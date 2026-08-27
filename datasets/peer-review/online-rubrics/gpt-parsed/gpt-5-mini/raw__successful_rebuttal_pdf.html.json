@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/successful_rebuttal_pdf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 19521,
+  "output_tokens": 4235,
+  "elapsed_s": 1119.102792458143,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "authors submitting to top-tier computer science conferences; researchers studying peer review processes",
+    "subtask_short": "rebuttal strategy in CS conferences",
+    "subtask_description": "Empirical criteria and measurable features for producing and evaluating author rebuttals in top-tier computer science conference peer review (ICLR-style rebuttal stage). Focuses on reviewer score changes, social/peer effects, and quantifiable author strategies.",
+    "subtask_keywords": [
+      "computer_science",
+      "conference_peer_review",
+      "rebuttal",
+      "author_response",
+      "ICLR2022",
+      "signed_social_network"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Successful rebuttal (INC definition)",
+        "description": "A rebuttal is defined as successful if a review's final score increases after the rebuttal stage (s1 - s0 > 0). INC (s1 - s0 > 0) is treated as success (1); KEEP and DEC are treated as non-success (0).",
+        "guidance": "This is the primary binary outcome used throughout the paper; prediction and analysis treat INC as the success label."
+      },
+      {
+        "name": "Rebuttal stage impact (borderline importance)",
+        "description": "The rebuttal stage matters: changes in review and paper average scores before and after rebuttal significantly affect acceptance, and rebuttal primarily benefits borderline papers (initial paper average around 5.0\u20136.0).",
+        "guidance": "Authors should prioritize rebuttal efforts for borderline submissions (initial average near decision boundary). The paper finds final score cut-off around 6.0 for acceptance."
+      },
+      {
+        "name": "Signed social network balance (balanced vs unbalanced motifs)",
+        "description": "Model reviewer interactions using Signed Social Network Analysis (SSNA) and structural balance theory: four signed motifs (two labeled unbalanced, two balanced) capture peer influence among reviewers for a given paper.",
+        "guidance": "Measure the number/proportion of balanced motifs per paper; an increase in balanced motifs after rebuttal is associated with reviewers moving toward agreement (and score changes)."
+      },
+      {
+        "name": "Positive link ratio (review sign ratio)",
+        "description": "Assign reviewer-review edges positive/negative based on score sign thresholds (e.g., ICLR scores: {1,3,5,6,8,10} with sign interval 5.0); compute the ratio of positive links in the reviewer network.",
+        "guidance": "Positive link ratio is typically below 50% in top CS conferences; changes in this ratio before/after rebuttal are informative about public/social pressures and acceptance control."
+      },
+      {
+        "name": "Peer-effect statistics of other reviews",
+        "description": "For a target review r on paper p, use detailed scores (Recommendation, Correctness, Technical Novelty & Significance, Empirical Novelty & Significance, Confidence) and compute statistics (max/min/mean/median/std) over other peer reviews for p.",
+        "guidance": "These statistics capture peer pressure signals used to predict whether a reviewer will change their score; Gao et al. (2019) style aggregate features are strong predictors."
+      },
+      {
+        "name": "Number of balanced and unbalanced motifs per reviewer/paper",
+        "description": "Count distinct balanced and unbalanced signed motifs (from the motif definitions) that involve each reviewer (or paper) as features representing peer influence strength.",
+        "guidance": "Including motif counts as features improves interpretability and prediction of score changes; paired t-tests show balanced motif proportion increases after rebuttal."
+      },
+      {
+        "name": "Reviewer detailed scoring metrics",
+        "description": "Per-reviewer detailed rubric items: Correctness; Technical Novelty and Significance; Empirical Novelty and Significance; Confidence; Recommendation score (1,3,5,6,8,10).",
+        "guidance": "Recommendation score correlates positively with correctness/novelty scores and negatively with confidence; these items are used in peer-effect features and analysis of score changes."
+      },
+      {
+        "name": "Review-level activity: # reviewer replies (discussion engagement)",
+        "description": "Count of replies in the review thread (reviewer/author/rebuttal replies) indicating how actively the review/discussion engaged.",
+        "guidance": "Higher reply counts correlate with more active discussions; positive reviews tend to have more active discussion. Engagement can mediate score changes."
+      },
+      {
+        "name": "Review text length (word count)",
+        "description": "Word count of the review text (and of author rebuttal responses) as a measure of effort/detail in review and response.",
+        "guidance": "Negative reviews exhibited higher review word counts in this dataset; authors\u2019 longer rebuttals (reply word count) are part of 'work hard' strategy metrics."
+      },
+      {
+        "name": "Review sentiment (automated sentiment score)",
+        "description": "Measure review text sentiment with a fine-tuned DistilBERT model; output is a positive sentiment score in [0,1] (value < 0.5 indicates negative sentiment).",
+        "guidance": "Sentiment correlates with recommendation: positive-recommendation reviews have higher sentiment scores. Sentiment can be an input feature for models predicting rebuttal success."
+      },
+      {
+        "name": "Paper meta-information features",
+        "description": "Paper-level metadata used as features: number of authors; title word count; abstract word count; number of keywords; number of paper pages; number of revisions; has one-sentence summary; has supplementary material; has skilled author (previous ICLR pub); has top Computer Science scientists (D-index).",
+        "guidance": "Accepted papers tended to have more authors, more pages/revisions, and higher rates of skilled/top authors; meta-features alone are weak predictors of rebuttal success but relate to acceptance probability."
+      },
+      {
+        "name": "Reply number (author response count)",
+        "description": "Number of distinct replies the authors post in the rebuttal thread (a measure of engagement/effort).",
+        "guidance": "Treated as part of the 'work hard' strategy; used as a quantitative feature to test whether more replies are associated with score increases."
+      },
+      {
+        "name": "Reply word count (author response length)",
+        "description": "Total word count of author rebuttal text (measuring how extensive the authors' responses are).",
+        "guidance": "Included as 'work hard' metric; longer rebuttals may signal effort/clarification but longer is not necessarily sufficient\u2014targeted addressing of reviewer concerns matters."
+      },
+      {
+        "name": "Text similarity between rebuttal and review (TF-IDF)",
+        "description": "Measure of overlap/similarity between author response text and reviewer comment text using TF-IDF similarity metrics.",
+        "guidance": "Intended to quantify whether authors explicitly address reviewers\u2019 points; higher similarity indicates more targeted responses to reviewers\u2019 concerns."
+      },
+      {
+        "name": "Text similarity between rebuttal and review (deep learning embeddings / SPECTER)",
+        "description": "Measure of semantic similarity between rebuttal and review using deep-learning document embeddings (e.g., SPECTER or other DL encoders).",
+        "guidance": "Captures semantic alignment beyond lexical overlap; used to quantify whether authors respond to reviewers substantively."
+      },
+      {
+        "name": "Politeness in author response",
+        "description": "Politeness score or binary indicator for politeness in the author rebuttal text (authors being polite in tone and phrasing).",
+        "guidance": "Being polite is advised as a strategy; politeness is measured and correlated with outcomes though the paper cautions statistical limitations in inferring causality."
+      },
+      {
+        "name": "Adding references in rebuttal",
+        "description": "Whether authors add or cite references in the rebuttal (explicitly referencing prior work or evidence to address reviewer concerns).",
+        "guidance": "Adding references is an explicit strategy tested in the analysis; it can strengthen technical claims or clarifications in the rebuttal."
+      },
+      {
+        "name": "Mentioning other reviewers / building consensus",
+        "description": "Authors explicitly reference other reviewers\u2019 comments or attempt to build consensus among reviewers in the rebuttal text.",
+        "guidance": "This 'make consensus' strategy can promote conformity among reviewers and is conceptually aligned with SSNA findings (balanced motifs encourage agreement)."
+      },
+      {
+        "name": "Provide more details in appendices",
+        "description": "Authors should include more technical details, experiments, or proofs in appendices (unlimited page allowance for appendices/citations) to strengthen the submission.",
+        "guidance": "While main-text upper limits exist, including strong appendices and more revisions/pages correlates with acceptance and provides material authors can reference in rebuttals."
+      },
+      {
+        "name": "Presence of skilled authors / Matthew effect",
+        "description": "Whether the paper has 'skillful authors' (previous ICLR publications) or authors listed among top Computer Science scientists (based on D-index); correlated with higher acceptance rates.",
+        "guidance": "Skilled or high-profile authors are associated with higher acceptance; the paper highlights this as the Matthew effect and recommends enlisting experienced co-authors where possible."
+      },
+      {
+        "name": "Scoring scale mapping to positive/negative",
+        "description": "For ICLR2022, reviewers select from {1, 3, 5, 6, 8, 10}; the authors treated scores 6, 8, 10 as positive and 1, 3, 5 as negative for analysis.",
+        "guidance": "This mapping underlies sign assignment in SSNA and many analyses; sign interval choices matter for constructing positive/negative links."
+      },
+      {
+        "name": "Machine-learning prediction feature set",
+        "description": "Multifactor feature grouping used for predicting rebuttal success: Paper meta-information (Xm), Rebuttal text embeddings (Xt using SPECTER), Peer-effect features (Xp), Author strategy features (Xs).",
+        "guidance": "Concatenate these feature groups and feed to an MLP for probability of rebuttal success; peer-effect features were most effective, and combining all features gave best performance."
+      },
+      {
+        "name": "Reviewer confidence negative correlation",
+        "description": "Observational finding: Confidence is negatively correlated with recommendation score in the dataset.",
+        "guidance": "Use caution interpreting confidence; it may behave differently from other detailed scores and interacts with peer dynamics."
+      },
+      {
+        "name": "Reviewer behavior baseline: most reviewers keep scores",
+        "description": "Empirical observation that most reviewers do not change their initial scores; increases occur mainly at borderline scores while high-score items can show decreases.",
+        "guidance": "Authors should set expectations: rebuttal can sway borderline reviews but many reviewers will not revise their scores."
+      }
+    ]
+  }
+}

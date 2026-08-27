@@ -1,0 +1,170 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_01755d73cc24.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18258,
+  "output_tokens": 4975,
+  "elapsed_s": 1426.3352919579484,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "Researchers and engineers working on LLM-based formal theorem proving, autoformalization, and Lean4 benchmark/dataset construction",
+    "subtask_short": "lean4 formalization benchmark construction",
+    "subtask_description": "Designing, autoformalizing, validating, and evaluating a large-scale Lean4 benchmark (FormalMATH) for LLM-based formal mathematical reasoning, including the human-in-the-loop pipeline, semantic/syntactic checks, disproof filtering, and prover evaluation.",
+    "subtask_keywords": [
+      "formal_math",
+      "lean4",
+      "benchmark",
+      "autoformalization",
+      "theorem_proving",
+      "llm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Syntactic correctness via Lean4 compiler",
+        "description": "All candidate Lean4 statements must be syntactically correct and type-check with the Lean4 compiler.",
+        "guidance": "Only syntactically valid statements are preserved for subsequent semantic verification; the paper uses a straightforward \"compile-and-filter\" strategy to generate high-quality training examples and to screen autoformalizer outputs."
+      },
+      {
+        "name": "Semantic alignment via multi-LLM verification",
+        "description": "Semantic equivalence between the original natural-language problem and the Lean4 formalization must be confirmed by multiple general-purpose LLMs.",
+        "guidance": "Each LLM back-translates the Lean4 statement into natural language, compares the reconstructed description with the original problem, and issues a binary aligned/misaligned judgment. Only statements that passed semantic verification performed by all the LLMs are collected. This step filters out a large fraction (e.g., filtered 60.7% of syntactically correct but semantically misaligned statements)."
+      },
+      {
+        "name": "Multi-LLM group voting protocol (semantic verification prompt)",
+        "description": "The semantic verification process must follow a specified workflow: back-translate, check equivalence, and return a True/False judgment.",
+        "guidance": "The verification prompt instructs LLMs: (1) back-translate the Lean statement into English, (2) check equivalence with the natural-language statement, (3) return True if equivalent, (4) otherwise return False. The LLMs must return only True/False directly."
+      },
+      {
+        "name": "Negation-based disproof filtering",
+        "description": "Construct the logical negation of a formalized statement and attempt automated proof attempts on the negation; a successful proof of the negation implies the original statement is invalid in the formal system.",
+        "guidance": "Apply transformation rules (e.g., De Morgan dualization) to construct \u00acT and run off-the-shelf LLM-based provers to try to prove \u00acT. Use this to identify inconsistencies and filter non-provable or misformalized statements; this strategy filtered about 1.6% of statements in FormalMATH."
+      },
+      {
+        "name": "Human expert verification (IMO-level annotators)",
+        "description": "Final semantic fidelity is confirmed by manual inspection from high-expertise human annotators (International Mathematical Olympiad medalist-level).",
+        "guidance": "Use expert reviewers to validate alignment after automated filtering. Annotation stats reported: 12 annotators, preservation rate 72.09% (from LLM-consensus stage to final retained statements), cost per statement $6.89, total duration 22 days."
+      },
+      {
+        "name": "Ensemble-based autoformalization with best-of-N sampling",
+        "description": "Generate multiple candidate formalizations per example by running multiple autoformalizer LLMs and sampling (best-of-N) per model.",
+        "guidance": "For K autoformalizers, generate N candidates T_n^{(k)} per autoformalizer; first apply syntax checking, then semantic verification; repeated sampling increases chance of producing a correct formalization."
+      },
+      {
+        "name": "Compile-and-filter training data creation",
+        "description": "Create paired natural-language/formal examples by having LLMs translate NL to Lean4 and keeping only those outputs that compile.",
+        "guidance": "This yields training corpora (e.g., 9,260 paired examples) used to finetune autoformalizers; compile-and-filter is a recommended practical strategy to bootstrap supervised fine-tuning data."
+      },
+      {
+        "name": "Pass@K evaluation metric for theorem provers",
+        "description": "Evaluate provers by Pass@K: the fraction of problems for which at least one valid proof is found among the top K generated attempts.",
+        "guidance": "For BFS methods K = N \u00d7 S \u00d7 T (N attempts \u00d7 S tactics per expansion \u00d7 T iterations). For SPG methods, K equals total number of complete proof trajectories sampled. Use appropriate sampling budgets when reporting Pass@K (e.g., Pass@32, Pass@3200)."
+      },
+      {
+        "name": "Distinguish proof-generation paradigms: BFS vs SPG",
+        "description": "Differentiate between best-first tree-search (BFS) proof-search methods and single-pass generation (SPG) methods when evaluating and designing provers.",
+        "guidance": "BFS: nodes = intermediate proof states, use heuristic scoring and iterative expansion; SPG: generate full proofs in one pass (often using best-of-N). Evaluation, sampling budgets, and verifier integration differ by paradigm and must be reported accordingly."
+      },
+      {
+        "name": "Reporting sampling budgets and their calculus",
+        "description": "When reporting results, explicitly state the sampling budget configuration used (e.g., 1\u00d732\u00d7100, 32\u00d732\u00d7100, Pass@3200).",
+        "guidance": "Sampling budget choices substantially affect Pass@K. Provide the mapping between search parameters and K (e.g., for BFS) and the effective computational cost, so results are interpretable and comparable."
+      },
+      {
+        "name": "Dataset composition and diversity requirements",
+        "description": "Benchmarks should cover a broad spectrum of mathematical domains (algebra, calculus, number theory, geometry, discrete math, applied math, etc.) and difficulty levels (high-school olympiad up to undergraduate theorems).",
+        "guidance": "FormalMATH includes 5,560 formally verified statements spanning many subdomains and multiple difficulty tiers; clearly report domain distributions and difficulty splits (e.g., plots, tables)."
+      },
+      {
+        "name": "FormalMATH-Lite curation criteria",
+        "description": "When creating a tractable subset for scaling experiments, balance solvable and unsolvable problems and align domain distribution with the full benchmark.",
+        "guidance": "FormalMATH-Lite (425 problems) is constructed by outcome-driven difficulty assessment (using existing provers) and stratified sampling to match domain distribution, enabling efficient test-time scaling studies."
+      },
+      {
+        "name": "Verifier implementation efficiency (tree-structured parallelism)",
+        "description": "Optimize proof verification by centralizing expensive operations (e.g., Mathlib import) at a root thread and parallelizing per-proof child threads.",
+        "guidance": "Use a tree-structured parallelism approach to avoid repeated heavy imports and to parallelize Lean4 verification across proofs to improve test-time efficiency."
+      },
+      {
+        "name": "Prompting strategies for proof generation (vanilla / CoT / NL-augmented CoT)",
+        "description": "Different decoding/prompting strategies should be evaluated: vanilla (direct Lean4 generation), naive chain-of-thought (CoT) with explanatory comments, and CoT augmented with natural-language solution guidance.",
+        "guidance": "Report each strategy's performance under the same sampling budgets. Empirical finding: naive CoT often outperforms NL-augmented CoT in Lean4 proof generation because NL guidance can omit low-level tactic detail and increase model perplexity."
+      },
+      {
+        "name": "CoT prompt format requirement (explanatory comments)",
+        "description": "For CoT generation, prompts should request explanatory comments preceding each line of Lean4 code to elicit stepwise reasoning.",
+        "guidance": "Provide concrete CoT prompt templates; the paper uses prompts that ask for explanatory comments before each code line to encourage tactic-level detail."
+      },
+      {
+        "name": "NL-augmented CoT caveat",
+        "description": "Augmenting CoT with human-written informal solutions can harm proof success by increasing uncertainty and omitting necessary tactic-level steps.",
+        "guidance": "Empirical results: NL-augmented CoT increased perplexity and decreased Pass@K compared to naive CoT; report both success rates and perplexity metrics when claiming benefits of NL augmentation."
+      },
+      {
+        "name": "Quantify domain bias of provers",
+        "description": "Analyze and report per-domain accuracy to reveal training or capability biases (e.g., algebra vs calculus performance).",
+        "guidance": "Provide domain breakdowns (plots/tables). The paper finds provers excel in algebra and applied math but fail in calculus/discrete math; link these biases to training corpus distributions."
+      },
+      {
+        "name": "Error diagnosis and classification pipeline",
+        "description": "Systematically analyze failed proofs via an automated LLM-driven diagnosis pipeline followed by human expert correction and classify common error patterns.",
+        "guidance": "Use a two-stage approach: (1) extract verbalized features/error indicators with LLMs, (2) assign error labels via a second prompt-driven call, then have humans review. Report major failure categories (e.g., missing constraints, incorrect goal logic, placeholders, redundant conditions)."
+      },
+      {
+        "name": "Autoformalization error pattern categories",
+        "description": "When autoformalizations fail, categorize errors such as missing constraints, redundant constraints, incorrect logical framing of goals (e.g., using \u2194 instead of existence/uniqueness claims), and omission of required characterization (e.g., 'determine all tuples').",
+        "guidance": "Provide concrete examples of each error type and how they change the semantic intent; use these categories to improve autoformalizer prompts and post-filters."
+      },
+      {
+        "name": "Require unanimous LLM agreement for collection",
+        "description": "Only collect a formalization if all semantic-verification LLMs return aligned (True) for that candidate.",
+        "guidance": "This strict consensus rule reduces false positives in autoformalization but lowers immediate yield; report consensus rates across difficulty levels (e.g., 30% unanimous agreement for high-school problems; much lower for undergraduate)."
+      },
+      {
+        "name": "Negation construction rules",
+        "description": "Specify transformation rules (e.g., De Morgan dualization) for constructing logical negations to enable disproof testing.",
+        "guidance": "Automate negation transformation consistently to feed LLM-based provers; ensure the negation is a valid Lean4 statement suitable for proof attempts."
+      },
+      {
+        "name": "Preservation rate reporting across pipeline stages",
+        "description": "Report the percentage of data preserved after each filtering stage (compiler checks, semantic verification, negation filtering, manual verification).",
+        "guidance": "Use funnel charts or tables; FormalMATH reports e.g., 100% \u2192 92.4% (compiler) \u2192 32.7% (post-LLM semantic verification) \u2192 21.7% (final). Also report the human-preservation multiplier (72.09%)."
+      },
+      {
+        "name": "Training data provenance and diversity disclosure",
+        "description": "List and disclose all source datasets and problem origins used to build the benchmark and training corpora.",
+        "guidance": "Include appendix/source list (e.g., MiniF2F, PutnamBench, OMNI-Math) and report how each source contributes to domain/difficulty coverage to allow reproducibility and bias analysis."
+      },
+      {
+        "name": "Reporting prover experimental settings and prompts",
+        "description": "Provide full details of prompts, decoding strategies, and experimental settings (e.g., whether CoT/natural-language solutions were used, RL vs SFT variants).",
+        "guidance": "Include example prompts in appendices (the paper includes many, e.g., I.1\u2013I.3) and state which models were trained with which prompting strategies to allow replication and fair comparison."
+      },
+      {
+        "name": "Measure and report test-time scaling effects",
+        "description": "When assessing the impact of increased sampling (test-time compute), report performance changes across orders of magnitude of sampling budgets.",
+        "guidance": "FormalMATH experiments show limited returns for SPG with large sampling increases and better scaling for BFS but still costly; present absolute gains and computational costs."
+      },
+      {
+        "name": "Ensembling SPG methods: marginal gains expectation",
+        "description": "When ensembling multiple SPG methods, expect small marginal improvements and report ensemble composition and combined Pass@K.",
+        "guidance": "Document ensemble strategy (which models, how outputs aggregated); e.g., ensembling STP, Goedel, DeepSeek variants yielded only ~0.84% uplift in the paper."
+      },
+      {
+        "name": "Prompt for domain classification (format constraints)",
+        "description": "Domain classification prompts must output a summarized sentence and classification chains using the given taxonomy, limit to at most 3 domains, use the exact chain format, and end with '=== report over ==='.",
+        "guidance": "Enforce taxonomy constraints (only last node may be 'Other'), separate multiple chains with semicolons, and maintain professional/report style\u2014useful for dataset labeling and domain distribution plots."
+      },
+      {
+        "name": "Verifier correctness: rely on compiler validation of proofs",
+        "description": "Use the Lean4 compiler as the ground-truth verifier for proof validity.",
+        "guidance": "Treat compiler acceptance as a binary success signal; because verifying proofs may be expensive, optimize verification (see tree-structured parallelism) and state exact verification procedure in experiments."
+      },
+      {
+        "name": "Report failure modes and common prover error patterns",
+        "description": "Classify and report the main prover failure modes (e.g., reward sparsity, combinatorial search complexity, misuse of automated tactics, missing low-level hypotheses).",
+        "guidance": "Use both automated LLM diagnosis and human review to enumerate failure patterns and provide illustrative examples. Use findings to motivate future algorithmic directions (intrinsic rewards, better exploration, alignment of NL->tactic spaces)."
+      }
+    ]
+  }
+}

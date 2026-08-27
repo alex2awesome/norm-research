@@ -1,0 +1,170 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 22,
+  "n_chunks": 160,
+  "chunk_chars": 39987,
+  "model": "gpt-5-mini",
+  "elapsed_s": 149.23454999999376,
+  "input_tokens": 17414,
+  "output_tokens": 6146,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "mathematicians and advanced symbolic-computation users (Singular/D-module users) computing annihilators, Bernstein\u2013Sato data, and other D-module constructions",
+    "subtask_short": "d-modules computations in Singular",
+    "subtask_description": "Documentation for procedures in the dmod.lib and dmodapp.lib Singular libraries: computing annihilators, Bernstein\u2013Sato polynomials/ideals, localizations, initial ideals, Groebner bases with weights, and related D-module tasks. It explains usage, returned objects, assumptions, and engine/verbosity controls for each procedure.",
+    "subtask_keywords": [
+      "d-modules",
+      "singular",
+      "bernstein_sato",
+      "weyl_algebra",
+      "symbolic_computation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Activate output ring with setring",
+        "description": "Activate the output ring returned by many procedures using the setring command before inspecting returned ideals/objects.",
+        "guidance": "Many procedures (operatorBM, annfsParamBM, annfs0, SDLoc, DLoc0, etc.) return a ring; the documentation repeatedly notes: 'activate the output ring with the setring command.' Failing to setring will make returned LD/LD0/BS etc. inaccessible or misleading."
+      },
+      {
+        "name": "printlevel controls verbosity/debug messages",
+        "description": "If printlevel = 1 progress debug messages will be printed; if printlevel >= 2, all debug messages will be printed.",
+        "guidance": "Set printlevel to inspect intermediate progress/debug information. Default behavior is quieter; many examples set printlevel = 0 for no debug output."
+      },
+      {
+        "name": "eng parameter selects Groebner engine (std vs slimgb)",
+        "description": "If eng <> 0, std is used for Groebner basis computations; otherwise (default) slimgb is used.",
+        "guidance": "Many procedures accept an optional eng parameter controlling whether the standard Groebner-engine (std) is used rather than slimgb. Use eng when you need std's behavior; slimgb is default and often preferable for speed/memory."
+      },
+      {
+        "name": "operatorBM \u2014 returned objects and meaning",
+        "description": "operatorBM(f [,eng]) returns a ring D[s] containing: the original polynomial F, LD (annihilator of f^s in Dn[s]), LD0 (D-mod structure = LD|s=s0), bs (global Bernstein polynomial of f in s), BS (list of roots with multiplicities), and PS (operator in Dn[s] with PS*f^(s+1)=bs*f^s).",
+        "guidance": "After setring on the returned ring, inspect LD, LD0, bs, BS, PS. Note: if eng <> 0 std is used. Example shows verifying reduce(PS*F-bs,LD) == 0."
+      },
+      {
+        "name": "operatorModulo \u2014 B-operator modulo computation and reduction caveat",
+        "description": "operatorModulo(f,I,b) computes the B-operator from polynomial f, ideal I = Ann f^s and Bernstein-Sato polynomial b using module-homomorphism/kernels; it returns a poly (an operator).",
+        "guidance": "The operator produced is not completely reduced w.r.t. Ann f^{s+1}; the example reduces PS modulo Ann f^{s+1} afterwards (PS = NF(PS,subst(LD,s,s+1))). Use printlevel to see progress. Verify by reduce(PS*F - bs, LD) == 0."
+      },
+      {
+        "name": "annfsParamBM \u2014 parametric generic Ann F^s and exceptional parameters",
+        "description": "annfsParamBM(f [,eng]) computes generic Ann F^s and exceptional parametric constellations for polynomials with parametric coefficients using the Brian\u00e7on\u2013Maisonobe (BM) algorithm.",
+        "guidance": "In the returned ring: LD is the D-module structure of Ann F^s; Param contains special parameters as entries. Use setring to access. Eng controls GB engine as usual. Examples show how to detect exceptional parameter values via Param."
+      },
+      {
+        "name": "annfsBMI \u2014 multivariate Bernstein\u2013Sato ideals and method flags",
+        "description": "annfsBMI(F [,eng,met,us]) computes Bernstein\u2013Sato ideals associated to f = F[1]*...*F[P] using the multivariate BM algorithm. In the output ring LD is the annihilator and BS is a Bernstein\u2013Sato ideal or list.",
+        "guidance": "Parameter met controls which ideal is computed: met < 0 -> B-Sigma ideal; 0 < met < P -> B_P ideal; otherwise default -> B ideal. If us <> 0 a syzygies-driven method is used. If the output ideal is principal, the procedure returns its factor list with multiplicities rather than the ideal. Use setring to inspect LD and BS."
+      },
+      {
+        "name": "checkRoot \u2014 test if -alpha is root and multiplicity options",
+        "description": "checkRoot(f, alpha [,S,eng]) checks whether -alpha is a root of the global Bernstein\u2013Sato polynomial of f and computes multiplicity using algorithm S ('alg1' or 'alg2').",
+        "guidance": "Assumes basering commutative and alpha a positive rational. 'alg1' returns 1 only if -alpha is a root; 'alg2' returns the multiplicity (0 if not root). The annihilator of f^s is needed (procedure computes it internally with BM). Eng selects GB engine. Use printlevel for debug output."
+      },
+      {
+        "name": "SannfsBFCT \u2014 compute Groebner basis of Ann(f^s)+<f> or +<f,f1,...,fn>",
+        "description": "SannfsBFCT(f [,a,b,c]) computes a Groebner basis of Ann(f^s)+<f> (default a=0) or Ann(f^s)+<f,f1,...,fn> (if a<>0) in D[s], returning a ring with anti-elimination ordering for s.",
+        "guidance": "b and c control which GB engine is used for different parts: if b<>0 std used for GBs, else slimgb; if c<>0 std is used in addition for computing ideals <I+J> where I is already a GB. Use vec2poly(pIntersect(s,LD)) to obtain Bernstein\u2013Sato polynomial from LD."
+      },
+      {
+        "name": "annfs0 \u2014 annihilator ideal of f^s from Sannfs-like output",
+        "description": "annfs0(I,F [,eng]) computes the annihilator ideal of f^s in the Weyl algebra based on the output of a Sannfs-like procedure; returns a ring where LD (a Groebner basis) is the annihilator and BS lists roots with multiplicities.",
+        "guidance": "Activate output ring with setring to inspect LD and BS. Eng controls GB engine; printlevel applies."
+      },
+      {
+        "name": "annfs2 \u2014 shorter s-expressions annihilator computation",
+        "description": "annfs2(I,F [,eng]) computes the annihilator ideal of f^s in the Weyl algebra similar to annfs0 but produces shorter expressions in the variable s (idea of Noro).",
+        "guidance": "Returns LD and BS as in annfs0. Use when shorter s-expressions are desirable. Eng, printlevel rules apply."
+      },
+      {
+        "name": "annfsRB \u2014 annihilator using Jacobian ideal",
+        "description": "annfsRB(I,F [,eng]) computes the annihilator ideal of f^s using, in addition to F, its Jacobian ideal; returns a ring where LD is the annihilator and BS contains roots/multiplicities of a Bernstein polynomial of f.",
+        "guidance": "Use when Jacobian-based improvements are relevant. Eng and printlevel rules apply; setring to inspect outputs."
+      },
+      {
+        "name": "checkFactor \u2014 test whether qs divides Bernstein\u2013Sato polynomial",
+        "description": "checkFactor(I,f,qs [,eng]) checks whether a univariate polynomial qs is a factor of the Bernstein\u2013Sato polynomial of f without computing the full polynomial; returns 1 if qs is a factor and 0 otherwise.",
+        "guidance": "I must be the annihilator LD (from Sannfs-like proc) and qs is in K[s]. Eng selects GB engine. The procedure can also reveal multiplicity info by testing powers of qs."
+      },
+      {
+        "name": "arrange \u2014 setup polynomial for a hyperplane arrangement",
+        "description": "arrange(p) constructs a polynomial describing a hyperplane arrangement of size p. Must be executed in a commutative ring.",
+        "guidance": "The returned polynomial can be factorized to list individual linear factors. Ensure basering is commutative."
+      },
+      {
+        "name": "reiffen \u2014 construct Reiffen curve polynomial",
+        "description": "reiffen(p,q) sets up the polynomial describing a Reiffen curve RC = x^p + y^q + x y^{q-1} with q >= p+1 >= 5 and returns a ring where RC is accessible.",
+        "guidance": "Activate the returned ring with setring and inspect RC."
+      },
+      {
+        "name": "isHolonomic \u2014 holonomicity test via GK dimension",
+        "description": "isHolonomic(M) returns 1 if M is holonomic over the base ring and 0 otherwise. M is holonomic iff 2*dim(M) = dim(R) where dim is Gelfand\u2013Kirillov dimension.",
+        "guidance": "Assumes basering is a Weyl algebra in characteristic 0. Useful to check modules/ideals produced earlier; example shows that isHolonomic may return 0 for ideals obtained by std(LD[1])."
+      },
+      {
+        "name": "convloc \u2014 convert ringlist orderings (p \u2192 s)",
+        "description": "convloc(L) converts a ringlist L into another ringlist where all 'p' orderings are replaced with 's' orderings (e.g., dp \u2192 ds).",
+        "guidance": "L should be the result of a ringlist command. Use to adapt orderings for localization or other contexts expecting 's'-style orderings."
+      },
+      {
+        "name": "minIntRoot \u2014 minimal integer root of a maximal ideal P",
+        "description": "minIntRoot(P, fact) returns the minimal integer root of a maximal ideal P. If fact==1, P is result of factorize, else treated as output of bernstein::gmssing.lib. The inputs are considered without constants and multiplicities.",
+        "guidance": "Used to find minimal integer root among factors from bernstein polynomials or factorize outputs. Examples show typical outputs being -1, -2, etc."
+      },
+      {
+        "name": "isRational \u2014 detect whether a number is rational (no parameters)",
+        "description": "isRational(n) returns 1 if n is a rational number (i.e., contains no parameters) and 0 otherwise.",
+        "guidance": "Assumes ground field characteristic 0. Useful to distinguish symbolic parametric numbers from genuine rationals returned by computations."
+      },
+      {
+        "name": "dmodapp.lib overview \u2014 main application capabilities",
+        "description": "dmodapp.lib provides applications of algebraic D-modules: localization (DLoc/SDLoc/DLoc0), annihilator computations for polynomials and rational functions (annPoly, annRat), Groebner bases with weights (GBWeight), restriction/integration of holonomic modules, characteristic variety computations (charVariety, charInfo), and ideals annihilating Appell hypergeometric functions.",
+        "guidance": "The overview lists the library's goals and related algorithms (e.g., SST, OTW). It points users to the correct procedures for common D-module tasks and to related references."
+      },
+      {
+        "name": "annPoly \u2014 compute complete annihilator of a polynomial f",
+        "description": "annPoly(f) computes the complete annihilator ideal of polynomial f in the corresponding Weyl algebra and returns a ring where LD (a GB) is the annihilator.",
+        "guidance": "Assumes basering commutative and characteristic 0. After setring inspect LD and verify annihilation (e.g., NF(Dy^4, LD) == 0 in example). gkdim(LD) should equal n/2 for holonomic modules."
+      },
+      {
+        "name": "annRat \u2014 compute annihilator of rational g/f using D-modules",
+        "description": "annRat(g,f) computes the annihilator of the rational function g/f in the Weyl algebra; returns a ring with LD (a GB) being the annihilator. The algorithm uses computation of Ann(f^{-1}) via D-modules.",
+        "guidance": "Assumes commutative basering over char 0. Examples show cross-checking with Macaulay2 by comparing Groebner bases. Use setring to inspect LD and test equality via NF."
+      },
+      {
+        "name": "DLoc \u2014 localization presentation of D/I with respect to f^s",
+        "description": "DLoc(I,f) computes the presentation of the localization of D/I w.r.t. f^s and returns a list L where L[1] is an ideal (GB) presenting the localization and L[2] is a list giving roots/multiplicities of the Bernstein polynomial of (D/I) f.",
+        "guidance": "Assumes basering is a Weyl algebra. The output ideal LD0 (in examples L[1]) is a Groebner basis for the localized module; L[2] summarizes the b-function. Use printlevel to see progress."
+      },
+      {
+        "name": "SDLoc \u2014 generic s-parametric presentation of localization",
+        "description": "SDLoc(I,f) computes a generic presentation of the localization of D/I w.r.t. f^s, returning a ring (basering extended by a new variable s) containing LD (a GB) which is the s-parametric presentation.",
+        "guidance": "Assumes D is a Weyl algebra over a field of char 0. Activate returned ring via setring to inspect LD. Useful precursor to computing DLoc0."
+      },
+      {
+        "name": "DLoc0 \u2014 compute presentation of localization based on SDLoc",
+        "description": "DLoc0(I,f) computes the presentation of the localization of D/I w.r.t. f^s (based on SDLoc output) and returns a ring containing LD0 (GB) and a list BS of roots/multiplicities of the Bernstein polynomial of (D/I) f.",
+        "guidance": "Use setring to inspect LD0 and BS. Example demonstrates computing the local presentation LD0 and the b-function description."
+      },
+      {
+        "name": "GBWeight \u2014 Groebner basis with respect to given weights",
+        "description": "GBWeight(I,u,v [,s,t,w]) computes a Groebner basis of I with respect to weight vectors u (for x variables) and v (for D variables) by homogenization relative to (u,v), computing a GB, and dehomogenizing the result.",
+        "guidance": "Assumes Weyl algebra basering and specific variable ordering x1..xn, D1..Dn. Optional s selects std vs slimgb, t selects matrix vs block ordering, and w (2*n positive entries) supplies homogenization weights; defaults are provided. Use when weighted initial ideals/GBs or deformation techniques (SST) are needed."
+      },
+      {
+        "name": "initialMalgrange \u2014 compute initial Malgrange ideal",
+        "description": "initialMalgrange(f [,a,b,v]) computes the initial Malgrange ideal of f w.r.t. weight vector (-1,0,...,0,1,0,...,0) (weight of t is -1, Dt is 1) and returns a ring containing inF (the initial ideal of the Malgrange ideal).",
+        "guidance": "Varnames of the basering should not include t or Dt. Optional args: a>0 to use std for GB computations, b>0 to use matrix ordering, v positive weight vector for a specialized homogenization weight. Use setring to inspect inF."
+      },
+      {
+        "name": "initialIdealW \u2014 compute initial ideal w.r.t. weights",
+        "description": "initialIdealW(I,u,v [,s,t,w]) computes the initial ideal (GB) of the input ideal I with respect to weights u (x variables) and v (D variables).",
+        "guidance": "Same basering assumptions as GBWeight. Optional args s,t,w control GB engine, ordering type, and homogenization weights. Use to obtain initial ideals for deformation or Malgrange-type computations."
+      }
+    ]
+  }
+}

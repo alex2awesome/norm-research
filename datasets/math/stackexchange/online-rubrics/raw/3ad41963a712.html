@@ -1,0 +1,699 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="https://www.ams.org/images/content/bubbles.png" type="image/x-icon">
+<link rel="icon" href="https://www.ams.org/images/content/bubbles.png" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/amsuser3.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/assign.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/clickmenu.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/impromptu.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/jquery.fileupload.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/twbs-2.3.2.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/mresubs_home3.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/font-awesome-css.min.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/mresubs_footer.css">
+
+<script type="text/javascript" src="/mathscinet/javascript/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.clickmenu.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.cookie.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery-impromptu.3.1.min.js"></script>
+<script src="https://use.fontawesome.com/7da0d8a943.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript">
+
+function infoChange(type)
+{
+   document.getElementById(type).value = 1;
+};
+
+jQuery(document).ready(function()
+{
+   $('#admin').clickMenu();
+   $('div[class="cmDiv"]').css('border-width', '0px');
+   $('div[class="cmDiv"]').css('float', 'middle');
+   $('div[class="cmDiv"]').css('background-color', '#98A4AE');
+   $('li[class~="main"]').css('background-color', '#98A4AE');
+   $('li[class~="main"]').css('left', '70%');
+   $('#menubox').css('width', '300');
+   $('#menubox').css('height', '100');
+
+   // Focus on change reviewer code input, if it exists
+   if ($('#rcode').length)
+   {   
+      $('#rcode').trigger('focus');
+   };
+
+   errStr = "";
+   if (errStr.length)
+   {
+      alert(errStr);
+   }
+
+   // Stop double click on review submission form
+   $('#reviewSubmit').one(function()
+   {
+      $(this).attr("disabled","disabled");
+      $("#mresubSubmit").click();
+   });
+   
+   // Handle reviewer code input on index.html
+   $('#addRcode').submit(function()
+   {
+      revc = $('#rcinput').val();
+      var patt = /^\d+$/;
+      if (patt.test(revc))
+      {
+         return(true);
+      }
+      else
+      {   
+         alert('Reviewer code: ' + revc + ' must be a number');
+         return(false);
+      }
+   });
+
+   // cno.html for checking
+   $('#cnoform').submit(function()
+   {
+      cno = $('#cno').val();
+      rc = $('#rc').val();
+      nonblank = /\S/m;
+      valid = 1;
+
+      if (cno == null || cno == "" || ! cno.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter an MR number.");
+      }
+      else if (rc == null || rc == "" || ! rc.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter a reviewer number.");
+      }
+
+      if (valid)
+      {
+         return(true);
+      }
+      else
+      {
+         return(false);
+      }
+   });
+
+   // Reviewer info change handling
+   $('#rinfochg').submit(function()
+   {
+      var nonblank = /\S/m;
+
+      // Name processing
+      fname = $('#firstName').val().trim();
+      lname = $('#lastName').val().trim();
+      mname = $('#middleName').val().trim();
+      sname = $('#suffix').val().trim();
+      rname = lname;
+
+      // non blank last name plus non blank first or middle, add a comma after last name
+      if ((fname.match(nonblank) || mname.match(nonblank)) && lname.match(nonblank))
+      {
+         rname = rname+',';
+      }
+
+      // Add first name
+      if (fname.match(nonblank))
+      {
+         rname = rname+' '+fname;
+      }
+
+      // Add middle name
+      if (mname.match(nonblank))
+      {
+         rname = rname+' '+mname;
+      }
+
+      // Add suffix
+      if (sname.match(nonblank))
+      {
+         // non blank first or middle, add a comma, otherwise add a space
+         if (fname.match(nonblank) || mname.match(nonblank))
+         {
+            rname = rname+',';
+         }
+         else
+         {
+            rname = rname+' ';
+         }
+
+         // Add suffix
+         rname = rname+sname;
+      }
+      $('#revName').val(rname);
+
+      addr = $('#addr').val();
+      email = $('#email').val();
+      plang = $('#pLang').val();
+      rclass = $('#class').val();
+      interest = $('#interest').val();
+      var valid = 1;
+
+      if (addr == null || addr == "" || ! addr.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter a mailing address.");
+         $('#addr').trigger('focus');
+         $('#addr').trigger('select');
+      }
+      else if (email == null || email == "" || ! email.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter an email address.");
+         $('#email').trigger('focus');
+         $('#email').trigger('select');
+      }
+      else if (rname == null || rname == "" || ! rname.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your name.");
+         $('#revName').trigger('focus');
+         $('#revName').trigger('select');
+      }
+      else if (plang == null || plang == "" || ! plang.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your primary language.");
+         $('#pLang').trigger('focus');
+         $('#pLang').trigger('select');
+      }
+      else if (rclass == null || rclass == "" || ! rclass.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter at least one MSC2010 class.");
+         $('#class').trigger('focus');
+         $('#class').trigger('select');
+      }
+      else if (interest == null || interest == "" || ! interest.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your area of interest.");
+         $('#interest').trigger('focus');
+         $('#interest').trigger('select');
+      }
+      else
+      {
+         if ($('#emailchange').val() == 1)
+         {
+            // Make sure we have at least a minimally valid email address
+            var atsign = /@/;
+            emails = email.split(" ");
+            for(i = 0; i < emails.length; i++)
+            {
+               if (! emails[i].match(atsign))
+               {
+                  valid = 0;
+                  alert(emails[i] + " is not a valid email address.");
+                  $('#email').trigger('focus');
+                  $('#email').trigger('select');
+               }
+            }
+         }
+      }
+
+      if (valid)
+      {
+         return(true);
+      }
+      else
+      {
+         return(false);
+      }
+   });
+			   
+   function promptback(v,m,f) 
+   { 
+      if (v)
+      {
+         if (f.passw == 'AMY')
+	 {
+            $.get("./moveToAssigned.html",
+            {
+               paperId: paperId,
+               rcode: $("#rc").val()
+            },
+            function() {window.location.reload();});
+         }
+         else
+         {
+            alert("Password incorrect.");
+         }
+      }
+   };
+
+   $(".delSub").click(function()
+   {
+      paperId = $(this).attr('id');
+      $.prompt('Please enter the password<br><input type="text" name="passw"><br>Delete '+paperId+' from the submitted list?',{ buttons: { YES: 1, no: 0 }, focus: 1, callback: promptback });
+   });
+      			   
+   // This deletes a language <tr> when the button is clicked
+   // and also removes the language from the hidden textarea
+   $(".langbutton").click(function()
+   {
+      delval = $(this).closest("td").attr("id");
+      $(this).closest("tr").remove();
+      langval = $("#pLang").val();
+      lregex = new RegExp(delval, "g");
+      $("#pLang").val(langval.replace(lregex,""));
+   });
+
+   $(function () 
+   {
+       $('#fileupload').fileupload(
+       {
+          url: './upload',
+          dataType: 'json',
+          done: function (e, data) 
+          {
+	      $("#review").val(data.result.files[0].contents);
+          }
+       });
+   });
+});
+
+// Populate lang text area and display buttons from pulldown menu
+function langSelect()
+{
+   langsel = $('#langlist option:selected').val();
+   currlang = $('#pLang').val().trim();
+   if (currlang.toLowerCase().indexOf(langsel.toLowerCase()) == -1)
+   {
+      $('#langtbl').append('<tr><td id="'+langsel+'">'+langsel+'<input type="button" class="langbutton" value="X" /></td></tr>');
+      langsel = ' '+langsel;
+      $('#pLang').val(currlang+langsel);
+
+      $(".langbutton").click(function()
+      {
+         delval = $(this).closest("td").attr("id");
+         $(this).closest("tr").remove();
+         langval = $("#pLang").val();
+         lregex = new RegExp(delval, "g");
+         $("#pLang").val(langval.replace(lregex,""));
+      });
+   }
+};
+
+function changeDate()
+{
+   var newDt=document.getElementById('date').value;
+   location.href="webLog.html?date="+newDt;
+}
+
+function searchStr()
+{
+   var search=document.getElementById('search').value;
+   location.href="webLog.html?search="+search;
+}   
+
+
+</SCRIPT>
+
+<TITLE>Mathematical Reviews Guide For Reviewers</TITLE>
+</head>
+<body>
+<div id="topDiv" align="center">
+<a href="https://www.ams.org"><img src="/mathscinet/images/ams-logo-header.png" align="center"/></a>
+</div> 
+<form>
+<input type="hidden" name="host" value="HOST=chicago.ams.org">
+</form>
+<div id="outerDiv" align="center">
+     <TABLE width="960" cellspacing="0" cellpadding="0" border="0" align="center">
+     <tbody>
+     <tr style="display:none">
+     <td align="left" id="importantUpdate" nowrap="nowrap">IMPORTANT NOTICE</td>
+     <td align="left" id="importantMessage">The AMS website will be down for maintenance on Tuesday April 25, 2017 between 5:00 PM - 8:00 PM EDT.</a><br>
+     </td>
+     </tr>
+     <tr><td>&nbsp;</td></tr>
+     <TR> 
+     <TD valign="top">
+     </TD>
+     <td id="timestamp">
+     2026-05-10 10:32 UTC
+     </td>  
+     </TR>
+     </tbody>
+     </TABLE>
+
+
+     <table id="mrbar" width="960" cellspacing="0" cellpadding="0" border="0">
+     <tbody>
+     <tr>
+         <td>
+         <A href="/mresubs/index.html" class="mrbarLink nounderline">
+         Home</a>
+         </td>
+
+           <td>
+           
+<A href="/mresubs/signin.html?caller=/mresubs/revr.html"
+ class="mrbarlink nounderline">
+           Log In</A>
+           </td>
+
+
+
+
+
+
+        <td>
+        <A href="/mresubs/help_mresubs.html" class="mrbarlink nounderline">
+         Help</A>
+        </td>
+
+
+     <td>
+     <A href="/cdn-cgi/l/email-protection#89e4e8fde1fbecffc9e8e4faa7e6fbee" class="mrbarlink nounderline">
+      Contact MR</A>
+     </td>
+     </tr>
+     </tbody>
+     </table>
+
+<div id="splash" class="white">
+<br><br><br>
+<h2>Mathematical Reviews<BR>Guide For Reviewers</h2>
+</div>
+
+<div class="homediv" align="left">
+<div class="homedivcontent"> 
+<table cellspacing="0" cols="2" width="100%">
+  <tbody>
+    <tr>
+      <td>Mathematical Reviews</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Reviewer Data Services</td>
+      <td>Phone: (734) 996-5259</td>
+    </tr>
+    <tr>
+      <td>535 W William, Suite 210</td>
+      <td>Email: <a href="/cdn-cgi/l/email-protection#8ae7ebfee2f8effccaebe7f9a4e5f8ed"><span class="__cf_email__" data-cfemail="442925302c362132042529376a2b3623">[email&#160;protected]</span></a></td>
+    </tr>
+    <tr>
+      <td>Ann Arbor, MI 48103</td>
+      <td> URL: <a href="http://www.ams.org/mr-database">www.ams.org/mr-database</a></td>
+    </tr>
+    <tr>
+      <td>USA</td>
+      <td> YouTube: <a href="http://youtu.be/cUEOghB3MvM">An Introduction to Mathematical Reviews</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><a href="/mresubs/revr.html">Submit a review</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr noshade="noshade">
+<h6>Updated February 2015</h6>
+<h3> <b>The Mathematical Reviews Database</b></h3>
+<p><b><a href="http://www.ams.org/mr-database" target="_blank">The Mathematical
+Reviews (MR) Database</a></b> contains bibliographic data and reviews of
+published mathematical research from 1940 to the present. Bibliographic data for
+new publications (including journal articles, books, collections and other
+published material) are added to the Database on an ongoing basis.&nbsp; Most of
+these items are sent out for peer review, or are reviewed by summary.
+<p>Information in the MR Database is published electronically
+  in <a href="/mathscinet">MathSciNet</a>. For more information see
+  the <a href="http://www.ams.org/authors/mr-edit.html"
+  target="_blank">Editorial Statement.</a> </p>
+<h3>The content of a review</h3>
+<p><b>What is a review?</b> A review should primarily help the reader
+  decide
+  whether or not to read the original item. The review may range in
+  length
+  from a few lines to about 600 words. <span
+ style="font-style: italic; font-weight: bold;"></span>In most
+  cases the review should state the main results, together with sufficient
+  information to make them comprehensible to someone already familiar with the
+  field. The main ideas of the proof should be sketched when feasible. If the
+  results are technical, requiring extensive notation or elaborate formulas, it
+  is preferable to describe them with a few well-chosen and relatively
+  nontechnical sentences. A review should also contain comments that provide
+  some background for the item, evaluate it and connect it to related items or
+  approaches. Well written reviews are most desirable since the lasting value of
+  Mathematical Reviews/MathSciNet as a research tool lies in its independent
+  third-party reviews.
+</p>
+<p>If you find that you are unable to write a review for a particular item for
+whatever reason (e.g., inappropriate field, time constraints, conflict of
+interest, etc.), please return it as soon as possible so that it may be
+reassigned.  When you return an item, it will greatly help us to avoid errors in
+future assignments if you provide a brief reason why you returned the item.
+Instruction on transfers is provided below under <strong>Reviewing
+Schedules</strong>.  Also, if you are receiving a large number of items outside
+your interest you might wish to reconsider your reviewing preferences.  How to
+do this is also described below under <strong>Miscellaneous</strong>.
+</p>
+<p><a name="other" id="other"></a>Two other treatments of items are possible,
+but should be used sparingly. You may recommend that the item be listed without
+a published review, or you may recommend that the author's summary be used as
+the review. In the second case the quoted summary would be given above your
+signature, to indicate that the summary is being used on the recommendation of
+the reviewer. If you decide to recommend one of these options, simply put your
+request in the Review text box (e.g., &quot;Publish without a review&quot;, or
+&quot;Use the summary as my review&quot;). However, in most cases, the
+mathematics community would prefer an insightful review to either of these two
+treatments.
+</p>
+<p><b>References</b>. Reviewers are encouraged to<span
+ style="font-style: italic;"><span style="font-weight: bold;"> </span></span>include
+references to closely related work. Because we try to verify each
+reference, you should give as much information as possible, including
+full author name,
+title of the cited item,
+year of publication, journal name (or book or video publisher), volume
+number and paging. Please include the MR Number if possible. References
+in the correct format, including the MR Number, can often be found 
+using <a href="/mref" target="_blank">MRef</a>.
+References to items in the MR Database will become active links in your
+review in MathSciNet. However, no special formatting is required when
+you submit your review, as each reference is checked for accuracy and reformatted during the editing process.</p>
+<p><b>Evaluative reviews</b>. Your review may include a positive or negative
+  evaluation of the item. Critical remarks should be objective, precise,
+  documented and expressed in good taste. Vague criticism offends authors and
+  fails to enlighten the reader. If you conclude that the item duplicates
+  earlier work, you must cite specific references. If you believe there is an
+  error in the item, please describe it precisely in your review and provide
+  evidence validating your claim (e.g., a counterexample, an exact reference
+  which supports your assertion, or an indication where the error arises in the
+  paper). You should bear in mind that the MR Database does not include author
+  responses to critical reviews. </p>
+<p><b>Book reviews</b>. Important new books deserve careful reviews.
+  We understand that such a review takes time to prepare. However,
+  a good review does not need to be very long; fewer than 600 words are
+  often sufficient. You should  try to limit your review to a
+  maximum of 1500 words. A
+  detailed review is sometimes appropriate even if the book contains few
+  new results; for example, if it is an expository survey of a field in
+  which
+  there is considerable interest, many readers will use your review to
+  determine
+  whether to consult the book. The same is true of expository
+  articles.<br>
+</p>
+<p>
+  <b>PLEASE NOTE:</b> Any published material, digital or otherwise, provided by
+  MR to you is intended for reviewing purposes only and is not to be forwarded
+  or otherwise distributed. In particular, you are not allowed to upload your
+  copy of the item to be reviewed into any large language models (LLMs) or other
+  AI tools; this violates our agreements with publishers. They may also regard
+  your action as a violation of their intellectual property rights. The use of
+  grammar checking tools on your review itself is permissible; however, please
+  note that each review is carefully edited by both our expert copy editors and
+  our staff mathematicians (the MR Editors).
+</p>
+<h3>Reviewing schedules</h3>
+<p><b>Time for reviewing</b>. Your promptness in returning reviews can
+significantly improve the timeliness of
+the MR Database.
+It is expected that you will spend no more than
+eight weeks completing the review of an item. We understand that this may
+not be sufficient time, depending on the length and complexity of the item
+and your other commitments. It is
+understood that
+reviewers holding multiple items will
+require additional time to complete the reviews. If you are receiving too many items, or too many at one time, please
+let
+us know.</p>
+<p><b>Reminder notices</b>. If you have held an item for about two
+  months,
+  a first reminder will be sent to you. If you receive a reminder notice
+  and you decide that you cannot finish the reviews of some of the
+  items that you have, please let us know
+  immediately. MR will transfer the items to another
+  reviewer. Books must be returned to MR.</p>
+<p><b>Transfer of items. </b>We may send you an item in an
+  inappropriate field or language.&nbsp; We may send you more items than you
+  can conveniently handle at one time, because of other demands on your
+  time. You may feel that you cannot be objective reviewing the work of
+  someone in close "proximity" to yourself, such as a close colleague or
+  a spouse. (Asking an author or co-author of an item to write a review
+  of that item is always an error on our part.) In cases
+  like these, please inform MR as soon as possible for transfer to
+  another reviewer. No explanation is
+  necessary; however, the
+  editors always find it useful if you can provide a short explanation
+  and we
+  appreciate your suggestions of
+  alternative reviewers.&nbsp; If the item is a book, please
+  return the book.</p>
+<p><b>Transfer to a colleague</b>. If you feel that a particular item
+  could be better handled by one of your colleagues, you may transfer it
+  to that person even if he or she is not a regular reviewer for
+  Mathematical
+  Reviews. If you do so, please let us know at once, giving the complete
+  name and address of your colleague so that we may record the transfer
+  in
+  our files. </p>
+<p><b>Becoming inactive</b>. At your request, we can make you
+  "inactive"
+  as a reviewer and stop sending you items for review until a fixed date,
+  or until you tell us that you are ready to review again. Such a request
+  should be sent to our Reviewer Data Services Department (<a href="/cdn-cgi/l/email-protection#c4a9a5b0acb6a1b284a5a9b7eaabb6a3"><span class="__cf_email__" data-cfemail="117c70657963746751707c623f7e6376">[email&#160;protected]</span></a>). </p>
+<h3> Review format </h3>
+<p><em> Reviews are submitted  using  <a href="/mresubs" target="_blank">MR Reviewer Home</a>. Once you sign in you will be connected to all your reviewer data.</em></p>
+<p><b>Format for electronically submitted reviews</b>. LaTeX is the
+  typesetting language used in the MR Database. However, if your review
+  does not contain mathematical symbols, knowledge of LaTeX is not required
+  to submit your review electronically. Many reviewers find that knowing
+  simple LaTeX such as $x$ and $x^2$ is sufficient. Click here for  <a href="/mresubs/index.html" target="_blank">MR Reviewer Home</a>.  Once you Sign In to  <a href="/mresubs/index.html">MR Reviewer Home</a>, you will be connected with your reviewer profile, including all the review items for which you have not yet submitted a review. </p>
+<p><b>Accuracy</b>. Ambiguities in the manuscript or notational
+  complexities can lead to the introduction of errors during the
+  editorial process. We strive to keep such errors to a minimum, but we
+  need your help.&nbsp; Please submit your reviews in final
+  form.&nbsp;Always proofread your review before submitting it.&nbsp;
+  This is especially important
+  if someone else has keyboarded the final copy of your review.  <a href="/mresubs"  target="_blank">MR Reviewer Home</a> offers you a
+  PDF preview that you can proofread for accuracy, including the accuracy
+  of your LaTeX encoding.</p>
+<p><b>Languages</b>. Reviews must be written in English.When reviewing an item written in a language other than English, if you propose that we use an unedited summary as the review there is no need to translate it.<br>
+</p>
+<p><b>Subject classification of reviews</b>. The data submission page on  <a href="/mresubs"  target="_blank">MR Reviewer Home</a> asks for your suggestions for the 5-character classifications of
+  the
+  item being reviewed, according to the <a href="/msc/">Mathematics Subject Classification (MSC)</a>. We value your
+  suggestions,
+  especially
+  in completing partial classifications and correcting errors, because
+  you will have read the item more carefully and possess
+  more
+  expertise than the editors. </p>
+<h3><b>Miscellaneous</b></h3>
+<p><b>Change of name or address</b>. Please inform our Reviewer
+  Data Services Department (<a href="/cdn-cgi/l/email-protection#8de0ecf9e5ffe8fbcdece0fea3e2ffea"><span class="__cf_email__" data-cfemail="137e72677b61766553727e603d7c6174">[email&#160;protected]</span></a>)
+  at once of any change in your address (paper or email) or name. This
+  will prevent the loss of review material and will save time and money. </p>
+<p><b>Reviewing preferences</b>. When you first became a reviewer, you
+  indicated to us your reviewing interests and language skills. If we are sending you inappropriate items, or if your interests change,
+  please let us know your current reviewing interests. This can be done using  <a href="/mresubs">MR Reviewer Home</a>, by clicking &quot;Change My Reviewer Info&quot; after signing in.</p>
+<p><b>When to keep the original item</b>. Items sent to you for review
+  may be retained (<em>for your personal use only</em>) once you have reviewed them. </p>
+<p><b>Recommending new reviewers</b>. New reviewers are frequently
+  enlisted
+  on the recommendation of a current reviewer. Your suggestions are very
+  welcome. A potential reviewer should ordinarily have already published
+  reviewable work.</p>
+<p><strong>Reviews in other publications.</strong> You may find yourself asked to write a review of the same item for another publication. In general, the community is best served by reviews written independently. If you have already been asked by another publication to review an item, please let us know and we will transfer it to another reviewer.</p>
+<p><b>Write to us</b>. We invite reviewers to write to our Reviewer Data
+  Services Department (<a href="/cdn-cgi/l/email-protection#fe939f8a968c9b88be9f938dd0918c99"><span class="__cf_email__" data-cfemail="600d01140812051620010d134e0f1207">[email&#160;protected]</span></a>)
+  with their questions, complaints, or special requests. We are keenly
+  aware
+  that MR relies greatly on its reviewers and we welcome their
+  correspondence&#8212;all of which will be read, carefully considered and,
+  when
+  appropriate, answered. (Note that MR normally does not accept
+  unsolicited
+  requests to review specific items.) <br>
+</p>
+<p><b>Submitting a review.</b> Reviews should be submitted via the <a href="/mresubs/revr.html">reviewer portal</a>.  You can also use the portal to find information about reviews that have been assigned to you and your recently submitted reviews.
+<hr noshade="noshade">
+<br>
+<b>Subscriptions</b>. Any requests for subscriptions to MR Database
+products or problems with current subscriptions should be addressed to: <br>
+&nbsp;
+<table cellspacing="0" cols="2" width="100%">
+  <tbody>
+    <tr>
+      <td>American Mathematical Society</td>
+      <td>Telephone: (800) 321-4267</td>
+    </tr>
+    <tr>
+      <td>Customer Services</td>
+      <td>Telephone (worldwide): (401) 455-4000</td>
+    </tr>
+    <tr>
+      <td>201 Charles Street</td>
+      <td>FAX: (401) 455-4046 or (401) 331-3842</td>
+    </tr>
+    <tr>
+      <td>Providence, RI 02940-2213 USA</td>
+      <td>Email: <a href="/cdn-cgi/l/email-protection#89eafcfafda4faecfbffc9e8e4faa7e6fbee"><span class="__cf_email__" data-cfemail="3d5e484e49104e584f4b7d5c504e13524f5a">[email&#160;protected]</span></a></td>
+    </tr>
+    <tr>
+      <td>USA</td>
+      <td>Web site: <a href="http://www.ams.org/customers">www.ams.org/customers</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<footer>
+<div id="footerlinediv">
+<a href="https://www.ams.org">
+<img id="footerline" src="/mathscinet/images/footer-line.png" style="width:1200px;"/>
+</a>
+</div>
+<div id="footerDiv">
+<a class="AMSLink AMSLinkBorder" href="https://www.ams.org/notices">Notices of the AMS</a> 
+<a class="AMSLink AMSLinkBorder" href="https://blogs.ams.org/">AMS Blogs</a>
+<a class="AMSLink AMSLinkBorder" href="https://www.ams.org/bull">Bulletin of the AMS</a>
+<br>
+<br>
+<a href="https://www.facebook.com/pages/American-Mathematical-Society/216331555216" title="Facebook"><i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://twitter.com/amermathsoc" title="Twitter"><i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://www.linkedin.com/companies/american-mathematical-society?trk=fc_badge" title="LinkedIn"><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://plus.google.com/111299122922781685506" title="Google+"><i class="fa fa-google-plus-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://instagram.com/amermathsoc" title="Instagram"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a> 
+<a href="https://www.youtube.com/amermathsoc" title="YouTube"><i class="fa fa-youtube-square fa-2x" aria-hidden="true"></i></a>
+<div class="clearfix">&nbsp;</div>  
+
+<div id="AMSfooter">
+American Mathematical Society &middot; 
+<a class="AMSLink" href="https://goo.gl/maps/ZvJdkQEC79p" title="Google map 201 Charles Street Providence, Rhode Island">201 Charles Street Providence, Rhode Island 02904-2213</a> &middot; 
+<a class="AMSLink" href="tel:401-455-4077">401-455-4000</a> or <a class="AMSLink" href="tel:800-321-4267">800-321-4267</a>
+<br><br>&copy; <a class="AMSLink" href="https://www.ams.org/copyright">Copyright</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+   var now = new Date();
+   document.write(now.getFullYear());
+</script>, American Mathematical Society &middot; <a class="AMSLink" href="https://www.ams.org/privacy">Privacy Statement</a>
+</div>
+</div>
+</footer>
+ 
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9847f1aa830065',t:'MTc3ODQwOTE1Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+
+
+
+
+
+
+

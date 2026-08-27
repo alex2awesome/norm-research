@@ -1,0 +1,180 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 17,
+  "n_chunks": 24,
+  "chunk_chars": 39998,
+  "model": "gpt-5-mini",
+  "elapsed_s": 199.49519124999642,
+  "input_tokens": 14349,
+  "output_tokens": 5179,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of PARI/GP (mathematicians, numerical analysts, and programmers) doing high-precision numerical integration, summation, transforms and plotting",
+    "subtask_short": "PARI/GP numerical integration & transforms",
+    "subtask_description": "Practical reference and usage guidelines for PARI/GP numerical routines (derivative, circle integrals, Fourier/Laplace/Mellin transforms, various numerical integrators and summation algorithms, and plotting). Contains function purposes, calling conventions, parameter encodings, warnings and tuning advice for accuracy and performance.",
+    "subtask_keywords": [
+      "pari_gp",
+      "numerical_integration",
+      "numerical_summation",
+      "inverse_transforms",
+      "high_precision"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "derivnum(X = a, expr)",
+        "description": "Numerical derivation of expr with respect to X at X = a.",
+        "guidance": "Example shows numerical derivative of sin(exp(x)) at 0. Library syntax: derivnum(void *E, GEN (*eval)(void*,GEN), GEN a, long prec). Also available: derivfun(...), which allows power series for a. When a is a power series, compute derivnum(t=a,f) accordingly. Avoid the clumsier approach of defining a gp function in library mode (won't work in library mode)."
+      },
+      {
+        "name": "intcirc(X = a, R, expr, {tab})",
+        "description": "Numerical integration of (2i\u03c0)^{-1} expr with respect to X on the circle |X \u2212 a| = R (sum of residues for meromorphic functions in the disk).",
+        "guidance": "tab argument is as in intnum; if computed with intnuminit endpoints should be [-1,1]. Library syntax detailed. Example: intcirc(s=1,0.5,zeta(s)) returns 1 (within tiny error). Use when computing sums of residues via contour integrals."
+      },
+      {
+        "name": "intfouriercos(X = a, b, z, expr, {tab})",
+        "description": "Numerical integration of expr(X) * cos(2\u03c0 z X) from a to b \u2014 the Fourier cosine transform on [a,b].",
+        "guidance": "Endpoints a and b are coded as in intnum; endpoints may be infinite but oscillation encodings ([[\u00b11], \u03b1 I]) are forbidden when endpoints are infinite. Library syntax provided. Use for cosine Fourier transforms on finite or encoded intervals."
+      },
+      {
+        "name": "intfourierexp(X = a, b, z, expr, {tab})",
+        "description": "Numerical integration of expr(X) * exp(\u22122i\u03c0 z X) from a to b \u2014 the Fourier transform (note the minus sign).",
+        "guidance": "Endpoints coded as in intnum; infinite endpoints require no oscillation encoding. Library syntax provided. Use for complex exponential Fourier transforms; watch sign convention."
+      },
+      {
+        "name": "intfouriersin(X = a, b, z, expr, {tab})",
+        "description": "Numerical integration of expr(X) * sin(2\u03c0 z X) from a to b \u2014 Fourier sine transform on [a,b].",
+        "guidance": "Endpoints coded as in intnum; infinite endpoints disallow oscillation encodings. Library syntax provided. Use for sine Fourier transforms."
+      },
+      {
+        "name": "intfuncinit(X = a, b, expr, {flag = 0}, {m = 0})",
+        "description": "Initialize tables for use with integral transforms (e.g., intmellininvshort), where expr is s(X) that multiplies integration weights.",
+        "guidance": "If flag \u2260 0, assumes s(\u2212X)=s(X) (even function) which makes computation twice as fast. Useful when s(X) is expensive to compute (e.g., gamma products). Library syntax differs in argument order from GP syntax."
+      },
+      {
+        "name": "intlaplaceinv(X = sig, z, expr, {tab})",
+        "description": "Numerical integration of (2i\u03c0)^{-1} expr(X) e^{X z} on the vertical line Re(X)=\u03c3 \u2014 inverse Laplace transform evaluation at z.",
+        "guidance": "sig can be a real \u03c3 (assumes slow decay at imaginary infinity) or [\u03c3, \u03b1] where \u03b1 = 0 (slow), \u03b1>0 (decay like exp(\u2212\u03b1 t)). It's often beneficial to increase m by 1\u20132 (intnumstep) or raise \u03c3 to improve accuracy. Examples show increasing m or \u03c3 improves accuracy/time tradeoff. Library syntax provided."
+      },
+      {
+        "name": "intmellininv(X = sig, z, expr, {tab})",
+        "description": "Numerical integration of (2i\u03c0)^{-1} expr(X) z^{\u2212X} on the line Re(X)=\u03c3 \u2014 inverse Mellin transform at z.",
+        "guidance": "sig coded as real \u03c3 or [\u03c3, \u03b1]; \u03b1=0 assumes exponential decrease like exp(\u2212t), \u03b1>0 for exp(\u2212\u03b1 t) (e.g., gamma products); \u03b1 usually \u22481 suffices. tab is as in intnum. Prefer intmellininvshort when possible for speed; library syntax provided."
+      },
+      {
+        "name": "intmellininvshort(sig, z, tab)",
+        "description": "Fast numerical inverse Mellin transform using precomputed tab containing s(sig + i t) values (from intfuncinit format).",
+        "guidance": "tab should be prepared with intfuncinit; intmellininvshort is typically much faster than intmellininv, especially when s(X) is expensive. Give a rough indication of exponential decrease in tab; omitting it can cause catastrophic loss of accuracy. Library syntax: GEN intmellininvshort(GEN sig, GEN z, GEN tab, long prec). Examples show huge speedups when tab is used."
+      },
+      {
+        "name": "intnum(X = a, b, expr, {tab})",
+        "description": "Numerical integration of expr over ]a,b[; integrand may be complex- or vector-valued; assumed regular on ]a,b[ unless special codings provided.",
+        "guidance": "Endpoints encoded as scalars or [\u00b11] for \u00b1\u221e. tab can be integer m (use 2^m sampling points) or tables from intnuminit (much faster for repeated integrals). If omitted, algorithm guesses m based on precision (intnumstep). For endpoints or singularities use [a, \u03b1] coding (\u03b1 indicates local singularity exponent or decay/oscillation at infinity). Wrong singularity exponents cause catastrophic loss of decimals. Infinite endpoints have special [[\u00b11], \u03b1] codings for slow decay (\u03b1=0), exponential decay (\u03b1>0), slow power decay (\u03b1<\u22121) or oscillations (\u03b1 = \u00b1 k i). Choose between exponential vs oscillatory type based on relative strength; examples and important warnings provided (e.g., exp overflow, examples of improvement by truncation near singularities). Library syntax provided. Many examples illustrate tuning tab and m for accuracy and speed; use intnuminit to precompute tables for multivariate integrals."
+      },
+      {
+        "name": "endpoint coding for intnum and related functions ([a, \u03b1] and [[\u00b11], \u03b1])",
+        "description": "Endpoints can be specified as scalars or as two-component vectors indicating local behavior or infinity-decay/oscillation.",
+        "guidance": "If finite, [a, \u03b1] indicates a singularity behaving like (x\u2212a)^\u03b1 (up to logs); \u03b1\u22650 means regular. For infinity, [[\u00b11], \u03b1]: \u03b1=0 (tends to zero slowly, non-exponential, non-oscillatory), \u03b1>0 (exponential decay ~exp(\u2212\u03b1 x)), \u03b1<\u22121 (slow power decay ~x^\u03b1; \u03b1\u2264\u22122 equivalent to \u03b1=0). Oscillatory codes: \u03b1 = k*I for cos(kx)g(x), \u03b1 = \u2212k*I for sin(kx)g(x) \u2014 critical to give exact k. If oscillating part is not pure sine/cosine, expand into Fourier series and sum contributions. Choosing wrong \u03b1 leads to loss of accuracy; guidance on when to prefer exponential vs oscillatory coding is provided."
+      },
+      {
+        "name": "intnuminit(a, b, {m = 0})",
+        "description": "Initialize integration tables for intnum between a and b (a and b coded as in intnum).",
+        "guidance": "Only compactness, singularities, speed of decrease and oscillations at infinity are considered (not function values). If m omitted, computed from current precision; otherwise integration step is 1/2^m. Reasonable m: 6\u20137 for 100 digits, 9 for 1000 digits. Output structure tab explained (tab[1] contains m, tab[2..] abscissas and weights). Use intnuminit to speed repeated or multivariate integrals, but intnuminit may be pessimistic \u2014 tune m by trial and error to improve speed vs accuracy."
+      },
+      {
+        "name": "intnuminitgen(t, a, b, ph, {m = 0}, {flag = 0})",
+        "description": "Initialize tables for integrations from a to b using abscissas \u03c6(t) and weights \u03c6'(t) (user-supplied change of variables).",
+        "guidance": "t ranges \u2212\u221e..+\u221e and \u03c6(t) is mapped to [a,b]; flag multiplies reserved table length by 4^flag to avoid errors. Library syntax provided."
+      },
+      {
+        "name": "intnumromb(X = a, b, expr, {flag = 0})",
+        "description": "Numerical integration using Romberg-style method; suitable for smooth functions on [a,b] for low-to-moderate accuracy.",
+        "guidance": "Use flag=0 for regular intervals; flag=1 for general driver (slow); flag=2 tailored for infinite endpoints (require ab>0 and prefer large a); flag=3 allows integrand undefined but continuous at endpoints (e.g., sin(x)/x at 0). User should not demand excessive accuracy (18\u201328 digits okay). No singularities should remain in interval; for improper integrals function must decrease sufficiently at infinity; avoid functions that are extremely small relative to precision on entire interval. Infinity can be approximated by a large finite number but watch underflow for rapidly decaying functions. Library syntax provided."
+      },
+      {
+        "name": "intnumstep()",
+        "description": "Return the value m used in intnum and sumnum programs (integration step = 1/2^m).",
+        "guidance": "Library syntax: long intnumstep(long prec). Use to inspect or adjust default m and tune performance/accuracy."
+      },
+      {
+        "name": "prod(X = a, b, expr, {x = 1})",
+        "description": "Product of expr for X from a to b, initialized at x (to force operation type: integer, real, or power series).",
+        "guidance": "Initialization parameter x controls computation type (exact integer arithmetic, floating point at default precision, or truncated power series with O(X^k) to bound degree and speed). Examples show huge speed savings when initializing with power series truncation for high-degree products. Library syntax: produit(...)."
+      },
+      {
+        "name": "prodeuler(X = a, b, expr)",
+        "description": "Product over primes between a and b (initialized at 1).",
+        "guidance": "Library syntax provided. Use when Euler-type infinite products over primes are required; routine specialized for prime iteration."
+      },
+      {
+        "name": "prodinf(X = a, expr, {flag = 0})",
+        "description": "Infinite product over X starting at a; evaluation stops when relative error of expression\u22121 is below default precision.",
+        "guidance": "Non-convergent products will loop infinitely. Expressions must evaluate to complex numbers. If flag=1, compute product of (1+expr) instead. Use prodinf1 for flag=1. Library syntax provided."
+      },
+      {
+        "name": "solve(X = a, b, expr)",
+        "description": "Find a real root of expr between a and b under the condition expr(a)*expr(b) \u2264 0 (bracketed root required).",
+        "guidance": "Uses Brent's method. Will error if roots are not bracketed. Can fail miserably if expr is undefined on [a,b] (e.g., solve on interval containing tan discontinuity). Library syntax: zbrent(...)."
+      },
+      {
+        "name": "sum(X = a, b, expr, {x = 0})",
+        "description": "Finite sum of expr with X from a to b, initialized at x to force computation type.",
+        "guidance": "Initialization parameter x controls exactness/precision/type; examples show time/memory tradeoffs (summing rationals exactly vs using floating). Library syntax: somme(...)."
+      },
+      {
+        "name": "sumalt(X = a, expr, {flag = 0})",
+        "description": "Numerical summation of an alternating series using algorithm of Cohen, Villegas and Zagier. Variable X starts at a.",
+        "guidance": "Flag=1 uses variant with different polynomials (sometimes faster). Routine is heuristic; rigorous proof requires expr values to be moments of a positive measure on [0,1]. Can sometimes sum divergent alternating series or non-exactly-alternating series; use to guess values of infinite sums. For geometrically convergent alternating series, suminf may be better. Library syntax: sumalt(...). Examples show superior accuracy for many alternating sums but also cases where suminf is faster/accurate."
+      },
+      {
+        "name": "sumdiv(n, X, expr)",
+        "description": "Sum expr over positive divisors of n (X takes divisors).",
+        "guidance": "Wrapper equivalent to enumerating divisors and evaluating expr with X lexically scoped to loop. For multiplicative functions prefer sumdivmult."
+      },
+      {
+        "name": "sumdivmult(n, d, expr)",
+        "description": "Sum multiplicative expression expr over positive divisors d of n, assuming f multiplicative.",
+        "guidance": "Assumes expr evaluates to f(d) where f is multiplicative (f(1)=1 and f(ab)=f(a)f(b) for coprime a,b). Use for number-theoretic divisor sums when multiplicativity allows optimizations."
+      },
+      {
+        "name": "suminf(X = a, expr)",
+        "description": "Infinite sum starting at X=a; evaluation stops when relative error of expression is below default precision for three consecutive evaluations.",
+        "guidance": "Expressions must evaluate to complex numbers. For slowly converging series reduce realprecision; if series is alternating or constant-sign prefer sumalt or sumpos. Examples show suminf may hang on slowly converging alternating series where sumalt succeeds. Library syntax provided."
+      },
+      {
+        "name": "sumnum(X = a, sig, expr, {tab}, {flag = 0})",
+        "description": "Numerical summation of expr for integer X from ceil(a) to +\u221e, with expr assumed holomorphic for Re(X) \u2265 \u03c3; uses intnum routines and integration on line Re(s)=\u03c3.",
+        "guidance": "sig codes \u03c3 or [\u03c3, \u03b1] as in sumnum documentation: \u03c3 real assumes decay \u2265 1/X^2; [\u03c3, \u03b1] with \u03b1<\u22121 means decay like X^\u03b1; [\u03c3, \u03b1] with \u03b1>0 means exponential decay (\u03b1 must be exact). tab must be initialized with sumnuminit. sumnum is generally faster than sumpos for slowly decreasing functions after initialization; flag\u22600 assumes real-type function f(z)=overline{f(z)} which speeds up calculations. For exponentially decreasing functions prefer suminf or sumpos. Examples show pitfalls (determination problems using complex values) and tuning (increase m or specify exact \u03b1). Library syntax provided."
+      },
+      {
+        "name": "sumnumalt(X = a, sig, expr, {tab}, {flag = 0})",
+        "description": "Numerical summation of (\u22121)^X expr(X) from ceil(a) to +\u221e; expr should be holomorphic for Re(X) \u2265 sig.",
+        "guidance": "This function uses intnum routines and is much slower than sumalt; provided for completeness only. expr must not include the (\u22121)^X coefficient. sig coded as in sumnum; for slowly decreasing functions indicating \u03b1 is less important; for exponential decrease must indicate \u03b1 exactly. tab must be initialized with sumnuminit. flag\u22600 assumes real-type and speeds up computation when tab is precomputed. Prefer sumalt in practice. Library syntax provided."
+      },
+      {
+        "name": "sumnuminit(sig, {m = 0}, {sgn = 1})",
+        "description": "Initialize tables for numerical summation using sumnum (sgn=1) or sumnumalt (sgn=\u22121); sig is abscissa of integration coded as in sumnum; m as in intnuminit.",
+        "guidance": "Precomputes tables to speed subsequent sumnum/sumnumalt calls; library syntax provided."
+      },
+      {
+        "name": "sumpos(X = a, expr, {flag = 0})",
+        "description": "Numerical summation of a series whose terms have the same sign, using Van Wijngaarden transformation to convert to alternating series then sumalt.",
+        "guidance": "Routine is heuristic and assumes expr is roughly decreasing; result wrong if expr is zero often; does not check sign of terms. For regular functions, sumnum is faster after initialization. flag=1 uses slightly different polynomials. Use sumpos to guess infinite sums of same-sign terms; sumalt or suminf may be better in other scenarios."
+      },
+      {
+        "name": "plotting: high-level, low-level and PostScript functions",
+        "description": "PARI provides plotting functions (ploth* high-level, plot/rectplot low-level, ps* PostScript output) as convenience visual aids, not for heavy-duty graphics.",
+        "guidance": "High-level ploth* require little user setup. Low-level rectplot functions give primitives and manage 16 virtual rectwindows (init with plotinit; draw with plotdraw; erase with plotkill). Use plotscale for scaled windows; by default origin upper-left, y downwards. PostScript output written to psfile (default ./pari.ps) and appended on each call \u2014 remove or change psfile if needed. Plotting functions are not available in library mode (only under gp). Graphical drivers: X11, Qt, FLTK (window is forked so gp session continues). For exact printed output use printtex for TeX; ps* functions give PostScript plots."
+      },
+      {
+        "name": "plot(X = a, b, expr, {Ymin}, {Ymax})",
+        "description": "Crude ASCII plot of expr from a to b with Y ranging Ymin..Ymax (defaults are computed from values).",
+        "guidance": "Simple ASCII plotting for quick visualization; supply Ymin/Ymax to control vertical range or let the function compute extremes."
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_ca53ce81865f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_ca53ce81865f.html",
+  "chunk_idx": 2,
+  "n_chunks": 7,
+  "chunk_chars": 39917,
+  "model": "gpt-5-mini",
+  "elapsed_s": 32.44993358400097,
+  "input_tokens": 12125,
+  "output_tokens": 3922,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing or evaluating automated reviewer-assignment systems (conference organizers, journal editors, algorithm designers)",
+    "subtask_short": "reviewer assignment system design",
+    "subtask_description": "Designing, modeling, and evaluating automated reviewer-to-proposal assignment methods (similarity computation, representation choices, and optimization algorithms) for peer-review settings such as conferences, journals, and grant review panels.",
+    "subtask_keywords": [
+      "reviewer_assignment",
+      "peer_review",
+      "matching",
+      "optimization",
+      "similarity_models"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Similarity score as objective weight",
+        "description": "The weight of the edge between a proposal and its reviewer shows the relevance between them (s_ij); the ORAP typically maximizes the cumulative sum of these similarity scores for matched pairs.",
+        "guidance": "Similarity scores form the input weight matrix for optimization; approaches assume availability of a proposal-reviewer similarity score matrix. Exact optimization (ILP/MIP) or heuristics can be used to maximize total similarity. Implementations: TPMS, EasyChair, HotCRP."
+      },
+      {
+        "name": "Reviewer workload constraint",
+        "description": "Each reviewer should be assigned a pre-determined number of proposals (workload w).",
+        "guidance": "Enforce as constraint \u2211_i x_ij = w for each reviewer j (equation 7-3). Essential practical constraint in most mathematical models."
+      },
+      {
+        "name": "Proposal demand constraint",
+        "description": "Each proposal should be reviewed by a certain number of reviewers (d).",
+        "guidance": "Enforce as constraint \u2211_j x_ij = d for each proposal i (equation 7-2). Frequently attempted to be met in models."
+      },
+      {
+        "name": "Two-stage framework (weighted bipartite graph then assignment)",
+        "description": "First construct a weighted bipartite graph between proposals and reviewers (weights = similarity), then determine a final assignment optimizing an objective under constraints.",
+        "guidance": "This canonical formulation underpins many ORAP approaches and clarifies separation between scoring (IRRAP) and optimization (ORAP)."
+      },
+      {
+        "name": "Maximizing cumulative sum of similarity scores",
+        "description": "Optimization objective to maximize the total similarity across all assigned proposal-reviewer pairs.",
+        "guidance": "Commonly formulated as ILP/MIP. Solved by exact solvers for small instances or approximation/heuristic algorithms (greedy, genetic, ant colony, particle swarm, hybrid methods, network flow formulations) for large-scale problems."
+      },
+      {
+        "name": "Maximizing topic coverage (coverage ratio)",
+        "description": "Quality measured by set-coverage ratio: the ratio of proposal topics covered by assigned reviewer group to total proposal topics (Coverage(q_i) formula 7-4).",
+        "guidance": "Derive topic sets from keywords or topic models. Use MaxTC-PRA, WGRAP, CMACRA or constrained network-flow transformations to ensure aspect coverage of proposals."
+      },
+      {
+        "name": "Confidence (topic coverage confidence)",
+        "description": "Measure of how much each assigned reviewer's competence encompasses proposal aspects (Confidence(q_i) formula 7-5).",
+        "guidance": "Computed as average overlap between proposal topics and each reviewer's topics normalized by group coverage; used as constraint or objective alongside coverage to ensure per-reviewer competence."
+      },
+      {
+        "name": "Optimizing fairness (max-min / lexi-min / rank-maximal)",
+        "description": "Objective to ensure no proposal is disadvantaged (e.g., maximize utility of worst-off proposal or maximize minimum total similarity per proposal).",
+        "guidance": "Formulations include max-min fairness, lexi-min, rank-maximal assignments and fairness objective \u0393_S(A) = min_i \u2211_{j\u2208R_A(i)} s_ij (equation 7-7). Algorithms like PeerReview4All use incremental max-flow to achieve provable guarantees."
+      },
+      {
+        "name": "Minimum similarity threshold constraint",
+        "description": "Impose strict constraints on the minimum similarity of valid proposal-reviewer matches to avoid assignments with near-zero relevance.",
+        "guidance": "Used to prevent assignments where a proposal has zero similarity to all assigned reviewers; can be enforced as a hard constraint in optimization."
+      },
+      {
+        "name": "Balanced workload distribution / fairness in workload",
+        "description": "Ensure balanced distribution of review assignments among reviewers to avoid overloading a few experts in popular fields.",
+        "guidance": "Model via upper and lower capacity limits or workload balancing objectives (e.g., minimize difference between max and min total profit/probabilities per reviewer)."
+      },
+      {
+        "name": "Conflict-of-Interest (COI) handling / minimization",
+        "description": "Include COI constraints or minimize conflicts when generating assignments.",
+        "guidance": "COIs should be explicitly modeled (for example, Pradhan et al. include minimizing COIs in an equilibrium multi-job assignment); treat COI edges as forbidden or highly penalized in the weight matrix."
+      },
+      {
+        "name": "Representation choice: word-based, topic-based, semantic-based",
+        "description": "Different document representations (frequency-based VSM, topic models like LSI/PLSA/LDA, and semantic/ontology-based) impact similarity computation and assignment quality.",
+        "guidance": "Frequency-based methods ignore word order and suffer sparsity; LDA widely used to identify topics; semantic methods (ontologies, semantic kernels) can enrich profiles but ontologies are costly to maintain."
+      },
+      {
+        "name": "Combining word and semantic information",
+        "description": "Combine LDA/topic models with semantic models (SLM, TF/IDF, semantic kernels) to obtain more accurate similarity scores between reviewers and proposals.",
+        "guidance": "Examples: LDA+SLM, LDA+TF/IDF, exact matching (SLM) + semantic matching (graph/ontology). Time-aware/topic-based weighting of recent publications can improve reviewer profile accuracy."
+      },
+      {
+        "name": "Neural network-based language models / word embeddings",
+        "description": "Use embeddings and deep models (Word2Vec, FastText, BERT, SciBERT, Doc2Vec, SPECTER, etc.) to produce dense vector document representations for similarity computation.",
+        "guidance": "These models address sparsity and capture semantic/syntactic affinities; studies show embeddings often outperform classical semantic-based methods. Also includes sentence-pair models and supervised approaches using field association signals."
+      },
+      {
+        "name": "Use of network-based / social information",
+        "description": "Leverage citation, co-authorship, collaboration, committee membership and other social/academic network relationships to strengthen reviewer recommendations.",
+        "guidance": "Techniques include topical PageRank, three-layer networks combining semantic, social and citation networks, co-authorship collaborative filtering and connectivity matrices; useful to capture implicit relationships not in text."
+      },
+      {
+        "name": "Choice of optimization/modeling paradigm (ILP, MIP, network flow, set covering, equilibrium models)",
+        "description": "Select mathematical model appropriate to the objective: ILP/MIP for sum-similarity maximization, network-flow formulations, set-covering for joint panelist objectives, equilibrium/multi-job assignment for balanced profits.",
+        "guidance": "Small instances: exact solvers (CPLEX). Large instances: approximations, greedy, hybrid or specialized network-flow transforms. Choice affects solvability and runtime; some formulations are NP-hard for certain objectives."
+      },
+      {
+        "name": "Algorithm class and scalability tradeoffs",
+        "description": "Algorithms (exact, greedy, stochastic, hybrid, evolutionary, metaheuristic, row/column generation) trade off solution quality versus runtime and memory.",
+        "guidance": "Greedy and heuristics scale but may sacrifice optimality; hybrids can improve precision but often increase time. Examples: greedy, two-phase stochastic-biased greedy, genetic algorithms, ant colony, particle swarm, PeerReview4All, FairFlow, row/column generation."
+      },
+      {
+        "name": "Group-based multi-aspect assignment vs independent assignment",
+        "description": "Assigning reviewers to proposals independently can harm global workload balance and topic distribution; multi-aspect group-based formulations (CMACRA, WGRAP, MARTA-LRA) aim to optimize group coverage under global constraints.",
+        "guidance": "Group-based models consider the committee as a whole and use coverage/confidence measures; typically harder (NP-hard) and approximated via greedy or specialized algorithms."
+      },
+      {
+        "name": "Handling multi-domain/multilabel reviewer expertise",
+        "description": "Model reviewers and proposals as belonging to multiple research domains (multilabel) and use hierarchical/transparent representations to capture this structure.",
+        "guidance": "Use hierarchical embeddings (e.g., Hiepar), bidirectional GRU with attention, or multilabel classifiers to capture multi-domain expertise and assign reviewers accordingly."
+      },
+      {
+        "name": "Freshness / recency weighting of reviewer profile",
+        "description": "Weight more recent publications higher to reflect reviewers' current interests or use proxies like journal impact factor to measure reviewer 'freshness'.",
+        "guidance": "Time-aware models (e.g., time-aware topic models) can improve matching to current interests and help diversify reviewer assignment across topics."
+      },
+      {
+        "name": "Use of field labels / supervised label information",
+        "description": "Incorporate known field/discipline labels for reviewers and proposals to improve classification and matching quality.",
+        "guidance": "Methods like WMD\u2013CCA use field labels to predict relationships; supervised signals can help learn field associations better than purely unsupervised approaches."
+      },
+      {
+        "name": "Decision-science techniques for uncertainty and multi-criteria",
+        "description": "Apply fuzzy optimization, AHP, OWAs and related multi-criteria decision methods to handle uncertainty in expertise and trade-offs among objectives (similarity, cost, budget).",
+        "guidance": "Examples: fuzzy ILP to maximize similarity while minimizing panel cost subject to budget; AHP to combine expertise and relevance into scores."
+      },
+      {
+        "name": "Evaluation metrics beyond objective value (statistical accuracy / ability to identify best proposals)",
+        "description": "Assess assignments not only by optimization objective but also by statistical guarantees about correctly identifying top proposals and robustness to noise.",
+        "guidance": "PeerReview4All provides statistical assurances for identifying best proposals; fairness objectives should be evaluated for downstream selection accuracy, not only summed similarity."
+      }
+    ]
+  }
+}

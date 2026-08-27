@@ -15,6 +15,7 @@ from methods.codability.experiments.build_fresh_item_partitions import (
     text_sha256,
 )
 from methods.codability.experiments.policy_data import (
+    ANALYSIS_IMPLEMENTATION_PATHS,
     _resolve_declared_path,
     validate_policy_articulation_selection_provenance,
 )
@@ -128,26 +129,10 @@ BREADTH_SCORING_IMPLEMENTATION = (
     "methods/metric_implementer/manifest.py",
     "methods/metric_implementer/artifact.py",
 )
-BREADTH_ANALYSIS_IMPLEMENTATION = (
-    "methods/codability/__init__.py",
-    "methods/codability/experiments/__init__.py",
-    "methods/codability/experiments/run_policy_isomorphism.py",
-    # The runner imports the shared arm selector from the scorer.  Bind that transitive
-    # dependency here as well as in the scoring closure so a selector change cannot silently
-    # alter the analysis population after the manifest is frozen.
-    "methods/codability/experiments/score_fresh_name_arms.py",
-    "methods/codability/experiments/policy_isomorphism.py",
-    "methods/codability/experiments/policy_data.py",
-    "methods/codability/experiments/build_fresh_item_partitions.py",
-    "methods/codability/experiments/target_articulation_frontier.py",
-    "methods/codability/grid_auc_report.py",
-    "methods/codability/experiments/common_target_ladder.py",
-    "methods/metric_implementer/__init__.py",
-    "methods/metric_implementer/manifest.py",
-    "methods/metric_implementer/artifact.py",
-    "methods/metric_implementer/config.py",
-    "methods/metric_implementer/vinfo.py",
-)
+# The runner imports the shared arm selector from the scorer, so that transitive dependency is
+# bound here as well as in the scoring closure.  The path list itself lives in policy_data so the
+# manifest declaration and the report generator's self-record can never drift apart again.
+BREADTH_ANALYSIS_IMPLEMENTATION = ANALYSIS_IMPLEMENTATION_PATHS
 BREADTH_COMPILATION_IMPLEMENTATION = (
     "methods/codability/__init__.py",
     "methods/codability/experiments/__init__.py",
@@ -2147,11 +2132,11 @@ def compile_concluding_confirmation_manifest(
             "required": True,
             "schema": "policy_isomorphism_calibration_release/v1",
             "artifact_path": (
-                "notebooks/data/two_faces_20260702/concluding_policy_confirmation_v1/"
+                "notebooks/data/two_faces_20260702/concluding_policy_confirmation_v2/"
                 "calibration_release.json"
             ),
             "calibration_report_path": (
-                "notebooks/data/two_faces_20260702/concluding_policy_confirmation_v1/"
+                "notebooks/data/two_faces_20260702/concluding_policy_confirmation_v2/"
                 "calibration_report.json"
             ),
             "calibration_report_schema": "policy_isomorphism_experiment/v5",

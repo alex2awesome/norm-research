@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/71e13c438d4f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "71e13c438d4f.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 16,
+  "chunk_chars": 39882,
+  "model": "gpt-5-mini",
+  "elapsed_s": 79.52675474999705,
+  "input_tokens": 11643,
+  "output_tokens": 5482,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "people writing and verifying Metamath source files / database authors (users learning the Metamath language)",
+    "subtask_short": "writing Metamath databases",
+    "subtask_description": "Rules and best practices for writing Metamath source files and database entries (tokens, declarations, hypotheses, assertions, frames, and scoping) so that proofs verify correctly. Covers syntax, semantic restrictions (like $d), and structuring of frames and proofs.",
+    "subtask_keywords": [
+      "metamath",
+      "formal_proofs",
+      "proof_scripts",
+      "language_spec",
+      "set.mm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Tokenization and character set",
+        "description": "A source file consists of a series of tokens, which are strings of non-whitespace printable characters (from the set of 94 shown on p. 112) separated by white space (spaces, tabs, carriage returns, line feeds, and form feeds). Any string consisting only of these characters is treated the same as a single space.",
+        "guidance": "Tokens are formed from the standard ASCII printable characters; whitespace separates tokens and multiple whitespace collapse. When reading or composing source files, ensure tokens are contiguous non-whitespace printable characters. The $ character is reserved for keywords (see below)."
+      },
+      {
+        "name": "Database vs source file",
+        "description": "Metamath can join several files together to form its input; the aggregate contents are called a database (tokens in a database include keywords, labels, and math symbols).",
+        "guidance": "When designing a database, remember scoping and declarations may span files; think of the combined files as the unit the verifier operates on."
+      },
+      {
+        "name": "Basic keywords (complete set)",
+        "description": "The basic language keywords are $c, $v, $d, $f, $e, $a, $p, $=, $., ${, and $}.",
+        "guidance": "Each keyword has a syntactic role (see Table 4.1): $c constant declaration, $v variable declaration, $d disjoint-variable restriction, $f floating (variable-type) hypothesis, $e essential hypothesis, $a axiomatic assertion, $p provable assertion, $= start of proof in $p, $. end of statement types, ${ start of block, $} end of block. Become familiar with these as they are the complete syntactical elements of the basic Metamath language."
+      },
+      {
+        "name": "Auxiliary keywords",
+        "description": "Auxiliary (extended language) keywords are $((start of comment), $) (end of comment), $[ (start included filename), $] (end included filename).",
+        "guidance": "Use these to include comments and reference other source files \u2014 they are part of the extended language and help practical database management."
+      },
+      {
+        "name": "Reserved $ character and case-sensitivity",
+        "description": "All keywords begin with the $ character. The $ character may not be used in a user-defined token. All tokens and keywords are case-sensitive.",
+        "guidance": "Treat $ as special; do not include it in labels or math symbol tokens. Remember 'n' and 'N' are distinct tokens."
+      },
+      {
+        "name": "Math symbol tokens",
+        "description": "Math symbols are tokens used to represent symbols in formulas and may consist of any combination of the 93 non-whitespace printable ASCII characters other than $.",
+        "guidance": "For readability, choose token names resembling the mathematical symbols they represent (e.g. x, +, bounded). You can map tokens to standard mathematical symbols for printouts via LaTeX using latexdef statements in a $t-tagged comment (open_tex filename)."
+      },
+      {
+        "name": "Expression notion",
+        "description": "An expression is any sequence of math symbols, possibly empty.",
+        "guidance": "When substituting or checking syntax, treat any such sequence (including empty) as a valid expression subject to type and $d restrictions."
+      },
+      {
+        "name": "Constants vs variables",
+        "description": "In a Metamath proof, a constant may not be substituted with any expression. A variable can be substituted with any expression.",
+        "guidance": "Use $c to declare constants and $v to declare variables. Remember $f statements specify the type of a variable (i.e. what kind of metavariable it is)."
+      },
+      {
+        "name": "$c and $v declaration statements (simple and compound)",
+        "description": "Constants are introduced with $c statements and variables with $v statements. Simple declarations: $c math-symbol $. or $v math-symbol $.. Compound declarations: $c math-symbol \u00b7 \u00b7 \u00b7 math-symbol $. or $v math-symbol \u00b7 \u00b7 \u00b7 math-symbol $.",
+        "guidance": "Compound declarations are shorthand for multiple simple declarations. Declarations must occur in appropriate places and be active (see scoping). Follow conventions (e.g. Appendix A token names) to enable inclusion of standard databases like set.mm."
+      },
+      {
+        "name": "Label tokens: syntax and uniqueness",
+        "description": "Label tokens identify Metamath statements for reference and may contain only letters, digits, period, hyphen, and underscore (. - _). A label is declared immediately before the keyword of the statement it identifies. Each $e, $f, $a, and $p statement must have a label; no other statement types may have labels. Every label must be unique.",
+        "guidance": "Always supply unique labels for $e/$f/$a/$p statements. Use consistent label naming conventions (set.mm uses ax- and df- prefixes)."
+      },
+      {
+        "name": "$d statement (disjoint-variable restriction) \u2014 syntax and high-level meaning",
+        "description": "The $d statement is a disjoint-variable restriction. Simple syntax: $d variable variable $. (variables must be previously declared active variables). The full meaning: if any substitution is made to its two variables, the two expressions resulting from the substitution must have no variables in common, and each possible pair of variables (one from each expression) must be in an active $d statement of the $p statement containing the proof.",
+        "guidance": "Use $d to forbid substitutions that would make formerly-distinct metavariables conflict (e.g. to prevent substituting y with x when that breaks a theorem). $d statements are never referenced directly in proofs; Metamath automatically verifies them. Be careful to include required $d statements for axioms ($a), since Metamath cannot infer missing restrictions for axioms."
+      },
+      {
+        "name": "Interpretations and informal readings of $d",
+        "description": "Depending on variable types, $d x y $. can be read as \u201cassume x and y are distinct variables\u201d; $d x ph $. as \u201cassume x does not occur in \u03c6\u201d; $d ph ps $. as \u201cassume \u03c6 and \u03c8 have no variables in common.\u201d",
+        "guidance": "These informal readings help design $d restrictions that match intended ordinary-mathematics meanings, but remember the formal rule is about disjointness after substitution and inheritance of $d constraints."
+      },
+      {
+        "name": "Compound $d statements and internal expansion",
+        "description": "A compound $d statement ($d variable \u00b7 \u00b7 \u00b7 variable $.) is a shorthand broken into one simple $d statement for each pair of variables in the compound statement. Duplicate pairs are combined internally into a single $d statement.",
+        "guidance": "You may write concise compound $d statements; Metamath expands them into pairwise restrictions. Understand that multiple overlapping $d declarations are normalized by the verifier."
+      },
+      {
+        "name": "$f (floating) and $e (essential) hypotheses \u2014 syntax and roles",
+        "description": "Syntax: label $f typecode variable $. and label $e typecode math-symbol \u00b7 \u00b7 \u00b7 math-symbol $.. $f states a variable\u2019s type (floating/used only if relevant); $e states a logical (essential) hypothesis. A hypothesis must have a label. A variable must have its type specified in a $f before it may be used in a $e, $a, or $p statement. There may be only one active $f for a given variable.",
+        "guidance": "$f corresponds to 'let x be a ...' while $e corresponds to 'assume ...'. Ensure each variable occurring in assertions has an active $f earlier in the scope. The order (a $f must occur before any $e that references that variable) matters for parsing."
+      },
+      {
+        "name": "Typecodes are required and enforce types",
+        "description": "After any $f, $e, $a, or $p token there is a required typecode (a constant) used to enforce types of expressions. Examples in set.mm: wff, turnstile (|-), setvar, class.",
+        "guidance": "Choose appropriate typecodes (e.g. wff for well-formed formulas, setvar for individual set variables). The typecode is part of the assertion/hypothesis and ensures syntactic/semantic correctness when building substitution instances."
+      },
+      {
+        "name": "Assertions: $a (axiomatic) and $p (provable) statements \u2014 syntax and usage",
+        "description": "Syntax: label $a typecode math-symbol \u00b7 \u00b7 \u00b7 math-symbol $. and label $p typecode math-symbol \u00b7 \u00b7 \u00b7 math-symbol $= proof $.. $a statements define syntax or axioms/definitions; $p statements claim provability and include a proof. All math symbols in assertions must be previously declared and active.",
+        "guidance": "$a statements function both to state axioms and to specify syntactic forms (so the verifier can construct substitution instances). Treat $a additions carefully \u2014 incorrect axioms can introduce contradictions; prefer using standard databases rather than inventing new $a statements casually. $p statements must provide a correct proof (referencing labels between $= and $.) and will be checked by the verifier."
+      },
+      {
+        "name": "Frames (grouping of hypotheses and assertions) \u2014 definition and properties",
+        "description": "A frame is a sequence of $d, $f, and $e statements followed by one $a or $p statement. Properties: (1) The set of variables contained in its $f statements must be identical to the set of variables contained in its $e, $a, and/or $p statements (i.e. mandatory variables). (2) No two $f statements may contain the same variable. (3) Any $f must occur before a $e in which its variable occurs.",
+        "guidance": "Frames determine the mandatory hypotheses for an assertion; ensure variable sets match and that $f ordering precedes $e. When constructing or refactoring assertions, maintain these properties to keep the frame valid. Use frames to reason about which hypotheses any reference to the assertion will require."
+      },
+      {
+        "name": "Mandatory hypotheses and RPN order",
+        "description": "Associated with a frame is a sequence of mandatory hypotheses: the set of all $f and $e statements in the frame, in the order they appear (the RPN order). A proof referencing the frame assigns to each mandatory hypothesis in this order.",
+        "guidance": "Do not change the order of mandatory hypotheses arbitrarily \u2014 proofs depend on the RPN order and the verifier (and subsequent proofs) expect it. Maintain stable hypothesis order for assertions used elsewhere."
+      },
+      {
+        "name": "$d statements are not mandatory hypotheses and their order is irrelevant",
+        "description": "$d statements are never part of the set of mandatory hypotheses; their order doesn\u2019t matter (so long as they satisfy frame properties). They specify variable restrictions that the verifier checks automatically during proof verification.",
+        "guidance": "You may add or rearrange $d statements within a frame without changing the RPN ordering of mandatory hypotheses, but be careful to preserve necessary $d restrictions for correctness and generality."
+      },
+      {
+        "name": "Extended frames and optional variables/hypotheses",
+        "description": "An extended frame is a frame together with zero or more $d and $f statements that reference variables not among the mandatory variables (optional variables). Optional hypotheses are $f statements on optional variables. Extended frames allow the use of temporary/dummy variables in proofs of $p statements.",
+        "guidance": "Optional variables are meaningful only for $p (provable) statements because $a statements have no proofs. Proofs referencing an assertion ignore optional extensions to its frame \u2014 you may add or delete optional hypotheses without affecting subsequent proofs that reference the assertion."
+      },
+      {
+        "name": "Scoping statements (${ and $}) and symbol 'activity'",
+        "description": "Scoping statements ${ (start of block) and $} (end of block) control the portion of the database over which certain statement types are recognized. Matched ${/$} delimit blocks; active declarations (which determine whether tokens/variables are recognized) are controlled by scoping.",
+        "guidance": "Use ${ and $} to limit the scope of $f, $e, $d, $a, and $p statements so that 'active' tokens are only recognized where intended. Remember the verifier internally converts databases to sequences of frames; scoping is for convenience and readability but affects activity and availability of declarations."
+      },
+      {
+        "name": "Metamath automatic verification and error reporting ($d violations)",
+        "description": "Metamath automatically verifies that all $d restrictions are met whenever it verifies proofs, and will notify with an error message if any violation occurs.",
+        "guidance": "If the verifier reports a disjoint-variable violation, use detailed proof display (show proof / detailed_step) to inspect substitutions and identify missing $d pairs. You can add missing $d statements to fix violations. Example error messages show the assertion and the substitutions made."
+      },
+      {
+        "name": "Guidance on adding $d statements and axioms ($a)",
+        "description": "Because Metamath will always detect when $d statements are needed for a proof, you can add them when you see an error. However, when you introduce axioms ($a statements) you must be very careful to properly specify the necessary associated $d statements since Metamath has no way of knowing whether your axioms are correct.",
+        "guidance": "Unnecessary $d statements may make a theorem less general. For $a statements (axioms/definitions), scrutinize and justify any $d restrictions; avoid adding new $a statements casually. Prefer using standard, scrutinized databases (like set.mm) unless you understand the implications of new axioms/definitions."
+      },
+      {
+        "name": "Use of $a statements to express syntax and definitions",
+        "description": "$a statements are used to specify syntactically valid symbol combinations (so substitution instances can be constructed) and to express definitions; Metamath makes no inherent distinction between axioms and definitions.",
+        "guidance": "Use $a statements to define syntactic forms (e.g. what constitutes a wff) and to introduce definitions that abbreviate other combinations. Where possible, make definitions eliminable (so they don't change provability) to minimize judgment risk; check Section 3.4 and 4.5 for theory on proper definitions."
+      },
+      {
+        "name": "Proof referencing and the proof label sequence",
+        "description": "A $p statement\u2019s proof contains a sequence of labels between $= and $. The sequence of labels between $= and $. is called a proof; labels used in the proof refer to earlier-declared assertions/hypotheses.",
+        "guidance": "When writing proofs, supply labels in the correct RPN order corresponding to the mandatory hypotheses of the referenced frames. The proof verifier will check substitutions, $d restrictions, and syntactic correctness using the associated $a statements."
+      }
+    ]
+  }
+}

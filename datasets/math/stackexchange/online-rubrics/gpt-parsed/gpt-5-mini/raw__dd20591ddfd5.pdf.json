@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/dd20591ddfd5.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 13663,
+  "output_tokens": 3975,
+  "elapsed_s": 2042.3589820840862,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "Isabelle/Isar users, proof-tool developers, and researchers in interactive theorem proving",
+    "subtask_short": "writing Isabelle proof methods (Eisbach)",
+    "subtask_description": "Designing and implementing automated proof procedures for Isabelle/Isar using the Eisbach proof method language; includes abstraction over terms, facts and methods, matching, combinators, and integration with Isabelle/ML. Targeted at making proof automation more accessible, maintainable, and readable within Isabelle developments.",
+    "subtask_keywords": [
+      "isabelle",
+      "isar",
+      "proof_methods",
+      "eisbach",
+      "proof_automation",
+      "formal_methods"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Design principle: easy to use for beginners and experts",
+        "description": "To be easy to use for beginners and experts.",
+        "guidance": "Eisbach aims to be accessible to existing Isar users so that a wider class of users can maintain and extend domain-specific proof procedures rather than requiring ML expertise. Examples: method-definition uses familiar Isar syntax; small ML snippets are available when necessary."
+      },
+      {
+        "name": "Design principle: expose limited functionality, leave complex functionality to Isabelle/ML",
+        "description": "To expose limited functionality, leaving complex functionality to Isabelle/ML.",
+        "guidance": "Eisbach intentionally provides a high-level, untyped language for common proof procedures while allowing sophisticated features and optimizations to be implemented in Isabelle/ML. This design reduces surface complexity while retaining extensibility via ML (e.g., custom attributes, indexing)."
+      },
+      {
+        "name": "Design principle: seamless integration with other Isabelle languages",
+        "description": "Seamless integration with other Isabelle languages.",
+        "guidance": "Eisbach must interoperate with Isar syntax, Isabelle/ML, and object-logics (Isabelle/HOL). Implementation uses Isabelle's parsing framework to embed Isar tokens and attributes so Eisbach methods can invoke existing methods and attributes transparently."
+      },
+      {
+        "name": "Design principle: readable proof procedures (Isar principle)",
+        "description": "To continue Isar\u2019s principle of readable proofs, creating readable proof procedures.",
+        "guidance": "Method definitions should produce structured, human-readable proof procedures (instead of opaque scripts), maintaining the document-oriented Isar style and easing maintenance."
+      },
+      {
+        "name": "Method-definition support (naming, combining, abstracting methods)",
+        "description": "The new Isar command method-definition allows proof methods to be combined, named, and abstracted over terms, facts and other methods.",
+        "guidance": "Example: 'method-definition induct-list facts simp = (match ?concl in ?P (?x :: a list) \u21d2 (induct ?x \u2192 fastforce simp: simp))' \u2014 after definition, the method can be invoked like any other Isar method."
+      },
+      {
+        "name": "Abstraction over parameters (facts, terms, methods)",
+        "description": "Methods may abstract over parameters: terms, facts, or other methods (via facts, for, and methods keywords).",
+        "guidance": "Fact parameters are supplied as lists (intro:, elim: etc.), term parameters via for with optional type constraints, and method-parameters via methods. This supports reusable, parameterized automation (examples: prop-solver2, elim-all)."
+      },
+      {
+        "name": "Fact collections and declare-attributes",
+        "description": "Support for creating and using named fact collections via declare-attributes and managing them in the proof context.",
+        "guidance": "declare-attributes allows creation of new collections which methods can reference by [intro] etc.; facts can be augmented in the context or passed at invocation. Example: declare impI [intro] and conjE [elim] then use prop-solver3."
+      },
+      {
+        "name": "Combinators and backtracking semantics (',', '|', '?', '+')",
+        "description": "Isar provides four combinators: ',' sequential composition with implicit backtracking, '|' alternative composition, '?' suppress failure (return original state), and '+' repeated application until failure.",
+        "guidance": "At the end of an apply command the first successful result is retained. Examples: '(rule impI, (erule conjE)?) | assumption)+' proves many propositional tautologies. The semantics of ',' produce all results of meth1 followed by meth2; first-success retention influences control flow."
+      },
+      {
+        "name": "Custom combinator '\u2192' that applies second method to all produced subgoals",
+        "description": "A fifth combinator ('\u2192') invokes the second method on all subgoals produced by the first, unlike ',' which sequences with unknown subgoal counts.",
+        "guidance": "Needed for cases where the number of subgoals cannot be known statically. Example: 'intro conjI \u2192 rule TrueI'. Used to define higher-order combinators like solve that check that a method discharges all produced subgoals."
+      },
+      {
+        "name": "Higher-order methods / method parameters and combinators",
+        "description": "Support for higher-order methods that take other methods as parameters (methods keyword) and can apply them over produced subgoals.",
+        "guidance": "Enables writing control combinators such as 'solve methods m = (m \u2192 fail)' or 'repeat-new methods meth = (meth \u2192 (repeat-new meth)?)'. These enable expressing policies like 'ensure this subcall solves all subgoals'."
+      },
+      {
+        "name": "Solve idiom: require a method to completely discharge its subgoals",
+        "description": "A higher-order pattern where a method is applied and then failure is triggered if any produced subgoals remain (e.g., solve m = (m \u2192 fail)).",
+        "guidance": "Useful to ensure recursive calls or guesses do not leave unsolved obligations; used in prop-solver and fol-solver to force full discharge or backtrack."
+      },
+      {
+        "name": "Matching construct and its semantics (match against ?concl / prems / facts)",
+        "description": "An expressive match construct allows matching terms or fact collections against patterns with pattern-method pairs; ?concl and prems are special for the current subgoal.",
+        "guidance": "Matching binds schematic variables and optionally names matched facts; successful matches serve as cut points for backtracking\u2014once a pattern matches, subsequent patterns are not tried (contrast to Ltac). All possible unifiers for a matched pattern are explored. Examples: solve-ex, match-rules, guess-all."
+      },
+      {
+        "name": "Implicit subgoal focusing triggered by mentioning ?concl or prems",
+        "description": "Mentioning ?concl or prems causes implicit subgoal focusing, lifting goal parameters into fixed variables and premises into local assumptions.",
+        "guidance": "Focusing creates a uniform local context to enable matching and parameter passing inside method bodies; it preserves the ability of methods like erule to remove premises from the goal."
+      },
+      {
+        "name": "Static closure of concrete syntax (embedding token lists via parsing framework)",
+        "description": "Eisbach embeds most Isar syntax as uninterpreted token lists using Isabelle\u2019s parsing framework that assigns values to tokens during parsing.",
+        "guidance": "This avoids re-implementing the parsers of many proof tools and attributes; at method application time Eisbach instantiates token values based on supplied arguments or match results and then executes the method body. Implementation detail but a design constraint to maintain Isar compatibility."
+      },
+      {
+        "name": "Ability to include small Isabelle/ML snippets",
+        "description": "Small snippets of ML may be included on demand within Eisbach methods.",
+        "guidance": "This provides escape hatches for functionality that Eisbach intentionally omits, enabling users to access the full power of ML for complex cases without making ML the default authoring mode."
+      },
+      {
+        "name": "Compatibility and forward/backward compatibility with Isar and existing methods",
+        "description": "Eisbach aims for seamless integration and compatibility with existing Isabelle proof methods and concepts (fact collections, attributes, tactics).",
+        "guidance": "Design choices (untyped methods, embedding Isar tokens) were made to allow Eisbach to invoke existing methods and to be included in future Isabelle releases without breaking existing developments."
+      },
+      {
+        "name": "Performance and efficiency considerations",
+        "description": "Eisbach implementations can have performance overhead; evaluation measured running time and identified hotspots (e.g., rule resolution costs).",
+        "guidance": "Evaluation: re-implementing two seL4 methods increased total proof running time from 8 minutes to 19 minutes for the benchmark; about 100 lines of ML were needed for compatibility and ~0.5% proof text changes. Guidance: possible optimizations include indexing facts and improving rule resolution."
+      },
+      {
+        "name": "Maintainability: reduce duplication and lower maintenance costs",
+        "description": "Primary goal is to make writing proofs more productive, avoid duplication, and thereby lower the costs of proof maintenance.",
+        "guidance": "By expressing automation at a high level and using readable method-definitions, Eisbach allows non-ML users to maintain domain-specific proof procedures; example: re-implementations of wp/wpc reduced ML code and made intent clearer, albeit with some efficiency trade-offs."
+      },
+      {
+        "name": "Expressiveness: higher-order matching, recursion and solver construction",
+        "description": "Eisbach must support higher-order matching, recursion, and composition to express non-trivial solvers (e.g., propositional and first-order solvers).",
+        "guidance": "Examples: prop-solver, guess-all, guess-ex, fol-solver combine matching, backtracking, and recursion to solve many standard logical problems. Matching considers only matches that bind all pattern variables to avoid trivial matches."
+      },
+      {
+        "name": "Matching/backtracking semantic choice (cutpoint behavior vs Ltac)",
+        "description": "Eisbach chooses match semantics where a successful pattern match is a cut point: subsequent patterns are not attempted even if the inner method fails; all unifiers of the matched pattern are explored.",
+        "guidance": "This choice aligns with Isabelle's pervasive backtracking and the combinator semantics where inner failure should signal outer combinators; to emulate Ltac semantics one can use '?' and '|' to try subsequent patterns after failures."
+      },
+      {
+        "name": "Debugging and traceability requirements",
+        "description": "Need for debugging features beyond manual printing of intermediate goal states; traces of matches and method applications with interaction are planned.",
+        "guidance": "Practical guidance: Eisbach currently lacks advanced debugging; planned features include interactive traces that show match results and method applications to aid development of complex methods."
+      },
+      {
+        "name": "Support for structured language elements and explicit subgoal addressing",
+        "description": "Desire to add more structured language elements (e.g., explicit subgoal production and addressing) for more natural integration with Isar.",
+        "guidance": "These features would make it easier to control goal decomposition and goal addressing, complementing existing combinators and implicit focusing."
+      },
+      {
+        "name": "Parallel evaluation support for method combinators",
+        "description": "Eisbach should support parallel evaluation by default where combinator structure permits; e.g., (\u2192) could use parallel THEN_ALL_NEW.",
+        "guidance": "Parallel skeletons could map naturally to method combinators to improve performance (analogy to PARALLEL_GOALS tactical in Isabelle/ML); this is a planned enhancement to improve scalability."
+      },
+      {
+        "name": "Typed vs untyped design tradeoff",
+        "description": "Eisbach is deliberately untyped, resembling Ltac, to interoperate with untyped Isar proof methods; typed tactic languages (like Mtac) avoid dynamic errors but are harder to interoperate with untyped infrastructure.",
+        "guidance": "While typed method contracts are attractive, Eisbach opts for untyped methods to call existing methods; higher-order methods can approximate runtime contracts and arbitrary contract languages could be layered on top later."
+      }
+    ]
+  }
+}

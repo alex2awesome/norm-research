@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_77c24a7680d1.html",
+  "task": "creative-writing",
+  "source_dir": "raw",
+  "source_file": "wavee_77c24a7680d1.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39248,
+  "model": "gpt-5-mini",
+  "elapsed_s": 51.86090579200027,
+  "input_tokens": 11578,
+  "output_tokens": 4140,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/sentiment-analysis researchers and practitioners implementing or evaluating lexicon-based sentiment systems",
+    "subtask_short": "lexicon-based sentiment analysis",
+    "subtask_description": "Designing, implementing, and evaluating a lexicon-based sentiment-analysis system (SO-CAL), including dictionary creation, handling of linguistic phenomena (negation, intensifiers, irrealis), text-level weighting, and cross-domain evaluation.",
+    "subtask_keywords": [
+      "sentiment_analysis",
+      "lexicon-based",
+      "so-cal",
+      "negation_handling",
+      "dictionary_validation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Negation: polarity shift model (shift toward opposite polarity by fixed amount)",
+        "description": "Value is shifted toward the opposite polarity by a fixed amount (in our current implementation, 4). Thus a +2 adjective is negated to a \u22122, but the negation of a \u22123 adjective (for instance, sleazy) is only slightly positive (\u22123 + 4 = 1).",
+        "guidance": "Captures mixed opinions (damning with faint praise). Examples: \"She\u2019s not terrific (5 \u2212 4 = 1) but not terrible (\u22125 + 4 = \u22121) either.\" Shifted negation functions as a downtoner for strongly positive words. The fixed shift parameter (4) can be fine-tuned."
+      },
+      {
+        "name": "Negation: polarity flip model (multiply by \u22121) and its problems",
+        "description": "The polarity flip model negates by flipping sign (multiply by \u22121).",
+        "guidance": "Flip model can interact badly with intensifiers (e.g., 'Not very good' can become more negative than 'not good'). Example arithmetic contrasts with shift model: \"Not good = 3 \u00d7 \u22121 = \u22123\" versus \"Not good = 3 \u2212 4 = \u22121\" for shift. The authors argue polarity flip is fundamentally flawed and that polarity shifts better reflect pragmatic reality."
+      },
+      {
+        "name": "Negation + intensifier interaction handling",
+        "description": "Negative polarity items interact with intensifiers and can lead to counterintuitive results (e.g., 'not very good' vs 'not good').",
+        "guidance": "One approach is to flip polarity of both adjective and intensifier so an amplifier becomes a downtoner (example: Not very good = 3 \u00d7 (100% + 25% \u00d7 \u22121) \u00d7 \u22121 = \u22122.25). Alternatively, polarity shift methods compute different results. Choice affects scoring; parameters for intensifier percentages (e.g., 25%) and negation shift amount should be tuned."
+      },
+      {
+        "name": "Scope detection: full parsing vs heuristics",
+        "description": "Full parsing is an option to determine scope of negation and modifiers but may be slow and ambiguous.",
+        "guidance": "Parsing could produce ambiguities and may not correctly interpret scope; parser results can be used to learn scope (Councill et al. 2010). Consider trade-off between runtime speed (online processing) and accuracy when selecting scope-detection method."
+      },
+      {
+        "name": "Irrealis blocking (ignore SO within irrealis scope)",
+        "description": "Ignore the semantic orientation (SO) of any word in the scope of an irrealis marker (i.e., within the same clause).",
+        "guidance": "Irrealis markers include modals, conditional markers (if), negative polarity items like any/anything, certain intensional verbs (expect, doubt), questions, and words in quotes. Example: \"This should have been a great movie.\" (3 \u2192 0). Exception: if markers of definiteness are in close proximity to SO-carrying words (e.g., determiner 'this'), ignore irrealis blocking because off-hand rhetorical questions/imperatives may carry strong opinion."
+      },
+      {
+        "name": "NPIs treated as irrealis blockers rather than negators",
+        "description": "Negative polarity items (any, anything, ever, at all) are treated as irrealis blockers because they occur in negative sentences and other nonveridical contexts.",
+        "guidance": "Using NPIs as irrealis blockers reduces erroneous negation where NPIs occur in embedded alternatives or non-negative contexts. Example contexts: questions, imperatives, complements of verbs like 'wonder'."
+      },
+      {
+        "name": "Content-word negators handled via dictionaries",
+        "description": "Content-word negators (verbs like 'eliminate') are typically included in the appropriate POS dictionaries with negative polarity.",
+        "guidance": "Aggregation with other sentiment words in the sentence will likely yield similar results to compositional approaches; thus explicit special-casing of many content-word negators is unnecessary if dictionaries include them."
+      },
+      {
+        "name": "Negative weighting (increase impact of negative expressions)",
+        "description": "Because negative expressions are relatively rare but cognitively weighted more, increase the final SO of any negative expression by a fixed amount (currently 50%).",
+        "guidance": "This normalization counters lexicon-based positive bias and was found to improve performance; parameter (50%) is configurable and was chosen on theoretical/experimental grounds."
+      },
+      {
+        "name": "Repetition weighting (diminish repeated word contributions)",
+        "description": "Decrease the weight of words that appear more often in the text: the nth appearance of a word in the text will have only 1/n of its full SO value.",
+        "guidance": "Rationale: repetition pragmatically indicates generic or descriptive use (less sentiment). Optionally impose an upper distance limit so only close repetitions are downweighted. Repetition weighting does not apply to words that have been intensi\ufb01ed (intensi\ufb01ers draw special attention)."
+      },
+      {
+        "name": "Text-span and XML weighting (assign different weights to parts of text)",
+        "description": "Assign different weights to sentences or spans of text; user-configurable spans or XML tag pairs can indicate spans to be multiplied by given weight.",
+        "guidance": "Examples: give most weight to two-thirds mark of a text, lower weight to descriptive paragraphs. XML weighting enables integration with external modules (topic-sentence detectors, discourse analyzers, subjectivity detectors) to emphasize/de-emphasize portions of text."
+      },
+      {
+        "name": "Multiple cut-offs and fine-grained numeric SO output",
+        "description": "SO-CAL outputs a numerical value reflecting polarity and strength; this can be thresholded with multiple cut-offs to produce multi-class outputs.",
+        "guidance": "Grouping script accepts list of n cut-off values and classifies texts into n+1 classes, reporting exact matches and near-misses (misclassified into neighboring class). Enables mapping to star ratings and more granular sentiment distinctions."
+      },
+      {
+        "name": "Dictionary granularity and multi-part-of-speech coverage",
+        "description": "Use hand-ranked, fine-grained, multi-part-of-speech dictionaries (adjectives, nouns, verbs, adverbs, intensifiers, multi-word expressions) rather than simplified single-value dictionaries.",
+        "guidance": "Experiments show full dictionaries outperform simplified alternatives (e.g., Simple, Only-Adj, One-Word). Include multi-word expressions and POS-specific entries for best performance. Granularity (\u22125 to +5) supports strength measurement as well as polarity."
+      },
+      {
+        "name": "Handling SO-empty texts (no dictionary words)",
+        "description": "When SO-CAL finds no words in its dictionaries for a text (SO-empty), two strategies: (1) back-off assign most frequent class (or positive when equal), or (2) exclude SO-empty texts from evaluation.",
+        "guidance": "Default assign zero (neutral) can be poor when task requires binary pos/neg and many empties exist. Back-off allows comparison with baseline; excluding empties evaluates only texts with direct evidence. Percent SO-empty varies by domain and text size; use strategy appropriate to evaluation/task."
+      },
+      {
+        "name": "Evaluation methodology: separate corpora & cross-domain testing",
+        "description": "Use separate corpora for development/training and testing to avoid overfitting; evaluate across multiple domains (reviews, headlines, news, blogs, MySpace comments) to assess portability.",
+        "guidance": "Epinions 1 used for development; Epinions 2, Polarity Dataset, Camera corpora used as unseen test data. Balanced corpora (equal numbers pos/neg) used in many tests. Cross-domain performance may drop; lexicon-based methods aim for more even cross-domain performance than some statistical methods."
+      },
+      {
+        "name": "Parameter tuning and risk of overfitting",
+        "description": "Some parameters (negation shift amount, intensifier percentages, negative weighting, repetition weighting) were fine-tuned during development (mostly on Epinions 1).",
+        "guidance": "Once theoretically and experimentally satisfied, parameters should be tested on unseen corpora to check for overfitting. Dictionaries influenced by development corpus composition but robust cross-domain performance indicates limited overfitting."
+      },
+      {
+        "name": "Performance contribution analysis of features",
+        "description": "Test contribution of individual features (negation, intensification, irrealis blocking, negative weighting, repetition weighting) to overall accuracy.",
+        "guidance": "Example findings: negation+intensification increase performance significantly; negative weighting yields one of most important gains; repetition weighting contributes variably across corpora. Compare combinations (shift vs switch negation) to select best feature set."
+      },
+      {
+        "name": "Measuring both polarity and strength (SO as polarity+strength)",
+        "description": "Define sentiment as polarity plus strength; SO-CAL's numerical output reflects both, though evaluations here focus mainly on polarity accuracy.",
+        "guidance": "SO-CAL output correlates with star ratings in reviews (strength measure correlates with fine-grained ratings). Keep numeric granularity if strength measures are required, not only binary polarity."
+      },
+      {
+        "name": "Dictionary validation via human judgments (Mechanical Turk)",
+        "description": "Validate dictionary rankings by collecting human judgments: binary/three-way decisions (positive/neutral/negative) and pairwise comparisons (which of two polar words is stronger?).",
+        "guidance": "Collect judgments from reliable Turkers (e.g., approval rating 99%), make tasks simple, avoid forcing Turkers into a fine-grained 11-point scale. Use distributional properties of responses (equal/neutral judgments expected at particular SO values, linear increase of polar responses as SO moves away from zero) to validate relative rankings. Filter evaluation words by minimum corpus frequency (e.g., at least 5 occurrences in two corpora)."
+      },
+      {
+        "name": "Handling domain-specific missing vocabulary",
+        "description": "Address missing domain vocabulary (SO-empty) by adding domain-specific words or using back-off strategies; relative text size impacts number of empties.",
+        "guidance": "Short texts (headlines, single sentences) have higher SO-empty rate; removing empties or employing back-off yields better comparable results. Consider expanding dictionaries for target domains or combining with statistical features."
+      },
+      {
+        "name": "Pragmatic considerations: markedness and euphemistic negation",
+        "description": "Negative statements are more marked and less frequent; negation is often expressed euphemistically, making negative sentiment harder to detect.",
+        "guidance": "Account for markedness via negative weighting and careful handling of euphemistic constructions; expect a universal positive bias in raw lexicons and correct via normalization (shift thresholds or negative weighting)."
+      },
+      {
+        "name": "Use of TF-like ideas (1/n weighting akin to tf)",
+        "description": "Repetition weighting (nth appearance has 1/n weight) is similar to term-frequency heuristics (tf) in information retrieval.",
+        "guidance": "This reduces impact of repeated generic adjectives and is theoretically related to tf-idf techniques; consider distance-limited repetition weighting and exceptions for intensified words."
+      }
+    ]
+  }
+}

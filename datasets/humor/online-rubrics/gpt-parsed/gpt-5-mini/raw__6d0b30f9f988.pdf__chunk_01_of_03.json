@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/6d0b30f9f988.pdf",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "6d0b30f9f988.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39328,
+  "model": "gpt-5-mini",
+  "elapsed_s": 63.86926075001247,
+  "input_tokens": 14060,
+  "output_tokens": 4137,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in computational humor and multimodal NLP (e.g., people building/evaluating caption-contest models and datasets)",
+    "subtask_short": "NewYorker caption contest evaluation",
+    "subtask_description": "Procedures, annotation guidelines, dataset construction rules, and evaluation metrics for modeling, ranking, matching, and explaining captions in The New Yorker cartoon caption contest; aimed at building/assessing models that predict relevance, funniness, and produce human-like explanations.",
+    "subtask_keywords": [
+      "computational_humor",
+      "caption_contest",
+      "annotation",
+      "dataset_construction",
+      "evaluation_metrics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Best-performing features for identifying funniest captions",
+        "description": "Features empirically found to perform best for identifying the funniest caption among a set: perplexity, match to image setting and uncanniness description, readability, proper nouns, overlap with WordNet's \u201cperson\u201d and \u201crelative\u201d synsets, lexical centrality among submissions, and sentiment.",
+        "guidance": "These features were identified in prior work (Shahaf et al., Radev et al.) and form direct analogs to the paper's own \u201clocation\u201d and \u201cuncanny description\u201d annotations; use these features (and similar annotations) when building models to detect the funniest caption."
+      },
+      {
+        "name": "High-quality caption identification",
+        "description": "For each contest, construct a set of high-quality captions by: (a) automatically adding official New Yorker finalists if available; (b) otherwise considering the top-5 crowd-ranked captions (from Jain et al., 2020) and selecting 3 diverse candidates via semantic deduplication.",
+        "guidance": "When official finalists are available include them; when using crowd ratings discard duplicates, then apply embedding-based semantic deduplication (SBERT vectors, hierarchical clustering) and sample one candidate per cluster to ensure diversity. Final high-quality sets total 2.7K captions across 704 contests in this study."
+      },
+      {
+        "name": "Semantic deduplication for diverse candidate selection",
+        "description": "Use SBERT (paraphrase-MiniLM-L6-v2) to compute vectors for candidate captions, perform hierarchical clustering, and sample a single candidate from each cluster to produce a representative and diverse set of high-quality captions.",
+        "guidance": "This reduces near-duplicate captions among the selected high-quality candidates; implement clustering on the SBERT embeddings and choose one per cluster to maintain diversity among finalists used to construct instances."
+      },
+      {
+        "name": "Matching-instance construction (negative sampling rules)",
+        "description": "Form a matching instance for each high-quality caption as the correct answer; form negative (mismatched) options by randomly assigning captions to other contests subject to constraints: assignments occur only within cross-validation splits; construct negatives so each answer appears exactly once as the correct answer and exactly four times as an incorrect option elsewhere.",
+        "guidance": "These constraints avoid train/test leakage and prevent 'answer-only' biases in the corpus. Ensure random assignment respects cross-validation split boundaries."
+      },
+      {
+        "name": "Quality-ranking-instance construction (sampling 'okay' negatives)",
+        "description": "To build quality-ranking instances, sample 'okay' captions (near-misses) from the contest's submissions: when crowd ratings exist, discard the top and bottom third and sample from the middle tertile; when ratings are unavailable, train a text-only quality-ranking model on crowd-labelled data to estimate quality and sample accordingly.",
+        "guidance": "Also deduplicate exact string matches so 'okay' captions aren't exact copies of high-quality captions or of each other. For older contests without ratings, the authors trained a quality-ranking model on 253 contests and used top/bottom-1000-per-contest samples to create good/bad corpora (\u2248506K captions) to support sampling."
+      },
+      {
+        "name": "Control for answer-only bias in corpus construction",
+        "description": "When forming instances, ensure negative assignments are made such that there is no answer-only bias: every answer appears exactly once as correct and exactly four times as incorrect in other instances.",
+        "guidance": "This explicit bookkeeping in negative sampling prevents artifacts where certain captions are recognizable as always-correct/always-incorrect due to dataset construction rather than model understanding."
+      },
+      {
+        "name": "Annotation types and sampling frequency",
+        "description": "Collect four annotation types per cartoon: locations, natural-language descriptions, 'uncanny' descriptions (what's unusual), and entity/Wikipedia links. In this study: Cartoon description HITs were run 3\u00d7 per cartoon, Wikipedia-links HITs 2\u00d7 per cartoon, and pairwise explanations HITs were run many times (e.g., 2.7K HITs overall) to support pairwise comparisons.",
+        "guidance": "At test time select a single randomly sampled valid tuple of annotations (held constant across methods). During training, use all available annotation variants. Keep annotation multiplicity in mind when building models that condition on human-written ancillary information."
+      },
+      {
+        "name": "Tuple construction preserving annotator-level dependencies",
+        "description": "Because some annotation types were collected within the same HIT (e.g., descriptions and uncanny descriptions; locations and entity links), construct tuples at the annotator level to preserve within-annotator dependencies. Concretely, consider the six valid tuples holding author constant (3(description,uncanny) \u00d7 2(location,link)) and sample one valid tuple per cartoon for evaluation.",
+        "guidance": "This avoids invalid combinations where an \u2018uncanny description\u2019 references entities introduced only in some other annotator's description; keep author-constancy when combining annotation types into single inputs."
+      },
+      {
+        "name": "Mechanical Turk worker qualification criteria",
+        "description": "To qualify crowdworkers for annotation tasks, require: residency from the set {AU, CA, NZ, GB, US}, at least 10,000 prior approved HITs, and a minimum acceptance rate of 97% on previous HITs. Qualification rounds involved manual grading of responses (e.g., 30 annotators graded in one round; 21 qualified).",
+        "guidance": "Run specific qualification rounds per HIT type (description/link HITs separate from pairwise-explanation HITs); manually inspect and qualify annotators based on gold/seed items, and issue disclaimers for mature content as needed."
+      },
+      {
+        "name": "Pairwise explanation judgment setup",
+        "description": "Collect pairwise judgments on explanations using a qualified pool of annotators: provide two explanations and ask which is better (or compare explanations against described desirable axes). The authors ran a second qualification round where annotators rated several manually selected 'good' and 'bad' joke explanations across desirable axes.",
+        "guidance": "Use the qualification round to filter annotators for the pairwise-explanation tasks; only qualified annotators should participate in the final pairwise judgments to ensure quality comparisons."
+      },
+      {
+        "name": "Explanation content standard",
+        "description": "A good explanation should explain how the joke/caption relates to the described situation and why it is funny (i.e., identify the mechanism by which the humor arises).",
+        "guidance": "Explanation examples illustrate mapping elements of the scene to the wordplay/figurative meaning (e.g., points out puns, plays on idioms, incongruity resolution). Use this standard when collecting or grading explanations and when training/examining models to produce human-like explanations."
+      },
+      {
+        "name": "Evaluation metrics for matching / ranking / explanation tasks",
+        "description": "Reported task metrics include: CrowdAcc (\u2191) and NYAcc (\u2191) for matching/choice accuracy (higher is better); BLEU-4 (B-4, \u2191) and Rouge-L (\u2191) and Perplexity (PPL, \u2193) for explanation generation/quality-ranking (BLEU/ROUGE higher is better, PPL lower is better).",
+        "guidance": "Use these standard automatic metrics alongside human (crowd and editor) accuracy estimates. Table 4 in the paper summarizes how different models scored on these metrics."
+      },
+      {
+        "name": "Cross-validation split constraints",
+        "description": "Construct cross-validation splits so that training, validation, and testing captions are disjoint; only assign negative captions within cross-validation splits to prevent leakage.",
+        "guidance": "This ensures fair evaluation: no caption used for training appears in validation or test instances. Maintain split-level isolation when sampling negatives and forming instances."
+      },
+      {
+        "name": "Model fine-tuning / training procedures (reproducibility constraints)",
+        "description": "Recommended/used training practices for models in the paper: validation-set early stopping on cross-entropy loss; fine-tune models separately per cross-validation split; select top-1 via beam search (n=5); use label-adjusted smoothed cross-entropy with smoothing=0.1; warmup / linear warmup steps (e.g., 200 steps) and small learning-rate searches per split; specified batch sizes (e.g., 32/64), image resizing/padding to 336px square, and image augmentations (random horizontal flip, color jitter, random grayscale).",
+        "guidance": "These hyperparameter and augmentation choices materially affect model performance (per reported experiments). When reproducing or comparing models, follow similar early stopping, smoothing, warmup, and data-augmentation settings and report them."
+      },
+      {
+        "name": "Privacy/IRB handling for crowd studies",
+        "description": "Crowdworker IDs are hashed in public releases so annotations cannot be back-traced to individuals; the crowdworking studies were considered exempt under US federal regulation 45 CFR 46.",
+        "guidance": "When publishing crowd-annotated data, hash or anonymize worker identifiers and verify IRB/exemption requirements for non-sensitive tasks; provide content warnings for mature themes where necessary."
+      }
+    ]
+  }
+}

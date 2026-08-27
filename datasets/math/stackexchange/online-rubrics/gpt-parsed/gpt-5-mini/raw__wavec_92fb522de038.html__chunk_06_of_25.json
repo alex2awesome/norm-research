@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_92fb522de038.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_92fb522de038.html",
+  "chunk_idx": 6,
+  "n_chunks": 25,
+  "chunk_chars": 39954,
+  "model": "gpt-5-mini",
+  "elapsed_s": 83.99978475000535,
+  "input_tokens": 11896,
+  "output_tokens": 5842,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Authors and implementers of MathML (renderer developers and content authors)",
+    "subtask_short": "mathml tables and elementary math layout",
+    "subtask_description": "Specification of MathML presentation elements and attributes for tables/matrices and elementary-math constructs (mstack, mlongdiv, alignment markers, carries, rows, cells). Useful for renderer implementers and authors authoring MathML markup for these constructs.",
+    "subtask_keywords": [
+      "mathml",
+      "presentation",
+      "mtable",
+      "mstack",
+      "elementary_math"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Table or Matrix <mtable> (description and basic constraints)",
+        "description": "A matrix or table is specified using the mtable element. Inside of the mtable element, only mtr elements may appear. Table rows that have fewer columns than other rows of the same table are effectively padded on the right (or left in RTL context) with empty mtd elements so that the number of columns in each row equals the maximum number of columns in any row of the table.",
+        "guidance": "MathML does not specify a table layout algorithm; it is the responsibility of a MathML renderer to resolve conflicts between the width attribute and other constraints (e.g., explicit columnwidth values and minimum sizes for table cell contents). The use of mtd elements with non-default rowspan/columnspan may affect how many mtd elements should be given in subsequent mtr elements. Note also that fences such as parentheses are not part of mtable rendering and must be represented explicitly in markup."
+      },
+      {
+        "name": "Attributes of <mtable>",
+        "description": "mtable elements accept attributes (in addition to common presentation attributes) to control alignment, row/column alignment, widths, spacing, lines, framing, equality of rows/columns, and display style.",
+        "guidance": "The specification lists and explains: align (\"top\"|\"bottom\"|\"center\"|\"baseline\"|\"axis\" with optional rownumber suffix and behavior when out of range or negative), rowalign (vertical alignment within a row), columnalign (horizontal alignment within a column), columnwidth (\"auto\"|length|\"fit\" with semantics including percentage interpretation relative to table width), width (\"auto\"|length with percentage relative to renderer available horizontal space; unitless numbers deprecated), rowspacing (length), columnspacing (length), rowlines/columnlines (\"none\"|\"solid\"|\"dashed\"), frame (\"none\"|\"solid\"|\"dashed\"), framespacing (two lengths: left/right and top/bottom), equalrows/equalcolumns (boolean), and displaystyle (boolean). Multiple values may be given as space-separated lists to apply per-row/column/gap; excess/insufficient values are handled by repeating last value or ignoring excess. Areas occupied by lines/spacing are not counted as rows/columns. Comparisons for string values are ASCII case-insensitive."
+      },
+      {
+        "name": "Row in Table or Matrix <mtr> (description)",
+        "description": "An mtr element represents one row in a table or matrix and is only allowed as a direct sub-expression of an mtable element. Each argument of mtr is placed in a different column of the table, starting at the leftmost column in a LTR context or rightmost in RTL. mtr elements are effectively padded with mtd elements when shorter than other rows.",
+        "guidance": "Use mtr only inside mtable. The behavior of shorter rows being padded to the table's maximum column count is explicit. See mtable attribute rules for alignment and spacing interactions."
+      },
+      {
+        "name": "Equation numbering and mlabeledtr (legacy)",
+        "description": "Earlier MathML versions specified an mlabeledtr element for numbered equations (first mtd the equation number, remaining cells the equation). This element is legacy and not specified in the current version (still valid in Legacy Schema).",
+        "guidance": "Automatic numbering/resolving references is outside MathML scope and should be handled via style sheets or other means (CSS example using an empty first mtd and CSS counters is provided). The side and minlabelspacing attributes of mtable determine placement of equation numbers in legacy usage."
+      },
+      {
+        "name": "Entry in Table or Matrix <mtd>",
+        "description": "An mtd element represents one entry (cell) in a table or matrix and is only allowed as a direct sub-expression of an mtr element. An mtd accepts a single argument (possibly an inferred mrow of multiple children).",
+        "guidance": "mtd supports attributes rowspan (positive-integer, causes cell to occupy specified number of rows; corresponding mtds in the following rows must be omitted), columnspan (positive-integer, similar semantics for columns), rowalign and columnalign (overriding values from containing mtr/mtable). Interpretations correspond to similar HTML table semantics. Comparisons are ASCII case-insensitive."
+      },
+      {
+        "name": "Alignment Markers (<maligngroup/>, <malignmark/>) \u2014 general note",
+        "description": "Alignment markers are space-like elements used to horizontally align specified points within a column of MathML expressions by automatic insertion of horizontal space between specified sub-expressions. Note: malignmark and maligngroup are not in MathML-Core; for most purposes alignment is recommended to be implemented using mtable columns. A Javascript polyfill is provided for existing MathML using malignmark.",
+        "guidance": "The elements have been simplified (attributes removed) and their allowed locations restricted. If maligngroup or malignmark occurs outside of an mtable they render with zero width. Prefer mtable-based alignment for new content; use the polyfill if needed for legacy markup."
+      },
+      {
+        "name": "Specifying alignment groups with <maligngroup/>",
+        "description": "Each part of an expression to be aligned should be in an alignment group. The point of alignment is the left edge (right edge in RTL) of the element that follows a maligngroup unless a malignmark intervenes. A table cell containing n maligngroup elements contains n alignment groups; elements entirely before the first maligngroup are disallowed.",
+        "guidance": "Alignment groups need not coincide with nested expression structure, but maligngroup/malignmark elements may only be contained (directly or indirectly) within certain element types (mrow or mstyle excluding mrow with dir changes, mphantom, mfenced, maction though only its selected sub-expression is checked). For cells divided into alignment groups every element in their content must be part of exactly one alignment group (except maligngroup elements and containers that themselves contain maligngroup). The first complete element in such a cell must be a maligngroup element to avoid ambiguity. If cells in a column have differing numbers of groups, zero-width alignment groups are effectively added on the right (or left in RTL) to pad to equal counts."
+      },
+      {
+        "name": "Table cells not divided into alignment groups",
+        "description": "Expressions in a column that are to have no alignment groups should contain no maligngroup or malignmark elements.",
+        "guidance": "Such expressions are aligned using only the columnalign attribute that applies to the table column as a whole, or via CSS where available."
+      },
+      {
+        "name": "Specifying alignment points using <malignmark/>",
+        "description": "An malignmark anywhere within the alignment group (except within another alignment scope wholly contained inside it) overrides alignment at the start of a maligngroup element; it indicates the alignment point should occur on the left edge (right edge in RTL) of the following element.",
+        "guidance": "A malignmark should only occur within elements allowed for maligngroup and there should be at most one malignmark in an alignment group."
+      },
+      {
+        "name": "Alignment algorithm (maligngroup -> mtable conversion)",
+        "description": "Alignments marked with maligngroup may be converted to an equivalent mtable that does not use maligngroup but uses additional table columns. The basic idea is that extra columns are introduced so each alignment group is represented by two columns: one aligning right towards the alignment point and one aligning left; the alignment point may be explicitly marked with malignmark or implicit at start of group.",
+        "guidance": "The details are implementation specific; a supplied polyfill provides an explicit example. Explicit rules for cells spanning across alignment scopes (e.g., table headings) are not given in detail here, though the polyfill provides one implementation. Implementers may transform maligngroup constructs to equivalent mtables for rendering."
+      },
+      {
+        "name": "Elementary math constructs (overview)",
+        "description": "Elements used for basic alignments in elementary math are: mstack (align rows of digits and operators), msgroup (groups rows with similar alignment), msrow (groups digits/operators into a row), msline (draws lines between rows), mscarries (annotates following row with optional borrows/carries/crossouts), mscarry (a borrow/carry/crossout for a single digit), mlongdiv (specifies divisor and quotient for long division with a stack of intermediate computations). mstack and mlongdiv are the parent elements for all elementary math layout.",
+        "guidance": "Children of mstack, mlongdiv, and msgroup (except msrow, msgroup, mscarries, msline) are treated as if implicitly surrounded by an msrow. Elements are described in subsequent sections; use these constructs to capture intermediate or intentionally missing partial forms common in elementary math. Since primary use is stacking rows of numbers aligned on digits and numbers are always formatted left-to-right, columns of an mstack are always processed left-to-right; dir attribute does not affect column ordering or operator ordering within a row."
+      },
+      {
+        "name": "<mstack> (stacks of characters) \u2014 description and layout method",
+        "description": "mstack is used to lay out rows of numbers that are aligned on each digit (common in 2D addition, subtraction, multiplication). Children represent rows (msrow), groups (msgroup), carries (mscarries) and lines (msline); any other element is treated as if surrounded by an msrow. Each row contains 'digits' placed into columns.",
+        "guidance": "Layout method: determine digits in each row; align digits according to stackalign; position each row according to position attribute/shift; determine maximum width of each column (carries do NOT participate in width calculation and are treated as zero width); align entries within columns according to charalign; compute width/height of mstack from rows/columns (overflow from a column is not used in that computation); baseline determined by align attribute. If an element is too wide it overflows into adjacent columns as determined by charalign. If no character in a column, width is taken to be width of '0' in current language (often uniform)."
+      },
+      {
+        "name": "Attributes of <mstack> (align, stackalign, charalign, charspacing, etc.)",
+        "description": "mstack accepts attributes in addition to common presentation attributes: align (vertical alignment with optional rownumber), stackalign (\"left\"|\"center\"|\"right\"|\"decimalpoint\" specifying which column is used to horizontally align rows), charalign (\"left\"|\"center\"|\"right\" specifying horizontal alignment of digits within a column), charspacing (length or keyword \"loose\"|\"medium\"|\"tight\" specifying spacing between columns).",
+        "guidance": "stackalign: for decimalpoint, the left-most column containing the decimalpoint character (via mstyle decimalcharacter, default \".\") is used or an implied decimalpoint on the right of the first number if none present. Rows with non-zero position or affected by shift are treated as if requisite empty columns were added. charalign: when content larger than column width the content overflows the opposite side from the alignment (e.g., right alignment overflows on left); overflow does not affect column width or overall mstack width\u2014authors should avoid collisions. charspacing: keyword values auto-adjust spacing when carries or other entries are wide; spacing is fixed and does not vary between columns. Comparisons are ASCII case-insensitive."
+      },
+      {
+        "name": "<mlongdiv> (long division) \u2014 description",
+        "description": "mlongdiv is similar to mstack and used to layout long division. The first two children are the divisor and the result (in that order); remaining children are treated as if children of mstack. The placement of these and the lines/separators used to display long division are controlled by longdivstyle.",
+        "guidance": "Result or divisor may be an elementary math element or an empty <mrow/>. Use of msgroup may cause elements to form their own mstack or be part of the dividend's mstack depending on longdivstyle. MathML does not specify exact conditions for forming separate mstack for result/divisor or behavior if msline or other elementary elements used and not participating in dividend's mstack layout; implementers may choose suitable rendering. Any rules drawn as part of division layout should use mathcolor."
+      },
+      {
+        "name": "Attribute longdivstyle for <mlongdiv>",
+        "description": "mlongdiv accepts a longdivstyle attribute whose values control the style of long division layout. Values listed include: \"lefttop\", \"stackedrightright\", \"mediumstackedrightright\", \"shortstackedrightright\", \"righttop\", \"left/\\right\", \"left)(right\", \":right=right\", \"stackedleftleft\", \"stackedleftlinetop\".",
+        "guidance": "Values are open-ended; conforming renderers may ignore values they do not handle but are encouraged to render listed values. The names are mnemonics describing position of divisor and result relative to dividend; examples map many names to notational conventions used in various countries (e.g., lefttop used in US/GB, stackedrightright in France, righttop in China/Sweden, left)(right in India, etc.)."
+      },
+      {
+        "name": "<msgroup> (group rows with similar positions)",
+        "description": "msgroup groups rows inside mstack and mlongdiv that have a similar position relative to the alignment of the stack. If not explicitly given, children representing the stack in mstack/mlongdiv are treated as implicitly surrounded by an msgroup.",
+        "guidance": "msgroup accepts attributes position (integer, default 0) specifying horizontal position of rows within the group relative to containing msgroup (relative to stackalign column; positive moves rows toward tens digit/pads right, negative towards ones digit/pads left; decimal point counts as a column) and shift (integer, default 0) specifying incremental shift of position for successive children within the group."
+      },
+      {
+        "name": "<msrow> (rows in elementary math) \u2014 description and rules",
+        "description": "An msrow represents a row in an mstack. Often implicit, msrow is useful for putting multiple elements in a single row (e.g., an operator alongside a number). If an mn element is a child of msrow, the number is split into digits and digits are placed into successive columns. Any other element (except mstyle) is treated as a single digit occupying the next column. mstyle is treated as if its children were children of msrow, with style affected by mstyle attributes. The empty element <mrow/> may create an empty column.",
+        "guidance": "A row is considered primarily as if it were a number (always displayed left-to-right), so the directionality used to display columns is always left-to-right; textual bidirectionality within token elements (other than mn) still applies, as does overall directionality within any children of msrow. msrow accepts a position attribute (integer) similar to msgroup position and interpreted relative to the containing stackalign."
+      },
+      {
+        "name": "<mscarries> (carries, borrows, crossouts) \u2014 description and behavior",
+        "description": "mscarries is used for annotations such as carries, borrows, and crossouts that occur in elementary math. Children are associated with elements in the following row of the mstack. It is an error for mscarries to be the last element of an mstack or mlongdiv. Each child of mscarries applies to the same column in the following row. Each child other than mscarry or <mrow/> is treated as if implicitly surrounded by mscarry; <mrow/> is used when no carry for a particular column is needed.",
+        "guidance": "Attachment of carries to columns proceeds left-to-right irrespective of overall document directionality. mscarries sets displaystyle to false and increments scriptlevel by 1 so children are typically smaller; it also changes default scriptsizemultiplier (default inside mscarries is 0.6) though scriptsizemultiplier can be set and overridden. If two rows of carries are adjacent, the first annotates the second as if the second had location = n (the second visually uses some amount of space though it may not draw)."
+      },
+      {
+        "name": "Attributes of <mscarries> (position, location, crossout)",
+        "description": "mscarries accepts attributes position (integer, default 0) specifying horizontal position of rows within this group relative to containing msgroup (affects association of each carry with the column below; e.g., position=1 associates rightmost carry with second digit column from right), location (compass-like values \"w\"|\"nw\"|\"n\"|\"ne\"|\"e\"|\"se\"|\"s\"|\"sw\", default \"n\") specifying location of carry/borrow relative to the character below, and crossout (zero-or-more values among \"none\"|\"updiagonalstrike\"|\"downdiagonalstrike\"|\"verticalstrike\"|\"horizontalstrike\") specifying how the column content below each carry is crossed out.",
+        "guidance": "Comparisons are ASCII case-insensitive. The interpretation of position is like that for msgroup/msrow but it alters carry association. location default places the carry above the character. Authors should use these attributes to control precise placement/style of carries and crossouts."
+      },
+      {
+        "name": "<mscarry> (single carry element)",
+        "description": "mscarry represents a borrow/carry and/or crossout for a single digit and is used as a child of mscarries.",
+        "guidance": "If children of mscarries are not mscarry or mrow, they are treated as implicitly surrounded by an mscarry; use <mrow/> for an explicit empty carry. mscarry itself is the unit element for per-column annotations and typically appears in smaller scriptlevel due to being inside mscarries."
+      }
+    ]
+  }
+}

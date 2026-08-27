@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/regulations_gov_api_root.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 5517,
+  "output_tokens": 3744,
+  "elapsed_s": 925.3565184171312,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "developers, data users, and researchers using the Regulations.gov API (e.g., app developers, data scientists, agency integrators)",
+    "subtask_short": "regulations.gov API usage",
+    "subtask_description": "Rules, constraints, and practical guidance for querying Regulations.gov programmatically (documents, comments, and dockets) via the v4 API, including authentication, available fields, pagination, rate limits, and example queries.",
+    "subtask_keywords": [
+      "api",
+      "regulations_gov",
+      "comments",
+      "documents",
+      "dockets",
+      "developers"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "API key required and X-Api-Key header",
+        "description": "To begin using this API, you will need to register for an API Key. After registration, you will need to provide this API key in the X-Api-Key HTTP header with every API request.",
+        "guidance": "If you want to use commenting API, you MUST use the form below to register for an API key. For sample purposes you can use DEMO_KEY but it is for demonstration only and should not be used beyond exploring the APIs."
+      },
+      {
+        "name": "Documents search endpoint (/v4/documents)",
+        "description": "/v4/documents supports searching for a list of documents: full text keyword searches and filtering based on a number of available parameters.",
+        "guidance": "Examples: filter[searchTerm]=water, filter[postedDate]=2020-09-01, filter[postedDate][ge]=2020-09-01&filter[postedDate][le]=2020-09-01, sort=postedDate (asc), sort=-postedDate (desc). Note: some data moved from v3 to detail endpoints."
+      },
+      {
+        "name": "Document detail endpoint (/v4/documents/{documentId}) and document types",
+        "description": "Use /v4/documents/{documentId} to obtain detailed information for a single document. A document is defined as Proposed Rule, Rule, Supporting & Related, or Other. Documents may be part of a Rulemaking or Nonrulemaking Docket.",
+        "guidance": "Attachments are not included by default; you can include attachments using include=attachments. The document JSON response contains documentId (returned as an Id of the document). There are attributes that vary by Agency posting the document."
+      },
+      {
+        "name": "Comments search endpoint (/v4/comments)",
+        "description": "/v4/comments supports searching for a list of comments: full text keyword searches and filtering based on a number of available parameters.",
+        "guidance": "Examples: filter[searchTerm]=water, filter[postedDate]=2020-09-01, filter[postedDate][ge]=...&filter[postedDate][le]=..., filter[commentOnId]=<objectId>, sort=postedDate (asc/desc)."
+      },
+      {
+        "name": "Comment detail endpoint (/v4/comments/{commentId})",
+        "description": "Use /v4/comments/{commentId} to obtain detailed information for a single comment. Each comment has attributes that vary based on the Agency posting the comment and whether it's part of a Rulemaking or Nonrulemaking docket.",
+        "guidance": "Attachments are not included by default; include attachments with include=attachments (e.g., ?include=attachments)."
+      },
+      {
+        "name": "Docket search endpoint (/v4/dockets)",
+        "description": "/v4/dockets can be used to search for dockets (organizational folders containing multiple documents).",
+        "guidance": "Examples: filter[searchTerm]=water, filter[searchTerm]=EPA-HQ-OAR-2003-0129, filter[agencyId]=GSA,EPA, sort=title (asc/desc)."
+      },
+      {
+        "name": "Docket detail endpoint (/v4/dockets/{docketId})",
+        "description": "Use /v4/dockets/{docketId} to retrieve detailed information for a single docket. Docket attributes vary by Agency and whether the docket is Rulemaking or Nonrulemaking.",
+        "guidance": "Example: https://api.regulations.gov/v4/dockets/EPA-HQ-OAR-2003-0129?api_key=DEMO_KEY. Some fields (e.g., RIN) moved to docket details and are not returned by /documents."
+      },
+      {
+        "name": "List of fields always publicly viewable on a comment",
+        "description": "Certain fields are always available in the JSON response for a comment.",
+        "guidance": "Always-public fields: agencyId, comment, commentOnId, docketId, documentId, documentType, postedDate, receiveDate, restrictReason (if restrictReasonType is 'Other'), restrictReasonType (if the document is restricted), reasonWithdrawn (if the comment has been withdrawn), title, trackingNbr, withdrawn."
+      },
+      {
+        "name": "Agency-configurable comment fields",
+        "description": "Agencies can toggle access to certain comment fields at any time; these fields may appear or not in the comment JSON response depending on agency configuration.",
+        "guidance": "Agency-configurable fields: city, country, docAbstract, firstName, govAgency, govAgencyType, lastName, legacyId, organization, pageCount, postmarkDate, stateProvinceRegion, subtype, zip. For agency-specific commenting practices contact eRulemaking@gsa.gov. The OpenAPI spec includes info on agency-configurable fields."
+      },
+      {
+        "name": "Fields never publicly viewable on a comment",
+        "description": "Some fields are never returned in public comment JSON responses.",
+        "guidance": "Never-public fields: originalDocumentId, address1, address2, email, phone, fax."
+      },
+      {
+        "name": "Data limitations and agency-managed fields",
+        "description": "Certain aspects of the commenting process and some data fields are managed solely by agencies, which can create limitations for external users of public comment data.",
+        "guidance": "A GAO report raised concerns that comment data may not be fully described to the public. For agency-specific practices or missing fields contact eRulemaking@gsa.gov. The OpenAPI Specification has been updated with agency-configurable field info."
+      },
+      {
+        "name": "Strict pagination limits in v4 and recommended bulk retrieval pattern",
+        "description": "v4 has strict pagination limits (page sizes and total pages). To retrieve very large result sets (e.g., >5000 comments), follow a multi-step paging and filtering strategy.",
+        "guidance": "Example procedure for >5000 comments: 1) Get documents for docketId and note objectId for each document. 2) Query comments by commentOnId. 3) Page through first set using page[size]=250&page[number]=N with N between 1 and 20 to retrieve first 5000. Sort by lastModifiedDate,documentId. 4) On last page record lastModifiedDate and run subsequent queries with filter[lastModifiedDate][ge]=<last_date_converted_to_Eastern_time> and repeat paging to retrieve next sets. Repeat until all comments retrieved. Note: page[size]=250 and page[number] 1..20 used in examples; lastModifiedDate parameter is in beta and may be removed when a permanent bulk solution is available."
+      },
+      {
+        "name": "Use of lastModifiedDate filter (beta) when paginating",
+        "description": "The lastModifiedDate parameter can be used as a filter to continue paginating large result sets without missing items.",
+        "guidance": "When moving to the next batch, filter by lastModifiedDate >= the last item's lastModifiedDate from the previous batch. Be careful with time zone conversions (example: 2020-08-10T15:58:52Z \u2192 2020-08-10 11:58:52 Eastern). Note: lastModifiedDate is beta and may be removed."
+      },
+      {
+        "name": "Commenting API rate limits",
+        "description": "Commenting API is subject to rate limits: 50 requests per minute and a secondary limit of 500 requests per hour.",
+        "guidance": "General API rate-limit guidance is at https://api.data.gov/docs/rate-limits/. Respect these limits to avoid throttling; use DEMO_KEY only for exploration."
+      },
+      {
+        "name": "Rate limit increase policy",
+        "description": "GSA may grant a rate limit increase on GET keys for an indefinite period on a case-by-case basis.",
+        "guidance": "Requests for higher limits must establish need to justify increases; each submission will be reviewed and considered individually."
+      },
+      {
+        "name": "Document status via withdrawn field",
+        "description": "The /v4/documents response includes a withdrawn boolean field indicating document status.",
+        "guidance": "If withdrawn = true, the document is withdrawn; otherwise the document is posted."
+      },
+      {
+        "name": "Attachments handling (include parameter)",
+        "description": "Attachments are not returned by default for document or comment details; include attachments explicitly using the include parameter.",
+        "guidance": "Examples: /v4/documents/{documentId}?include=attachments&api_key=DEMO_KEY and /v4/comments/{commentId}?include=attachments&api_key=DEMO_KEY."
+      },
+      {
+        "name": "Supported query parameters and common filters",
+        "description": "The API supports common filters and sorting for searches across documents, comments, and dockets using filter[...] and sort parameters.",
+        "guidance": "Common examples shown: filter[searchTerm], filter[postedDate], filter[postedDate][ge]/[le], filter[commentOnId], filter[docketId], filter[agencyId], sort=postedDate or sort=-postedDate, sort=title or sort=-title. Use these to refine searches."
+      },
+      {
+        "name": "OpenAPI specification and staging environment",
+        "description": "Full API details are available in the OpenAPI Specification file; a staging API is available for testing.",
+        "guidance": "Open API specification file link provided on the page. Staging API URL: https://api-staging.regulations.gov \u2014 use staging for testing."
+      },
+      {
+        "name": "Examples as authoritative usage patterns",
+        "description": "The documentation provides concrete example queries demonstrating searches, filters, sorting, paging, and how to retrieve attachments or details.",
+        "guidance": "Copy/paste-ready examples include searches by term/dates/commentId/documentId, sorting, and the multi-step approach for retrieving very large comment sets (document list \u2192 commentByObjectId \u2192 paginated retrieval). Use examples as templates for constructing queries."
+      }
+    ]
+  }
+}

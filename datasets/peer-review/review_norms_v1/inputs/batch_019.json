@@ -1,0 +1,162 @@
+[
+{
+"review_id": "neurips_H4e7mBnC9f0_r3",
+"paper_id": "neurips_H4e7mBnC9f0",
+"review_text": "\n\n**Summary:**\nSummary.\n\nThis paper attempts to facilitate the surrogate gradient descent in training SNNs. The proposed FDG quantitatively analyzes the gradients in the training procedure. And then, the authors propose a Dspike function, which is claimed as a proper searching function for the optimal surrogate gradients.  Numerical experiments demonstrate the superiority of the proposed models to several contenders in CIFAR and ImageNet data sets.\n\nContributions.\n\nI have to admit that it's hard to understand and follow the objective and soundness of this paper. At first glance at the Tables in Section 5, the proposed methods achieve a commendable result compared to other SNN models. However, I can't entirely agree with the author's claimed contributions, especially the first and second ones.\n\nAs claimed that \"through which (FDG) we are able to not only explain why it (surrogate gradient) works well but also indicate how we can improve its (gradient) adaptivity to data through training\", so what are the answers of why and how? In detail,\n\n[1] The derivation of FGD can be traced back to the directional derivative and difference in mathematics. It is reasonable to use Eq. (10) to approximate the instantaneous derivative at a certain point in ANNs, which have continuous and differentiable activations. The high-similarity curves in experiment $\\mathrm{I}$ verify my conjectures. It's a good point.\n\n[2] However, the finite difference technique is not suitable for estimating the derivative of holder-continuous and non-differentiable functions. There may be a large gap between the instantaneous and average derivatives. Thus, the similarity between FDG and surrogate gradients in SNNs cannot support the \"soundness of surrogate gradients\" in Line 175 due to the imprecision of FDG.\n\n[3] Further, how to conclude that \"This observation concludes that surrogate gradient can predict the change rate of loss in a relatively larger neighborhood\" between Lines 175-176? Doesn't dissimilarity mean invalidity? I hope the authors can clarify this point.\n\n[4] My conjecture in [2] can be verified by Figure 2. At the initial state that epoch = 0 or 1, parameters $\\mathbf{W}$ may be far away from the optimal solution. In this case, FDG is not similar to the surrogate gradient if employing small $\\epsilon$. As the setting in the experiment that \"weight decay (L2 regularization) is set to 0.0001\", the parameters may converge to the optimal local minima as weights decay to 0.0001. Thus, FDG still works, although $\\epsilon$ is small. So it may be a practical trick but not holds as the authors theoretically claimed, right?\n\nAbout the claim that \"optimal surrogate gradient can be found by choosing temperature wisely\" in Lines 210-211. In other words, the Dspike function is effective since optimal surrogate gradient can be found by choosing temperature wisely. How to evaluate this point? I would have appreciated more clarity on the experimental results not as omitted by \"As did in former toy experiments (Sec. 4.2), we verify the cosine similarity between our Dspike gradients and the FDG at the beginning of each training epoch and update the  temperature to better match the FDG.\"\n\nIn summary, I find the interests of this work and the proposed model may be effective in practice. However, this conclusion should be testified either theoretically or experimentally. Of course, this paper still needs improvement in these two aspects. So the current version is improper for acceptance."
+},
+{
+"review_id": "neurips_vLyI__SoeAe_r0",
+"paper_id": "neurips_vLyI__SoeAe",
+"review_text": "\n\n**Summary:**\nThis paper fits in the category of survey/review paper. While this kind of paper is not common at Neurips, it doesn't mean that it should be disregarded. It does a good job at trying to unify a popular body of work on policy gradient methods under the umbrella of \"control as inference\". The paper is well-structured: it defines a taxonomy which differentiates between \"EM-based\" methods and those based on \"direct KL minimization\". The paper focuses on four algorithms: Maximum a posteriori Policy Optimisation (Abdolmaleki et al. 2018), Advantage-Weighted Regression (Peng et al. 2019), Soft Actor-Critic (Haarnoja et al. 2017) and Relative Entropy Policy Search (Peters et al. 2010). The  paper starts by explaining how the RL problem can be cast as a probabilistic inference problem and tries to explain how an evidence lower bound can obtained. It then goes into the specifics of each algorithm and how each either parametrizes the prior or the posterior and whether  it uses hard constraints (with closed-form expressions) or soft/regularized re-formulations. \n\nThe empirical section then compares the raw performance three of those algorithms (SAC, MPO and AWR) on six Mujoco environments. \n\nRegarding the \"co-adaptation\" expression in the title, I wouldn't say it defines the paper. The \"co-adaptation\" findings really pertain to the impact of specific implementation details on the final performance in those six Mujoco environments. More specifically, the authors study the impact of double-q learning + clipping, ELU activations vs ReLu, network size and layer normalization. The empirical findings are nicely summarized through tables. "
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "neurips_vLyI__SoeAe_r1",
+"paper_id": "neurips_vLyI__SoeAe",
+"review_text": "\n\n**Summary:**\nProvides a unifying mathematical framework for off-policy inference based algorithms such as MPO, AWR (that use pseudo-likelihood objective) and SAC, classifying them into EM based or KL based algorithms (uses the control as inference framework to do so). This allows decoupling the effect of high-level algorithmic choices from low-level code optimizations, to identify where the benefit from these algorithms really comes from, and further analyzing which design choices are transferrable across different algorithm families. "
+},
+{
+"review_id": "neurips_vLyI__SoeAe_r2",
+"paper_id": "neurips_vLyI__SoeAe",
+"review_text": "\n\n**Summary:**\nComparing the performance of different RL algorithms can sometimes be difficult because algorithmic contributions can be confounded with differing implementational choices between the agents. This paper attempts to examine the relative contributions of algorithmic vs implementational choices in a series of inference-based, off-policy actor-critic algorithms -- MPO, AWR, and SAC. The authors' starting point is a unified view of these algorithms from the perspective of control-as-inference. In this framework, policies as cast as posterior probabilities that a given action in a given state will be optimal. The authors derive an ELBO for this posterior that, when optimised, yields an approximate optimal policy. The authors then describe how optimization can be approached in two ways: an EM approach (where both a prior and posterior policy are optimized) and a KL approach (where only the posterior policy is optimized). MPO and AWR belong to the EM family of algorithms, while SAC belongs to the KL family. The authors further detail how these algorithms fit into their unified framework.\n\nIn the second half of the paper, the authors focus on the implementational differences between these algorithms. They focus specifically on four choices: clipped double q-learning, tanh-squashing in the policies, the choice of activation function and layer norm, and the network size. Specifically, through a series of ablation studies, the authors examine how critical some of these choices are to specific algorithms and which of these can be transferred to other algorithms."
+},
+{
+"review_id": "neurips_ALg4gT0DL4Axd_r0",
+"paper_id": "neurips_ALg4gT0DL4Axd",
+"review_text": "\n\n**Summary:**\nThe authors consider a popular multi-armed bandit setting. Working in the fixed-confidence setting, they focus on the problem of the identification of $m$ arms corresponding to the largest means for a given error rate $\\delta$ with the goal of minimizing the sample complexity for a fixed error rate. The authors focus on the misspecified linear bandit setting, establish results concerning sample complexity and the scale of misspecification, and design an algorithm for Top-$m$ identification in misspecified linear bandit setting.  "
+},
+{
+"review_id": "neurips_ALg4gT0DL4Axd_r1",
+"paper_id": "neurips_ALg4gT0DL4Axd",
+"review_text": "\n\n**Summary:**\nThis paper investigates the problem of top-m identification for misspecified linear bandits. Specifically, the reward samples, contrary to the setting in linear bandits, is assumed to be translated by unknown misspecifications, and the goal is to identify any subset of cardinality $$m$$ of arms having the highest mean rewards. An upper bound on the maximum possible misspecification $$\\varepsilon$$ is assumed, and sequential design rules in the form of a sequence of estimators, arm selection rules and measurable stopping rules are proposed. The sequence of estimators comprise the sample means of each arm, followed by the projection of the estimated means on to the set of realizable models. The arm selection rules involve a no-regret learner to generate a distribution for sampling the next action. The stopping rule is a confidence-interval based decision where the confidence interval is a trade-off between the concentration rate due to unstructured (stochastic) bandits and linear bandits, where the trade-off is guided by the level of misspecification $$\\varepsilon$$. A tractable lower bound is derived developing on the existing lower bounds on the sample complexity of stochastic bandits, and the proposed decision rules are shown to yield an asymptotically optimal sample complexity."
+},
+{
+"review_id": "neurips_ALg4gT0DL4Axd_r2",
+"paper_id": "neurips_ALg4gT0DL4Axd",
+"review_text": "\n\n**Summary:**\nThe paper deals with Misspecification In Fixed-Confidence Linear Top-m Identification. The authors define the problem of identifying thee best subset of size m in a K-armed contextual bandits and present a lower bound on the sample complexity. They also present an algorithm (MisLid) to solve the problem and analyse its correctness and establish an upper bound on its sample complexity. Finally, the authors support their claim by running experiments."
+},
+{
+"review_id": "neurips_ftKnhsDquqr_r1",
+"paper_id": "neurips_ftKnhsDquqr",
+"review_text": "\n\n**Summary:**\nThis paper improves and aggregates techniques for 1-Lipschitz CNNs with respect to the $l_2$ norm. First, the authors approximate the gradient for Skew Orthogonal Convolutions (SOC) so the throughput is increased. Second, the paper cooperates Curvature-based Robustness Certificate (CRC) into CNN to replace the last linear layer of the model. Third, it introduces a novel 1-Lipschitz pooling layer which is learnable. Combining these three techniques achieves better standard/robust accuracy on CIFAR-10/CIFAR-100 with a shorter training time."
+},
+{
+"review_id": "neurips_ftKnhsDquqr_r2",
+"paper_id": "neurips_ftKnhsDquqr",
+"review_text": "\n\n**Summary:**\nThe work proposes 3 methods that could be used to improve the training of the 1-Lipschitz networks from different aspects: (1) an approximation approach for the calculation of gradients in SOC layers which makes the method more time-efficient; (2) changing the final linear layer of a network to an MLP and specifically apply adversarial training on the MLP yields superior performances; (3) a more expressive pooling method compared with max-pooling. The work then empirically demonstrates that using (1) results in time-efficient models with no significant sacrifice in performance and using (2)(3) together boost both natural accuracy and robustness of trained models."
+},
+{
+"review_id": "neurips_ftKnhsDquqr_r3",
+"paper_id": "neurips_ftKnhsDquqr",
+"review_text": "\n\n**Summary:**\nThis paper presents techniques for accelerating and improving the training of 1-Lipschitz CNNs for certified $\\ell_2$ robustness. Specifically, the paper proposes an approximate gradient computation procedure for skew orthogonal convolutions (SOC) which reduces the training time of SOC-based CNNs. The paper also presents a trainable 1-Lipschitz projection-based pooling layer and proposes to replace the last linear layer of 1-Lipschitz CNNs with a certifiable 1-hidden layer MLP for improved robustness. The combination of these techniques improves the state-of-the-art provable $\\ell_2$ robustness on CIFAR-10 and CIFAR-100."
+},
+{
+"review_id": "neurips_ftKnhsDquqr_r4",
+"paper_id": "neurips_ftKnhsDquqr",
+"review_text": "\n\n**Summary:**\nThis paper proposes an 1-Lipschitz CNN with improved standard and provable robust accuracies on CIFAR-10 and CIFAR-100 with 1) faster gradient copmutation of SOC layers; 2) 1-hidden layer MLP instaed of last linear layer; 3) 1-Lipschitz pooling layer called projection pooling. "
+},
+{
+"review_id": "neurips_Q7kdFAVPdu_r1",
+"paper_id": "neurips_Q7kdFAVPdu",
+"review_text": "\n\n**Summary:**\nThis paper proposes a tensor decomposition leveraging contrastive self-supervised learning based on the data augmentation for positive samples and the unbiased estimation of negative samples, which can align with downstream classification tasks. The proposed method optimizes the objective by using an alternating least squares algorithm. The experimental results using four real-world tensor datasets show that the proposed method achieves better accuracy on the downstream classification tasks using a much smaller number of parameters than several comparison models including tensor-based models, self-supervised models, and auto-encoder models. "
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "neurips_Q7kdFAVPdu_r2",
+"paper_id": "neurips_Q7kdFAVPdu",
+"review_text": "\n\n**Summary:**\nThe authors present  \"augmented\" tensor decomposition, which utilizes an objective that is designed for downstream tasks (by way of \"alignment\") in addition to data reconstruction (\"fitness\"). Hence, the quality of the decomposition is determined not only by reconstruction error, but by correct clustering on features. The authors contribute an algorithm for implementing this approach and motivate the significance with a comparison to existing CP decomposition approaches. The authors' algorithm builds on Alternating Least Squares (ALS), a typical method in CP decomposition algorithms."
+},
+{
+"review_id": "neurips_Q7kdFAVPdu_r3",
+"paper_id": "neurips_Q7kdFAVPdu",
+"review_text": "\n\n**Summary:**\nThis paper propose a novel self-supervised framework for CP Tensor Decomposition, in which an iterative method is developed to enable  an alternative least squares fashion. The experiment results on various datasets show its efficiency."
+},
+{
+"review_id": "neurips_Q7kdFAVPdu_r4",
+"paper_id": "neurips_Q7kdFAVPdu",
+"review_text": "\n\n**Summary:**\nIn the paper, the authors investigated a new variant of CP decomposition (CPD) for the classification task. Compared to the classic CPD, the new one imposes the self-supervised loss, so better embedding spaces, modeled by latent factors, can be learned by augmenting the training data. "
+},
+{
+"review_id": "neurips_IZXIfq0CuTa_r1",
+"paper_id": "neurips_IZXIfq0CuTa",
+"review_text": "\n\n**Summary:**\nThis work proposes a tensorial representation of data, and linear transformation and split into multiple spectral subsets. An independent neural network is trained on each of these subsets at training and combined through an ensembling approach. This reduces the computational complexity due to smaller data size per network and the parallel training of each subnetwork."
+},
+{
+"review_id": "neurips_IZXIfq0CuTa_r2",
+"paper_id": "neurips_IZXIfq0CuTa",
+"review_text": "\n\n**Summary:**\nThe authors proposed a spectral tensor decomposition of a DNN into independent, parallel and computationally cheaper subnets that process corresponding spectrally decomposed data, resulting in speedup in training; ensembling of these subnets yielded reasonable generalization performance. \n"
+},
+{
+"review_id": "neurips_IZXIfq0CuTa_r3",
+"paper_id": "neurips_IZXIfq0CuTa",
+"review_text": "\n\n**Summary:**\nThis paper introduces a parallelization of DNN from a tensor perspective. The data is split into their spectral subsets and is passed into parallel subnetworks and finally, the results are based on an ensemble of the subnetworks. Specifically, the author provides detailed spectral counterparts for fully connected layer, convolution layer and recurrent layers. The tensorized structure naturally enables network compression at the same time."
+},
+{
+"review_id": "neurips_IZXIfq0CuTa_r4",
+"paper_id": "neurips_IZXIfq0CuTa",
+"review_text": "\n\n**Summary:**\nThe paper introduces a method to train DNN models using parallel ensemble learning. The key idea is to build networks with parallel branches and update each branch independently using split, independent data sets. The evaluation shows that such a method can lead to reduced computation and model size on MNIST, CIFAR-10, and ImageNet. "
+},
+{
+"review_id": "neurips_Ddd6FqHXmHA_r1",
+"paper_id": "neurips_Ddd6FqHXmHA",
+"review_text": "\n\n**Summary:**\nThis paper introduced a new evaluation metric for OSR, OpenAUC, which jointly measures the binary open-set performance and multi-class closed-set performance, and also introduced a simple OSR method by minimizing the OpenAUC risk with synthetic open-set samples by mixing up features of closed-set samples. Thorough theoretical analysis is presented and promising performance on public datasets is shown. "
+},
+{
+"review_id": "neurips_Ddd6FqHXmHA_r2",
+"paper_id": "neurips_Ddd6FqHXmHA",
+"review_text": "\n\n**Summary:**\nThis paper focuses on the evaluation issue for the Open-Set Recognition (OSR) problem. Specifically, the authors point out that existing metrics for OSR are inconsistent with the goal of OSR: some poor open-set predictions can escape from the punishment of classification-based metrics, while novelty detection AUC ignores the close-set performance. In view of this, a novel metric, named OpenAUC, is proposed. Theoretical analysis reveals that OpenAUC overcomes the limitations of the existing metrics. Moreover, an end-to-end learning algorithm is proposed to optimize OpenAUC. Finally, empirical results on six benchmark datasets validate the effectiveness of the proposed method."
+},
+{
+"review_id": "neurips_Ddd6FqHXmHA_r3",
+"paper_id": "neurips_Ddd6FqHXmHA",
+"review_text": "\n\n**Summary:**\nThe paper introduces a new metric called OpenAUC as a summary number to jointly measure the closed-set classification accuracy and open-set detection accuracy. It is a threshold-free metric. The paper compares existing metrics used in the literature of open-set recognition and points out their limitations. Further, the paper develops a loss to train neural networks by directly optimizing the OpenAUC metric. Experiments on standard open-set recognition datasets validate the effectiveness of the loss.\n\n"
+},
+{
+"review_id": "neurips_wYGIxXZ_sZx_r1",
+"paper_id": "neurips_wYGIxXZ_sZx",
+"review_text": "\n\n**Summary:**\nThe goal of the paper is to understand which metrics (when being small) imply that a solution of the minimax problem (using a dataset) also behaves well on the expected loss. First, the authors provide a negative example showing that \u201cgeneralization error in primal risk\u201d being small is not sufficient. Then, the authors provide a new metric namely \u201cgeneralization in the primal gap\u201d, which the authors explain is a better metric. They then consider two popular algorithms for minimax optimization - GDA and GDMax and provide conditions under which one is better than the other. "
+},
+{
+"review_id": "neurips_wYGIxXZ_sZx_r2",
+"paper_id": "neurips_wYGIxXZ_sZx",
+"review_text": "\n\n**Summary:**\nThis paper studies the algorithm-dependent generalization property of stochastic minimax optimization problems in the nonconvex-concave or nonconvex-nonconcave setting. In particular, this paper gives two (non)concave minimax examples to support that generalization error for primal risk may not be enough to quantify the actual generalization error, due to the objective value differences between population and empirical optimal minimax learners. \nTo study the generalization error for the primal risk, this paper relies on the tool of $\\epsilon$-algorithmic stability [Hardt et al., 2016], and get a bound with sub-linear dependence on the $\\epsilon$ for nonconvex-concave problems for the first time. The setting is hard since the Lipschitz continuity and the uniqueness do not hold anymore. Their main idea is to consider a virtual gradient ascent algorithm to fill up this gap.\nThis paper further investigates the generalization property of GDA and GDmax, and provides two examples and estimate on the capacities to show that GDA generalizes better than GDMax."
+},
+{
+"review_id": "neurips_wYGIxXZ_sZx_r3",
+"paper_id": "neurips_wYGIxXZ_sZx",
+"review_text": "\n\n**Summary:**\nThe paper proposes a new metric, the primal gap, to study the generalization of minimax learners. The paper gives an overview of shortcomings of previous metrics for minimization problems (the primal risk and primal-dual risk) when they are applied to minimax problems. Then, it is shown that the primal gap metric works well specifically for minimax problems. Generalization bounds are derived, and as special cases applied to primal risk and primal-dual risk for the nonconvex-concave setting, showing new bounds there. Finally, comparisons between gradient descent-ascent and gradient descent-max are given. "
+},
+{
+"review_id": "neurips_wYGIxXZ_sZx_r4",
+"paper_id": "neurips_wYGIxXZ_sZx",
+"review_text": "\n\n**Summary:**\nThis paper introduces an example to show that the primal risk metric has inadequacies in studying the generalization for minimax problems.\n\nThis paper then proposes a new metric \u2013 the primal gap to avoid the issue in the example.\n\nThis paper then leverages this new metric to compare the generalization behavior of GDA and GDMax.\n\nFinally, this paper establishes generalization bounds for primal risk and primal-dual risk without assuming strong concavity."
+},
+{
+"review_id": "neurips_hYx-xr1wdo_r1",
+"paper_id": "neurips_hYx-xr1wdo",
+"review_text": "\n\n**Summary:**\nThis work explores statistical-computational gaps in the problem of obtaining non-trivial correlation (sometimes referred to as `weak recovery') with the cluster labels of a balanced mixture of isotropic Gaussian vectors that have sparse means drawn from a Gaussian-Bernoulli prior. Via a reduction to a low-rank matrix factorization problem, explicit formulas are derived for the asymptotic mean-squared error of the Bayes estimator, which is statistically optimal for this problem although likely hard to compute. On the algorithmic side, approximate message passing is proposed and an exact asymptotic formula for its mean-squared error is derived. Information-theoretic and algorithmic thresholds are described, and for large enough sparsity levels, these two thresholds differ. Numerical experiments explore what happens when the sparsity level is sub-extensive and show that the phase transitions have a different behavior in this regime."
+},
+{
+"review_id": "neurips_hYx-xr1wdo_r2",
+"paper_id": "neurips_hYx-xr1wdo",
+"review_text": "\n\n**Summary:**\nThis paper studies statistical and computational limits of subspace clustering, focusing on high-dimensional Gaussian mixture model with sparse centroids. The paper considers the regime where both the fraction of non-zero components of the cluster means and the ratio between the number of samples and the dimension are fixed (which differs from previous literature). The information-theoretic threshold (below which reconstruction is statistically impossible) and algorithmic limitations (in terms of an approximate message passing algorithm) are obtained, which indicate a statistical-to-computational gap. The results are illustrated and compared with previous works through simulations. \n\n\n\n"
+},
+{
+"review_id": "neurips_hYx-xr1wdo_r3",
+"paper_id": "neurips_hYx-xr1wdo",
+"review_text": "\n\n**Summary:**\nThis paper studies the performance of subspace clustering in a high-dimensional Gaussian mixture model. The cluster centers are assumed to be sparse. The problem is equivalent to one of low-rank matrix estimation. Using this connections, the information-theoretic limit for this problem is derived and compared with the performance of AMP (generally thought to be the best among poly-time algorithms for this problem).  The results are specialized to the setting of sparsity ratio approaching one, and the statistical-computational gap is found to be of the order of $\\sqrt{\\rho}\\log(1/\\rho)$."
+},
+{
+"review_id": "neurips_hYx-xr1wdo_r4",
+"paper_id": "neurips_hYx-xr1wdo",
+"review_text": "\n\n**Summary:**\nThe authors consider a clustering problem where the cluster means are sparse vectors and the noise is Gaussian. They prove the information-theoretic threshold in terms of the signal-to-noise ratio (SNR) under which the clustering is impossible statistically. They also analyze a performance of an approximate message passing (AMP) algorithm for the problem. The difference between the informatin-theoretic transition and the algorithmic transition (based on the AMP algorithm) is discussed."
+}
+]

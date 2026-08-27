@@ -1,0 +1,84 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/8aa11d45a9ea.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 5948,
+  "output_tokens": 2918,
+  "elapsed_s": 1952.9606607500464,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "Coq developers, proof engineering researchers, and ML-for-code researchers",
+    "subtask_short": "Coq code formatting with LMs",
+    "subtask_description": "Learning and evaluating language-model-based formatting for Coq proof scripts: predicting spacing/linebreak/indentation between lexer tokens and integrating suggestions into Coq development workflows.",
+    "subtask_keywords": [
+      "coq",
+      "code_formatting",
+      "language_models",
+      "spacing_prediction",
+      "serapi"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Task definition: spacing prediction",
+        "description": "Task: predict spacing between tokens obtained from Coq\u2019s lexer.",
+        "guidance": "Obtain tokens and spacing via SerAPI\u2019s sertok program; the model's output is a suggestion for spacing between two given Coq tokens."
+      },
+      {
+        "name": "Feature representation for tokens and spacing",
+        "description": "Represent tokenized sentences as S-expressions and represent spacing examples as tuples: (Content, Kind, #Newlines, #Spaces).",
+        "guidance": "Example sentence encoding: Sentence((IDENT Lemma)(IDENT mg_eq_proof)... (KEYWORD .))). Spacing example entries: [(null, BOS, 0, 0), (Lemma, IDENT, 2, 0), ...]. Use SerAPI-produced S-expressions and sertok outputs as machine-readable inputs."
+      },
+      {
+        "name": "Corpus preparation and train/validation/test split",
+        "description": "Randomly split corpus files into training, validation and testing sets containing 80%, 10%, 10% of the files, respectively.",
+        "guidance": "Train models using training and validation sets; evaluate on the held-out testing set by comparing predicted spacing to existing spacing in the test files."
+      },
+      {
+        "name": "Baseline metric: top-k accuracy",
+        "description": "Evaluate formatting predictions with top-1 and top-3 accuracy (i.e., whether the correct spacing appears in the top-k model predictions).",
+        "guidance": "Reported results: Neural model top-1 99.7% / top-3 96.8%; n-gram model top-1 98.9% / top-3 93.4% (paper's reported numbers)."
+      },
+      {
+        "name": "Caveat about top-k accuracy (severity weighting)",
+        "description": "Top-k accuracy assumes all errors are equally important, but subjective severity of spacing errors can differ greatly.",
+        "guidance": "This implies evaluation should consider severity-weighted metrics or other schemes that reflect the differing impact of spacing errors (e.g., line breaks vs minor space differences)."
+      },
+      {
+        "name": "Model taxonomy: n-gram baseline vs neural advanced",
+        "description": "n-gram model baseline: inserts spacing as special tokens and predicts next token by frequency after n\u22121 previous tokens. Neural model: embeds Coq tokens and spacing into vectors and predicts spacing using embeddings.",
+        "guidance": "Neural model captures deeper formatting rules than statistical n-gram approach; n-gram is simpler/faster but less expressive."
+      },
+      {
+        "name": "Corpus scale and machine-readable representation requirement",
+        "description": "Use a sizable, machine-readable corpus (e.g., MathComp-based corpus: 100k+ proof script lines, 63k+ Gallina lines, 2.2M+ Coq lexer tokens) represented as S-expressions via SerAPI.",
+        "guidance": "Practical tooling requirement: use Coq + SerAPI (paper: Coq 8.10, SerAPI 0.7.1) to obtain consistent token/spacing data."
+      },
+      {
+        "name": "Integration/process guideline for applying LMs to conventions",
+        "description": "Workflow: 1) pick a trained language model based on preferred library/style; 2) refine the model by training on your own code; 3) use the refined model to suggest conventions in all code.",
+        "guidance": "Rule-based linters can still be useful as rerankers of LM suggestions; models should be selected/finetuned to match project/library idioms (MathComp, Stdpp, CompCert, etc.)."
+      },
+      {
+        "name": "Practical formatting issues to target (examples)",
+        "description": "Identify concrete formatting problems that matter in proof scripts, e.g., unwanted line breaks before Qed, inconsistent indenting of proof scripts, and spacing differences around tokens.",
+        "guidance": "Slides show concrete examples where neural formatting differs from manual formatting, and examples labeled as 'Problem: Line Breaks Before Qed' and 'Problem: Indenting Proof Scripts'\u2014these are high-impact error types to prioritize in evaluation and model tuning."
+      },
+      {
+        "name": "Rule-based linters: pros and cons",
+        "description": "Rule-based linting is simple and fast and easy to integrate, but addresses only a small subset of conventions, is tedious to author new rules for, and cannot support all Coq languages.",
+        "guidance": "Use rule-based approaches for quick checks and possibly to rerank LM suggestions, but rely on LMs to capture broader, evolving conventions across Coq variants and libraries."
+      },
+      {
+        "name": "Evaluation protocol: compare suggested spacing against existing spacing",
+        "description": "Apply the trained model to the testing set and evaluate suggested spacing against the existing spacing in those files.",
+        "guidance": "This is the paper's basic automatic evaluation setup; consider augmenting with human judgment or severity-weighted scoring for important differences."
+      },
+      {
+        "name": "Desiderata / open evaluation questions",
+        "description": "Questions that should guide further evaluation design: What metrics should we use to judge spacing correctness? What are the main sets of coding conventions for Coq? How can rule-based formatting be defined abstractly? Can formatting be combined with refactoring? How should formatting suggestions be integrated into Coq-based development processes?",
+        "guidance": "These point to required next steps: define convention taxonomies, create metrics that reflect human-perceived severity and stylistic conventions, explore combined formatting+refactoring tools, and define integration points in developer workflows (editors, CI, review)."
+      }
+    ]
+  }
+}

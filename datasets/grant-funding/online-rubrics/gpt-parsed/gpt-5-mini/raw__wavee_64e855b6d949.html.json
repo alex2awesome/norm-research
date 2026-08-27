@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/wavee_64e855b6d949.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18680,
+  "output_tokens": 4423,
+  "elapsed_s": 1522.7598910001107,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in bibliometrics/research evaluation (including funders and policymakers)",
+    "subtask_short": "predicting long-term citation impact",
+    "subtask_description": "Developing and evaluating statistical models to forecast a publication's long-term citation impact (11 years) using early citations, Mendeley readership, and non-scientific features (authorship, journal, funding, open access, references, etc.). Includes model specifications, transformations, and field controls.",
+    "subtask_keywords": [
+      "bibliometrics",
+      "citation_prediction",
+      "mendeley",
+      "ols_regression",
+      "research_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Early citations (IMPACT_t) as predictor",
+        "description": "Short-term citation counts measured at varying time windows (t = 0..6 years) used as predictors of long-term impact (citations at 11 years).",
+        "guidance": "Early citations are strong predictors: correlation with long-term impact rises as t increases (e.g., IMPACT_t0 correlation with IMPACT_t11 = 0.39, IMPACT_t2 = 0.72). Models iteratively replace IMPACT_t across t0\u2013t6; do not include all impact variables simultaneously due to severe multicollinearity."
+      },
+      {
+        "name": "Mendeley readership (READ_t) as predictor",
+        "description": "Mendeley readership counts measured at varying time windows (READ_t) and scaled to the average readership of WoS publications in the same subject category and publication year.",
+        "guidance": "READ_t is a significant predictor, especially early (L_READ_t starts high and decreases across iterations), and exhibits rapid growth and long-term sustainability; its predictive role diminishes over time but remains statistically significant in models."
+      },
+      {
+        "name": "Integrate non-scientific factors with early citations",
+        "description": "Include non-citation predictors\u2014journal prestige, authorship and affiliation features, reference list characteristics, funding, open-access status, document type, length, etc.\u2014alongside early citations.",
+        "guidance": "Integrating these factors yields a more nuanced framework and improves predictive accuracy over models relying solely on early citations; some non-scientific factors (e.g., OA, funding) boost short-term impact but their predictive power diminishes over longer windows."
+      },
+      {
+        "name": "Normalized citation impact (field- and year-normalized IMPACT_t)",
+        "description": "Use normalized impact defined as the citation count divided by the average citations of all WoS publications in the same subject category (SC) and publication year.",
+        "guidance": "Normalization controls for field- and year-specific citation practices and is used as the response variable (IMPACT_t11) and for short-term impact predictors; necessary because citation patterns vary substantially across SCs."
+      },
+      {
+        "name": "Time-window choice and timeliness vs accuracy tradeoff",
+        "description": "Short-term predictors computed over 0\u20136 years; long-term impact measured at 11 years post-publication.",
+        "guidance": "Longer citation windows improve accuracy but delay insights. The study explicitly examines how predictor influence changes with the length of the citation time window to manage the timeliness/accuracy tradeoff for decision-makers."
+      },
+      {
+        "name": "OLS regression framework",
+        "description": "Use Ordinary Least Squares (OLS) regression to estimate long-term normalized impact (IMPACT_t11) as a function of time-varying (IMPACT, READ) and time-invariant covariates (authorship, IF, pages, references, dummies, subject categories).",
+        "guidance": "Series of regression specifications are estimated; coefficients (\u03b2 vectors) are interpreted across iterations to assess evolving significance. Report statistical significance and coefficient trends."
+      },
+      {
+        "name": "Full / Reduced / Completely Reduced model specifications",
+        "description": "Three model families: Full (IMPACT_t and READ_t + Z + D + S), Reduced (IMPACT_t + IF + S), Completely Reduced (IMPACT_t + S); each estimated for t0\u2013t6.",
+        "guidance": "Compare model families to evaluate marginal predictive power of READ and other non-scientific regressors versus parsimonious models. Each family runs seven iterations replacing time-varying X (t0..t6) to trace evolution of explanatory power."
+      },
+      {
+        "name": "Logarithmic transformation (base-10) with +1",
+        "description": "Apply base-10 log transformation to integer and continuous variables, adding one to avoid data loss from zeros.",
+        "guidance": "Local polynomial smoothing indicates linear relationships on a log scale; transformation reduces skewness and aligns with prior literature recommendations (e.g., IMPACT_t, READ, AUTH, PAGES, IF, REFER)."
+      },
+      {
+        "name": "Journal impact factor (IF) as predictor (normalized)",
+        "description": "Normalized impact factor of the source journal in the publication year included as a regressor.",
+        "guidance": "IF often improves prediction but relationship with article-level impact is not strictly linear; include as control (time-invariant) in Reduced and Full models to assess venue effect."
+      },
+      {
+        "name": "Authorship: number of authors (AUTH)",
+        "description": "Number of authors on the byline included as a continuous predictor.",
+        "guidance": "AUTH shows a positive coefficient at very early t but can become negative in later iterations, indicating its effect may change over the publication lifecycle; include and monitor trend."
+      },
+      {
+        "name": "Native English-speaking author dummy (D_ENG)",
+        "description": "Dummy variable indicating presence of at least one native English-speaking author in the byline.",
+        "guidance": "Accounts for potential linguistic advantage; initial positive effect that may decline or turn negative over time (observed coefficient trend in Full models)."
+      },
+      {
+        "name": "International collaboration dummy (D_FOREIGN)",
+        "description": "Dummy variable for publications with two or more countries in the author affiliation list.",
+        "guidance": "International collaboration often correlates with higher citations early on; effect declines over iterations. Be aware of correlation with D_ENG (observed correlation \u2248 0.60)."
+      },
+      {
+        "name": "Funding acknowledgement dummy (D_FUNDING)",
+        "description": "Dummy variable indicating publication received financial support (acknowledgement).",
+        "guidance": "Funding often correlates with higher citation rates short-term but predictive power may diminish over time and can show negative trajectories in models; include to capture short-term boosts."
+      },
+      {
+        "name": "Open access status dummy (D_OPEN: Green/Hybrid/Gold)",
+        "description": "Dummy(s) indicating open access status (Green, Hybrid, Gold) of the publication.",
+        "guidance": "OA articles tend to attract more citations early on, but the OA effect decreases over time. Include OA status especially when predicting short-term citation increases."
+      },
+      {
+        "name": "Document type controls (D_ART, D_REW)",
+        "description": "Dummy variables distinguishing articles and reviews from baseline conference proceedings.",
+        "guidance": "Reviews typically have higher citation rates; control for document type as these categories are mutually exclusive and affect citation trajectories."
+      },
+      {
+        "name": "Publication length (PAGES)",
+        "description": "Number of pages of the publication included as an integer predictor (log-transformed).",
+        "guidance": "Longer articles generally receive more citations; include as a control variable (logged) per prior literature."
+      },
+      {
+        "name": "Reference list length (REFER) and reference characteristics",
+        "description": "Count of cited references (REFER) included as predictor; related features include diversity of cited fields, cognitive distance, recency, and presence of highly cited references.",
+        "guidance": "Longer reference lists and inclusion of recent/highly cited references correlate with increased citations. Consider also reference diversity and self-citation proportion where measurable."
+      },
+      {
+        "name": "Disciplinary classification controls (subject category dummies S)",
+        "description": "Include a set of dummy variables representing WoS subject categories (247 dummies in the dataset) to control for field-specific citation dynamics.",
+        "guidance": "Essential because citation patterns differ widely by discipline; necessary to avoid confounding and to normalize impact across heterogeneous fields."
+      },
+      {
+        "name": "Correlation and multicollinearity diagnostics",
+        "description": "Conduct descriptive statistics, correlation matrices, autocorrelation analysis, and check Herfindahl-Hirschman Index for category concentration to diagnose multicollinearity and heterogeneity.",
+        "guidance": "High autocorrelations among successive impact/readership measures require excluding simultaneous inclusion of all impact variables. No pairwise correlations were high enough to suggest severe multicollinearity among time-invariant variables, but some (e.g., D_FOREIGN vs D_ENG) are notable."
+      },
+      {
+        "name": "Avoid simultaneous inclusion of highly autocorrelated predictors",
+        "description": "Do not include multiple highly autocorrelated measures of the same construct (e.g., IMPACT_t0..t6 simultaneously) in one model.",
+        "guidance": "Including all impact variables together would produce severe multicollinearity and compromise predictive estimates; instead iterate models replacing the time-varying variable(s) or use dimension reduction."
+      },
+      {
+        "name": "Scale readership and impact to field-year averages",
+        "description": "Normalize READ_t and IMPACT_t by scaling to the average readership/citations of WoS publications in the same subject category and publication year.",
+        "guidance": "Field-year scaling makes measures comparable across disciplines and publication years and is used consistently for both response and predictors."
+      },
+      {
+        "name": "Include only variables measurable at scale",
+        "description": "Prefer predictors that can be consistently measured across large datasets; acknowledge that some non-quality-related factors cannot be consistently measured at large scale.",
+        "guidance": "Practical modeling constraint: exclude or flag features that lack consistent, large-scale measurement even if theoretically relevant."
+      },
+      {
+        "name": "Use coefficient trends across time-iterations to assess evolving predictor influence",
+        "description": "Trace changes in regression coefficients for each predictor across the t0\u2013t6 iterations to understand how predictor importance evolves with longer short-term windows.",
+        "guidance": "Example findings: L_IMPACT_t coefficient increases from 0.243 (t0) to 0.976 (t6); L_READ_t decreases from 0.278 to 0.070; other variables (AUTH, D_ENG, D_FUNDING, D_OPEN) show distinct trajectories indicating changing roles over time."
+      },
+      {
+        "name": "Consider altmetrics and social media exposure as complementary predictors",
+        "description": "Altmetrics (tweets, blog mentions, policy citations) can complement traditional predictors but their relationship with long-term citations is complex and field-dependent.",
+        "guidance": "Early altmetric attention may predict higher citation rates in some contexts (e.g., Eysenbach 2011), but coverage varies by field; include cautiously and interpret results with field-aware controls."
+      }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_970e4e0d1065.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16171,
+  "output_tokens": 4024,
+  "elapsed_s": 1424.480452415999,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI planning researchers, domain designers, and participants in planning competitions",
+    "subtask_short": "pddl2.1 language specification",
+    "subtask_description": "Specification and design rationale for the pddl2.1 planning-domain language: syntax, semantics and validation rules for numeric and temporal (durative) planning constructs, intended for use in the International Planning Competition and by the planning research community.",
+    "subtask_keywords": [
+      "pddl2.1",
+      "planning_language",
+      "temporal",
+      "numeric",
+      "durative_actions"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Backward compatibility guarantees",
+        "description": "Two guarantees of backward compatibility: 1. All existing pddl domains (in common usage) are valid pddl2.1 domains. 2. Valid pddl plans are valid pddl2.1 plans.",
+        "guidance": "This preserves existing benchmark libraries and enables gradual adoption; pddl2.1 designed to be backward compatible with the fragment of pddl in common usage since 1998."
+      },
+      {
+        "name": "Physics, not advice design principle",
+        "description": "Adopt McDermott\u2019s maxim 'physics, not advice': a language should focus on expressing the physical properties of the world, not advice to the planner about how to search the associated solution spaces.",
+        "guidance": "Keep the language as simple as possible and avoid constructs that embed search-control advice; still acknowledge modelling abstractions are necessary."
+      },
+      {
+        "name": "Requirements flags and graceful rejection",
+        "description": "pddl includes requirements flags in domain descriptions to indicate which language features are used so planners can reject domains using unsupported features.",
+        "guidance": "Syntax-checking tools should confirm requirement flags are correctly set; if no requirements are declared, :strips is assumed. Requirements can imply or abbreviate other requirements."
+      },
+      {
+        "name": "Numeric expressions: syntax and operators",
+        "description": "Numeric expressions are constructed using arithmetic operators from primitive numeric expressions (values associated with domain functions). Conditions on numeric expressions are comparisons between pairs of numeric expressions and prefix syntax is used for arithmetic and comparison operators.",
+        "guidance": "Any arithmetic expression can be used in metrics; prefix form simplifies parsing. Numeric expressions are not allowed as terms (arguments) to predicates or action parameters."
+      },
+      {
+        "name": "Numeric effects and assignment operators",
+        "description": "Effects on numeric fluents support a selection of assignment operations including direct assignment and relative assignments (increase, decrease). The language uses assign (instead of change) for clarity.",
+        "guidance": "Use assign/increase/decrease to update numeric-valued functions. Choose assign to avoid ambiguity when used alongside increase/decrease."
+      },
+      {
+        "name": "Numeric expressions cannot appear as terms",
+        "description": "Numeric expressions are not allowed to appear as terms in the language (i.e., as arguments to predicates or as action-parameter values).",
+        "guidance": "Philosophical rationale: finite set of objects only; pragmatic rationale: many planners require finite grounding of action schemas. If numeric parameters are needed they must be modeled via a finite set of named objects."
+      },
+      {
+        "name": "Functions restricted to Object^n \u2192 R (numeric-valued functions only)",
+        "description": "Functions in pddl2.1 are restricted to be of type Object^n \u2192 R (numeric-valued functions), so declarations of function return types are unnecessary; only function names and argument types are declared.",
+        "guidance": "Avoid functions of type Object^n \u2192 Object because they introduce semantic problems (infinite object sets, quantified precondition interpretation, identity issues) that complicate grounding and semantics."
+      },
+      {
+        "name": "Plan metric field and semantics",
+        "description": "Introduce an optional :metric field in problem specifications to specify an expression (minimize or maximize) that a planner can use to evaluate or guide plan construction. total-time is provided as a built-in variable referring to plan span.",
+        "guidance": "Metric expressions must be well-defined (e.g., avoid division by zero). Domain designers must instrument quantities (e.g., total fuel used) in the domain to use them in metrics. Planners may ignore metrics, but using them to guide search is recommended though non-trivial."
+      },
+      {
+        "name": "Implications and well-definedness of metrics",
+        "description": "Plan metrics can render a problem ill-defined (e.g., if arbitrarily high utility plans are constructible) and introduce undecidability: the introduction of numeric expressions makes determining well-definedness undecidable (Helmert, 2002).",
+        "guidance": "Modelers should instrument and constrain resources to avoid unbounded metrics; planners might ignore metrics or use heuristics\u2014deciding well-definedness is generally undecidable."
+      },
+      {
+        "name": "Durative actions: discretised and continuous forms",
+        "description": "Two forms of durative action are provided: discretised durative actions (restricted timed conditions/effects at start, end, and over the interval) and continuous durative actions (allowing continuous numeric change over an interval).",
+        "guidance": "All conditions and effects of durative actions must be temporally annotated. Discrete activity happens only at start or end points; continuous actions allow numeric fluents to be updated continuously."
+      },
+      {
+        "name": "Temporal annotation of durative conditions/effects (at start/over all/at end)",
+        "description": "Conditions and effects for durative actions are temporally annotated to indicate whether propositions must hold at the start, over the interval (invariant), or at the end; effects are annotated as immediate (start) or delayed (end).",
+        "guidance": "Invariant (over all) conditions are required over the open interval (excluding endpoints). To require closed-interval truth, include (at start p), (over all p), and (at end p). This affords more concurrency by distinguishing invariants from endpoint preconditions."
+      },
+      {
+        "name": "No moving targets rule (concurrency validity constraint)",
+        "description": "No two actions can simultaneously make use of a value if one of them is accessing the value to update it \u2014 'no moving targets'. For an action with precondition P to start at time t, there must be a half-open interval immediately preceding t in which P holds.",
+        "guidance": "For plan validity: disallow simultaneous assertion and negation of a proposition at the same instant; disallow requiring a proposition and asserting it at the same instant. This conservative rule prevents unstable reliance on changing values and is analogous to mutex protection."
+      },
+      {
+        "name": "Point-based temporal model and instantaneous logical changes",
+        "description": "Time is point-based: logical state changes occur instantaneously at start or end points of durative actions; propositions are true over half-open intervals (closed on the left, open on the right). Between any two time points only a finite number of happenings is allowed in the discretised view.",
+        "guidance": "Model temporal relations using start/end points and half-open intervals; this supports precise reasoning about concurrency and validation while keeping a finite discretised model between points."
+      },
+      {
+        "name": "Numeric access/update concurrency restriction",
+        "description": "Validity requires that no numeric value be accessed and updated simultaneously at the same instant.",
+        "guidance": "Treat numeric fluents analogously to logical propositions under the 'no moving targets' rule; planners and validators must ensure read/write conflicts do not occur at the same instant."
+      },
+      {
+        "name": "Duration constraints and ?duration parameter",
+        "description": "Durative actions have an implicit ?duration parameter. Duration can be specified as equality or via inequalities; use of inequalities requires the :duration-inequalities requirement flag.",
+        "guidance": "When duration constraints are inequalities the executor may select a duration within bounds; using ?duration in continuous effects requires the :duration-inequalities requirement (because duration may be freely chosen)."
+      },
+      {
+        "name": "Continuous effects and #t local clock",
+        "description": "Continuous durative effects use expressions involving #t (local clock for the durative action) and assign-op-t operations (increase/decrease with factors like (* <f-exp> #t)). Multiple concurrent processes affecting the same fluent are accumulated.",
+        "guidance": "The #t term represents the period of time the durative action has been active; design assumes accumulation of contributions from multiple processes rather than assuming a single rate of change per fluent."
+      },
+      {
+        "name": "Levels of expressive power (competition levels)",
+        "description": "pddl2.1 features were identified with levels of increasing expressive power for the competition: level 1 = strips fragment, level 2 = numeric extensions, level 3 = discretised durative actions, level 4 = continuous durative actions, level 5 = all extensions plus spontaneous events/physical processes (pddl+).",
+        "guidance": "Competition focused on levels 1\u20133; planners could declare which level features they support to enable fair comparison and graceful rejection of unsupported domains."
+      },
+      {
+        "name": "Validation of concurrent plans and complexity",
+        "description": "A formal semantics for discretised and continuous durative actions and plans is provided to enable plan validity checking; plan validation becomes important and its complexity increases with concurrency and numeric/continuous effects.",
+        "guidance": "Section 10 of the paper discusses the plan validation process used in the competition and the complexity of validation for pddl2.1; validation must enforce temporal annotations, no moving-targets, numeric read/write constraints, and continuous accumulation semantics."
+      },
+      {
+        "name": "Syntax design choices (prefix arithmetic, assign token, function declarations)",
+        "description": "Use prefix syntax for arithmetic and comparison operators; prefer assign over change; function declarations simplified to only name and argument types (since functions are numeric-valued).",
+        "guidance": "These choices simplify parsing and reduce ambiguity (e.g., change vs assign) and avoid superfluous return-type declarations for numeric functions."
+      },
+      {
+        "name": "Modelling guidance: instrumenting metrics and resources",
+        "description": "To make a domain metric-expressive, the modeller must instrument relevant quantities in the domain (e.g., initialize total-fuel-used and update it in action effects) because plan metrics can only refer to numeric expressions manipulated by actions.",
+        "guidance": "If a metric (e.g., minimize distance) requires additional bookkeeping, update the domain description (not just the problem file) to track such quantities; be careful to bound resources to avoid unbounded objective functions."
+      },
+      {
+        "name": "Avoid poorly-understood extensions",
+        "description": "Design choice to avoid extending pddl with elements that are poorly understood (e.g., general hierarchical HTN syntax, functions returning objects), because they introduce inconsistencies and semantic complications.",
+        "guidance": "Prefer conservative, well-specified constructs that support finite grounding and clear semantics; defer risky extensions until their implications are better understood."
+      },
+      {
+        "name": "Requirement flags list and semantics",
+        "description": "pddl2.1 defines a set of requirement flags (:strips, :typing, :negative-preconditions, :disjunctive-preconditions, :equality, :existential-preconditions, :universal-preconditions, :quantified-preconditions, :conditional-effects, :fluents, :durative-actions, :duration-inequalities, :continuous-effects, :adl) with descriptions and implication relationships.",
+        "guidance": "Domains should declare the appropriate requirement flags; some flags imply others (e.g., :fluents = :strips + :typing + ...), and planners can check flags to determine feature support."
+      }
+    ]
+  }
+}

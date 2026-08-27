@@ -1,0 +1,1234 @@
+<!-- URL: https://ec.europa.eu/international-partnerships/comm-visibility-requirements_en -->
+<!-- HTTP: 200 SIZE:   102470 -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="Communicating and raising visibility plays a key role in strengthening the EU’s role in the world, fostering democratic debate and demonstrating the EU’s positive contribution to people’s lives. The following guidance outlines what is expected of partners implementing EU external actions." />
+<meta name="keywords" content="the EU&#039;s international role,international cooperation" />
+<link rel="canonical" href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en" />
+<meta property="og:determiner" content="auto" />
+<meta property="og:site_name" content="International Partnerships" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en" />
+<meta property="og:title" content="Communicating and raising EU visibility: Guidance for external actions" />
+<meta property="og:description" content="Communicating and raising visibility plays a key role in strengthening the EU’s role in the world, fostering democratic debate and demonstrating the EU’s positive contribution to people’s lives. The following guidance outlines what is expected of partners implementing EU external actions." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="Communicating and raising visibility plays a key role in strengthening the EU’s role in the world, fostering democratic debate and demonstrating the EU’s positive contribution to people’s lives. The following guidance outlines what is expected of partners implementing EU external actions." />
+<meta name="twitter:title" content="Communicating and raising EU visibility: Guidance for external actions" />
+<meta property="og:image" content="https://international-partnerships.ec.europa.eu/profiles/contrib/ewcms/modules/ewcms_seo/assets/images/ec-socialmedia-fallback.png" />
+<meta property="og:image:alt" content="International Partnerships" />
+<meta name="twitter:image" content="https://international-partnerships.ec.europa.eu/profiles/contrib/ewcms/modules/ewcms_seo/assets/images/ec-socialmedia-fallback.png" />
+<meta name="twitter:image:alt" content="International Partnerships" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="Generator" content="Drupal 11 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script type="module" src="/themes/contrib/oe_theme/dist/duet/duet/duet.esm.js"></script>
+<script type="application/json">{"service":"preview","position":"before"}</script>
+<script type="application/ld+json">{
+    "@context": "https:\/\/schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+                "@id": "https:\/\/international-partnerships.ec.europa.eu\/index_en",
+                "name": "Home"
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+                "@id": "https:\/\/international-partnerships.ec.europa.eu\/knowledge-hub_en",
+                "name": "Knowledge hub"
+            }
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+                "@id": "https:\/\/international-partnerships.ec.europa.eu\/knowledge-hub\/communicating-and-raising-eu-visibility-guidance-external-actions_en",
+                "name": "Communicating and raising EU visibility: Guidance for external actions"
+            }
+        }
+    ]
+}</script>
+<script type="application/ld+json">{
+    "@context": "https:\/\/schema.org",
+    "@type": "CreativeWork",
+    "name": "Communicating and raising EU visibility: Guidance for external actions",
+    "description": "Communicating and raising visibility plays a key role in strengthening the EU’s role in the world, fostering democratic debate and demonstrating the EU’s positive contribution to people’s lives.\r\nThe following guidance outlines what is expected of partners implementing EU external actions.",
+    "url": "https:\/\/international-partnerships.ec.europa.eu\/knowledge-hub\/communicating-and-raising-eu-visibility-guidance-external-actions",
+    "about": [
+        {
+            "@type": "DefinedTerm",
+            "name": "the EU\u0027s international role",
+            "inDefinedTermSet": {
+                "@type": "DefinedTermSet",
+                "name": "Digital Europa Thesaurus",
+                "alternateName": "DET",
+                "url": "http:\/\/publications.europa.eu\/resource\/dataset\/det",
+                "description": "Multilingual thesaurus for digital Europe covering EU policy areas.",
+                "publisher": {
+                    "@type": "GovernmentOrganization",
+                    "name": "Publications Office of the European Union",
+                    "url": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body\/PUBL"
+                }
+            },
+            "@id": "http:\/\/data.europa.eu\/uxp\/5873"
+        },
+        {
+            "@type": "DefinedTerm",
+            "name": "international cooperation",
+            "inDefinedTermSet": {
+                "@type": "DefinedTermSet",
+                "name": "Digital Europa Thesaurus",
+                "alternateName": "DET",
+                "url": "http:\/\/publications.europa.eu\/resource\/dataset\/det",
+                "description": "Multilingual thesaurus for digital Europe covering EU policy areas.",
+                "publisher": {
+                    "@type": "GovernmentOrganization",
+                    "name": "Publications Office of the European Union",
+                    "url": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body\/PUBL"
+                }
+            },
+            "@id": "http:\/\/data.europa.eu\/uxp\/216"
+        }
+    ],
+    "publisher": [
+        {
+            "@type": [
+                "GovernmentOrganization",
+                "DefinedTerm"
+            ],
+            "identifier": {
+                "@type": "PropertyValue",
+                "propertyID": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body",
+                "value": "INTPA",
+                "url": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body\/INTPA"
+            },
+            "name": "Directorate-General for International Partnerships",
+            "alternateName": "DG International Partnerships",
+            "inDefinedTermSet": {
+                "@type": "DefinedTermSet",
+                "name": "Corporate body",
+                "url": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body",
+                "description": "Authority table for EU corporate bodies and organizations",
+                "publisher": {
+                    "@type": "GovernmentOrganization",
+                    "name": "Publications Office of the European Union",
+                    "url": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body\/PUBL"
+                }
+            },
+            "@id": "http:\/\/publications.europa.eu\/resource\/authority\/corporate-body\/INTPA"
+        }
+    ]
+}</script>
+<link rel="icon" href="/themes/contrib/oe_theme/images/favicons/ec/favicon.ico" type="image/vnd.microsoft.icon" />
+<link rel="alternate" hreflang="es" href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_es" />
+<link rel="alternate" hreflang="en" href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en" />
+<link rel="alternate" hreflang="fr" href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_fr" />
+<link rel="alternate" hreflang="pt-pt" href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_pt" />
+<link rel="icon" href="/themes/contrib/oe_theme/images/favicons/ec/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/themes/contrib/oe_theme/images/favicons/ec/favicon.png" />
+
+    <title>Communicating and raising EU visibility: Guidance for external actions - International Partnerships</title>
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_0zNDaTcGvdA0Z1MTOJV6v1oFlFvB_DCcQXTmVwEoOEw.css?delta=0&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_MxniBLeqmQM8aQpn7qEu41tHTE5cFJvpGBDjlWMqKSQ.css?delta=1&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+<link rel="stylesheet" media="print" href="/sites/default/files/css/css_4xYqO0xVUo9uwCPi62qZyF66fdJIK7xfKpAXrEafiFw.css?delta=2&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_Tv04f224lUCJj3CEDAfI3vCmTqKBMgGdXbX-n02uBpI.css?delta=3&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+<link rel="stylesheet" media="print" href="/sites/default/files/css/css_S5xanQqLipcFRzRri22yhVx9HGOJUaWwGaAMhMTpM98.css?delta=4&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_A_xZWZ6Ji0x64h01PVnAebhVZK_DeI8RaRc-H5qN2Uw.css?delta=5&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+<link rel="stylesheet" media="print" href="/sites/default/files/css/css_W5CbZdHPtbakBFX5Bn75QMiz5dLiOB7CBqmD9DSNvh4.css?delta=6&amp;language=en&amp;theme=ewcms_theme&amp;include=eJxFyUEKwCAMBdELST2SRPupgpqQRIq3L125mcUbvGVYxN_kzN2bBEbyioFYeAhPTE-9ZSXdCeVc0TY9CCk9SlIt3rqE-nXkWlNW7s0q7mDbHCNmMny9Dy5k" />
+
+    
+  </head>
+  <body class="language-en ecl-typography path-node page-node-type-landing-page">
+          <a
+  href="#main-content"
+  class="ecl-link ecl-link--primary ecl-skip-link"
+   id="skip-id"
+>Skip to main content</a>
+
+        <div id="cck_here"></div>    <script type="application/json">{"utility":"globan","theme":"light","logo":true,"link":true,"mode":false}</script>
+
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+          <header
+  class="ecl-site-header ecl-site-header-with-logo-l ecl-site-header--has-menu"
+  data-ecl-auto-init="SiteHeader"
+>
+  
+    <div class="ecl-site-header__header">
+        <div class="ecl-site-header__inner">
+      <div class="ecl-site-header__background">
+        <div class="ecl-site-header__header">
+          <div class="ecl-site-header__container ecl-container">
+            <div class="ecl-site-header__top" data-ecl-site-header-top>
+                    <a
+    class="ecl-link ecl-link--standalone ecl-site-header__logo-link"
+    href="https://commission.europa.eu/index_en"
+    aria-label="Home - European Commission"
+    data-aria-label-en="Home - European Commission"
+  >
+                                <picture
+  class="ecl-picture ecl-site-header__picture"
+   title="European&#x20;Commission"
+><source 
+                  srcset="/themes/contrib/oe_theme/dist/ec/images/logo/positive/logo-ec--en.svg"
+                          media="(min-width: 996px)"
+                      ><img 
+              class="ecl-site-header__logo-image ecl-site-header__logo-image--l"
+              src="/themes/contrib/oe_theme/dist/ec/images/logo/logo-ec--mute.svg"
+              alt="European Commission logo"
+          ></picture>  </a>
+
+
+              <div class="ecl-site-header__action">
+                  <div class="ecl-site-header__language"><a
+    class="ecl-button ecl-button--tertiary ecl-button--neutral ecl-site-header__language-selector"
+    href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en"
+    data-ecl-language-selector
+    role="button"
+    aria-label="Change language, current language is English - en"
+      aria-controls="language-list-overlay"
+    ><span class="ecl-site-header__language-icon"><span 
+  class="wt-icon--global ecl-icon ecl-icon--m ecl-site-header__icon ecl-icon--global"
+  aria-hidden="false"
+   title="en" role="img"></span></span>en</a><div class="ecl-site-header__language-container" id="language-list-overlay" hidden data-ecl-language-list-overlay aria-labelledby="ecl-site-header__language-title" role="dialog"><div class="ecl-site-header__language-header"><div
+        class="ecl-site-header__language-title"
+        id="ecl-site-header__language-title"
+      >Select your language</div><button
+  class="ecl-button ecl-button--tertiary ecl-button--neutral ecl-site-header__language-close ecl-button--icon-only"
+  type="submit"
+   data-ecl-language-list-close
+><span class="ecl-button__container"><span class="ecl-button__label" data-ecl-label="true">Close</span><span 
+  class="wt-icon--close ecl-icon ecl-icon--m ecl-button__icon ecl-icon--close"
+  aria-hidden="true"
+   data-ecl-icon></span></span></button></div><div
+      class="ecl-site-header__language-content"
+      data-ecl-language-list-content
+    ><div class="ecl-site-header__language-category" data-ecl-language-list-eu><ul class="ecl-site-header__language-list" translate="no"><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_bg"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="bg"
+><span class="ecl-site-header__language-link-code">bg</span><span class="ecl-site-header__language-link-label" lang="bg">български</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_es"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="es"
+><span class="ecl-site-header__language-link-code">es</span><span class="ecl-site-header__language-link-label" lang="es">español</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_cs"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="cs"
+><span class="ecl-site-header__language-link-code">cs</span><span class="ecl-site-header__language-link-label" lang="cs">čeština</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_da"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="da"
+><span class="ecl-site-header__language-link-code">da</span><span class="ecl-site-header__language-link-label" lang="da">dansk</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_de"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="de"
+><span class="ecl-site-header__language-link-code">de</span><span class="ecl-site-header__language-link-label" lang="de">Deutsch</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_et"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="et"
+><span class="ecl-site-header__language-link-code">et</span><span class="ecl-site-header__language-link-label" lang="et">eesti</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_el"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="el"
+><span class="ecl-site-header__language-link-code">el</span><span class="ecl-site-header__language-link-label" lang="el">ελληνικά</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link ecl-site-header__language-link--active"
+   hreflang="en"
+><span class="ecl-site-header__language-link-code">en</span><span class="ecl-site-header__language-link-label" lang="en">English</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_fr"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="fr"
+><span class="ecl-site-header__language-link-code">fr</span><span class="ecl-site-header__language-link-label" lang="fr">français</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_ga"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="ga"
+><span class="ecl-site-header__language-link-code">ga</span><span class="ecl-site-header__language-link-label" lang="ga">Gaeilge</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_hr"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="hr"
+><span class="ecl-site-header__language-link-code">hr</span><span class="ecl-site-header__language-link-label" lang="hr">hrvatski</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_it"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="it"
+><span class="ecl-site-header__language-link-code">it</span><span class="ecl-site-header__language-link-label" lang="it">italiano</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_lv"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="lv"
+><span class="ecl-site-header__language-link-code">lv</span><span class="ecl-site-header__language-link-label" lang="lv">latviešu</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_lt"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="lt"
+><span class="ecl-site-header__language-link-code">lt</span><span class="ecl-site-header__language-link-label" lang="lt">lietuvių</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_hu"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="hu"
+><span class="ecl-site-header__language-link-code">hu</span><span class="ecl-site-header__language-link-label" lang="hu">magyar</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_mt"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="mt"
+><span class="ecl-site-header__language-link-code">mt</span><span class="ecl-site-header__language-link-label" lang="mt">Malti</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_nl"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="nl"
+><span class="ecl-site-header__language-link-code">nl</span><span class="ecl-site-header__language-link-label" lang="nl">Nederlands</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_pl"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="pl"
+><span class="ecl-site-header__language-link-code">pl</span><span class="ecl-site-header__language-link-label" lang="pl">polski</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_pt"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="pt"
+><span class="ecl-site-header__language-link-code">pt</span><span class="ecl-site-header__language-link-label" lang="pt">português</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_ro"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="ro"
+><span class="ecl-site-header__language-link-code">ro</span><span class="ecl-site-header__language-link-label" lang="ro">română</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_sk"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="sk"
+><span class="ecl-site-header__language-link-code">sk</span><span class="ecl-site-header__language-link-label" lang="sk">slovenčina</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_sl"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="sl"
+><span class="ecl-site-header__language-link-code">sl</span><span class="ecl-site-header__language-link-label" lang="sl">slovenščina</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_fi"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="fi"
+><span class="ecl-site-header__language-link-code">fi</span><span class="ecl-site-header__language-link-label" lang="fi">suomi</span></a></li><li class="ecl-site-header__language-item"><a
+  href="https://international-partnerships.ec.europa.eu/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_sv"
+  class="ecl-link ecl-link--standalone ecl-site-header__language-link"
+   hreflang="sv"
+><span class="ecl-site-header__language-link-code">sv</span><span class="ecl-site-header__language-link-label" lang="sv">svenska</span></a></li></ul></div></div></div></div>
+<div class="ecl-site-header__search-container" role="search">
+  <a
+    class="ecl-button ecl-button--tertiary ecl-button--neutral ecl-site-header__search-toggle"
+    href=""
+    data-ecl-search-toggle="true"
+    aria-controls=""
+    aria-expanded="false"
+  ><span 
+  class="wt-icon--search ecl-icon ecl-icon--s ecl-site-header__icon ecl-icon--search"
+  aria-hidden="true"
+   role="img"></span></a>
+  <script type="application/json">{"service":"search","version":"2.0","form":".ecl-search-form","filters":{"scope":{"sites":[{"selected":true,"name":"International Partnerships","id":["comm-ewcms-intpa-ip"]}]}}}</script>
+<form
+  class="ecl-search-form ecl-site-header__search"
+  role="search"
+   class="oe-search-search-form" data-drupal-selector="oe-search-search-form" action="/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en" method="post" id="oe-search-search-form" accept-charset="UTF-8" data-ecl-search-form
+><div class="ecl-form-group"><label
+                  for="edit-keys"
+            id="edit-keys-label"
+          class="ecl-form-label ecl-search-form__label"
+    >Search</label><input
+      id="edit-keys"
+      class="ecl-text-input ecl-text-input--m ecl-search-form__text-input form-search ecl-search-form__text-input"
+      name="keys"
+        type="search"
+            
+  ></div><button
+  class="ecl-button ecl-button--tertiary ecl-search-form__button ecl-search-form__button ecl-button--icon-only"
+  type="submit"
+  
+><span class="ecl-button__container"><span 
+  class="wt-icon--search ecl-icon ecl-icon--m ecl-button__icon ecl-icon--search"
+  aria-hidden="true"
+   data-ecl-icon></span><span class="ecl-button__label" data-ecl-label="true">Search</span></span></button><input autocomplete="off" data-drupal-selector="form-mmb8kq8ng4vna1pzd7cymur5kfsz6xvswhzbfaqwixg" type="hidden" name="form_build_id" value="form-mmB8kQ8nG4VnA1PzD7CYmUr5kFSz6XvsWHZBfaQWixg" /><input data-drupal-selector="edit-oe-search-search-form" type="hidden" name="form_id" value="oe_search_search_form" /></form>
+  
+</div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+      <div>
+    <div id="block-machinetranslation">
+  
+    
+      <div class="ecl-lang-select-page ecl-u-pv-m ecl-u-d-none" id="etrans-block">
+  <div class="ecl-container">
+    <div class="webtools-etrans--wrapper">
+      <div id="webtools-etrans"></div>
+      <div class="webtools-etrans--message">
+        <div
+  class="ecl-notification ecl-notification--info"
+  data-ecl-notification
+  role="alert"
+  data-ecl-auto-init="Notification"
+><span 
+  class="wt-icon--information ecl-icon ecl-icon--m ecl-notification__icon ecl-icon--information"
+  aria-hidden="false"
+  ></span><div class="ecl-notification__content"><div class="ecl-notification__description">&nbsp;</div></div></div>      </div>
+    </div>
+  </div>
+</div>
+<div class="ecl-lang-select-page ecl-u-pv-m ecl-u-d-none" id="no-etrans-block">
+  <div class="ecl-container">
+    <div class="webtools-etrans--wrapper">
+      <div id="webtools-etrans"></div>
+      <div class="webtools-etrans--message">
+        <div
+  class="ecl-notification ecl-notification--warning"
+  data-ecl-notification
+  role="alert"
+  data-ecl-auto-init="Notification"
+><span 
+  class="wt-icon--information ecl-icon ecl-icon--m ecl-notification__icon ecl-icon--information"
+  aria-hidden="false"
+  ></span><div class="ecl-notification__content"><div class="ecl-notification__description">&nbsp;</div></div></div>      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  </div>
+
+  
+    <div class="ecl-container">
+    <div class="ecl-site-header__banner-top">
+      <a href="https://commission.europa.eu/aid-development-cooperation-fundamental-rights_en" class="ecl-link ecl-link--standalone ecl-link--no-visited" data-header-class-link="true" data-header-class-link-label-en="Aid, Development cooperation, Fundamental rights">Aid, Development cooperation, Fundamental rights</a>
+    </div>
+  </div>
+          <div class="ecl-site-header__banner">
+      <div class="ecl-container">
+                  <div class="ecl-site-header__site-name">International Partnerships</div>
+                      </div>
+    </div>
+      <div id="block-ewcms-theme-horizontal-menu">
+  
+    
+      <div style="height: 0">&nbsp;</div><div class="ewcms-horizontal-menu">
+      
+                                                                                                                                                                                                                                        
+                
+                                                                                        
+                                                                                                                                                        
+                                                                                                          
+                
+          
+      <nav
+  class="ecl-menu"
+  data-ecl-menu
+  data-ecl-menu-max-lines="2"
+  data-ecl-auto-init="Menu"
+      data-ecl-menu-label-open="Menu"
+        data-ecl-menu-label-close="Close"
+    role="navigation" aria-label="Site&#x20;navigation"
+><div class="ecl-menu__overlay"></div><div class="ecl-container ecl-menu__container"><button
+  class="ecl-button ecl-button--tertiary ecl-button--neutral ecl-menu__open ecl-button--icon-only"
+  type="button"
+   data-ecl-menu-open aria-expanded="false"
+><span class="ecl-button__container"><span 
+  class="wt-icon--hamburger ecl-icon ecl-icon--m ecl-button__icon ecl-icon--hamburger"
+  aria-hidden="true"
+   data-ecl-icon></span><span 
+  class="wt-icon--close ecl-icon ecl-icon--m ecl-button__icon ecl-icon--close"
+  aria-hidden="true"
+   data-ecl-icon></span><span class="ecl-button__label" data-ecl-label="true">Menu</span></span></button><section class="ecl-menu__inner" data-ecl-menu-inner aria-label="Menu"><header class="ecl-menu__inner-header"><button
+  class="ecl-button ecl-button--tertiary ecl-menu__close ecl-button--icon-only"
+  type="submit"
+   data-ecl-menu-close
+><span class="ecl-button__container"><span class="ecl-button__label" data-ecl-label="true">Close</span><span 
+  class="wt-icon--close ecl-icon ecl-icon--m ecl-button__icon ecl-icon--close"
+  aria-hidden="true"
+   data-ecl-icon></span></span></button><div class="ecl-menu__title">Menu</div><button
+  class="ecl-button ecl-button--tertiary ecl-menu__back"
+  type="submit"
+   data-ecl-menu-back
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--xs ecl-icon--rotate-270 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span><span class="ecl-button__label" data-ecl-label="true">Back</span></span></button></header><button
+  class="ecl-button ecl-button--tertiary ecl-menu__item ecl-menu__items-previous ecl-button--icon-only"
+  type="button"
+   data-ecl-menu-items-previous tabindex="-1"
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--s ecl-icon--rotate-270 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span><span class="ecl-button__label" data-ecl-label="true">Previous items</span></span></button><button
+  class="ecl-button ecl-button--tertiary ecl-menu__item ecl-menu__items-next ecl-button--icon-only"
+  type="button"
+   data-ecl-menu-items-next tabindex="-1"
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--s ecl-icon--rotate-90 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span><span class="ecl-button__label" data-ecl-label="true">Next items</span></span></button><ul class="ecl-menu__list" data-ecl-menu-list><li class="ecl-menu__item" data-ecl-menu-item id="ecl-menu-item-ecl-menu-179260776-0"><a
+  href="/index_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="Home" data-active-path="&#x2F;" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-0-link"
+>Home</a></li><li class="ecl-menu__item ecl-menu__item--has-children" data-ecl-menu-item data-ecl-has-children aria-haspopup aria-expanded="false" id="ecl-menu-item-ecl-menu-179260776-1"><a
+  href="/policies_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="Policies" data-active-path="&#x2F;node&#x2F;1280" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-1-link"
+>Policies</a><button
+  class="ecl-button ecl-button--tertiary ecl-button--m ecl-button--neutral ecl-menu__button-caret"
+  type="button"
+   data-ecl-menu-caret aria-label="Access&#x20;item&#x27;s&#x20;children" aria-describedby="ecl-menu-item-ecl-menu-179260776-1-link" aria-expanded="false"
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span></span></button><div
+    class="ecl-menu__mega"
+    data-ecl-menu-mega
+  ><ul class="ecl-menu__sublist"><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/global-gateway_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Global&#x20;Gateway" data-active-path="&#x2F;node&#x2F;1750"
+>Global Gateway</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/climate-environment-and-energy_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Climate,&#x20;environment&#x20;and&#x20;energy" data-active-path="&#x2F;node&#x2F;746"
+>Climate, environment and energy</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/digital-and-infrastructure_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Digital&#x20;and&#x20;infrastructure" data-active-path="&#x2F;node&#x2F;1354"
+>Digital and infrastructure</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/gender-equality_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Gender&#x20;equality" data-active-path="&#x2F;node&#x2F;1302"
+>Gender equality</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/youth_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Youth" data-active-path="&#x2F;node&#x2F;1609"
+>Youth</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/human-development_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Human&#x20;development" data-active-path="&#x2F;node&#x2F;761"
+>Human development</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/migration-and-forced-displacement_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Migration&#x20;and&#x20;forced&#x20;displacement" data-active-path="&#x2F;node&#x2F;750"
+>Migration and forced displacement</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/peace-and-governance_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Peace&#x20;and&#x20;governance" data-active-path="&#x2F;node&#x2F;1301"
+>Peace and governance</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/sustainable-growth-and-jobs_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Sustainable&#x20;growth&#x20;and&#x20;jobs" data-active-path="&#x2F;node&#x2F;760"
+>Sustainable growth and jobs</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/european-development-policy_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="European&#x20;development&#x20;policy" data-active-path="&#x2F;node&#x2F;781"
+>European development policy</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/sustainable-development-goals_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Sustainable&#x20;Development&#x20;Goals" data-active-path="&#x2F;node&#x2F;785"
+>Sustainable Development Goals</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/africa-eu-partnership_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Africa-EU&#x20;Partnership" data-active-path="&#x2F;node&#x2F;744"
+>Africa-EU Partnership</a></li><li class="ecl-menu__subitem ecl-menu__see-all"><a
+  href="/policies_en"
+  class="ecl-link ecl-link--standalone ecl-link--icon ecl-menu__sublink"
+  
+><span 
+      class="ecl-link__label">See all</span><span 
+  class="wt-icon--arrow-left ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-link__icon ecl-icon--arrow-left"
+  aria-hidden="true"
+  ></span></a></li></ul></div></li><li class="ecl-menu__item" data-ecl-menu-item id="ecl-menu-item-ecl-menu-179260776-2"><a
+  href="/countries_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="Countries" data-active-path="&#x2F;node&#x2F;1284" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-2-link"
+>Countries</a></li><li class="ecl-menu__item ecl-menu__item--has-children" data-ecl-menu-item data-ecl-has-children aria-haspopup aria-expanded="false" id="ecl-menu-item-ecl-menu-179260776-3"><a
+  href="/funding-and-technical-assistance_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="Funding&#x20;and&#x20;technical&#x20;assistance" data-active-path="&#x2F;node&#x2F;787" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-3-link"
+>Funding and technical assistance</a><button
+  class="ecl-button ecl-button--tertiary ecl-button--m ecl-button--neutral ecl-menu__button-caret"
+  type="button"
+   data-ecl-menu-caret aria-label="Access&#x20;item&#x27;s&#x20;children" aria-describedby="ecl-menu-item-ecl-menu-179260776-3-link" aria-expanded="false"
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span></span></button><div
+    class="ecl-menu__mega"
+    data-ecl-menu-mega
+  ><ul class="ecl-menu__sublist"><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/funding-and-technical-assistance/funding-instruments_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Funding&#x20;instruments" data-active-path="&#x2F;node&#x2F;1323"
+>Funding instruments</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/funding-and-technical-assistance/looking-funding_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Looking&#x20;for&#x20;funding" data-active-path="&#x2F;node&#x2F;1318"
+>Looking for funding</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/funding-and-technical-assistance/guidelines_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Guidelines" data-active-path="&#x2F;node&#x2F;1324"
+>Guidelines</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/funding-and-technical-assistance/technical-assistance_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Technical&#x20;assistance" data-active-path="&#x2F;node&#x2F;1951"
+>Technical assistance</a></li><li class="ecl-menu__subitem ecl-menu__see-all"><a
+  href="/funding-and-technical-assistance_en"
+  class="ecl-link ecl-link--standalone ecl-link--icon ecl-menu__sublink"
+  
+><span 
+      class="ecl-link__label">See all</span><span 
+  class="wt-icon--arrow-left ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-link__icon ecl-icon--arrow-left"
+  aria-hidden="true"
+  ></span></a></li></ul></div></li><li class="ecl-menu__item ecl-menu__item--has-children" data-ecl-menu-item data-ecl-has-children aria-haspopup aria-expanded="false" id="ecl-menu-item-ecl-menu-179260776-4"><a
+  href="/news-and-events_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="News&#x20;and&#x20;events" data-active-path="&#x2F;node&#x2F;1293" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-4-link"
+>News and events</a><button
+  class="ecl-button ecl-button--tertiary ecl-button--m ecl-button--neutral ecl-menu__button-caret"
+  type="button"
+   data-ecl-menu-caret aria-label="Access&#x20;item&#x27;s&#x20;children" aria-describedby="ecl-menu-item-ecl-menu-179260776-4-link" aria-expanded="false"
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span></span></button><div
+    class="ecl-menu__mega"
+    data-ecl-menu-mega
+  ><ul class="ecl-menu__sublist"><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/news-and-events/news_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="News" data-active-path="&#x2F;node&#x2F;2"
+>News</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/news-and-events/events_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Events" data-active-path="&#x2F;node&#x2F;4"
+>Events</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/policies/programming/projects_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Projects" data-active-path="&#x2F;node&#x2F;5"
+>Projects</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/news-and-events/stories_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Stories" data-active-path="&#x2F;node&#x2F;1308"
+>Stories</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/news-and-events/european-development-days_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="The&#x20;European&#x20;Development&#x20;Days" data-active-path="&#x2F;node&#x2F;2415"
+>The European Development Days</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/news-and-events/lorenzo-natali-prize_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Lorenzo&#x20;Natali&#x20;Prize" data-active-path="&#x2F;node&#x2F;763"
+>Lorenzo Natali Prize</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="https://kapuscinskilectures.eu/"
+  class="ecl-link ecl-link--standalone ecl-link--icon ecl-menu__sublink"
+   data-untranslated-label="Kapuscinski&#x20;Development&#x20;Lectures"
+><span 
+      class="ecl-link__label">Kapuscinski Development Lectures</span><span 
+  class="wt-icon--external ecl-icon ecl-icon--2xs ecl-link__icon ecl-icon--external"
+  aria-hidden="false"
+  ></span></a></li><li class="ecl-menu__subitem ecl-menu__see-all"><a
+  href="/news-and-events_en"
+  class="ecl-link ecl-link--standalone ecl-link--icon ecl-menu__sublink"
+  
+><span 
+      class="ecl-link__label">See all</span><span 
+  class="wt-icon--arrow-left ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-link__icon ecl-icon--arrow-left"
+  aria-hidden="true"
+  ></span></a></li></ul></div></li><li class="ecl-menu__item ecl-menu__item--has-children" data-ecl-menu-item data-ecl-has-children aria-haspopup aria-expanded="false" id="ecl-menu-item-ecl-menu-179260776-5"><a
+  href="/knowledge-hub_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="Knowledge&#x20;hub" data-active-path="&#x2F;node&#x2F;1294" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-5-link"
+>Knowledge hub</a><button
+  class="ecl-button ecl-button--tertiary ecl-button--m ecl-button--neutral ecl-menu__button-caret"
+  type="button"
+   data-ecl-menu-caret aria-label="Access&#x20;item&#x27;s&#x20;children" aria-describedby="ecl-menu-item-ecl-menu-179260776-5-link" aria-expanded="false"
+><span class="ecl-button__container"><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-button__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   data-ecl-icon></span></span></button><div
+    class="ecl-menu__mega"
+    data-ecl-menu-mega
+  ><ul class="ecl-menu__sublist"><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="https://europa.eu/capacity4dev/"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Capacity4dev"
+>Capacity4dev</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="https://international-partnerships.learning.europa.eu/"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="EU&#x20;International&#x20;Partnerships&#x20;Academy"
+>EU International Partnerships Academy</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/knowledge-hub/infopoint_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="International&#x20;Partnerships&#x20;InfoPoint" data-active-path="&#x2F;node&#x2F;784"
+>International Partnerships InfoPoint</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/knowledge-hub/communicating-and-raising-eu-visibility-guidance-external-actions_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Communicating&#x20;and&#x20;raising&#x20;EU&#x20;visibility&#x3A;&#x20;Guidance&#x20;for&#x20;external&#x20;actions" data-active-path="&#x2F;node&#x2F;1464"
+>Communicating and raising EU visibility: Guidance for external actions</a></li><li
+        class="ecl-menu__subitem"
+        data-ecl-menu-subitem
+      ><a
+  href="/knowledge-hub/digital-content-guidelines_en"
+  class="ecl-link ecl-link--standalone ecl-menu__sublink"
+   data-untranslated-label="Digital&#x20;content&#x20;guidelines" data-active-path="&#x2F;node&#x2F;1319"
+>Digital content guidelines</a></li><li class="ecl-menu__subitem ecl-menu__see-all"><a
+  href="/knowledge-hub_en"
+  class="ecl-link ecl-link--standalone ecl-link--icon ecl-menu__sublink"
+  
+><span 
+      class="ecl-link__label">See all</span><span 
+  class="wt-icon--arrow-left ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-link__icon ecl-icon--arrow-left"
+  aria-hidden="true"
+  ></span></a></li></ul></div></li><li class="ecl-menu__item" data-ecl-menu-item id="ecl-menu-item-ecl-menu-179260776-6"><a
+  href="/publications_en"
+  class="ecl-link ecl-link--standalone ecl-menu__link"
+   data-untranslated-label="Publications" data-active-path="&#x2F;node&#x2F;3116" data-ecl-menu-link id="ecl-menu-item-ecl-menu-179260776-6-link"
+>Publications</a></li></ul></section></div></nav>
+
+</div>
+
+  </div>
+
+
+
+</header>
+
+            <div class="ecl-u-mb-2xl" id="block-ewcms-theme-page-header">
+  
+    
+      
+            
+  
+
+
+<div
+  class="ecl-page-header"
+  
+><div class="ecl-page-header__container"><div class="ecl-container"><nav
+  class="ecl-breadcrumb ecl-page-header__breadcrumb"
+   aria-label="You&#x20;are&#x20;here&#x3A;" aria-label="" data-ecl-breadcrumb="true"
+><ol class="ecl-breadcrumb__container"><li class="ecl-breadcrumb__segment" data-ecl-breadcrumb-item="static"><a
+  href="/index_en"
+  class="ecl-link ecl-breadcrumb__link"
+  
+>Home</a><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--fluid ecl-breadcrumb__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   role="presentation"></span></li><li class="ecl-breadcrumb__segment" data-ecl-breadcrumb-item="static"><a
+  href="/knowledge-hub_en"
+  class="ecl-link ecl-breadcrumb__link"
+  
+>Knowledge hub</a><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--fluid ecl-breadcrumb__icon ecl-icon--corner-arrow"
+  aria-hidden="true"
+   role="presentation"></span></li><li class="ecl-breadcrumb__segment ecl-breadcrumb__current-page" data-ecl-breadcrumb-item="static" aria-current="page"><span>Communicating and raising EU visibility: Guidance for external actions</span></li></ol></nav><h1 class="ecl-page-header__title"><span>Communicating and raising EU visibility: Guidance for external actions</span></h1></div></div></div>
+  </div>
+
+
+  
+
+  <main class="ecl-u-pb-xl" id="main-content" data-inpage-navigation-source-area="h2.ecl-u-type-heading-2, div.ecl-featured-item__heading">
+    <div class="ecl-container">
+      <div class="ecl-row">
+        <div class="ecl-col-s-12 ewcms-top-sidebar">
+            <div>
+    <div data-drupal-messages-fallback class="hidden"></div>
+  </div>
+
+        </div>
+      </div>
+      <div class="ecl-row">
+        <div class="ecl-col-s-12">
+                      <div id="block-ewcms-theme-main-page-content" data-inpage-navigation-source-area="h2, div.ecl-featured-item__heading" class="ecl-u-mb-l">
+  
+    
+      <article dir="ltr">
+
+  
+    
+
+  
+  <div>
+    
+
+
+  
+  <div class="ecl-u-mb-2xl">
+    <a id="paragraph_2695"></a>
+    
+<div class="ecl-row inpage-navigation-container">
+  <div class="ecl-col-l-3">
+        <nav
+  class="ecl-inpage-navigation oe-theme-ecl-inpage-navigation ecl-u-z-dropdown"
+  data-ecl-auto-init="InpageNavigation" data-ecl-auto-initialized="true"
+  data-ecl-inpage-navigation="true"
+  aria-labelledby="ecl-inpage-navigation-1224492691"
+><div class="ecl-inpage-navigation__title" id="ecl-inpage-navigation-1224492691">
+    Page contents
+  </div><div class="ecl-inpage-navigation__body"><div class="ecl-inpage-navigation__trigger-wrapper"><button 
+      type="button"
+      class="ecl-inpage-navigation__trigger"
+      id="ecl-inpage-navigation-1224492691-trigger"
+      data-ecl-inpage-navigation-trigger="true"
+      aria-controls="ecl-inpage-navigation-list"
+      aria-expanded="false"><span
+          class="ecl-inpage-navigation__trigger-current"
+          data-ecl-inpage-navigation-trigger-current="true">Page contents</span><span 
+  class="wt-icon--corner-arrow ecl-icon ecl-icon--xs ecl-icon--rotate-180 ecl-inpage-navigation__trigger-icon ecl-icon--corner-arrow"
+  aria-hidden="false"
+  ></span></button></div><ul class="ecl-inpage-navigation__list" data-ecl-inpage-navigation-list="true" id="ecl-inpage-navigation-1224492691-list"></ul></div></nav>
+  </div>
+  <div class="ecl-col-l-9" data-inpage-navigation-source-area="h2, div.ecl-featured-item__heading">
+    
+
+
+  
+  <div class="ecl-u-mb-2xl">
+    <a id="paragraph_2692"></a>
+      <div>
+          <div class="ecl"><p>Communicating and raising visibility plays a key role in strengthening the EU’s role in the world, fostering democratic debate and demonstrating the EU’s positive contribution to people’s lives.</p>
+
+<p>The following guidance outlines what is expected of partners implementing EU external actions.</p></div>
+
+      </div>
+
+  </div>
+
+              <div class="ewcms-page-section ecl-u-mb-2xl">
+      
+  <div class="ecl-u-pa-m">
+    <a id="paragraph_2705"></a>
+      <div>
+          <div class="ecl">
+  <h2 class="ecl-u-type-heading-2">Visibility</h2>
+</div>
+<div class="ecl"><p>Recipients of EU funding have a <strong>general obligation</strong> to acknowledge the origin and ensure the visibility of any EU funding received. The visibility obligations apply equally, regardless of whether the actions concerned are implemented by the European Commission, through grants and procurement contracts, or partners through indirect management.</p>
+
+<p>The <strong>EU emblem</strong> is the single most important visual brand used to acknowledge the origin and ensure the visibility of EU funding. Apart from the emblem, no other visual identity or logo may be created or used to highlight EU support, unless previously agreed with the European Commission. Partners implementing <strong>Global Gateway</strong> projects/programmes should also include the Global Gateway logo in addition to the EU emblem.</p>
+
+    
+
+<div class="ecl-media-container ecl-media-container--custom-ratio ecl-u-mb-s ewcms-embed-small" data-ecl-media-container="true" data-ecl-auto-init="MediaContainer"><figure class="ecl-media-container__figure"><div class="ecl-media-container__media"><img loading="eager" class="ecl-u-width-100 ecl-u-height-auto ecl-media-container__media--ratio-custom" srcset="/sites/default/files/styles/embed_small/public/2019-09/haiti.jpg?itok=Dn5UVSPX 1x, /sites/default/files/styles/embed_small_2x/public/2019-09/haiti.jpg?itok=30pdNv-6 2x" width="253" height="158" src="/sites/default/files/styles/embed_small/public/2019-09/haiti.jpg?itok=Dn5UVSPX" alt="Haiti" title="haiti.jpg"></div></figure></div>
+
+
+<p>The EU emblem should be accompanied by a <strong>funding statement</strong> (‘Funded by the European Union’ or ‘Co-funded by the European Union’) mentioning the EU’s support. Both the EU emblem and the funding statement are essential to acknowledge EU support. As a rule, they always go hand in hand and must not be separated.</p>
+
+<p>Visibility counts as an <strong>eligible cost</strong>. Any expenditure related to visibility is part of the action and can benefit from EU funding. Given that individual projects/programmes will not, in principle, include a dedicated visibility budget any costs necessary to ensure compliance with contractual visibility requirements should be factored into the budget foreseen for the relevant objectives and activities of the action.</p></div>
+
+      </div>
+
+  </div>
+
+  </div>  
+  <div class="ecl-u-mb-2xl">
+    <a id="paragraph_2706"></a>
+      <div>
+          <div class="ecl">
+  <h2 class="ecl-u-type-heading-2">Strategic Communication</h2>
+</div>
+<div class="ecl"><p>In certain cases, the EU may decide to finance&nbsp;<strong>communication actions on selected political priorities&nbsp;</strong>as part of a specific programme or project. In these cases, communication should help ensure awareness, understanding and perception of the EU and its role in the world, in both the EU and partner countries and regions, is commensurate with the scale, scope and ambition of its sustained engagement.</p>
+
+<p>When strategic communication activities are foreseen as part of a specific programme or project, the implementing partner should produce a&nbsp;<strong>Strategic Communication Plan</strong>. The guidance details the main elements that should be included in this plan.</p>
+
+<p>Ensuring communication activities are&nbsp;<strong>data driven</strong>&nbsp;is critical to their success. Key performance indicators can be quantitative or qualitative, and in a good monitoring system, both types of indicators complement each other.</p>
+
+<p>Partners should<strong>&nbsp;involve the EU</strong>&nbsp;in developing and implementing strategic communication activities, for example press engagement, events or production of audiovisual content. This will help ensure alignment with the EU’s own strategic communication plans and maximise impact.</p></div>
+
+      </div>
+
+  </div>
+
+    
+  <div class="ecl-u-mb-2xl">
+    <a id="paragraph_2707"></a>
+      <div>
+          <div class="ecl">
+  <h2 class="ecl-u-type-heading-2">Legal and contractual</h2>
+</div>
+<div class="ecl"><p>The European Union has the&nbsp;<strong>right to use</strong>&nbsp;communication material produced and owned by the recipients of EU funding. This right is granted in the form of a royalty-free, non-exclusive and irrevocable licence. The ownership of the material remains with the recipients of the EU funding.</p>
+
+<p>The EU will act in an appropriate and timely manner&nbsp;<strong>in the event of non-compliance</strong>&nbsp;by partners of visibility and/or, if relevant, strategic communication obligations, as is the case with any other breach of contractual obligations.</p></div>
+
+      </div>
+
+  </div>
+
+    
+  <div class="ecl-u-mb-2xl">
+    <a id="paragraph_2699"></a>
+      <div>
+          <div class="ecl">
+  <h2 class="ecl-u-type-heading-2">Related documents</h2>
+</div>
+<div class="ecl">  
+  
+
+                                    
+  
+  
+
+<div class="ecl-file" data-ecl-file="" id="ecl-file-312579433" data-ecl-auto-init="FileDownload"><div class="ecl-file__container"><span class="wt-icon--file ecl-icon ecl-icon--2xl ecl-file__icon ecl-icon--file" aria-hidden="true"></span><div class="ecl-file__info"><ul class="ecl-file__detail-meta"><li class="ecl-file__detail-meta-item">16 SEPTEMBER 2024</li></ul><div class="ecl-file__title" id="ecl-file-312579433-title">Communicating and raising EU visibility: Guidance for external actions - 2022</div></div></div><div class="ecl-file__footer"><div class="ecl-file__language" id="ecl-file-312579433-lang">English</div><div class="ecl-file__meta">(5.48 MB - PDF)</div><div class="ecl-file__action"><a href="/document/download/e6c7b8f5-e3e6-4458-ae7e-9cc313a338b8_en?filename=communicating-and-raising-eu-visibility-guidance-for-external-actions-july-2022_en.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__download" data-untranslated-label="Communicating and raising EU visibility: Guidance for external actions - 2022" data-wt-preview="pdf" id="ecl-file-312579433-link" aria-labelledby="ecl-file-312579433-link-label ecl-file-312579433-title ecl-file-312579433-lang"><span class="ecl-link__label" id="ecl-file-312579433-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></div><div class="ecl-file__translation-container" data-ecl-file-translation-container=""><button class="ecl-button ecl-button--tertiary ecl-file__translation-toggle" type="button" data-ecl-file-translation-toggle="" aria-expanded="false"><span class="ecl-button__container"><span class="ecl-button__label" data-ecl-label="true">Other languages (3)</span><span class="wt-icon--corner-arrow ecl-icon ecl-icon--fluid ecl-icon--rotate-180 ecl-button__icon ecl-icon--corner-arrow" aria-hidden="true" data-ecl-icon=""></span></span></button><ul class="ecl-file__translation-list"><li class="ecl-file__translation-item"><div class="ecl-file__translation-info"><div class="ecl-file__translation-title" id="ecl-file-312579433-translation-0-lang" lang="es">español</div><div class="ecl-file__translation-meta">(5.51 MB - PDF)</div></div><div class="ecl-file__translation-action"><a href="/document/download/e6c7b8f5-e3e6-4458-ae7e-9cc313a338b8_es?filename=communicating-and-raising-eu-visibility-guidance-for-external-actions-july-2022_es.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__translation-download" id="ecl-file-312579433-translation-0-link" aria-labelledby="ecl-file-312579433-translation-0-link-label ecl-file-312579433-title ecl-file-312579433-translation-0-lang" hreflang="es"><span class="ecl-link__label" id="ecl-file-312579433-translation-0-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></li><li class="ecl-file__translation-item"><div class="ecl-file__translation-info"><div class="ecl-file__translation-title" id="ecl-file-312579433-translation-1-lang" lang="fr">français</div><div class="ecl-file__translation-meta">(5.52 MB - PDF)</div></div><div class="ecl-file__translation-action"><a href="/document/download/e6c7b8f5-e3e6-4458-ae7e-9cc313a338b8_fr?filename=communicating-and-raising-eu-visibility-guidance-for-external-actions-july-2022_fr.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__translation-download" id="ecl-file-312579433-translation-1-link" aria-labelledby="ecl-file-312579433-translation-1-link-label ecl-file-312579433-title ecl-file-312579433-translation-1-lang" hreflang="fr"><span class="ecl-link__label" id="ecl-file-312579433-translation-1-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></li><li class="ecl-file__translation-item"><div class="ecl-file__translation-info"><div class="ecl-file__translation-title" id="ecl-file-312579433-translation-2-lang" lang="pt">português</div><div class="ecl-file__translation-meta">(5.44 MB - PDF)</div></div><div class="ecl-file__translation-action"><a href="/document/download/e6c7b8f5-e3e6-4458-ae7e-9cc313a338b8_pt?filename=communicating-and-raising-eu-visibility-guidance-for-external-actions-july-2022_pt.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__translation-download" id="ecl-file-312579433-translation-2-link" aria-labelledby="ecl-file-312579433-translation-2-link-label ecl-file-312579433-title ecl-file-312579433-translation-2-lang" hreflang="pt"><span class="ecl-link__label" id="ecl-file-312579433-translation-2-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></li></ul></div></div>
+
+    
+  
+
+                                    
+  
+  
+
+<div class="ecl-file" data-ecl-file="" id="ecl-file-471649138" data-ecl-auto-init="FileDownload"><div class="ecl-file__container"><span class="wt-icon--file ecl-icon ecl-icon--2xl ecl-file__icon ecl-icon--file" aria-hidden="true"></span><div class="ecl-file__info"><ul class="ecl-file__detail-meta"><li class="ecl-file__detail-meta-item">23 JANUARY 2023</li></ul><div class="ecl-file__title" id="ecl-file-471649138-title">Communicating and raising EU visibility 2022: FAQ</div></div></div><div class="ecl-file__footer"><div class="ecl-file__language" id="ecl-file-471649138-lang">English</div><div class="ecl-file__meta">(131.48 KB - PDF)</div><div class="ecl-file__action"><a href="/document/download/b1201cc9-1e54-41d5-9e7f-108a14ae95b7_en?filename=Communicating-and-raising-EU-visibility-FAQ.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__download" data-untranslated-label="Communicating and raising EU visibility 2022: FAQ" data-wt-preview="pdf" id="ecl-file-471649138-link" aria-labelledby="ecl-file-471649138-link-label ecl-file-471649138-title ecl-file-471649138-lang"><span class="ecl-link__label" id="ecl-file-471649138-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></div><div class="ecl-file__translation-container" data-ecl-file-translation-container=""><button class="ecl-button ecl-button--tertiary ecl-file__translation-toggle" type="button" data-ecl-file-translation-toggle="" aria-expanded="false"><span class="ecl-button__container"><span class="ecl-button__label" data-ecl-label="true">Other languages (3)</span><span class="wt-icon--corner-arrow ecl-icon ecl-icon--fluid ecl-icon--rotate-180 ecl-button__icon ecl-icon--corner-arrow" aria-hidden="true" data-ecl-icon=""></span></span></button><ul class="ecl-file__translation-list"><li class="ecl-file__translation-item"><div class="ecl-file__translation-info"><div class="ecl-file__translation-title" id="ecl-file-471649138-translation-0-lang" lang="es">español</div><div class="ecl-file__translation-meta">(132.51 KB - PDF)</div></div><div class="ecl-file__translation-action"><a href="/document/download/b1201cc9-1e54-41d5-9e7f-108a14ae95b7_es?filename=communicating-and-raising-eu-visibility-2022-faq_es.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__translation-download" id="ecl-file-471649138-translation-0-link" aria-labelledby="ecl-file-471649138-translation-0-link-label ecl-file-471649138-title ecl-file-471649138-translation-0-lang" hreflang="es"><span class="ecl-link__label" id="ecl-file-471649138-translation-0-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></li><li class="ecl-file__translation-item"><div class="ecl-file__translation-info"><div class="ecl-file__translation-title" id="ecl-file-471649138-translation-1-lang" lang="fr">français</div><div class="ecl-file__translation-meta">(168.59 KB - PDF)</div></div><div class="ecl-file__translation-action"><a href="/document/download/b1201cc9-1e54-41d5-9e7f-108a14ae95b7_fr?filename=communicating-and-raising-eu-visibility-2022-faq_fr.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__translation-download" id="ecl-file-471649138-translation-1-link" aria-labelledby="ecl-file-471649138-translation-1-link-label ecl-file-471649138-title ecl-file-471649138-translation-1-lang" hreflang="fr"><span class="ecl-link__label" id="ecl-file-471649138-translation-1-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></li><li class="ecl-file__translation-item"><div class="ecl-file__translation-info"><div class="ecl-file__translation-title" id="ecl-file-471649138-translation-2-lang" lang="pt">português</div><div class="ecl-file__translation-meta">(132.53 KB - PDF)</div></div><div class="ecl-file__translation-action"><a href="/document/download/b1201cc9-1e54-41d5-9e7f-108a14ae95b7_pt?filename=communicating-and-raising-eu-visibility-2022-faq_pt.pdf" class="ecl-link ecl-link--standalone ecl-link--icon ecl-file__translation-download" id="ecl-file-471649138-translation-2-link" aria-labelledby="ecl-file-471649138-translation-2-link-label ecl-file-471649138-title ecl-file-471649138-translation-2-lang" hreflang="pt"><span class="ecl-link__label" id="ecl-file-471649138-translation-2-link-label">Download</span><span class="wt-icon--download ecl-icon ecl-icon--fluid ecl-link__icon ecl-icon--download" aria-hidden="true"></span></a></div></li></ul></div></div>
+
+  <p> </p></div>
+
+      </div>
+
+  </div>
+
+    
+  <div>
+    <a id="paragraph_2704"></a>
+      <div>
+          <div class="ecl">
+  <h2 class="ecl-u-type-heading-2">Related links</h2>
+</div>
+<div class="ecl"><p><a href="https://commission.europa.eu/document/3192a0ef-6bda-4e1a-81ca-65ade2ffad73_en" class="ecl-link">Use of EU emblem</a></p><p><a href="https://ec.europa.eu/regional_policy/information-sources/logo-download-center_en" class="ecl-link">Download EU emblem</a></p></div>
+
+      </div>
+
+  </div>
+
+  
+  </div>
+</div>
+
+  </div>
+
+  
+  </div>
+
+</article>
+
+  </div>
+
+            
+                  </div>
+      </div>
+      <div class="ecl-row">
+        <div class="ecl-col-s-12">
+          
+            <div>
+    <div id="block-ewcms-theme-socialshare">
+  
+    
+      <div class="ecl-social-media-share ecl-u-screen-only">
+  <p class="ecl-social-media-share__description">
+    Share this page
+  </p>
+  <script type="application/json">{"service":"share","version":"2.0","networks":["twitter","facebook","linkedin","email","more"],"display":"icons","stats":true,"selection":true}</script>
+</div>
+
+  </div>
+
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+          
+  
+
+
+  
+  
+
+  
+    
+
+
+    
+          
+  <footer
+  class="ecl-site-footer"
+   data-logo-area-label-en="Home&#x20;-&#x20;European&#x20;Commission"
+><div class="ecl-site-footer__main"><div class="ecl-container ecl-site-footer__container"><div class="ecl-site-footer__row ecl-site-footer__row--specific"><div 
+  class="ecl-site-footer__section ecl-site-footer__section--site-info"
+  
+><div class="ecl-site-footer__title"><a
+  href="https://international-partnerships.ec.europa.eu/index_en"
+  class="ecl-link ecl-link--inverted ecl-link--icon ecl-site-footer__title-link"
+  
+><span 
+      class="ecl-link__label">International Partnerships</span><span 
+  class="wt-icon--arrow-left wt-icon--inverted ecl-icon ecl-icon--xs ecl-icon--flip-horizontal ecl-link__icon ecl-icon--arrow-left"
+  aria-hidden="true"
+  ></span></a></div><div class="ecl-site-footer__description">This site is managed by:<br />Directorate-General for International Partnerships</div><div
+  class="ecl-social-media-follow ecl-social-media-follow--horizontal ecl-social-media-follow--left ecl-site-footer__social-media"
+  
+><ul class="ecl-social-media-follow__list"><li class="ecl-social-media-follow__item"><a
+  href="https://www.facebook.com/EUPartnerships/"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="Follow&#x20;us" data-footer-link-label="Facebook"
+><span 
+  class="wt-icon-networks--facebook wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--facebook"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Facebook</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://www.instagram.com/eu_partnerships/"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="Follow&#x20;us" data-footer-link-label="Instagram"
+><span 
+  class="wt-icon-networks--instagram wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--instagram"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Instagram</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://www.linkedin.com/showcase/global-gateway-eu/posts/?feedView=all"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="Follow&#x20;us" data-footer-link-label="Linkedin"
+><span 
+  class="wt-icon-networks--linkedin wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--linkedin"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Linkedin</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://x.com/EU_Partnerships"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="Follow&#x20;us" data-footer-link-label="X"
+><span 
+  class="wt-icon-networks--x wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--x"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">X</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://www.youtube.com/user/EUintheWorld"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="Follow&#x20;us" data-footer-link-label="Youtube"
+><span 
+  class="wt-icon-networks--youtube wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--youtube"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Youtube</span></a></li></ul></div></div><div class="ecl-site-footer__section ecl-site-footer__section--links"><div class="ecl-site-footer__row"><div 
+  class="ecl-site-footer__section ecl-site-footer__section--about"
+  
+><div class="ecl-site-footer__title">
+    About us  </div><ul class="ecl-site-footer__list"><li class="ecl-site-footer__list-item"><a
+  href="/jobs_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="About&#x20;us" data-footer-link-label="Jobs"
+>Jobs</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/international-partnerships_en#leadership-and-organisation"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="About&#x20;us" data-footer-link-label="Organisation&#x20;and&#x20;leadership"
+>Organisation and leadership</a></li></ul></div></div><div class="ecl-site-footer__row"><div 
+  class="ecl-site-footer__section ecl-site-footer__section--more ecl-footer-class-links"
+  
+><div class="ecl-site-footer__title">
+    More information on:  </div><ul class="ecl-site-footer__list"><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/aid-development-cooperation-fundamental-rights_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-footer-class-link-en="Aid,&#x20;Development&#x20;cooperation,&#x20;Fundamental&#x20;rights"
+>Aid, Development cooperation, Fundamental rights</a></li></ul></div><div 
+  class="ecl-site-footer__section ecl-site-footer__section--related"
+  
+><div class="ecl-site-footer__title">
+    Related links  </div><ul class="ecl-site-footer__list"><li class="ecl-site-footer__list-item"><a
+  href="https://capacity4dev.europa.eu/"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="Related&#x20;links" data-footer-link-label="Capacity4Dev"
+>Capacity4Dev</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://international-partnerships.learning.europa.eu/"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="Related&#x20;links" data-footer-link-label="EU&#x20;International&#x20;Partnerships&#x20;Academy"
+>EU International Partnerships Academy</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://team-europe-explorer.europa.eu"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="Related&#x20;links" data-footer-link-label="Team&#x20;Europe&#x20;Explorer"
+>Team Europe Explorer</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://webgate.ec.europa.eu/fpfis/wikis/spaces/ExactExternalWiki/overview"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="Related&#x20;links" data-footer-link-label="EXACT&#x20;-&#x20;EU&#x20;External&#x20;Action&#x20;Wiki"
+>EXACT - EU External Action Wiki</a></li></ul></div></div></div></div><div class="ecl-site-footer__row ecl-site-footer__row--common"><div 
+  class="ecl-site-footer__section ecl-site-footer__section--common"
+  
+><a
+  href="https://commission.europa.eu/index_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__logo-link"
+  
+><picture
+  class="ecl-picture ecl-site-footer__picture"
+  
+><img 
+              class="ecl-site-footer__logo-image"
+              src="/themes/contrib/oe_theme/dist/ec/images/logo/negative/logo-ec--en.svg"
+              alt="European Commission logo"
+          ></picture></a><div class="ecl-site-footer__extra-links-container"><div
+  class="ecl-social-media-follow ecl-social-media-follow--left ecl-social-media-follow--description_inline ecl-site-footer__social-media"
+  
+><p class="ecl-social-media-follow__description">Follow the European Commission</p><ul class="ecl-social-media-follow__list"><li class="ecl-social-media-follow__item"><a
+  href="https://www.facebook.com/EuropeanCommission"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="social_media_common_links" data-footer-link-label="Facebook"
+><span 
+  class="wt-icon-networks--facebook wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--facebook"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Facebook</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://www.instagram.com/europeancommission"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="social_media_common_links" data-footer-link-label="Instagram"
+><span 
+  class="wt-icon-networks--instagram wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--instagram"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Instagram</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://x.com/EU_Commission"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="social_media_common_links" data-footer-link-label="X"
+><span 
+  class="wt-icon-networks--x wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--x"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">X</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://www.linkedin.com/company/european-commission"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="social_media_common_links" data-footer-link-label="Linkedin"
+><span 
+  class="wt-icon-networks--linkedin wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--linkedin"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Linkedin</span></a></li><li class="ecl-social-media-follow__item"><a
+  href="https://european-union.europa.eu/contact-eu/social-media-channels_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-link--icon ecl-social-media-follow__link ecl-link--icon-only"
+   data-section-label-untranslated="social_media_common_links" data-footer-link-label="Other"
+><span 
+  class="wt-icon-networks--chain wt-icon--inverted ecl-icon ecl-icon--s ecl-link__icon ecl-social-media-follow__icon ecl-icon-networks--chain"
+  aria-hidden="true"
+  ></span><span 
+      class="ecl-link__label">Other</span></a></li></ul></div><ul class="ecl-site-footer__list ecl-site-footer__list--inline"><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/about/contact_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="extra_links" data-footer-link-label="Contact&#x20;us"
+>Contact us</a></li></ul></div><ul class="ecl-site-footer__list ecl-site-footer__list--inline"><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/legal-notice/vulnerability-disclosure-policy_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="legal_navigation" data-footer-link-label="Report&#x20;an&#x20;IT&#x20;vulnerability"
+>Report an IT vulnerability</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/languages-our-websites_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="legal_navigation" data-footer-link-label="Languages&#x20;on&#x20;our&#x20;websites"
+>Languages on our websites</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/cookies-policy_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="legal_navigation" data-footer-link-label="Cookies"
+>Cookies</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/privacy-policy-websites-managed-european-commission_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="legal_navigation" data-footer-link-label="Privacy&#x20;policy"
+>Privacy policy</a></li><li class="ecl-site-footer__list-item"><a
+  href="https://commission.europa.eu/legal-notice_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-section-label-untranslated="legal_navigation" data-footer-link-label="Legal&#x20;notice"
+>Legal notice</a></li><li class="ecl-site-footer__list-item"><a
+  href="/accessibility-statement_en"
+  class="ecl-link ecl-link--standalone ecl-link--inverted ecl-site-footer__link"
+   data-is-accessibility-link="true"
+>Accessibility</a></li></ul></div></div></div></div></footer>
+
+
+  
+  </div>
+
+    <script type="application/json">{"utility":"piwik","siteID":"b97fd3ef-98c8-4690-99db-ca0cecc80df9","sitePath":["international-partnerships.ec.europa.eu"],"instance":"ec","dimensions":[{"id":3,"value":"Landing Page"},{"id":4,"value":"international-cooperation the-EU's-international-role"},{"id":5,"value":"Directorate-General-for-International-Partnerships"},{"id":6,"value":"Communicating and raising EU visibility: Guidance for external actions"},{"id":7,"value":"ac7cfcfd-0aeb-4a65-a687-ae6ca8ece831"},{"id":8,"value":"EC - STANDARDISED"},{"id":9,"value":"the-EU's-international-role international-affairs international-cooperation cooperation-policy"},{"id":10,"value":"Default landing page"},{"id":12,"value":"170"},{"id":30,"value":"4gm5l4-node-1464"}]}</script>
+<script type="application/json">{"utility":"cck"}</script>
+
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"","currentPath":"node\/1464","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en","urlSuffixes":["bg","es","cs","da","de","et","el","en","fr","ga","hr","it","lv","lt","hu","mt","nl","pl","pt","ro","sk","sl","fi","sv","ar","ca","is","no","tr","uk","ru","zh","lb","sw","he","ja","kl"]},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"ewcms_multilingual":{"monolingual":false,"current_node_available_translations":["es","en","fr","pt"],"machine_translation_script":{"json":"{\u0022service\u0022:\u0022etrans\u0022,\u0022renderAs\u0022:false,\u0022user\u0022:\u0022International Partnerships\u0022,\u0022exclude\u0022:\u0022.ecl-site-header__language-item,.ecl-site-header__language-selector,.toolbar\u0022,\u0022languages\u0022:{\u0022source\u0022:\u0022en\u0022,\u0022available\u0022:[\u0022es\u0022,\u0022en\u0022,\u0022fr\u0022,\u0022pt\u0022]},\u0022config\u0022:{\u0022live\u0022:false,\u0022mode\u0022:\u0022lc2023\u0022,\u0022targets\u0022:{\u0022receiver\u0022:\u0022#webtools-etrans\u0022}}}","current_node_language":"en"},"machine_translation":{"available_languages":["bg","es","cs","da","de","et","el","fr","ga","hr","it","lv","lt","hu","mt","nl","pl","pt-pt","ro","sk","sl","fi","sv","en"],"current_node_language_code":"en","native_languages":{"bg":"\u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438","es":"espa\u00f1ol","cs":"\u010de\u0161tina","da":"dansk","de":"Deutsch","et":"eesti","el":"\u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac","en":"English","fr":"fran\u00e7ais","ga":"Gaeilge","hr":"hrvatski","it":"italiano","lv":"latvie\u0161u","lt":"lietuvi\u0173","hu":"magyar","mt":"Malti","nl":"Nederlands","pl":"polski","pt-pt":"portugu\u00eas","ro":"rom\u00e2n\u0103","sk":"sloven\u010dina","sl":"sloven\u0161\u010dina","fi":"suomi","sv":"svenska","ar":"\u0627\u0644\u0639\u0631\u0628\u064a\u0629","ca":"catal\u00e0","is":"\u00edslenska","he":"\u05e2\u05d1\u05e8\u05d9\u05ea","kl":"kalaallisut","ja":"\u65e5\u672c\u8a9e","lb":"L\u00ebtzebuergesch","nb":"norsk","ru":"\u0440\u0443\u0441\u0441\u043a\u0438\u0439","sw":"Kiswahili","tr":"t\u00fcrk\u00e7e","uk":"y\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430","zh-hans":"\u4e2d\u6587"},"suffix_map":{"bg":"bg","es":"es","cs":"cs","da":"da","de":"de","et":"et","el":"el","en":"en","fr":"fr","ga":"ga","hr":"hr","it":"it","lv":"lv","lt":"lt","hu":"hu","mt":"mt","nl":"nl","pl":"pl","pt":"pt-pt","ro":"ro","sk":"sk","sl":"sl","fi":"fi","sv":"sv","kl":"kl"},"etrans_enabled":true,"etrans_languages":["ar","bg","cs","da","de","el","en","es","et","fi","fr","ga","hr","hu","is","it","ja","lt","lv","mt","nb","nl","pl","pt-pt","ro","ru","sk","sl","sv","tr","uk","zh-hans"],"non_eu_languages":["ar","ca","he","is","ja","kl","lb","nb","ru","sw","tr","uk","zh-hans"],"translated_strings":{"translation_not_available":{"bg":"\u0422\u0430\u0437\u0438 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u043d\u0435 \u0435 \u0434\u043e\u0441\u0442\u044a\u043f\u043d\u0430 \u043d\u0430 \u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438 \u0435\u0437\u0438\u043a.","es":"Esta p\u00e1gina no est\u00e1 disponible en espa\u00f1ol","cs":"Tato str\u00e1nka nen\u00ed v \u010de\u0161tin\u011b k dispozici","da":"Denne side er ikke tilg\u00e6ngelig p\u00e5 dansk","de":"Diese Seite ist auf Deutsch nicht verf\u00fcgbar.","et":"See lehek\u00fclg ei ole eesti keeles k\u00e4ttesaadav","el":"\u0397 \u03c3\u03b5\u03bb\u03af\u03b4\u03b1 \u03b1\u03c5\u03c4\u03ae \u03b4\u03b5\u03bd \u03b5\u03af\u03bd\u03b1\u03b9 \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b7 \u03c3\u03c4\u03b1 \u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac","en":"This page is not available in English.","fr":"Cette page n\u2019est pas disponible en fran\u00e7ais.","ga":"N\u00edl an leathanach seo ar f\u00e1il i nGaeilge","hr":"Ova stranica nije dostupna na hrvatskom jeziku","it":"Questa pagina non \u00e8 disponibile in italiano","lv":"\u0160\u012b lapa nav pieejama latvie\u0161u valod\u0101.","lt":"\u0160io puslapio lietuvi\u0173 kalba n\u0117ra","hu":"Ez az oldal nem \u00e9rhet\u0151 el magyarul","mt":"Din il-pa\u0121na mhix disponibbli bil-Malti","nl":"Deze pagina is niet beschikbaar in het Nederlands.","pl":"Strona nie jest dost\u0119pna w j\u0119zyku polskim.","pt-pt":"Esta p\u00e1gina n\u00e3o est\u00e1 dispon\u00edvel em portugu\u00eas","ro":"Aceast\u0103 pagin\u0103 nu este disponibil\u0103 \u00een limba rom\u00e2n\u0103","sk":"T\u00e1to str\u00e1nka nie je dostupn\u00e1 v sloven\u010dine","sl":"Ta stran ni na voljo v sloven\u0161\u010dini.","fi":"T\u00e4t\u00e4 sivua ei ole saatavilla suomen kielell\u00e4.","sv":"Sidan finns inte p\u00e5 svenska","ar":"\u0647\u0630\u0647 \u0627\u0644\u0635\u0641\u062d\u0629 \u063a\u064a\u0631 \u0645\u062a\u0627\u062d\u0629 \u0641\u064a \u0627\u0644\u0639\u0631\u0628\u064a\u0629.","ca":"Aquesta p\u00e0gina no est\u00e0 disponible en catal\u00e0.","is":"\u00deessi s\u00ed\u00f0a er ekki tilt\u00e6k \u00ed \u00edslenska.","he":"This page is not available in \u05e2\u05d1\u05e8\u05d9\u05ea.","kl":"This page is not available in kalaallisut.","ja":"\u3053\u306e\u30da\u30fc\u30b8\u306f\u65e5\u672c\u8a9e\u3067\u306f\u3054\u5229\u7528\u3044\u305f\u3060\u3051\u307e\u305b\u3093\u3002","lb":"D\u00ebs S\u00e4it ass net op L\u00ebtzebuergesch zoug\u00e4nglech.","nb":"Denne siden er ikke tilgjengelig p\u00e5 norsk.","ru":"\u0440\u0443\u0441\u0441\u043a\u0438\u0439 \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u0434\u043b\u044f \u043f\u0435\u0440\u0435\u0432\u043e\u0434\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u044b","sw":"This page is not available in Kiswahili.","tr":"Bu sayfa t\u00fcrk\u00e7e dilinde mevcut de\u011fildir.","uk":"y\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430 \u0432\u0456\u0434\u0441\u0443\u0442\u043d\u044f \u0434\u043b\u044f \u043f\u0435\u0440\u0435\u043a\u043b\u0430\u0434\u0443 \u0446\u0456\u0454\u0457 \u0441\u0442\u043e\u0440\u0456\u043d\u043a\u0438.","zh-hans":"\u672c\u9875\u9762\u5e76\u65e0\u4e2d\u6587\u7248\u672c\u3002"},"translation_message":{"bg":"\u0412\u0435\u0440\u0441\u0438\u044f \u043d\u0430 \u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438 \u0435\u0437\u0438\u043a \u0435 \u043d\u0430\u043b\u0438\u0447\u043d\u0430 \u0447\u0440\u0435\u0437 eTranslation, \u0443\u0441\u043b\u0443\u0433\u0430\u0442\u0430 \u0437\u0430 \u043c\u0430\u0448\u0438\u043d\u0435\u043d \u043f\u0440\u0435\u0432\u043e\u0434 \u043d\u0430 \u0415\u0432\u0440\u043e\u043f\u0435\u0439\u0441\u043a\u0430\u0442\u0430 \u043a\u043e\u043c\u0438\u0441\u0438\u044f.","es":"El espa\u00f1ol est\u00e1 disponible mediante eTranslation, el servicio de traducci\u00f3n autom\u00e1tica de la Comisi\u00f3n Europea.","cs":"\u010cesk\u00fd p\u0159eklad textu je k dispozici prost\u0159ednictv\u00edm eTranslation, slu\u017eby strojov\u00e9ho p\u0159ekladu Evropsk\u00e9 komise.","da":"En overs\u00e6ttelse til dansk f\u00e5r du via eTranslation, som er Europa-Kommissionens maskinovers\u00e6ttelsestjeneste.","de":"Deutsch ist \u00fcber eTranslation verf\u00fcgbar, den maschinellen \u00dcbersetzungsdienst der Europ\u00e4ischen Kommission.","et":"Eesti keel on Euroopa Komisjoni masint\u00f5lketeenuses eTranslation k\u00e4ttesaadav.","el":"\u0397 \u03ad\u03ba\u03b4\u03bf\u03c3\u03b7 \u03c3\u03c4\u03b1 \u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac \u03b5\u03af\u03bd\u03b1\u03b9 \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03b7 \u03bc\u03ad\u03c3\u03c9 \u03c4\u03b7\u03c2 \u03c5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b1\u03c2 eTranslation, \u03c4\u03b7\u03c2 \u03c5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b1\u03c2 \u03b1\u03c5\u03c4\u03cc\u03bc\u03b1\u03c4\u03b7\u03c2 \u03bc\u03b5\u03c4\u03ac\u03c6\u03c1\u03b1\u03c3\u03b7\u03c2 \u03c4\u03b7\u03c2 \u0395\u03c5\u03c1\u03c9\u03c0\u03b1\u03ca\u03ba\u03ae\u03c2 \u0395\u03c0\u03b9\u03c4\u03c1\u03bf\u03c0\u03ae\u03c2.","en":"English is available via eTranslation, the European Commission\u0027s machine translation service.","fr":"Le fran\u00e7ais est disponible par eTranslation, le service de traduction automatique de la Commission europ\u00e9enne.","ga":"T\u00e1 an Ghaeilge ar f\u00e1il tr\u00ed eTranslation, seirbh\u00eds meais\u00ednaistri\u00fach\u00e1in an Choimisi\u00fain Eorpaigh.","hr":"Tekst na hrvatskom dostupan je samo kao strojni prijevod koji je generirala usluga eTranslation Europske komisije.","it":"L\u0027italiano \u00e8 disponibile in versione tradotta automaticamente dal servizio eTranslation della Commissione europea.","lv":"Tulkojums latvie\u0161u valod\u0101 ir pieejams, izmantojot Eiropas Komisijas ma\u0161\u012bntulko\u0161anas pakalpojumu \u201ceTranslation\u201d.","lt":"Vertim\u0105 \u012f lietuvi\u0173 kalb\u0105 galima sugeneruoti Europos Komisijos ma\u0161ininio vertimo priemone \u201eeTranslation\u201c.","hu":"Ez a tartalom el\u00e9rhet\u0151 magyar nyelven az eTranslation, az Eur\u00f3pai Bizotts\u00e1g ford\u00edt\u00f3programja \u00e1ltal biztos\u00edtott g\u00e9pi ford\u00edt\u00e1s form\u00e1j\u00e1ban.","mt":"Il-Malti hu disponibbli permezz tal-eTranslation, is-servizz tat-traduzzjoni awtomatika tal-Kummissjoni Ewropea.","nl":"Nederlands is beschikbaar via eTranslation, de machinevertaaldienst van de Europese Commissie.","pl":"T\u0142umaczenie na j\u0119zyk polski zostanie wygenerowane przy pomocy serwisu t\u0142umaczenia maszynowego Komisji Europejskiej eTranslation.","pt-pt":"Vers\u00e3o em portugu\u00eas dispon\u00edvel atrav\u00e9s do servi\u00e7o eTranslation, o servi\u00e7o de tradu\u00e7\u00e3o autom\u00e1tica da Comiss\u00e3o Europeia.","ro":"Versiunea \u00een limba rom\u00e2n\u0103 este disponibil\u0103 prin intermediul eTranslation, serviciul de traducere automat\u0103 al Comisiei Europene.","sk":"Preklad do sloven\u010diny je dostupn\u00fd cez eTranslation, slu\u017ebu strojov\u00e9ho prekladu Eur\u00f3pskej komisie.","sl":"Slovenski prevod je na voljo prek eTranslation, strojnega prevajalnika Evropske komisije.","fi":"Euroopan komission eTranslation-palvelusta voi tilata suomenkielisen konek\u00e4\u00e4nn\u00f6ksen.","sv":"Svenska kan f\u00e5s via eTranslation, EU-kommissionens maskin\u00f6vers\u00e4ttningsverktyg.","ar":"@\u0627\u0644\u0644\u063a\u0629 \u0645\u062a\u0627\u062d\u0629 \u0645\u0646 \u062e\u0644\u0627\u0644 eTranslation\u060c \u062e\u062f\u0645\u0629 \u0627\u0644\u062a\u0631\u062c\u0645\u0629 \u0627\u0644\u0622\u0644\u064a\u0629 \u0645\u0646 \u0627\u0644\u0645\u0641\u0648\u0636\u064a\u0629 \u0627\u0644\u0623\u0648\u0631\u0648\u0628\u064a\u0629.","ca":"catal\u00e0 est\u00e0 disponible a trav\u00e9s d\u2019eTranslation, el servei de traducci\u00f3 autom\u00e0tica de la Comissi\u00f3 Europea.","is":"\u00edslenska er f\u00e1anlegt \u00ed gegnum eTranslation, v\u00e9l\u00fe\u00fd\u00f0ingar\u00fej\u00f3nustu framkv\u00e6mdastj\u00f3rnar Evr\u00f3pusambandsins.","he":"\u05e2\u05d1\u05e8\u05d9\u05ea is available via eTranslation, the European Commission\u0027s machine translation service.","kl":"kalaallisut is available via eTranslation, the European Commission\u0027s machine translation service.","ja":"\u65e5\u672c\u8a9e\u306f\u6b27\u5dde\u59d4\u54e1\u4f1a\u306e\u6a5f\u68b0\u7ffb\u8a33\u30b5\u30fc\u30d3\u30b9\u3067\u3042\u308beTranslation\u3092\u901a\u3058\u3066\u5229\u7528\u3067\u304d\u307e\u3059\u3002","lb":"L\u00ebtzebuergesch ass zoug\u00e4nglech via eTranslation, den automateschen Iwwersetzungsd\u00e9ngscht vun der Europ\u00e4escher Kommissioun.","nb":"norsk er tilgjengelig via eTranslation, EU-kommisjonens tjeneste for maskinoversettelse.","ru":"\u0440\u0443\u0441\u0441\u043a\u0438\u0439 \u0434\u043e\u0441\u0442\u0443\u043f\u0435\u043d \u0432 eTranslation, \u0441\u043b\u0443\u0436\u0431\u0435 \u043c\u0430\u0448\u0438\u043d\u043d\u043e\u0433\u043e \u043f\u0435\u0440\u0435\u0432\u043e\u0434\u0430 \u0415\u0432\u0440\u043e\u043f\u0435\u0439\u0441\u043a\u043e\u0439 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438.","sw":"Kiswahili is available via eTranslation, the European Commission\u0027s machine translation service.","tr":"t\u00fcrk\u00e7e, Avrupa Komisyonu\u0027nun makine terc\u00fcmesi hizmeti olan eTranslation \u00fczerinde mevcuttur.","uk":"y\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430 \u0456\u0441\u043d\u0443\u0454 \u0432 eTranslation, \u0441\u043b\u0443\u0436\u0431\u0456 \u043c\u0430\u0448\u0438\u043d\u043d\u043e\u0433\u043e \u043f\u0435\u0440\u0435\u043a\u043b\u0430\u0434\u0443 \u0404\u0432\u0440\u043e\u043f\u0435\u0439\u0441\u044c\u043a\u043e\u0457 \u043a\u043e\u043c\u0456\u0441\u0456\u0457.","zh-hans":"\u53ef\u901a\u8fc7\u6b27\u76df\u59d4\u5458\u4f1a\u7684\u673a\u5668\u7ffb\u8bd1\u670d\u52a1eTranslation\u83b7\u5f97\u4e2d\u6587\u7248\u672c\u3002"},"translate_link":{"bg":"\u041f\u0440\u0435\u0432\u043e\u0434 \u043d\u0430 \u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438","es":"Traducir al espa\u00f1ol","cs":"P\u0159elo\u017eit do \u010de\u0161tiny","da":"Overs\u00e6t til dansk","de":"Ins Deutsche \u00fcbersetzen","et":"T\u00f5lgi eesti keelde","el":"\u039c\u03b5\u03c4\u03ac\u03c6\u03c1\u03b1\u03c3\u03b7 \u03c3\u03c4\u03b1 \u03b5\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac","en":"Translate to English","fr":"Traduire en fran\u00e7ais","ga":"Aistrigh go Gaeilge","hr":"Prevedi na hrvatski","it":"Tradurre in italiano","lv":"P\u0101rtulkot latvie\u0161u valod\u0101","lt":"I\u0161versti \u012f lietuvi\u0173 kalb\u0105","hu":"Ford\u00edt\u00e1s magyarra","mt":"Ittradu\u010bi g\u0127all-Malti","nl":"Vertalen in het Nederlands","pl":"Przet\u0142umacz na j\u0119zyk polski","pt-pt":"Traduzir para portugu\u00eas","ro":"Traducere \u00een limba rom\u00e2n\u0103","sk":"Prelo\u017ei\u0165 do sloven\u010diny","sl":"Prevedi v sloven\u0161\u010dino","fi":"K\u00e4\u00e4nn\u00e4 suomeksi","sv":"\u00d6vers\u00e4tt till svenska","ar":"\u062a\u0631\u062c\u0645 \u0625\u0644\u0649 \u0627\u0644\u0639\u0631\u0628\u064a\u0629.","ca":"Tradueix-la a catal\u00e0","is":"\u00de\u00fd\u00f0a \u00e1 \u00edslenska","he":"Translate to \u05e2\u05d1\u05e8\u05d9\u05ea","kl":"Translate to kalaallisut","ja":"\u65e5\u672c\u8a9e\u306b\u7ffb\u8a33","lb":"Op L\u00ebtzebuergesch iwwersetzen.","nb":"Oversett til norsk","ru":"\u041f\u0435\u0440\u0435\u0432\u0435\u0441\u0442\u0438 \u043d\u0430 \u0440\u0443\u0441\u0441\u043a\u0438\u0439","sw":"Translate to Kiswahili","tr":"t\u00fcrk\u00e7e diline terc\u00fcme et","uk":"\u041f\u0435\u0440\u0435\u043a\u043b\u0430\u0441\u0442\u0438 \u043d\u0430 y\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430.","zh-hans":"\u7ffb\u8bd1\u4e3a\u4e2d\u6587"},"disclaimer_link":{"bg":"\u0412\u0430\u0436\u043d\u0430 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e\u0442\u043d\u043e\u0441\u043d\u043e \u043c\u0430\u0448\u0438\u043d\u043d\u0438\u044f \u043f\u0440\u0435\u0432\u043e\u0434","es":"Informaci\u00f3n importante sobre la traducci\u00f3n autom\u00e1tica","cs":"D\u016fle\u017eit\u00e9 informace o strojov\u00e9m p\u0159ekladu","da":"Vigtig information om maskinovers\u00e6ttelser","de":"Das sollten Sie \u00fcber maschinelle \u00dcbersetzung wissen","et":"Oluline teave masint\u00f5lke kohta","el":"\u03a3\u03b7\u03bc\u03b1\u03bd\u03c4\u03b9\u03ba\u03ad\u03c2 \u03c0\u03bb\u03b7\u03c1\u03bf\u03c6\u03bf\u03c1\u03af\u03b5\u03c2 \u03c3\u03c7\u03b5\u03c4\u03b9\u03ba\u03ac \u03bc\u03b5 \u03c4\u03b7\u03bd \u03b1\u03c5\u03c4\u03cc\u03bc\u03b1\u03c4\u03b7 \u03bc\u03b5\u03c4\u03ac\u03c6\u03c1\u03b1\u03c3\u03b7","en":"Important information about machine translation","fr":"Informations importantes concernant la traduction automatique","ga":"Eolas t\u00e1bhachtach faoin meais\u00ednaistri\u00fach\u00e1n","hr":"Va\u017ene informacije o strojnom prevo\u0111enju","it":"Informazioni importante sulla traduzione automatica","lv":"Svar\u012bga inform\u0101cija par ma\u0161\u012bntulko\u0161anu","lt":"Svarbi informacija apie ma\u0161inin\u012f vertim\u0105","hu":"Fontos tudnival\u00f3k a g\u00e9pi ford\u00edt\u00e1sr\u00f3l","mt":"Informazzjoni importanti dwar it-traduzzjoni awtomatika","nl":"Belangrijke informatie over machinevertaling","pl":"Wa\u017cne informacje o t\u0142umaczeniu maszynowym","pt-pt":"Informa\u00e7\u00f5es importantes sobre a tradu\u00e7\u00e3o autom\u00e1tica","ro":"Informa\u021bii importante despre traducerea automat\u0103","sk":"D\u00f4le\u017eit\u00e9 inform\u00e1cie o strojovom preklade","sl":"Pomembne informacije o strojnem prevodu","fi":"T\u00e4rke\u00e4\u00e4 tietoa konek\u00e4\u00e4nn\u00f6ksist\u00e4","sv":"Viktigt om maskin\u00f6vers\u00e4ttning","ar":"\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0647\u0627\u0645\u0629 \u062d\u0648\u0644 \u0627\u0644\u062a\u0631\u062c\u0645\u0629 \u0627\u0644\u0622\u0644\u064a\u0629","ca":"Informaci\u00f3 important sobre la traducci\u00f3 autom\u00e0tica","is":"Mikilv\u00e6gar uppl\u00fdsingar um v\u00e9lr\u00e6na \u00fe\u00fd\u00f0ingu","he":"Important information about machine translation","kl":"Important information about machine translation","ja":"\u6a5f\u68b0\u7ffb\u8a33\u306b\u95a2\u3059\u308b\u91cd\u8981\u306a\u60c5\u5831","lb":"Wichteg Informatiounen fir d\u0027automatesch Iwwersetzung","nb":"Viktig informasjon om maskinoversettelse","ru":"\u0412\u0430\u0436\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u043c\u0430\u0448\u0438\u043d\u043d\u043e\u043c \u043f\u0435\u0440\u0435\u0432\u043e\u0434\u0435","sw":"Important information about machine translation","tr":"Makine terc\u00fcmesi hakk\u0131nda \u00f6nemli bilgiler","uk":"\u0412\u0430\u0436\u043b\u0438\u0432\u0430 \u0456\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0456\u044f \u043f\u0440\u043e \u043c\u0430\u0448\u0438\u043d\u043d\u0438\u0439 \u043f\u0435\u0440\u0435\u043a\u043b\u0430\u0434","zh-hans":"\u5173\u4e8e\u673a\u5668\u7ffb\u8bd1\u7684\u91cd\u8981\u4fe1\u606f"},"close_message":{"bg":"\u0417\u0430\u0442\u0432\u0430\u0440\u044f\u043d\u0435 \u043d\u0430 \u0441\u044a\u043e\u0431\u0449\u0435\u043d\u0438\u0435\u0442\u043e","es":"Cerrar este mensaje","cs":"Zav\u0159\u00edt tuto zpr\u00e1vu","da":"Luk denne meddelelse","de":"Diese Nachricht schlie\u00dfen","et":"Sulge teade","el":"\u039a\u03bb\u03b5\u03af\u03c3\u03b9\u03bc\u03bf \u03b1\u03c5\u03c4\u03bf\u03cd \u03c4\u03bf\u03c5 \u03bc\u03b7\u03bd\u03cd\u03bc\u03b1\u03c4\u03bf\u03c2","en":"Close this message","fr":"Fermer ce message","ga":"D\u00fan an teachtaireacht seo","hr":"Zatvori ovu poruku","it":"Chiudi il messaggio","lv":"Aizv\u0113rt \u0161o zi\u0146ojumu","lt":"U\u017edaryti \u0161i\u0105 \u017einut\u0119","hu":"\u00dczenet bez\u00e1r\u00e1sa","mt":"Ag\u0127laq dan il-messa\u0121\u0121","nl":"Bericht sluiten","pl":"Zamknij t\u0119 wiadomo\u015b\u0107","pt-pt":"Fechar esta mensagem","ro":"\u00cenchide\u021bi acest mesaj","sk":"Zatvori\u0165 t\u00fato spr\u00e1vu","sl":"Zapri to sporo\u010dilo","fi":"Sulje t\u00e4m\u00e4 viesti","sv":"St\u00e4ng meddelandet","ar":"\u0627\u0642\u0641\u0644 \u0647\u0630\u0647 \u0627\u0644\u0631\u0633\u0627\u0644\u0629","ca":"Tanca aquest missatge","is":"Loka skilabo\u00f0unum","he":"Close this message","kl":"Close this message","ja":"\u3053\u306e\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u9589\u3058\u308b","lb":"D\u00ebs Noriicht zoumaachen","nb":"Lukk meldingen","ru":"\u0417\u0430\u043a\u0440\u044b\u0442\u044c \u044d\u0442\u043e \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435","sw":"Close this message","tr":"Bu mesaj\u0131 kapat","uk":"\u0417\u0430\u043a\u0440\u0438\u0442\u0438 \u0446\u0435 \u043f\u043e\u0432\u0456\u0434\u043e\u043c\u043b\u0435\u043d\u043d\u044f","zh-hans":"\u5173\u95ed\u6b64\u4fe1\u606f"}}}},"ewcms_theme":{"defaultLanguagePageTitle":"Communicating and raising EU visibility: Guidance for external actions"},"ajaxTrustedUrl":{"form_action_p_pvdeGsVG5zNF_XLGPTvYSKCf43t8qZYSwcfZl2uzM":true},"user":{"uid":0,"permissionsHash":"02220801ce63d8b19794c4ec4e2f6c58954215c54fc89f95ada601f0190bfb95"}}</script>
+<script src="/core/assets/vendor/jquery/jquery.min.js?v=4.0.0-rc.1"></script>
+<script src="/sites/default/files/js/js_UAJAnTUC_ajQttGbfDGKTbWE3yRiQJH2z7NX4uWgI_Y.js?scope=footer&amp;delta=1&amp;language=en&amp;theme=ewcms_theme&amp;include=eJyVjUESgzAIRS9k65EYGpnIDAGHkFh7-lprFy67g_ffB1pTqTCb88s0UKCQthFTcCcIR5aBDqU0CRbW3FDGE2GaWQ9Nq2Cw6V8yqIHsf85SzFRopAS1eaftSo8ZFWULTvWSsS6YCRQ75-9dp2IdZTD61Z9Bvpeh9vyhKz3CTOo4eVtQ7r_9Vgt6iOFE_gYx9HHH"></script>
+<script src="https://ec.europa.eu/wel/surveys/wr_survey01/wr_survey.js" defer></script>
+<script src="/sites/default/files/js/js_Gp06KeZOpp2rLKvxDAlFroImIJRagreDLbQgU3MRzWQ.js?scope=footer&amp;delta=3&amp;language=en&amp;theme=ewcms_theme&amp;include=eJyVjUESgzAIRS9k65EYGpnIDAGHkFh7-lprFy67g_ffB1pTqTCb88s0UKCQthFTcCcIR5aBDqU0CRbW3FDGE2GaWQ9Nq2Cw6V8yqIHsf85SzFRopAS1eaftSo8ZFWULTvWSsS6YCRQ75-9dp2IdZTD61Z9Bvpeh9vyhKz3CTOo4eVtQ7r_9Vgt6iOFE_gYx9HHH"></script>
+<script src="https://webtools.europa.eu/load.js" defer></script>
+
+  </body>
+</html>

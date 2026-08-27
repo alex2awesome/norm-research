@@ -1,0 +1,233 @@
+[
+  {
+    "label": "cc_brute_force_vs_nicer_solution",
+    "platform": "cc",
+    "problem_id": "P3235",
+    "difficulty": 0.15,
+    "input": {
+      "unit_id": "cc_6c7de30140bbf501",
+      "text": "You're given a permutation $P$ of $\\{1, 2, \\ldots, N\\}$.\nFor each index $i$, let $L_i$ denote the number of elements smaller than $P_i$ and to its left, and $R_i$ denote the number of elements larger than $P_i$ to its right.\nCount the number of indices $i$ such that $L_i = R_i$.\n\nThe fact that the constraint on $N$ is quite small ($N \\le 100$) allows us to just not have to think much and simply brute force the answer.\n\nThat is, we are able to directly compute the values $L_i$ and $R_i$ for each index $i$ in linear time, after which we can simply check if $L_i = R_i$ or not.\nThis gives a solution in $\\mathcal{O}(N^2)$.\n\nHowever, there exists a faster (and nicer) solution as well!\n\nConsider the element $P_i$ at index $i$.\nSuppose we've already computed $L_i$ for it.\nLet's try to figure out $R_i$.\n- Since $P$ is a permutation, there are $P_i-1$ elements smaller than $P_i$ in total, those being $1, 2, \\ldots, P_i-1$.\n- There are $L_i$ elements smaller than $P_i$ to its left.\n  This means the remaining $(P_i-1-L_i)$ smaller elements are to the right of index $i$.\n- There are $N-i$ elements to the right of index $i$.\n  $(P_i-1-L_i)$ of them are smaller than $P_i$, so the rest must be larger than it.\n  The count of elements to the right of $i$ that are larger than $P_i$ is exactly $R_i$ by definition.\n- Thus, we obtain $R_i = N-i - (P_i-1-L_i)$.\n\nSo, $R_i$ can be written in terms of $L_i$.\nWe want $L_i = R_i$, so equating them we see that:\n$$\nL_i = N-i-P_i+1+L_i\n$$\nWhich reduces to\n$$\nP_i+i = N+1\n$$\nSo we simply need to count the number of indices $i$ for which $P_i+i = N+1$, which is easily done in linear time!"
+    },
+    "output": {
+      "unit_id": "cc_6c7de30140bbf501",
+      "passages": [
+        {
+          "passage_text": "The fact that the constraint on $N$ is quite small ($N \\le 100$) allows us to just not have to think much and simply brute force the answer.",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "the constraint on $N$ is quite small ($N \\le 100$) allows us to just not have to think much",
+              "signal_type": "observation",
+              "polarity": "neutral",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "simply brute force the answer",
+              "signal_type": "suggestion",
+              "polarity": "positive",
+              "rubric_matches": []
+            }
+          ]
+        },
+        {
+          "passage_text": "That is, we are able to directly compute the values $L_i$ and $R_i$ for each index $i$ in linear time, after which we can simply check if $L_i = R_i$ or not.\nThis gives a solution in $\\mathcal{O}(N^2)$.",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "directly compute the values $L_i$ and $R_i$ for each index $i$ in linear time",
+              "signal_type": "observation",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "This gives a solution in $\\mathcal{O}(N^2)$",
+              "signal_type": "observation",
+              "polarity": "neutral",
+              "rubric_matches": []
+            }
+          ]
+        },
+        {
+          "passage_text": "However, there exists a faster (and nicer) solution as well!",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "there exists a faster (and nicer) solution as well",
+              "signal_type": "praise",
+              "polarity": "positive",
+              "rubric_matches": []
+            }
+          ]
+        },
+        {
+          "passage_text": "So, $R_i$ can be written in terms of $L_i$.\nWe want $L_i = R_i$, so equating them we see that:\n$$\nL_i = N-i-P_i+1+L_i\n$$\nWhich reduces to\n$$\nP_i+i = N+1\n$$\nSo we simply need to count the number of indices $i$ for which $P_i+i = N+1$, which is easily done in linear time!",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "$R_i$ can be written in terms of $L_i$",
+              "signal_type": "observation",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "we simply need to count the number of indices $i$ for which $P_i+i = N+1$, which is easily done in linear time",
+              "signal_type": "praise",
+              "polarity": "positive",
+              "rubric_matches": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "label": "cf_naive_vs_log_with_floating_point_pitfall",
+    "platform": "cf",
+    "problem_id": "2043_A",
+    "difficulty": 0.0,
+    "input": {
+      "unit_id": "cf_eb6ed0c53191e227",
+      "text": "Let's try to solve this problem \"naively\": obviously, while we have at least one coin with value $$$>3$$$, we should transform it, since it increases the number of coins we get. We can simulate this process, but the number of transformations we get might be really large, so we need to speed this up.\nLet's make it faster the following way: instead of transforming just one coin, we will transform all coins at once. So, after one operation, we will have $$$2$$$ coins with value $$$\\lfloor \\frac{x}{4} \\rfloor$$$; after two operations, we will have $$$4$$$ coins with value $$$\\lfloor \\frac{x}{16} \\rfloor$$$ each, and so on. This can be implemented using a simple while-loop: while the value of our coins is greater than $$$3$$$, we divide it by $$$4$$$ and double the number of coins. This solution works in $$$O(\\log n)$$$.\nIt is also possible to derive a formula for the answer: the number of times we need to divide a number by $$$4$$$ so it becomes less than $$$4$$$ is $$$\\lfloor \\log_4 n \\rfloor$$$, and the number of coins we will get is $$$2$$$ to the power of that expression. However, you must be very careful with this approach, because it can have severe precision issues due to the fact that standard logarithm functions work with floating-point numbers, so they are imprecise. You should use some way to calculate $$$\\lfloor \\log_4 n \\rfloor$$$ without floating-point calculations; for example, iterating (or binary searching) on the power of $$$4$$$ you need to divide the number by so that it becomes less than $$$4$$$."
+    },
+    "output": {
+      "unit_id": "cf_eb6ed0c53191e227",
+      "passages": [
+        {
+          "passage_text": "Let's try to solve this problem \"naively\": obviously, while we have at least one coin with value $$$>3$$$, we should transform it, since it increases the number of coins we get. We can simulate this process, but the number of transformations we get might be really large, so we need to speed this up.",
+          "passage_polarity": "negative",
+          "signals": [
+            {
+              "signal_text": "while we have at least one coin with value $$$>3$$$, we should transform it, since it increases the number of coins we get",
+              "signal_type": "observation",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "We can simulate this process, but the number of transformations we get might be really large, so we need to speed this up",
+              "signal_type": "complaint",
+              "polarity": "negative",
+              "rubric_matches": []
+            }
+          ]
+        },
+        {
+          "passage_text": "Let's make it faster the following way: instead of transforming just one coin, we will transform all coins at once. So, after one operation, we will have $$$2$$$ coins with value $$$\\lfloor \\frac{x}{4} \\rfloor$$$; after two operations, we will have $$$4$$$ coins with value $$$\\lfloor \\frac{x}{16} \\rfloor$$$ each, and so on. This can be implemented using a simple while-loop: while the value of our coins is greater than $$$3$$$, we divide it by $$$4$$$ and double the number of coins. This solution works in $$$O(\\log n)$$$.",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "instead of transforming just one coin, we will transform all coins at once",
+              "signal_type": "suggestion",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "This can be implemented using a simple while-loop",
+              "signal_type": "praise",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "This solution works in $$$O(\\log n)$$$",
+              "signal_type": "observation",
+              "polarity": "positive",
+              "rubric_matches": []
+            }
+          ]
+        },
+        {
+          "passage_text": "It is also possible to derive a formula for the answer: the number of times we need to divide a number by $$$4$$$ so it becomes less than $$$4$$$ is $$$\\lfloor \\log_4 n \\rfloor$$$, and the number of coins we will get is $$$2$$$ to the power of that expression. However, you must be very careful with this approach, because it can have severe precision issues due to the fact that standard logarithm functions work with floating-point numbers, so they are imprecise. You should use some way to calculate $$$\\lfloor \\log_4 n \\rfloor$$$ without floating-point calculations; for example, iterating (or binary searching) on the power of $$$4$$$ you need to divide the number by so that it becomes less than $$$4$$$.",
+          "passage_polarity": "mixed",
+          "signals": [
+            {
+              "signal_text": "It is also possible to derive a formula for the answer",
+              "signal_type": "observation",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "you must be very careful with this approach, because it can have severe precision issues",
+              "signal_type": "complaint",
+              "polarity": "negative",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "standard logarithm functions work with floating-point numbers, so they are imprecise",
+              "signal_type": "observation",
+              "polarity": "negative",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "You should use some way to calculate $$$\\lfloor \\log_4 n \\rfloor$$$ without floating-point calculations",
+              "signal_type": "suggestion",
+              "polarity": "negative",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "iterating (or binary searching) on the power of $$$4$$$ you need to divide the number by so that it becomes less than $$$4$$$",
+              "signal_type": "suggestion",
+              "polarity": "positive",
+              "rubric_matches": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "label": "lc_short_approach_summary",
+    "platform": "lc",
+    "problem_id": "minimum-path-cost-in-a-hidden-grid",
+    "difficulty": 0.55,
+    "input": {
+      "unit_id": "lc_2da05641347f578b",
+      "text": "# Approach: Dfs Graph Construction + Heap-Optimized Dijkstra Algorithm\n\nWe observe that the grid size is $m \\times n$, where $m, n \\leq 100$. Therefore, we can initialize the starting coordinates as $(sx, sy) = (100, 100)$ and assume the grid size is $200 \\times 200$. Then, we can use depth-first search (DFS) to explore the entire grid and construct a 2D array $g$ repre\n\nTime: O(m \\times n \\log(m \\times n) | Space: O(m \\times n)"
+    },
+    "output": {
+      "unit_id": "lc_2da05641347f578b",
+      "passages": [
+        {
+          "passage_text": "We observe that the grid size is $m \\times n$, where $m, n \\leq 100$. Therefore, we can initialize the starting coordinates as $(sx, sy) = (100, 100)$ and assume the grid size is $200 \\times 200$. Then, we can use depth-first search (DFS) to explore the entire grid and construct a 2D array $g$ repre",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "the grid size is $m \\times n$, where $m, n \\leq 100$",
+              "signal_type": "observation",
+              "polarity": "neutral",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "we can initialize the starting coordinates as $(sx, sy) = (100, 100)$ and assume the grid size is $200 \\times 200$",
+              "signal_type": "suggestion",
+              "polarity": "positive",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "we can use depth-first search (DFS) to explore the entire grid and construct a 2D array $g$",
+              "signal_type": "suggestion",
+              "polarity": "positive",
+              "rubric_matches": []
+            }
+          ]
+        },
+        {
+          "passage_text": "Time: O(m \\times n \\log(m \\times n) | Space: O(m \\times n)",
+          "passage_polarity": "positive",
+          "signals": [
+            {
+              "signal_text": "Time: O(m \\times n \\log(m \\times n)",
+              "signal_type": "observation",
+              "polarity": "neutral",
+              "rubric_matches": []
+            },
+            {
+              "signal_text": "Space: O(m \\times n)",
+              "signal_type": "observation",
+              "polarity": "neutral",
+              "rubric_matches": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,89 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/3643ca1d0b89.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 13571,
+  "output_tokens": 3424,
+  "elapsed_s": 1924.7358818750363,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and benchmark creators focused on mathematical problem solving and dataset/benchmark evaluation",
+    "subtask_short": "benchmarking mathematical problem solving",
+    "subtask_description": "Creating and evaluating a math-problem-solving benchmark (MATH) for autoregressive language models, including dataset construction, formatting conventions, training/evaluation protocols, and metrics to measure model performance on competition-style math problems.",
+    "subtask_keywords": [
+      "machine_learning",
+      "benchmark",
+      "mathematics",
+      "dataset",
+      "evaluation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Exact-match accuracy via boxed final answer",
+        "description": "Use exact match (rather than heuristic metrics such as BLEU) by requiring models to generate a final boxed answer; the final answers are unique after normalization, allowing automatic exact-match scoring.",
+        "guidance": "Automatic assessment starts by determining the beginning and end of the answer using the \\boxed{} delimiter; evaluate what is inside \\boxed{} and compare with the ground truth answer under the normalization rules described. Exact-match accuracy is the primary metric."
+      },
+      {
+        "name": "Answer formatting and normalization rules",
+        "description": "Force final boxed answers to follow consistent formatting rules so automatically-detected boxed answers can be judged for equivalence.",
+        "guidance": "Specific rules: probabilities expressed as simplified fractions; matrix entry fractions encoded with x/y; other fractions encoded with \\frac{x}{y}; coefficients encoded without a multiplication symbol (e.g., 5x not 5* x); expressions with multiple variables entered in alphabetical order; polynomials in decreasing degree order. Treat different fraction encodings that are equivalent (e.g., \\frac{x}{y} and x/y) as equivalent. Different parenthesis encodings (e.g., \\left( and () are equivalent). Units may be included or omitted; ignore spaces; treat common numeric equivalents (0.5 and 1/2, 0.1 and .1) as the same. When the answer is a factorized polynomial, permit different orderings of factors (e.g., 4(x+1)(x-1) \u2261 4(x-1)(x+1)). These rules cover nearly all practical equivalences for generated and actual solutions."
+      },
+      {
+        "name": "Problem categorization by subject",
+        "description": "Categorize each problem into one of seven subjects so performance can be analyzed by topic.",
+        "guidance": "The seven subjects are Prealgebra, Algebra, Number Theory, Counting and Probability, Geometry, Intermediate Algebra, and Precalculus. Use these subject tags to permit fine-grained assessment across topics."
+      },
+      {
+        "name": "Problem difficulty encoding (1\u20135 following AoPS)",
+        "description": "Assign each problem a difficulty level from '1' to '5' following AoPS conventions so models can be evaluated across difficulty strata.",
+        "guidance": "Difficulty 1 corresponds to a subject's easiest problems for humans (e.g., first problems of an AMC 8), while difficulty 5 corresponds to the subject's hardest problems (e.g., AIME problems). Use these levels to analyze accuracy vs. difficulty."
+      },
+      {
+        "name": "Use of LaTeX and Asymptote for formatting and diagrams",
+        "description": "Format problems and full step-by-step solutions consistently using LaTeX, and encode mathematical figures in Asymptote rather than raster images.",
+        "guidance": "Using LaTeX avoids unusual symbols and enables flexible encoding of math; Asymptote vector graphics are encoded as text so pure language models can process figures/diagrams and be assessed on geometry."
+      },
+      {
+        "name": "Provision of full step-by-step solutions",
+        "description": "Provide every problem with a full step-by-step solution and a final boxed answer so models can be trained to generate derivations and use scratch space.",
+        "guidance": "Train models on sequences that are an equal mix of '(P) Final Answer: <Answer>' and '(P) Full Solution: <Step-by-Step Solution>' to let models both generate final answers and full solutions. Step-by-step solutions enable training-time benefits (pretraining on solutions increases accuracy by ~10% relative to training on Q&A only), partial ground-truth 'hints' (portions of solutions) can improve inference accuracy, but having models generate their own full step-by-step solutions before outputting the final answer currently decreases accuracy at test time (hypothesized snowballing/self-confusion effects)."
+      },
+      {
+        "name": "Evaluation of partial-solution hints",
+        "description": "Assess model ability to use partial ground-truth solutions (hints) by prompting with fractions of the step-by-step solution before asking for the final answer.",
+        "guidance": "Prompting experiments vary the fraction of the solution shown (0% up to 99%); models' accuracy is measured conditional on seeing portions of the solution. Results show that even with 99% of the solution (all but the final answer), models can still fail often (~40% for some models), indicating room for improvement in using hints."
+      },
+      {
+        "name": "Automatic assessment pipeline and localization of answers",
+        "description": "Locate final answers deterministically by parsing the content inside the \\boxed{} command so automated scoring is reliable.",
+        "guidance": "Because final answers are wrapped and delimited with \\boxed{}, the evaluation system can reliably extract the answer text and apply the normalization/equivalence rules for exact-match comparison."
+      },
+      {
+        "name": "Primary dataset split and scale",
+        "description": "Define fixed training and test splits and provide scale information to ensure reproducible evaluation.",
+        "guidance": "MATH contains 12,500 problems: 7,500 training and 5,000 test. The AMPS pretraining corpus contains over 100,000 Khan Academy problems with solutions and ~5 million Mathematica-generated problems (23 GB total)."
+      },
+      {
+        "name": "Human baseline evaluation protocol",
+        "description": "Establish human-level baselines by sampling test problems and imposing controlled conditions for comparison.",
+        "guidance": "Randomly sample 20 problems from the MATH test set, require participants (university students) to have 1 hour to work the problems and to perform calculations by hand; report human accuracies under these constraints to provide context (examples: a CS PhD student ~40%, experienced contestants up to ~90%)."
+      },
+      {
+        "name": "Model confidence and error-detection metrics (AUROC)",
+        "description": "Measure whether model confidence discriminates correct from incorrect answers by defining confidence and computing AUROC.",
+        "guidance": "Define confidence as the average prediction probability of the tokens that make up a generated answer. Compute the AUROC of confidence as a detector: 100% = perfect detection, 50% = random chance. Example: GPT-2 (1.5B) had AUROC ~68.8%, indicating substantial overlap between confidences of correct and incorrect answers and room for improvement in error detection/calibration."
+      },
+      {
+        "name": "Tokenizer and model-specific preprocessing considerations",
+        "description": "Be aware of how tokenizers and model architectures interact with LaTeX/math formatting when designing experiments and preprocessing.",
+        "guidance": "Example notes: GPT-2 tokenizes numbers so that one digit is processed at a time (important for numeric generation); T5's tokenizer removes many LaTeX symbols which harmed performance in development; consider these effects when selecting models and preprocessing steps. When evaluating few-shot settings (GPT-3), prompts were constructed by prepending 8 problems with correct answers and using temperature 0 to output up to 20 tokens for the final answer."
+      },
+      {
+        "name": "Generation/evaluation protocol and hyperparameter recommendations",
+        "description": "Specify generation settings used during evaluation so results are comparable.",
+        "guidance": "Default generation parameters: for GPT-2 use the default HuggingFace parameters except use beam search. Beam size = 20 when generating only the final answer; beam size = 10 when generating full step-by-step solutions. Fine-tuning uses AdamW, batch size 128, weight decay 0.05; pretraining on AMPS for one epoch with upsampling/downsampling (upsample Khan by 5\u00d7, downsample Mathematica by 2\u00d7) as described."
+      }
+    ]
+  }
+}

@@ -5,6 +5,7 @@ from collections import Counter
 import hashlib
 import json
 import re
+import sys
 from typing import Mapping, Sequence
 
 import numpy as np
@@ -100,23 +101,40 @@ def _quoted_spans(text: str) -> set[str]:
 
 def no_verbatim_violations(
     rule: str, demos: Sequence[str], *, corpus_token_counts: Mapping[str, int],
-    max_tokens: int = 64, rare_threshold: int = 5,
-) -> list[str]:
-    """Return fail-closed structural violations for the rule-only arm."""
+    max_tokens: int = 64, rare_threshold: int = 5, with_details: bool = False,
+) -> list[str] | tuple[list[str], list[str]]:
+    """Return fail-closed structural violations for the rule-only arm.
+
+    With ``with_details=True`` also return human-readable evidence strings naming
+    the offending content, so a bounded repair prompt can target it instead of
+    rewriting blind.
+    """
     violations = []
+    details = []
     words = _words(rule)
     if len(words) > int(max_tokens):
         violations.append("token_cap")
+        details.append(f"token_cap: {len(words)} words exceeds the {int(max_tokens)}-word maximum")
     if not rule.rstrip().endswith("?") or rule.count("?") != 1:
         violations.append("single_question_format")
-    if _shared_shingle(rule, demos, 8) is not None:
+        details.append("single_question_format: reply with exactly one question ending in a single '?'")
+    shingle = _shared_shingle(rule, demos, 8)
+    if shingle is not None:
         violations.append("eight_word_demo_shingle")
-    if _lifted_proper_nouns(rule, demos):
+        details.append("eight_word_demo_shingle: remove the copied phrase \"" + " ".join(shingle) + "\"")
+    lifted_nouns = _lifted_proper_nouns(rule, demos)
+    if lifted_nouns:
         violations.append("lifted_proper_noun")
+        details.append("lifted_proper_noun: do not use " + ", ".join(sorted(lifted_nouns)[:8]))
     rule_quotes = _quoted_spans(rule)
     demo_quotes = set().union(*(_quoted_spans(text) for text in demos)) if demos else set()
-    if rule_quotes.intersection(demo_quotes):
+    lifted_quotes = rule_quotes.intersection(demo_quotes)
+    if lifted_quotes:
         violations.append("lifted_quote")
+        details.append(
+            "lifted_quote: remove the quoted span(s) "
+            + "; ".join(f'"{value}"' for value in sorted(lifted_quotes)[:4])
+        )
     demo_tokens = set(token for text in demos for token in _lower_words(text))
     lifted_rare = {
         token for token in _lower_words(rule)
@@ -125,6 +143,13 @@ def no_verbatim_violations(
     }
     if lifted_rare:
         violations.append("lifted_rare_token")
+        details.append(
+            "lifted_rare_token: replace the corpus-specific word(s) "
+            + ", ".join(sorted(lifted_rare)[:12])
+            + " with general vocabulary"
+        )
+    if with_details:
+        return sorted(set(violations)), details
     return sorted(set(violations))
 
 
@@ -172,11 +197,16 @@ def blind_prompt(*, template: str, noun: str, arm: str) -> str:
     )
 
 
-def _repair_prompt(rule: str, violations: Sequence[str]) -> str:
+def _repair_prompt(rule: str, violations: Sequence[str], details: Sequence[str] = ()) -> str:
+    guidance = "\n".join(f"- {line}" for line in details) if details else (
+        "- " + ", ".join(violations)
+    )
     return (
         "Rewrite the candidate below as exactly one short general rubric question, maximum 64 "
         "tokens. Do not quote or copy examples, proper nouns, or rare corpus-specific words. "
-        f"The rejected constraint codes were: {', '.join(violations)}. Reply only with the question.\n\n"
+        "Keep the same evaluative meaning while fixing every issue listed:\n"
+        f"{guidance}\n"
+        "Reply only with the question.\n\n"
         f"CANDIDATE:\n{rule}"
     )
 
@@ -200,9 +230,16 @@ def _generate(constructor, prompts: Sequence[str], seeds: Sequence[int], *, max_
 
 def induce_requests(
     constructor, *, requests: Sequence[Mapping[str, object]], store: EvidenceCellStore,
-    corpus_counts: Mapping[str, int], max_repairs: int = 2,
+    corpus_counts: Mapping[str, int], max_repairs: int = 4,
 ) -> dict[str, dict]:
-    """Induce only missing cells, with bounded no-verbatim repair."""
+    """Induce only missing cells, with bounded batched no-verbatim repair.
+
+    A cell whose rule still violates the no-verbatim constraints after
+    ``max_repairs`` targeted repair rounds is stored as a VOID artifact
+    (fail closed, recorded) rather than aborting the stage: one criterion's
+    unparaphrasable vocabulary must not destroy the campaign. Downstream
+    consumers must skip rows carrying ``"void": True``.
+    """
     output = {}
     missing = []
     for request in requests:
@@ -216,42 +253,61 @@ def induce_requests(
         constructor, [str(row["prompt"]) for row in missing],
         [_seed(str(row["cache_key"])) for row in missing],
     )
-    for position, request in enumerate(missing):
-        rule = rules[position]
-        repair_attempts = 0
-        violations = (
-            no_verbatim_violations(
-                rule, request["example_texts"], corpus_token_counts=corpus_counts,
-            ) if request["arm"] == "no_verbatim_examples" else []
+    by_key = {str(request["cache_key"]): request for request in missing}
+    current = {
+        str(request["cache_key"]): rule for request, rule in zip(missing, rules)
+    }
+    attempts = {key: 0 for key in by_key}
+
+    def _check(key: str) -> tuple[list[str], list[str]]:
+        request = by_key[key]
+        if request["arm"] != "no_verbatim_examples":
+            return [], []
+        return no_verbatim_violations(
+            current[key], request["example_texts"],
+            corpus_token_counts=corpus_counts, with_details=True,
         )
-        for attempt in range(int(max_repairs)):
-            if not violations:
-                break
-            rule = _generate(
-                constructor, [_repair_prompt(rule, violations)],
-                [_seed(str(request["cache_key"]), attempt + 1)],
-            )[0]
-            repair_attempts += 1
-            violations = no_verbatim_violations(
-                rule, request["example_texts"], corpus_token_counts=corpus_counts,
-            )
-        if violations:
-            raise RuntimeError(
-                "no-verbatim induction failed closed after bounded repairs: "
-                + ",".join(violations)
-            )
-        rule_sha = hashlib.sha256(rule.encode("utf-8")).hexdigest()
-        payload = store.put(str(request["cache_key"]), "induction", {
+
+    pending = {key: found for key in by_key if (found := _check(key))[0]}
+    for _ in range(int(max_repairs)):
+        if not pending:
+            break
+        round_keys = sorted(pending)
+        repaired = _generate(
+            constructor,
+            [_repair_prompt(current[key], *pending[key]) for key in round_keys],
+            [_seed(key, attempts[key] + 1) for key in round_keys],
+        )
+        next_pending = {}
+        for key, rule in zip(round_keys, repaired):
+            attempts[key] += 1
+            current[key] = rule
+            found = _check(key)
+            if found[0]:
+                next_pending[key] = found
+        pending = next_pending
+
+    for key, request in by_key.items():
+        base = {
             "arm": str(request["arm"]),
             "panel_sha256": str(request["panel_sha256"]),
             "state": int(request["state"]),
             "template_sha256": str(request["template_sha256"]),
-            "rule": rule,
-            "rule_sha256": rule_sha,
             "no_verbatim_enforced": request["arm"] == "no_verbatim_examples",
-            "repair_attempts": int(repair_attempts),
-        })
-        output[str(request["cache_key"])] = payload
+            "repair_attempts": int(attempts[key]),
+        }
+        if key in pending:
+            payload = store.put(key, "induction", {
+                **base, "rule": "", "rule_sha256": "",
+                "void": True, "void_violations": list(pending[key][0]),
+            })
+        else:
+            rule = current[key]
+            payload = store.put(key, "induction", {
+                **base, "rule": rule,
+                "rule_sha256": hashlib.sha256(rule.encode("utf-8")).hexdigest(),
+            })
+        output[key] = payload
     return output
 
 
@@ -291,14 +347,41 @@ def execute_rule_probe_cells(
             raise RuntimeError("executor returned incomplete or non-finite rule/probe cells")
         for item, score in zip(batch, scores):
             rule_sha, _, index, _, probe_sha, key = item
-            payload = store.put(key, "rule_probe", {
-                "rule_sha256": rule_sha,
-                "probe_sha256": probe_sha,
-                "p_yes": float(score),
-                "hard_prediction": int(score > 0.5),
-                "executor_revision": str(executor_revision),
-                "readout_id": str(readout_id),
-            })
+            # Concurrent shards can execute the same (rule, probe) cell (shared
+            # control states) independently; vLLM batching is not bit-exact
+            # across different batch compositions, so raw floats can differ in
+            # the last few digits between shards. Quantize before hashing so
+            # equivalent cells agree instead of tripping the disagreement guard.
+            p_yes = round(float(score), 6)
+            try:
+                payload = store.put(key, "rule_probe", {
+                    "rule_sha256": rule_sha,
+                    "probe_sha256": probe_sha,
+                    "p_yes": p_yes,
+                    "hard_prediction": int(p_yes > 0.5),
+                    "executor_revision": str(executor_revision),
+                    "readout_id": str(readout_id),
+                })
+            except RuntimeError:
+                # Two shards raced the same missing cell. Had this shard polled
+                # the store a moment later it would have taken the cached value
+                # via the get() above — so accepting the first-written cell is
+                # identical to the ordinary cache-hit path and keeps the frozen
+                # instrument value stable. vLLM scores drift with batch
+                # composition (deltas up to a few percent observed), so exact
+                # re-execution agreement is not a valid invariant here. Every
+                # collision is logged with its delta for post-hoc audit.
+                stored = store.get(key)
+                if stored is None:
+                    raise
+                delta = abs(float(stored["p_yes"]) - p_yes)
+                print(
+                    f"[rule_probe collision] key={key[:16]} stored={stored['p_yes']:.6f} "
+                    f"ours={p_yes:.6f} delta={delta:.6f} "
+                    f"hard_flip={int(stored['hard_prediction']) != int(p_yes > 0.5)}",
+                    file=sys.stderr, flush=True,
+                )
+                payload = stored
             rows[(rule_sha, index)] = payload
     return rows
 
@@ -324,12 +407,14 @@ def evaluate_behavioral_state_tables_v14(
     templates: Mapping[str, str] | None = None, max_chars: int = 600,
     query_batch_size: int = 2048, induction_only: bool = False,
     probe_embeddings: np.ndarray | None = None,
+    state_indices_by_panel: Sequence[Sequence[int]] | None = None,
 ) -> dict:
-    """Enumerate and value all 256 states for both declared behavioral arms."""
+    """Value exhaustive CERT states or the declared observed-only FAST states."""
     panels = list(design_manifest["panels"])
     panel_size = int(design_manifest["panel_size"])
-    if panel_size != 8:
-        raise ValueError("v14 behavioral channel is frozen at k=8")
+    if panel_size not in {6, 8}:
+        raise ValueError("v14 behavioral supports frozen k=6 fan-out and k=8 sentinels")
+    n_states = 1 << panel_size
     heldout = list(map(int, heldout_indices))
     teaching = set(map(int, design_manifest["teaching_indices"]))
     if teaching.intersection(heldout):
@@ -362,12 +447,33 @@ def evaluate_behavioral_state_tables_v14(
     requests = []
     request_keys = {}
     states = enumerate_states(panel_size)
+    requested_by_panel = []
+    scored_by_panel = []
+    for panel_position, panel in enumerate(panels):
+        requested = (
+            set(range(n_states)) if state_indices_by_panel is None
+            else set(map(int, state_indices_by_panel[panel_position]))
+        )
+        if not requested or min(requested) < 0 or max(requested) >= n_states:
+            raise ValueError("behavioral requested state lies outside the panel code space")
+        # Only the originally requested lane states are SCORED. The shuffled control
+        # partners are appended to the induction set so each scored state's control
+        # rule exists, but they are not themselves scored: shuffled_state is a bit
+        # rotation (not an involution), so the control of a control generally lies
+        # outside the requested set and must not be demanded by the fill loop.
+        scored_by_panel.append(sorted(requested))
+        requested.update(
+            shuffled_state(state, panel_size, str(panel["panel_sha256"]))
+            for state in list(requested)
+        )
+        requested_by_panel.append(sorted(requested))
     for arm in BEHAVIORAL_ARMS:
         template_sha = canonical_template_sha256(template_map[arm])
         for panel_position, panel in enumerate(panels):
             indices = list(map(int, panel["indices"]))
             texts = [str(probe_texts[index]) for index in indices]
-            for state, labels in enumerate(states):
+            for state in requested_by_panel[panel_position]:
+                labels = states[state]
                 prompt = induction_prompt(
                     template=template_map[arm], noun=noun, texts=texts,
                     labels=labels.tolist(), max_chars=max_chars, arm=arm,
@@ -403,7 +509,9 @@ def evaluate_behavioral_state_tables_v14(
     rules = {
         str(row["rule_sha256"]): str(row["rule"])
         for row in induced.values()
+        if not row.get("void") and str(row.get("rule_sha256", ""))
     }
+    n_void = sum(1 for row in induced.values() if row.get("void"))
     if induction_only:
         return {
             "schema": STATE_TABLE_SCHEMA,
@@ -412,6 +520,7 @@ def evaluate_behavioral_state_tables_v14(
             "panel_design_sha256": str(design_manifest["design_sha256"]),
             "decoder_revision": str(decoder_revision),
             "n_induction_cells": len(induced),
+            "n_void_induction_cells": int(n_void),
             "n_distinct_rules": len(rules),
         }
     if executor is None:
@@ -424,14 +533,24 @@ def evaluate_behavioral_state_tables_v14(
 
     arms = {}
     for arm in BEHAVIORAL_ARMS:
-        raw_mi = np.empty((len(panels), 256), dtype=float)
-        balanced = np.empty_like(raw_mi)
-        shuffled_mi = np.empty_like(raw_mi)
-        raw_lift = np.empty_like(raw_mi)
-        rule_sha_table = np.empty((len(panels), 256), dtype="U64")
-        near_lift = np.empty_like(raw_mi) if transfer_strata is not None else None
-        far_lift = np.empty_like(raw_mi) if transfer_strata is not None else None
+        raw_mi = np.full((len(panels), n_states), np.nan, dtype=float)
+        balanced = np.full_like(raw_mi, np.nan)
+        shuffled_mi = np.full_like(raw_mi, np.nan)
+        raw_lift = np.full_like(raw_mi, np.nan)
+        rule_sha_table = np.full((len(panels), n_states), "", dtype="U64")
+        hard_predictions = np.full(
+            (len(panels), n_states, len(h_texts)), -1, dtype=np.int8,
+        )
+        near_lift = np.full_like(raw_mi, np.nan) if transfer_strata is not None else None
+        far_lift = np.full_like(raw_mi, np.nan) if transfer_strata is not None else None
         blind_row = induced[request_keys[(arm, -1, -1)]]
+        if blind_row.get("void"):
+            # The blind control sees no demos, so only format constraints can void
+            # it; a void blind row is an instrument failure, not a metric property.
+            raise RuntimeError(
+                f"blind induction voided for arm {arm}: "
+                + ",".join(map(str, blind_row.get("void_violations", [])))
+            )
         blind_sha = str(blind_row["rule_sha256"])
         blind_prediction = np.asarray([
             executions[(blind_sha, index)]["hard_prediction"] for index in range(len(h_texts))
@@ -447,21 +566,28 @@ def evaluate_behavioral_state_tables_v14(
                 blind_far = plugin_binary_mutual_information(
                     target[far_positions], blind_prediction[far_positions]
                 )
-            for state in range(256):
+            for state in scored_by_panel[panel_position]:
                 row = induced[request_keys[(arm, panel_position, state)]]
-                rule_sha = str(row["rule_sha256"])
                 shuffled = shuffled_state(state, panel_size, str(panel["panel_sha256"]))
-                shuffled_sha = str(induced[
-                    request_keys[(arm, panel_position, shuffled)]
-                ]["rule_sha256"])
+                shuffled_row = induced[request_keys[(arm, panel_position, shuffled)]]
+                if row.get("void") or shuffled_row.get("void"):
+                    # Void cells stay NaN and drop out of observed_state_mask.
+                    continue
+                rule_sha = str(row["rule_sha256"])
+                shuffled_sha = str(shuffled_row["rule_sha256"])
                 prediction = np.asarray([
                     executions[(rule_sha, index)]["hard_prediction"]
                     for index in range(len(h_texts))
                 ], dtype=np.uint8)
+                hard_predictions[panel_position, state] = prediction
                 shuffled_prediction = np.asarray([
                     executions[(shuffled_sha, index)]["hard_prediction"]
                     for index in range(len(h_texts))
                 ], dtype=np.uint8)
+                # The aggregate's permutation null recomputes mi[control] from this
+                # table, so the shuffled partner's predictions must be persisted
+                # too (they are induced+executed above but are not lane states).
+                hard_predictions[panel_position, shuffled] = shuffled_prediction
                 raw_mi[panel_position, state] = plugin_binary_mutual_information(target, prediction)
                 balanced[panel_position, state] = balanced_agreement(target, prediction)
                 shuffled_mi[panel_position, state] = plugin_binary_mutual_information(
@@ -500,7 +626,16 @@ def evaluate_behavioral_state_tables_v14(
             "blind_balanced_agreement": balanced_agreement(target, blind_prediction),
             "target_entropy_bits": binary_entropy_bits(target),
             "rule_sha256": rule_sha_table,
-            "n_distinct_rules": int(len(set(rule_sha_table.ravel().tolist()))),
+            "hard_predictions": hard_predictions,
+            "blind_hard_prediction": blind_prediction,
+            "observed_state_mask": np.isfinite(raw_lift),
+            "n_distinct_rules": int(len(set(
+                value for value in rule_sha_table.ravel().tolist() if value
+            ))),
+            "n_void_induction_cells": int(sum(
+                1 for (row_arm, _, _), cell_key in request_keys.items()
+                if row_arm == arm and induced[cell_key].get("void")
+            )),
             "template_sha256": canonical_template_sha256(template_map[arm]),
         }
         if transfer_strata is not None:
@@ -518,6 +653,7 @@ def evaluate_behavioral_state_tables_v14(
         "decoder_revision": str(decoder_revision),
         "executor_revision": str(executor_revision),
         "readout_id": str(readout_id),
+        "state_scope": "exhaustive" if state_indices_by_panel is None else "observed_only",
         "heldout_indices": heldout,
         "heldout_sha256": hashlib.sha256(json.dumps(heldout).encode("utf-8")).hexdigest(),
         "near_far_transfer": (

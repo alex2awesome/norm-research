@@ -1,0 +1,166 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 12,
+  "n_chunks": 41,
+  "chunk_chars": 39957,
+  "model": "gpt-5-mini",
+  "elapsed_s": 106.64295591700647,
+  "input_tokens": 11872,
+  "output_tokens": 4764,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Magma users writing and testing user intrinsics, package files, and using the Magma online help (beginner to intermediate programmers)",
+    "subtask_short": "writing Magma intrinsics and packages",
+    "subtask_description": "Guidelines and requirements for implementing, testing and packaging user intrinsics in the Magma system (error checking, signatures, spec files, imports), plus instructions for using the Magma online help/browser.",
+    "subtask_keywords": [
+      "magma",
+      "intrinsic",
+      "package",
+      "error_handling",
+      "spec_file",
+      "help_browser"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Signatures detect wrong argument category",
+        "description": "Argument types given in intrinsic signatures cause wrong argument categories to be detected immediately (e.g., intrinsic LowerToUpperCase(s::MonStgElt) will error if passed a non-string).",
+        "guidance": "Example: calling LowerToUpperCase(4/7) produces a runtime error 'Bad argument types'. Use signatures to rely on automatic category/type checking for arguments."
+      },
+      {
+        "name": "Aggregate argument element-type checking",
+        "description": "If an argument is an aggregate type (e.g. a sequence or set) the category/type of its elements should be tested as well.",
+        "guidance": "Example: SequenceToString(q) has signature (<SeqEnum[MonStgElt]> q) and will error if q is not a sequence or if elements are not strings."
+      },
+      {
+        "name": "Use require-statement for general argument/parameter checks",
+        "description": "The require-statement tests any user-specified condition and, if false, stops execution and prints a message and the values of expressions.",
+        "guidance": "Syntax: require condition: expression list; If condition is false, Magma prints 'Runtime error in <intrinsic>: <message>' and displays the expression list (often a literal string)."
+      },
+      {
+        "name": "Use requirerange for integer range checks",
+        "description": "Use requirerange v, L, U ; to verify an integer v lies in the closed interval [L .. U].",
+        "guidance": "If L \u2264 v \u2264 U nothing happens; otherwise Magma prints an error message stating the problem (example: requirerange n, 0, 80; )."
+      },
+      {
+        "name": "Use requirege for lower-bound integer checks",
+        "description": "Use requirege v, L; to verify integer v \u2265 L.",
+        "guidance": "If v \u2265 L nothing happens; otherwise Magma prints an error message stating the problem (example: requirege n, 1; )."
+      },
+      {
+        "name": "Include an expression list to give informative error output",
+        "description": "The expression list after require allows printing values (often a literal string) to help the user understand the runtime error.",
+        "guidance": "Common pattern: require condition: \"Descriptive error message\"; or include more expressions like require #c eq 1: \"Argument 1 (\", c, \") should be a single string character\";"
+      },
+      {
+        "name": "Validate string character sets with require",
+        "description": "When converting or manipulating strings, check that characters belong to the expected subset before proceeding.",
+        "guidance": "Example: q := [ STC(c) : c in StringToSequence(s) ]; require q subset [STC(\"a\")..STC(\"z\")]: \"String characters must be a, ..., z\";"
+      },
+      {
+        "name": "Check divisors to avoid division by zero",
+        "description": "Ensure any argument used as a divisor is checked (e.g., require b ne 0) to prevent division-by-zero runtime errors.",
+        "guidance": "Example recommendation: add require b ne 0: \"Argument 2 cannot be 0\"; in EuclideanAlgorithm after the comment."
+      },
+      {
+        "name": "Parameters in signatures are untyped \u2014 check them by hand",
+        "description": "Parameters (named/optional parameters) do not have types given in the signature, so their category/type must be validated explicitly inside the intrinsic.",
+        "guidance": "Example: require Category(Al) eq MonStgElt: \"Parameter Al not a string\"; require Category(n) eq RngIntElt: \"Parameter n not an integer\";"
+      },
+      {
+        "name": "Check parameter membership against allowed choices",
+        "description": "Verify that a string parameter takes one of the permitted values before using it.",
+        "guidance": "Example: require Al in {\"Trapezoid\", \"Simpson\"}: \"Parameter Al must be \\\"Trapezoid\\\" or \\\"Simpson\\\"\";"
+      },
+      {
+        "name": "Ensure integer-typed parameters and bounds",
+        "description": "For integer parameters, assert both the category and any required bounds (e.g., n is integer and n \u2265 1).",
+        "guidance": "Combine checks: require Category(n) eq RngIntElt: \"Parameter n not an integer\"; requirege n, 1;"
+      },
+      {
+        "name": "Do not rely on automatic coercion into RealField",
+        "description": "Arguments that are elements of the real field must be supplied explicitly as such; integers and rationals will not be coerced automatically into the real field.",
+        "guidance": "Example failure: calling Quadrature(Sin, 2, 5.3) produces 'Runtime error in Quadrature: Bad argument types' \u2014 supply 2.0 not 2."
+      },
+      {
+        "name": "Spec file structure: filenames and directory trees",
+        "description": "A package spec file is a list of filenames in a tree format; items may be filenames or directory name followed by { items } to indicate contained files/directories.",
+        "guidance": "Filenames are relative to the directory containing the spec file; separate filenames by whitespace and it is conventional (but not required) to put them on separate lines. Example shown with nested Grp { genlpck FP { ord1 ord2 } }."
+      },
+      {
+        "name": "Indentation in spec files is optional but helpful",
+        "description": "Indentation is not essential for spec files, but useful to indicate tree structure to the reader.",
+        "guidance": "The parser uses braces and whitespace; use indentation only for human readability."
+      },
+      {
+        "name": "Attach spec files with AttachSpec and detach with DetachSpec",
+        "description": "Use AttachSpec(F) to incorporate all package files named in spec file F into the current Magma session; use DetachSpec(F) to remove them.",
+        "guidance": "Attaching a spec file has same effect as attaching all package files specified in it. If package files change, intrinsics update automatically; if the spec file itself changes you must detach and re-attach."
+      },
+      {
+        "name": "Use MAGMA_USER_SPEC to auto-attach spec files at startup",
+        "description": "Set the environment variable MAGMA_USER_SPEC to a colon-separated list of full pathnames of spec files to have them attached automatically at Magma startup.",
+        "guidance": "Typical usage in .cshrc: setenv MAGMA_USER_SPEC \"$HOME/Magma/spec:/home/friend/specp\""
+      },
+      {
+        "name": "Make start-up spec packages frozen for performance",
+        "description": "Packages included in a start-up spec file should be made frozen to slightly decrease execution time.",
+        "guidance": "Frozen packages do not auto-update when edited; bear this in mind during development/testing (unfrozen packages update automatically)."
+      },
+      {
+        "name": "Use import to share constants/identifiers among package files",
+        "description": "In a package file P, use import \"filename\" : identifier list; to bring identifiers from another package file into P with the same names and values.",
+        "guidance": "The named file must be included in the same spec file and attached when P is attached. If the source file changes later, automatic updating takes place in the context P."
+      },
+      {
+        "name": "Prefer import over duplicating constants across packages",
+        "description": "Importing identifiers from a single definitions file is preferable to keeping separate copies of constants in each package file.",
+        "guidance": "Example: keep Z := IntegerRing(); R := RealField(); in mydefs and in other files use import \"mydefs\" : Z, R;"
+      },
+      {
+        "name": "Intrinsics update automatically when package files change (unless frozen)",
+        "description": "When a package file is edited and saved, attached intrinsics from that package are updated automatically in the session; if the package was frozen, this automatic update does not occur.",
+        "guidance": "Example: Attach(\"mypck1\"); edit mypck1 and save; subsequent calls use the updated intrinsic without needing to re-attach."
+      },
+      {
+        "name": "Single online help requests (use ? )",
+        "description": "Use a single ? followed by a word (or ? alone) to request online help without entering the browser. If one node matches the word that node is shown; if several match they are listed with numbers.",
+        "guidance": "Do not end help requests with a semicolon. To view a listed node type ? followed by its number (e.g., ?6). Typing ? alone gives information about the help system."
+      },
+      {
+        "name": "Enter the online help browser with ??",
+        "description": "Type ?? from within Magma to enter the Magma Help Browser; the prompt becomes ??> and browser commands are used (not Magma statements).",
+        "guidance": "Browser commands should not be followed by semicolons. Exit the browser with quit, exit or Ctrl-D."
+      },
+      {
+        "name": "Browser navigation commands and node display",
+        "description": "Browser provides commands such as ls (list children), show (display node), where/pwd (current node), goto/cd (change node), up (parent), walk/back (traverse nodes).",
+        "guidance": "When show displays a node it prints PATH and KIND and lists subnodes and cross-references; 'show' by itself shows the current node."
+      },
+      {
+        "name": "Finding help nodes: find, delve, search",
+        "description": "Use find word to look for nodes referenced by the word (case-insensitive); use delve to search only at or below the current node; use search for exhaustive substring searches.",
+        "guidance": "Topics are named as singular nouns (use 'polynomial' not 'polynomials'). Output of find/search is a numbered list of pathnames \u2014 view an entry by typing its number."
+      },
+      {
+        "name": "Kinds of help nodes and their intended use",
+        "description": "Help nodes have kinds: Overview (O), Section (S), Intrinsic (I) and Example (E). Overview nodes are purpose-written for beginners and are concise.",
+        "guidance": "You can restrict searches to node kinds using ofind/sfind/ifind/efind to focus on Overviews, Sections, Intrinsics or Examples respectively."
+      },
+      {
+        "name": "Cross-references in help nodes",
+        "description": "Nodes may include cross-references listed with special + numbers; these can be followed by +<number> at the browser prompt to view the referenced node.",
+        "guidance": "Cross-references often occur in SEE ALSO sections or inline (e.g., 'See [+1]'); type '+1' to follow the reference."
+      },
+      {
+        "name": "Tab completion in the browser",
+        "description": "On most systems pressing the tab key attempts to complete the current word against commands, references or pathnames; if multiple matches exist it expands to the common prefix and can list possibilities on a second press.",
+        "guidance": "If tab completion is not available, use search as the best substitute. If there are no possibilities the shell may beep."
+      }
+    ]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "schema_version": "silver-match-v3-content-gepa-policy-v1",
+  "status": "POLICY_FROZEN_BEFORE_NEW_CONTENT_TASK_PREDICTIONS_OR_LABELS",
+  "frozen_date": "2026-07-12",
+  "scope": [
+    "press-releases",
+    "creative-writing",
+    "peer-review",
+    "legal-outcome-prediction"
+  ],
+  "scientific_contract": {
+    "primary_target": "exact current-bank metric_id",
+    "family_target": "separately versioned sensitivity only",
+    "selection_inputs": "canonical identity and source_group only",
+    "required_upstream_split_for_new_gepa_packs": "train",
+    "one_norm_per_source_group": true,
+    "exclude_from_retriever_gradients": true,
+    "exclude_from_mi_and_outcome_estimation": true,
+    "sealed_tests_may_be_touched": false,
+    "downstream_outcomes_may_be_read": false,
+    "failed_or_consumed_dev_rows_may_be_reused_for_selection": false,
+    "parse_failures_are_unresolved": true,
+    "thresholds_may_be_lowered_after_observing_results": false
+  },
+  "mandatory_exclusion_classes": [
+    "all manual calibration train/dev/test rows",
+    "all Sonnet or other LLM teacher rows used for retriever training",
+    "all prior adjudicator GEPA optimize/dev/test rows",
+    "all prior verifier GEPA optimize/dev/test rows",
+    "all semantic resolver and tie-break rows",
+    "all permanent blind-audit rows",
+    "all frozen or quarantined test rows by UID and source_group",
+    "all outcome-linked or MI-analysis rows"
+  ],
+  "new_panel_design": {
+    "press-releases": {
+      "optimize_count": 120,
+      "select_count": 240,
+      "minimum_per_corpus": 0,
+      "priority": 1
+    },
+    "creative-writing": {
+      "optimize_count": 120,
+      "select_count": 240,
+      "minimum_per_corpus": 12,
+      "priority": 2
+    },
+    "peer-review": {
+      "optimize_count": 160,
+      "select_count": 300,
+      "minimum_per_corpus": 0,
+      "priority": 3
+    },
+    "legal-outcome-prediction": {
+      "optimize_count": 200,
+      "select_count": 360,
+      "minimum_per_corpus": 8,
+      "priority": 4
+    }
+  },
+  "adjudicator_policy": {
+    "candidate_depth": 50,
+    "optimize_orders": [
+      "original",
+      "hashed"
+    ],
+    "select_orders": [
+      "original",
+      "hashed",
+      "reverse"
+    ],
+    "production_match_requires_exact_order_consensus": true,
+    "production_match_requires_no_parse_error": true,
+    "production_match_requires_metric_in_frozen_bank": true,
+    "prompt_choice_uses_optimize_only": true,
+    "select_pack_can_choose_policy_but_not_rewrite_prompt": true
+  },
+  "verifier_policy": {
+    "eligible_policies": [
+      "original_and_hashed_exact_high",
+      "all_three_orders_exact_high"
+    ],
+    "minimum_retained": 20,
+    "minimum_point_precision": 0.9,
+    "minimum_wilson_95_lower": 0.8,
+    "selection_order": [
+      "higher_wilson_95_lower",
+      "higher_point_precision",
+      "higher_recall_of_correct_proposals",
+      "higher_retained_support"
+    ],
+    "independent_blind_audit_required_before_production_claim": true
+  },
+  "abstention_policy": {
+    "types": [
+      "NO_EXPLICIT_CRITERION",
+      "GENERIC_VERDICT",
+      "CONTEXT_NEEDED",
+      "NOISE",
+      "MATCH_FAMILY_ONLY",
+      "NO_CANDIDATE_FITS"
+    ],
+    "automatic_acceptance_requires_identical_type_all_three_orders_high": true,
+    "automatic_acceptance_requires_repeated_full_bank_capture": true,
+    "possible_exact_bank_match_is_unresolved": true,
+    "disagreement_or_low_confidence_is_unresolved": true,
+    "false_abstention_claim_requires_blind_one_sided_95_upper_below": 0.05
+  },
+  "openrouter_plan": {
+    "allowed_use": "small frozen optimize/select GEPA only; never full production",
+    "api_base_url": "https://openrouter.ai/api/v1",
+    "api_key_file": "~/.openrouter-api-key.txt",
+    "model": "google/gemma-4-31b-it",
+    "temperature": 0.0,
+    "concurrency": 8,
+    "parse_retry_allowance_fraction": 0.2,
+    "hard_request_cap_per_invocation": "ceil(1.2 * exact frozen eligible row count)",
+    "hard_request_cap_per_task": 3000,
+    "hard_request_cap_all_four_tasks": 9000,
+    "task_order": [
+      "press-releases",
+      "creative-writing",
+      "peer-review",
+      "legal-outcome-prediction"
+    ],
+    "stop_conditions": [
+      "request cap reached",
+      "input or output hash drift",
+      "non-train/dev split role",
+      "sealed-test reference",
+      "missing exclusion audit",
+      "candidate bank or manifest mismatch"
+    ]
+  },
+  "known_press_release_evidence": {
+    "model_root": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context",
+    "dev_candidates": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/candidates/dev.frozen-retriever.top50.jsonl",
+      "observed_sha256_prefix_to_reverify": "c5e0e7e4"
+    },
+    "dev_manual_panel": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/panels/dev.manual.jsonl",
+      "observed_sha256_prefix_to_reverify": "840fd87f"
+    },
+    "adjudicator_selection": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa/SELECTION.dev-only.json",
+    "failed_verifier_pack_root": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/verifier_calibration_pr_dev_v1/press-releases",
+    "failed_verifier_truth_observed_sha256_prefix_to_reverify": "a7ae30e1",
+    "failed_r3_high_only": {
+      "retained": 29,
+      "precision": 0.6207,
+      "wilson_95_lower": 0.44,
+      "status": "REJECTED_AND_CONSUMED"
+    },
+    "quarantined_test_record": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/PR_ADJUDICATOR_TEST.UNAVAILABLE_PRESELECTION_MATERIALIZATION.json",
+      "sha256": "595cd0d8925bd201433bfd5e6c386d7c034f1c2db998f1758beafe2c20e2e7c2",
+      "policy": "never inspect, score, quote, tune on, or replace"
+    }
+  },
+  "unresolved_path_contract": {
+    "tasks": [
+      "creative-writing",
+      "peer-review",
+      "legal-outcome-prediction"
+    ],
+    "status": "DISCOVER_AND_HASH_AUDIT_ON_SK3_BEFORE_MATERIALIZATION",
+    "may_guess_paths": false,
+    "required_artifacts": [
+      "canonical task norm paths from the faithful manifest",
+      "frozen retriever selection and task bank",
+      "all prior calibration/GEPA/verifier/audit identity panels",
+      "candidate slates for selected identities"
+    ]
+  }
+}

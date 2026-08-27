@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_ec7d3bafb1d6.html",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "wavee_ec7d3bafb1d6.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39952,
+  "model": "gpt-5-mini",
+  "elapsed_s": 38.4212355419877,
+  "input_tokens": 19109,
+  "output_tokens": 3814,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on patent prosecution automation (patent attorneys, recommender/LLM system developers, and applied AI researchers)",
+    "subtask_short": "automating responses to Office Actions",
+    "subtask_description": "Designing, evaluating, and deploying systems (recommender + LLM) to assist patent attorneys in drafting responses to Office Actions (OA), including dataset construction, embedding/extraction methods, recommendation ranking, and human evaluation.",
+    "subtask_keywords": [
+      "patent_prosecution",
+      "office_action_response",
+      "recommender_systems",
+      "llm",
+      "user_study"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Precision@k",
+        "description": "Precision@k \u2014 used to assess non-hybrid recommender systems (reported as percentages, e.g., precision@10).",
+        "guidance": "Reported in the experiments (precision@10). Used to quantify how many of the top-k recommended templates are relevant; CF increases precision by recommending templates based on similar attorneys' past behaviors."
+      },
+      {
+        "name": "Recall@k",
+        "description": "Recall@k \u2014 used to assess non-hybrid recommender systems (reported as percentages, e.g., recall@10).",
+        "guidance": "Reported in the experiments (recall@10). CB (content-based) tends to yield higher recall due to emphasis on document similarity and greater diversity/coverage; CF often yields lower recall because it focuses on attorney preference."
+      },
+      {
+        "name": "nDCG@k",
+        "description": "nDCG@k \u2014 normalized discounted cumulative gain at k, reported as a percentage (e.g., nDCG@10).",
+        "guidance": "Assesses ranking quality of top-k recommendations by accounting for graded relevance and position. Report alongside precision@k and recall@k."
+      },
+      {
+        "name": "Report median and mean metrics for hybrid systems",
+        "description": "For hybrid systems, report both median and mean precision@k, recall@k, and nDCG@k across all topics.",
+        "guidance": "Hybrid-system performance is summarized by median (and mean) metrics across topics to capture topic-level variability (the paper reports median (mean) values in tables)."
+      },
+      {
+        "name": "Top-k selection (k=10)",
+        "description": "Use top-k = 10 recommended templates (k = 10) for analysis and visualization.",
+        "guidance": "The experiments extract the top k templates T_refined,ci and use k = 10 for analyzing embedding relationships, nearest neighbors, and reporting precision/recall/nDCG@10."
+      },
+      {
+        "name": "Embedding extraction method choice (Sentence-BERT vs LLM embeddings)",
+        "description": "Content-based (CB) embeddings can be extracted using traditional LM methods (e.g., Sentence-BERT as in PARIS) or LLM-based embeddings (e.g., GPT-3 text-embedding-ada-002 as in LE-PARIS).",
+        "guidance": "LE-PARIS (LLM-based embeddings) demonstrated stronger semantic understanding and higher recall@10 in experiments. When documents are large, perform syntactic and semantic segmentation and then combine embeddings due to token limitations of embedding APIs/models."
+      },
+      {
+        "name": "Segmentation of large documents for embedding extraction",
+        "description": "When documents exceed token limits, conduct syntactic and semantic segmentation and then combine their embeddings.",
+        "guidance": "Necessary for LLM-based embedding extraction (token limits); ensures representation of large OA documents by merging segment embeddings."
+      },
+      {
+        "name": "Collaborative Filtering algorithms selection (ALS, BPR, BiVAE)",
+        "description": "Use matrix factorization-based algorithms (ALS and BPR) and autoencoder algorithms (BiVAE) for CF.",
+        "guidance": "BPR showed superior recall@10, precision@10, and nDCG@10 in CF experiments. CF boosts precision by leveraging patterns of similar attorneys but can reduce coverage/recall."
+      },
+      {
+        "name": "Tradeoff: CF precision vs CB recall",
+        "description": "CF tends to recommend templates based on past behaviors/preferences of similar attorneys (enhancing precision), while CB emphasizes document similarity (increasing diversity and recall).",
+        "guidance": "Design hybrid systems to combine these complementary strengths to achieve both high precision and recall."
+      },
+      {
+        "name": "Cascade hybrid refinement (CB+CF linear combination L(\u00b7))",
+        "description": "Refinement process that linearly combines CF-ranked templates T_cf,ci with CB-ranked templates T_cb,k \u2229 T_ci via a linear combination L(\u00b7) and selects top-k from T_refined,ci.",
+        "guidance": "Hybrid approach: consider topic membership and intersection between CB and CF results, using a linear combination to refine rankings and propose final recommended response templates."
+      },
+      {
+        "name": "Use of visualization (t-SNE) to evaluate embedding distributions",
+        "description": "Project embeddings (PARIS vs LE-PARIS) into a 3D t-SNE space to examine clustering patterns and the distance relationship between a received OA and its top-k embeddings.",
+        "guidance": "PARIS (Sentence-BERT) embeddings appeared dispersed without a clear pattern; LE-PARIS embeddings were more clustered, indicating stronger semantic understanding. Visualization supports qualitative assessment of embedding quality."
+      },
+      {
+        "name": "LLM response-generation quality criteria",
+        "description": "Evaluate generated OA responses on readability/structure, legal-argument depth, specific claim references, technical explanation, and hallucination risk.",
+        "guidance": "Observed model behaviors: PatentGPT-J-6B often created continuous text blocks with repetition and limited legal depth; Llama 2 improved structure and technical rebuttal but may hallucinate; GPT-3.5 focused on term elucidation and adaptability; GPT-4 provided comprehensive coverage, suggested claim amendments, balanced legal/technical strategies, and used placeholders to reduce hallucination risk."
+      },
+      {
+        "name": "Avoid generating patent claims with LLMs",
+        "description": "The system should not attempt to create patent claims (claims are prone to hallucinations).",
+        "guidance": "Instead, use LLMs to argue technical differences between the current case and prior art, where LLMs' strengths in discerning differences can be leveraged safely."
+      },
+      {
+        "name": "Zero-shot evaluation protocol for LLM generators",
+        "description": "Perform a zero-shot evaluation by inputting a specific OA segment (e.g., 35 U.S.C. \u00a7 102 text + examiner statements) together with role instructions (assume role of a patent attorney) and analyze generated outcomes qualitatively.",
+        "guidance": "Used here as a preliminary qualitative investigation; follow up with domain-expert quantitative evaluations (Study 5) for more rigorous assessment."
+      },
+      {
+        "name": "Human evaluation: blind A/B testing with domain experts",
+        "description": "Conduct blind testing where patent attorneys are randomly assigned outputs from different LLMs, unaware of the source, and rate satisfaction on a 1-5 star scale guided by 'Are you satisfied with the generated result?'.",
+        "guidance": "Each attorney received ten results from each LLM; blind/random assignment reduces bias. Use repeated measures designs when multiple ratings per rater are gathered."
+      },
+      {
+        "name": "Statistical analysis for within-subject LLM comparisons",
+        "description": "Apply repeated measures ANOVA to test differences between generation methods, followed by post hoc paired t-tests with correction for multiple comparisons (False Discovery Rate).",
+        "guidance": "Report F-statistic, p-values, and effect size (e.g., \u03b7\u00b2_p). In the study, generation methods accounted for 93% of variance (\u03b7\u00b2_p = .93). Use FDR or similar adjustments for multiple pairwise tests."
+      },
+      {
+        "name": "Longitudinal performance analysis using mixed linear models (MLM)",
+        "description": "Use mixed linear models to predict attorney performance from system engagement over time, accounting for repeated observations and random effects (attorney and time).",
+        "guidance": "Control for demographics (gender, age, education, tenure), attorney (subject) random effects, and time effects. Compare model fit (e.g., -2 log-likelihood) between fixed-effects and mixed-effects models to justify MLM choice."
+      },
+      {
+        "name": "Measure of engagement with systems (PARIS / LE-PARIS)",
+        "description": "Engagement measured as the number of times the system was fully utilized (from entry to completion of the response draft with system assistance), weighted by the depth of operation.",
+        "guidance": "Use this weighted count as the predictor in MLMs to associate system engagement with attorney performance."
+      },
+      {
+        "name": "Measure of attorney performance on OA tasks",
+        "description": "Performance measured as monthly OA workload adjusted for difficulty by an impartial third party responsible for task assignments.",
+        "guidance": "Use difficulty-adjusted monthly workload as the dependent variable in longitudinal models to assess practical impact of system engagement."
+      },
+      {
+        "name": "Include demographic/control covariates",
+        "description": "Control variables to include gender (coding specified: 1 = female, 0 = male), age, education level, and tenure (measured in months).",
+        "guidance": "Include these as fixed effects in MLMs to isolate the effect of system engagement on performance."
+      },
+      {
+        "name": "Report and interpret effect sizes and significance",
+        "description": "Report coefficients, standard errors, p-values, and effect sizes (e.g., \u03b7\u00b2_p) when presenting statistical results.",
+        "guidance": "Example: PARIS engagement coefficient = .086 (SE = .012, p < .01); LE-PARIS engagement coefficient = .162 (SE = .014, p < .01). Use -2 log-likelihood comparisons to assess model fit improvements."
+      },
+      {
+        "name": "Dataset construction and curation practices",
+        "description": "Construct a historical database of OA responses; use topic modeling and extensive expert consensus for iterative database refinement to ensure quality and categorization.",
+        "guidance": "Database construction is nascent\u2014future work should expand and refine using tailored language models, improved tokenization, and iterative expert review to improve OA/response semantic capture."
+      },
+      {
+        "name": "Future methodological recommendations for recommender components",
+        "description": "For CB: train embedding models specifically on OA/response data rather than off-the-shelf extractors. For CF: experiment with contrastive or generative self-supervised recommenders and data augmentation.",
+        "guidance": "Also explore LLMs-as-recommenders and alternative hybrid strategies; these are suggested directions rather than evaluated standards."
+      },
+      {
+        "name": "Confidentiality and ethical guideline for LLM use in prosecution",
+        "description": "Be cautious of intellectual property and client confidentiality risks when using LLMs for OA response drafting; compliance with professional confidentiality rules (e.g., ABA Rule 1.6) is required.",
+        "guidance": "Agencies and firms should consider using locally run, open-sourced LLMs instead of external APIs to mitigate risks of leaking confidential prosecution information."
+      }
+    ]
+  }
+}

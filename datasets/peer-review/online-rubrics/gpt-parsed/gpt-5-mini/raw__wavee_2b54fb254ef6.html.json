@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_2b54fb254ef6.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16989,
+  "output_tokens": 5069,
+  "elapsed_s": 1184.7725715830456,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and developers building automated peer-review / author-feedback systems; researchers studying automated review evaluation",
+    "subtask_short": "author-centric pre-submission feedback",
+    "subtask_description": "Generate structured, actionable pre-submission feedback for academic papers (summary, strengths, weaknesses, questions) using retrieval and LLMs, with passage selection via graph neural networks and evaluation via automatic and human judgments.",
+    "subtask_keywords": [
+      "peer_review",
+      "author-centric_feedback",
+      "graph-rag",
+      "gnn",
+      "llm_finetuning",
+      "passage_retrieval"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Structured feedback fields",
+        "description": "Generate structured, actionable pre-submission feedback containing Summary, Strengths, Weaknesses, and Questions, without producing acceptance recommendations or replacing human peer review.",
+        "guidance": "The system's output should include the four fields (Summary, Strengths, Weaknesses, Questions). Exclude rating-based fields that correspond to final decision-making (e.g., accept/reject, score). Use the Summary, Strengths, Weaknesses, and Questions sections of human-written peer reviews as supervision signals (GPT-4 consolidated reviews used in training)."
+      },
+      {
+        "name": "Use of peer reviews as proxy supervision",
+        "description": "In the absence of large-scale pre-submission feedback datasets, use human-written peer reviews as a proxy; retain only Summary, Strengths, Weaknesses, and Questions as supervision.",
+        "guidance": "Justification: peer reviews provide expert critiques aligned with guidance authors seek pre-submission. Caveat: reviews reflect variable writing maturity and reviewer focus. Support choice with user study when possible."
+      },
+      {
+        "name": "Passage segmentation policy",
+        "description": "Segment each paper into discrete passages split at newline characters (\\n); for DPR queries, concatenate k consecutive sentences (k \u2208 {1,3,5}) to form a single query.",
+        "guidance": "Each passage is a candidate context. For each query (concatenated k sentences), retrieve the top-m most relevant passages (m \u2208 {3,5}) using DPR. Consolidate unique passages retrieved across multiple queries per paper to form training labels for the GNN."
+      },
+      {
+        "name": "DPR retrieval configuration",
+        "description": "Use Dense Passage Retrieval (DPR) to identify passages corresponding to feedback sections, retrieving top-m passages per query based on semantic similarity in embedding space.",
+        "guidance": "Concrete choices used: multiset-base DPR context and question encoders; m \u2208 {3,5}; k \u2208 {1,3,5}. Retrieved passages across varied k,m serve as ground truth labels for training the GNN. DPR is a baseline but may miss some key passages that graph-based methods recover."
+      },
+      {
+        "name": "Document graph construction (nodes & edges)",
+        "description": "Represent each paper as an undirected hierarchical document graph G = (V,E) with nodes for the paper root, section headings, sub-headings, passages, and sentences; edges encode hierarchical links (Ehier) and sequential links (Eseq).",
+        "guidance": "Ehier reflects structural nesting; Eseq preserves linear ordering of passages and sentences. The union E = Ehier \u222a Eseq enables vertical propagation and lateral flow. Graph construction is agnostic to section depth and adapts to nested structures. Full node/edge definitions provided in Appendix A (paper)."
+      },
+      {
+        "name": "Mitigate over-squashing via rewiring (sequential edges)",
+        "description": "Augment the hierarchical backbone with sequential edges to facilitate lateral information flow and reduce over-squashing/bottlenecks in tree-like graphs.",
+        "guidance": "Rationale: hierarchical trees can concentrate neighbor information at root leading to information bottlenecks; sequential edges (e.g., passage-to-next-passage, sentence-to-next-sentence) preserve textual progression and reduce dependence on deep hierarchical paths. Expect typical graph depth \u2264 5 hops for scientific papers."
+      },
+      {
+        "name": "GNN-based passage selection (training objective)",
+        "description": "Train a Graph Attention Network (GAT) over the document graph to classify passage nodes as feedback-relevant or not, using DPR-extracted passages as ground-truth labels.",
+        "guidance": "Node embeddings for sentence nodes initialized with Sentence-Transformer all-mpnet-base-v2; other node types initialized as zero embeddings (dim=768). Trained models are denoted GNN(k,m) corresponding to DPR parameters used to create labels. Use binary classification loss (Cross Entropy) and retain best validation checkpoint."
+      },
+      {
+        "name": "Passage selection operational advantage",
+        "description": "At inference time, the GNN autonomously identifies salient passages directly from the document graph, eliminating dependence on human-generated feedback as queries.",
+        "guidance": "This approach reduces the need for external grounding and lowers input context length for LLMs, improving both factual grounding and computational efficiency relative to full-text approaches."
+      },
+      {
+        "name": "Context length minimization for LLM input",
+        "description": "Reduce LLM input token length by selecting a subset of salient passages to improve generation quality and efficiency.",
+        "guidance": "Empirical evidence: average token lengths reported for Full Paper (~9446 tokens) vs GNN (5,5) (~4147 tokens) and GNN (5,3) (~2899 tokens). Shorter contexts improve LLM performance (reference Hsieh et al., 2024). Choose configuration (k,m) to balance context richness vs training/inference cost."
+      },
+      {
+        "name": "LLM fine-tuning objective and input format",
+        "description": "Fine-tune LLMs on GNN-selected passages with supervision targets consisting of the four structured fields; prompts should instruct the model to output Summary, Strengths, Weaknesses, and Questions.",
+        "guidance": "Example prompt template (used in finetuning): Instruction + Research Paper Passages + 'Feedback for the paper:' followed by **Summary**, **Strengths**, **Weaknesses**, **Questions**. Fine-tuning used LoRA (rank=8, \u03b1=16) for efficiency and 3 epochs in experiments; apply LoRA to q_proj,k_proj,v_proj,o_proj and other transformer matrices as listed."
+      },
+      {
+        "name": "Do not issue acceptance recommendations or final decisions",
+        "description": "The system must avoid producing acceptance/rejection recommendations or ratings that correspond to final decision-making.",
+        "guidance": "Design intent: author-centric pre-submission aid, not a reviewer replacement. Exclude rating-based fields from training targets and outputs to prevent misuse as a decision tool."
+      },
+      {
+        "name": "Automatic evaluation metrics for feedback quality",
+        "description": "Evaluate generated structured feedback using ROUGE-1/2/L (Recall and F1), BERTScore-F1, and Aspect Coverage (ACov) to assess lexical overlap, semantic similarity, and breadth of aspects covered.",
+        "guidance": "ROUGE measures surface overlap (use both Recall and F1); BERTScore-F1 assesses semantic similarity; Aspect Coverage (Yuan et al., 2022) measures whether feedback engages with diverse scholarly dimensions beyond summarization. Use stemming options consistently when computing ROUGE for reliability."
+      },
+      {
+        "name": "Aspect Coverage dimensions (ACov aspects)",
+        "description": "Measure breadth of scholarly criteria addressed by feedback across aspects: Summary (SUM), Clarity (CLA), Soundness/Correctness (SOU), Substance (SUB), Originality (ORI), Meaningful Comparison (CMP), Replicability (REP), Motivation/Impact (MOT).",
+        "guidance": "Report per-aspect coverage percentages. Use an aspect tagger (e.g., Yuan et al., 2022) to compute ACov and identify dimensions where feedback is weak (e.g., Motivation/Impact, Replicability)."
+      },
+      {
+        "name": "Human qualitative assessment categories",
+        "description": "Assess generated feedback along four qualitative dimensions: Feedback Depth (FD), Feedback Thoroughness (FT), Feedback Constructiveness (FC), Feedback Helpfulness (FH), using a 1\u20135 scale with explicit level definitions.",
+        "guidance": "Definitions (excerpted):\n- FD: technical understanding and meaningful engagement (1 Unqualified to 5 Authoritative).\n- FT: coverage of methodology/results/reproducibility (1 Negligent to 5 Forensic).\n- FC: utility of suggestions (1 Destructive to 5 Transformative).\n- FH: effectiveness of issue identification and explanation (1 Misleading to 5 Revelatory).\nAnnotators should be eligible domain experts; each feedback annotated by multiple annotators (paper used 3 annotators per feedback) and scores averaged."
+      },
+      {
+        "name": "Scoring methodology for qualitative categories (human / LLM-as-judge)",
+        "description": "For each qualitative category, find highest level (5\u20131) where ALL criteria are fully satisfied (Base Level). Then check Base+1 level to compute partial credit as (Satisfied criteria in higher level / Total criteria in higher level). Final score = Base Level + Partial Credit, rounded to two decimals (specific rounding increments given).",
+        "guidance": "This procedure was provided in Appendix E / Figure 4 for both human annotators and LLM-as-a-Judge prompts; use it to enable partial-credit scoring across multi-criteria definitions per level."
+      },
+      {
+        "name": "Factual validity assessment rubric (per-claim)",
+        "description": "Annotate each discrete claim in feedback for factual consistency with the source paper using four labels: Completely Agree, Mostly Agree, Mostly Disagree, Completely Disagree.",
+        "guidance": "Procedural rules: read the entire paper first; treat the entire Summary as one discrete claim; treat each bulleted point in Strengths/Weaknesses/Questions as a discrete claim. Definitions: Completely Agree = entirely accurate; Mostly Agree = mostly correct with minor gaps; Mostly Disagree = mostly incorrect; Completely Disagree = factually wrong or hallucinated. Use dropdown scales and provide per-claim judgments; aggregate percentages (e.g., CA/MA = positive rating)."
+      },
+      {
+        "name": "Annotator eligibility and annotation protocol",
+        "description": "Ensure annotators conducting qualitative and factual assessments are eligible to review for the target conference (domain experts); use multiple annotators per item and average results.",
+        "guidance": "Experimental setup used 27 annotators for qualitative assessment (3 annotations per feedback) and 10 annotators for factual validity (each paper evaluated by 2 annotators). Use a UI that displays the full paper and the feedback (Streamlit in the paper)."
+      },
+      {
+        "name": "LLM-as-a-Judge as scalable proxy",
+        "description": "Use a large LLM (e.g., Gemini-2.0-Flash) prompted with the qualitative assessment guidelines as an automated judge to approximate human preferences at scale.",
+        "guidance": "Adapt human prompts for LLM-as-a-Judge; validate correlation between automated judge scores and human annotations before trusting large-scale judgments. The paper reports strong correlation in their experiments."
+      },
+      {
+        "name": "Ablation and hyperparameter trade-offs (k,m)",
+        "description": "Vary k (number of review sentences concatenated: 1,3,5) and m (number of top DPR-retrieved passages used to train the GNN: 3,5) to study effect on feedback quality and training cost.",
+        "guidance": "Finding: increasing k and m provides richer context leading to consistent improvements on metrics, but increases training time and computational cost. Choose (k,m) for an efficiency-performance trade-off (e.g., Llama (5,3) reduces training time with minor performance loss vs (5,5))."
+      },
+      {
+        "name": "Passage classifier / GNN implementation & training standards",
+        "description": "Use a Graph Attention Network (GAT) with multiple GATConv layers, residual connections, activations, dropout; followed by an MLP passage classifier; train for sufficient epochs (the paper used 30 epochs) and use Cross Entropy loss.",
+        "guidance": "Implementation details: initialize sentence node embeddings with all-mpnet-base-v2 (dim=768), other nodes zero; first GATConv maps to 128-d per head with 4 heads (concatenated), residual projections, ELU and dropout p=0.2; further layers as described; classifier MLP uses SiLU activations, dropout p=0.3, layernorm; retain best validation checkpoint for inference."
+      },
+      {
+        "name": "Fine-tuning hyperparameter choices for LLM adaptation",
+        "description": "When fine-tuning LLMs for structured feedback, apply Low-Rank Adaptation (LoRA) for parameter-efficient tuning and choose sensible hyperparameters (e.g., LoRA rank=8, \u03b1=16, 3 epochs, learning rate 1e-4, AdamW optimizer).",
+        "guidance": "Integrate LoRA into q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj. Use FP16 training, gradient accumulation / batch sizes as hardware permits. Report training time to reflect efficiency-performance trade-offs across configurations and models."
+      },
+      {
+        "name": "Evaluation reporting standards",
+        "description": "Report both automatic metrics (ROUGE F1/Recall, BERTScore-F1) and human evaluation results (qualitative scores, factual validity percentages, impact survey responses).",
+        "guidance": "Include training/test split sizes, model configuration labels (e.g., Mistral (k,m), Llama (k,m)), and compute Aspect Coverage by aspect. Report human evaluation sample sizes and annotator counts, and aggregate results (means, percentages)."
+      },
+      {
+        "name": "Ethical and deployment considerations",
+        "description": "Acknowledge risks of bias, misuse, and academic integrity; design system as a supplementary author-centric aid and advocate for transparency.",
+        "guidance": "Disclose training data provenance (e.g., historical peer reviews consolidated by GPT-4) and possible biases (leniency toward well-known authors, under-representation of areas). Warn against over-reliance, potential misuse for decision-making, and risks of academic misconduct (e.g., misrepresenting AI critiques as human). Recommend transparency and supplementary use only."
+      },
+      {
+        "name": "Factual evaluation procedural guideline (claim extraction)",
+        "description": "Procedure for factual validity annotation: read full paper, identify every discrete claim in feedback, treat Summary as one claim and each bullet in Strengths/Weaknesses/Questions as separate claims, then rate each claim on 1\u20134 validity scale.",
+        "guidance": "This stepwise process ensures consistent per-claim judgments and reduces ambiguity about unit of annotation. Provide annotators with explicit dropdown categories and examples; use aggregated per-claim statistics (CA/MA/MD/CD) to quantify grounding and hallucination rates."
+      }
+    ]
+  }
+}

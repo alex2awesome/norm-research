@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 20,
+  "n_chunks": 41,
+  "chunk_chars": 39496,
+  "model": "gpt-5-mini",
+  "elapsed_s": 203.66943070799607,
+  "input_tokens": 14672,
+  "output_tokens": 6808,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of the Magma computer-algebra system working with power series, Laurent series and finite fields (mathematicians, researchers, advanced students)",
+    "subtask_short": "magma power_series_and_finite_fields",
+    "subtask_description": "Practical rules, requirements and behaviors for creating and manipulating power series / Laurent series and for constructing and working with finite (Galois) fields in Magma. Covers constructors, precision semantics, arithmetic constraints, embeddings, and associated polynomial functions.",
+    "subtask_keywords": [
+      "magma",
+      "power_series",
+      "laurent_series",
+      "finite_fields",
+      "computer_algebra"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "elt< P | v, Q, r > constructor semantics",
+        "description": "elt< P | v, Q, r > creates the element with valuation v, coefficient sequence Q and relative precision r in the power series or Laurent series ring P. The value of r must be positive or \u22121. If v is omitted, valuation defaults to zero; if r is omitted, relative precision is set to length of Q.",
+        "guidance": "Examples: elt< P | 18, [5,0,0,0,-7,10], 29 > prints as 5*x^18 - 7*x^22 + 10*x^23 + O(x^47). Use r = -1 to create an exact series. When using elt with r provided, r controls the reported/used relative precision."
+      },
+      {
+        "name": "Coercion behavior into series rings",
+        "description": "Coercion of a single element of the coefficient ring into the series ring gives an exact result. Coercion of a sequence Q gives the same result as elt< P | Q > (valuation assumed zero and last entry of Q is last-known term).",
+        "guidance": "Example: P![4,34,59,0,2,0] prints as 4 + 34*x + 59*x^2 + 2*x^4 + O(x^6). Use coercion of single coefficient for exact constant series."
+      },
+      {
+        "name": "Laurent series element creation",
+        "description": "Elements of Laurent series rings are created by the same methods as for power series rings, but negative powers of the indeterminate are allowed.",
+        "guidance": "Example constructors and elt usage shown; e.g., elt< L | -19, [4,24,0,3,5], 21 > yields 4*y^-19 + 24*y^-18 + 3*y^-16 + 5*y^-15 + O(y^2)."
+      },
+      {
+        "name": "Default relative precision attribute for free series rings",
+        "description": "Free series rings store a default relative precision in the 'Precision' attribute. HasAttribute(P,'Precision') returns (true, value). By design the Magma default for free series rings is 20.",
+        "guidance": "Example: HasAttribute(P, 'Precision') prints 'true 20'. This default is used when no explicit precision is requested."
+      },
+      {
+        "name": "Changing precision attribute after ring creation (AssertAttribute)",
+        "description": "AssertAttribute(P, 'Precision', p) changes the precision attribute of an existing free series ring P to p. This affects newly-created elements only, not pre-existing elements.",
+        "guidance": "Example: After AssertAttribute(P,'Precision',28), printing (2+p1)^-1 shows more terms; previously-created element p3 still shows with the old precision."
+      },
+      {
+        "name": "Setting precision at ring creation (Precision parameter)",
+        "description": "When creating a free series ring, the Precision parameter can be given: PowerSeriesRing(R: Precision := p) or LaurentSeriesRing(R: Precision := p) sets the ring's default relative precision at creation.",
+        "guidance": "Example: Pb<xb> := PowerSeriesRing(Q: Precision := 8); then xb^3/(1-xb) prints with O(xb^11) consistent with default 8 leading to reported O(...) accordingly."
+      },
+      {
+        "name": "Fixed absolute precision power series rings (PowerSeriesRing(R,p))",
+        "description": "PowerSeriesRing(R, p) creates a fixed absolute precision power series ring in which every element has the same absolute precision p and there are no exact elements. Precision(P30) returns p.",
+        "guidance": "Mathematically this is R[[x]]/x^p. Elements may be entered like polynomials; elt< P | v, Q > accepted but O and r arguments are ignored (Magma will accept but ignore them). Examples: P30!0 prints O(s^30)."
+      },
+      {
+        "name": "Limited relative precision Laurent series rings (LaurentSeriesRing(R,p))",
+        "description": "LaurentSeriesRing(R, p) creates a limited relative precision Laurent series ring where all elements have relative precision \u2264 p (Precision returns p). If an element is typed as a polynomial it is given relative precision p; use the O(...) function to give relative precision less than p.",
+        "guidance": "Example: t^5 + O(t^12) keeps O(t^12) while plain t^5 printed in L30 becomes t^5 + O(t^35) (relative to p)."
+      },
+      {
+        "name": "Precision propagation rules for arithmetic",
+        "description": "In non-fixed-absolute-precision rings, the absolute precision of f + g is the minimum of the absolute precisions of f and g; the relative precision of f * g is the minimum of the relative precisions of f and g.",
+        "guidance": "In fixed precision rings every element shares the same absolute precision so addition/multiplication do not require special combination rules there."
+      },
+      {
+        "name": "Division semantics and requirements",
+        "description": "To evaluate f / g, Magma divides f and g by the valuation of g to obtain normalized series and returns normalized_f * normalized_g^{-1}. For division to succeed, the constant term (valuation coefficient) of g must be a unit; if the coefficient ring R is not a field, division is not generally available. For power series (not Laurent) the valuation of the result must be non-negative.",
+        "guidance": "This means you cannot divide by series whose leading coefficient is non-unit or in rings that are not fields; ensure the divisor's valuation coefficient is invertible."
+      },
+      {
+        "name": "Exponentiation constraints for series",
+        "description": "f^n (n integer) is possible; but if f is a power series (not Laurent) the result cannot contain negative powers. Thus n must be non\u2011negative or f must have valuation zero. Evaluating f^g (series exponent) is permitted only if valuation of f is zero.",
+        "guidance": "For fractional powers or negative exponents ensure series valuation and ring type permit the result; else operation is invalid."
+      },
+      {
+        "name": "Boolean equality tests are strict; lenient equality via truncation",
+        "description": "Operators/functions eq, ne, IsZero are strict: two elements are equal only if their difference is the (ring) zero. The zero has infinite precision except in fixed precision rings. To test approximate equality, subtract the two elements and test whether the truncation of the difference is zero (Truncate + IsZero).",
+        "guidance": "Example: f1 := x^5 + O(x^10); f2 := x^5 + O(x^12); f1 eq f2 is false; d := f1 - f2 gives O(x^10); IsZero(Truncate(d)) is true. Use Truncate for lenient comparisons."
+      },
+      {
+        "name": "Evaluate(f, r) substitution",
+        "description": "Evaluate(f, r) substitutes the ring element r into the series f in place of the indeterminate.",
+        "guidance": "Example: forming expon := Exp(x) and Evaluate(expon, 1.0) yields a floating-point approximation to e. Note substitution into series with appropriate coefficient field/type is supported."
+      },
+      {
+        "name": "Available series operations and their meanings",
+        "description": "Magma provides a collection of operations on series with specified semantics: Derivative(f), Derivative(f,n), Integral(f), SquareRoot(f)/Sqrt(f) (approximated where f has even valuation), Laplace(f), Composition(f,g), Reversion(f)/Reverse(f) (inverse under composition), Convolution(f,g), etc. (See Table 23.2 in text).",
+        "guidance": "Each operation has precise truncation/precision behavior documented: e.g., composition sums coefficients up to min(precisions); convolution and Laplace have factorial-weighted coefficient formulas. Consult Magma help for exact formulae and precision consequences."
+      },
+      {
+        "name": "Transcendental functions constraints and precision",
+        "description": "Transcendental functions (Sin, Cos, Tan, Sinh, Exp, Log, Sincos, etc.) require the coefficient ring of the series to be a field. If f has valuation zero (nonzero constant term), the coefficient field must be one of the real or complex fields so that the constant term of the result can be evaluated. The precision of the result is approximately equal to the precision of f.",
+        "guidance": "Examples: Sincos(x) and Exp(x + O(x^15)) produce series truncated consistent with input precision. Using floating-point coefficient fields may cause inexact identities (see example with RealField(8))."
+      },
+      {
+        "name": "Series as generating functions (interpretation of coefficients)",
+        "description": "A generating function is a series whose coefficients carry values of a sequence/function \u03c4; the nth coefficient equals \u03c4(n). Series can be used for counting/verification of combinatorial identities within precision limits.",
+        "guidance": "Example: defining C(x) = (1 - Sqrt(1-4*x)) / (2*x) and printing Coefficients(C) recovers Catalan numbers; comparing algebraic relations (e.g., C \u2212 1 = x*C^2) can be verified to O(x^p) and tested via Truncate/IsZero."
+      },
+      {
+        "name": "Inverse/reciprocal series may be infinite; require precision choices",
+        "description": "The inverse of a series generally has infinitely many non-zero terms; if a relative precision is not requested, Magma uses the ring default precision attribute to decide how many terms to compute/return.",
+        "guidance": "Example: (2 + p1)^-1 prints to default precision; change ring precision attribute to get more terms or create ring with larger default Precision when exact long expansions are needed."
+      },
+      {
+        "name": "Fixed-precision rings have no exact elements",
+        "description": "In a fixed absolute precision power series ring (PowerSeriesRing(R,p)) every element has the same absolute precision p and therefore there are no exact elements in that ring.",
+        "guidance": "This affects equality and operations: zero is O(x^p) and exact arithmetic differs from free series rings. Use fixed-precision rings when you want a consistent absolute precision for all elements."
+      },
+      {
+        "name": "O(...) truncation notation and ignored options in fixed-precision rings",
+        "description": "In fixed precision rings the O(...) notation and the r option in elt constructors are accepted syntactically but ignored (Magma uses the ring's fixed precision instead).",
+        "guidance": "When constructing elements in fixed-precision rings, enter coefficients like polynomials; do not rely on per-element O(...) to change absolute precision."
+      },
+      {
+        "name": "RootOfUnity(n, K) behavior",
+        "description": "RootOfUnity(n, K) returns a primitive n-th root of unity in the smallest possible extension field of K which contains such a root; the parent field of the returned element is that extension.",
+        "guidance": "Example: RootOfUnity(23, gf9) returns an element in a finite field of size 3^22 whose Order(r) is 23."
+      },
+      {
+        "name": "Finite field existence and basic invariants",
+        "description": "A finite field of size q exists iff q = p^n for prime p and integer n\u22651. The numbers p and n are called the characteristic and the degree (respectively). Up to isomorphism there is exactly one finite field of a given size q.",
+        "guidance": "Magma provides functions to inspect fields: Degree(F) and Characteristic(F) (text gives these as returning p and n in order as phrased in the manual chunk), and #F returns the cardinality q = p^n. Use these to confirm field invariants."
+      },
+      {
+        "name": "Constructing finite fields: GF(q) and GF(p,n)",
+        "description": "The FiniteField or GF function produces the Galois field of q elements. GF(q) and GF(p, n) give identical fields mathematically; GF(p, n) avoids factoring q and can be faster when p is large.",
+        "guidance": "Example: F32 := GF(2,5); F32 eq GF(32) yields true. Use GF(p,n) when you can supply p and n separately to avoid factorization."
+      },
+      {
+        "name": "Creating extensions and subfields (ext and sub constructors)",
+        "description": "Given a finite field F of size p^n, extensions and subfields can be defined with ext and sub. For extensions any degree d is permitted; for subfields the requested degree must divide n. The constructors have multiple forms (by polynomial or by degree).",
+        "guidance": "Examples: H := ext< G | 4 > creates a degree-4 extension; sub< H | 6 > creates subfield of degree 6 when possible. Use ext< F | f > with irreducible f to define via polynomial or ext< F | d > to let Magma pick f."
+      },
+      {
+        "name": "Field generator representations: polynomial vs power presentation",
+        "description": "Elements of a finite field can be printed/represented either as polynomials in a field generator (polynomial presentation) or as powers of a multiplicative-generator (power presentation). For small fields both may be used and by default power presentation is shown; change attribute 'PowerPrinting' to alter behavior. For large fields Magma defaults to polynomial representation.",
+        "guidance": "Example: AssertAttribute(G,'PowerPrinting',false) switches to polynomial display. Use Generator(F) or F.1 to access the canonical generator. PrimitiveElement(F) finds a primitive multiplicative generator."
+      },
+      {
+        "name": "Primitive and normal elements utilities",
+        "description": "IsPrimitive(a) tests whether a is a primitive (multiplicative) element of the field. PrimitiveElement(F) returns a primitive element. NormalElement(F) returns an element generating a normal basis (\u03b1, \u03b1^p, \u03b1^{p^2}, ...).",
+        "guidance": "Examples show IsPrimitive for several elements; NormalElement can take a subfield argument to find normal elements relative to an intermediate field."
+      },
+      {
+        "name": "ext by defining polynomial requires irreducibility; use IsIrreducible",
+        "description": "When creating an extension using ext< F | f >, f must be irreducible of the desired degree. Check IsIrreducible(f) before using it as a defining polynomial.",
+        "guidance": "Example: create Pgf9<x> and define f, check IsIrreducible(f) true, then gf9e4<alpha> := ext< gf9 | f >. After creation Evaluate(f,alpha) yields 0."
+      },
+      {
+        "name": "ext by degree picks DefiningPolynomial via IrreduciblePolynomial(F,d)",
+        "description": "When ext< F | d > is used, Magma selects a suitable defining polynomial; DefiningPolynomial(E) returns that polynomial and it equals IrreduciblePolynomial(F,d).",
+        "guidance": "If you prefer named indeterminates, you may retrieve DefiningPolynomial(E) and assign a print name using angle bracket syntax (defgf9e4e3<y> := DefiningPolynomial(...))."
+      },
+      {
+        "name": "ext/ExtensionField optionally return embedding monomorphism",
+        "description": "Both forms of ext and ExtensionField may optionally return a second value: the embedding monomorphism \u03c6 : F \u2192 E, which effects coercion of elements of F into E.",
+        "guidance": "If you need to coerce elements explicitly or work with embeddings, capture the second return value from ext or ExtensionField."
+      },
+      {
+        "name": "SplittingField constructs smallest extension that splits polynomial(s)",
+        "description": "SplittingField(p) constructs the smallest-degree extension E of F such that polynomial p factors completely into linear factors over E. SplittingField(T) works for a set T of polynomials.",
+        "guidance": "Examples demonstrate factoring p over successive extensions and finally over Spl := SplittingField(p) where p has all linear factors and Roots(PolynomialRing(Spl) ! p) returns all roots."
+      },
+      {
+        "name": "sub constructor forms: generated-by-element or by-degree",
+        "description": "sub< field | a > returns the subfield generated by element a. sub< field | m > returns a subfield of absolute degree m (m must divide absolute degree of field). Both forms can optionally return the embedding monomorphism.",
+        "guidance": "Example: sub< gf9e4e3 | alpha^2 > and sub< gf9e4e3 | 4 > both construct size 3^4 subfields; their generators may differ though fields are isomorphic."
+      },
+      {
+        "name": "Embedding semantics and requirement to call Embed for independently-created isomorphic fields",
+        "description": "When an extension or subfield is created from a parent field, Magma automatically knows embeddings; but if two isomorphic fields are created independently (even if degrees divide), Magma does not automatically know their relation. Use Embed(F, G) to set up an isomorphism/embedding between them.",
+        "guidance": "ext produces a different field each call even with same arguments; GF(p,n) is canonical (multiple GF(p,n) calls return identical fields). After Embed(F1,F2) equality tests and coercions between the fields work. Embed(F,F2,x) lets you specify the image of the generator."
+      },
+      {
+        "name": "Associated polynomial functions and argument semantics (one vs two arguments)",
+        "description": "Magma provides many polynomial-related functions for finite fields (De\ufb01ningPolynomial(F), De\ufb01ningPolynomial(F,S), IrreduciblePolynomial(F,m), AllIrreduciblePolynomials(F,m), IsIrreducible(f), PrimitivePolynomial(F,m), IsPrimitive(f), MinimalPolynomial(a[,S]), CharacteristicPolynomial(a[,S]), etc.). If two arguments are given, operations are performed with respect to the specified subfield S; otherwise with respect to the ground field (note: Degree has its own convention regarding prime vs ground field).",
+        "guidance": "Example: MinimalPolynomial(e) returns minimal polynomial over ground field; MinimalPolynomial(e, gf9) returns minimal polynomial over subfield gf9; the degree of the minimal polynomial indicates the degree of the corresponding extension. The minimal polynomial of a field generator is the defining polynomial."
+      }
+    ]
+  }
+}

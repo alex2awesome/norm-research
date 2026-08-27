@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peer_reviews_pr_plos.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15088,
+  "output_tokens": 3805,
+  "elapsed_s": 877.4947465839796,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, conference organizers, and policymakers interested in peer review quality and measurement (e.g., program chairs, peer-review experimenters, and peer review methodologists)",
+    "subtask_short": "evaluating_peer_review_quality",
+    "subtask_description": "Guidance and empirical evaluation methods for measuring and interpreting the quality of peer reviews (especially conference paper reviews), including criteria to rate reviews, experimental protocols to detect biases, and statistical models to quantify reliability, miscalibration, and subjectivity.",
+    "subtask_keywords": [
+      "peer_review",
+      "review_quality",
+      "conference_peer_review",
+      "evaluation_metrics",
+      "experimental_design"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Overall quality score (7-point scale)",
+        "description": "Evaluators were asked to rate the overall quality of paper reviews on a 7 point scale. Higher ratings correspond to higher rated quality.",
+        "guidance": "Used as the primary outcome measure for perceived review quality in analysis. Interpretation: higher numeric value = higher perceived quality. In comparisons to other domains using different scales, re-normalize (e.g., linear scaling) before comparing."
+      },
+      {
+        "name": "Understanding",
+        "description": "\u201cThe review demonstrates an adequate understanding of the paper.\u201d",
+        "guidance": "Rated on a 5-point Likert scale from \u20132 (Strongly Disagree) to 2 (Strongly Agree). Used as one of four criteria mapped to overall quality; improvements in this criterion, holding others constant, should not decrease overall score (monotonicity assumption when learning aggregate mapping)."
+      },
+      {
+        "name": "Coverage",
+        "description": "\u201cThe review covers all the required aspects.\u201d",
+        "guidance": "Rated on a 5-point Likert scale from \u20132 to 2. Treated as a separable criterion: specifically analyzed for sensitivity to manipulations (e.g., elongation had strongest effect on Coverage)."
+      },
+      {
+        "name": "Substantiation",
+        "description": "\u201cEvaluations made in the review are well supported.\u201d",
+        "guidance": "Rated on a 5-point Likert scale from \u20132 to 2. Emphasizes evidence/reasoning backing claims in a review; used alongside other criteria to predict overall quality."
+      },
+      {
+        "name": "Constructiveness",
+        "description": "\u201cThe review provides constructive feedback to authors.\u201d",
+        "guidance": "Rated on a 5-point Likert scale from \u20132 to 2. Focuses on usefulness and actionable feedback for authors; included in mapping to overall quality."
+      },
+      {
+        "name": "Use of established Review Quality Indicators (RQIs)",
+        "description": "Questionnaire criteria were chosen based on proposed Review Quality Indicators (RQIs) for peer reviews, tailored for concision and domain relevance.",
+        "guidance": "When designing evaluation instruments, adopt known RQIs (e.g., van Rooyen et al. RQI) and adapt wording/length to context. Linkage to prior validated indicators provides construct validity for criteria selection."
+      },
+      {
+        "name": "Uselessly elongated review bias",
+        "description": "Evaluations of review quality can be positively biased by increasing review length via non-informative filler (\u2018useless elongation\u2019).",
+        "guidance": "Empirical test via randomized controlled trial: create elongated versions of reviews by adding filler without improving substantive content (repeat headers, duplicate summaries, write out multiple-choice responses, replicate abstract, etc.). Randomly assign evaluators to long vs short condition and measure treatment effect (\u03c4 statistic interpreted as probability long>short). Use Mann\u2013Whitney U, Fisher permutation tests, and bootstrap CIs. Practical implication: review length may be a cheap/spurious signal and must be accounted for when using human-provided review-quality scores for incentives or evaluation."
+      },
+      {
+        "name": "Author outcome\u2013induced bias",
+        "description": "Authors evaluating reviews of their own papers show positive bias toward reviews recommending acceptance versus rejection.",
+        "guidance": "To measure, match pairs of reviews evaluated by the same author on the same paper controlling for confounders: (i) same author & same paper, (ii) review lengths similar (longer \u2264 1.5\u00d7 shorter), (iii) both reviews have\u22652 non-author evaluations and have mean non-author overall evaluation within 1 point. Apply Mann\u2013Whitney U (\u03c4 statistic) and permutation tests. Result interpretation: authors' scores for accept reviews can be substantially higher (e.g., observed mean difference ~1.4 on 7-pt scale). Caution: authors should be used carefully as evaluators for incentives or measurement without debiasing."
+      },
+      {
+        "name": "Inter-evaluator agreement / disagreement rate",
+        "description": "Agreement quantified by taking pairs of evaluators and pairs of reviews both evaluated by them: they 'agree' if both rank the same review higher; 'disagree' if they rank opposite; ties discarded.",
+        "guidance": "Compute total agreements vs disagreements across evaluator pairs and review pairs. Report disagreement rate (disagreements / (agreements + disagreements)); report tie rates separately. Provide 95% CIs by bootstrapping. Baseline random-agreement rate is 0.5. Use this statistic to compare consistency of review-evaluations to paper reviews or other processes; similar observed disagreement (~0.3) indicates comparable inconsistency."
+      },
+      {
+        "name": "Miscalibration (linear evaluator-offset model)",
+        "description": "Model evaluation scores as a linear combination: observed score = objective_review_quality + evaluator_offset (bias/miscalibration) + idiosyncratic noise; evaluator offsets modeled per-evaluator-type as normal distributions with their own variances.",
+        "guidance": "Fit via maximum likelihood (Gaussian Process / GPy) to estimate variance components. Use normalized evaluator-offset variance as a measure of miscalibration per evaluator type; larger variance indicates greater miscalibration. Compare to historical estimates (e.g., NeurIPS 2014) to contextualize magnitude. Use per-type offsets (meta-reviewers, reviewers, authors, external reviewers) to detect groups with larger miscalibration (authors had notably higher offset variance in the study)."
+      },
+      {
+        "name": "Subjectivity / commensuration bias (mapping criteria \u2192 overall)",
+        "description": "Evaluators differ in how they map criterion-level scores (Understanding, Coverage, Substantiation, Constructiveness) to an overall quality score \u2014 a form of subjectivity called commensuration bias.",
+        "guidance": "Learn a monotone aggregate function mapping criteria to overall score (ensuring monotonicity: improvement in any criterion holding others constant should not reduce overall score). Measure commensuration bias by average absolute loss (L1) between the learned aggregate prediction and actual overall scores; normalize losses when comparing across scales. Higher loss indicates more variability/subjectivity in aggregation. Use this to quantify arbitrariness and compare to other review settings."
+      },
+      {
+        "name": "Experimental design and assignment best practices",
+        "description": "Random assignment, blinding of evaluators to the specific experimental manipulation, and choosing evaluator populations that have not previously seen target material are necessary to identify causal effects (e.g., length bias).",
+        "guidance": "In RCTs: assign participants uniformly at random to conditions; ensure participants in treatment arms (e.g., external reviewers) had not previously seen original reviews to avoid contamination; do not reveal the specific manipulation to participants to avoid demand effects. When selecting papers for experiments, maximize overlap so multiple evaluators evaluate the same reviews for inter-evaluator comparisons."
+      },
+      {
+        "name": "Construction of manipulations that do not improve substantive quality",
+        "description": "When testing spurious signals (e.g., length), elongate reviews in ways that do not add informational content: repeat box headers, duplicate summaries in different sections, write out multiple-choice answers in text boxes, replicate abstracts, etc.",
+        "guidance": "Document examples of original vs elongated text (appendices). Ensure manipulations increase word count substantially (e.g., from ~200\u2013300 words to ~600\u2013850 words) while preserving substantive content so measured effects reflect perception changes, not real quality change."
+      },
+      {
+        "name": "Matching and confounder controls for bias estimation",
+        "description": "When estimating biases (e.g., author-outcome bias), control for confounders by matching on within-author comparisons, review length, and proxy measures of true quality (e.g., non-author mean evaluations).",
+        "guidance": "Use strict matching criteria (same author and paper; length similarity threshold; non-author evaluation agreement and similar means) before applying pairwise non-parametric tests. This reduces alternative explanations for observed differences in evaluator scores."
+      },
+      {
+        "name": "Statistical testing and uncertainty quantification",
+        "description": "Use non-parametric tests (Mann\u2013Whitney U interpreted via \u03c4 statistic), Fisher permutation tests for p-values, and bootstrap resampling to compute confidence intervals for test statistics.",
+        "guidance": "Define \u03c4 as the probability a treated item is scored higher than control (ties broken randomly). For significance, run many permutations/bootstraps (e.g., 20,000 iterations suggested). Correct for multiple comparisons when testing multiple criteria (e.g., Holm\u2013Bonferroni)."
+      },
+      {
+        "name": "Handling ties and reporting tie rates",
+        "description": "When computing pairwise agreement metrics, ties are common and should be reported separately; experiments here observed tie rates of ~29% (overall) and 37\u201340% (criteria).",
+        "guidance": "Discard ties when computing agreement/disagreement rates per the referenced methodology and report tie frequency; high tie rates affect interpretability of agreement statistics and may indicate coarse scale or low evaluator effort."
+      },
+      {
+        "name": "Scale normalization when comparing across contexts",
+        "description": "When comparing metrics derived from different rating scales (e.g., 7-point evaluation of reviews vs 10-point paper review scales), normalize scores (e.g., linear rescaling) before computing cross-domain comparisons or losses.",
+        "guidance": "Example used: re-normalize loss by factor 6/9 assuming linear mapping from a 10-point scale to a 7-point scale. Report assumption and sensitivity to mapping choice."
+      },
+      {
+        "name": "Recruitment and evaluator-type stratification",
+        "description": "Include multiple types of evaluators (meta-reviewers, paper reviewers, paper authors, external reviewers) and analyze them separately to account for differences in perspectives, calibration, and selection bias.",
+        "guidance": "Recruit on an opt-in basis may induce selection bias; report recruitment windows, opt-in procedure, and analyze per-type to mitigate confounding. Use external reviewers (who didn't see original reviews) for manipulations requiring blindness."
+      },
+      {
+        "name": "Ethics, privacy, and data sharing constraints",
+        "description": "Human-subjects data involving evaluations of identifiable reviewers may be sensitive; consent forms may restrict data sharing and require de-identification or aggregation.",
+        "guidance": "Obtain IRB approval and informed consent; when raw data cannot be shared due to privacy guarantees, provide partially aggregated data and document rationale. Clearly state limitations in public data availability and provide reproducible analysis code where possible."
+      }
+    ]
+  }
+}

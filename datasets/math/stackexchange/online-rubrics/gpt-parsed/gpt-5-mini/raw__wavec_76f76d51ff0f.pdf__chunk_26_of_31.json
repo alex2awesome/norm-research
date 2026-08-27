@@ -1,0 +1,266 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 26,
+  "n_chunks": 31,
+  "chunk_chars": 39984,
+  "model": "gpt-5-mini",
+  "elapsed_s": 391.2525633749974,
+  "input_tokens": 12820,
+  "output_tokens": 6766,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "PARI/GP users and developers writing GP scripts or extending PARI with libraries (GP scripters and libpari extension authors)",
+    "subtask_short": "pari/gp library API usage",
+    "subtask_description": "Guidance and API semantics for using PARI/GP built-in functions, GP scripting constructs, and extending GP with installed/shared-library functions; includes warnings, complexity notes, parallel programming constraints, and default settings. Useful for GP script authors and C/libpari extension developers.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "library",
+      "scripting",
+      "extension",
+      "parallel_programming"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "install gives access to non-static library functions",
+        "description": "install gives you access to all non-static functions defined in the PARI library and allows adding external functions to the gp interpreter.",
+        "guidance": "Example: install(\"addii\",\"GG\"); then addii(1,2) returns 3. You can install functions from libc.so (e.g. system) or your own compiled shared libraries (use gp2c or manual compilation). Re-installing prints a warning and updates prototypes but will not reload a symbol from the library even if recompiled. Caution: installing on statically-linked gp may cause a segmentation fault on first use; test on a harmless example first."
+      },
+      {
+        "name": "prototype notation for library functions",
+        "description": "Prototype strings encode return type and argument types for libpari functions (e.g. i, l, v for int/long/void; G for GEN; & for GEN*; L for long; s for char*; n for variable; p/P for real/series precision).",
+        "guidance": "Special constructs: DG (optional GEN -> NULL if omitted), D& (optional GEN*), Dn (optional variable -> -1 if omitted). Example: long issquareall(GEN x, GEN *n = NULL) has prototype lGD&. Full documentation in libpari.dvi."
+      },
+      {
+        "name": "install caution on static linking",
+        "description": "Installed functions may provoke a Segmentation Fault on statically-compiled gp when first used.",
+        "guidance": "If you intend to use install, check it works on your machine with a harmless example (e.g., installing addii and calling it) before relying on it in production."
+      },
+      {
+        "name": "kill(sym) restores symbol to undefined status but retains variable name and priority",
+        "description": "kill(sym) restores sym to 'undefined' and deletes help messages added with addhelp, but the variable name remains known to the interpreter and keeps its former priority.",
+        "guidance": "Example: after z = y = 1; kill(y); typing y prints symbol y (undeclared) and variable() still lists y among names; killing a user function (a t_CLOSURE) does not remove its name from variable list. kill is the only way to remove aliases and installed functions."
+      },
+      {
+        "name": "quote operator vs kill for resetting variables",
+        "description": "Using the quote operator (a = 'a) resets variables to their starting values but does not delete help messages attached to the name and is slightly slower than kill(a).",
+        "guidance": "Example: x = 1; addhelp(x,\"foo\"); x = 'x; ?x still shows help 'foo'. Use kill to remove help or aliases."
+      },
+      {
+        "name": "listcreate is obsolete; use List",
+        "description": "listcreate({n}) is obsolete and retained for compatibility; create empty lists with List().",
+        "guidance": "The previous mandatory argument is ignored; use List() in modern code."
+      },
+      {
+        "name": "listinsert complexity and semantics",
+        "description": "listinsert(L,x,n) inserts object x at position n in L (t_LIST). It has complexity O(#L \u2212 n + 1) due to shifting elements to the right.",
+        "guidance": "Use when insertion at arbitrary positions is required; library syntax: GEN listinsert(GEN L, GEN x, long n)."
+      },
+      {
+        "name": "listkill obsolete; prefer L = List()",
+        "description": "listkill(L) is obsolete; use L = List() instead. Local variables are cleared automatically when a user function returns.",
+        "guidance": ""
+      },
+      {
+        "name": "listpop removes nth or last element; complexity O(#L \u2212 n + 1)",
+        "description": "listpop(list,{n}) removes the n-th element of list (t_LIST). If n omitted or greater than length, removes last element. If list empty, does nothing.",
+        "guidance": "Runs in time O(#L \u2212 n + 1). Library syntax: void listpop0(GEN list, long n)."
+      },
+      {
+        "name": "listput semantics and performance",
+        "description": "listput(list,x,{n}) sets the n-th element to x; if n omitted or greater than length, appends x. Returns the inserted element. Can insert into occupied cells or append.",
+        "guidance": "Examples show listput(L,1) appends. Direct assignment L[n]=x is simpler for replacing. At top-level, direct indexing beyond end errors, but listput can append beyond current end. Complexity: O(#L) worst-case (reallocation) but O(1) on average; successive listputs to build a list of final length #L run in total O(#L)."
+      },
+      {
+        "name": "listsort sorts in place and shares ordering with sets",
+        "description": "listsort(L,{flag=0}) sorts t_LIST in place using the universal comparison function cmp; ordering is same as for sets so setsearch can be used.",
+        "guidance": "Faster than vecsort because it sorts in place (no copy). No value returned. If flag non-zero, suppresses repeated coefficients. Library syntax: void listsort(GEN L, long flag)."
+      },
+      {
+        "name": "localbitprec sets real bit precision dynamically and masks global realbitprecision",
+        "description": "localbitprec(p) sets real precision to p bits in dynamic scope; computations use p bits but realbitprecision itself is unaffected (masked) and unmasked on exit. Nested scopes: innermost takes precedence; subroutines called from localbitprec use the local accuracy.",
+        "guidance": "Effectively similar to temporarily default(realbitprecision,p) but safer (exception-safe). Bit precision increases in machine-dependent steps (64 on many machines), so requested p may be rounded up to the next multiple of 64 (32 on 32-bit machines). Changing realbitprecision globally is deprecated in favor of localbitprec/localprec; mixing both yields surprising results\u2014prefer localbitprec in programs."
+      },
+      {
+        "name": "localprec sets real precision (decimal digits) dynamically",
+        "description": "localprec(p) sets real precision to p decimal digits in dynamic scope; computations use that precision while default(realprecision) remains unaffected outside scope.",
+        "guidance": "Nested scopes behave similarly. Changing realprecision globally is deprecated in favor of localprec; mixing both yields surprising results\u2014prefer localprec within programs. Subroutines called from localprec scope use local accuracy."
+      },
+      {
+        "name": "mapget raises exception for missing key",
+        "description": "mapget(M,x) returns image of x by map M and raises an exception when key x not present.",
+        "guidance": "Example exception message: 'mapget: non-existent component in mapget: index not in map'. Use mapisdefined to test presence before mapget if necessary. Library syntax: GEN mapget(GEN M, GEN x)."
+      },
+      {
+        "name": "mapisdefined returns presence and optionally image",
+        "description": "mapisdefined(M,x,{&z}) returns 1 if x has an image in M, 0 otherwise; if z is present, sets z to the image of x when it exists.",
+        "guidance": "Useful to test membership without raising exceptions. Works with Map objects. Library syntax: GEN mapisdefined(GEN M, GEN x, GEN *z = NULL)."
+      },
+      {
+        "name": "mapput associates key to value",
+        "description": "mapput(M,x,y) associates x to y in map M; use mapget to retrieve value.",
+        "guidance": "Maps preserve key ordering visible via Vec(M) or Mat(M). Library syntax: void mapput(GEN M, GEN x, GEN y)."
+      },
+      {
+        "name": "print/print1 output behavior",
+        "description": "print outputs string arguments in raw format ending with newline; print1 outputs without ending newline.",
+        "guidance": "You can embed newlines using \\n notation. printtex/writetex provide TeX formatting variants for output intended for TeX manuscripts."
+      },
+      {
+        "name": "printf follows C-style directives with gp specifics",
+        "description": "printf(fmt,{x}*) prints according to format directives (flags #,0,-,+,space; field width; precision; conversion specifiers d,i,o,u,x,X,p,e,E,f,g,G,c,s,%).",
+        "guidance": "Field width or precision can be specified with * using subsequent args. Length modifier is ignored under gp except 'P' indicates argument is a GEN. Numerical conversions apply recursively to vectors/matrices. Examples illustrate padding, signs, widths, and nested formatting."
+      },
+      {
+        "name": "printf deviations from C89/C99",
+        "description": "gp's printf deviates in a few places: missing precision uses current realprecision (not C89 default 6); exponent formatting differs (no enforced two digits, never write + in exponent, 0 printed as 0.Eexp); f may switch to e if exponent >= precision; g/G do not remove trailing zeros or trailing decimal point; 0 printed as 0.Eexp.",
+        "guidance": "Be aware when formatting numbers for consistent cross-platform output; use explicit formatting when needed."
+      },
+      {
+        "name": "printsep/printsep1 behavior",
+        "description": "printsep(sep,{str}*) outputs arguments separated by sep ending with newline; printsep1 does same but without trailing newline.",
+        "guidance": "Useful for delimiter-separated output sequences."
+      },
+      {
+        "name": "printtex/writetex produce TeX-format output",
+        "description": "printtex({str}*) outputs arguments in TeX format to standard output; writetex(filename,{str}*) writes/appends TeX-format output to filename.",
+        "guidance": "To capture TeX output to a file, consider enabling log defaults: default(logfile, \"new.tex\"); default(log,1); printtex(result); or use writetex."
+      },
+      {
+        "name": "quit(status) exit value is mod 256",
+        "description": "quit({status=0}) exits gp returning status (a small integer). The system typically sees status mod 256.",
+        "guidance": "Non-zero status normally indicates abnormal termination; consult exit(3)/wait(2) on your system for details."
+      },
+      {
+        "name": "read/readstr/readvec file input semantics",
+        "description": "read(filename) reads and evaluates file and returns last expression result; readstr(filename) returns a vector of GP strings, each line; readvec(filename) returns a vector whose components are evaluations of all sequences of instructions in the file.",
+        "guidance": "If filename omitted, re-reads the last fed file. readvec is useful to capture all per-line evaluations (e.g., file with 1\\n2\\n3 gives [1,2,3]). There is also a gp_readvec_stream(FILE*) for more flexibility. If a GP binary file is read, last object is returned. Beware of allocatemem statements in files; leave read instructions by themselves, not embedded in larger sequences."
+      },
+      {
+        "name": "select applies selection function and supports matrix/indices and comprehension syntax",
+        "description": "select(f,A,{flag=0}) returns elements x of A such that f(x) is non-zero; for matrices it selects columns; if flag = 1 returns indices of selected elements.",
+        "guidance": "Shortcuts: [g(x) | x <- v, f(x)] equivalent to apply(g, select(f, Vec(v))); [x | x <- v, f(x)] equivalent to select(f, Vec(v)). Example: select(x->isprime(x), vector(50,i,i^2+1)). For indirect selection use flag=1 and vecextract to recover elements. select(x->x, M) selects non-0 entries."
+      },
+      {
+        "name": "self() returns calling closure for anonymous recursion",
+        "description": "self() returns the calling function or closure as a t_CLOSURE object, enabling anonymous recursive functions.",
+        "guidance": "Example: (n->if(n==0,1,n*self()(n-1)))(5) yields 120."
+      },
+      {
+        "name": "setrand reseeds PRNG deterministically",
+        "description": "setrand(n) reseeds the random number generator using seed n (either a state array or a small positive integer producing a deterministic state). No value returned.",
+        "guidance": "Using setrand(1) twice yields identical randomized computations\u2014useful for reproducibility in tests."
+      },
+      {
+        "name": "system executes shell command and output bypasses log",
+        "description": "system(str) executes the system command str; its output is written to standard output (it doesn't go into GP's logfile).",
+        "guidance": "This simply calls the C system command. Example: sys(\"ls gp*\") lists files; library syntax: void gpsystem(const char *str)."
+      },
+      {
+        "name": "trap obsolete; use iferr; trap semantics for recovery",
+        "description": "trap({e},{rec},seq) is obsolete; it tries to evaluate seq and traps runtime error e, executing rec as recovery if error occurs; seq is evaluated up to the error and rec executes in the same context (no undo of side effects).",
+        "guidance": "Use iferr for a nicer interface. Example: inv(x) = trap(e_INV, INFINITY, 1/x). trap's interface currently not adequate for trapping individual exceptions; recognized keywords include e ALARM, e ARCH, e STACK, e INV, e IMPL, e OVERFLOW, e SYNTAX, e MISC, e TYPE, e USER; library syntax: GEN trap0(const char *e = NULL, GEN rec = NULL, GEN seq = NULL)."
+      },
+      {
+        "name": "type(x) returns internal PARI type name as string (use typ macro for integer code)",
+        "description": "type(x) returns the internal type name of PARI object x as a string (e.g., type(1) -> \"t_INT\"). The typ macro usually preferable as it returns a long matching t_* symbols.",
+        "guidance": "The name type was avoided in library code because it's a reserved identifier for some compilers. Library syntax: GEN type0(GEN x)."
+      },
+      {
+        "name": "uninline experimental",
+        "description": "uninline() (experimental) exits the scope of all current inline variables.",
+        "guidance": "Use with caution\u2014experimental feature."
+      },
+      {
+        "name": "version() returns version vector and lex comparison guidance",
+        "description": "version() returns current version number as a t_VEC with three integer components [major, minor, patchlevel]; development checkouts may append further components (e.g., commit count, git hash).",
+        "guidance": "Use lex(version(), [2,3,5]) >= 0 to check compatibility across vectors of different lengths. For development versions the 4th component counts reachable commits and 5th is git commit hash\u2014include them in logfile names if managing many development versions."
+      },
+      {
+        "name": "warning outputs 'user warning' and arguments, optionally colored",
+        "description": "warning({str}*) outputs the message 'user warning' and stringified arguments; if colors enabled, message appears in different color for visibility.",
+        "guidance": "Example: warning(n, \" is very large, this might take a while.\")."
+      },
+      {
+        "name": "whatnow(key) maps old function names to new syntax or reports removals",
+        "description": "whatnow(key) reports the new function name and syntax if a function present in older GP versions changed; if function removed and no compatible interface exists, reports that it no longer exists.",
+        "guidance": "Example: whatnow(\"mu\") shows 'mu(n) ===> moebius(n)'. For removed functions no equivalent is mentioned."
+      },
+      {
+        "name": "write/write1/writebin semantics and binary file warnings",
+        "description": "write(filename,{str}*) appends arguments to filename with newline; write1 without newline; writebin(filename,{x}) writes object x in binary format (exact internal structure) which is faster but not human-readable. If x omitted, saves all user variables (named object) preserving names and relative variable priorities.",
+        "guidance": "Binary files have a magic number so can be read by read or \\r. Installed functions and history objects cannot be saved via writebin. Binary files are architecture-dependent and compatibility with future gp versions not guaranteed\u2014avoid for long-term storage; they may also be larger and harder to compress. Binary files can be gzipped (.gz). Library syntax: void gpwritebin(const char *filename, GEN x = NULL)."
+      },
+      {
+        "name": "writetex writes TeX-format output to file",
+        "description": "writetex(filename,{str}*) writes/appends TeX-format output to filename (same as write but TeX formatted).",
+        "guidance": ""
+      },
+      {
+        "name": "parallel programming requires PARI configured with --mt and functions must be side-effect-free",
+        "description": "Parallel functions are only available if PARI was configured with Configure --mt=...; two multithread interfaces supported (POSIX threads and MPI). POSIX threads suit single systems, MPI suit clusters. The parallel GP interface behaves identically across thread interfaces if program written properly.",
+        "guidance": "Parallel functions require that closures do not access global variables or variables declared with local(), and must be free of side effects. Write code accordingly to be portable between POSIX and MPI."
+      },
+      {
+        "name": "parapply constraints and usage",
+        "description": "parapply(f,x) evaluates f in parallel on elements of x; f must not access globals or locals and must be side-effect-free.",
+        "guidance": "Example: parapply(factor, [2^256+1, 2^193-1]) factors numbers in parallel. Library syntax: GEN parapply(GEN f, GEN x)."
+      },
+      {
+        "name": "pareval constraints and usage",
+        "description": "pareval(x) evaluates a vector of zero-arity closures x in parallel; closures must not access globals or locals and be side-effect-free.",
+        "guidance": "Useful to run many independent computations concurrently. Library syntax: GEN pareval(GEN x)."
+      },
+      {
+        "name": "parfor evaluation order, expr2 sequentiality, and side-effect caveats",
+        "description": "parfor(i=a,{b},expr1,{r},{expr2}) starts computations for i in increasing order but completions may be out of order; expr2 is evaluated sequentially for each r as it becomes available. expr2 may use break/next/return to exit; if an exit occurs at i=c, computations for i<c are completed and return value is that of smallest i causing interruption. Use of side-effects in expr2 can lead to undefined behavior due to non-deterministic number of expr2 evaluations.",
+        "guidance": "Example: compute sum of squares in parallel by parfor with a sequential accumulative expr2 ensures no concurrent modification of accumulator though addition order is nondeterministic. expr2 may exit loop; examples provided for parallel prime search. Be careful with shared state\u2014prefer to avoid or protect."
+      },
+      {
+        "name": "parforprime loops over primes",
+        "description": "parforprime(p = a, {b}, expr1, {r}, {expr2}) behaves like parfor but iterates only over primes between a and b (b can be +oo).",
+        "guidance": "Same side-effect and exit semantics as parfor."
+      },
+      {
+        "name": "parforvec, parselect, parsum, parvector semantics and constraints",
+        "description": "parforvec(X=v,expr1,{j},{expr2},{flag}) evaluates expr2 for generated X in random order in parallel; parselect selects elements in parallel (flag=1 returns indices); parsum computes sum in parallel (random order) with expr free of side effects; parvector evaluates vector elements expr in parallel.",
+        "guidance": "All parallel constructs require expressions/closures that do not access global variables or local() variables and are free of side effects. parforvec and parfor's break/return semantics may still execute expr2 for some lower indices\u2014be careful with side-effects."
+      },
+      {
+        "name": "GP defaults: TeXstyle bits meaning",
+        "description": "TeXstyle default bits control GP's TeX formatting in logs when log=3: bit 2 inserts \\right/\\left pairs, bit 4 inserts discretionary breaks in polynomials to improve line breaks.",
+        "guidance": "Default value is 0."
+      },
+      {
+        "name": "GP defaults: breakloop",
+        "description": "breakloop default enables 'break loop' debugging mode; default is 1 for interactive gp sessions, 0 otherwise.",
+        "guidance": "See Section 2.10.3 for debugging mode details."
+      },
+      {
+        "name": "GP defaults: colors configuration and compatibility",
+        "description": "colors default configures output colors (seven slots) for error messages, history numbers, prompt, input line, output, help messages, timer; accepted values are 'no', integers 0..15, or triples [fg,bg,attr]; special presets darkbg/lightbg/boldfg available.",
+        "guidance": "If k < 7 missing slots assumed 'no'. In current version incompatible with PariEmacs (changing colors will fail silently). Default value is \"\" (no colors)."
+      },
+      {
+        "name": "GP defaults: compatible is obsolete",
+        "description": "The compatible default is obsolete and is now a no-op.",
+        "guidance": ""
+      },
+      {
+        "name": "GP defaults: datadir points to optional data files",
+        "description": "datadir default names directory containing optional data files (elldata, galdata, galpol, seadata packages).",
+        "guidance": "Default is /usr/local/share/pari or override via Configure --datadir=."
+      },
+      {
+        "name": "GP defaults: debug level default",
+        "description": "debug default controls debugging messages; if non-zero extra messages may be printed.",
+        "guidance": "Default value is 0 (no debugging messages)."
+      }
+    ]
+  }
+}

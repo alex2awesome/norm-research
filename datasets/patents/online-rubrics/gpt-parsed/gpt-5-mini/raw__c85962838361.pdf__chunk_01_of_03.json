@@ -1,0 +1,111 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/c85962838361.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "c85962838361.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39971,
+  "model": "gpt-5-mini",
+  "elapsed_s": 41.91040304204216,
+  "input_tokens": 12275,
+  "output_tokens": 3438,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "economists and empirical researchers studying the relationship between R&D, patents, patent citations, and firm market value (firm valuation using patent-based knowledge stocks)",
+    "subtask_short": "market_value_estimation_using_patents",
+    "subtask_description": "Estimating firm market value (Tobin's q) as a function of knowledge stocks constructed from R&D expenditures, patent counts, and citation counts, including specification, construction of stocks, estimation choices, and robustness checks.",
+    "subtask_keywords": [
+      "econometrics",
+      "patents",
+      "citations",
+      "r_and_d",
+      "tobin_q",
+      "firm_valuation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Model specification: additively separable linear specification",
+        "description": "Use an additively separable linear specification of the firm-level market-value function (as used by Griliches (1981) and co-authors). This specification assumes the marginal shadow value of the assets is equalized across firms and allows a scale parameter \u03c3.",
+        "guidance": "Write the value function in logs; if constant returns to scale (\u03c3=1) move log A to the left and use Tobin's q as dependent variable. Include parameter \u03c3 to allow non-constant scale effects. Be explicit about interpreting \u03c3\u03b3 as absolute shadow value of knowledge assets relative to tangible assets."
+      },
+      {
+        "name": "Treat knowledge creation as a cascade: R&D \u2192 patents \u2192 citations",
+        "description": "View R&D, patents, and citations as cascading indicators: R&D reveals commitment to innovation, patents catalog codifiable new knowledge, and citations indicate the extent to which innovations turn out to be important.",
+        "guidance": "Include R&D stock, patent stock (patents), and citation stock (citations) in the valuation equation because each 'adds information on top of what could be inferred on the basis of the previous indicator.'"
+      },
+      {
+        "name": "Constructing R&D and patent stocks with depreciation",
+        "description": "Compute R&D and patent stocks using a declining-balance depreciation specification; conventionally use a 15% depreciation rate.",
+        "guidance": "Follow convention (15% rate) for R&D and patent stock depreciation; small departures from this rate typically do not change results but deserve revisiting with richer data."
+      },
+      {
+        "name": "Constructing citation stocks and decomposing past vs future",
+        "description": "Citation stocks must account for citations accruing over long horizons: decompose total citation stock into 'past' citations observed by time t and 'future' citations that occur after t, and compute stocks using a declining balance formula with depreciation \u03b4.",
+        "guidance": "Use equations (5)-(8) to compute T_CITES(t)=past + future. Recognize citations are not one-shot events; decide whether to use past, future, or total citation stocks depending on the question (timing of information revelation)."
+      },
+      {
+        "name": "Be cautious with log-linear approximations for high K/A ratios",
+        "description": "The term log(1 + \u03b3 (K/A)it) is typically approximated by \u03b3 (K/A)it, but this approximation can be relatively inaccurate for K/A ratios above ~15%.",
+        "guidance": "Avoid relying on the small-argument linear approximation when K/A ratios are large; estimate the nonlinear specification or use the full form to prevent approximation bias."
+      },
+      {
+        "name": "Use nonlinear least squares with time dummies; careful about firm fixed effects",
+        "description": "Estimate the market-value equation using nonlinear least squares, including year dummies and, in some specifications, industry fixed effects. The authors choose not to include firm fixed effects.",
+        "guidance": "Avoid firm fixed effects when interest centers on cross-firm R&D strategies because: (1) R&D intensity is highly correlated with firm effects; (2) panels are short and right-hand variables are predetermined, so differencing causes attenuation from measurement error; (3) assuming permanent differences across firms may be inappropriate given strategy changes."
+      },
+      {
+        "name": "Normalize coefficients to compare magnitudes across different units",
+        "description": "Coefficients on R&D/Assets, Patents/Assets, and Citations/Assets are not directly comparable because of differing units; normalize coefficients by multiplying by the ratio of total stock to deflated R&D stock to enable comparisons.",
+        "guidance": "Normalize using ratios of totals rather than cross-firm averages due to zeros and skewness; nonetheless, treat normalized coefficients cautiously because skewness and zeros make them unreliable."
+      },
+      {
+        "name": "Choose sample period and sample selection carefully",
+        "description": "Focus estimation on subperiods and samples where data are most complete (authors focus on 1979-1988) and restrict to 'patenting firms' (firms with at least one patent during a baseline period) when computing patent and citation stocks.",
+        "guidance": "Select periods with minimal truncation and stable valuation coefficients; restrict sample to firms for which stocks can be computed to avoid measurement issues."
+      },
+      {
+        "name": "Decompose citation stock into predicted and residual (unexpected) components",
+        "description": "Split total citation stock into the part predictable from past citations and an orthogonal residual (unexpected citations). The unexpected portion has a much larger coefficient in valuation regressions.",
+        "guidance": "Estimate TE_CITES_Pt|CITES (predicted) and R_CITES (residual) as in equation (9); include both to separate information already priced from new information revealed by future citations."
+      },
+      {
+        "name": "Model nonlinear/tail effects of citations per patent",
+        "description": "Because the distribution of citations per patent is highly skewed, capture nonlinearity by breaking Citations/Patents into categorical groups (e.g., <5, 5-6, 7-10, 11-20, >20) and including dummies to capture large premiums for highly cited portfolios.",
+        "guidance": "Expect little difference below median but large, economically significant valuation premiums for firms above the median; tail firms (>20 cites/patent) can have very large market-value premiums."
+      },
+      {
+        "name": "Account for industry heterogeneity via sector interactions",
+        "description": "Industry matters: interact sector dummies with knowledge-stock ratios because the impact of R&D, patent yield, and citations per patent varies widely across sectors (e.g., Drugs vs Computers).",
+        "guidance": "Include sector dummies and full interactions to allow differential coefficients; interpret cross-sector differences in terms of sectoral roles of patents (exclusion vs cross-licensing)."
+      },
+      {
+        "name": "Measure and treat self-citations separately",
+        "description": "Self-citations (citations from the same assignee) may differ in informational content from external citations; include measures like share of self-citations and ratio of self-citation stock to patent stock to capture their distinct effect on market value.",
+        "guidance": "Expect self-citations to have a positive coefficient but diminishing value with larger patent portfolios; consider mechanistic reasons (portfolio size raises probability of self-cites) and potential self-bias when interpreting results."
+      },
+      {
+        "name": "Address truncation and continuation practices in patent data",
+        "description": "Patent application and citation timing is complicated by continuation practice and truncation at the end of the data window; about one-quarter (up to one-half in biotech) have earlier priority dates but delayed continuations.",
+        "guidance": "Be explicit about using official vs original application dates; consider robustness checks using original priority dates and account for truncation in citation tallies (future citations beyond data end)."
+      },
+      {
+        "name": "Avoid differenced estimators for slowly changing regressors due to attenuation bias",
+        "description": "Because key right-hand side variables (e.g., R&D intensity) change slowly and panels are relatively short, differenced estimators can suffer substantial downward bias from measurement error.",
+        "guidance": "Prefer levels estimation (e.g., NLS with controls) over within-differencing when regressors are highly persistent; justify not using firm fixed effects on these grounds."
+      },
+      {
+        "name": "Interpret coefficients via semi-elasticities and evaluate at mean/median",
+        "description": "Compute semi-elasticities (partial derivatives) to interpret the impact of small changes in ratios (e.g., R&D/Assets, Patents/R&D, Cites/Patents) on Tobin's q, and evaluate these at means, medians, and ratios of totals because distributions are skewed.",
+        "guidance": "Use equation (10) to compute \u2202 log Q/\u2202(ratio) and report values at multiple representative points (mean, median, totals) to convey sensitivity given skewness."
+      },
+      {
+        "name": "Caveat: citation-based analysis requires long horizons and cannot evaluate very recent innovations",
+        "description": "Substantial time is needed after a patent is granted to accumulate significant citation information; thus citation-based analysis is not usable for evaluating current or very recent innovations.",
+        "guidance": "Use citation measures only when sufficient post-grant time has elapsed; for recent innovations rely on other indicators (R&D, patents) or acknowledge limitations."
+      }
+    ]
+  }
+}

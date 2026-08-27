@@ -1,0 +1,109 @@
+{
+  "schema_version": "silver-match-v3-press-releases-verifier-dev-policy-v2",
+  "status": "FROZEN_BEFORE_FRESH_DEV_PREDICTIONS_LABELS_OR_TRUTH",
+  "task": "press-releases",
+  "purpose": "Author a strict exact-leaf verifier from optimize-only evidence, then select it once on a fresh source-disjoint verifier-dev panel without recycling any optimize, select, verifier, blind, sealed-test, MI, or outcome exposure.",
+  "canonical_inputs": {
+    "manifest": {
+      "path": "/lfs/skampere3/0/alexspan/data/silver_match_v3_20260712_faithful/manifest.json",
+      "sha256": "b614e345a07123f9fe79d9521351886107476d34cf2b09daa50efce71dc1356f"
+    },
+    "bank_source_sha256": "01b67a332cd9f7b964e586dafc5a06dedacf7465aeab08d8eac8f60f165169ad",
+    "exclusion_inventory": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/exclusion_union/EXCLUSION_INVENTORY.json",
+      "sha256": "4f60a60f205f1bebb6f1d460551d8deee879a8b8d4a7dc8672adfd9746ae9bfe"
+    },
+    "exclusion_identities": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/exclusion_union/identities.jsonl",
+      "sha256": "671ba1dd1abaa8f0bcca546baad953c2aac1cdd69e701c80e56f658b22fb46a8",
+      "uids": 11375,
+      "source_groups": 7690
+    },
+    "fresh_dev_identity_freeze": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/identity/FREEZE.json",
+      "sha256": "e035e43f957fa1ecaf6a0eb0cf5e439ea86f6efc7be553336a7c522a2b4efe34"
+    },
+    "fresh_dev_identities": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/identity/identities.jsonl",
+      "sha256": "18d8f14c0b2040069eb9f7cb2699ef8924616c58a9cd27358084982229ec08a6",
+      "count": 300,
+      "source_groups": 300,
+      "required_upstream_split": "train",
+      "role": "verifier_dev"
+    },
+    "fresh_dev_vs_exclusions": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/identity.vs_exclusion_union.audit.json",
+      "sha256": "3d1136ae1110546605bb6709b15da2332cc1f8d2502ada3f76efd37237e0a758",
+      "uid_overlap": 0,
+      "source_group_overlap": 0
+    }
+  },
+  "optimize_only_author_evidence": {
+    "packet": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/optimize_author_training_v1/examples.jsonl",
+      "sha256": "dd7bf631a0dac73660b6807e1f538b8824114e4bbbc36a46fcc4b77f62ce5429"
+    },
+    "report": {
+      "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/adjudicator_k50/press-releases/gepa_clean_v2/verifier_dev_v2/optimize_author_training_v1/REPORT.json",
+      "sha256": "53ce7cbf810ad38423bc2859d62d2199b342e6a9e37fe7036d532c0b60a180b1"
+    },
+    "count": 30,
+    "confirm_match": 17,
+    "reject": 13,
+    "use": "verifier_prompt_authorship_and_gepa_optimize_only",
+    "may_select_verifier": false
+  },
+  "fresh_truth_protocol": {
+    "candidate_and_proposal_hidden_from_labelers": true,
+    "initial_independent_full_bank_passes": 2,
+    "maximum_resolver_passes": 2,
+    "resolver_scope": "exact unresolved rows only",
+    "chunk_size": 25,
+    "maximum_initial_chunk_calls": 24,
+    "maximum_resolver_chunk_calls": 24,
+    "maximum_total_chunk_calls": 48,
+    "maximum_total_row_judgments": 1200,
+    "allowed_typed_decisions": [
+      "MATCH",
+      "GENERIC_VERDICT",
+      "MATCH_FAMILY_ONLY",
+      "NO_CANDIDATE_FITS",
+      "NO_EXPLICIT_CRITERION",
+      "NOISE"
+    ],
+    "noise_semantics": "Only decision == NOISE is extraction noise; NO_EXPLICIT_CRITERION is a valid typed non-match.",
+    "truth_release": "At least two exact independent votes per resolved row; remaining disagreements stay unresolved."
+  },
+  "proposal_and_balance_protocol": {
+    "r4_three_order_proposals_may_run_after_identity_freeze": true,
+    "proposals_must_remain_hidden_from_truth_labelers": true,
+    "strict_proposal": "All three order variants emit MATCH with the same current-bank metric leaf.",
+    "identity_substitution_after_freeze": false,
+    "pair_universe": "Intersection of the fixed 300 identities, independently frozen truth, and strict R4 proposals.",
+    "balancing": "Deterministically balance CONFIRM_MATCH versus REJECT where capacity permits, then round-robin proposal metric_id before stable-hash fill. Never replace an identity based on its truth or proposal.",
+    "balance_seed": 2026071305,
+    "maximum_pairs": 300
+  },
+  "gepa_and_selection_caps": {
+    "author_model": "Gemma-4-31B with tightly shepherded GEPA; Codex/subagent judge may reject and replace any proposal",
+    "maximum_authored_verifier_variants": 4,
+    "authoring_inputs": "optimize_only_author_evidence only",
+    "maximum_fresh_dev_scoring_rounds_per_variant": 1,
+    "maximum_order_variants_per_verifier": 2,
+    "maximum_fresh_dev_batch_inference_runs": 8,
+    "no_prompt_edits_after_first_fresh_dev_score": true,
+    "selection": "One predeclared lexicographic selection after all fixed variants are scored once.",
+    "minimum_retained_proposals": 20,
+    "minimum_exact_precision": 0.9,
+    "minimum_wilson_lower_95": 0.8,
+    "failed_gate_action": "Do not promote; use independent subagent verifier or abstain.",
+    "promotion_requires_new_independent_blind_audit": true
+  },
+  "permanent_exclusions": {
+    "fresh_dev_from_retriever_or_ce_gradients": true,
+    "fresh_dev_from_adjudicator_prompt_optimization": true,
+    "fresh_dev_from_mi_or_outcome_estimation": true,
+    "fresh_dev_from_final_blind_claims": true,
+    "optimize_examples_from_verifier_selection_or_blind_claims": true
+  }
+}

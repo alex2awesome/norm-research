@@ -1,0 +1,83 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/waveh7_0f0bc19ca251.html",
+  "model": "claude-via-subagent-waveh7",
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "elapsed_s": 0.0,
+  "extracted": {
+    "orientation": "course_syllabus",
+    "intended_audience": "CS230 (Stanford Deep Learning) students learning to choose evaluation metrics for ML systems",
+    "subtask_short": "Advanced evaluation metrics for classification and detection",
+    "subtask_description": "Stanford CS230's Section 8 walks through evaluation metrics for deep learning systems, focusing on classification (accuracy, confusion matrix, precision, recall, F1) and object detection (IoU, AP via precision-recall AUC, mAP). The section motivates each metric, explains when it is appropriate, and gives worked numerical examples on a pneumonia classification toy problem.",
+    "subtask_keywords": ["evaluation_metrics", "classification", "object_detection", "precision_recall", "f1_score", "iou", "mean_average_precision", "class_imbalance", "single_number_metric", "deep_learning_course"],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Accuracy as fraction of correct predictions",
+        "description": "To compare the models, we could first use accuracy, which is the number of correctly classified examples divided by the total: accuracy(f) = sum_{x_i in X_test} 1{f(x_i) = y_i} / |X_test|.",
+        "guidance": "Defined as the fraction of correctly classified test examples; the worked example gives Accuracy(M1)=9/10, Accuracy(M2)=8/10, Accuracy(M3)=5/10, naively favouring M1."
+      },
+      {
+        "name": "Accuracy is unsuitable under class imbalance",
+        "description": "In general, when you have class imbalance (which is most of the time!), accuracy is not a good metric to use.",
+        "guidance": "Anti-pattern flagged explicitly: accuracy is misleading under class imbalance, which the page notes is most situations in practice."
+      },
+      {
+        "name": "Confusion matrix for asymmetric error breakdown",
+        "description": "Accuracy doesn't discriminate between errors (i.e., it treats misclassifying a patient with pneumonia as healthy the same as misclassifying a visualizing patient with having pneumonia). A confusion matrix is a tabular format for showing a more detailed breakdown of a model's correct and incorrect classifications.",
+        "guidance": "Confusion matrices break down predictions into TP/FP/TN/FN so that asymmetric error costs (e.g., missed pneumonia vs. false alarm) can be reasoned about separately."
+      },
+      {
+        "name": "Recall = tp / (tp + fn)",
+        "description": "Out of all the patients with pneumonia, how many did the model predict as having pneumonia? This metric is recall, which is expressed as the following: Recall = tp / (tp + fn).",
+        "guidance": "Recall captures the share of positives correctly identified; crucial when missing a positive (e.g., untreated pneumonia patient) is unacceptable. Example values: Recall(M1)=0/1, Recall(M2)=1/1, Recall(M3)=1/1."
+      },
+      {
+        "name": "Precision = tp / (tp + fp)",
+        "description": "Imagine that the treatment for pneumonia is very costly and therefore you would also like to make sure only patients with pneumonia receive treatment. A natural question to ask would be: Out of all the patients that are predicted to have pneumonia, how many actually have pneumonia? This metric is precision, expressed as the following: Precision = tp / (tp + fp).",
+        "guidance": "Precision captures the share of positive predictions that are correct; appropriate when false positives are costly (e.g., expensive treatment). Example values: precision(M1)=0/0, precision(M2)=1/3, precision(M3)=1/6."
+      },
+      {
+        "name": "Combine multiple metrics into a single number",
+        "description": "Precision and recall are both useful, but having multiple evaluation metrics makes it difficult to directly compare models. From Andrew Ng's machine learning book: 'Having multiple-number evaluation metrics makes it harder to compare algorithms. Better to combine them to a single evaluation metric. Having a single-number evaluation metric speeds up your ability to make a decision when you are selecting among a large number of classifiers. It gives a clear preference ranking among all of them, and therefore a clear direction for progress.' - Machine Learning Yearning",
+        "guidance": "Methodological prescription (quoted from Andrew Ng's Machine Learning Yearning): combine multiple metrics into a single-number metric to obtain a clear preference ranking and direction for progress."
+      },
+      {
+        "name": "F1 score as harmonic mean of precision and recall",
+        "description": "F1 score is a metric that combines recall and precision by taking their harmonic mean: F1 = 2 * (precision * recall) / (precision + recall).",
+        "guidance": "F1 combines precision and recall via harmonic mean. Example values: F1(M1)=0, F1(M2)=1/2, F1(M3)=2/7. The section also asks (food for thought) why F1 is not used as the training loss directly."
+      },
+      {
+        "name": "Intersection over Union (IoU) for bounding boxes",
+        "description": "Object detection involves finding objects, classifying them, and localizing them by drawing bounding boxes around them. Intersection over union is an intuitive metric that measures the goodness of fit of a bounding box. The higher the IoU, the better the fit. IoU is a great metric since it works well for any size and shape of object.",
+        "guidance": "IoU is the per-bounding-box goodness-of-fit metric used in object detection; higher is better and it generalizes across object sizes/shapes. Combined with precision/recall, it forms the basis of mAP."
+      },
+      {
+        "name": "Average Precision (AP) as area under PR curve",
+        "description": "At each confidence threshold, we can measure the precision and recall of the detector, giving us one data point. If we connect these points together, one for each threshold, we get a precision recall curve... We can summarize the performance of the model with one metric, by taking the area under the curve (shown in blue). This gives us a number between 0 and 1, where higher is better. This metric is commonly known as average precision (AP).",
+        "guidance": "AP summarizes the precision-recall curve across confidence thresholds as the area under the curve, bounded between 0 and 1 with higher being better. Used as the per-class/per-image detection score."
+      },
+      {
+        "name": "TP/FP via IoU threshold and class match",
+        "description": "We start with IoU to decide if each prediction is correct or not. For a ground truth object and nearby prediction, if the predicted class matches the actual class, and the IoU is greater than a threshold, we say that the network got that prediction right (true positive). Otherwise, the prediction is a false positive.",
+        "guidance": "A detection is a true positive iff (1) the predicted class matches the ground-truth class and (2) the bounding-box IoU exceeds a chosen threshold; otherwise it is a false positive."
+      },
+      {
+        "name": "Smoothed precision-recall curve for AP computation",
+        "description": "Notice how our precision-recall curve is jagged: this is due to some predictions being correct (increasing recall) and others being incorrect (decreasing precision). We smooth out the kinks in this graph to produce our network's final PR curve for this image and class. The average precision (AP) for this image and class is the area under this smoothed curve.",
+        "guidance": "AP is computed on a smoothed PR curve (kinks removed) for a given image/class, not on the raw jagged curve."
+      },
+      {
+        "name": "Mean Average Precision (mAP) over classes and images",
+        "description": "To compute the mean average precision over the whole dataset, we average the AP for each image and class, giving us one single metric of our network's performance on classification! This is the metric that is used for common object detection benchmarks such as Pascal VOC and COCO.",
+        "guidance": "mAP averages AP across all images and classes to produce a single scalar; cited as the standard metric for Pascal VOC and COCO."
+      },
+      {
+        "name": "NLP / generative metric checklist",
+        "description": "Evaluation Metrics for NLP Tasks: Generative language models — Perplexity, Cross entropy. Machine Translation — BLEU, ROUGE. Multi-task learning — GLUE. Manual evaluation by humans for fluency, grammar, comparative ranking, etc. Evaluations Metrics for GANs: Inception Score, Wasserstein distance, Fréchet Inception Distance, Traditional metrics such as precision, recall, and F1.",
+        "guidance": "Catalogues per-task metric choices: perplexity/cross-entropy for language modeling, BLEU/ROUGE for MT, GLUE for multi-task NLU, human evaluation for fluency/grammar/ranking; Inception Score, Wasserstein distance, FID, and classical precision/recall/F1 for GANs."
+      }
+    ]
+  }
+}

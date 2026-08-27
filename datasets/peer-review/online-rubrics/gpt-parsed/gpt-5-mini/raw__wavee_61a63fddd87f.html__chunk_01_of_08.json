@@ -1,0 +1,136 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_61a63fddd87f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_61a63fddd87f.html",
+  "chunk_idx": 1,
+  "n_chunks": 8,
+  "chunk_chars": 39977,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.3933990000005,
+  "input_tokens": 12140,
+  "output_tokens": 3994,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing/evaluating algorithms for conference peer-review bidding and assignment (ML/AI conference organizers, algorithm designers)",
+    "subtask_short": "peer-review bidding algorithm evaluation",
+    "subtask_description": "Designing, analyzing, and empirically evaluating algorithms that present paper orderings to arriving reviewers to elicit bids, trading off paper-side objectives (ensuring enough bids per paper) and reviewer-side objectives (showing relevant papers).",
+    "subtask_keywords": [
+      "peer_review",
+      "bidding",
+      "algorithm",
+      "conference_assignment",
+      "evaluation",
+      "simulation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Expected gain for final reviewer",
+        "description": "Given any history of paper orderings and bids from previously arrived reviewers, the paper ordering given by SUPER* to the final reviewer maximizes the expected gain conditioned on the history.",
+        "guidance": "This is the objective optimized for the final reviewer in Theorem 1: algorithms should present an ordering that maximizes the expected incremental gain from that reviewer, conditioned on observed history."
+      },
+      {
+        "name": "Expected immediate gain for any reviewer",
+        "description": "The immediate gain from a reviewer is defined as the difference between the gain after and before the reviewer arrived; SUPER* (with zero heuristic) gives orderings that maximize the expected immediate gain from any arriving reviewer conditioned on the history (Corollary 1).",
+        "guidance": "Design objective: maximize per-arrival expected immediate gain rather than only long-term aggregated metrics. Using zero heuristic yields this local optimality guarantee."
+      },
+      {
+        "name": "Local optimality (per-reviewer)",
+        "description": "SUPER* is computationally efficient and is locally optimal in the sense of optimizing for the reviewer under consideration despite the optimization over permutations.",
+        "guidance": "Algorithms should aim for local optimality guarantees: optimality with respect to the currently arriving reviewer given the observed history. Local optimality can be a practical design goal when global optimality is hard."
+      },
+      {
+        "name": "Global optimality under community (noiseless) model",
+        "description": "Under a noiseless community model (similarity matrices that are block diagonal up to permutation), SUPER* (with zero heuristic) and SIM are optimal, while BID and RAND are provably suboptimal by additive factors (Theorem 3).",
+        "guidance": "When similarity structure is strongly community/block structured, algorithms that exploit that structure (SUPER*, SIM) achieve optimal global performance; baselines that ignore it can be significantly worse."
+      },
+      {
+        "name": "Robustness to small noise in community model",
+        "description": "Under a noisy community model (small random perturbations from block structure), SUPER* (with zero heuristic) remains near-optimal (within a tiny additive factor), while SIM, BID, and RAND become significantly suboptimal (Theorem 4).",
+        "guidance": "Algorithms should be robust to small perturbations of similarity structure; robustness is a key criterion beyond noiseless-model optimality."
+      },
+      {
+        "name": "Paper-side gain function forms",
+        "description": "The paper-side gain \u03b3_p(g_j) encodes the conference objective for per-paper bid counts, with examples used including \u03b3_p(g_j) = min(g_j, 6) and \u03b3_p(g_j) = \u221ag_j.",
+        "guidance": "Choose \u03b3_p to reflect desired returns (e.g., diminishing returns after a target number of bids). The optimization and empirical behavior depend strongly on this choice; use it to reward meeting minimum bid thresholds."
+      },
+      {
+        "name": "Reviewer-side gain function forms",
+        "description": "Reviewer-side gain \u03b3_r captures reviewer satisfaction/utility from shown papers; examples include DCG-style functions \u03b3_r(\u03c0, S) = (2 S - 1)/log2(\u03c0+1) or variants with faster decay in position.",
+        "guidance": "Model reviewer utility to reflect position bias and similarity. This affects ordering priorities\u2014higher similarity and earlier positions should yield higher \u03b3_r."
+      },
+      {
+        "name": "Bidding probability model",
+        "description": "The bidding (probability) model f(\u03c0, S) models the probability of a reviewer bidding on a paper as a function of position and similarity; examples: f(\u03c0, S) = S / log2(\u03c0+1) and f(\u03c0, S) = S / \u03c0.",
+        "guidance": "Explicitly model click/position bias in bid probability. The choice of f strongly influences algorithm design and empirical robustness; test performance under plausible alternative f models."
+      },
+      {
+        "name": "Trade-off parameter (\u03bb) between paper- and reviewer-side gains",
+        "description": "A scalar \u03bb weights the relative importance of paper-side and reviewer-side gains in the objective; varying \u03bb changes which algorithms perform best and the distribution of bids.",
+        "guidance": "Tune \u03bb to reflect venue priorities (favoring paper coverage vs reviewer experience). Evaluate algorithms across a sweep of \u03bb to understand behavior under different trade-offs."
+      },
+      {
+        "name": "Time complexity / computational efficiency",
+        "description": "The general version of SUPER* has a per-reviewer time complexity of O(d^3) given heuristic evaluations (Proposition 1), while for a decomposable model class the specialized routine reduces complexity to O(d log d) by sorting weights (Algorithm 3).",
+        "guidance": "Design algorithms that are computationally feasible at conference scale. Where possible, exploit decomposability to reduce runtime (sorting rather than solving assignment problems). Include time-complexity analysis in evaluations."
+      },
+      {
+        "name": "Decomposability condition for efficient solution",
+        "description": "If the bidding model decomposes as f(\u03c0, S) = f_S(S) f_\u03c0(\u03c0) with f_S non-increasing and f_\u03c0 non-decreasing (and reviewer-side gain decomposes similarly), then the optimal ordering for a reviewer reduces to sorting nonnegative weights (equation (6), Algorithm 3).",
+        "guidance": "When models factorize in position and similarity, exploit this structure to obtain fast exact solutions via sorting; verify these monotonicity conditions before using the fast routine."
+      },
+      {
+        "name": "Robustness to model mismatch and real-world complexities",
+        "description": "Important robustness tests include mismatches between assumed and actual bidding functions, noisy similarity scores, partial reviewer participation (some reviewers not arriving), concurrent reviewer arrivals (batches), and reviewer search behavior (subset of papers shown).",
+        "guidance": "Evaluate algorithms under these deviations: measure whether performance degrades and how bid distributions change. The paper finds SUPER* (especially zero heuristic) is robust across these scenarios."
+      },
+      {
+        "name": "Distribution of bid counts per paper (coverage metric)",
+        "description": "Track number of papers ending with bid counts in intervals (e.g., {0,1,2}, {3,4,5}, {6,7,8}, {9+}) and especially the number of papers with fewer than the desired minimum bids.",
+        "guidance": "Use bid-count histograms as an operational metric of fairness/coverage. A successful algorithm should substantially reduce the number of under-bid papers compared to baselines."
+      },
+      {
+        "name": "Relative (additive) gain vs baselines and statistical reporting",
+        "description": "Report mean relative gains (additive gains relative to a baseline) across repeated runs with error bars showing standard error of the mean; compare to baselines such as SIM, BID, and RAND.",
+        "guidance": "Use repeated simulations and present means with standard errors for statistical reliability. Compare algorithms across multiple baselines and parameter settings."
+      },
+      {
+        "name": "Performance across similarity-structure families",
+        "description": "Evaluate algorithms on multiple synthetic similarity structures (homogeneous, low rank, community/block, interdisciplinary) as well as reconstructed real-conference matrices (ICLR2018).",
+        "guidance": "Test generalization by evaluating on diverse similarity structures; ensure algorithm maintains advantages across these regimes (e.g., SUPER* outperforms baselines on all tested structures)."
+      },
+      {
+        "name": "Theoretical worst-case suboptimality bounds for baselines",
+        "description": "Provide provable additive lower bounds showing how far popular baselines (SIM, BID, RAND) can be from optimal in worst-case instances (Theorem 2: bounds of form c d / log^2(d) or c \u03bb d / log^2(d), etc.).",
+        "guidance": "Include theoretical guarantees and worst-case separation results to justify algorithmic choices. Such bounds strengthen empirical claims by demonstrating potential pathological failures of baselines."
+      },
+      {
+        "name": "Heuristic choice and its trade-offs (mean vs zero heuristic)",
+        "description": "SUPER* can use heuristic estimates (mean heuristic) or set heuristic to zero; mean heuristic can give marginal gains but is more sensitive to missing future bids, while zero heuristic is more robust when reviewer arrival/bidding is uncertain.",
+        "guidance": "Select heuristic strategy according to the reliability of forward estimates: use mean heuristic when future behavior is well-estimated; prefer zero heuristic when arrivals or bidding are unpredictable."
+      },
+      {
+        "name": "Empirical reproducibility and dataset/code availability",
+        "description": "Experiments report that code and data to reproduce experiments are available (github.com/fiezt/Peer-Review-Bidding) and use multiple random shuffles and repeated runs.",
+        "guidance": "Provide code and reconstructed similarity matrices to enable reproducibility; run multiple random seeds and report aggregate statistics."
+      },
+      {
+        "name": "Scalability and evaluation on real conference data",
+        "description": "Demonstrated experiments on a reconstructed ICLR2018 similarity matrix (n=2435 reviewers, d=935 papers) and on synthetic datasets with various (n,d) pairs to assess scalability and empirical performance.",
+        "guidance": "Evaluate on realistic conference-size matrices to ensure the algorithm performs and scales in practice; include both large real data and synthetic sweeps."
+      },
+      {
+        "name": "Design for interdisciplinary paper coverage",
+        "description": "Assess algorithm's impact on interdisciplinary papers (papers with moderate similarity across reviewer groups) to ensure they are not systematically under-served; SUPER* reduces insufficient bids on interdisciplinary papers compared to SIM and RAND.",
+        "guidance": "Include special-case evaluations for interdisciplinary items to detect and mitigate biases that would reduce their chance of obtaining enough bids."
+      },
+      {
+        "name": "Open problems and passive-ordering fallback",
+        "description": "A noted open problem is designing an online algorithm that is globally optimal for every similarity matrix; the 'passive' problem (precomputing orderings before arrivals) is suggested as a fallback or heuristic source.",
+        "guidance": "Consider designing passive precomputed orderings as fallbacks when computational time is limited; treat this as both an evaluation axis and a potential heuristic generator."
+      }
+    ]
+  }
+}

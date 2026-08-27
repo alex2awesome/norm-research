@@ -19,6 +19,7 @@ from methods.codability.experiments.common_target_ladder import (
     validate_policy_cell_panel,
 )
 from methods.codability.experiments.policy_data import (
+    ANALYSIS_IMPLEMENTATION_PATHS,
     PUBLIC_DEVELOPMENT_PARTITIONS,
     _align_orbit,
     _average_repetitions,
@@ -1188,20 +1189,7 @@ def _content_specific_joint_fiber(
 def _analysis_implementation() -> dict:
     root = Path(__file__).resolve().parent
     repo_root = root.parents[2]
-    files = [
-        root / "run_policy_isomorphism.py",
-        root / "score_fresh_name_arms.py",
-        root / "policy_isomorphism.py",
-        root / "policy_data.py",
-        root / "build_fresh_item_partitions.py",
-        root / "target_articulation_frontier.py",
-        root.parent / "grid_auc_report.py",
-        root / "common_target_ladder.py",
-        repo_root / "methods/metric_implementer/manifest.py",
-        repo_root / "methods/metric_implementer/artifact.py",
-        repo_root / "methods/metric_implementer/config.py",
-        repo_root / "methods/metric_implementer/vinfo.py",
-    ]
+    files = [repo_root / path for path in ANALYSIS_IMPLEMENTATION_PATHS]
     return {
         "semantics": (
             "complete fixed-target/direct-endpoint certification, paired item inference, "

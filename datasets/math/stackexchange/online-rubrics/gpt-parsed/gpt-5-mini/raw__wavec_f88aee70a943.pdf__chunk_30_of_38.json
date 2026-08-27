@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 30,
+  "n_chunks": 38,
+  "chunk_chars": 39834,
+  "model": "gpt-5-mini",
+  "elapsed_s": 339.40596695899876,
+  "input_tokens": 16732,
+  "output_tokens": 6433,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "users of the PARI/GP library (mathematicians and computational number theorists) working with L-functions and modular forms",
+    "subtask_short": "parigp modular forms & l-functions",
+    "subtask_description": "Extracted API documentation and operational constraints for PARI/GP routines manipulating L-functions and modular forms (initialization, evaluation, cost estimates, searches, and conversions). Targets developers and researchers using these library functions correctly and efficiently.",
+    "subtask_keywords": [
+      "parigp",
+      "modular_forms",
+      "l_functions",
+      "library_api",
+      "documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "lfunrootres: root number and residue computation",
+        "description": "When at most a single pole is allowed, lfunrootres computes both the root number and the residue (0 if no pole).",
+        "guidance": "The function inspects the polar part to determine residues; the behaviour differs if there is a single pole versus more complicated polar structure (examples show single pole at 1, double pole cases). Use the library syntax GEN lfunrootres(GEN data, long bitprec)."
+      },
+      {
+        "name": "lfuntheta: m-th derivative evaluation and error bound",
+        "description": "lfuntheta(data, t, {m=0}) computes the m-th derivative at t of the theta function attached to the L-function given by data. The result is given with absolute error less than 2^{-B}, where B = realbitprecision.",
+        "guidance": "data can be a standard L-function data or output of lfunthetainit. The theta function is defined by the specified Dirichlet-series/inverse-Mellin transform formula; in the modular-form case \u0398(t)=2(f(it/N)\u2212a(0)) and a(0)=\u2212L(f,0). Use GEN lfuntheta(GEN data, GEN t, long m, long bitprec)."
+      },
+      {
+        "name": "lfunthetacost: cost estimation for theta evaluation",
+        "description": "lfunthetacost(L, {tdom}, {m=0}) estimates the number of Fourier coefficients a(n) that would be computed for lfunthetainit(L,tdom,m) at current bit precision; also estimates cost of subsequent lfuntheta (which must compute that many gammamellininv values).",
+        "guidance": "If L is already an Linit, tdom and m are ignored and should be omitted to get cost for that particular Linit. Domain restrictions apply to t (examples show domain error when arg t > 0.785...). Use long lfunthetacost0(GEN L, GEN tdom = NULL, long m, long bitprec)."
+      },
+      {
+        "name": "lfunthetainit: allowed t-domain descriptors and cone constraint",
+        "description": "lfunthetainit(L,{tdom},{m=0}) initializes evaluation of theta derivatives for t in domain tdom. By default t real, t \u2265 1. tdom may be a positive real \u03c1, a non-real complex number (compute at that t, and allows evaluation for any z with |z| \u2265 |t| and |arg z| \u2264 |arg t|), or a pair [\u03c1,\u03b1] meaning |t| \u2265 \u03c1 and |arg t| \u2264 \u03b1.",
+        "guidance": "Must satisfy the cone constraint |2\u00b7arg z/d| < \u03c0/2 (and |2\u03b1/d| < \u03c0/2), where d is the degree of the \u0393 factor. Initialization (the T structure) speeds up multiple evaluations in the cone; domain errors occur otherwise (example: lfuntheta domain error when arg t > 0.785398163397448). Use GEN lfunthetainit(GEN L, GEN tdom = NULL, long m, long bitprec)."
+      },
+      {
+        "name": "lfuntwist: conductor coprimality requirement",
+        "description": "lfuntwist(L, chi) creates the Ldata structure of the twist of L by the primitive character attached to Dirichlet character chi. The conductor of the character must be coprime to the conductor of L.",
+        "guidance": "If conductors are not coprime the twist is not accepted; use GEN lfuntwist(GEN L, GEN chi)."
+      },
+      {
+        "name": "lfunzeros: naive zero-finding assumptions and divz parameter",
+        "description": "lfunzeros(L, lim, {divz=8}) computes an ordered list of zeros of L(s) on the critical line in the interval specified by lim using a naive algorithm which may miss zeros: it assumes two consecutive zeros at height T \u2265 1 differ by at least 2\u03c0/\u03c9 where \u03c9 := divz\u00b7(d\u00b7log(T/2\u03c0) + d + 2\u00b7log(N/(\u03c0/2)^d)).",
+        "guidance": "Increase divz (integral > 8) for a finer search mesh. The algorithm also assumes all zeros are simple except possibly at s=k/2 and that there are no poles in the search interval; a possible zero at s=k/2 is repeated according to multiplicity. Use GEN lfunzeros(GEN L, GEN lim, long divz, long bitprec)."
+      },
+      {
+        "name": "lfunzeros: Linit domain requirement for reliable detection near top boundary",
+        "description": "If you pass an Linit argument to lfunzeros, ensure the algorithm has L = lfuninit(Ldata, [T+1]) where T is the upper bound of lim: this allows detection of zeros near T.",
+        "guidance": "Make sure the Linit domain contains [1, T+1]; a domain [0, T] is not sufficient. The algorithm assumes any multiple zero at s=k/2 has order \u2264 maximal derivation order allowed by the Linit; increasing that derivation order in Linit is costly."
+      },
+      {
+        "name": "Supported modular form spaces (mfinit): space flags and decomposition",
+        "description": "mfinit initializes modular form spaces: full Mk(\u03930(N),\u03c7) (flag 4), cuspidal Sk (flag 1), Eisenstein Ek (flag 3) with Mk = Ek \u2295 Sk, newspace Snew_k (flag 0) and oldspace Sold_k (flag 2).",
+        "guidance": "The resulting mf structure contains a basis accessible via mfbasis; mfeigenbasis returns the eigenbasis of the newspace only (even if a larger space was requested). Fourier coefficients of basis elements lie in the cyclotomic field Q(\u03c7) and are given algebraically (rational numbers or t_POLMODs)."
+      },
+      {
+        "name": "Generalized modular forms: internal format and caution",
+        "description": "Modular forms are represented in an internal format allowing mfcoefs to compute arbitrarily many Fourier coefficients; coefficients are given algebraically and mfparams can recover level, weight, character and field.",
+        "guidance": "Some creation/operations (derivation/integration, E2, eta quotients, quotients) may produce objects that are not true modular forms; the library does not attempt to check modularity. When a function's documentation does not state it applies to generalized modular forms, the output is undefined if the input is not a true modular form."
+      },
+      {
+        "name": "getcache: cache reporting and growth policy",
+        "description": "getcache() returns name, size, number of cache misses since last extension, largest cache miss and size in bytes for various auto-growing caches (Hurwitz class numbers, small integer factorizations, divisors, primitive dihedral forms, etc.).",
+        "guidance": "Caches start empty, are set to small defaults, grow on demand up to a maximal value and never decrease; they are freed only on exit. Use GEN getcache()."
+      },
+      {
+        "name": "lfunmf: mapping modular forms to L-functions and orbit handling",
+        "description": "lfunmf(mf, {F}) returns the L-functions corresponding to F (a modular form) or, if F omitted, the L-functions attached to all eigenforms in the new space: a vector whose length equals the number of Galois orbits of newforms, each entry being the vector of L-functions for the d complex embeddings of an orbit of dimension d over Q(\u03c7).",
+        "guidance": "Use GEN lfunmf(GEN mf, GEN F = NULL, long bitprec). Example usage shows concatenation of orbit vectors to obtain all attached L-functions."
+      },
+      {
+        "name": "mfcoefs/mfcoef: coefficient extraction convention and indexing",
+        "description": "mfcoefs(F,n,{d=1}) computes [a[0], a[d], ..., a[nd]] of generalized modular form F (d positive, default 1); mfcoef(F,n) returns the n-th Fourier coefficient (the n+1-st component of mfcoefs).",
+        "guidance": "When F is a modular form space (mfinit output), mfcoefs returns the matrix whose columns give Fourier expansions of mfbasis(F). Coefficients are algebraic (rational or t_POLMODs). Use GEN mfcoefs(GEN F, long n, long d) and GEN mfcoef(GEN F, long n)."
+      },
+      {
+        "name": "mfdiv: quotient validity at infinity",
+        "description": "mfdiv(F,G) divides two generalized modular forms assuming the quotient will not have poles at infinity; if quotient would have poles at infinity, use mfshift before dividing.",
+        "guidance": "If ord(G) > ord(F) a domain error occurs (example shown). Use GEN mfdiv(GEN F, GEN G)."
+      },
+      {
+        "name": "mffrommetaquo: holomorphy and valuation rules for eta-quotients",
+        "description": "mffrommetaquo(eta, {flag=0}) returns the modular form corresponding to an eta quotient matrix eta. If valuation at infinity is fractional return 0. If the eta quotient is meromorphic, return 0 if flag=0; if flag\u22600 return the eta quotient divided by q^{-v} if v<0 (i.e., with valuation 0).",
+        "guidance": "A 1\u00d7k vector is accepted instead of a factorization matrix. Use GEN mffrommetaquo(GEN eta, long flag)."
+      },
+      {
+        "name": "mffromlfun: recognize modular form space from an L-function",
+        "description": "mffromlfun(L) given an L-function representing a self-dual modular form returns [NK, space, v] where mf = mfinit(NK, space) is the modular form space containing the form and mftobasis(mf, v) represents it on the space basis.",
+        "guidance": "If L has inexact complex coefficients, one can compute an eigenbasis for mf and check if one attached L-function is close to L; examples show comparing lfunan(L,10) vectors to detect match. Use GEN mffromlfun(GEN L, long prec)."
+      },
+      {
+        "name": "mfeigensearch: search parameters NK and AP semantics",
+        "description": "mfeigensearch(NK, {AP}) searches for normalized rational eigen cuspforms with quadratic character under restrictions on initial Fourier coefficients. NK = [N,k] (or vector of allowed levels); AP is list of [p,ap] where p prime and ap either an integer (coefficient must match) or Mod(a,b) (coefficient congruence modulo b).",
+        "guidance": "Result vector of newforms matching criteria sorted by increasing level then increasing |D|. Use GEN mfeigensearch(GEN NK, GEN AP = NULL)."
+      },
+      {
+        "name": "mfatkininit: Atkin\u2013Lehner initialization and returned structure",
+        "description": "mfatkininit(mf,Q) initializes data for Atkin\u2013Lehner operator W_Q for primitive divisor Q of level N in mf. Returns 4-component vector [mfB, CM, C, mf].",
+        "guidance": "mfB encodes the target modular form space (or 0 if character does not change), CM is M\u00b7C (matrix of W_Q multiplied by normalizing constant) with polmod coefficients in Q(\u03c7), C is the complex normalization constant (if rational A, C=1). Use GEN mfatkininit(GEN mf, long Q, long prec)."
+      },
+      {
+        "name": "mfatkineigenvalues: Atkin\u2013Lehner eigenvalues grouped by orbit and rounding",
+        "description": "mfatkineigenvalues(mf, Q) outputs Atkin\u2013Lehner eigenvalues of w_Q on the new space, grouped by orbit. If \u03c7 is trivial or quadratic modulo N/Q, the result is rounded and eigenvalues are \u00b1i^k.",
+        "guidance": "To get eigenvalues on spaces larger than the new space compute [mfB,M,C]=mfatkininit and find roots of charpoly(M)/C. Coefficients may be polmods and must be embedded to C before root-finding when needed. Use GEN mfatkineigenvalues(GEN mf, long Q, long prec)."
+      },
+      {
+        "name": "mfbasis: basis ordering for full space",
+        "description": "mfbasis(NK,{space=4}) returns a basis of the corresponding subspace of Mk(\u03930(N),\u03c7). If space is the full space Mk, the output is first a basis of Eisenstein space then a basis of the cuspidal space.",
+        "guidance": "To obtain eigenforms use mfeigenbasis. NK can be the output of mfinit; use GEN mfbasis(GEN NK, long space)."
+      },
+      {
+        "name": "mfeigenbasis: eigenbasis is for newspace and efficiency note",
+        "description": "mfeigenbasis(mf) returns the vector of eigenforms for the space mf; the eigenforms are expressed internally as algebraic linear combinations of mfbasis(mf) and individually expanding many coefficients for eigenforms is inefficient.",
+        "guidance": "To expand many eigenforms efficiently, compute M = mfcoefs(mf, N) once and multiply by mftobasis(mf, B[i]) to obtain expansions faster. Use GEN mfeigenbasis(GEN mf)."
+      },
+      {
+        "name": "mfconductor: minimal defining level",
+        "description": "mfconductor(mf, F) gives the smallest level on which modular form F (in cuspidal space mf) is defined.",
+        "guidance": "Returns a long value giving the conductor; use long mfconductor(GEN mf, GEN F)."
+      },
+      {
+        "name": "mfcuspval/mfcusps/mfcuspwidth: cusp data conventions and return types",
+        "description": "mfcusps(N) lists cusps of \u03930(N) as rationals a/b with b|N. mfcuspval(mf,F,cusp) returns the valuation of F at cusp (\u221e or rational), returning either a rational number or \u221e if F=0; if Q(F)\u2260Q(\u03c7) returns a vector of valuations for each complex embedding. mfcuspwidth(N,cusp) returns the cusp width.",
+        "guidance": "mfcuspisregular(NK,cusp) determines if given cusp is regular. Use GEN mfcusps(GEN N), GEN mfcuspval(GEN mf, GEN F, GEN cusp, long bitprec) and long mfcuspwidth(GEN N, GEN cusp)."
+      },
+      {
+        "name": "mfembed: embeddings when Q(f) larger than Q(\u03c7) and application to coefficient vectors",
+        "description": "mfembed(f, {v}) returns embeddings of Q(f) induced over Q(\u03c7) or applies embeddings to v. If Q(f)=Q(\u03c7) return single canonical embedding; if Q(f)>Q(\u03c7) return [Q(f):Q(\u03c7)] induced embeddings attached to complex roots of s(P). If v omitted returns embeddings; if v provided apply embeddings coefficientwise.",
+        "guidance": "f may be an eigenform produced by mfeigenbasis when Q(f)>Q(\u03c7). Also allow mfinit output instead of f for Q(\u03c7) single embedding. Use GEN mfembed0(GEN f, GEN v = NULL, long prec). Examples illustrate lifting polmods and applying embeddings to coefficient vectors; care must be taken when substituting field generators."
+      },
+      {
+        "name": "mfeval: numerical evaluation and error bound; embedding multiplicity",
+        "description": "mfeval(mf,F,vtau) computes numerical value(s) of F at vtau with absolute error < 2^{-B} where B=realbitprecision. If Q(F)>Q(\u03c7) it returns a vector of d=[Q(F):Q(\u03c7)] embedded values.",
+        "guidance": "To maximize imaginary part of the argument the function computes (f|_k \u03b3)(\u03b3^{-1}\u00b7\u03c4) for a suitable \u03b3 (possibly not in \u03930(N)), using mfslashexpansion when necessary. Use GEN mfeval(GEN mf, GEN F, GEN vtau, long bitprec)."
+      },
+      {
+        "name": "mffromqf: theta correspondence and half-integral weights",
+        "description": "mffromqf(Q,{P}) given an even integral positive definite quadratic form Q and spherical polynomial P, computes [mf, F, v] where F is the theta function corresponding to (Q,P), mf its modular form space and v the coefficients in mfbasis(mf). Odd dimensions supported correspond to half-integral weight forms.",
+        "guidance": "The function can compute large coefficients fast (examples show massive coefficients computed quickly). Use GEN mffromqf(GEN Q, GEN P = NULL)."
+      }
+    ]
+  }
+}

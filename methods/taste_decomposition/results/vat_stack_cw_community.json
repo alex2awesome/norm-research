@@ -1,0 +1,114 @@
+{
+  "cell": "cw_community",
+  "direction": "1_mirror",
+  "n_E": 7008,
+  "pos_rate_E": 0.5017123287671232,
+  "n_groups_E": 5136,
+  "arms": {
+    "round0": {
+      "arm": "round0",
+      "family": "impute_perfold",
+      "n_features_VA": 60,
+      "n_features_VA_prescreen": 60,
+      "T_E": 0.792073577571097,
+      "VA_lin_E": 0.6597130186729427,
+      "VA_nl_E_seeds": [
+        0.650920615559439,
+        0.6486573569100573,
+        0.650697286956567
+      ],
+      "VA_nl_E_mean": 0.6500917531420211,
+      "VA_nl_E_spread": 0.0022632586493817053,
+      "VAT_lin_E": 0.7865816649660462,
+      "VAT_nl_E_seeds": [
+        0.7874258259085939,
+        0.785883864891245,
+        0.7858979145571805
+      ],
+      "VAT_nl_E_mean": 0.7864025351190064,
+      "VAT_nl_E_spread": 0.0015419610173489362,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.13650521034915486,
+        "ci95": [
+          0.12389507329806877,
+          0.14939291004509989
+        ],
+        "p_gt_0": 1.0,
+        "n_boot_used": 2000,
+        "n_groups": 5136
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.004647751662503086,
+        "ci95": [
+          -0.008080569605700427,
+          -0.0011274568454191353
+        ],
+        "p_gt_0": 0.0055,
+        "n_boot_used": 2000,
+        "n_groups": 5136
+      }
+    },
+    "round8": {
+      "arm": "round8",
+      "family": "impute_perfold",
+      "n_features_VA": 144,
+      "n_features_VA_prescreen": 144,
+      "T_E": 0.792073577571097,
+      "VA_lin_E": 0.6709586156298095,
+      "VA_nl_E_seeds": [
+        0.6650898461883297,
+        0.6653156182113644,
+        0.665108497628905
+      ],
+      "VA_nl_E_mean": 0.6651713206761997,
+      "VA_nl_E_spread": 0.00022577202303475374,
+      "VAT_lin_E": 0.7787297342731705,
+      "VAT_nl_E_seeds": [
+        0.7882302812734975,
+        0.7848428457309214,
+        0.7875497480345128
+      ],
+      "VAT_nl_E_mean": 0.786874291679644,
+      "VAT_nl_E_spread": 0.003387435542576034,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.12314043508516781,
+        "ci95": [
+          0.11185280396163559,
+          0.13528607487196292
+        ],
+        "p_gt_0": 1.0,
+        "n_boot_used": 2000,
+        "n_groups": 5136
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.0038432962975994966,
+        "ci95": [
+          -0.007328284305426156,
+          -0.0002836954003732182
+        ],
+        "p_gt_0": 0.0155,
+        "n_boot_used": 2000,
+        "n_groups": 5136
+      }
+    }
+  },
+  "population": "cw_honest_population (n=7008), ALL rows dense_split in {eval,test} by construction (cw_honest_dense_preds.report.json)",
+  "round8_note": "round8 anchor-battery gate FAILED (coherent-vs-scrambled AUC .3205 < .5); 0 criteria admitted to A -> round8 bank IS round7's 144-col bank verbatim (CAMPAIGN_TABLES.md; round8_results_GATE_FAILED.json)",
+  "bank_sizes": {
+    "round0": 60,
+    "round8": 144
+  },
+  "runtime_sec": 4836.021050930023,
+  "alignment_check": {
+    "note": "This script never reads any precomputed *_va_nl_oof_*.npy file (grep-verified). Every VA_nl/VAT_nl OOF array is computed FRESH in-process, within run_arm()/fit_arm(), from V/A/y/groups/dense arrays that are constructed together (same function, same iteration order) for every cell -- so the 'bank item_ids order vs join/population order' landmine (mismatched precomputed OOF vs population row order) cannot occur here structurally. Cross-file joins (where the dense-prob CSV is a separate file from the bank population) are explicitly assert-checked at load time (see cross_file_join_asserts); adapter-based cells (nc_outcome, nc_agree, peer_curation, peer_revealed, hashtagwars_verdict) never join across files at all (single function call builds every array in lockstep). External validation: T_E computed here matches the independently-computed samerows registry auc_dense_heldout/eval/test figures (separate code path, rescore_dense_same_rows.py-family scripts) to 4 decimal places in every cell where a reference exists -- see t_e_vs_registry below.",
+    "cross_file_join_asserts": [
+      "round0_state.npz['ids'] == round7_state.npz['ids'] (elementwise, asserted, PASS)",
+      "round0_state.npz['y'] == round7_state.npz['y'] (elementwise, asserted, PASS)",
+      "round0_state.npz['T'] == round7_state.npz['T'] (np.allclose, asserted, PASS)"
+    ],
+    "t_e_vs_registry_pooled": {
+      "computed": 0.792073577571097,
+      "registry_auc_dense_heldout": 0.792073577571097
+    }
+  }
+}

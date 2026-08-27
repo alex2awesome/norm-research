@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_51b2f595c7cc.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 14608,
+  "output_tokens": 3817,
+  "elapsed_s": 2155.7061583339237,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / computational humor researchers and practitioners building interpretable humor detection systems",
+    "subtask_short": "theory-driven humor detection framework",
+    "subtask_description": "Designing, implementing, and evaluating an interpretable, theory-grounded computational humor detection system (THInC) that represents distinct humor theories via feature-based GA2M classifiers and ensembles them for prediction and theory-assessment.",
+    "subtask_keywords": [
+      "computational_humor",
+      "interpretability",
+      "ga2m",
+      "feature_engineering",
+      "ensemble",
+      "humor_theory"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Ground models in established humor theories",
+        "description": "Each humor theory (superiority, relief, incongruity, incongruity resolution / surprise disambiguation) should be taken as the foundation for a classifier or modeling component rather than relying solely on black-box performance.",
+        "guidance": "Represent each theory with a distinct feature set and classifier so that learned representations can be associated back to theoretical concepts; do not claim that classifier weights directly prove theoretical primacy \u2014 ensemble weights are implementation-dependent."
+      },
+      {
+        "name": "Represent each theory with an interpretable GA2M classifier",
+        "description": "Use GA2M (generalized additive model plus interactions) models as 'white box' classifiers for each humor theory to enable additive, feature-level interpretability.",
+        "guidance": "Leverage GA2M's modularity: plot single-feature functions f_i(x_i) and pairwise interactions f_ij(x_i,x_j), inspect marginal contributions and uncertainty intervals; maximize interactions only up to the point where pairwise interactions remain visually representable."
+      },
+      {
+        "name": "Proxy feature engineering workflow",
+        "description": "A stepwise workflow to engineer 'proxy features' that quantitatively reflect manifestations of humor theories: (1) identify computational tools, (2) tokenize, (3) create a time series (token-based or subsequence-based), (4) formulate hypotheses linking time-series patterns to theory, (5) extract numerical proxy features.",
+        "guidance": "Iterate across tools, proxy features, hypotheses, and theories to build a comprehensive set of proxies; example subsequence vs token-based choices are provided and should be chosen sensibly per tool."
+      },
+      {
+        "name": "Capture the temporal/unfolding nature of humor",
+        "description": "Features should account for the sequential, temporal delivery of jokes (the way humor unfolds over tokens/subsequences).",
+        "guidance": "Use subsequence-based features (prefix-subsequence values per token) to mimic human perception over time; token-based features are appropriate for token-local phenomena (e.g., morphosyntactic ambiguity)."
+      },
+      {
+        "name": "Formulate straightforward hypotheses linking time series to theory",
+        "description": "For each time series produced by a computational tool, explicitly state simple, testable hypotheses about how time-series characteristics (e.g., bursts, trends) map to qualitative aspects of a humor theory.",
+        "guidance": "Examples: 'A manifestation of the incongruity theory is bursts of anger.'; 'A manifestation of the relief theory is increasing optimism.' Use these hypotheses to guide numeric proxy extraction and later validation."
+      },
+      {
+        "name": "Design numeric proxy features from time series",
+        "description": "Extract numerical features (proxies) from time series that operationalize the hypotheses (e.g., max change, linear_fit_slope, ratio of peaks, CID CE).",
+        "guidance": "Automate extraction with time-series feature tools (tsfresh was used) to compute a broad set of candidate proxies (slope, max change, crossings, peak ratios, energy ratios, CID CE, etc.)."
+      },
+      {
+        "name": "Assess proxy efficacy via learned feature functions",
+        "description": "Evaluate whether a proxy feature 'captures' the hypothesized part of a theory by comparing the hypothesized numerical mapping to the learned GA2M feature function and its uncertainty.",
+        "guidance": "Focus assessment on sign and regions with large logit contributions and narrow uncertainty intervals; qualitatively validate by inspecting local examples at points with large contributions. If feature function matches hypothesis, proxy is effective; if not, consider hypothesis revision or new proxies."
+      },
+      {
+        "name": "Handle non-matching or noisy proxies",
+        "description": "If an actual feature function does not match the hypothesized mapping, determine whether (a) the hypothesis is wrong (interpretation should be revised), or (b) the proxy is noisy and fails to measure intended aspect.",
+        "guidance": "Remedies: find a new hypothesis supported by local examples, engineer more effective proxy features, or drop the computational tool if no suitable hypothesis links to the theory."
+      },
+      {
+        "name": "Use ensembling to combine theory classifiers",
+        "description": "Combine individual theory-grounded GA2M classifiers into a final prediction via an ensemble (weighted soft voting) to leverage complementary explanatory power of different theories.",
+        "guidance": "Learn ensemble weights (authors used Nelder\u2013Mead optimizing average precision); interpret ensemble weights as relative contributions within the chosen proxy implementations, not as definitive evidence of theory superiority."
+      },
+      {
+        "name": "Evaluate predictive performance with appropriate metrics",
+        "description": "Report predictive performance using suitable metrics (the paper reports F1 score on the positive class and compares to a black-box benchmark).",
+        "guidance": "Use test-set F1 for the target class (jokes), average-precision for weight learning were used in the implementation; always compare interpretable/theory-grounded systems to strong black-box baselines to quantify the interpretability vs performance trade-off."
+      },
+      {
+        "name": "Focus evaluation on in-domain, well-formed instances",
+        "description": "Evaluate the framework primarily on in-domain data (well-formed sentences that are jokes or non-jokes) because proxy behavior and learned mappings depend on domain characteristics.",
+        "guidance": "The implementation used SemEval 2021 Task 7 data (Twitter + short jokes) with known class imbalance and annotator labels; be explicit about dataset composition and annotation protocol."
+      },
+      {
+        "name": "Inspect local interpretability (instance-level contributions)",
+        "description": "For a given instance, compute and visualize the contribution (logit) of the most contributing features to trace how a theory manifests locally.",
+        "guidance": "Show the feature function evaluation point and corresponding logit contributions (positive/negative), the intercept, and the underlying time series (e.g., anger probabilities) to ground semantic interpretation of proxies."
+      },
+      {
+        "name": "Aggregate global interpretability to find influential proxies",
+        "description": "Aggregate feature contributions across the training set (e.g., weighted mean absolute logit impact) to identify which proxies most globally encode a humor theory in this implementation.",
+        "guidance": "Use global aggregates to prioritize proxies for refinement or to draw tentative conclusions about what manifestations of a theory are most predictive in-domain."
+      },
+      {
+        "name": "Accept and document the interpretability vs performance trade-off",
+        "description": "Recognize that a fully theory-grounded, interpretable approach may underperform the best black-box models but provides traceability from features back to theory.",
+        "guidance": "Report both interpretability benefits (associative backtracing) and performance differences; use ensembles to narrow performance gaps while maintaining interpretability where possible."
+      },
+      {
+        "name": "Select diverse computational tools appropriate to target manifestations",
+        "description": "Choose computational text-analysis tools (emotion classifiers, sentiment, hate/offense detectors, language models, ambiguity detectors, morphosyntactic ambiguity checks, etc.) that can plausibly produce time series relevant to theory manifestations.",
+        "guidance": "The implementation used 10 tools (7 LLM classifiers, LLaMA-2 LM probabilities, and custom ambiguity detectors); ensure tools' outputs align with formulated hypotheses and tokenization choices."
+      },
+      {
+        "name": "Tokenization must support the chosen time-series strategy",
+        "description": "Choose a tokenization method that meaningfully splits text for the intended subsequence or token-based analyses (authors used BPE).",
+        "guidance": "Tokenization affects temporal structure; ensure consistency between tokenizer and computational tools; subsequence-based features build prefix sequences of tokens."
+      },
+      {
+        "name": "Engineer a sufficiently comprehensive set of proxies",
+        "description": "Construct a broad set of proxies across theories and tools to capture diverse manifestations; the implementation used 155 features across four theory classifiers.",
+        "guidance": "Cover multiple statistical summaries per time series (slopes, max changes, crossings, peak ratios, energy ratios, CID CE, etc.) so training can weight/filter ineffective proxies."
+      },
+      {
+        "name": "Train GA2M classifiers with parameters balancing expressivity and interpretability",
+        "description": "Configure GA2M training to allow pairwise interactions while preserving interpretability (e.g., maximize interactions but keep pairwise interactions visualizable; limit bins when dataset is small).",
+        "guidance": "Implementation choices: set number of interactions to maximum possible, limit bins per feature to 100 to aggregate data in bins for limited datasets, use default learning rate 0.01, early stopping tolerance 0.0001."
+      },
+      {
+        "name": "Frame the framework as associative/backtracing, not causal",
+        "description": "Treat the learned links between proxies and humor theories as associative evidence enabling backtracing of model behavior to theoretical concepts, rather than causal proof of what causes humor.",
+        "guidance": "State limitations: ontology/causal claims require different, often intractable approaches; this framework focuses on machine-learned associations and interpretability."
+      },
+      {
+        "name": "Explicit experimental evaluation questions (EQ1\u2013EQ5)",
+        "description": "Structure evaluation around concrete questions: EQ1 (performance), EQ2 (which theory classifier contributes most), EQ3 (proxy efficacy and remedies), EQ4 (proxy contributions to individual jokes), EQ5 (which proxies most influence theory representation).",
+        "guidance": "Use these evaluation axes to systematically assess predictive power, interpretability, and the fidelity of proxies to theories."
+      },
+      {
+        "name": "Visualize learned feature functions with uncertainty",
+        "description": "Plot feature functions (learned logit contribution vs feature value) together with uncertainty bands (e.g., minimal and maximal logit values of bagged trees) and overlay hypothesized mapping for comparison.",
+        "guidance": "Use visualization to judge match between hypothesis and learned mapping and to select candidate regions for qualitative validation via examples."
+      },
+      {
+        "name": "Acknowledge and plan for limitations (semantics, simultaneous scenarios, adversarial robustness)",
+        "description": "Recognize current inability to fully represent simultaneous scenarios and semantics/context issues, and the risk of spurious out-of-domain correlations; propose mitigation paths.",
+        "guidance": "Future work suggestions include integrating large language models more effectively for semantics/simultaneity, using adversarial examples to probe robustness, and refining theories to reduce ambiguity."
+      }
+    ]
+  }
+}

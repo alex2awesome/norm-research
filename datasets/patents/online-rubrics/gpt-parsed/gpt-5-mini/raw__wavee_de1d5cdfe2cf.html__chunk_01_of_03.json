@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_de1d5cdfe2cf.html",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "wavee_de1d5cdfe2cf.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39969,
+  "model": "gpt-5-mini",
+  "elapsed_s": 31.030930000008084,
+  "input_tokens": 10641,
+  "output_tokens": 3214,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI researchers and patent practitioners exploring RLHF for patent claim generation",
+    "subtask_short": "RLHF patent claim generation",
+    "subtask_description": "Training and evaluating language models with RLHF to generate patent claims that align with desirable legal and pragmatic properties (e.g., claim length, limiting terms, grant likelihood), and assessing technical and legal constraints for such systems.",
+    "subtask_keywords": [
+      "patent",
+      "rlhf",
+      "claim_generation",
+      "reward_model",
+      "patent_practice"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patentability requirements (novelty, non-obviousness, utility)",
+        "description": "To be patentable, at least three major requirements in patent law must be satisfied: novelty, non-obviousness, and utility.",
+        "guidance": "These are the ultimate legal criteria that generated claims must meet; the manuscript suggests training reward models for novelty and non-obviousness (or a joint model) and keeping human-in-the-loop for utility because of scarcity of negative samples. Note: the reward model in the experiments (granted vs pre-grant) is only a preliminary proxy and cannot substitute for full legal determination."
+      },
+      {
+        "name": "Reward based on claim length",
+        "description": "Reward function that gives positive reward when generated text contains the end-of-claim tag and scales by length relative to a max_len (e.g., reward = 1 + len(s)/float(max_len) when <|end of claim|> present; 0 otherwise).",
+        "guidance": "max_len defines upper threshold (e.g., 512 or 1024). If generated claim surpasses threshold and is truncated without end tag, reward = 0. Experiments show policy can be trained to control average claim length; longer claims correlate with greater 'granted' likelihood in datasets but may degrade textual quality."
+      },
+      {
+        "name": "Reward based on limiting terms (count of limiting clauses)",
+        "description": "Reward computed as the sum of counts of limiting terms in the generated claim text (example implementation: reward += text.count('wherein ') + text.count('whereby ') + text.count('where ') + text.count('when ')).",
+        "guidance": "Limiting clauses (typically indicated by 'wherein', etc.) narrow claim scope and increase likelihood of allowance but decrease likelihood of infringement. The experiment validates that policy models can be controlled to increase or decrease the number of limiting terms; however, more limiting terms often increase claim length and may reduce text quality."
+      },
+      {
+        "name": "Joint reward function (length + limiting terms)",
+        "description": "Combined reward that enforces an upper bound on length (using max_len and end-of-claim tag) and adds counts of limiting terms to the reward (i.e., length-based reward + sum of limiting term counts).",
+        "guidance": "Joint rewards can lead the model to prioritize adding limiting terms while respecting length constraints; experiments showed claim length constrained while limiting terms increase. Models may still collapse after extended training; qualitative review needed."
+      },
+      {
+        "name": "Reward model classifying granted vs pre-grant (binary)",
+        "description": "Train a classification reward model (distilbert-base) with labels granted=1 and pre-grant=0; use classification accuracy or predicted probability as reward for PPO.",
+        "guidance": "Reward model input tokens are capped at 500 due to model context window. The policy trained to maximize this reward increases the proportion of generated claims predicted as 'granted' (reported granted ratios before/after PPO). Caveat: predictions do not equal actual prosecution or litigation outcomes; the reward model is a proxy and its limitations determine final quality."
+      },
+      {
+        "name": "Presence of <|end of claim|> tag as a generation requirement",
+        "description": "Generated text must include a specific end-of-claim tag (<|end of claim|>) for the length-based reward to be computed positively; absence after truncation yields zero reward.",
+        "guidance": "This tag functions as an explicit termination signal for reward computation and truncation handling. Experimental reward code checks for s.find('<|end of claim|>') == -1 to assign zero reward when missing."
+      },
+      {
+        "name": "Limiting terms list (example set)",
+        "description": "Limiting terms treated as indicators of claim limitations: 'wherein', 'where', 'when', 'whereby' (listed explicitly in the experiments).",
+        "guidance": "The listed terms are not exhaustive; additional terms can be incorporated in future work. Counting these terms is used as a simple heuristic proxy for claim narrowness in reward design."
+      },
+      {
+        "name": "Balance between claim scope and allowance/infringement",
+        "description": "A well-crafted patent claim should strike a balance between broader claim scope (more likely to be infringed, less likely to be allowed) and narrower scope (more likely to be allowed, less likely to be infringed).",
+        "guidance": "Reward design should reflect practitioner intent (maximize allowance probability subject to preferred scope). The manuscript frames this as an objective for RLHF but notes achieving equilibrium is complex and requires human/patent-practitioner involvement."
+      },
+      {
+        "name": "Quality and coherence of generated patent text",
+        "description": "Text quality tends to decline as claim length increases; longer generated claims often become nonsensical or far-fetched.",
+        "guidance": "Higher rewards targeted at length or limiting-term counts can lead to a decline in textual quality. The paper emphasizes the need for qualitative human review and notes that policy alignment to a reward model does not guarantee high-quality, legally sound claims."
+      },
+      {
+        "name": "Human-in-the-loop for utility requirement and difficult legal criteria",
+        "description": "Because utility (and other complex legal/factual determinations) are hard to model automatically, human feedback remains integral for assessing utility and other subtle legal requirements.",
+        "guidance": "Utility requirement lacks negative samples (most granted patents meet utility), making classifier training implausible; therefore, keeping humans in the loop is advised for evaluating utility and factual grounding."
+      },
+      {
+        "name": "Use of prosecution office actions / prior art references for novelty/non-obviousness evaluation",
+        "description": "To train reward models for novelty and non-obviousness, the manuscript suggests using prior art references cited in office actions and extracting relevant paragraphs as training data.",
+        "guidance": "Such prosecution records are not widely available in textual form today; obtaining and integrating these references is important for building reward models that evaluate novelty/non-obviousness. Effective prior-art search capability is a prerequisite."
+      },
+      {
+        "name": "Augmentability to other patent law requirements (written description, antecedent basis, means-plus-function, patentable subject matter)",
+        "description": "Other patent law requirements (written description requirement, antecedent-basis requirement, means-plus-function structure, patentable subject matter) could potentially be evaluated through reward models using positive (allowed) and negative (rejected) samples from prosecution history.",
+        "guidance": "These are identified as candidate dimensions for reward modeling provided sufficient labeled data is available; they are separate evaluative axes beyond novelty/non-obviousness/utility."
+      },
+      {
+        "name": "Evaluation metrics and monitoring (reward mean, claim length, number of limiting terms, granted ratios)",
+        "description": "Key empirical metrics used to evaluate training and policy behavior include reward mean (over training steps), average claim length, number of limiting terms, and the ratio of claims predicted as granted before/after PPO training.",
+        "guidance": "Plots in experiments include moving averages (window size 100). Comparative tables (e.g., Table 4) show granted/pre-grant counts and ratios for 1,000-row samples before and after PPO to assess efficacy. Use both quantitative metrics and qualitative inspections (appendices) for assessment."
+      },
+      {
+        "name": "Reliance on reward model quality (policy follows reward model)",
+        "description": "The ultimate quality of generated patent claims hinges on the performance of the reward model; the policy model will align to whatever the reward model measures.",
+        "guidance": "Experiments show mixed subjective quality outcomes after PPO; some outputs improved and others worsened relative to SFT. Practitioners must ensure reward models encode desired legal and quality criteria; otherwise RLHF will amplify reward-model biases or shortcomings."
+      },
+      {
+        "name": "Technical and reproducibility constraints (token caps, training steps, hardware requirements)",
+        "description": "Practical constraints affecting training and reproducibility: reward model token cap (500 tokens for distilbert-base), recommended training steps (e.g., 2,500 to 10,000 steps depending on experiment), and hardware (GPU VRAM 16G\u201324G; training one policy model for 10,000 steps \u2248 5 days on an NVIDIA L4 with 24G VRAM).",
+        "guidance": "These constraints shape feasible model sizes and dataset handling. Reproducibility notes: provide source code/datasets, list models used for SFT and RM, and document prompts (e.g., first 30 tokens used as prompts for policy generation in experiment 4)."
+      }
+    ]
+  }
+}

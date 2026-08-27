@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/wavee_bec0da624d01.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11373,
+  "output_tokens": 4258,
+  "elapsed_s": 1544.4811914169695,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "metascience researchers, funding agencies, and NLP/ML researchers working on grant-to-publication linkage and evaluation",
+    "subtask_short": "NSF grant-publication linkage dataset",
+    "subtask_description": "Construction and evaluation of a large-scale open dataset (FIND) linking NSF grant proposals/awards to downstream publications, plus NLP applications (citation prediction and proposal\u2013finding alignment scoring).",
+    "subtask_keywords": [
+      "nsf",
+      "grant_linkage",
+      "dataset",
+      "metascience",
+      "nlp"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Grant\u2013publication linkage: union of Crossref and PAR",
+        "description": "Create a list of publications associated with an NSF award ID by taking the union of publications listed in Crossref and publications listed in the NSF Public Access Repository (PAR).",
+        "guidance": "Crossref is voluntary and provides funding metadata when publishers add NSF award IDs (found ~35% coverage overall for 1960-2025); PAR began after 2013 and is incomplete (43.6% of award IDs from 2017+ have a PAR publication; 0.05% for 2000-2016). 25% of PAR publications are also found in Crossref. Using the union yields 42.7% of awards matched to at least one publication (224,524 of 525,927 award IDs). Be aware of incomplete coverage and temporal/directorate biases; improving pre-2000 linkage is a future task."
+      },
+      {
+        "name": "Use OpenAlex (and Crossref) for publication metadata and citation counts",
+        "description": "Merge Crossref metadata with OpenAlex to obtain abstracts and citation counts for matched publications.",
+        "guidance": "Crossref likely underestimates citation counts; OpenAlex contains abstracts for 512,644 publications and citation counts for 936,703 in the dataset. Restrict citation-prediction tasks to publications with OpenAlex citation counts and tasks that use abstracts to the subset with abstracts available."
+      },
+      {
+        "name": "Focus period for analysis: 2000\u20132025",
+        "description": "Restrict primary analyses to NSF awards from 2000 onwards.",
+        "guidance": "Rationale: better grant\u2013publication matching after 2000 (Digital Object Identifier introduction) and consistent directorate structure after 2000. Coverage and match rates are substantially worse pre-2000; improving linkage for earlier grants is recommended future work."
+      },
+      {
+        "name": "Exclude administrative/Office of the Director awards",
+        "description": "Drop awards assigned to administrative directorates (e.g., Office of the Director) from analyses.",
+        "guidance": "These awards are likely part of NSF administration rather than scientific production and are thus excluded to focus on research awards."
+      },
+      {
+        "name": "Aggregate to award level using average citation counts",
+        "description": "Represent each NSF award as a single data point by aggregating citation counts across all publications associated with the award (average citation count).",
+        "guidance": "This ensures each data point captures the award's total downstream citation impact rather than individual paper-level variation. Aggregation choices affect prediction tasks and interpretation."
+      },
+      {
+        "name": "Hurdle-model framework for citation prediction",
+        "description": "Use a two-stage hurdle modeling approach to account for zero-inflated and highly skewed citation distributions: (1) model the likelihood an award leads to any cited research, (2) model the expected citation impact conditional on at least one cited publication.",
+        "guidance": "The decomposition separates drivers of 'having any impact' from drivers of 'how much impact' and improves interpretability; consider that broader/applied proposals may affect stage 1 differently than ambitious/technical proposals affect stage 2."
+      },
+      {
+        "name": "Strict ex-ante prediction feature restriction",
+        "description": "For citation-prediction, use only metadata available at the time of funding: award amount, effective/expiration dates, duration, organizational directorate, and textual content from titles and abstracts.",
+        "guidance": "This prevents label leakage and ensures predictions are made using only information that would be available to funders at decision time."
+      },
+      {
+        "name": "Text representation: use SPECTER2 embeddings",
+        "description": "Convert award text (title + abstract) into dense semantic embeddings using SPECTER2 for downstream models.",
+        "guidance": "Award-level embeddings were computed from title+abstract concatenation; paper-level embeddings were mean-pooled over paper abstracts. Visualization (UMAP) can be used to inspect topical overlap between awards and papers."
+      },
+      {
+        "name": "Structured feature preprocessing",
+        "description": "Apply robust scaling and target encoding to structured features, with optional polynomial interaction terms to capture non-linearities.",
+        "guidance": "These preprocessing steps are part of the feature pipeline before model training; choose encodings and interactions carefully to avoid overfitting."
+      },
+      {
+        "name": "Model training and validation protocol",
+        "description": "Partition data into training (60%), validation (20%), and test (20%) sets with stratified sampling; optimize hyperparameters with Optuna using 5-fold cross-validation.",
+        "guidance": "Use stratified splits to preserve label distributions; Optuna + 5-fold CV is used to tune models. Evaluate final performance on held-out test set."
+      },
+      {
+        "name": "Model families and ensembling",
+        "description": "Train multiple model types (LightGBM, MLPs, elastic-net logistic regression) and construct voting, stacking, and calibrated weighted ensembles to leverage complementary strengths.",
+        "guidance": "LightGBM performed strongly (AUC=0.818, AP=0.964) and often delivered most performance, but ensembles can improve robustness, particularly for classification (calibrated weighting used only for classification)."
+      },
+      {
+        "name": "Evaluation metrics for classification/regression",
+        "description": "Use ROC-AUC and precision-recall / average precision (AP) for binary classification (stage 1) and appropriate regression metrics for stage 2 (log-transformed citation counts).",
+        "guidance": "Report ROC and PR curves; classification AUCs observed ~0.809\u20130.818 and AP >0.96. Regression performance for citation counts is inherently limited and commonly lower (paper cites typical r^2 ranges ~0.4\u20130.5 for paper-level features in literature)."
+      },
+      {
+        "name": "Definition: verifiable claims and investigation proposals (from grants)",
+        "description": "Verifiable claims: statements presented as facts, established knowledge, or explicit/implicit assumptions that could be verified through existing evidence. Investigation proposals: future research activities, hypotheses to test, questions to answer, or methods to develop that the award will pursue.",
+        "guidance": "Extraction instructions: identify ALL verifiable claims and ALL investigation proposals; keep each item concise (typically 1\u20132 sentences); preserve technical terminology exactly as written; extract only what is stated or directly implied (do not add interpretation). Output arrays of items; use empty arrays [] if none found. Examples provided in prompt."
+      },
+      {
+        "name": "Definition: scientific findings and reported methods (from publications)",
+        "description": "Scientific findings: statements reporting discoveries, measurements, relationships, or conclusions based on the study. Reported methods: specific techniques, procedures, models, data, or tools used to produce the findings.",
+        "guidance": "Extraction instructions: identify ALL scientific findings and ALL reported methods; keep items concise (typically 1\u20132 sentences); preserve technical terminology; extract only what is explicitly stated or directly implied. Output arrays of items; use empty arrays [] if none found. Examples provided in prompt."
+      },
+      {
+        "name": "LLM extraction output requirements and prompt constraints",
+        "description": "When using LLMs to extract structured items from text, require that the model preserve technical specificity, separate claims/proposals/findings/methods, and not hallucinate beyond the text.",
+        "guidance": "Prompts explicitly define items, give examples, instruct to include ALL items found, and require empty arrays when none exist. These constraints are enforced to reduce misclassification of claims vs proposals and to maintain fidelity to source text."
+      },
+      {
+        "name": "Proposal\u2013finding alignment: 0\u2013100 success (alignment) score",
+        "description": "Score each (proposal, finding) pair from 0\u2013100 capturing how well the scientific finding achieves the goals in the investigation proposal; aggregate pair scores to produce grant-level 'scientific success' or 'alignment' scores.",
+        "guidance": "Use an LLM (gpt-4.1.nano in this work) with a prompt asking an 'expert scientific evaluator' to rate 0\u2013100. Generate all pairwise combinations of proposals and findings for a grant; expect many low/mismatched pairs (median pair score in dataset was 20; mean ~30.81, SD ~25.44). At the grant level, median grant had five (proposal,finding) pairs with a score above 50. Interpret aggregated trends (e.g., temporal jumps) cautiously as they may reflect linguistic/reporting changes, policy shifts, or matching artifacts."
+      },
+      {
+        "name": "Generate all proposal\u2013finding pairwise combinations for scoring",
+        "description": "For each grant, produce all pairwise combinations between extracted investigation proposals and extracted scientific findings and score each pair.",
+        "guidance": "This yields a comprehensive mapping but produces many irrelevant/mismatched pairs (12,424,084 pairs generated in the study). Be aware that median scores are low due to combinatorial mismatches; consider alternative pairing strategies if false pairings are problematic."
+      },
+      {
+        "name": "Restrict tasks to records with required fields (citations/abstracts)",
+        "description": "For task-specific datasets, restrict analyses to the subset of publications that have the necessary metadata: citation counts for citation prediction, abstracts for proposal\u2013finding alignment.",
+        "guidance": "The paper restricts the citation prediction to publications with OpenAlex citation counts and the claim/finding extraction to publications with abstracts; this reduces sample size but ensures inputs exist for the NLP tasks."
+      },
+      {
+        "name": "Be explicit about matching and coverage biases by directorate and time",
+        "description": "Document and account for differences in grant\u2013publication match rates across NSF directorates and over time.",
+        "guidance": "Example: Social Sciences and STEM education have the lowest match rates and decreased after ~2008; Mathematical Sciences, Computer Science, and Engineering match rates increase. These coverage differences can bias model training and downstream analyses (e.g., fewer social-science examples may reduce model performance there)."
+      },
+      {
+        "name": "Report extraction/matching failures and missingness",
+        "description": "Record failures to extract items (e.g., proposals not extracted) and missing linkage/matching rates.",
+        "guidance": "The study reports failing to extract proposals from 40,877 grants and indicates large numbers of unmatched awards; transparently report such missingness as it affects dataset utility and downstream inferences."
+      },
+      {
+        "name": "Use embedding visualization (SPECTER2 + UMAP) to assess topical overlap",
+        "description": "Compare semantic embedding spaces of award abstracts and paper abstracts via SPECTER2 embeddings projected with UMAP to visualize topical/linguistic overlap or divergence.",
+        "guidance": "Visualization can reveal substantial overlap (award descriptions capture much of the same topical structure as resulting papers) and identify subregions of divergence; use this diagnostic to inform expectations about alignment scores and model transferability."
+      }
+    ]
+  }
+}

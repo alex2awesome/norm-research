@@ -1,0 +1,730 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="https://www.ams.org/images/content/bubbles.png" type="image/x-icon">
+<link rel="icon" href="https://www.ams.org/images/content/bubbles.png" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/amsuser3.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/assign.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/clickmenu.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/impromptu.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/jquery.fileupload.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/twbs-2.3.2.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/mresubs_home3.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/font-awesome-css.min.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/mresubs_footer.css">
+
+<script type="text/javascript" src="/mathscinet/javascript/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.clickmenu.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.cookie.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery-impromptu.3.1.min.js"></script>
+<script src="https://use.fontawesome.com/7da0d8a943.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript">
+
+function infoChange(type)
+{
+   document.getElementById(type).value = 1;
+};
+
+jQuery(document).ready(function()
+{
+   $('#admin').clickMenu();
+   $('div[class="cmDiv"]').css('border-width', '0px');
+   $('div[class="cmDiv"]').css('float', 'middle');
+   $('div[class="cmDiv"]').css('background-color', '#98A4AE');
+   $('li[class~="main"]').css('background-color', '#98A4AE');
+   $('li[class~="main"]').css('left', '70%');
+   $('#menubox').css('width', '300');
+   $('#menubox').css('height', '100');
+
+   // Focus on change reviewer code input, if it exists
+   if ($('#rcode').length)
+   {   
+      $('#rcode').trigger('focus');
+   };
+
+   errStr = "";
+   if (errStr.length)
+   {
+      alert(errStr);
+   }
+
+   // Stop double click on review submission form
+   $('#reviewSubmit').one(function()
+   {
+      $(this).attr("disabled","disabled");
+      $("#mresubSubmit").click();
+   });
+   
+   // Handle reviewer code input on index.html
+   $('#addRcode').submit(function()
+   {
+      revc = $('#rcinput').val();
+      var patt = /^\d+$/;
+      if (patt.test(revc))
+      {
+         return(true);
+      }
+      else
+      {   
+         alert('Reviewer code: ' + revc + ' must be a number');
+         return(false);
+      }
+   });
+
+   // cno.html for checking
+   $('#cnoform').submit(function()
+   {
+      cno = $('#cno').val();
+      rc = $('#rc').val();
+      nonblank = /\S/m;
+      valid = 1;
+
+      if (cno == null || cno == "" || ! cno.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter an MR number.");
+      }
+      else if (rc == null || rc == "" || ! rc.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter a reviewer number.");
+      }
+
+      if (valid)
+      {
+         return(true);
+      }
+      else
+      {
+         return(false);
+      }
+   });
+
+   // Reviewer info change handling
+   $('#rinfochg').submit(function()
+   {
+      var nonblank = /\S/m;
+
+      // Name processing
+      fname = $('#firstName').val().trim();
+      lname = $('#lastName').val().trim();
+      mname = $('#middleName').val().trim();
+      sname = $('#suffix').val().trim();
+      rname = lname;
+
+      // non blank last name plus non blank first or middle, add a comma after last name
+      if ((fname.match(nonblank) || mname.match(nonblank)) && lname.match(nonblank))
+      {
+         rname = rname+',';
+      }
+
+      // Add first name
+      if (fname.match(nonblank))
+      {
+         rname = rname+' '+fname;
+      }
+
+      // Add middle name
+      if (mname.match(nonblank))
+      {
+         rname = rname+' '+mname;
+      }
+
+      // Add suffix
+      if (sname.match(nonblank))
+      {
+         // non blank first or middle, add a comma, otherwise add a space
+         if (fname.match(nonblank) || mname.match(nonblank))
+         {
+            rname = rname+',';
+         }
+         else
+         {
+            rname = rname+' ';
+         }
+
+         // Add suffix
+         rname = rname+sname;
+      }
+      $('#revName').val(rname);
+
+      addr = $('#addr').val();
+      email = $('#email').val();
+      plang = $('#pLang').val();
+      rclass = $('#class').val();
+      interest = $('#interest').val();
+      var valid = 1;
+
+      if (addr == null || addr == "" || ! addr.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter a mailing address.");
+         $('#addr').trigger('focus');
+         $('#addr').trigger('select');
+      }
+      else if (email == null || email == "" || ! email.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter an email address.");
+         $('#email').trigger('focus');
+         $('#email').trigger('select');
+      }
+      else if (rname == null || rname == "" || ! rname.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your name.");
+         $('#revName').trigger('focus');
+         $('#revName').trigger('select');
+      }
+      else if (plang == null || plang == "" || ! plang.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your primary language.");
+         $('#pLang').trigger('focus');
+         $('#pLang').trigger('select');
+      }
+      else if (rclass == null || rclass == "" || ! rclass.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter at least one MSC2010 class.");
+         $('#class').trigger('focus');
+         $('#class').trigger('select');
+      }
+      else if (interest == null || interest == "" || ! interest.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your area of interest.");
+         $('#interest').trigger('focus');
+         $('#interest').trigger('select');
+      }
+      else
+      {
+         if ($('#emailchange').val() == 1)
+         {
+            // Make sure we have at least a minimally valid email address
+            var atsign = /@/;
+            emails = email.split(" ");
+            for(i = 0; i < emails.length; i++)
+            {
+               if (! emails[i].match(atsign))
+               {
+                  valid = 0;
+                  alert(emails[i] + " is not a valid email address.");
+                  $('#email').trigger('focus');
+                  $('#email').trigger('select');
+               }
+            }
+         }
+      }
+
+      if (valid)
+      {
+         return(true);
+      }
+      else
+      {
+         return(false);
+      }
+   });
+			   
+   function promptback(v,m,f) 
+   { 
+      if (v)
+      {
+         if (f.passw == 'AMY')
+	 {
+            $.get("./moveToAssigned.html",
+            {
+               paperId: paperId,
+               rcode: $("#rc").val()
+            },
+            function() {window.location.reload();});
+         }
+         else
+         {
+            alert("Password incorrect.");
+         }
+      }
+   };
+
+   $(".delSub").click(function()
+   {
+      paperId = $(this).attr('id');
+      $.prompt('Please enter the password<br><input type="text" name="passw"><br>Delete '+paperId+' from the submitted list?',{ buttons: { YES: 1, no: 0 }, focus: 1, callback: promptback });
+   });
+      			   
+   // This deletes a language <tr> when the button is clicked
+   // and also removes the language from the hidden textarea
+   $(".langbutton").click(function()
+   {
+      delval = $(this).closest("td").attr("id");
+      $(this).closest("tr").remove();
+      langval = $("#pLang").val();
+      lregex = new RegExp(delval, "g");
+      $("#pLang").val(langval.replace(lregex,""));
+   });
+
+   $(function () 
+   {
+       $('#fileupload').fileupload(
+       {
+          url: './upload',
+          dataType: 'json',
+          done: function (e, data) 
+          {
+	      $("#review").val(data.result.files[0].contents);
+          }
+       });
+   });
+});
+
+// Populate lang text area and display buttons from pulldown menu
+function langSelect()
+{
+   langsel = $('#langlist option:selected').val();
+   currlang = $('#pLang').val().trim();
+   if (currlang.toLowerCase().indexOf(langsel.toLowerCase()) == -1)
+   {
+      $('#langtbl').append('<tr><td id="'+langsel+'">'+langsel+'<input type="button" class="langbutton" value="X" /></td></tr>');
+      langsel = ' '+langsel;
+      $('#pLang').val(currlang+langsel);
+
+      $(".langbutton").click(function()
+      {
+         delval = $(this).closest("td").attr("id");
+         $(this).closest("tr").remove();
+         langval = $("#pLang").val();
+         lregex = new RegExp(delval, "g");
+         $("#pLang").val(langval.replace(lregex,""));
+      });
+   }
+};
+
+function changeDate()
+{
+   var newDt=document.getElementById('date').value;
+   location.href="webLog.html?date="+newDt;
+}
+
+function searchStr()
+{
+   var search=document.getElementById('search').value;
+   location.href="webLog.html?search="+search;
+}   
+
+
+</SCRIPT>
+
+<TITLE>Mathematical Reviews Reviewer Submission Help</TITLE>
+</head>
+<body>
+<div id="topDiv" align="center">
+<a href="https://www.ams.org"><img src="/mathscinet/images/ams-logo-header.png" align="center"/></a>
+</div> 
+<form>
+<input type="hidden" name="host" value="HOST=chicago.ams.org">
+</form>
+<div id="outerDiv" align="center">
+     <TABLE width="960" cellspacing="0" cellpadding="0" border="0" align="center">
+     <tbody>
+     <tr style="display:none">
+     <td align="left" id="importantUpdate" nowrap="nowrap">IMPORTANT NOTICE</td>
+     <td align="left" id="importantMessage">The AMS website will be down for maintenance on Tuesday April 25, 2017 between 5:00 PM - 8:00 PM EDT.</a><br>
+     </td>
+     </tr>
+     <tr><td>&nbsp;</td></tr>
+     <TR> 
+     <TD valign="top">
+     </TD>
+     <td id="timestamp">
+     2026-05-10 10:32 UTC
+     </td>  
+     </TR>
+     </tbody>
+     </TABLE>
+
+
+     <table id="mrbar" width="960" cellspacing="0" cellpadding="0" border="0">
+     <tbody>
+     <tr>
+         <td>
+         <A href="/mresubs/index.html" class="mrbarLink nounderline">
+         Home</a>
+         </td>
+
+           <td>
+           
+<A href="/mresubs/signin.html?caller=/mresubs/revr.html"
+ class="mrbarlink nounderline">
+           Log In</A>
+           </td>
+
+
+
+
+        <td>
+        <A href="/mresubs/guide-reviewers.html" class="mrbarlink nounderline">
+         Guide for Reviewers</A> 
+        </td>
+
+
+
+
+     <td>
+     <A href="/cdn-cgi/l/email-protection#7f121e0b170d1a093f1e120c51100d18" class="mrbarlink nounderline">
+      Contact MR</A>
+     </td>
+     </tr>
+     </tbody>
+     </table>
+
+<div id="splash" class="white">
+<br><br><br>
+<h2>Mathematical Reviews<BR>Reviewer Submission Help</h2>
+</div>
+
+<p><a href="#signin">AMS Web Sign In</a><br>
+<a href="#identify">Item Identification if not Signed In </a><br>
+<a href="#webform">Completing the Web Form</a><br>
+<a href="#reviewtext">Review Text</a> <br>
+<a href="#references">References in review text </a><br>
+<a href="#submission"></a><a href="#remarks">Remarks</a><br>
+<a href="#comments">TeX Comments </a> <br>
+<a href="#submission"></a><a href="#submission"></a><a
+ href="#submission">Review Submission</a><br>
+<a href="#changes">Making Changes</a> <a href="#reflists"><br>
+Reference lists in MathSciNet </a><br>
+<a href="#confirmation">Automated confirmation of receipt of review</a><br>
+<a href="#updates">Updating your reviewer information</a> </p>
+<hr noshade="noshade">
+<p><a name="signin" id="signin"></a><b>AMS Web Sign In </b><br>
+Although it is not required to Sign In, you will have the most
+satisfactory interaction with the Web submission process if you do so.
+In order to do AMS Web Sign In you need to have an AMS Web Account with
+your reviewer number in the Profile. If you have not previously set up
+your AMS Web Account, go to <a
+ href="https://www.ams.org/ams-web-account" target="_blank">www.ams.org/ams-web-account</a>.
+If you have previously set up an AMS Web Account, but did not add your
+reviewer number to your Profile, you may click the link above, sign in
+and add your reviewer number.</p>
+<p>Once you have set up an AMS Web Account with your reviewer number in
+the Profile, your reviewer information will always be available when
+you Sign In on the Web Submission page (link at the upper left).</p>
+<p>After Sign In, click <em>Interactive Web form</em> to access your
+reviewer information and submit your review.</p>
+<p>You will get a list of all the review items that are presently out
+to you. Click on the <em>Submit Review</em> button next to the item for which
+you want to submit a review and you will be taken to a page for
+completing the review information. All your personal reviewer
+information will already be filled in: name, e-mail, postal address.</p>
+<p>Normally, the item you are reviewing will be on the list. If it is
+not, simply fill in the MR Number in the box with the text <em>Enter
+an MR Number</em>. If the item is not on the list, it is helpful if you
+put a comment in the <a href="#remarks">Remarks</a> portion of the
+page. For example, the item might have been passed to you by a
+colleague, to whom it was assigned for review. <br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<hr noshade="noshade">
+<p></p>
+<p> <a name="identify"></a><b>Item Identification if not Signed In (MR
+Number)</b><br>
+If you choose not to Sign In, click the <em>Interactive Web form</em>
+link to begin. On the next screen, enter the identifying number known
+as the MR Number of the item to be reviewed. The MR Number is a seven
+digit number found in the upper left corner of the review sheet that
+accompanied the item that you were sent. It is also found on the first
+page of the item being reviewed. When you are presented with the
+bibliographic data for the MR Number you entered, study it carefully to
+make sure you are looking at the correct item.<br>
+<br>
+On this first screen, you are also prompted for your reviewer number.
+Your reviewer number contains six digits and appears below your name at
+the upper left of the review sheet that accompanied the item you were
+sent. This is not a required field. However, it is helpful to our
+review processing if it is entered.<br>
+<br>
+Click the Continue button once this information has been entered. You
+will now be at the main data entry screen.<br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<hr noshade="noshade">
+<p> <a name="webform"></a><b>Completing the Web Form</b><br>
+Following is a list of the fields on the interactive web form. Each
+field is described in detail within this help file. Required fields are
+indicated with an asterisk (<span class="style1">*</span>). </p>
+<p> <a href="#textype">TeX Type</a><span class="style1">*</span><br>
+<a href="#rname">Reviewer Name</a><span class="style1">*</span><br>
+<a href="#email">Email</a><span class="style1">*</span><br>
+<a href="#address">Postal Mail</a><br>
+<a href="#msc">MSC Primary</a><br>
+<a href="#msc">MSC Secondary(s)</a><br>
+<a href="#reviewtext">Review Text</a><span class="style1">*</span><br>
+<a href="#remarks">Remarks</a> </p>
+<p> <a name="textype"></a><b>TeX Type</b><br>
+At the top of the Web form you are asked to select the type of TeX to
+be used in processing your review. The four choices are: TeX, AMS-TeX,
+LaTeX, and AMS-LaTeX. Choose the type that you feel most comfortable
+using. If your review only contains roman text�no math symbols or other
+alphabets�none of the formatting features of TeX are needed. In this
+case it doesn't matter which type you choose. Following is some
+information on each type: </p>
+<blockquote>
+  <p><em>TeX</em><br>
+This type is sometimes called plain TeX. If you normally use plain TeX
+and need to use the AMS math or symbol fonts, select AMS-TeX. (For
+example, \Bbb uses the AMS Font package.)<br>
+  <br>
+  <em>AMS-TeX</em><br>
+This type of TeX is the closest to what is used internally at
+Mathematical Reviews and externally on MathSciNet for presentation of
+reviews. The AMS Font package (which includes blackboard bold) is
+loaded when this type is selected. <br>
+  <br>
+  <em>LaTeX</em><br>
+The text that you enter into the Review Text input box should not
+include \documentclass (or the older \documentstyle), \begin{document},
+or \end{document}, all of which are automatically inserted by the Web
+form processor. If you insert them, you may not get a proper PDF
+preview. If you normally use LaTeX and need to use the AMS math or
+symbol fonts, select AMS-LaTeX. (For example, \mathbb uses the AMS Font
+package.)<br>
+  <br>
+  <em>AMS-LaTeX (Recommended)</em><br>
+Your insertion into the Review Text input box should not include
+\documentstyle, \begin{document}, or \end{document}, all of which are
+automatically inserted by the Web form processor. If you insert them,
+you may not get a proper PDF preview. The AMS Font package (which
+includes blackboard bold) is loaded when this type is selected. </p>
+  <p><em>Scientific Word/Workplace (choose AMS-LaTeX)</em><br>
+SW/SWP can be viewed as a special form of AMS-LaTeX. Prepare your review
+text in SW/SWP, select all of it, do a Edit-Copy As Internal Format
+(not the normal Edit-Copy), then paste into the Review Text box on the
+Web form. There may be "funny" material in the PDF preview, but our
+production staff can remove it.<br>
+  <br>
+  <em>All types of TeX</em><br>
+Note that "#" and "&amp;" have special meanings in TeX. If you need to
+use those characters in the text of your review, remember to use "\#"
+and "\&amp;" instead. </p>
+</blockquote>
+<p> <a name="rname"></a><b>Reviewer Name</b><br>
+Reviewer name is a required field. If you Signed In, it is already
+filled in. This information is particularly important if you are a new
+reviewer or if the originally designated reviewer has passed the item
+to you. Reviewer name should be submitted in the format: last name,
+first name, middle initial.</p>
+<p> <a name="email"></a><b>Email</b><br>
+Email address is a required field. If you Signed In, it is already
+filled in. Your email address will be used for sending an automated
+confirmation of your review submission, as well as for updating our
+reviewer information database. The automated confirmations are sent out
+once per day, so there can be a delay of up to 24 hours before you
+receive it.</p>
+<p> <a name="address"></a><b>Postal Mail</b><br>
+If you Signed In, your current postal mail address is already filled
+in. It is very important in maintaining timeliness that we have your
+most recent postal mail address when we send your next review item.
+Although the postal mail address is not required, please keep us
+informed of any changes to your address.</p>
+<p> <a name="msc"></a><b>Mathematics Subject Classification (MSC)</b><br>
+The review sheet you receive asks for suggestions for the 5-digit
+classifications of the item being reviewed. The MSC primary and
+secondary fields are not required but we encourage you to recommend a
+unique primary classification and, if desired, one or more secondary
+classifications. Classifications must be entered without internal
+spaces, e.g., "11D45", not "11 D 45". Multiple secondary
+classifications should be separated by a space in the input box. If you
+agree with the suggested classifications, you do not need to fill in
+these boxes.&nbsp;[<a href="http://www.ams.org/msc/">Browse
+the MSC</a>]</p>
+&nbsp;<a name="reviewtext"></a><b>Review Text<br>
+</b>Your review text can be entered directly into the review text box,
+or&nbsp; it can be uploaded from your local computer system.&nbsp; In
+either case, we ask that you do not use your own TeX definitions (\def
+or \newcommand) or TeX macros. Because of the nature of the review data
+in the Mathematical Reviews Database, all your definitions and macros
+will have to be removed, which will&nbsp; increase production time and
+expense. Do not use any \input, \usepackage, or \include commands, as
+they will have to be removed in production and may prevent you from
+receiving a PDF preview.&nbsp; If your review has been prepared in
+Scientific Word or Workplace, select all of it, do a Edit-Copy As
+Internal Format (not the normal Edit-Copy), then paste into the Review
+Text box on the Web form. There may be "funny" material in the PDF
+preview, but our production staff can remove it.&nbsp; Using the upload
+feature in this case will not produce a PDF file.&nbsp; <br>
+<br>
+For those with TeX knowledge and access to TeX on their computer, the
+best way to create the text for insertion in this box is to first
+process your review using the TeX processor on your computer system.
+You may use plain TeX, AMS-TeX, LaTeX or AMS-LaTeX. When you are happy
+with the results as viewed on your system, either select the text of
+your review (you may leave out all preamble and postamble formatting
+commands, such as \bye in plain TeX and \begin {document} in LaTeX),
+copy the selected review text and paste it into the Review Text box; or
+use the upload button as follows:&nbsp; use the Browse button to locate
+and open the TeX/LaTeX file to be uploaded;&nbsp; the name and location
+of the file should appear in the box to the left of this button.&nbsp;
+After selecting the Upload button, your review should appear in the
+Review Text box.&nbsp; If the wrong file has been uploaded, you may
+Browse, Open and Upload a new file.&nbsp; <br>
+<br>
+Example:
+<table align="center">
+  <tbody>
+    <tr>
+      <td>i<img src="http://www.ams.org/images/review_help.gif"
+ alt="Sample review text" height="225" width="475"> </td>
+    </tr>
+  </tbody>
+</table>
+<p> <b><a name="references"></a>References in review text </b><br>
+If you choose to include references with your review text, provide as much
+information as possible, including full author name, year of
+publication, journal name (or book or video title), title of the cited
+item, volume and paging. Include the MR Number if possible. References
+in the right format, including the MR Number, can often be found by
+using <a href="http://www.ams.org/mref/">MRef</a>, which is a
+free service of the AMS. </p>
+<p> <a name="remarks"></a><b>Remarks</b><br>
+Use the Remarks box to add any comments about the review item that you
+are submitting that will be helpful to the editors at Mathematical
+Reviews. This box can also be used if there is an error in the
+bibliographic information or title translation. Do not use this box for
+comments about other reviews or for regular correspondence. Regular
+correspondence should be sent by email to <a href="/cdn-cgi/l/email-protection#6a070b1e02180f1c2a0b07194405180d"><span class="__cf_email__" data-cfemail="5835392c302a3d2e1839352b76372a3f">[email&#160;protected]</span></a>.<br>
+<br>
+<a name="comments" id="comments"></a><b>TeX comments</b><br>
+The percent (%) character has a special meaning in TeX, signaling a
+comment which is not viewed as part of the text. It is assumed during editing that commented out material is not part of the review text. Place
+optional material in the Remarks box with an explanation. If a percent
+character is actually needed in review text, use \%. <br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<hr noshade="noshade">
+<p> <a name="submission"></a><b>Review Submission</b><br>
+Once you have entered all of the required information on the Web form,
+click the "Submit" button. You will receive a confirmation screen that
+your review has been submitted to Mathematical Reviews. Also at this
+time the TeX processor is applied to your review text. There will be a
+link to view a PDF preview of your review if the TeX processor runs
+without errors. Following are some suggestions to ensure that TeX runs
+without errors:<br>
+<br>
+If you have access to a TeX processor on your local
+system, it is recommended that you first process your review on your
+local system, to make sure that it is free of errors.<br>
+<br>
+If you need AMS fonts (for example, the Euler fonts and bold math
+fonts), be sure to select either AMS-TeX or AMS-LaTeX.</p>
+<p>Inclusion of external macro packages (\input or \usepackage, for
+example) not in standard TeX/LaTeX distributions will prevent the
+creation of a PDF preview. All macros invoked from such packages will
+have to be removed during the editing process, so please avoid using
+external packages. All user-defined macros also must be removed during
+the editing process. <br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<hr noshade="noshade">
+<p> <a name="changes"></a><b>Making Changes</b><br>
+You are free to make changes after you push the "Submit" button. Once
+you get the confirming "Thank you" screen,&nbsp; you may select hte
+"Edit Review" button to go back to the review text box. Make any
+desired changes and push "Submit" again. You may do this as many times
+as needed.&nbsp;&nbsp; If the preview of the PDF file is not as you
+expected, please make a note in&nbsp; the Remarks box to indicate your
+intentions.&nbsp; <br>
+<br>
+If you submit an amended review in the same day (U.S. Eastern time),
+the new review simply writes over the old review and only the amended
+review will be processed. If you submit an amendment on a later day,
+place a note in the Remarks box that your amended review is intended to
+replace the original submission.<br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<hr noshade="noshade">
+<p> <a name="reflists" id="reflists"></a><b>Reference lists in
+MathSciNet </b><br>
+<a href="http://www.ams.org/mrcitations/journal_list.html"
+ target="_blank">Selected journals </a>covered in MathSciNet have the
+reference lists from the individual papers included with the MathSciNet
+Full Item information. These reference lists are keyed and processed
+independently of review text. No action on your part is needed to
+include these reference lists. These reference lists do not replace the
+valuable <a href="#references">references</a> that you may add in your
+review text; they supplement that information.<br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<hr noshade="noshade">
+<p> <a name="confirmation" id="confirmation"></a><b>Automated
+confirmation of receipt of review</b><br>
+The receipt of your review is confirmed by an automated e-mail system.
+These automated confirmations are sent out once per day.<br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+<!-- BEGIN AMS copyright FOOTER. DO NOT ALTER THIS SECTION.
+     DO NOT REMOVE THIS SECTION FROM EDITED VERSIONS OF THIS FILE.   -->
+<hr noshade="noshade">
+<p> <a name="updates" id="updates"></a><b>Updating your reviewer
+information </b><br>
+The <em>View My Reviewer Information</em> link takes you to a page
+with your reviewer information. Please check your list of classes and
+interests from time to time. These lists will determine the items that
+editors send you for review. At the top of the page you will find a
+link to change this information. While you will not see a change
+instantly take effect, your request will be sent to Mathematical
+Reviews for database updating. You may also use this page to send us
+updates to your name, e-mail, or postal address. <br>
+<br>
+[<a href="#top">Return to Top</a>] </p>
+</div>
+<footer>
+<div id="footerlinediv">
+<a href="https://www.ams.org">
+<img id="footerline" src="/mathscinet/images/footer-line.png" style="width:1200px;"/>
+</a>
+</div>
+<div id="footerDiv">
+<a class="AMSLink AMSLinkBorder" href="https://www.ams.org/notices">Notices of the AMS</a> 
+<a class="AMSLink AMSLinkBorder" href="https://blogs.ams.org/">AMS Blogs</a>
+<a class="AMSLink AMSLinkBorder" href="https://www.ams.org/bull">Bulletin of the AMS</a>
+<br>
+<br>
+<a href="https://www.facebook.com/pages/American-Mathematical-Society/216331555216" title="Facebook"><i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://twitter.com/amermathsoc" title="Twitter"><i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://www.linkedin.com/companies/american-mathematical-society?trk=fc_badge" title="LinkedIn"><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://plus.google.com/111299122922781685506" title="Google+"><i class="fa fa-google-plus-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://instagram.com/amermathsoc" title="Instagram"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a> 
+<a href="https://www.youtube.com/amermathsoc" title="YouTube"><i class="fa fa-youtube-square fa-2x" aria-hidden="true"></i></a>
+<div class="clearfix">&nbsp;</div>  
+
+<div id="AMSfooter">
+American Mathematical Society &middot; 
+<a class="AMSLink" href="https://goo.gl/maps/ZvJdkQEC79p" title="Google map 201 Charles Street Providence, Rhode Island">201 Charles Street Providence, Rhode Island 02904-2213</a> &middot; 
+<a class="AMSLink" href="tel:401-455-4077">401-455-4000</a> or <a class="AMSLink" href="tel:800-321-4267">800-321-4267</a>
+<br><br>&copy; <a class="AMSLink" href="https://www.ams.org/copyright">Copyright</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+   var now = new Date();
+   document.write(now.getFullYear());
+</script>, American Mathematical Society &middot; <a class="AMSLink" href="https://www.ams.org/privacy">Privacy Statement</a>
+</div>
+</div>
+</footer>
+
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9847f5fb46cf26',t:'MTc3ODQwOTE1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+
+
+
+
+
+
+

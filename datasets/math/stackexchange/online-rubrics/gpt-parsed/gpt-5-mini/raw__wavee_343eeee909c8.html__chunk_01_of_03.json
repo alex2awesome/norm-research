@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_343eeee909c8.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_343eeee909c8.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39408,
+  "model": "gpt-5-mini",
+  "elapsed_s": 58.117212167002435,
+  "input_tokens": 12988,
+  "output_tokens": 3613,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML researchers and dataset/benchmark designers working on LLM mathematical reasoning evaluation",
+    "subtask_short": "rv-bench construction and evaluation",
+    "subtask_description": "Guidelines and evaluation protocol for constructing RV-BENCH: a random-variable-based benchmark to evaluate LLM mathematical reasoning, including annotator selection, variableization steps, difficulty control, calibration, dataset composition, evaluation metrics, model selection, and error analysis. Useful for teams building reproducible math reasoning benchmarks and performing thorough LLM evaluations.",
+    "subtask_keywords": [
+      "benchmark",
+      "math_reasoning",
+      "random_variable_questions",
+      "dataset_construction",
+      "llm_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Annotator qualifications and selection",
+        "description": "Publicly recruited 10 candidate annotators, all of whom are graduate students with strong backgrounds in mathematics and computer science (majoring in at least one domain and achieving an \u201cA\u201d grade in the other through postgraduate-level high school examination). Candidates were required to manually solve a selection of mathematical and coding problems (100 in total) sampled from the MATH test set and LeetCode for qualification purposes. Ultimately, six candidates with the highest examination grades were chosen to serve as the professional annotators for RV-BENCH.",
+        "guidance": "Use domain-qualified graduate-level annotators; require a practical qualification exam (100 problems) and pick top performers for annotation to ensure high-quality question functions."
+      },
+      {
+        "name": "Raw data sampling",
+        "description": "Randomly and uniformly sample 250 benchmark problems from the MATH test set and 250 from the LeetCode-Math branch (500 in total), following the processing setup of PRM800K (Lightman et al. 2024).",
+        "guidance": "Adopt uniform random sampling from target source benchmarks and follow prior dataset processing conventions for comparability."
+      },
+      {
+        "name": "Step 1: Identify and initialize variables",
+        "description": "Annotators first review the problem and identify the variables, assigning a semantic-based name. Then, a range is set for each variable, which is required to maintain the difficulty level of the original problem.",
+        "guidance": "Select variables that align with the original problem\u2019s conceptual intention (exclude descriptive characteristics like '6-sided' that are not to be randomized), replace occurrences with slots, assign semantically meaningful names and constrained ranges, and ensure mutually dependent variables have constrained ranges so instantiated questions remain solvable."
+      },
+      {
+        "name": "Step 2: Construct the general solution (solution module)",
+        "description": "Annotators convert the original text-based step-by-step solution into code implementation; for LeetCode problems, annotators identify community Python solutions and transform them into the appropriate format, defining the solution module which takes variable combinations as input and returns the corresponding answer.",
+        "guidance": "Ensure the solution is generalizable across variable combinations (not tightly coupled to a specific instance); revise and validate code implementations; for code-sourced problems, adapt verified community code into the canonical solution module and validate correctness."
+      },
+      {
+        "name": "Step 3: Generate QA pairs (generation module)",
+        "description": "Based on the initialized variables from Step 1 and the corresponding answer from Step 2, the QA pair is generated as an instantiated question in RV-BENCH.",
+        "guidance": "Fill slots with randomized variable values, format outputs into question-answer pairs, remove extraneous or irrelevant content from original problem texts, and compile all generated questions into a comprehensive question set."
+      },
+      {
+        "name": "Difficulty control criteria",
+        "description": "Three conditions/criteria for setting the random range in Step 2: 1) The fluctuation range of variables should remain uniform across different questions; 2) Variables that significantly affect the problem\u2019s complexity may be fixed as constants; 3) The random range for simpler questions can be broader, whereas for more challenging questions, it should be narrower to prevent considerable variations in difficulty.",
+        "guidance": "Use these rules to preserve difficulty parity with original problems; set ranges carefully to avoid introducing systematic extra numerical complexity. Use a fixed random seed (seed=42) to ensure reproducibility of generated RVQs."
+      },
+      {
+        "name": "Calibration and post-filtering",
+        "description": "After annotation, perform cross-calibration: annotators review each other's annotations, verify correctness of question functions, and test the runtime of the solution module across a broad spectrum of variable combinations. Problems that are not well-comprehended are re-evaluated; if a problem cannot guarantee solvability or generalization for random variables, it is removed. Question functions from LeetCode-Math that do not closely relate to mathematical reasoning or computation are filtered out.",
+        "guidance": "Include runtime testing to detect issues (e.g., exceeding recursion depth), perform cross-checks among annotators for objectivity and consistency, and remove or revise any non-generalizable or unsolvable functions."
+      },
+      {
+        "name": "AI tools in annotation policy",
+        "description": "Employed LLMs (e.g., GPT-4o, DeepSeek-V3) to generate initial code prototypes, which were subsequently refined by expert human annotators. The integration reduced the annotation time per item by approximately 15 minutes; nevertheless, the team refrained from full automation due to concerns about hallucinations and reliability.",
+        "guidance": "Permit LLM-assisted prototyping but require human review/refinement and avoid fully automated annotation pipelines until reliability concerns (hallucinations, incorrect code) are resolved."
+      },
+      {
+        "name": "Dataset composition and provenance",
+        "description": "After calibration and post-filtering, RV-BENCH comprises 230 question-generating functions. For experiments: 575 RVQs from 115 RVQ groups are generated by MATH question-generating functions (MATH-RV) and an equal number by LeetCode functions (LEETCODE-RV), resulting in 1150 RVQs in RV-BENCH for this study.",
+        "guidance": "Track and report provenance (which source each function came from), groupings, and final counts after filtering; publicly release generated RVQs and corresponding solutions for reproducibility."
+      },
+      {
+        "name": "Evaluation metrics: exact match and pass@k",
+        "description": "For the MATH benchmark (MATH-SP), use exact match accuracy as the metric. For RVQs and multi-sample inference, use pass@k accuracy to measure improvements via test-time scaling.",
+        "guidance": "Define evaluation metric per source (exact match for canonical-answer datasets), and use pass@k when evaluating multi-sample/test-time-scaling behaviors; report pass@k across multiple k values to characterize elicitation of proficiency/generalization."
+      },
+      {
+        "name": "Model selection guidance",
+        "description": "Select a diverse range of LLMs covering various model sizes and architectures including dense models (e.g., LLaMA, Qwen, Phi, Gemma, DeepSeek), mixture-of-experts (MoE) models (e.g., Mixtral, Qwen-Max), math-specific models (e.g., Qwen-Math, Mathstral, DeepSeek-Math), and proprietary large-scale models (e.g., GPT-4o, Claude-3, GLM-4-Plus, Gemini-2-Pro, DeepSeek-V3).",
+        "guidance": "Include representative models across open-source/proprietary, dense/MoE, and math-specialized models to draw comprehensive conclusions about generalization and scaling effects."
+      },
+      {
+        "name": "Error analysis taxonomy",
+        "description": "Categorize incorrect model answers into three error types: 1) Question Understanding Error (QUE): the model misunderstands the question requirement; 2) Inference Logical Error (ILE): the inherent reasoning process is incorrect (e.g., misapplication of theorems); 3) Numerical Computational Error (NCE): the numerical computation is incorrect, resulting in an error in the final answer.",
+        "guidance": "Tally proportions of QUE, ILE, and NCE for original and RV settings, compute differences in proportions to assess whether randomization increased numerical complexity. Focus analysis on NCE as primary computational-error signal."
+      },
+      {
+        "name": "Control for numerical complexity in RVQs",
+        "description": "When replacing fixed variables with random ones, control variable ranges so that the observed performance gap is not confounded by increased numerical complexity; the annotation process enforces strict control over variable ranges and uses empirical error analysis to verify that NCE proportion remains similar between original and RV settings.",
+        "guidance": "Design and empirically validate that RV generation does not significantly increase numerical difficulty (e.g., NCE fluctuates within ~2%); when non-integer intermediate computations arise, note potential increased NCE and report accordingly."
+      },
+      {
+        "name": "Reproducibility and release",
+        "description": "Use a fixed random seed of 42 for RVQ generation and publicly release all generated RVQs and corresponding solutions.",
+        "guidance": "Fix random seeds and publish dataset generation code and outputs to allow external reproduction and follow-up analysis."
+      },
+      {
+        "name": "Filtering non-mathematical LeetCode functions",
+        "description": "Question functions derived from LeetCode-Math that do not closely relate to mathematical reasoning or computation are filtered out during post-filtering.",
+        "guidance": "Apply domain relevance filters to keep only functions that evaluate mathematical reasoning; remove algorithmic / engineering tasks that don't test the target competency."
+      }
+    ]
+  }
+}

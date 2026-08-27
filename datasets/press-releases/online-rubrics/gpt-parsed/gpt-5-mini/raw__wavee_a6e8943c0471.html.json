@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_a6e8943c0471.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12512,
+  "output_tokens": 3961,
+  "elapsed_s": 1505.51527058403,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners studying press releases and media coverage of health science (health communication researchers, computational social scientists, data scientists, journal editors, PR practitioners, journalists)",
+    "subtask_short": "predicting press releases and media coverage",
+    "subtask_description": "Characterize and predict which published health science articles will (1) receive a journal-issued press release and (2) garner mainstream media coverage, using text features and supervised topic models.",
+    "subtask_keywords": [
+      "press_release",
+      "media_coverage",
+      "newsworthiness",
+      "health_science",
+      "text_classification",
+      "slda"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "News values (proximity, significance, novelty)",
+        "description": "\"News values, such as proximity, significance, and novelty, act as criteria for deciding what is newsworthy and most likely to increase audience attention.\"",
+        "guidance": "These classical journalistic news values are the elements used to decide newsworthiness and are the target attributes that press releases try to evoke. Examples from the paper: proximity (e.g., 'uk','england'), significance (e.g., 'death','increase','outcomes'), novelty. Use news values when composing or assessing an information subsidy."
+      },
+      {
+        "name": "Topical relevance / applicability to general audiences",
+        "description": "Journals \"intentionally disseminate press releases that cover topics likely to be found 'newsworthy' by lay audiences\"; topics that are 'relevant and applicable to general audiences' are preferred.",
+        "guidance": "Prefer studies whose findings affect broad populations or everyday concerns (examples: 'women', 'pregnancy', 'flu', 'alcohol'). When producing press releases, emphasize applicability, real-world implications, and relatable angles to increase chance of coverage."
+      },
+      {
+        "name": "Population-level / epidemiological signals predict coverage",
+        "description": "Words and phrases indicating population-level results (e.g., 'women', '95% CI', 'drinking', 'risk', 'cohort study', 'systolic blood') are predictive of press release issuance and media coverage.",
+        "guidance": "Highlight cohort size, population affected, population-level measures, and clear effect estimates in abstracts or press materials to increase perceived newsworthiness. The paper found these features positively correlated with both PR and NC."
+      },
+      {
+        "name": "Basic-science / technical topics anticorrelate with coverage",
+        "description": "Technical laboratory/basic-science terms (e.g., 'binding', 'receptor', 'mice', 'protein', 'molecular') were negatively associated with press release generation and media coverage.",
+        "guidance": "Highly technical or mechanistic work is less likely to receive press releases or media attention unless framed in broader implications. Avoid overemphasizing molecular detail when the audience is lay; instead, translate significance to population/behavioral impact if appropriate."
+      },
+      {
+        "name": "Press releases as information subsidies written in journalistic style",
+        "description": "\"Press releases, which are often written by journal staff members in the form of news stories, are one type of information subsidy.\"",
+        "guidance": "When producing press releases, adopt journalistic news-story conventions: clear lede, emphasis on news values, accessible language, and structure suitable for direct reuse by newsrooms. This increases the utility of the release as an information subsidy."
+      },
+      {
+        "name": "Include study limitations in press releases (transparency)",
+        "description": "Prior work (Woloshin and Schwartz) analyzed the fraction of press releases that reported study limitations; reporting limitations is an evaluated characteristic.",
+        "guidance": "Explicitly state study limitations in press materials to avoid exaggeration and improve trustworthiness. Omitting limitations has been identified as a problematic practice in prior evaluations."
+      },
+      {
+        "name": "Source selection / newsroom reliance on press releases (audience: small outlets)",
+        "description": "Journalists\u2014especially at small media organizations\u2014\"were more likely to use press releases\" as resources; reliance on press releases affects which stories appear in the news.",
+        "guidance": "For outreach, target smaller outlets and emphasize ready-to-use content. Understand that outlet type influences whether a press release will be picked up; tailor releases accordingly."
+      },
+      {
+        "name": "Matched sampling for negative instances (dataset construction control)",
+        "description": "Negative instances were sampled via a matched sampling approach: for each cited article, sample up to 10 (or up to 20 in Reuters case) articles from the same journal and issue/year for which no press release or coverage was issued.",
+        "guidance": "When building corpora to study coverage, match negatives by journal, issue, year, and volume to control for venue and temporal confounds. This isolates content predictors rather than venue effects."
+      },
+      {
+        "name": "Feature engineering: use uni- and bigrams from titles, abstracts, and MeSH terms",
+        "description": "Features in the logistic regression model comprised counts of uni- and bigrams extracted from titles, abstracts, and MeSH terms (with MeSH terms manually assigned in PubMed).",
+        "guidance": "Use lexical features from title/abstract and controlled vocabulary terms (MeSH) as primary predictors. Consider both unigrams and bigrams to capture salient phrases (e.g., 'resonance imaging')."
+      },
+      {
+        "name": "Text preprocessing and feature selection thresholds",
+        "description": "Text preprocessing used a standard English stop word list; only kept features that appeared in at least two instances; kept at most the 50,000 most frequently occurring features.",
+        "guidance": "Apply stop-word removal, minimum document frequency thresholds, and cap vocabulary size (e.g., 50k) to limit sparsity and computational cost. Report actual vocabulary sizes per corpus."
+      },
+      {
+        "name": "Modeling: regularized logistic regression with \u21132 penalty and hyperparameter tuning",
+        "description": "Used logistic regression with a squared \u21132 norm penalty (LIBLINEAR); \u03bb hyper-parameter selected via nested cross-validation (logarithmic line search over 1e-5 to 100).",
+        "guidance": "Use regularization to avoid overfitting; select penalty strength using nested CV rather than tuning on test folds. Implement with scalable solvers (e.g., LIBLINEAR) for high-dimensional lexical features."
+      },
+      {
+        "name": "Performance evaluation: five-fold cross-validation and AUC",
+        "description": "Performance was assessed using five-fold cross-validation and the area under the ROC curve (AUC) as the main metric.",
+        "guidance": "Assess discriminative performance with k-fold CV (k=5) and report mean and SD AUC across folds. Example observed AUCs in the study: Sumner PR AUC=0.666 (SD 0.019), JAMA PR AUC=0.882 (SD 0.018), Sumner NC AUC=0.591 (SD 0.044), Reuters NC AUC=0.783 (SD 0.022)."
+      },
+      {
+        "name": "Robust feature identification via bootstrap confidence intervals",
+        "description": "Used bootstrap sampling (1000 repeats) to construct approximate 95% confidence intervals around logistic regression coefficient estimates; ranked predictors by CI bounds to identify robustly predictive features.",
+        "guidance": "To identify stable predictors, fit models on bootstrap samples, record coefficient distributions, compute CIs, and rank features by lower/upper CI bounds (descending for positive predictors, ascending for negative predictors)."
+      },
+      {
+        "name": "Use supervised topic modeling (sLDA) to uncover discriminative topics",
+        "description": "Applied supervised latent Dirichlet allocation (sLDA) to uncover latent topics that explicitly correlated with press release issuance and media coverage; set K=20 topics and symmetric Dirichlet prior \u03b1=1.",
+        "guidance": "Fit sLDA with supervision labels (PR issued / NC received) to obtain topic coefficients indicating correlation with outcomes; interpret top words per topic and topic coefficients to identify thematic drivers of newsworthiness."
+      },
+      {
+        "name": "Consider press release text as predictive features for news coverage",
+        "description": "For news coverage prediction, models using features extracted from press releases achieved mean AUC comparable to models using article features (e.g., Sumner NC: article-features AUC=0.591; press-release-features AUC=0.575).",
+        "guidance": "When modeling or planning outreach, include features both from the original article and from the press release text; press release wording itself can influence downstream media pickup."
+      },
+      {
+        "name": "Data linkage and use of bibliographic metadata (PubMed/MeSH)",
+        "description": "Linked press releases to corresponding scientific publications using PubMed searches of titles and retrieved titles, abstracts, and MeSH keywords for articles.",
+        "guidance": "Use authoritative bibliographic databases (e.g., PubMed) to retrieve abstracts and controlled vocabulary terms (MeSH) for structured feature construction and reproducible dataset creation."
+      },
+      {
+        "name": "Practical communication implication: press releases can shape news agenda but have limited topical breadth",
+        "description": "Press releases are useful, and journals 'are helping journalists build the news agenda' by selecting studies assumed to be newsworthy; however, 'journalists should be aware of the limited scope of the breadth of topics covered in press releases.'",
+        "guidance": "Producers should be mindful that press releases tend to favor certain topics; journalists should seek beyond press releases to avoid topical bias. For evaluators, assess representativeness of press-release-selected studies when drawing conclusions about covered science."
+      },
+      {
+        "name": "Recommendations for future feature improvements (higher-level concepts)",
+        "description": "Suggest moving beyond lexical features to high-level concepts such as size/composition of study cohort, study type (observational or controlled), and whether research is basic vs applied; also richer linguistic features to capture writing style.",
+        "guidance": "When designing predictive systems or composing press releases, incorporate meta-data (study design, population size, outcome measures) and linguistic/style features to improve predictive accuracy and interpretability."
+      }
+    ]
+  }
+}

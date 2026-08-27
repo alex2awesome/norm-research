@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_416b073834c3.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 6777,
+  "output_tokens": 3939,
+  "elapsed_s": 1418.8217518751044,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "LaTeX / TikZ users who want to perform calculations inside TikZ using the math library",
+    "subtask_short": "tikz math library usage",
+    "subtask_description": "Guidance and rules for using the TikZ 'math' library: how to load it, the \u007ftikzmath\u007f mini-language (assignments, functions, loops, conditionals), variable typing/indexing, and execution semantics.",
+    "subtask_keywords": [
+      "latex",
+      "tikz",
+      "pgf_math",
+      "tikzmath",
+      "library"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Loading the math library and entry points",
+        "description": "Load the library with \\usetikzlibrary{math}. For most purposes use \\tikzmath{<statements>} to perform sequences of mathematical operations. The /tikz/evaluate=<statements> key simply executes the same statements.",
+        "guidance": "The library provides a miniature mathematical language for assignments, function definitions, conditionals, and iterations. Examples show \\usetikzlibrary{math} then \\tikzmath{ ... } or using evaluate= in a TikZ picture options.\n"
+      },
+      {
+        "name": "Statement termination (semicolon requirement)",
+        "description": "Every statement should end with a semi-colon.",
+        "guidance": "This is emphasized as the most important thing to remember and the most common reason why \\tikzmath fails."
+      },
+      {
+        "name": "Keyword spacing requirement",
+        "description": "All the keywords must be followed by at least one space.",
+        "guidance": "This parser constraint is the second most important thing to remember (after semicolons). Keywords without the required space may not be recognized."
+      },
+      {
+        "name": "Engine speed and accuracy limitations",
+        "description": "The math library uses the pgf math engine, which performs calculations using pure TeX and is therefore subject to speed and accuracy limitations.",
+        "guidance": "Do not use this library for algorithms requiring intensive or highly accurate computation. For greater accuracy (but not necessarily speed), consider using the fp or fpu libraries."
+      },
+      {
+        "name": "\\tikzmath command semantics",
+        "description": "\\tikzmath{<statements>} processes a series of statements that can represent assignments, function definitions, conditional evaluation, and iterations.",
+        "guidance": "The mini-parser accepts simple keywords and expressions; formatting is relatively flexible (like the TikZ parser) but obey the semicolon and keyword-space rules. Use this for sequences of operations that would be cumbersome with the raw pgf math engine."
+      },
+      {
+        "name": "/tikz/evaluate key behavior",
+        "description": "The /tikz/evaluate=<statements> key simply executes the same statements as \\tikzmath{<statements>}.",
+        "guidance": "Use evaluate= in TikZ options to run math statements when setting up a picture. No default value is provided."
+      },
+      {
+        "name": "Variable indexing rules and mixing indexed/non-indexed variables",
+        "description": "TeX-macros (not registers) may be suffixed with an index (e.g., \\x1). Once an assignment is made using an index, the math library expects all instances of the variable on the right-hand side of an assignment to be followed by an index. This effect is reversed if you subsequently make an assignment to the variable without an index.",
+        "guidance": "Do not mix indexed and non-indexed uses carelessly; the parser's behavior changes depending on whether an indexed or non-indexed assignment was last made to the variable."
+      },
+      {
+        "name": "let keyword (unevaluated assignment)",
+        "description": "let <variable> = <expression>; assigns <expression> to <variable> without evaluation by the pgf math-engine.",
+        "guidance": "The assigned <expression> is fully expanded using \\edef. Any spaces preceding <expression> are removed, but trailing spaces before the semicolon are included. Useful to store raw expressions or tokens rather than numeric results."
+      },
+      {
+        "name": "Variable typing: integer / real / coordinate declarations",
+        "description": "Declare variables with integer, int (alias), real, or coordinate keywords: integer/int cause truncation to integers, real prevents truncation (allows reals), coordinate parses TikZ-style coordinates.",
+        "guidance": "Declarations apply to the named macros (variables must be TeX macros, not registers) and persist within the current TeX scope. Example: integer \\x; then assignments to \\x are truncated (not rounded). Use real to allow non-integer assignments. coordinate enables parsing of expressions like (2cm,3pt) and stores them as 'x,y'."
+      },
+      {
+        "name": "Coordinate variables also define component macros (\\cx, \\cy)",
+        "description": "When a variable is declared coordinate and assigned a coordinate, two further macros are defined: the variable name suffixed with x (e.g., \\cx) gets the x-coordinate, and suffixed with y (\\cy) gets the y-coordinate.",
+        "guidance": "These component macros may themselves be indexed (e.g., \\cx1). If the TikZ calc library is loaded, more coordinate calculations are possible and coordinate expressions need not be surrounded by ($ ... $)."
+      },
+      {
+        "name": "for loop syntax and semantics",
+        "description": "for <variable> in {<list>} { <expressions> }; iterates over items in <list>. The library's loop is a trimmed-down version of \\foreach and usable only inside \\tikzmath.",
+        "guidance": "Important notes: every value in <list> is evaluated by the pgf math engine; if an item contains a comma it must be braced (e.g., {mod(5,2)}); you cannot use TikZ coordinates within <list>; only single-variable assignment is supported; the 'dots notation' (1,2,...,9) works but lacks context-sensitive replacement like pgf's \\foreach; assignments made in the loop body are not scoped and last beyond the loop."
+      },
+      {
+        "name": "List evaluation and comma/brace rule inside for-lists",
+        "description": "Each item in a for-list is evaluated using the pgf math engine; however, if an item itself contains a comma it must be placed inside braces.",
+        "guidance": "Example: {random(3,10)} must be braced if it contains a comma. This prevents parsing ambiguity."
+      },
+      {
+        "name": "Loop assignments are not scoped",
+        "description": "Assignments that occur inside the body of a for loop are not scoped \u2014 they persist after the loop ends, including the loop variable's final value.",
+        "guidance": "Be aware that variables changed in loops retain their last-assigned values in the surrounding scope; plan variable naming or manual resets accordingly."
+      },
+      {
+        "name": "Branching (if/then and if/then/else) semantics",
+        "description": "if <condition> then { <if-non-zero-statements> }; and if <condition> then { <if-non-zero-statements> } else { <if-zero-statements> }; evaluate <condition> numerically and treat any non-zero value as true.",
+        "guidance": "Nested conditionals are supported in examples. Use explicit comparisons (e.g., \\k > 260) to branch on numeric conditions."
+      },
+      {
+        "name": "Function declaration rules (function ... { ... })",
+        "description": "Declare functions with function <name>(<arguments>) { <definition> }; where <arguments> are comma-separated TeX macros. The function name must not already be a function in the current scope.",
+        "guidance": "Functions behave like pgf's declare function but cannot accept arrays as arguments and cannot take a variable number of arguments. <definition> should be a sequence of statements parseable by \\tikzmath. It is not advisable to define functions inside other functions. Use return to indicate the function's return value."
+      },
+      {
+        "name": "Arrays cannot be passed as function arguments",
+        "description": "The arrays that the pgf math engine supports cannot currently be passed as arguments to functions declared in the tikzmath mini-language.",
+        "guidance": "If you need array-like behavior in functions, work around this limitation by other means (e.g., globals or encoded tokens) since direct passing is unsupported."
+      },
+      {
+        "name": "return keyword usage in functions",
+        "description": "return <expression>; should be used as the last executed statement in a function to indicate the value that should be returned.",
+        "guidance": "Use return to provide the function's numeric (or other) result. Examples show functions calling other functions and returning values directly."
+      },
+      {
+        "name": "Immediate execution with print{...}",
+        "description": "print { <code> }; executes <code> immediately (inside a TeX group), intended as a convenience for displaying information.",
+        "guidance": "Useful to emit intermediate results into the document for debugging or display (analogous to print in programming languages). The code inside print is executed inside a TeX group so local assignments do not escape."
+      },
+      {
+        "name": "Brace-delimited execution block semantics ({ ... };)",
+        "description": "If a statement begins with a brace { then everything up to the matching } is collected and executed; the closing brace must be followed by a semi-colon. The contents are executed inside a TeX group.",
+        "guidance": "Unlike print, the brace-notation can be used inside functions so that TikZ path commands can be safely executed inside a tikzpicture. Remember the semicolon requirement after the closing brace."
+      }
+    ]
+  }
+}

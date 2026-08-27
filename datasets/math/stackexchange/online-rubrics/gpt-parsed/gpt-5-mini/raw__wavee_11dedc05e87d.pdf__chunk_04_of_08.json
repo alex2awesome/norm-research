@@ -1,0 +1,285 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_11dedc05e87d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_11dedc05e87d.pdf",
+  "chunk_idx": 4,
+  "n_chunks": 8,
+  "chunk_chars": 39968,
+  "model": "gpt-5-mini",
+  "elapsed_s": 109.77130270800262,
+  "input_tokens": 13589,
+  "output_tokens": 8899,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "research mathematicians and computer-assisted proof developers working on sphere-packing/Kepler conjecture and combinatorial/plane-graph classification",
+    "subtask_short": "classifying_tame_plane_graphs",
+    "subtask_description": "Constructing and classifying 'tame' plane graphs arising from decomposition stars in the proof of the Kepler conjecture; includes combinatorial definitions, numeric bounds, admissible weight assignments, and algorithmic generation/pruning strategies for enumerating all tame graphs.",
+    "subtask_keywords": [
+      "plane_graphs",
+      "tame_graphs",
+      "sphere_packing",
+      "weight_assignments",
+      "computer_classification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Plane graph (Definition 7.2) \u2014 four structural conditions",
+        "description": "Let G be a nonempty finite set of cycles (faces) of length at least 3. The elements of faces are the vertices; edges are unordered pairs {v,w} where one is the successor of the other in some face. G is a plane graph if the following four conditions hold: (1) If v has successor w in some face F, there is a unique face s(F,v) in G for which v is the successor of w (each edge occurs twice with opposite orientation). (2) For each vertex v, F -> s(F,v) is a cyclic permutation of the faces containing v. (3) Euler's formula V - E + F = 2 holds. (4) The vertex set is connected (the only nonempty set closed under v -> s(v,C) for all C is the full vertex set).",
+        "guidance": "This is the primary combinatorial definition used to attach a plane graph to a decomposition star. The definition is stricter than standard planar graph definitions because it requires all faces to be simple polygons of length \u2265 3 and fixes an orientation (faces oriented). It rules out degenerate examples (e.g., a single edge)."
+      },
+      {
+        "name": "Faces are simple polygons with \u22653 vertices (orientation remark)",
+        "description": "Every face in a plane graph is required to be a simple polygon with at least 3 vertices; orientation is built into the definition (oriented plane graphs).",
+        "guidance": "This excludes graphs with faces that are not simple polygons (for example, a single edge) and enforces a chosen embedding/orientation. Use the right-hand rule convention for orientation if needed."
+      },
+      {
+        "name": "Face length function and face-type vocabulary (Definition 7.4)",
+        "description": "len(F) is the length (# vertices) of a face. Faces of length 3 are triangles, length 4 are quadrilaterals, and length \u22655 are called exceptional faces. tri(v) is the number of triangles containing a vertex v.",
+        "guidance": "These basic descriptors are used throughout tameness criteria, weight assignments, and vertex-type definitions."
+      },
+      {
+        "name": "Vertex type (Definition 7.6)",
+        "description": "The type of a vertex is the triple (p,q,r) where p = number of triangles containing the vertex, q = number of quadrilaterals containing it, and r = number of exceptional faces containing it. When r = 0, abbreviated as (p,q).",
+        "guidance": "Vertex type is central to later admissibility inequalities and to pruning/generation strategies that classify possible local configurations."
+      },
+      {
+        "name": "Target constant (tgt)",
+        "description": "tgt = 14.8 (arises repeatedly; approximation to 4\u03c0\u03b6 \u2212 8 \u2248 14.7947, where \u03b6 = 1/(2 arctan(2/5))).",
+        "guidance": "Used as a numerical threshold in admissibility and tameness criteria (e.g., total weight target)."
+      },
+      {
+        "name": "Weight-parameter functions a(n), b(p,q), c(n), d(n)",
+        "description": "Functions a : N \u2192 R, b : N\u00d7N \u2192 R, c : N \u2192 R, d : N \u2192 R are defined (with explicit tabulated/exceptional values) and used in admissible-weight inequalities and tameness checks. b(p,q) = 14.8 except for listed exceptional values (table given). c and d have piecewise/tabulated values (tables in text).",
+        "guidance": "These numeric tables supply lower bounds and corrections in weight-assignment inequalities; the paper provides explicit tables for these functions (refer to the table entries and 'tgt = 14.8'). Implementers should use the exact tabulated numbers as given in the paper."
+      },
+      {
+        "name": "Separated set of vertices (definition)",
+        "description": "A set V of vertices is called separated if: (1) for every vertex in V there is an exceptional face containing it; (2) no two vertices in V are adjacent; (3) no two vertices in V lie on a common quadrilateral; (4) each vertex in V has degree 5.",
+        "guidance": "Separated sets are the combinatorial configuration for which special weight inequalities (Property 4 of admissibility) apply. Recognize these sets when checking admissibility bounds."
+      },
+      {
+        "name": "Admissible weight assignment \u2014 property 1 (per-face lower bound)",
+        "description": "If a face F has length n, then w(F) \u2265 d(n).",
+        "guidance": "Every admissible weight assignment must satisfy this nonnegativity/lower-bound constraint on each face using the d(n) table. d(n) values are tabulated in the text."
+      },
+      {
+        "name": "Admissible weight assignment \u2014 property 2 (vertex-type bound)",
+        "description": "If a vertex v has type (p,q), then the sum over faces F containing v of w(F) \u2265 b(p,q).",
+        "guidance": "This local inequality links the weight of faces around a vertex to the b(p,q) table. It is used to deduce lower bounds on total weight from partial/complete face information."
+      },
+      {
+        "name": "Admissible weight assignment \u2014 property 3 (type (5,0) k-set inequality)",
+        "description": "Let V be any set of vertices of type (5,0). If |V| = k \u2264 4 then the sum over faces F disjoint from V of w(F) \u2265 0.55 k.",
+        "guidance": "This provides a lower bound contribution tied to clusters of up to four vertices of type (5,0). It is applied when such vertices appear in partial graphs to bound total weight from below."
+      },
+      {
+        "name": "Admissible weight assignment \u2014 property 4 (separated-set inequality)",
+        "description": "Let V be any separated set of vertices. Then sum_{F: V\u2229F = \u2205} (w(F) \u2212 d(len(F))) \u2265 sum_{v\u2208V} a(tri(v)).",
+        "guidance": "This inequality constrains how much 'excess' weight over the d(len(F)) minima can be absent from faces disjoint from a separated set. Uses the a(n) function on tri(v)."
+      },
+      {
+        "name": "Total weight",
+        "description": "The total weight of a weight assignment w is Sum_F w(F) (sum over all faces F).",
+        "guidance": "Tameness Property 7 requires existence of an admissible weight assignment with total weight < tgt; total weight lower bounds derived from local inequalities are used for pruning in graph enumeration."
+      },
+      {
+        "name": "Tameness Property 1 (face lengths)",
+        "description": "The length of each face is at least 3 and at most 8.",
+        "guidance": "This bounds the combinatorial faces of tame graphs to triangles through octagons; aggregates formed in simplification have between 5 and 8 edges and are permitted."
+      },
+      {
+        "name": "Tameness Property 2 (3-circuits)",
+        "description": "Every 3-circuit is either a face or the opposite of a face.",
+        "guidance": "Rules out embedded 3-circuits that are not actual faces (or opposite faces) to constrain possible local triangular arrangements."
+      },
+      {
+        "name": "Tameness Property 3 (4-circuits restricted forms)",
+        "description": "Every 4-circuit surrounds one of the cases illustrated in Figure 7.2 (i.e., a small finite set of allowed 4-circuit configurations).",
+        "guidance": "When enumerating/validating graphs, 4-circuits must match one of the depicted allowable patterns; other 4-circuits are forbidden."
+      },
+      {
+        "name": "Tameness Property 4 (vertex degree bounds)",
+        "description": "The degree of every vertex is at least 2 and at most 6.",
+        "guidance": "Vertex degrees outside [2,6] indicate non-tame graphs and can be pruned early in enumeration."
+      },
+      {
+        "name": "Tameness Property 5 (degree bound for vertices in exceptional faces)",
+        "description": "If a vertex is contained in an exceptional face (length \u22655), then the vertex's degree is at most 5.",
+        "guidance": "This tighter bound controls arrangements involving exceptional faces and restricts how many faces can meet at such vertices."
+      },
+      {
+        "name": "Tameness Property 6 (global c(len(F)) sum lower bound)",
+        "description": "Sum over faces F of c(len(F)) \u2265 8.",
+        "guidance": "The function c(len(F)) is defined earlier; this global inequality implies (among other things) that the graph must have at least eight triangles. Use the tabulated c(n) values to evaluate this sum."
+      },
+      {
+        "name": "Tameness Property 7 (existence of admissible weight assignment below target)",
+        "description": "There exists an admissible weight assignment of total weight less than the target tgt = 14.8.",
+        "guidance": "This is a crucial global feasibility condition: a tame graph must admit a weight assignment meeting the four admissibility properties and whose total weight < 14.8. If all admissible assignments exceed 14.8, the graph is non-tame (prune)."
+      },
+      {
+        "name": "Tameness Property 8 (no adjacent (4,0) vertices)",
+        "description": "There are never two vertices of type (4,0) that are adjacent to each other.",
+        "guidance": "Local adjacency of two (4,0) vertices is forbidden in tame graphs and is a pruning criterion in enumeration."
+      },
+      {
+        "name": "Partial plane graph marking invariant (Definition 8.2)",
+        "description": "A partial plane graph is a plane graph with every face marked 'complete' or 'incomplete', with the additional requirement that no two incomplete faces share an edge.",
+        "guidance": "Partial plane graphs encode intermediate states in the finite-state generation of plane graphs; the 'no two incomplete faces share an edge' condition must be enforced when patching and pruning."
+      },
+      {
+        "name": "Patch definition and conditions",
+        "description": "A patch is a partial plane graph P with distinguished faces F1 (incomplete) and F2 (complete) such that: every vertex of P lies in F1 or F2; F2 is the only complete face; F1 and F2 share an edge; every vertex of F2 not in F1 has degree 2.",
+        "guidance": "Patches are the atomic pieces used to grow partial plane graphs via 'pasting' (gluing) operations; the conditions ensure consistent gluing and maintenance of the partial-graph invariant."
+      },
+      {
+        "name": "Finite-state machine generation constraints",
+        "description": "States are isomorphism classes of partial plane graphs with at most N vertices. Transitions are patchings (P,\u03c6) that identify an incomplete face of the state with the distinguished incomplete face of P, but transitions that would produce > N vertices are excluded. Initial states In are partial plane graphs with two faces ((1,2,...,n),(n,n-1,...,1)) with one face complete and the other incomplete. Terminal states are those with every face complete (plane graphs with \u2264 N vertices).",
+        "guidance": "Use the finite-state machine to generate all plane graphs up to isomorphism for fixed N; the N-vertex cutoff and exclusion rule are essential for finite enumeration; isomorphism classes are used to collapse duplicates."
+      },
+      {
+        "name": "Patch/gluing uniqueness and \u03c6-choices",
+        "description": "There are n distinct proper ways of identifying an n-sided incomplete face F1 with an n-sided F (opposite orientation), parameterized by bijections \u03c6 : F1 \u2192 Fop; the isomorphism class of the resulting graph is determined by G, P, and \u03c6.",
+        "guidance": "When generating graphs, account for the n cyclic identifications; distinct \u03c6 can give non-isomorphic results; enumeration must consider all proper \u03c6 mappings unless pruned."
+      },
+      {
+        "name": "Pruning rule: incomplete face of length 3",
+        "description": "If a current partial state contains an incomplete face of length 3, eliminate all transitions except the one that simply completes that face (i.e., the only allowed transition is making that face complete).",
+        "guidance": "This pruning follows from tameness constraints (triangles must be completed immediately); use to reduce branching factor in generation."
+      },
+      {
+        "name": "Pruning rule: incomplete face of length 4",
+        "description": "If the current state contains an incomplete face of length 4, eliminate all transitions except those that lead to the possibilities allowed by Tameness Property 3 (the admissible 4-circuit cases), interpreting depicted faces as complete.",
+        "guidance": "Enforces the restricted set of allowed 4-circuits at generation time; prevents exploring forbidden 4-circuit completions."
+      },
+      {
+        "name": "Pruning rule: remove patches with complete face length > 8",
+        "description": "Disallow transitions that use patches whose complete face has length greater than 8.",
+        "guidance": "Faces >8 are forbidden by Tameness Property 1; this is an immediate pruning step."
+      },
+      {
+        "name": "Pruning rule: bound by completed-face d(n) sum",
+        "description": "If complete faces F1,...,Fk of lengths n1,...,nk are present, any admissible weight assignment has total weight at least sum_i d(ni); if this sum \u2265 tgt then prune the state (no transitions needed).",
+        "guidance": "Use per-face lower bounds d(n) on already-complete portions to get a simple lower bound on total weight and prune early if it already exceeds target."
+      },
+      {
+        "name": "Pruning rule: apply admissible inequalities on complete portion",
+        "description": "More generally, apply all admissibility inequalities to the complete portion of the partial graph to obtain lower bounds on total weight; if lower bound \u2265 tgt then prune. Careful: vertices may become adjacent later or lie on the same quadrilateral later, so take this into account.",
+        "guidance": "This stronger pruning uses all available local constraints; however, be conservative about potential future adjacencies/quadrilateral formation that could change which inequalities apply."
+      },
+      {
+        "name": "Second-type pruning strategies (search-space reduction heuristics)",
+        "description": "Examples: (1) Fix one incomplete face and one edge and follow only transitions that patch that face and add a complete face along that edge. (2) From initial states, follow paths in which every added complete face has length \u2264 n (graphs with larger faces are reachable from other initial states). (3) Pre-create initial states Ip,q corresponding to local (p,q) arrangements with b(p,q) < tgt and prohibit transitions that create vertex types preceding (p,q) in a fixed linear order.",
+        "guidance": "These strategies reduce redundant search paths and exploit symmetry/monotonicity in vertex-type bounds; they are justified by the reachability lemma and local-type classification lemma."
+      },
+      {
+        "name": "Lemma 8.5 (shared-face intersection constraint)",
+        "description": "If A and B are triangular or quadrilateral faces that have at least 2 vertices in common in a tame graph, then they have exactly two vertices in common and they share an edge.",
+        "guidance": "This local combinatorial exclusion rules out overlapping face configurations and is used both in pruning and in structural classification of allowed local neighborhoods."
+      },
+      {
+        "name": "Construction of plane graph G(D) from a decomposition star (Section 9.2)",
+        "description": "From a decomposition star D, let U(D) be vertices at distance \u2264 2t0. Draw geodesic arcs on the unit sphere between radial projections of v1 and v2 for every pair v1,v2 \u2208 U(D) satisfying |v1|,|v2|,|v1\u2212v2| \u2264 2t0. These arcs (which meet only at endpoints) partition the sphere into standard regions and define a combinatorial plane graph G(D). Replace certain aggregates (triangle+pentagon or degree-6 five-triangle-one-pentagon configurations) by their bounding polygonal faces as described in Remarks 9.18\u20139.19.",
+        "guidance": "This is the canonical method to attach a combinatorial plane graph to a contravening decomposition star; the arc-length and distance thresholds (2t0, etc.) ensure no loops or multiple joins and that faces are simple polygons (or specific aggregated forms)."
+      },
+      {
+        "name": "No loops or multiple joins in G(D) (metric justification)",
+        "description": "Edges correspond to spherical geodesic arcs of arc-length strictly less than \u03c0 (triangles with side lengths between 2 and 2t0 have angles < \u03c0). Thus endpoints are never antipodal; hence there are no loops or multiple joins in the combinatorial graph G(D).",
+        "guidance": "When verifying a constructed G(D), check arc-length constraints to rule out loops/multiplicity; this combinatorial property follows from metric bounds on triangle side lengths."
+      },
+      {
+        "name": "Lemma 9.1 (standard region boundary constraint)",
+        "description": "Let R be a standard region in a contravening decomposition star D. The boundary of R is a simple polygon with at most eight edges, or one of the configurations of Figure 9.1 (specific non-polygonal possibilities).",
+        "guidance": "This lemma yields the face-length upper bound (\u22648) for standard regions (or prescribes special aggregate shapes), which underpins tameness Property 1 and the aggregate simplifications in G(D)."
+      },
+      {
+        "name": "Lemma 9.2 (\u03c4 and \u03c3 per-standard-region numeric bounds)",
+        "description": "For a standard region R with n = n(R): \u03c4R(D) \u2265 tn where t3=0, t4=0.1317, t5=0.27113, t6=0.41056, t7=0.54999, t8=0.6045. Furthermore, for 5 \u2264 n \u2264 8, \u03c3R(D) \u2264 sn where s3 = 1 pt, s4 = 0, s5 = \u22120.05704, s6 = \u22120.11408, s7 = \u22120.17112, s8 = \u22120.22816.",
+        "guidance": "These per-face numeric lower/upper bounds are used to sum over regions to get global \u03c4/\u03c3 estimates and to apply Lemma 9.3 and other contradiction criteria. Use the precise tn/sn constants as tabulated."
+      },
+      {
+        "name": "Lemma 9.3 (small-polygon combined bound \u21d2 not contravening)",
+        "description": "Let F be a set of standard regions bounded by a simple polygon with at most nine edges. If \u03c3F(D) \u2264 s9 and \u03c4F(D) \u2265 t9 (with s9 = \u22120.1972 and t9 = 0.6978), then D does not contravene.",
+        "guidance": "This combined numeric test provides a certificate to rule out contravening decomposition stars based on sums over small aggregates; useful as a pruning/check condition."
+      },
+      {
+        "name": "Lemma 9.4 (\u03c3R bounds for triangular vs non-triangular regions)",
+        "description": "If R is triangular then \u03c3R(D) \u2264 1 pt. If R is not triangular then \u03c3R(D) \u2264 0.",
+        "guidance": "Simple \u03c3 bounds per-region: triangles can give at most +1 point, others nonpositive; these are key to counting/combining local contributions around the origin."
+      },
+      {
+        "name": "Lemma 9.5 (\u03c4R nonnegativity)",
+        "description": "For every standard cluster R, \u03c4R(D) \u2265 0.",
+        "guidance": "\u03c4 is a shifted version of \u03c3 and this nonnegativity is exploited when summing \u03c4 over regions."
+      },
+      {
+        "name": "Lemma 9.6 (vertex-local \u03c4 lower bounds via table \u03c4LP(p,q))",
+        "description": "Let S1,...,Sp and R1,...,Rq be the tetrahedra and quad clusters around a vertex of type (p,q). Then sum_{i=1}^p \u03c4(Si) + sum_{i=1}^q \u03c4(Ri) \u2265 \u03c4LP(p,q), where \u03c4LP(p,q) values are given in Table 9.6.",
+        "guidance": "This provides vertex-local lower bounds on aggregate \u03c4 contributions depending on vertex type; implementers should use the tabulated \u03c4LP table when checking local feasibility."
+      },
+      {
+        "name": "Lemma 9.7 (inequalities for clusters of type (5,0) vertices)",
+        "description": "Let v1,...,vk (k \u2264 4) be distinct vertices of type (5,0). Let S1,...,Sr be quasi-regular tetrahedra around edges (0,vi). Then sum_{i=1}^r \u03c4(Si) > 0.55 k pt, and sum_{i=1}^r \u03c3(Si) < r pt \u2212 0.48 k pt.",
+        "guidance": "Gives quantitative bounds that penalize presence of nearby (5,0) vertices; used to derive contradictions or to enforce weight lower bounds in pruning."
+      },
+      {
+        "name": "Lemma 9.8 (allowed (p,q) vertex types in contravening stars)",
+        "description": "If a vertex has type (p,q,r) with r = 0 in a contravening decomposition star, then (p,q) must be one of: (6,0),(5,0),(4,0),(5,1),(4,1),(3,1),(2,1),(3,2),(2,2),(1,2),(2,3),(1,3),(0,3),(0,4).",
+        "guidance": "This exhaustively restricts possible local (triangle/quadrilateral) configurations at vertices in contravening examples and is used to limit casework and pruning."
+      },
+      {
+        "name": "Lemma 9.9 (triangles contain no enclosed vertices)",
+        "description": "A triangular standard region contains no enclosed vertices.",
+        "guidance": "Topology/geometric constraint used when counting/enclosing vertices per-region and when bounding contributions."
+      },
+      {
+        "name": "Lemma 9.10 (quadrilaterals exclude nearby low-height enclosed vertices)",
+        "description": "A quadrilateral region does not enclose any vertices of height at most 2 t0.",
+        "guidance": "Used to limit enclosed-vertex cases inside quadrilateral faces when analyzing contravening decomposition stars."
+      },
+      {
+        "name": "Lemma 9.11 (four-edge boundary area constraint \u21d2 \u22641 enclosed vertex)",
+        "description": "If F is a union of standard regions whose boundary consists of four edges and area(F) \u2264 2\u03c0, then there is at most one enclosed vertex over F.",
+        "guidance": "Geometric area-based restriction used to bound number of enclosed vertices in particular four-edged aggregates."
+      },
+      {
+        "name": "Lemma 9.12 (triangle+pentagon aggregate \u03c4 lower bound)",
+        "description": "If F is union of a triangle and pentagon meeting at a vertex of type (1,0,1) as shown, then \u03c4F(D) \u2265 11.16 pt.",
+        "guidance": "Numeric aggregate lower bound used to rule out certain local configurations by exceeding allowed \u03c4 budgets."
+      },
+      {
+        "name": "Lemma 9.13 (exceptional face many small interior angles \u21d2 \u03c4 lower bound)",
+        "description": "If R is an exceptional standard region with r pairwise nonadjacent interior angles \u2264 1.32, then \u03c4R(D) \u2265 tn + r(1.47) pt (where tn depends on len(R)).",
+        "guidance": "Combines per-face tn with additional penalties per small interior angle to obtain stronger \u03c4 lower bounds on badly-shaped exceptional faces."
+      },
+      {
+        "name": "Lemma 9.14 (lower bounds on interior angles)",
+        "description": "Every interior angle of every standard region is at least 0.8638. Every interior angle of every standard region that is not a triangle is at least 1.153.",
+        "guidance": "These geometry-based lower bounds on interior angles are used in many local shape arguments and to infer existence of flat quarters (Lemma 9.16)."
+      },
+      {
+        "name": "Lemma 9.16 (small interior angle \u21d2 existence of flat quarter)",
+        "description": "If the interior angle at a corner v of a non-triangular standard region is at most 1.32, then there is a flat quarter over R whose central vertex is v.",
+        "guidance": "Connects combinatorial/angle constraints to metric structure (flat quarter existence) and is useful in producing additional local penalties or structure when analyzing regions."
+      },
+      {
+        "name": "Aggregation/simplification rules for G(D) (Remarks 9.18\u20139.19)",
+        "description": "Certain specific local configurations are replaced by their bounding polygonal faces to produce a simplified combinatorial plane graph: (1) triangle+pentagon arrangement replaced by bounding pentagon; (2) arrangements of six standard regions around a vertex formed from five triangles and one pentagon are replaced by the bounding octagon (or hexagon).",
+        "guidance": "These aggregation rules ensure the combinatorial plane graph G(D) has faces that are simple polygons (or prescribed aggregate shapes) and simplify classification; handle overlapping aggregates carefully (rare)."
+      },
+      {
+        "name": "Proposition 10.1 (nonemptiness and \u22652 faces for \u03c3(D) > 0)",
+        "description": "If a decomposition star D has \u03c3(D) > 0, then the associated vertex set U(D) (vertices at distance \u2264 2t0) is nonempty and the constructed plane graph has at least two faces.",
+        "guidance": "Used to prove that contravening stars produce nontrivial plane graphs; implementers should check \u03c3(D) sign implications on U(D) existence before attempting to build G(D)."
+      },
+      {
+        "name": "Proposition 10.2 (face length bound in contravening graphs)",
+        "description": "The plane graph of a contravening decomposition star satisfies: each face has length at least 3 and at most 8 (the \u22648 bound follows from Lemma 9.1).",
+        "guidance": "This reiterates tameness Property 1 specifically for contravening graphs; use this to validate face-length constraints in constructed G(D)."
+      }
+    ]
+  }
+}

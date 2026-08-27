@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html id="ie7" lang="en">
+<![endif]-->
+<!--[if (gt IE 7) | (!IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<title>Conan O&#8217;Brien | Jumped The Snark | Page 2</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://jumpedthesnark.com/xmlrpc.php" />
+<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=2491'
+					+ '&is_singular=';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9qdW1wZWR0aGVzbmFyay5jb20%3D"
+		+ "&wpcomid=7274386"
+		+ "&time=" + Math.floor( Date.now() / 1000 );
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s1.wp.com' />
+<link rel='dns-prefetch' href='//s2.wp.com' />
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//af.pubmine.com' />
+<link rel="alternate" type="application/rss+xml" title="Jumped The Snark &raquo; Feed" href="https://jumpedthesnark.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Jumped The Snark &raquo; Comments Feed" href="https://jumpedthesnark.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Jumped The Snark &raquo; Conan O&#039;Brien Tag Feed" href="https://jumpedthesnark.com/tag/conan-obrien/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??/wp-content/mu-plugins/widgets/eu-cookie-law/templates/style.css,/wp-content/mu-plugins/jetpack-plugin/sun/modules/infinite-scroll/infinity.css?m=1777406400j&cssminify=yes' type='text/css' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/common.min.css */
+</style>
+<style id="wp-block-library-inline-css-extra">
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+<style id="classic-theme-styles-inline-css">
+.wp-block-button__link{background-color:#32373c;border-radius:9999px;box-shadow:none;color:#fff;font-size:1.125em;padding:calc(.667em + 2px) calc(1.333em + 2px);text-decoration:none}.wp-block-file__button{background:#32373c;color:#fff}.wp-block-accordion-heading{margin:0}.wp-block-accordion-heading__toggle{background-color:inherit!important;color:inherit!important}.wp-block-accordion-heading__toggle:not(:focus-visible){outline:none}.wp-block-accordion-heading__toggle:focus,.wp-block-accordion-heading__toggle:hover{background-color:inherit!important;border:none;box-shadow:none;color:inherit;padding:var(--wp--preset--spacing--20,1em) 0;text-decoration:none}.wp-block-accordion-heading__toggle:focus-visible{outline:auto;outline-offset:0}.wp-block-tab:not(.has-text-color){color:inherit!important}.wp-block-tab:not(.has-background){background-color:inherit!important}.wp-block-tab:focus,.wp-block-tab:hover{text-decoration:none}.wp-block-tab:focus-visible{outline:auto;outline-offset:0}
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/classic.min.css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??-eJx9jEEOAiEQBD/kQECjeDC+ZWEnijIwYWA3/l72op689KFTVXplCCU3zE1z6reYRYfiUwlP0VYZpwxIJE4IFRd10HOU9iFA2iuhCiI7/ROiDt9WxfETT20jCOc4YUIa2D9t5eGA91xRBMZS7ATtPkTZvCtdzNEZt7f2fHq8Afl7R7w=&cssminify=yes' type='text/css' media='all' />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/_static/??-eJx9i8sOhCAMAH9IbAxmH4eN36KksphCCS0h/v3qTS97m0lmoGXjOCkmBf1iRIFcF8iBXOEGojth70Q6uISxmkzVhyRQcCH2B3o4qov+mzyyIXazBk43MSvNoZzrFD/Dcxweb2vta/sBjzc9Qw==&cssminify=yes' type='text/css' media='all' />
+<style id="jetpack-global-styles-frontend-style-inline-css">
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+/*# sourceURL=jetpack-global-styles-frontend-style-inline-css */
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/wp-content/themes/h4/global.css?m=1420737423i&cssminify=yes' type='text/css' media='all' />
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"7274386","postID":"0","siteURL":"https://jumpedthesnark.com","xhrURL":"https://jumpedthesnark.com/wp-admin/admin-ajax.php","nonce":"0d227c72f5","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https://s0.wp.com/wp-content/js/wpcom-proxy-request.js?m=1513050504i&amp;ver=20211021","i18n":{"followedText":"New posts from this site will now appear in your \u003Ca href=\"https://wordpress.com/reader\"\u003EReader\u003C/a\u003E","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+//# sourceURL=wpcom-actionbar-placeholder-js-extra
+</script>
+<script id="jetpack-mu-wpcom-settings-js-before">
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https://s1.wp.com/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/"};
+//# sourceURL=jetpack-mu-wpcom-settings-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/js/rlt-proxy.js,/wp-content/blog-plugins/wordads-classes/js/cmp/v2/cmp-non-gdpr.js?m=1720530689j'></script>
+<script id="rlt-proxy-js-after">
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+//# sourceURL=rlt-proxy-js-after
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://jumpedthesnark.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Conan O&#8217;Brien &#8211; Page 2 &#8211; Jumped The Snark" />
+<meta property="og:url" content="https://jumpedthesnark.com/tag/conan-obrien/" />
+<meta property="og:site_name" content="Jumped The Snark" />
+<meta property="og:image" content="https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=200&#038;ts=1778409094" />
+<meta property="og:image:width" content="200" />
+<meta property="og:image:height" content="200" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="shortcut icon" type="image/x-icon" href="https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=32" sizes="16x16" />
+<link rel="icon" type="image/x-icon" href="https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=32" sizes="16x16" />
+<link rel="apple-touch-icon" href="https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=114" />
+<link rel='openid.server' href='https://jumpedthesnark.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://jumpedthesnark.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://jumpedthesnark.com/osd.xml" title="Jumped The Snark" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<script type="text/javascript" id="webfont-output">
+  
+  WebFontConfig = {"typekit":{"id":"vbi3sha"}};
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+	})();
+</script><meta name="description" content="Posts about Conan O&#8217;Brien written by skeim01" />
+<script>
+var wa_client = {}; wa_client.cmd = []; wa_client.config = { 'blog_id': 7274386, 'blog_language': 'en', 'is_wordads': false, 'hosting_type': 0, 'afp_account_id': null, 'afp_host_id': 5038568878849053, 'theme': 'pub/pilcrow', '_': { 'title': 'Advertisement', 'privacy_settings': 'Privacy Settings' }, 'formats': [ 'belowpost', 'bottom_sticky', 'sidebar_sticky_right', 'sidebar', 'gutenberg_rectangle', 'gutenberg_leaderboard', 'gutenberg_mobile_leaderboard', 'gutenberg_skyscraper' ] };
+</script>
+		<script type="text/javascript">
+
+			window.doNotSellCallback = function() {
+
+				var linkElements = [
+					'a[href="https://wordpress.com/?ref=footer_blog"]',
+					'a[href="https://wordpress.com/?ref=footer_website"]',
+					'a[href="https://wordpress.com/?ref=vertical_footer"]',
+					'a[href^="https://wordpress.com/?ref=footer_segment_"]',
+				].join(',');
+
+				var dnsLink = document.createElement( 'a' );
+				dnsLink.href = 'https://wordpress.com/advertising-program-optout/';
+				dnsLink.classList.add( 'do-not-sell-link' );
+				dnsLink.rel = 'nofollow';
+				dnsLink.style.marginLeft = '0.5em';
+				dnsLink.textContent = 'Do Not Sell or Share My Personal Information';
+
+				var creditLinks = document.querySelectorAll( linkElements );
+
+				if ( 0 === creditLinks.length ) {
+					return false;
+				}
+
+				Array.prototype.forEach.call( creditLinks, function( el ) {
+					el.insertAdjacentElement( 'afterend', dnsLink );
+				});
+
+				return true;
+			};
+
+		</script>
+		<script type="text/javascript">
+	window.google_analytics_uacct = "UA-52447-2";
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-52447-2']);
+	_gaq.push(['_gat._anonymizeIp']);
+	_gaq.push(['_setDomainName', 'none']);
+	_gaq.push(['_setAllowLinker', true]);
+	_gaq.push(['_initData']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})();
+</script>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-4' href='/_static/??-eJydzNEKwjAMheEXsqbCWK/ER5GahdEtTUvTMPb2IkwvRbz8D4cPtuqwSCfpkM1VtjmJwkK9RlyPBjWBexKEBxdcFXRLldoZVU/wM5DLZEwKGFsxJf583sOfXk9Mk5sjM7X9W738W75eQgiDHwfvlydRt19W&cssminify=yes' type='text/css' media='all' />
+
+</head>
+
+<body class="archive paged tag tag-conan-obrien tag-68232 paged-2 tag-paged-2 wp-theme-pubpilcrow customizer-styles-applied two-column content-sidebar color-light jetpack-reblog-enabled">
+<div id="container" class="hfeed">
+	<div id="page" class="blog">
+		<div id="header">
+						<div id="site-title">
+				<span>
+					<a href="https://jumpedthesnark.com/" title="Jumped The Snark" rel="home">Jumped The Snark</a>
+				</span>
+			</div>
+
+			<div id="nav" role="navigation">
+			  				<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+								<div class="menu-header"><ul id="menu-menu-1" class="menu"><li id="menu-item-6574" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-6574"><a href="https://jumpedthesnark.com/">Home</a></li>
+<li id="menu-item-6575" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6575"><a href="https://jumpedthesnark.com/a-newsroom-a-day/">A Newsroom A Day</a></li>
+<li id="menu-item-6576" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6576"><a href="https://jumpedthesnark.com/judd-apatow-effect/">Judd Apatow Effect</a></li>
+<li id="menu-item-6577" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-6577"><a href="https://jumpedthesnark.com/saved-by-the-bell-project/">The &#8216;Saved by the Bell&#8217; Project</a>
+<ul class="sub-menu">
+	<li id="menu-item-6578" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6578"><a href="https://jumpedthesnark.com/saved-by-the-bell-project/sbtb-season-1/">Season 1</a></li>
+	<li id="menu-item-6594" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6594"><a href="https://jumpedthesnark.com/saved-by-the-bell-project/season-2/">Season 2</a></li>
+	<li id="menu-item-6593" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6593"><a href="https://jumpedthesnark.com/saved-by-the-bell-project/season-3/">Season 3</a></li>
+	<li id="menu-item-6592" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6592"><a href="https://jumpedthesnark.com/saved-by-the-bell-project/season-4/">Season 4</a></li>
+	<li id="menu-item-6591" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6591"><a href="https://jumpedthesnark.com/saved-by-the-bell-project/season-5/">Season 5</a></li>
+</ul>
+</li>
+<li id="menu-item-6579" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6579"><a href="https://jumpedthesnark.com/about/">Whom?</a></li>
+</ul></div>			</div><!-- #nav -->
+
+			<div id="pic">
+				<a href="https://jumpedthesnark.com/" rel="home">
+										<img src="https://jumpedthesnark.com/wp-content/uploads/2015/07/cropped-jumpedthesnark-boymeetsworld2.jpg" width="770" height="200" alt="" />
+								</a>
+			</div><!-- #pic -->
+		</div><!-- #header -->
+
+		<div id="content-box">
+
+<div id="content-container">
+	<div id="content" role="main">
+
+		<h1 class="page-title archive-head">
+			Tag Archives: <span>Conan O&#8217;Brien</span>		</h1>
+
+		<div id="nav-above" class="navigation">
+	<div class="nav-previous"><a href="https://jumpedthesnark.com/tag/conan-obrien/page/3/" ><span class="meta-nav">&larr;</span> Older posts</a></div>
+	<div class="nav-next"><a href="https://jumpedthesnark.com/tag/conan-obrien/" >Newer posts <span class="meta-nav">&rarr;</span></a></div>
+</div><!-- #nav-above -->
+
+<div id="post-2491" class="post-2491 post type-post status-publish format-standard hentry category-good-humor category-mancrush category-talkies tag-conan tag-conan-obrien tag-hanx tag-nickelodeon tag-team-coco tag-tom-hanks tag-you-cant-do-that-on-television">
+	<div class="entry-meta">
+
+		2010/11/10 &middot; 3:39 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/11/10/splash-2-tom-hanks-on-conan/" rel="bookmark">&#8216;Splash 2&#8217;: Tom Hanks on &#8216;Conan&#8217;</a></h2>	<div class="entry entry-content">
+		<p>Is there a better guest, nay, a better person than Tom Hanks?  We think not.</p>
+Vodpod videos no longer available.
+<p>But what&#8217;s with Conan&#8217;s <a href="http://www.huffingtonpost.com/2009/06/03/tom-hanks-hit-by-meteor-o_n_210740.html" target="_blank">propensity</a> for treating Hanks like he&#8217;s on a 1980s <a href="http://www.youtube.com/watch?v=B1Q55CLrTkg" target="_blank">Nickelodeon show</a>?  We guess Conan&#8217;s getting Hanks back for spurring the whole <a href="http://teamcoco.com/" target="_blank">Coco</a> phenomenon.  You should be thanking him, Coco!  Might have <a href="http://www.facebook.com/imwithcoco?ref=ts" target="_blank">saved your career</a>.</p>
+<p>Guess they&#8217;ll have to come up with a new backdrop the next time Hanx comes around.</p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/11/10/splash-2-tom-hanks-on-conan/#respond">Leave a comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/good-humor/" rel="category tag">Good Humor</a>, <a href="https://jumpedthesnark.com/category/mancrush/" rel="category tag">Mancrush</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/conan/" rel="tag">Conan</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/hanx/" rel="tag">Hanx</a>, <a href="https://jumpedthesnark.com/tag/nickelodeon/" rel="tag">Nickelodeon</a>, <a href="https://jumpedthesnark.com/tag/team-coco/" rel="tag">Team Coco</a>, <a href="https://jumpedthesnark.com/tag/tom-hanks/" rel="tag">Tom Hanks</a>, <a href="https://jumpedthesnark.com/tag/you-cant-do-that-on-television/" rel="tag">You Can't Do That On Television</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-2484" class="post-2484 post type-post status-publish format-standard hentry category-analysis category-good-humor category-interweb category-is-that-still-on category-talkies tag-conan tag-conan-obrien tag-daily-show tag-david-letterman tag-facebook tag-harrison-ford tag-jack-white tag-jay-leno tag-jon-stewart tag-late-night tag-late-show tag-seth-rogen tag-tom-hanks tag-tonight-show">
+	<div class="entry-meta">
+
+		2010/11/09 &middot; 9:51 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/11/09/conan-on-tbs-somewhat-funny-very-obrien/" rel="bookmark">&#8216;Conan&#8217; on TBS: Somewhat Funny, Very&nbsp;O&#8217;Brien</a></h2>	<div class="entry entry-content">
+		<p><a href="https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png"><img data-attachment-id="2485" data-permalink="https://jumpedthesnark.com/2010/11/09/conan-on-tbs-somewhat-funny-very-obrien/picture-17-2/" data-orig-file="https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png" data-orig-size="300,277" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="Conan O&amp;#8217;Brien Premiere" data-image-description="" data-image-caption="" data-large-file="https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png?w=300" class="alignright size-full wp-image-2485" title="Conan O'Brien Premiere" src="https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png?w=500" alt=""   srcset="https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png?w=246&amp;h=227 246w, https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png?w=150&amp;h=139 150w, https://jumpedthesnark.com/wp-content/uploads/2010/11/picture-17.png 300w" sizes="(max-width: 246px) 100vw, 246px" /></a>So it happened!  Conan O&#8217;Brien finally returned to TV, this time taking his talents to the basic cable shores of TBS.  The anticipation was palpable, and at 11pm EST Monday night we turned our TVs to see the redhead comedian&#8217;s triumphant, cathartic, possibly historic, debut.</p>
+<p>And then at midnight, after Conan finished jamming with buddy Jack White, he signed off and George Lopez came on, an hour later than usual, but, with Daylight Saving time having just gone into effect, perhaps completely in line with our circadian rhythms.</p>
+<p>And, well, the world had not changed.</p>
+<p> <a href="https://jumpedthesnark.com/2010/11/09/conan-on-tbs-somewhat-funny-very-obrien/#more-2484" class="more-link">Read on: The message or the medium, Andy shines and the Jewish elephant in the room&#8230;</a></p>
+<div id="atatags-370373-6a005e86d56bb">
+		<script type="text/javascript">
+			__ATA = window.__ATA || {};
+			__ATA.cmd = window.__ATA.cmd || [];
+			__ATA.cmd.push(function() {
+				__ATA.initVideoSlot('atatags-370373-6a005e86d56bb', {
+					sectionId: '370373',
+					format: 'inread'
+				});
+			});
+		</script>
+	</div>			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/11/09/conan-on-tbs-somewhat-funny-very-obrien/#comments">1 Comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/analysis/" rel="category tag">Analysis</a>, <a href="https://jumpedthesnark.com/category/good-humor/" rel="category tag">Good Humor</a>, <a href="https://jumpedthesnark.com/category/interweb/" rel="category tag">Interweb</a>, <a href="https://jumpedthesnark.com/category/is-that-still-on/" rel="category tag">Is That Still On?</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/conan/" rel="tag">Conan</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/daily-show/" rel="tag">Daily Show</a>, <a href="https://jumpedthesnark.com/tag/david-letterman/" rel="tag">David Letterman</a>, <a href="https://jumpedthesnark.com/tag/facebook/" rel="tag">Facebook</a>, <a href="https://jumpedthesnark.com/tag/harrison-ford/" rel="tag">Harrison Ford</a>, <a href="https://jumpedthesnark.com/tag/jack-white/" rel="tag">Jack White</a>, <a href="https://jumpedthesnark.com/tag/jay-leno/" rel="tag">Jay Leno</a>, <a href="https://jumpedthesnark.com/tag/jon-stewart/" rel="tag">jon stewart</a>, <a href="https://jumpedthesnark.com/tag/late-night/" rel="tag">Late Night</a>, <a href="https://jumpedthesnark.com/tag/late-show/" rel="tag">Late Show</a>, <a href="https://jumpedthesnark.com/tag/seth-rogen/" rel="tag">Seth Rogen</a>, <a href="https://jumpedthesnark.com/tag/tom-hanks/" rel="tag">Tom Hanks</a>, <a href="https://jumpedthesnark.com/tag/tonight-show/" rel="tag">Tonight Show</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-2460" class="post-2460 post type-post status-publish format-standard hentry category-analysis category-interweb category-local-flavor category-makes-you-think category-talkies tag-barack-obama tag-conan tag-conan-obrien tag-george-w-bush tag-im-with-coco tag-jaypocalypse tag-jfk tag-michael-ian-black tag-nbc tag-nixon tag-potus tag-president tag-rock-the-vote tag-sheperd-fairey tag-tbs tag-team-coco tag-tonight-show">
+	<div class="entry-meta">
+
+		2010/11/08 &middot; 8:09 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/11/08/the-one-in-which-we-compare-conan-obrien-to-barack-obama/" rel="bookmark">The One in Which We Compare Conan O&#8217;Brien to Barack&nbsp;Obama</a></h2>	<div class="entry entry-content">
+		<p><img class="alignright" title="I'm With Coco" src="https://i0.wp.com/www.culturebully.com/wp-content/uploads/2010/03/im-with-team-coco-conan-obrien.jpg" alt="" width="227" height="351" /><img class="alignright" title="Obama Hope" src="https://techbuddha.files.wordpress.com/2009/01/obama-hope.jpg?w=229&#038;h=351" alt="" width="229" height="351" />Sometime around the beginning of this year I pondered the similarities between Conan O&#8217;Brien and President Barack Obama (and teased an upcoming blog post on the subject via Twitter).  With Conan&#8217;s new show premiering on TBS tonight, following the Republican tidal wave that swept into congress last week, and in doing so affixing a bold question mark onto Obama&#8217;s presidency, it seems like there&#8217;s no better time to finally revisit the parallel.  This comparison is perhaps more relevant, and possibly more darkly prescient, than ever.</p>
+<p>When Barack Obama won the presidency in 2008 a collective sigh of relief escaped young voters across the country.  Actually, it was less a sigh of relief and more of a giddy shout.  Hope had won out.  Yes we could.  We had a charismatic leader, the sexiest president since JFK, who was certain to reverse the damage done by eight years under George W. Bush&#8217;s tyrannical reign.  And just like how JFK utilized his good looks and immense charm to capture the nation&#8217;s heart in the <a href="http://www.time.com/time/nation/article/0,8599,2021078,00.html" target="_blank">first televised presidential debate</a>, badly outshining a sweaty, swarthy Richard Nixon, Obama used new media, most notably the internet, in a way no President had before.  He was a star for sure, but in a way we had never seen.  He galvanized the young, tech savvy populace, the early adopters who proclaimed their support on their Facebook and MySpace pages.  MTV had been encouraging late teens and twenty-somethings to Rock the Vote for many years, but in that election we truly had a rock star to endorse.  We were fed up with the Bush regime, with Republican rule, and we were energized, we were motivated, and we had Barack Obama, the son of a Kenyan immigrant, as our shining ray of hope.  And in that time it was a symbiotic relationship.  Obama inspired the poor, the hungry, the unemployed and recent college graduate masses, and they banded together to have their voices heard, to provide Obama with the spirit and the mandate.  He gave us hope, and we gave him our vote.</p>
+<p>And then on that Tuesday night in November our prayers were answered.  Celebrations erupted on the <a href="http://www.freewilliamsburg.com/election-celebrations-take-over-bedford/" target="_blank">streets of Williamsburg,</a> citizens went wild in Chicago, and Hawaii cheered their native son.  We had won.  We had our guy.  And he would lead us to the promised land.</p>
+<p> <a href="https://jumpedthesnark.com/2010/11/08/the-one-in-which-we-compare-conan-obrien-to-barack-obama/#more-2460" class="more-link">Or would he?  And what does all this have to do with Conan O&#8217;Brien.  Grab a snack and read on.</a></p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/11/08/the-one-in-which-we-compare-conan-obrien-to-barack-obama/#comments">1 Comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/analysis/" rel="category tag">Analysis</a>, <a href="https://jumpedthesnark.com/category/interweb/" rel="category tag">Interweb</a>, <a href="https://jumpedthesnark.com/category/local-flavor/" rel="category tag">Local Flavor</a>, <a href="https://jumpedthesnark.com/category/makes-you-think/" rel="category tag">Makes You Think</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/barack-obama/" rel="tag">Barack Obama</a>, <a href="https://jumpedthesnark.com/tag/conan/" rel="tag">Conan</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/george-w-bush/" rel="tag">George W Bush</a>, <a href="https://jumpedthesnark.com/tag/im-with-coco/" rel="tag">I'm with Coco</a>, <a href="https://jumpedthesnark.com/tag/jaypocalypse/" rel="tag">Jaypocalypse</a>, <a href="https://jumpedthesnark.com/tag/jfk/" rel="tag">JFK</a>, <a href="https://jumpedthesnark.com/tag/michael-ian-black/" rel="tag">Michael Ian Black</a>, <a href="https://jumpedthesnark.com/tag/nbc/" rel="tag">NBC</a>, <a href="https://jumpedthesnark.com/tag/nixon/" rel="tag">Nixon</a>, <a href="https://jumpedthesnark.com/tag/potus/" rel="tag">POTUS</a>, <a href="https://jumpedthesnark.com/tag/president/" rel="tag">President</a>, <a href="https://jumpedthesnark.com/tag/rock-the-vote/" rel="tag">Rock the Vote</a>, <a href="https://jumpedthesnark.com/tag/sheperd-fairey/" rel="tag">Sheperd Fairey</a>, <a href="https://jumpedthesnark.com/tag/tbs/" rel="tag">TBS</a>, <a href="https://jumpedthesnark.com/tag/team-coco/" rel="tag">Team Coco</a>, <a href="https://jumpedthesnark.com/tag/tonight-show/" rel="tag">Tonight Show</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-2363" class="post-2363 post type-post status-publish format-standard hentry category-flashback category-literarally category-lost category-other-peoples-stuff category-talkies tag-best-in-show tag-bill-carter tag-conan tag-conan-obrien tag-daniel-roebuck tag-david-letterman tag-doc-artz tag-jay-leno tag-jaypocalypse tag-john-michael-higgins tag-lost tag-tbs tag-the-late-shift tag-tonight-show tag-vanity-fair tag-war-for-late-night">
+	<div class="entry-meta">
+
+		2010/10/29 &middot; 4:27 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/10/29/remember-like-a-year-ago-when-all-we-did-was-write-about-conan-obrien-and-jay-leno/" rel="bookmark">Remember Like a Year Ago When All We Did was Write About Conan O&#8217;Brien and Jay&nbsp;Leno?</a></h2>	<div class="entry entry-content">
+		<p>Well, now there&#8217;s a book (not written by us).  Bill Carter, who chronicled the first <em>Tonight Show</em> War in <em>The Late Shift</em>, is set to release <em>The War for Late Night</em>, an in-depth look at last winter&#8217;s late night talkie drama, what many of us referred to as the <a href="https://jumpedthesnark.com/2010/01/13/in-defense-of-jay-lenohow-he-might-screw-this-all-up-aka-more-thoughts-on-late-shift-2-daves-revenge/" target="_blank">Jaypocalypse</a>.  With Conan, beard and all, set to premiere his new show on TBS in just a matter of days, the book should be a fascinating recount of how the late night landscape was <a href="https://jumpedthesnark.com/2010/01/12/conan-barbarian-or-adventurer/" target="_blank">perhaps forever changed</a>, and how, in the end, the skirmish might have been the best thing that ever happened to Conan O&#8217;Brien.</p>
+<p>Read an except from <em>The War for Late Night</em> <a href="http://www.vanityfair.com/culture/features/2010/12/late-night-wars-excerpt-201012?currentPage=all" target="_blank">on Vanity Fair</a></p>
+<p>And since there will inevitably be a movie based on the book, let&#8217;s remember the last one:</p>
+<span class="embed-youtube" style="text-align:center; display: block;"><iframe class="youtube-player" width="500" height="282" src="https://www.youtube.com/embed/wXnh4tYpA-U?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe></span>
+<p>(Fun Fact: did you know that the actor who played Jay Leno in <em>The Late Shift</em>, <a href="http://www.imdb.com/name/nm0736263/" target="_blank">Daniel Roebuck</a>, went on to play <a href="http://www.youtube.com/watch?v=0dvI6bqIlgY" target="_blank">Dr. Leslie Artz</a> on <em>Lost</em>?  It&#8217;s true!  I know, right?!  Oh, and Letterman was played by John Michael Higgins, who is just <a href="http://www.youtube.com/watch?v=o25afKNzOFM" target="_blank">generally awesome</a>.  Crazy!)</p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/10/29/remember-like-a-year-ago-when-all-we-did-was-write-about-conan-obrien-and-jay-leno/#respond">Leave a comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/flashback/" rel="category tag">Flashback!</a>, <a href="https://jumpedthesnark.com/category/literarally/" rel="category tag">Literarally</a>, <a href="https://jumpedthesnark.com/category/lost/" rel="category tag">LOST</a>, <a href="https://jumpedthesnark.com/category/other-peoples-stuff/" rel="category tag">Other people&#039;s stuff</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/best-in-show/" rel="tag">Best in Show</a>, <a href="https://jumpedthesnark.com/tag/bill-carter/" rel="tag">Bill Carter</a>, <a href="https://jumpedthesnark.com/tag/conan/" rel="tag">Conan</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/daniel-roebuck/" rel="tag">Daniel Roebuck</a>, <a href="https://jumpedthesnark.com/tag/david-letterman/" rel="tag">David Letterman</a>, <a href="https://jumpedthesnark.com/tag/doc-artz/" rel="tag">Doc Artz</a>, <a href="https://jumpedthesnark.com/tag/jay-leno/" rel="tag">Jay Leno</a>, <a href="https://jumpedthesnark.com/tag/jaypocalypse/" rel="tag">Jaypocalypse</a>, <a href="https://jumpedthesnark.com/tag/john-michael-higgins/" rel="tag">John Michael Higgins</a>, <a href="https://jumpedthesnark.com/tag/lost/" rel="tag">LOST</a>, <a href="https://jumpedthesnark.com/tag/tbs/" rel="tag">TBS</a>, <a href="https://jumpedthesnark.com/tag/the-late-shift/" rel="tag">The Late Shift</a>, <a href="https://jumpedthesnark.com/tag/tonight-show/" rel="tag">Tonight Show</a>, <a href="https://jumpedthesnark.com/tag/vanity-fair/" rel="tag">Vanity Fair</a>, <a href="https://jumpedthesnark.com/tag/war-for-late-night/" rel="tag">War for Late Night</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-1862" class="post-1862 post type-post status-publish format-standard hentry category-best-show-youre-not-watching category-dillon-panthers category-good-humor tag-27-yankees tag-adult-swim tag-cheap-seats tag-conan-obrien tag-dana-carvey-show tag-delocated tag-eugene-mirman tag-friday-night-lights tag-jimmy-fallon tag-jon-glaser tag-party-down tag-paul-rudd tag-zz-top">
+	<div class="entry-meta">
+
+		2010/09/03 &middot; 3:45 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/09/03/delocated-another-best-show-youre-not-watching-unless-you-are-in-which-case-nevermind/" rel="bookmark">&#8216;Delocated&#8217;: Another Best Show You&#8217;re Not Watching. Unless You Are. In Which Case&nbsp;Nevermind.</a></h2>	<div class="entry entry-content">
+		<p>We talk a lot about the best show you&#8217;re not watching on this blog (<em>Friday Night Lights</em>, <em>Community</em>, <em>Party Down</em> before its unfortunate demise).  To that list we now proudly add <em>Delocated</em>.</p>
+<p>If you&#8217;re a fan of Adult Swim you might have caught <em>Delocated</em> on a random night/morning around 1:45am.  The show was created by and stars Jon Glaser,  longtime NY comedian and former writer (<a href="http://www.youtube.com/watch?v=199WN-I73Tk" target="_blank">and performer</a>) on <em>Late Night with Conan O&#8217;Brien</em>.  If you&#8217;ve been around comedy in NY you probably know him, and if you own a TV you&#8217;ve probably seen him and not even known it, with appearances on <em>30 Rock</em>, <a href="http://www.youtube.com/watch?v=fFUZezn_JK4" target="_blank"><em>Human Giant</em></a>, and <a href="http://www.youtube.com/watch?v=9-U-4dxaNhI" target="_blank"><em>Cheap Seats</em></a>.  In his early days he was also a writer on <em>The Dana Carvey Show, </em>which was basically to up and coming comedians as <a href="http://www.youtube.com/watch?v=hwloBel_Zjk" target="_blank"><em>The Outsiders</em></a> was to young, hunky, male actors (The line-up included Carvey, Glaser, <a href="http://www.hulu.com/watch/10643/the-dana-carvey-show-episode-5" target="_blank">Steve Carell, Stephen Colbert</a>, Louis CK, Robert Smigel, Dave Chappelle and, curiously, Charlie Kaufman.  It was pretty much the &#8217;27 Yankees of comedy).</p>
+<p>The first season of <em>Delocated</em> comprised six 10-min episodes (and an amazing Paul Rudd cameo), and features Glaser as &#8220;Jon,&#8221; a member of the Witness Protection Program who agrees to move his family to NY and turn their life into a reality show, despite the fact that this requires wearing masks and using voice modulators.</p>
+Vodpod videos no longer available.
+<p>The show also stars <a href="http://www.youtube.com/watch?v=CWHUvM0v0WM&amp;feature=PlayList&amp;p=1118D2A72CACF063&amp;index=0&amp;playnext=1" target="_blank">Eugene Mirman</a> as Yvegni Mirminksy, an aspiring stand-up comedian who happens to also be a member of the Russian crime family that Jon ratted out.</p>
+Vodpod videos no longer available.
+<p>The second season has been expanded to twelve 22-min episodes, and with the added length the show has broadened its scope, increased the violence, heightened the drama, and upped the absurdity.  It&#8217;s a dumb-smart, surreal, brilliant show, capable of silly comedy, and, as we find out in the season two premiere, silly drama.   It&#8217;s one of TV&#8217;s best kept secrets, but unlike &#8220;Jon&#8217;s&#8221; identity this is one secret that should be revealed to all.</p>
+<p>Catch up on season one on the <a href="http://www.adultswim.com/shows/delocated/video.html" target="_blank">Adult Swim website</a>, and then move right onto the new season (below!).  Also, catch new episodes Sundays at 10pm, just before <a href="http://video.adultswim.com/childrens-hospital/index.html" target="_blank"><em>Childrens Hospital </em></a>(which, now that we mention it, is another best show you&#8217;re not watching).</p>
+Vodpod videos no longer available.
+<p>Bonus features:</p>
+<p>Jon Glaser on <em>Jimmy Fallon</em> last night!</p>
+Vodpod videos no longer available.
+<p>Also, Jon Glaser reads letters from his deceased father, Dave Glaser, to his father&#8217;s former band mates ZZ Top.  One of the funniest things I have ever heard.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"><iframe class="youtube-player" width="500" height="282" src="https://www.youtube.com/embed/z9pEB2O_fnM?version=3&#038;rel=1&#038;showsearch=0&#038;showinfo=1&#038;iv_load_policy=1&#038;fs=1&#038;hl=en&#038;autohide=2&#038;wmode=transparent" allowfullscreen="true" style="border:0;" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation allow-popups-to-escape-sandbox"></iframe></span>
+<p>And finally, for extra credit check out the <a href="http://delocatedblog.tumblr.com/" target="_blank"><em>Delocated</em> Blog</a> and the <a href="http://pffr.net/" target="_blank">PFFR</a> website.</p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/09/03/delocated-another-best-show-youre-not-watching-unless-you-are-in-which-case-nevermind/#respond">Leave a comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/best-show-youre-not-watching/" rel="category tag">Best Show You're Not Watching</a>, <a href="https://jumpedthesnark.com/category/dillon-panthers/" rel="category tag">Dillon Panthers</a>, <a href="https://jumpedthesnark.com/category/good-humor/" rel="category tag">Good Humor</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/27-yankees/" rel="tag">27 Yankees</a>, <a href="https://jumpedthesnark.com/tag/adult-swim/" rel="tag">Adult Swim</a>, <a href="https://jumpedthesnark.com/tag/cheap-seats/" rel="tag">Cheap Seats</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/dana-carvey-show/" rel="tag">Dana Carvey Show</a>, <a href="https://jumpedthesnark.com/tag/delocated/" rel="tag">Delocated</a>, <a href="https://jumpedthesnark.com/tag/eugene-mirman/" rel="tag">Eugene Mirman</a>, <a href="https://jumpedthesnark.com/tag/friday-night-lights/" rel="tag">Friday Night Lights</a>, <a href="https://jumpedthesnark.com/tag/jimmy-fallon/" rel="tag">Jimmy Fallon</a>, <a href="https://jumpedthesnark.com/tag/jon-glaser/" rel="tag">Jon Glaser</a>, <a href="https://jumpedthesnark.com/tag/party-down/" rel="tag">Party Down</a>, <a href="https://jumpedthesnark.com/tag/paul-rudd/" rel="tag">Paul Rudd</a>, <a href="https://jumpedthesnark.com/tag/zz-top/" rel="tag">ZZ Top</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-1781" class="post-1781 post type-post status-publish format-standard hentry category-intersection-of-the-venn-diagram-of-things-that-i-love category-muppets category-other-peoples-stuff tag-conan-obrien tag-frank-oz tag-gene-shalit tag-jack-paar tag-jim-henson tag-jimmy-fallon tag-late-night tag-muppets tag-nbc tag-studio-6b tag-taxi tag-tom-brokaw tag-tonight-show tag-yoda">
+	<div class="entry-meta">
+
+		2010/06/08 &middot; 9:33 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/06/08/and-another-muppet-someone-awesome-team-up-jimmy-fallon-youve-done-it-again/" rel="bookmark">And Another Muppet + Someone Awesome Team-up! (Jimmy Fallon, You&#8217;ve Done It&nbsp;Again)</a></h2>	<div class="entry entry-content">
+		<p>Jimmy Fallon, I like you more and more.</p>
+<p>Ten years ago you were the object of affection of every girl in my AP European History class, and the envy of every guy (well, not <em>every</em> guy).  Then the constant <a href="http://www.hulu.com/watch/78503/saturday-night-live-aquarium-repairmen" target="_blank">giggling</a> became kinda annoying, and then you went and made <a href="http://www.youtube.com/watch?v=8fJbxZvZwAs" target="_blank"><em>Taxi</em></a>, and then you became sort of a joke.  And, to be completely honest, we were pretty skeptical when you were named Conan O&#8217;Brien&#8217;s <em>Late Night</em> successor.  Like the homecoming king who left the hometown only to flame out and return to work in his dad&#8217;s hardware store.</p>
+<p>But damn if you haven&#8217;t gone and totally redeemed yourself.  But this isn&#8217;t really about you.  Rather, this isn&#8217;t really about your show.  We <a href="https://jumpedthesnark.com/2010/03/10/four-more-examples-of-how-jimmy-fallon-is-killing-it-and-one-that-shows-why-hes-not/" target="_blank">talked enough</a> about that.  This is about you, once again, recognizing something brilliant.  In this case it&#8217;s the maze of <a href="http://gothamist.com/2009/02/24/video_jim_henson.php" target="_blank">pipes hidden inside of Studio 6B</a> dressing room decorated by Jim Henson and his confederates 40 years ago, before an appearance on Jack Paar&#8217;s <em>Tonight Show</em>.  Fallon, love him or loathe him, appreciated the genius and made good on <a href="http://twitter.com/jimmyfallon/status/1245200139" target="_blank">his promise</a> to put the installation behind glass, and now the pipe-art is a new stop on the NBC Studio tour, as Fallon, along with Yoda, er, Frank Oz shows us here:</p>
+Vodpod videos no longer available.
+<p>And, just to show that the more things change the more they stay the same, and that everything is cyclical, here&#8217;s a 30 year-old video of Henson giving a tour of the pipes to <a href="http://www.youtube.com/watch?v=mDTwIBTNwkI" target="_blank">Gene Shalit</a> (!).  And look at that mop on Brokaw!</p>
+Vodpod videos no longer available.
+<p>Guess I&#8217;ll have to go on the Studio tour now.  Even though it&#8217;ll be awkward to return to network headquarters after NBC brass screwed <a href="http://www.youtube.com/watch?v=K-Ms0u5CfPY" target="_blank">me</a> over and took <a href="http://www.youtube.com/watch?v=bMkDz5x9SAQ" target="_blank">my</a> show away.</p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/06/08/and-another-muppet-someone-awesome-team-up-jimmy-fallon-youve-done-it-again/#respond">Leave a comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/intersection-of-the-venn-diagram-of-things-that-i-love/" rel="category tag">Intersection of the venn diagram of things that I love</a>, <a href="https://jumpedthesnark.com/category/muppets/" rel="category tag">Muppets</a>, <a href="https://jumpedthesnark.com/category/other-peoples-stuff/" rel="category tag">Other people&#039;s stuff</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/frank-oz/" rel="tag">Frank Oz</a>, <a href="https://jumpedthesnark.com/tag/gene-shalit/" rel="tag">Gene Shalit</a>, <a href="https://jumpedthesnark.com/tag/jack-paar/" rel="tag">Jack Paar</a>, <a href="https://jumpedthesnark.com/tag/jim-henson/" rel="tag">Jim Henson</a>, <a href="https://jumpedthesnark.com/tag/jimmy-fallon/" rel="tag">Jimmy Fallon</a>, <a href="https://jumpedthesnark.com/tag/late-night/" rel="tag">Late Night</a>, <a href="https://jumpedthesnark.com/tag/muppets/" rel="tag">Muppets</a>, <a href="https://jumpedthesnark.com/tag/nbc/" rel="tag">NBC</a>, <a href="https://jumpedthesnark.com/tag/studio-6b/" rel="tag">Studio 6B</a>, <a href="https://jumpedthesnark.com/tag/taxi/" rel="tag">Taxi</a>, <a href="https://jumpedthesnark.com/tag/tom-brokaw/" rel="tag">Tom Brokaw</a>, <a href="https://jumpedthesnark.com/tag/tonight-show/" rel="tag">Tonight Show</a>, <a href="https://jumpedthesnark.com/tag/yoda/" rel="tag">Yoda</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-1492" class="post-1492 post type-post status-publish format-standard hentry category-freak-out-control category-good-humor category-lost category-saturday-night-live category-saved-by-the-bell category-talkies tag-7th-floor-west tag-andy-samberg tag-california-dreams tag-carson-daly tag-chelsea-handler tag-chris-parnell tag-conan-obrien tag-jimmy-fallon tag-late tag-late-night tag-lazy-sunday tag-lost tag-mark-paul-gosselaar tag-martini-race tag-real-housewives-of-late-night tag-saved-by-the-bell tag-snl">
+	<div class="entry-meta">
+
+		2010/03/10 &middot; 12:14 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/03/10/four-more-examples-of-how-jimmy-fallon-is-killing-it-and-one-that-shows-why-hes-not/" rel="bookmark">Four More Examples of How Jimmy Fallon is Killing it (and One That Shows Why He&#8217;s&nbsp;Not)</a></h2>	<div class="entry entry-content">
+		<p>Talking up the good work that Jimmy Fallon and the <em>Late Night</em> crew have been doing is nothing new <a href="https://jumpedthesnark.com/2010/01/12/in-defense-of-jimmy-fallon/" target="_blank">on this blog</a>.  In fact, we&#8217;ve been complimenting their efforts as far back as last Fall.  But with the show celebrating its <a href="http://popwatch.ew.com/2010/03/04/jimmy-fallon-first-year/" target="_blank">one year anniversary</a> last week, and with the program demonstrating as much creativity and spontaneity as any show in late night today (effectively filling the absurdity vacuum left by Conan), we thought it fitting to highlight some recent clips to show how Jimmy continues to impress (and then one more to illustrate how in other respects he continues to disappoint).</p>
+<p><em>Late Night</em> has particularly excelled in slickly produced, exceptionally accurate television parodies, first with the Hills spoof <a href="http://www.latenightwithjimmyfallon.com/video/categories/7th-floor-west/1096281/" target="_blank"><em>7th Floor West</em></a> and then with <em><a href="http://www.latenightwithjimmyfallon.com/video/categories/the-real-housewives-of-late-night/1163947/" target="_blank">The Real Housewives of Late Night</a></em>.  The show has continued this hot streak by taking on the height of the pop culture phenomena, <em>Lost</em>, with their new recurring series, <em>Late.</em> Below is the 2nd episode, as the castaways (brought together by an elevator crash and now stranded on a creepy abandoned office floor) struggle to make sense of their new and mysterious surroundings.</p>
+Vodpod videos no longer available.
+<p> <a href="https://jumpedthesnark.com/2010/03/10/four-more-examples-of-how-jimmy-fallon-is-killing-it-and-one-that-shows-why-hes-not/#more-1492" class="more-link">More Fallon goodness: California Dreams, Lazy Sunday &amp; Blood!</a></p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/03/10/four-more-examples-of-how-jimmy-fallon-is-killing-it-and-one-that-shows-why-hes-not/#comments">2 Comments</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/freak-out-control/" rel="category tag">Freak Out Control</a>, <a href="https://jumpedthesnark.com/category/good-humor/" rel="category tag">Good Humor</a>, <a href="https://jumpedthesnark.com/category/lost/" rel="category tag">LOST</a>, <a href="https://jumpedthesnark.com/category/saturday-night-live/" rel="category tag">Saturday Night Live</a>, <a href="https://jumpedthesnark.com/category/saved-by-the-bell/" rel="category tag">Saved by the Bell</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/7th-floor-west/" rel="tag">7th Floor West</a>, <a href="https://jumpedthesnark.com/tag/andy-samberg/" rel="tag">Andy Samberg</a>, <a href="https://jumpedthesnark.com/tag/california-dreams/" rel="tag">California Dreams</a>, <a href="https://jumpedthesnark.com/tag/carson-daly/" rel="tag">Carson Daly</a>, <a href="https://jumpedthesnark.com/tag/chelsea-handler/" rel="tag">Chelsea Handler</a>, <a href="https://jumpedthesnark.com/tag/chris-parnell/" rel="tag">Chris Parnell</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/jimmy-fallon/" rel="tag">Jimmy Fallon</a>, <a href="https://jumpedthesnark.com/tag/late/" rel="tag">Late</a>, <a href="https://jumpedthesnark.com/tag/late-night/" rel="tag">Late Night</a>, <a href="https://jumpedthesnark.com/tag/lazy-sunday/" rel="tag">Lazy Sunday</a>, <a href="https://jumpedthesnark.com/tag/lost/" rel="tag">LOST</a>, <a href="https://jumpedthesnark.com/tag/mark-paul-gosselaar/" rel="tag">Mark-Paul Gosselaar</a>, <a href="https://jumpedthesnark.com/tag/martini-race/" rel="tag">martini race</a>, <a href="https://jumpedthesnark.com/tag/real-housewives-of-late-night/" rel="tag">Real Housewives of Late Night</a>, <a href="https://jumpedthesnark.com/tag/saved-by-the-bell/" rel="tag">Saved by the Bell</a>, <a href="https://jumpedthesnark.com/tag/snl/" rel="tag">SNL</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-1376" class="post-1376 post type-post status-publish format-standard hentry category-buffy-hildegarde category-nostalgia-corner category-saturday-night-live category-talkies tag-bob-odenkirk tag-bosom-buddies tag-chris-rock tag-conan-obrien tag-david-letterman tag-five-timers-club tag-late-night tag-mr-short-term-memory tag-robert-smigel tag-saturday-night-live tag-snl tag-tom-hanks tag-tonight-show">
+	<div class="entry-meta">
+
+		2010/01/25 &middot; 1:22 pm	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/01/25/monday-friday-nostalgia-corner-hanx-for-the-memories/" rel="bookmark">Monday Friday Nostalgia Corner: Hanx For the&nbsp;Memories</a></h2>	<div class="entry entry-content">
+		<p>I wasn&#8217;t able to post to Nostalgia Corner last Friday because my day was just NUTS (okay, so my mom was visiting and I spent my scant free time writing about <a href="http://www.hulu.com/watch/121511/the-tonight-show-with-conan-obrien-classic-tonight-show-moment-tom-hanks" target="_blank"><em>The Office</em> clip show</a>)!  So here&#8217;s a belated but still relevant edition.</p>
+<p>As we all know (and have probably watched) by now Conan O&#8217;Brien closed out his tenure as host of the <em>Tonight Show</em> last Friday with guests Will Ferrell, Neil Young and Tom Hanks.  <a href="http://nymag.com/daily/entertainment/2010/01/tonight_wont_be_the_only_time.html" target="_blank">Vulture already noted</a> that Hanks, a frequent late night visitor and guest on Conan&#8217;s <a href="http://www.hulu.com/watch/121511/the-tonight-show-with-conan-obrien-classic-tonight-show-moment-tom-hanks" target="_blank">second <em>Tonight Show</em></a>, also holds the distinction of appearing on David Letterman&#8217;s last show as host of <em>Late Night. </em>But I would like to focus less on Hanks&#8217; propensity for appearing on sign-offs, but rather on his relationship with Conan O&#8217;Brien.  Conan often still seems like the young guy, the gawky, redheaded kid, but the truth his he&#8217;s being holding court in late night for 17 years, and he&#8217;s actually known Hanks for over 20 years, as O&#8217;Brien was a writer on <em>SNL</em> in the late 80s when Hanks was the go-to host (hosting five times in five years, on pace at the time to shatter all hosting records).  <a href="http://www.hulu.com/watch/122590/the-tonight-show-with-conan-obrien-tom-hanks-part-2#s-p1-sr-i1" target="_blank">They even discussed this</a> on the show last Friday, with Hanks revealing that he called Conan and his fellow writers Bob Odenkirk and Robert Smigel the &#8220;boiler-room boys.&#8221;  And the two sketches that Hanks is probably most associated with &#8211; &#8220;<a href="http://snl.jt.org/char.php?i=261" target="_blank">Mr. Short-Term Memory</a>&#8221; &amp; the &#8220;<a href="http://www.hulu.com/watch/4130/saturday-night-live-tenth-reunion" target="_blank">Girl Watchers</a>&#8221; &#8211; were written by O&#8217;Brien, and Conan even appears in Hanks&#8217; most memorable monologue &#8220;<a href="http://www.dailymotion.com/video/x8xz9t_saturday-night-live-tom-hanks-12081_shortfilms" target="_blank">The Five Timer&#8217;s Club</a>&#8221; (although Conan identifies himself as &#8220;Sean&#8221;).  But, for today, we&#8217;re going to highlight Hanks&#8217; monologue from his third hosting stint in October of 1988, a bit that includes Conan&#8217;s first appearance on <em>SNL (</em>in denim vest!).  The ties that bind:</p>
+<div style="font-size:.9em;"><a href="/watch/2927697-dailymotion-saturday-night-live-tom-hanks-10081988-a-film-tv-video">Vodpod videos no longer available.</a></div>
+<p>It&#8217;s true, Tom Hanks is the nicest guy in Hollywood.  Maybe in any wood.  And possibly the funniest.  Chris Rock <a href="http://www.ew.com/ew/article/0,,1021799_3,00.html" target="_blank">once said</a> that if Hanks had &#8220;grown up with less education, he&#8217;d be the greatest comedian who ever lived,&#8221; and I believe it.  I think it&#8217;s high that time Hanks attached himself to a straight-up comedy and showed these kids how it&#8217;s done (<em><a href="http://www.youtube.com/watch?v=cvxzPv9oMIA" target="_blank">Bosom Buddies</a>: The Movie</em>???).</p>
+<p>Bonus viewing: Conan lauding Hanks on <em><a href="http://www.hulu.com/watch/53300/inside-the-actors-studio-conan-obrien---tom-hanks" target="_blank">Inside the Actor&#8217;s Studio</a></em>.</p>
+<p>Bonus social networking: follow <a href="http://twitter.com/tomhanks" target="_blank">Hanx on Twitter</a>.</p>
+<p style="font-size:.9em;">
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/01/25/monday-friday-nostalgia-corner-hanx-for-the-memories/#respond">Leave a comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/buffy-hildegarde/" rel="category tag">Buffy &amp; Hildegarde</a>, <a href="https://jumpedthesnark.com/category/nostalgia-corner/" rel="category tag">Nostalgia Corner</a>, <a href="https://jumpedthesnark.com/category/saturday-night-live/" rel="category tag">Saturday Night Live</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/bob-odenkirk/" rel="tag">Bob Odenkirk</a>, <a href="https://jumpedthesnark.com/tag/bosom-buddies/" rel="tag">Bosom Buddies</a>, <a href="https://jumpedthesnark.com/tag/chris-rock/" rel="tag">Chris Rock</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/david-letterman/" rel="tag">David Letterman</a>, <a href="https://jumpedthesnark.com/tag/five-timers-club/" rel="tag">Five-Timer's Club</a>, <a href="https://jumpedthesnark.com/tag/late-night/" rel="tag">Late Night</a>, <a href="https://jumpedthesnark.com/tag/mr-short-term-memory/" rel="tag">Mr. Short-Term Memory</a>, <a href="https://jumpedthesnark.com/tag/robert-smigel/" rel="tag">Robert Smigel</a>, <a href="https://jumpedthesnark.com/tag/saturday-night-live/" rel="tag">Saturday Night Live</a>, <a href="https://jumpedthesnark.com/tag/snl/" rel="tag">SNL</a>, <a href="https://jumpedthesnark.com/tag/tom-hanks/" rel="tag">Tom Hanks</a>, <a href="https://jumpedthesnark.com/tag/tonight-show/" rel="tag">Tonight Show</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-1367" class="post-1367 post type-post status-publish format-standard hentry category-interweb category-other-peoples-stuff category-talkies category-the-state tag-conan-obrien tag-i-am-a-wonderful-man tag-i-love-the-80s tag-jaypocalypse tag-late-late-show tag-michael-ian-black tag-norma-rae tag-stella tag-tonight-show tag-twitter tag-vitriol">
+	<div class="entry-meta">
+
+		2010/01/25 &middot; 2:47 am	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/01/25/michael-ian-black-does-understand/" rel="bookmark">Michael Ian Black Does&nbsp;Understand</a></h2>	<div class="entry entry-content">
+		<p><img data-attachment-id="1373" data-permalink="https://jumpedthesnark.com/2010/01/25/michael-ian-black-does-understand/michael-ian-black/" data-orig-file="https://jumpedthesnark.com/wp-content/uploads/2010/01/michael-ian-black.jpg" data-orig-size="200,150" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="Michael Ian Black" data-image-description="" data-image-caption="" data-large-file="https://jumpedthesnark.com/wp-content/uploads/2010/01/michael-ian-black.jpg?w=200" loading="lazy" class="alignright size-full wp-image-1373" title="Michael Ian Black" src="https://jumpedthesnark.com/wp-content/uploads/2010/01/michael-ian-black.jpg?w=500" alt=""   srcset="https://jumpedthesnark.com/wp-content/uploads/2010/01/michael-ian-black.jpg 200w, https://jumpedthesnark.com/wp-content/uploads/2010/01/michael-ian-black.jpg?w=150&amp;h=113 150w" sizes="(max-width: 200px) 100vw, 200px" />If there was one comedian/mid-level celebrity whose career I&#8217;d like to emulate it would probably be Michael Ian Black (okay, there&#8217;s a laundry list of comedian/mid-level celebrities who careers I&#8217;d like to emulate, and an even longer list of A-list celebrities whose resumes I wouldn&#8217;t mind having.  But there are few people out there who I admire and appreciate at the level of Michael Ian Black.  One of the reasons I like Mr. Black so much is because, obviously, he&#8217;s as funny and smart as anyone else out there (if his work in <a href="http://www.youtube.com/watch?v=YsyVuEANC6I" target="_blank"><em>I ♥ the [Insert Decade]</em> </a>didn&#8217;t convince you of that, check out his stand-up album <a href="http://www.amazon.com/Wonderful-Man-Michael-Ian-Black/dp/B000UGG34Q" target="_blank">I Am A Wonderful Man</a>, an excellent performance from someone who is not known as a stand-up comedian).  But, beyond his humor, I especially appreciate the fact that he has the courage to say or write just about anything, the best examples of which are found on <a href="http://twitter.com/michaelianblack" target="_blank">his Twitter feed</a>, where he makes fun of everyone and everything from Asians to his kids to his wife cutting off the tip of her finger to himself.  Often times I&#8217;ll find myself wanting to tweet something potentially offensive, and I don&#8217;t do so because I fear that not everyone will get the joke; sarcasm and satire sometimes don&#8217;t play so well in less than 140 characters.  But Black has been able to pull that off, so much so that he&#8217;s participated in several Twitter fundraisers in which for a small donation he&#8217;ll make fun of you mercilessly, usually mocking your Twitter name or criticizing your photo.  He has created this persona of being an arrogant, insensitive asshole (again, refer to the name of his comedy album), which is a weird achievement to want to replicate, but it seems clear to me that it&#8217;s just a put-on.  It might be an extension of the real Michael Ian Black, but, if so, it&#8217;s a huge exaggeration.  I mean, he lives in Connecticut with his wife and kids (who he appears to loathe, if his tweets are to be believed), so how terrible can he really be?</p>
+<p>Amidst this backdrop of bombastic, often crude, tweets and blog posts it was surprising that Black received the most backlash for a tweet he composed on Friday night to commemorate Conan O&#8217;Brien&#8217;s last night as host of <em>The Tonight Show</em>:</p>
+<p><a href="https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg"><img data-attachment-id="1368" data-permalink="https://jumpedthesnark.com/2010/01/25/michael-ian-black-does-understand/mib-tweet/" data-orig-file="https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg" data-orig-size="593,273" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="MIB Tweet" data-image-description="" data-image-caption="" data-large-file="https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg?w=500" loading="lazy" class="aligncenter size-medium wp-image-1368" title="MIB Tweet" src="https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg?w=300&#038;h=138" alt="" width="300" height="138" srcset="https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg?w=300 300w, https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg?w=150 150w, https://jumpedthesnark.com/wp-content/uploads/2010/01/mib-tweet.jpg 593w" sizes="(max-width: 300px) 100vw, 300px" /></a>Typical trenchant, insightful, slightly dickish Michael Ian Black commentary.  But out of all his tweets this one caused the most commotion (although, as you can see, it was retweeted 100+ followers, so I guess not everyone was outraged).  It was a joke, but like many of his jokes, he had a point, a good point.  Which is another aspect of MIB I appreciate: his candor.  He&#8217;s a fan of Conan too, but the truth is Conan fans didn&#8217;t turn out in droves until these last two weeks, when it didn&#8217;t matter anymore.</p>
+<p>So, to clarify his point, Black knew he needed more words than Twitter would allow, so he took to his <a href="http://www.michaelianblack.net/blog/" target="_blank">blog</a> (and spared us from a full on tweet procession), and exemplified another quality I admire: intelligence.  He composed <a href="http://www.michaelianblack.net/blog/2010/01/norma-rae.html" target="_blank">his actual, and, as he noted, &#8220;unfunny&#8221; thoughts</a> on the Conan situation, comparing Conan to Sally Fields in <a href="http://en.wikipedia.org/wiki/Norma_Rae" target="_blank"><em>Norma Rae</em></a> and asking &#8220;how did a Harvard-educated, multi-millionaire late night talk show host magically transmogrify into a guy who got laid off at the local car plant?&#8221;  Now I&#8217;ve basically been glued to the computer the last two weeks reading every update on the late night wars and watching every relevant monologue the night before, and I&#8217;ve even contributed <a href="https://jumpedthesnark.com/2010/01/12/conan-barbarian-or-adventurer/" target="_blank">my own thoughts</a>, but Black does have a point.  In the end, it&#8217;s just millionaires playing in the sandbox, and Conan doesn&#8217;t really represent the oppressed, jobless masses.  In his essay, Black puts aside the sarcasm and the deadpan humor, presenting refreshing clarity about the whole thing.  I&#8217;m not sure I&#8217;ve read a better breakdown on the skirmish.  Despite the <a href="http://www.imdb.com/find?s=all&amp;q=michael+ian+black+just+doesn%27t+understand" target="_blank">working title</a> of his latest <a href="http://www.comedycentral.com/videos/index.jhtml?videoId=247218&amp;title=super-mattress-sale" target="_blank">TV show</a>, Michael Ian Black does understand.  A lot better than most of us.</p>
+<p> <a href="https://jumpedthesnark.com/2010/01/25/michael-ian-black-does-understand/#more-1367" class="more-link">Bonus: How I once gave Michael Ian Black unsolicited career advice. Sorry!</a></p>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/01/25/michael-ian-black-does-understand/#comments">1 Comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/interweb/" rel="category tag">Interweb</a>, <a href="https://jumpedthesnark.com/category/other-peoples-stuff/" rel="category tag">Other people&#039;s stuff</a>, <a href="https://jumpedthesnark.com/category/talkies/" rel="category tag">Talkies</a>, <a href="https://jumpedthesnark.com/category/the-state/" rel="category tag">The State</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/i-am-a-wonderful-man/" rel="tag">I Am A Wonderful Man</a>, <a href="https://jumpedthesnark.com/tag/i-love-the-80s/" rel="tag">I Love the 80s</a>, <a href="https://jumpedthesnark.com/tag/jaypocalypse/" rel="tag">Jaypocalypse</a>, <a href="https://jumpedthesnark.com/tag/late-late-show/" rel="tag">Late Late Show</a>, <a href="https://jumpedthesnark.com/tag/michael-ian-black/" rel="tag">Michael Ian Black</a>, <a href="https://jumpedthesnark.com/tag/norma-rae/" rel="tag">Norma Rae</a>, <a href="https://jumpedthesnark.com/tag/stella/" rel="tag">Stella</a>, <a href="https://jumpedthesnark.com/tag/tonight-show/" rel="tag">Tonight Show</a>, <a href="https://jumpedthesnark.com/tag/twitter/" rel="tag">Twitter</a>, <a href="https://jumpedthesnark.com/tag/vitriol/" rel="tag">vitriol</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+
+<div id="post-1330" class="post-1330 post type-post status-publish format-standard hentry category-comic-book-guy category-muppet-mondays category-muppets category-other-peoples-stuff tag-comic-books tag-conan-obrien tag-david-peterson tag-muppets">
+	<div class="entry-meta">
+
+		2010/01/19 &middot; 1:50 am	</div><!-- .entry-meta -->
+
+	<h2 class="entry-title"><a href="https://jumpedthesnark.com/2010/01/19/muppet-monday-if-you-thought-the-muppets-were-only-going-to-dominate-the-web-tv-and-volunteerism-in-2010-then-you-were-wrong-dead-wrong/" rel="bookmark">Muppet Monday: If You Thought the Muppets Were Only Going to Dominate the Web, TV and Volunteerism in 2010 Then You Were Wrong. Dead&nbsp;Wrong.</a></h2>	<div class="entry entry-content">
+		<p>They&#8217;re taking on the comic book world as well.</p>
+<p>I had a long, busy day so I&#8217;m just getting to the Muppet Monday post now.  In lieu of this, and for the sake of brevity, I&#8217;m going to paste an email from Jump the Snark BFF Steve Ponzo:</p>
+<blockquote>
+<div>Maybe a future Muppet Monday for you&#8230;</div>
+<div><a href="http://www.toughpigs.com/qa-with-muppet-comics-david-petersen/" target="_blank">http://www.toughpigs.com/qa-with-muppet-comics-david-petersen/</a></div>
+<div>also here at David Petersen&#8217;s blog on jan. 5th he posted a bunch of new images:</div>
+<div><a href="http://davidpetersen.blogspot.com/2010/01/muppets-joe-over-at-toughpigs.html" target="_blank">http://davidpetersen.blogspot.com/</a></div>
+</blockquote>
+<div><img data-attachment-id="1331" data-permalink="https://jumpedthesnark.com/2010/01/19/muppet-monday-if-you-thought-the-muppets-were-only-going-to-dominate-the-web-tv-and-volunteerism-in-2010-then-you-were-wrong-dead-wrong/kermitcolor/" data-orig-file="https://jumpedthesnark.com/wp-content/uploads/2010/01/kermitcolor.jpg" data-orig-size="420,650" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="kermitcolor" data-image-description="" data-image-caption="" data-large-file="https://jumpedthesnark.com/wp-content/uploads/2010/01/kermitcolor.jpg?w=420" loading="lazy" class="size-medium wp-image-1331 aligncenter" title="kermitcolor" src="https://jumpedthesnark.com/wp-content/uploads/2010/01/kermitcolor.jpg?w=193&#038;h=300" alt="" width="193" height="300" srcset="https://jumpedthesnark.com/wp-content/uploads/2010/01/kermitcolor.jpg?w=193 193w, https://jumpedthesnark.com/wp-content/uploads/2010/01/kermitcolor.jpg?w=386 386w, https://jumpedthesnark.com/wp-content/uploads/2010/01/kermitcolor.jpg?w=97 97w" sizes="(max-width: 193px) 100vw, 193px" /></div>
+<div>
+<p>That&#8217;s right, a new Muppet comic book!  So now they&#8217;re officially taken over <a href="https://jumpedthesnark.com/2009/12/24/christmas-eve-clipdown-muppets-killing-it-christmas-style/" target="_blank">TV</a>, <a href="https://jumpedthesnark.com/2010/01/11/muppet-monday-voluntear-video-and-peoples-is-peoples/" target="_blank">Disneyland</a>, <a href="https://jumpedthesnark.com/2009/11/24/was-hoping-this-would-also-be-a-waynes-world-parody/" target="_blank">the web</a> and your local comic book store.  Next stop <a href="http://www.youtube.com/view_play_list?p=256328C6106159EA&amp;playnext=1&amp;playnext_from=PL&amp;v=w0ChbqaTIs8" target="_blank">Broadway</a>?  Or maybe they can partner up with Conan on a new venture.</p>
+<p>Oh, and make sure to check out Steve&#8217;s blog, <a href="http://steveponzo.blogspot.com/" target="_blank">His Still Life</a>.  He&#8217;s an artist, and a good one.</p>
+</div>
+			</div><!-- .entry-content -->
+	
+	<div class="entry-links">
+		<p class="comment-number"><a href="https://jumpedthesnark.com/2010/01/19/muppet-monday-if-you-thought-the-muppets-were-only-going-to-dominate-the-web-tv-and-volunteerism-in-2010-then-you-were-wrong-dead-wrong/#respond">Leave a comment</a></p>
+
+					<p class="entry-categories tagged">Filed under <a href="https://jumpedthesnark.com/category/comic-book-guy/" rel="category tag">Comic Book Guy</a>, <a href="https://jumpedthesnark.com/category/muppet-mondays/" rel="category tag">Muppet Mondays</a>, <a href="https://jumpedthesnark.com/category/muppets/" rel="category tag">Muppets</a>, <a href="https://jumpedthesnark.com/category/other-peoples-stuff/" rel="category tag">Other people&#039;s stuff</a></p>
+			<p class="entry-tags tagged">Tagged as <a href="https://jumpedthesnark.com/tag/comic-books/" rel="tag">comic books</a>, <a href="https://jumpedthesnark.com/tag/conan-obrien/" rel="tag">Conan O'Brien</a>, <a href="https://jumpedthesnark.com/tag/david-peterson/" rel="tag">David Peterson</a>, <a href="https://jumpedthesnark.com/tag/muppets/" rel="tag">Muppets</a><br /></p>
+			</div><!-- .entry-links -->
+
+</div><!-- #post-## -->
+
+
+<div id="nav-below" class="navigation">
+	<div class="nav-previous"><a href="https://jumpedthesnark.com/tag/conan-obrien/page/3/" ><span class="meta-nav">&larr;</span> Older posts</a></div>
+	<div class="nav-next"><a href="https://jumpedthesnark.com/tag/conan-obrien/" >Newer posts <span class="meta-nav">&rarr;</span></a></div>
+</div><!-- #nav-below -->
+	</div><!-- #content -->
+</div><!-- #content-container -->
+
+
+	<div id="sidebar" class="widget-area" role="complementary">
+				<ul class="xoxo sidebar-list">
+
+			
+		<li id="recent-posts-2" class="widget widget_recent_entries">
+		<h3 class="widget-title">The Past</h3>
+		<ul>
+											<li>
+					<a href="https://jumpedthesnark.com/2024/12/06/nevermind-the-facts-a-purely-fictional-account-of-nirvana-after-1994/">Nevermind the Facts: A Purely Fictional Account of Nirvana After&nbsp;1994</a>
+									</li>
+											<li>
+					<a href="https://jumpedthesnark.com/2023/06/08/spin-city-15-very-real-ted-lasso-spin-offs/">Spin City: 15 Very Real Ted Lasso&nbsp;Spin-Offs</a>
+									</li>
+											<li>
+					<a href="https://jumpedthesnark.com/2022/03/11/what-if-john-lennon-lived-the-untold-story-of-the-beatles-in-the-1980s/">What If&#8230;John Lennon Lived?: The Untold Story of  The Beatles in the&nbsp;1980s</a>
+									</li>
+											<li>
+					<a href="https://jumpedthesnark.com/2020/05/22/lions-hyenas-goats-oh-my-on-survivor-winners-at-war/">Lions, Hyenas &amp; GOATS, Oh My!: On &#8216;Survivor: Winners at&nbsp;War&#8217;</a>
+									</li>
+											<li>
+					<a href="https://jumpedthesnark.com/2020/01/02/the-best-of-the-decade-the-teens/">The Best of the Decade: The&nbsp;Teens</a>
+									</li>
+					</ul>
+
+		</li><li id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://jumpedthesnark.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></li><li id="linkcat-125418" class="widget widget_links"><h3 class="widget-title">Better Blogs</h3>
+	<ul class='xoxo blogroll'>
+<li><a href="http://www.avclub.com/">A.V. Club</a></li>
+<li><a href="http://ausiellofiles.ew.com/">EW Inside TV</a></li>
+<li><a href="http://tv.gawker.com/">Gawker.TV</a></li>
+<li><a href="http://www.grantland.com/">Grantland</a></li>
+<li><a href="http://watching-tv.ew.com/">Ken Tucker&#039;s Watching TV</a></li>
+<li><a href="http://www.latenightwithjimmyfallon.com/">Late Night with Jimmy Fallon</a></li>
+<li><a href="http://content.usatoday.com/communities/popcandy/index" rel="noopener" target="_blank">Pop Candy</a></li>
+<li><a href="http://popwatch.ew.com/">Pop Watch</a></li>
+<li><a href="http://www.stereogum.com">Stereogum</a></li>
+<li><a href="http://featuresblogs.chicagotribune.com/entertainment_tv/">The Watcher</a></li>
+<li><a href="http://www.toplessrobot.com/">Topless Robot</a></li>
+<li><a href="http://tvgal.com/">TV Gal</a></li>
+<li><a href="http://www.tvsquad.com/">TV Squad</a></li>
+<li><a href="http://videogum.com/">Videogum</a></li>
+<li><a href="http://www.vulture.com/">Vulture</a></li>
+<li><a href="http://www.google.com/url?sa=t&#038;rct=j&#038;q=&#038;esrc=s&#038;source=web&#038;cd=2&#038;ved=0CC8QFjAB&#038;url=http%3A%2F%2Fwww.hitfix.com%2Fwhats-alan-watching&#038;ei=YBJSUN-vHuaJ0QG7_4DYAw&#038;usg=AFQjCNFZpZryIe__sVjLZSxAlDif3gNu4w">What&#039;s Alan Watching?</a></li>
+
+	</ul>
+</li>
+<li id="linkcat-131902" class="widget widget_links"><h3 class="widget-title">Compatriots</h3>
+	<ul class='xoxo blogroll'>
+<li><a href="http://anewsroomaday.tumblr.com/">A Newsroom A Day</a></li>
+<li><a href="http://eliotglazer.com/">Eliot Glazer</a></li>
+<li><a href="http://ejectamenta.tumblr.com/" title=" caught in the ambiguity between naivete &amp; sophistication">e_jectamenta</a></li>
+<li><a href="http://steveponzo.blogspot.com/">His Still Life</a></li>
+<li><a href="http://ilanaglazer.blogspot.com/">ilazer</a></li>
+<li><a href="http://midnightmindset.blogspot.com/">Midnight Mindset</a></li>
+<li><a href="http://pick-pockets.blogspot.com/">Pick Pocket</a></li>
+
+	</ul>
+</li>
+<li id="twitter-3" class="widget widget_twitter"><h3 class="widget-title"><a href='http://twitter.com/JumpedTheSnark'>Twitted</a></h3><a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/JumpedTheSnark">Tweets by JumpedTheSnark</a></li><li id="rss_links-3" class="widget widget_rss_links"><h3 class="widget-title">Jumped The Snark in your RSS.  Kinda seems like overkill though, doesn\&#8217;t it? </h3><ul><li><a href="https://jumpedthesnark.com/feed/" title="Subscribe to Posts">RSS - Posts</a></li></ul>
+</li><li id="calendar-3" class="widget widget_calendar"><h3 class="widget-title">Back to the Future Part IV</h3><div id="calendar_wrap" class="calendar_wrap"><table id="wp-calendar" class="wp-calendar-table">
+	<caption>May 2026</caption>
+	<thead>
+	<tr>
+		<th scope="col" aria-label="Monday">M</th>
+		<th scope="col" aria-label="Tuesday">T</th>
+		<th scope="col" aria-label="Wednesday">W</th>
+		<th scope="col" aria-label="Thursday">T</th>
+		<th scope="col" aria-label="Friday">F</th>
+		<th scope="col" aria-label="Saturday">S</th>
+		<th scope="col" aria-label="Sunday">S</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td colspan="4" class="pad">&nbsp;</td><td>1</td><td>2</td><td>3</td>
+	</tr>
+	<tr>
+		<td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td id="today">10</td>
+	</tr>
+	<tr>
+		<td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td>
+	</tr>
+	<tr>
+		<td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td>
+	</tr>
+	<tr>
+		<td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td>
+	</tr>
+	</tbody>
+	</table><nav aria-label="Previous and next months" class="wp-calendar-nav">
+		<span class="wp-calendar-nav-prev"><a href="https://jumpedthesnark.com/2024/12/">&laquo; Dec</a></span>
+		<span class="pad">&nbsp;</span>
+		<span class="wp-calendar-nav-next">&nbsp;</span>
+	</nav></div></li><li id="categories-402412461" class="widget widget_categories"><h3 class="widget-title">Categories</h3>
+			<ul>
+					<li class="cat-item cat-item-63600654"><a href="https://jumpedthesnark.com/category/10-seconds-or-less/">10 Seconds or Less</a>
+</li>
+	<li class="cat-item cat-item-108935855"><a href="https://jumpedthesnark.com/category/a-newsroom-a-day/">A Newsroom A Day</a>
+</li>
+	<li class="cat-item cat-item-522446"><a href="https://jumpedthesnark.com/category/across-the-pond/">Across the pond</a>
+</li>
+	<li class="cat-item cat-item-33432940"><a href="https://jumpedthesnark.com/category/all-the-sudden-i-could-really-go-for-a-coke/">All the sudden I could really go for a Coke</a>
+</li>
+	<li class="cat-item cat-item-10544"><a href="https://jumpedthesnark.com/category/analysis/">Analysis</a>
+</li>
+	<li class="cat-item cat-item-272296"><a href="https://jumpedthesnark.com/category/back-to-the-past/">Back to the Past</a>
+</li>
+	<li class="cat-item cat-item-97310"><a href="https://jumpedthesnark.com/category/bad-humor/">Bad Humor</a>
+</li>
+	<li class="cat-item cat-item-884998"><a href="https://jumpedthesnark.com/category/be-careful-what-you-wish-for/">Be careful what you wish for</a>
+</li>
+	<li class="cat-item cat-item-47048947"><a href="https://jumpedthesnark.com/category/bert-n-ernie/">Bert-n-Ernie</a>
+</li>
+	<li class="cat-item cat-item-41805306"><a href="https://jumpedthesnark.com/category/best-show-youre-not-watching/">Best Show You&#039;re Not Watching</a>
+</li>
+	<li class="cat-item cat-item-1048395"><a href="https://jumpedthesnark.com/category/better-late-than-never/">Better Late Than Never</a>
+</li>
+	<li class="cat-item cat-item-400132"><a href="https://jumpedthesnark.com/category/bob-loblaw/">Bob Loblaw</a>
+</li>
+	<li class="cat-item cat-item-88811"><a href="https://jumpedthesnark.com/category/brilliance/">Brilliance</a>
+</li>
+	<li class="cat-item cat-item-42035"><a href="https://jumpedthesnark.com/category/broadway/">Broadway!</a>
+</li>
+	<li class="cat-item cat-item-30609949"><a href="https://jumpedthesnark.com/category/buffy-hildegarde/">Buffy &amp; Hildegarde</a>
+</li>
+	<li class="cat-item cat-item-24153875"><a href="https://jumpedthesnark.com/category/century-21-reality/">Century 21 Reality</a>
+</li>
+	<li class="cat-item cat-item-104002"><a href="https://jumpedthesnark.com/category/checks-balances/">Checks &amp; Balances</a>
+</li>
+	<li class="cat-item cat-item-786117"><a href="https://jumpedthesnark.com/category/comic-book-guy/">Comic Book Guy</a>
+</li>
+	<li class="cat-item cat-item-6596"><a href="https://jumpedthesnark.com/category/commodore-64/">Commodore 64</a>
+</li>
+	<li class="cat-item cat-item-17776"><a href="https://jumpedthesnark.com/category/conspiracy-theory/">Conspiracy Theory</a>
+</li>
+	<li class="cat-item cat-item-23394254"><a href="https://jumpedthesnark.com/category/count-bleh/">Count Bleh</a>
+</li>
+	<li class="cat-item cat-item-26198078"><a href="https://jumpedthesnark.com/category/cross-country-hipsters/">Cross Country Hipsters</a>
+</li>
+	<li class="cat-item cat-item-21073938"><a href="https://jumpedthesnark.com/category/crucial-taunt/">Crucial Taunt</a>
+</li>
+	<li class="cat-item cat-item-97465152"><a href="https://jumpedthesnark.com/category/depp-or-stewart/">Depp or Stewart?</a>
+</li>
+	<li class="cat-item cat-item-2047762"><a href="https://jumpedthesnark.com/category/dillon-panthers/">Dillon Panthers</a>
+</li>
+	<li class="cat-item cat-item-28809845"><a href="https://jumpedthesnark.com/category/discos-and-dragons/">Discos and Dragons</a>
+</li>
+	<li class="cat-item cat-item-2319292"><a href="https://jumpedthesnark.com/category/dunder-mifflin-this-is-pam/">Dunder Mifflin, this is Pam</a>
+</li>
+	<li class="cat-item cat-item-45115950"><a href="https://jumpedthesnark.com/category/fashion-show-at-lunch-2/">Fashion Show at Lunch</a>
+</li>
+	<li class="cat-item cat-item-13541615"><a href="https://jumpedthesnark.com/category/feeny/">Feeny</a>
+</li>
+	<li class="cat-item cat-item-55843"><a href="https://jumpedthesnark.com/category/flashback/">Flashback!</a>
+</li>
+	<li class="cat-item cat-item-29654644"><a href="https://jumpedthesnark.com/category/freak-out-control/">Freak Out Control</a>
+</li>
+	<li class="cat-item cat-item-2424"><a href="https://jumpedthesnark.com/category/geekery/">Geekery</a>
+</li>
+	<li class="cat-item cat-item-49782747"><a href="https://jumpedthesnark.com/category/george-lucas-doesnt-need-more-money/">George Lucas Doesn&#039;t Need More Money</a>
+</li>
+	<li class="cat-item cat-item-9609996"><a href="https://jumpedthesnark.com/category/god-laughs/">God Laughs</a>
+</li>
+	<li class="cat-item cat-item-235706"><a href="https://jumpedthesnark.com/category/golden-girls/">Golden Girls</a>
+</li>
+	<li class="cat-item cat-item-878471"><a href="https://jumpedthesnark.com/category/good-humor/">Good Humor</a>
+</li>
+	<li class="cat-item cat-item-47051"><a href="https://jumpedthesnark.com/category/good-news/">Good News!</a>
+</li>
+	<li class="cat-item cat-item-16747075"><a href="https://jumpedthesnark.com/category/good-with-coffee/">Good with Coffee</a>
+</li>
+	<li class="cat-item cat-item-47870190"><a href="https://jumpedthesnark.com/category/gratuitous-search-term-bait/">Gratuitous Search Term Bait</a>
+</li>
+	<li class="cat-item cat-item-48403258"><a href="https://jumpedthesnark.com/category/greendale-human/">Greendale Human</a>
+</li>
+	<li class="cat-item cat-item-71315"><a href="https://jumpedthesnark.com/category/growing-pains/">Growing Pains</a>
+</li>
+	<li class="cat-item cat-item-44440461"><a href="https://jumpedthesnark.com/category/hanx/">Hanx</a>
+</li>
+	<li class="cat-item cat-item-1913"><a href="https://jumpedthesnark.com/category/huh/">Huh?</a>
+</li>
+	<li class="cat-item cat-item-693190"><a href="https://jumpedthesnark.com/category/impatience/">Impatience</a>
+</li>
+	<li class="cat-item cat-item-4695588"><a href="https://jumpedthesnark.com/category/in-defense-of/">In defense of:</a>
+</li>
+	<li class="cat-item cat-item-28372"><a href="https://jumpedthesnark.com/category/in-memoriam/">In Memoriam</a>
+</li>
+	<li class="cat-item cat-item-44872300"><a href="https://jumpedthesnark.com/category/internet-killed-the-print-media-star/">Internet Killed the Print Media Star</a>
+</li>
+	<li class="cat-item cat-item-37341550"><a href="https://jumpedthesnark.com/category/intersection-of-the-venn-diagram-of-things-that-i-love/">Intersection of the venn diagram of things that I love</a>
+</li>
+	<li class="cat-item cat-item-4292"><a href="https://jumpedthesnark.com/category/interweb/">Interweb</a>
+</li>
+	<li class="cat-item cat-item-26697636"><a href="https://jumpedthesnark.com/category/is-that-still-on/">Is That Still On?</a>
+</li>
+	<li class="cat-item cat-item-47869838"><a href="https://jumpedthesnark.com/category/its-gross/">It&#039;s gross.</a>
+</li>
+	<li class="cat-item cat-item-110097698"><a href="https://jumpedthesnark.com/category/its-not-television/">It&#039;s Not Television</a>
+</li>
+	<li class="cat-item cat-item-682775"><a href="https://jumpedthesnark.com/category/judd-apatow/">Judd Apatow</a>
+</li>
+	<li class="cat-item cat-item-96547838"><a href="https://jumpedthesnark.com/category/jump-streets-ahead/">Jump Streets Ahead</a>
+</li>
+	<li class="cat-item cat-item-851320"><a href="https://jumpedthesnark.com/category/jumped-the-shark/">Jumped the Shark</a>
+</li>
+	<li class="cat-item cat-item-13477"><a href="https://jumpedthesnark.com/category/just-because/">Just because.</a>
+</li>
+	<li class="cat-item cat-item-46193430"><a href="https://jumpedthesnark.com/category/kierans-korner/">Kieran&#039;s Korner</a>
+</li>
+	<li class="cat-item cat-item-29521041"><a href="https://jumpedthesnark.com/category/krebstar/">Krebstar</a>
+</li>
+	<li class="cat-item cat-item-23091958"><a href="https://jumpedthesnark.com/category/lady-holiday/">Lady Holiday</a>
+</li>
+	<li class="cat-item cat-item-1832"><a href="https://jumpedthesnark.com/category/lists/">Lists</a>
+</li>
+	<li class="cat-item cat-item-43126847"><a href="https://jumpedthesnark.com/category/literarally/">Literarally</a>
+</li>
+	<li class="cat-item cat-item-127595"><a href="https://jumpedthesnark.com/category/local-flavor/">Local Flavor</a>
+</li>
+	<li class="cat-item cat-item-633126"><a href="https://jumpedthesnark.com/category/look-alikes/">Look-Alikes</a>
+</li>
+	<li class="cat-item cat-item-425"><a href="https://jumpedthesnark.com/category/lost/">LOST</a>
+</li>
+	<li class="cat-item cat-item-8409"><a href="https://jumpedthesnark.com/category/makes-you-think/">Makes You Think</a>
+</li>
+	<li class="cat-item cat-item-9609994"><a href="https://jumpedthesnark.com/category/man-plans/">Man Plans</a>
+</li>
+	<li class="cat-item cat-item-2704971"><a href="https://jumpedthesnark.com/category/mancrush/">Mancrush</a>
+</li>
+	<li class="cat-item cat-item-27953081"><a href="https://jumpedthesnark.com/category/marconi-cheese/">Marconi &amp; Cheese</a>
+</li>
+	<li class="cat-item cat-item-24875783"><a href="https://jumpedthesnark.com/category/mars-investigations/">Mars Investigations</a>
+</li>
+	<li class="cat-item cat-item-206274"><a href="https://jumpedthesnark.com/category/masochism/">Masochism</a>
+</li>
+	<li class="cat-item cat-item-11030769"><a href="https://jumpedthesnark.com/category/match-games/">Match Games</a>
+</li>
+	<li class="cat-item cat-item-43859225"><a href="https://jumpedthesnark.com/category/matt-christopher-books/">Matt Christopher Books</a>
+</li>
+	<li class="cat-item cat-item-68370"><a href="https://jumpedthesnark.com/category/mickey-mouse-club/">Mickey Mouse Club</a>
+</li>
+	<li class="cat-item cat-item-443798"><a href="https://jumpedthesnark.com/category/monster-mash/">Monster Mash</a>
+</li>
+	<li class="cat-item cat-item-28578589"><a href="https://jumpedthesnark.com/category/mr-gaeta-prepare-for-jump/">Mr. Gaeta, Prepare for Jump</a>
+</li>
+	<li class="cat-item cat-item-35968"><a href="https://jumpedthesnark.com/category/ms-paint/">MS Paint</a>
+</li>
+	<li class="cat-item cat-item-26927009"><a href="https://jumpedthesnark.com/category/muppet-mondays/">Muppet Mondays</a>
+</li>
+	<li class="cat-item cat-item-221431"><a href="https://jumpedthesnark.com/category/muppets/">Muppets</a>
+</li>
+	<li class="cat-item cat-item-92861287"><a href="https://jumpedthesnark.com/category/must-flee-tv/">Must Flee TV</a>
+</li>
+	<li class="cat-item cat-item-667534"><a href="https://jumpedthesnark.com/category/must-see-tv/">Must See TV</a>
+</li>
+	<li class="cat-item cat-item-48774333"><a href="https://jumpedthesnark.com/category/mustachiod/">Mustachio&#039;d</a>
+</li>
+	<li class="cat-item cat-item-7884316"><a href="https://jumpedthesnark.com/category/new-favorite-show/">New Favorite Show</a>
+</li>
+	<li class="cat-item cat-item-4371302"><a href="https://jumpedthesnark.com/category/nicktoons/">Nicktoons</a>
+</li>
+	<li class="cat-item cat-item-3003129"><a href="https://jumpedthesnark.com/category/nostalgia-corner/">Nostalgia Corner</a>
+</li>
+	<li class="cat-item cat-item-99975"><a href="https://jumpedthesnark.com/category/other-peoples-stuff/">Other people&#039;s stuff</a>
+</li>
+	<li class="cat-item cat-item-41675209"><a href="https://jumpedthesnark.com/category/participation-award/">Participation Award</a>
+</li>
+	<li class="cat-item cat-item-14401982"><a href="https://jumpedthesnark.com/category/parting-shot/">Parting Shot</a>
+</li>
+	<li class="cat-item cat-item-4530374"><a href="https://jumpedthesnark.com/category/periodically/">Periodically</a>
+</li>
+	<li class="cat-item cat-item-28087176"><a href="https://jumpedthesnark.com/category/reeeeeege/">Reeeeeege</a>
+</li>
+	<li class="cat-item cat-item-2711937"><a href="https://jumpedthesnark.com/category/reginald-veljohnson/">Reginald VelJohnson</a>
+</li>
+	<li class="cat-item cat-item-35697100"><a href="https://jumpedthesnark.com/category/rip-off-2/">Rip-off</a>
+</li>
+	<li class="cat-item cat-item-5536"><a href="https://jumpedthesnark.com/category/robots/">Robots</a>
+</li>
+	<li class="cat-item cat-item-21678"><a href="https://jumpedthesnark.com/category/saturday-night-live/">Saturday Night Live</a>
+</li>
+	<li class="cat-item cat-item-205282"><a href="https://jumpedthesnark.com/category/saved-by-the-bell/">Saved by the Bell</a>
+</li>
+	<li class="cat-item cat-item-50175955"><a href="https://jumpedthesnark.com/category/saved-by-the-bell-project/">Saved by the Bell Project</a>
+</li>
+	<li class="cat-item cat-item-12481785"><a href="https://jumpedthesnark.com/category/seinlanguage/">Seinlanguage</a>
+</li>
+	<li class="cat-item cat-item-323725"><a href="https://jumpedthesnark.com/category/sell-out/">Sell Out</a>
+</li>
+	<li class="cat-item cat-item-23381375"><a href="https://jumpedthesnark.com/category/sha-la-la-la/">Sha la la la</a>
+</li>
+	<li class="cat-item cat-item-160952"><a href="https://jumpedthesnark.com/category/shorties/">Shorties</a>
+</li>
+	<li class="cat-item cat-item-162798"><a href="https://jumpedthesnark.com/category/slow-news-day/">Slow News Day</a>
+</li>
+	<li class="cat-item cat-item-1866989"><a href="https://jumpedthesnark.com/category/snick/">Snick</a>
+</li>
+	<li class="cat-item cat-item-734725"><a href="https://jumpedthesnark.com/category/talkies/">Talkies</a>
+</li>
+	<li class="cat-item cat-item-6206123"><a href="https://jumpedthesnark.com/category/team-zissou/">Team Zissou</a>
+</li>
+	<li class="cat-item cat-item-25837521"><a href="https://jumpedthesnark.com/category/tex-wasabis/">Tex Wasabi&#039;s</a>
+</li>
+	<li class="cat-item cat-item-111297"><a href="https://jumpedthesnark.com/category/tgif/">TGIF</a>
+</li>
+	<li class="cat-item cat-item-36427827"><a href="https://jumpedthesnark.com/category/the-bieb/">The Bieb</a>
+</li>
+	<li class="cat-item cat-item-119758"><a href="https://jumpedthesnark.com/category/the-big-screen/">The Big Screen</a>
+</li>
+	<li class="cat-item cat-item-29521033"><a href="https://jumpedthesnark.com/category/the-roaring-10s/">The Roaring 10s!</a>
+</li>
+	<li class="cat-item cat-item-26426927"><a href="https://jumpedthesnark.com/category/the-sixth-taste/">The Sixth Taste</a>
+</li>
+	<li class="cat-item cat-item-23188"><a href="https://jumpedthesnark.com/category/the-state/">The State</a>
+</li>
+	<li class="cat-item cat-item-1777761"><a href="https://jumpedthesnark.com/category/the-worst/">The Worst</a>
+</li>
+	<li class="cat-item cat-item-50634933"><a href="https://jumpedthesnark.com/category/today-in-today/">Today in Today</a>
+</li>
+	<li class="cat-item cat-item-25870766"><a href="https://jumpedthesnark.com/category/top-scallop/">Top Scallop</a>
+</li>
+	<li class="cat-item cat-item-902776"><a href="https://jumpedthesnark.com/category/tribal-council/">Tribal Council</a>
+</li>
+	<li class="cat-item cat-item-27813951"><a href="https://jumpedthesnark.com/category/tv-killed-the-music-video-star/">TV Killed the Music Video Star</a>
+</li>
+	<li class="cat-item cat-item-24845206"><a href="https://jumpedthesnark.com/category/tyranasaurus-sex/">Tyranasaurus Sex</a>
+</li>
+	<li class="cat-item cat-item-97633757"><a href="https://jumpedthesnark.com/category/venn-diesel-diagram/">Venn Diesel Diagram</a>
+</li>
+	<li class="cat-item cat-item-1913560"><a href="https://jumpedthesnark.com/category/virulent/">Virulent</a>
+</li>
+	<li class="cat-item cat-item-33631709"><a href="https://jumpedthesnark.com/category/wake-up-sf/">Wake Up, SF!</a>
+</li>
+	<li class="cat-item cat-item-44037032"><a href="https://jumpedthesnark.com/category/well-get-it-in-post/">We&#039;ll Get It In Post</a>
+</li>
+	<li class="cat-item cat-item-66818"><a href="https://jumpedthesnark.com/category/weigh-in/">Weigh-in</a>
+</li>
+	<li class="cat-item cat-item-34744928"><a href="https://jumpedthesnark.com/category/what-too-fabulous/">What? Too fabulous?</a>
+</li>
+	<li class="cat-item cat-item-1317555"><a href="https://jumpedthesnark.com/category/whos-the-boss/">Who&#039;s the Boss?</a>
+</li>
+	<li class="cat-item cat-item-17110340"><a href="https://jumpedthesnark.com/category/winterfallen/">Winterfallen</a>
+</li>
+	<li class="cat-item cat-item-28936787"><a href="https://jumpedthesnark.com/category/woody-allen-bar-mitzvahs-bagels/">Woody Allen, Bar Mitzvahs &amp; Bagels</a>
+</li>
+	<li class="cat-item cat-item-19264187"><a href="https://jumpedthesnark.com/category/words-t9-doesnt-know/">Words T9 Doesn&#039;t Know</a>
+</li>
+	<li class="cat-item cat-item-555042"><a href="https://jumpedthesnark.com/category/yankee-swap/">Yankee Swap</a>
+</li>
+	<li class="cat-item cat-item-787307"><a href="https://jumpedthesnark.com/category/yasmine-bleeth/">Yasmine Bleeth</a>
+</li>
+	<li class="cat-item cat-item-582882"><a href="https://jumpedthesnark.com/category/you-decide/">You Decide</a>
+</li>
+	<li class="cat-item cat-item-25278924"><a href="https://jumpedthesnark.com/category/yvonne-hudson/">Yvonne Hudson</a>
+</li>
+			</ul>
+
+			</li>		</ul>
+	</div><!-- #sidebar .widget-area -->
+
+	
+		</div><!-- #content-box -->
+
+		<div id="footer" role="contentinfo">
+			<div id="colophon">
+
+				
+				<div id="site-info">
+					<a href="https://jumpedthesnark.com/" title="Jumped The Snark" rel="home">Jumped The Snark</a> &middot; A Visceral Thrill Ride				</div><!-- #site-info -->
+
+				<div id="site-generator">
+					<a href="https://wordpress.com/?ref=footer_blog" rel="nofollow">Blog at WordPress.com.</a>				</div><!-- #site-generator -->
+
+			</div><!-- #colophon -->
+		</div><!-- #footer -->
+	</div><!-- #page .blog -->
+</div><!-- #container -->
+
+		<script type="text/javascript">
+		var infiniteScroll = {"settings":{"id":"content","ajaxurl":"https://jumpedthesnark.com/?infinity=scrolling","type":"scroll","wrapper":true,"wrapper_class":"infinite-wrap","footer":"page","click_handle":"1","text":"Older posts","totop":"Scroll back to top","currentday":"19.01.10","order":"DESC","scripts":[],"styles":[],"google_analytics":false,"offset":2,"history":{"host":"jumpedthesnark.com","path":"/tag/conan-obrien/page/%d/","use_trailing_slashes":true,"parameters":""},"query_args":{"paged":2,"tag":"conan-obrien","error":"","m":"","p":0,"post_parent":"","subpost":"","subpost_id":"","attachment":"","attachment_id":0,"name":"","pagename":"","page_id":0,"second":"","minute":"","hour":"","day":0,"monthnum":0,"year":0,"w":0,"category_name":"","cat":"","tag_id":68232,"author":"","author_name":"","feed":"","tb":"","meta_key":"","meta_value":"","preview":"","s":"","sentence":"","title":"","fields":"all","menu_order":"","embed":"","category__in":[],"category__not_in":[],"category__and":[],"post__in":[],"post__not_in":[],"post_name__in":[],"tag__in":[],"tag__not_in":[],"tag__and":[],"tag_slug__in":["conan-obrien"],"tag_slug__and":[],"post_parent__in":[],"post_parent__not_in":[],"author__in":[],"author__not_in":[],"search_columns":[],"lazy_load_term_meta":false,"posts_per_page":10,"ignore_sticky_posts":false,"suppress_filters":false,"cache_results":true,"update_post_term_cache":true,"update_menu_item_cache":false,"update_post_meta_cache":true,"post_type":"","nopaging":false,"comments_per_page":"50","no_found_rows":false,"order":"DESC"},"query_before":"2026-05-10 06:31:34","last_post_date":"2010-01-19 01:50:39","body_class":"infinite-scroll neverending","loading_text":"Loading new page","stats":"blog=7274386\u0026v=wpcom\u0026tz=-4\u0026user_id=0\u0026arch_tag=conan-obrien\u0026arch_results=10\u0026subd=jumpedthesnark\u0026x_pagetype=infinite"}};
+		</script>
+		<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/files/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/pub/pilcrow/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="grofiles-cards-js" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202619d1133547e8a1f2801609f51cef12522abe7f6647d869e9fbc974fe356a37e613"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+//# sourceURL=wpgroho-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+		<div id="infinite-footer">
+			<div class="container">
+				<div class="blog-info">
+					<a id="infinity-blog-title" href="https://jumpedthesnark.com/" rel="home">
+						Jumped The Snark					</a>
+				</div>
+				<div class="blog-credits">
+					<a href="https://wordpress.com/?ref=footer_website" rel="nofollow">Create a free website or blog at WordPress.com.</a> 				</div>
+			</div>
+		</div><!-- #infinite-footer -->
+				<!-- CCPA [start] -->
+		<script type="text/javascript">
+			( function () {
+
+				var setupPrivacy = function() {
+
+					// Minimal Mozilla Cookie library
+					// https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie/Simple_document.cookie_framework
+					var cookieLib = window.cookieLib = {getItem:function(e){return e&&decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*"+encodeURIComponent(e).replace(/[\-\.\+\*]/g,"\\$&")+"\\s*\\=\\s*([^;]*).*$)|^.*$"),"$1"))||null},setItem:function(e,o,n,t,r,i){if(!e||/^(?:expires|max\-age|path|domain|secure)$/i.test(e))return!1;var c="";if(n)switch(n.constructor){case Number:c=n===1/0?"; expires=Fri, 31 Dec 9999 23:59:59 GMT":"; max-age="+n;break;case String:c="; expires="+n;break;case Date:c="; expires="+n.toUTCString()}return"rootDomain"!==r&&".rootDomain"!==r||(r=(".rootDomain"===r?".":"")+document.location.hostname.split(".").slice(-2).join(".")),document.cookie=encodeURIComponent(e)+"="+encodeURIComponent(o)+c+(r?"; domain="+r:"")+(t?"; path="+t:"")+(i?"; secure":""),!0}};
+
+					// Implement IAB USP API.
+					window.__uspapi = function( command, version, callback ) {
+
+						// Validate callback.
+						if ( typeof callback !== 'function' ) {
+							return;
+						}
+
+						// Validate the given command.
+						if ( command !== 'getUSPData' || version !== 1 ) {
+							callback( null, false );
+							return;
+						}
+
+						// Check for GPC. If set, override any stored cookie.
+						if ( navigator.globalPrivacyControl ) {
+							callback( { version: 1, uspString: '1YYN' }, true );
+							return;
+						}
+
+						// Check for cookie.
+						var consent = cookieLib.getItem( 'usprivacy' );
+
+						// Invalid cookie.
+						if ( null === consent ) {
+							callback( null, false );
+							return;
+						}
+
+						// Everything checks out. Fire the provided callback with the consent data.
+						callback( { version: 1, uspString: consent }, true );
+					};
+
+					// Initialization.
+					document.addEventListener( 'DOMContentLoaded', function() {
+
+						// Internal functions.
+						var setDefaultOptInCookie = function() {
+							var value = '1YNN';
+							var domain = '.wordpress.com' === location.hostname.slice( -14 ) ? '.rootDomain' : location.hostname;
+							cookieLib.setItem( 'usprivacy', value, 365 * 24 * 60 * 60, '/', domain );
+						};
+
+						var setDefaultOptOutCookie = function() {
+							var value = '1YYN';
+							var domain = '.wordpress.com' === location.hostname.slice( -14 ) ? '.rootDomain' : location.hostname;
+							cookieLib.setItem( 'usprivacy', value, 24 * 60 * 60, '/', domain );
+						};
+
+						var setDefaultNotApplicableCookie = function() {
+							var value = '1---';
+							var domain = '.wordpress.com' === location.hostname.slice( -14 ) ? '.rootDomain' : location.hostname;
+							cookieLib.setItem( 'usprivacy', value, 24 * 60 * 60, '/', domain );
+						};
+
+						var setCcpaAppliesCookie = function( applies ) {
+							var domain = '.wordpress.com' === location.hostname.slice( -14 ) ? '.rootDomain' : location.hostname;
+							cookieLib.setItem( 'ccpa_applies', applies, 24 * 60 * 60, '/', domain );
+						}
+
+						var maybeCallDoNotSellCallback = function() {
+							if ( 'function' === typeof window.doNotSellCallback ) {
+								return window.doNotSellCallback();
+							}
+
+							return false;
+						}
+
+						// Look for usprivacy cookie first.
+						var usprivacyCookie = cookieLib.getItem( 'usprivacy' );
+
+						// Found a usprivacy cookie.
+						if ( null !== usprivacyCookie ) {
+
+							// If the cookie indicates that CCPA does not apply, then bail.
+							if ( '1---' === usprivacyCookie ) {
+								return;
+							}
+
+							// CCPA applies, so call our callback to add Do Not Sell link to the page.
+							maybeCallDoNotSellCallback();
+
+							// We're all done, no more processing needed.
+							return;
+						}
+
+						// We don't have a usprivacy cookie, so check to see if we have a CCPA applies cookie.
+						var ccpaCookie = cookieLib.getItem( 'ccpa_applies' );
+
+						// No CCPA applies cookie found, so we'll need to geolocate if this visitor is from California.
+						// This needs to happen client side because we do not have region geo data in our $SERVER headers,
+						// only country data -- therefore we can't vary cache on the region.
+						if ( null === ccpaCookie ) {
+
+							var request = new XMLHttpRequest();
+							request.open( 'GET', 'https://public-api.wordpress.com/geo/', true );
+
+							request.onreadystatechange = function () {
+								if ( 4 === this.readyState ) {
+									if ( 200 === this.status ) {
+
+										// Got a geo response. Parse out the region data.
+										var data = JSON.parse( this.response );
+										var region      = data.region ? data.region.toLowerCase() : '';
+										var ccpa_applies = ['california', 'colorado', 'connecticut', 'delaware', 'indiana', 'iowa', 'montana', 'new jersey', 'oregon', 'tennessee', 'texas', 'utah', 'virginia'].indexOf( region ) > -1;
+										// Set CCPA applies cookie. This keeps us from having to make a geo request too frequently.
+										setCcpaAppliesCookie( ccpa_applies );
+
+										// Check if CCPA applies to set the proper usprivacy cookie.
+										if ( ccpa_applies ) {
+											if ( maybeCallDoNotSellCallback() ) {
+												// Do Not Sell link added, so set default opt-in.
+												setDefaultOptInCookie();
+											} else {
+												// Failed showing Do Not Sell link as required, so default to opt-OUT just to be safe.
+												setDefaultOptOutCookie();
+											}
+										} else {
+											// CCPA does not apply.
+											setDefaultNotApplicableCookie();
+										}
+									} else {
+										// Could not geo, so let's assume for now that CCPA applies to be safe.
+										setCcpaAppliesCookie( true );
+										if ( maybeCallDoNotSellCallback() ) {
+											// Do Not Sell link added, so set default opt-in.
+											setDefaultOptInCookie();
+										} else {
+											// Failed showing Do Not Sell link as required, so default to opt-OUT just to be safe.
+											setDefaultOptOutCookie();
+										}
+									}
+								}
+							};
+
+							// Send the geo request.
+							request.send();
+						} else {
+							// We found a CCPA applies cookie.
+							if ( ccpaCookie === 'true' ) {
+								if ( maybeCallDoNotSellCallback() ) {
+									// Do Not Sell link added, so set default opt-in.
+									setDefaultOptInCookie();
+								} else {
+									// Failed showing Do Not Sell link as required, so default to opt-OUT just to be safe.
+									setDefaultOptOutCookie();
+								}
+							} else {
+								// CCPA does not apply.
+								setDefaultNotApplicableCookie();
+							}
+						}
+					} );
+				};
+
+				// Kickoff initialization.
+				if ( window.defQueue && defQueue.isLOHP && defQueue.isLOHP === 2020 ) {
+					defQueue.items.push( setupPrivacy );
+				} else {
+					setupPrivacy();
+				}
+
+			} )();
+		</script>
+
+		<!-- CCPA [end] -->
+		<div class="widget widget_eu_cookie_law_widget">
+<div
+	class="hide-on-button ads-active"
+	data-hide-timeout="30"
+	data-consent-expiration="180"
+	id="eu-cookie-law"
+	style="display: none"
+>
+	<form method="post">
+		<input type="submit" value="Close and accept" class="accept" />
+
+		Privacy &amp; Cookies: This site uses cookies. By continuing to use this website, you agree to their use. <br />
+To find out more, including how to control cookies, see here:
+				<a href="https://automattic.com/cookies/" rel="nofollow">
+			Cookie Policy		</a>
+ </form>
+</div>
+</div>		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-pub-pilcrow actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://jumpedthesnark.com">
+				<img loading='lazy' alt='' src='https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=50&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png' srcset='https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=50&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=75&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1.5x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=100&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 2x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=150&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 3x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=200&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 4x' class='avatar avatar-50' height='50' width='50' />				Jumped The Snark			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 37 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="7274386" />
+										<input type="hidden" name="source" value="https://jumpedthesnark.com/tag/conan-obrien/page/2/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="55271d660a" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fjumpedthesnark.com%252F2010%252F11%252F10%252Fsplash-2-tom-hanks-on-conan%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="https://jumpedthesnark.com">
+				<img loading='lazy' alt='' src='https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=50&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png' srcset='https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=50&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=75&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1.5x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=100&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 2x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=150&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 3x, https://secure.gravatar.com/blavatar/202683d7cd052828c8f6ded600a75a67cad7e5e6e0df5613ed3fa9e3cdeaaafa?s=200&#038;d=https%3A%2F%2Fs2.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 4x' class='avatar avatar-50' height='50' width='50' />				Jumped The Snark			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fjumpedthesnark.com%252F2010%252F11%252F10%252Fsplash-2-tom-hanks-on-conan%252F">Log in</a></li>
+															<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://jumpedthesnark.com" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/feeds/281910">
+										View site in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+			<div id="jp-carousel-loading-overlay">
+			<div id="jp-carousel-loading-wrapper">
+				<span id="jp-carousel-library-loading"><svg class="jetpack-spinner" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"/><path d="M 50 4 A 46 46 0 0 1 96 50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1.4s" from="0 50 50" to="360 50 50" repeatCount="indefinite"/></path></svg></span>
+			</div>
+		</div>
+		<div class="jp-carousel-overlay" style="display: none;">
+
+		<div class="jp-carousel-container">
+			<!-- The Carousel Swiper -->
+			<div
+				class="jp-carousel-wrap swiper jp-carousel-swiper-container jp-carousel-transitions"
+				itemscope
+				itemtype="https://schema.org/ImageGallery">
+				<div class="jp-carousel swiper-wrapper"></div>
+				<div class="jp-swiper-button-prev swiper-button-prev">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskPrev" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="9" height="12">
+							<path d="M16.2072 16.59L11.6496 12L16.2072 7.41L14.8041 6L8.8335 12L14.8041 18L16.2072 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskPrev)">
+							<rect x="0.579102" width="23.8823" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+				<div class="jp-swiper-button-next swiper-button-next">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskNext" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="8" height="12">
+							<path d="M8.59814 16.59L13.1557 12L8.59814 7.41L10.0012 6L15.9718 12L10.0012 18L8.59814 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskNext)">
+							<rect x="0.34375" width="23.8822" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<!-- The main close buton -->
+			<div class="jp-carousel-close-hint">
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<mask id="maskClose" mask-type="alpha" maskUnits="userSpaceOnUse" x="5" y="5" width="15" height="14">
+						<path d="M19.3166 6.41L17.9135 5L12.3509 10.59L6.78834 5L5.38525 6.41L10.9478 12L5.38525 17.59L6.78834 19L12.3509 13.41L17.9135 19L19.3166 17.59L13.754 12L19.3166 6.41Z" fill="white"/>
+					</mask>
+					<g mask="url(#maskClose)">
+						<rect x="0.409668" width="23.8823" height="24" fill="#FFFFFF"/>
+					</g>
+				</svg>
+			</div>
+			<!-- Image info, comments and meta -->
+			<div class="jp-carousel-info">
+				<div class="jp-carousel-info-footer">
+					<div class="jp-carousel-pagination-container">
+						<div class="jp-swiper-pagination swiper-pagination"></div>
+						<div class="jp-carousel-pagination"></div>
+					</div>
+					<div class="jp-carousel-photo-title-container">
+						<h2 class="jp-carousel-photo-caption"></h2>
+					</div>
+					<div class="jp-carousel-photo-icons-container">
+						<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-info" aria-label="Toggle photo metadata visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskInfo" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M12.7537 2C7.26076 2 2.80273 6.48 2.80273 12C2.80273 17.52 7.26076 22 12.7537 22C18.2466 22 22.7046 17.52 22.7046 12C22.7046 6.48 18.2466 2 12.7537 2ZM11.7586 7V9H13.7488V7H11.7586ZM11.7586 11V17H13.7488V11H11.7586ZM4.79292 12C4.79292 16.41 8.36531 20 12.7537 20C17.142 20 20.7144 16.41 20.7144 12C20.7144 7.59 17.142 4 12.7537 4C8.36531 4 4.79292 7.59 4.79292 12Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskInfo)">
+										<rect x="0.8125" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+							</span>
+						</a>
+												<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-comments" aria-label="Toggle photo comments visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskComments" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M4.3271 2H20.2486C21.3432 2 22.2388 2.9 22.2388 4V16C22.2388 17.1 21.3432 18 20.2486 18H6.31729L2.33691 22V4C2.33691 2.9 3.2325 2 4.3271 2ZM6.31729 16H20.2486V4H4.3271V18L6.31729 16Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskComments)">
+										<rect x="0.34668" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+
+								<span class="jp-carousel-has-comments-indicator" aria-label="This image has comments."></span>
+							</span>
+						</a>
+											</div>
+				</div>
+				<div class="jp-carousel-info-extra">
+					<div class="jp-carousel-info-content-wrapper">
+						<div class="jp-carousel-photo-title-container">
+							<h2 class="jp-carousel-photo-title"></h2>
+						</div>
+						<div class="jp-carousel-comments-wrapper">
+															<div id="jp-carousel-comments-loading">
+									<span>Loading Comments...</span>
+								</div>
+								<div class="jp-carousel-comments"></div>
+								<div id="jp-carousel-comment-form-container">
+									<span id="jp-carousel-comment-form-spinner"><svg class="jetpack-spinner" width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"/><path d="M 50 4 A 46 46 0 0 1 96 50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1.4s" from="0 50 50" to="360 50 50" repeatCount="indefinite"/></path></svg></span>
+									<div id="jp-carousel-comment-post-results"></div>
+																														<form id="jp-carousel-comment-form">
+												<label for="jp-carousel-comment-form-comment-field" class="screen-reader-text">Write a Comment...</label>
+												<textarea
+													name="comment"
+													class="jp-carousel-comment-form-field jp-carousel-comment-form-textarea"
+													id="jp-carousel-comment-form-comment-field"
+													placeholder="Write a Comment..."
+												></textarea>
+												<div id="jp-carousel-comment-form-submit-and-info-wrapper">
+													<div id="jp-carousel-comment-form-commenting-as">
+																													<fieldset>
+																<label for="jp-carousel-comment-form-email-field">Email (Required)</label>
+																<input type="text" name="email" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-email-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-author-field">Name (Required)</label>
+																<input type="text" name="author" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-author-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-url-field">Website</label>
+																<input type="text" name="url" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-url-field" />
+															</fieldset>
+																											</div>
+													<input
+														type="submit"
+														name="submit"
+														class="jp-carousel-comment-form-button"
+														id="jp-carousel-comment-form-button-submit"
+														value="Post Comment" />
+												</div>
+											</form>
+																											</div>
+													</div>
+						<div class="jp-carousel-image-meta">
+							<div class="jp-carousel-title-and-caption">
+								<div class="jp-carousel-photo-info">
+									<h3 class="jp-carousel-caption" itemprop="caption description"></h3>
+								</div>
+
+								<div class="jp-carousel-photo-description"></div>
+							</div>
+							<ul class="jp-carousel-image-exif" style="display: none;"></ul>
+							<a class="jp-carousel-image-download" href="#" target="_blank" style="display: none;">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.84615 5V19H19.7775V12H21.7677V19C21.7677 20.1 20.8721 21 19.7775 21H5.84615C4.74159 21 3.85596 20.1 3.85596 19V5C3.85596 3.9 4.74159 3 5.84615 3H12.8118V5H5.84615ZM14.802 5V3H21.7677V10H19.7775V6.41L9.99569 16.24L8.59261 14.83L18.3744 5H14.802Z" fill="white"/>
+									</mask>
+									<g mask="url(#mask0)">
+										<rect x="0.870605" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+								<span class="jp-carousel-download-text"></span>
+							</a>
+							<div class="jp-carousel-image-map" style="display: none;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		</div>
+		
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script id="jetpack-carousel-js-extra">
+var jetpackSwiperLibraryPath = {"url":"/wp-content/mu-plugins/jetpack-plugin/sun/_inc/blocks/swiper.js"};
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https://jumpedthesnark.com/wp-admin/admin-ajax.php","nonce":"188131027d","display_exif":"1","display_comments":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","image_label":"Open image in full-screen.","download_original":"View full size \u003Cspan class=\"photo-size\"\u003E{0}\u003Cspan class=\"photo-size-times\"\u003E\u00d7\u003C/span\u003E{1}\u003C/span\u003E","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"1","login_url":"https://jumpedthesnark.wordpress.com/wp-login.php?redirect_to=https%3A%2F%2Fjumpedthesnark.com%2F2010%2F11%2F09%2Fconan-on-tbs-somewhat-funny-very-obrien%2F","blog_id":"7274386","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"stats_query_args":"blog=7274386&v=wpcom&tz=-4&user_id=0&arch_tag=conan-obrien&arch_results=10&subd=jumpedthesnark","is_public":"1"};
+//# sourceURL=jetpack-carousel-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJydjEsOwjAMRC9EcEEVXSGOgtLEVE6dj2qHitvTRQuIBQuW82bmwVyMy0kxKfScB1O4DpQE5jx568U4tiIoEBZklc39uA+yg49brO8T+QFVAOvS5pHQsJ1BMRa2il/8hyegFuvGNYPUBFdKDvpK7IHSjRIpGnFTZt7yYx8p/S11dspVkF+zDazWSzwfuq5rm1PbNOEJcwpzxw=='></script>
+<script id="twitter-widgets-js" src="https://platform.twitter.com/widgets.js?ver=20111117"></script>
+<script data-wp-strategy="defer" defer id="tiled-gallery-js" src="/wp-content/mu-plugins/jetpack-plugin/sun/_inc/build/tiled-gallery/tiled-gallery/tiled-gallery.min.js?m=1755011788i&#038;ver=15.9-a.0"></script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/carousel-wpcom/carousel-wpcom.js?m=1761899756i'></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/","ext":".png","svgUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?m=1764078722i&ver=7.0-RC2-62280"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
+</script>
+		<script type="text/javascript">
+			(function() {
+				var extend = function(out) {
+					out = out || {};
+
+					for (var i = 1; i < arguments.length; i++) {
+						if (!arguments[i])
+						continue;
+
+						for (var key in arguments[i]) {
+						if (arguments[i].hasOwnProperty(key))
+							out[key] = arguments[i][key];
+						}
+					}
+
+					return out;
+				};
+				extend( window.infiniteScroll.settings.scripts, ["jetpack-mu-wpcom-settings","rlt-proxy","cmp-script-stub","wpcom-actionbar-placeholder","grofiles-cards","wpgroho","wordads-client","eu-cookie-law-script","the-neverending-homepage","jetpack-carousel","twitter-widgets","tiled-gallery","carousel-wpcom"] );
+				extend( window.infiniteScroll.settings.styles, ["eu-cookie-law-style","the-neverending-homepage","coblocks-frontend","wpcom-core-compat-playlist-styles","wpcom-bbpress2-staff-css","pilcrow","reblogging","geo-location-flair","h4-global","wp-emoji-styles","wp-block-library","classic-theme-styles","wp-block-styles-placeholder","wp-global-styles-placeholder","jetpack-global-styles-frontend-style","global-styles","jetpack-swiper-library","jetpack-carousel","tiled-gallery","core-block-supports-duotone"] );
+			})();
+		</script>
+				<span id="infinite-aria" aria-live="polite"></span>
+		<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'7274386','blog_tz':'-4','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+		// Prevent sending pageview tracking from WP-Admin pages.
+		_stq.push(['view', {'blog':'7274386','v':'wpcom','tz':'-4','user_id':'0','arch_tag':'conan-obrien','arch_results':'10','subd':'jumpedthesnark'}]);
+		_stq.push(['extra', {'crypt':'UE5XaGUuOTlwaD85flAmcm1mcmZsaDhkV11YdWtpP0NsWnVkPS9sL0ViLndld3BuVT01Uj14Ti1yYTBnX3xuYUQ3Qz1oblZbVHV3MTZ6aj0wcy01aFV6Y1RhRDhuPzkwMncsNm1ad0EldTZtNXh1JSxyYW44MzAxMFBndmg2Wy16eVsyMS1CX1JPX243bD1KblBiczZBLCVaRXM2VUROVltbW2ZKUFdPUWJ4MzNYTWxub3dFdVJaMW9tTFR8VF1jP3MlTW5kOTRaM35lQVJKPW1yfCVjc35uVkMuVDNRVndFMiZfal09VFZXQkJVL0NtSEpIeW1ZTWE/amtXYnxFRSUrNnl+d1JPaEFKYlZGeHpRSW8wS1sySD0xQjl4P25KcXdKMGRMWElTZkZNNm5+W2szPzF0cDNNdVF1MWNbW3Bic2FWaGFHRjRSWTB5bUJCS0JsOHJ1bnotaUdTbls='}]);
+_stq.push([ 'clickTrackerInit', '7274386', '0' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="Etc/GMT+4" data-custom-props="{&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;pub\/pilcrow&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202619"></script> 	</body>
+</html>

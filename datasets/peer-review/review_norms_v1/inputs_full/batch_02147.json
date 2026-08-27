@@ -1,0 +1,162 @@
+[
+{
+"review_id": "icml_q0P4rrDImq_r3",
+"paper_id": "icml_q0P4rrDImq",
+"review_text": "The paper focuses on an important and timely problem, i.e., how to discover the copyrighted content in the training data of VLMs. Specifically, the paper\u2019s contribution includes (1) a new benchmark, MovieTection, (2) a new method DIS-Co, (3) comprehensive experiments, and (4) some new discoveries.\n\n## Update after rebuttal\n\nDear authors, I would like to express my honor to have an opportunity to review your paper and apologize for forgetting to file some areas, such as \u201cClaims and Evidence\u201d. Here, as the update after the rebuttal, I want to summarize my opinion and give the final recommendations.\n\nAlthough I agree that: (1) the paper makes valid claims with experimental evidence; (2) the evaluation is sufficient; (3) the designs and analyses of experiments are reasonable and sufficient; and (4) the relation to broader scientific literature is strong. The following concerns are not solved during the rebuttal, and therefore I suggest incorporating them into the revision and submitting your paper to a later conference.\n\n1. To show your paper is novel, you should NOT say there are similar topics in the top-tier conferences. That is definitely true because I do not argue that this topic is not novel; the topic is important and should appear at these conferences. In addition, the move from LLM to MLLM cannot be considered significant, though unexplored. I think the proposed DIS-CO is not novel (as shown above, and the authors admit it is a piece-up of existing works). No need to argue that you build a new benchmark and conduct a lot of experiments, they have nothing to do with the novelty.\n\n2. The authors say \"Our paper focuses on a technical problem: detecting whether a model has memorized specific content.\" This focus is feasible. However, the paper does not reflect this. The paper makes a lot of arguments on *copyright* rather than memorization/replication. Please see a similar paper [1] on how to focus on technical problem: \n\n*\"Replicants are either a benefit or a hazard; there may be situations where content replication is acceptable, desirable, or fair use, and others where it is \u201cstealing.\u201d While these ethical boundaries are unclear at this time, we focus on the scientific question of whether replication actually happens with modern state-of-the-art diffusion models, and to what degree.\"*\n\nWhat's more, your paper and [1] have a large similarity because you focus on the copy(right)/memorization of MLLM and [1] focus on the diffusion models. However, no citation or comparison is given.\n\n[1] Somepalli, Gowthami, et al. \"Diffusion art or digital forgery? investigating data replication in diffusion models.\" Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. 2023.\n\n3. 8 pages should not be the excuse for limiting to videos rather than images. In fact, you also treat videos as a sequence of images, and there is indeed no fundamental difference. To conduct comprehensive research, you should include both videos and images."
+},
+{
+"review_id": "icml_YufVk7I6Ii_r0",
+"paper_id": "icml_YufVk7I6Ii",
+"review_text": "This paper aims to analyze the effect of attention masks, such as the causal mask, of the observed attention patterns. In particular, the authors suggest modeling the possible paths that the information can flow using attention as edges of a graph. By looking at this graph, they obtain certain bounds which they map to practical observations such as bias towards early tokens in the sequence. Furthermore, the paper looks into the effect of relative and rotary positional encodings on these bounds and show how these encodings can lead to different biases."
+},
+{
+"review_id": "icml_YufVk7I6Ii_r1",
+"paper_id": "icml_YufVk7I6Ii",
+"review_text": "This paper analyses position bias in transformers, both theoretically and experimentally.\nThe paper first proposes to analyse a transformer as a graph, with attention weights representing weighted-edges between two tokens\u2019 representations in adjacent transformer layers; an *attention flow* can then be computed between tokens $t$ and $t\u2019$ at layers $\\ell$ and $\\ell\u2019$, respectively, by summing the attention over all possible paths between them.\nThe paper then uses this graph-based framework to show how the attention flow changes as the depth of a transformers grows to infinity.\nThey consider models with autoregressive, sliding, and prefix attention masks. \nImportantly, they show that for these three models all attention flow converges to the first token position as the depth of a model grows.\nThey also consider models with no position embeddings, with ALiBi, and with ROPe.\nThey then experiment on a synthetic task, with results supporting their theoretical analysis.\n\n# Strengths\n\nThis paper studies an interesting phenomenon\u2014position bias in autoregressive language models\u2014providing new theoretical results justifying their existence.\n\nThis paper then supports this theoretical analysis with well designed experiments.\n\n# Weaknesses\n\nThe paper misses some critical literature in interpretability and analysis of language models, which could make analyses stronger if considered. In particular, the paper fails to cite Abnar et al. (2020), who first proposed the graph-theoretical analysis of transformers used in this paper (termed attention flow there). This framework has later been criticised/expanded by, e.g., Kobayashi et al. (2022), who point out that considering value-vector norms is important for more meaningful analyses involving attention flow. Further, discussing papers such as Jain et al. (2019) and Wiegreffe et al. (2019), and their relation to the analyses proposed here could significantly strengthen the paper.\n\nThe theoretical analysis ignores residual connections, which are integral to modern transformers. Residual connections can be interpreted as increasing the effect attention by one on diagonal entries, i.e.,: $A = \\widehat{A} + I$. Given this extra term, the condition necessary to prove Theorem 4.1 (i.e., $P_{ij} < 1- \\epsilon$) does not hold. So, do the theoretical analyses here only hold for transformers without residual connections? Furthermore, were residual connections used in experiments?\n\n* Jain et al. (2019). Attention is not Explanation. https://aclanthology.org/N19-1357.pdf \n* Wiegreffe et al. (2019). Attention is not not Explanation. https://aclanthology.org/D19-1002.pdf \n* Abnar et al. (2020). Quantifying Attention Flow in Transformers. https://aclanthology.org/2020.acl-main.385.pdf\n* Kobayashi et al. (2022). Attention is Not Only a Weight: Analyzing Transformers with Vector Norms. https://aclanthology.org/2020.emnlp-main.574.pdf"
+},
+{
+"review_id": "icml_YufVk7I6Ii_r2",
+"paper_id": "icml_YufVk7I6Ii",
+"review_text": "This paper presents a graph-theoretic framework to analyze how position bias emerges in transformer architectures. The authors mathematically model attention masks as directed graphs to understand how tokens interact based on their sequential positions across multiple layers of attention.\nThe authors support their findings with experiments that reproduce position biases observed in real-world LLMs, including phenomena like \"lost-in-the-middle\" and attention sinks. Their framework helps explain why increasing model depth amplifies positional biases, why some positions gain disproportionate attention, and how different masking approaches affect information flow.\n\nThe main claims of the paper are:\n- Causal masking inherently biases attention toward earlier positions in deep networks. This happens because tokens in deeper layers attend to increasingly contextualized representations of earlier tokens, amplifying their influence.\n- There's a nuanced interaction between causal masking and relative positional encodings (like decay masks and RoPE). While these encodings introduce distance-based decay within individual attention maps, their aggregate effect across multiple layers creates a trade-off between local decay effects and the cumulative importance of early sequence positions."
+},
+{
+"review_id": "icml_YufVk7I6Ii_r3",
+"paper_id": "icml_YufVk7I6Ii",
+"review_text": "This paper studies the \"position bias\" in transformers, that is, the bias of the model to focus on certain regions of the input. The authors investigate how causal mask and positional encoding impact this position bias. To that end, they leverage a graph-theoretic formalization of the attention module to study the position bias. In particular, the authors unify under their study this bias and its empirical observations shown in prior works. The authors show that causal masking biases attention towards earlier positions and conduct this analysis for several types of masking used in practice. The authors also study how positional encoding and masking interact and provide insights into how to design them to trade-off between local and global context. Finally, the authors validate their findings experimentally in a controlled setting."
+},
+{
+"review_id": "icml_v2G9HML7ep_r0",
+"paper_id": "icml_v2G9HML7ep",
+"review_text": "Authors propose a novel self-supervised time series representation pre-training framework that integrates two popular generative paradigms to enhance representation transferability. Specifically, they employ a causal Transformer encoder for autoregressive prediction while incorporating a denoising diffusion process to recover fine-grained local patterns. Extensive experiments on time series classification and forecasting tasks validate the effectiveness of the proposed approach."
+},
+{
+"review_id": "icml_v2G9HML7ep_r1",
+"paper_id": "icml_v2G9HML7ep",
+"review_text": "The paper introduces TimeDART, a novel self-supervised learning framework for time series analysis that integrates autoregressive modeling with diffusion-based denoising. The framework aims to address the limitations of existing methods, such as masked autoencoders, contrastive learning, and autoregressive approaches, particularly their susceptibility to noise. TimeDART employs a causal Transformer encoder and a cross-attention-based denoising mechanism to capture both global dynamics and local patterns in time series data. The paper demonstrates the effectiveness of TimeDART through extensive experiments, showing improvements in both time series prediction and classification tasks.\n\n## update after rebuttal\nThe authors have actively responded to reviewers' comments. Though some of my concern about the utilization of diffusion model still remains, to some extent, they've empirically illustrated that it worked from the view of self-supervised learning."
+},
+{
+"review_id": "icml_v2G9HML7ep_r2",
+"paper_id": "icml_v2G9HML7ep",
+"review_text": "This paper presents a self-supervised time series representation learning method. It combines autoregressive modeling with the denoising diffusion process. Key ideas involve normalizing and patch-embedding data, using a causal Transformer encoder for long-term evolution and a patch-level diffusion/denoising mechanism for local patterns. Results show TimeDART outperforms baselines in forecasting and classification tasks, both in-domain and cross-domain."
+},
+{
+"review_id": "icml_v2G9HML7ep_r3",
+"paper_id": "icml_v2G9HML7ep",
+"review_text": "This paper introduces TimeDART, a self-supervised time series representation learning framework that integrates autoregressive modeling with a denoising diffusion process. The method consists of a causal Transformer encoder with a patch-based embedding strategy to capture global trends, while a denoising diffusion process refines fine-grained local patterns. The authors claim that this combination improves transferability and representation quality for downstream tasks. Empirical evaluations on nine publicly available datasets demonstrate the effectiveness of TimeDART, outperforming various state-of-the-art baselines in time series forecasting and classification."
+},
+{
+"review_id": "icml_lioemOcq3H_r0",
+"paper_id": "icml_lioemOcq3H",
+"review_text": "The paper introduces FeatSharp, a method which builds upon FeatUp (specifically its JBU upsampling variant) [1],  by incorporating higher-resolution tiled views and combining them with the upsampled feature maps from FeatUp. Additionally, FeatSharp includes a de-biasing module designed to remove fixed-pattern noise from the frozen vision encoder.\n\nThe authors find that their method out-performs FeatUp-JBU across a number of pretrained vision encoders (e.g., CLIP, DINOv2, SigLIP, SAM, RadioV2.5) for ADE20K segmentation. Additionally, they utilise their method to improve the training of a pre-existing method, AM-Radio (Multi-teacher distillation method), across a number of datasets/tasks.\n\n[1] Fu, S., Hamilton, M., Brandt, L. E., Feldmann, A., Zhang,\nZ., and Freeman, W. T. Featup: A model-agnostic\nframework for features at any resolution. In The Twelfth\nInternational Conference on Learning Representations,\n2024. URL https://openreview.net/forum?\nid=GkJiNn2QDF.\n\n[2] Ranzinger, M., Heinrich, G., Kautz, J., and Molchanov, P. Am-radio: Agglomerative vision foundation model reduce all domains into one. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), pp. 12490\u201312500, June 2024b."
+},
+{
+"review_id": "icml_lioemOcq3H_r1",
+"paper_id": "icml_lioemOcq3H",
+"review_text": "The paper discusses improving vision model features by refining their sharpness and resolution. It builds on the JBU algorithm to provide more detailed feature maps and studies how to clean features effectively using ViT-Denoiser's methods. The paper also enhances the AM-RADIO framework, achieving better benchmark performance and feature adaptation."
+},
+{
+"review_id": "icml_lioemOcq3H_r2",
+"paper_id": "icml_lioemOcq3H",
+"review_text": "The authors proposed a novel method for efficiently upsampling feature maps of low-resolution ViTs (CLIP) to capture fine-grained details typically lost due to limited resolution. Built upon FeatUp, their method adds de-biasing and tiles fusion modules to incorporate detailed tile features, resulting in higher levels of detail, with extensive experiments demonstrating the effectiveness."
+},
+{
+"review_id": "icml_lioemOcq3H_r3",
+"paper_id": "icml_lioemOcq3H",
+"review_text": "This paper introduces a novel upsampling method designed to address the low-resolution feature map limitations of vision encoders, particularly Vision Transformers. The proposed approach builds upon FeatUp, the current state-of-the-art upsampler, by integrating FeatUp\u2019s Joint Bilateral Upsampling (JBU) with a mosaic of tiles, followed by processing through a single local attention block. The authors demonstrate the effectiveness of this method across various dense prediction tasks, including semantic segmentation, object detection, depth estimation, and surface normal prediction. Additionally, the study highlights how incorporating FeatSharp within RADIO training enables low-resolution-only teacher models to generate high-resolution distillation targets, further enhancing model performance."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "icml_xYtLsWiUli_r0",
+"paper_id": "icml_xYtLsWiUli",
+"review_text": "This paper presents GRIMOIRE, a novel text-guided generative model for scalable vector graphics (SVG). The model consists of two main components: a Visual Shape Quantizer (VSQ), which learns to reconstruct raster images as vector shapes through a discrete codebook; and an Auto-Regressive Transformer (ART), which models the joint distribution over shape tokens, positions, and textual descriptions to generate SVGs from natural language prompts. Unlike prior approaches requiring direct supervision from SVG data, GRIMOIRE is trained only with raster image supervision, enabling it to scale to larger datasets. The authors evaluate their method on tasks such as closed-shape reconstruction (MNIST, Emoji) and stroke-based generation (icons, fonts), demonstrating improved flexibility over SVG-supervised methods and competitive generative quality against image-supervised baselines."
+},
+{
+"review_id": "icml_xYtLsWiUli_r1",
+"paper_id": "icml_xYtLsWiUli",
+"review_text": "The authors propose a SVG generative model GRIMOIRE which can be conditioned on a text prompt or a partially completed SVG. The primary innovation in the paper is training a VQ-VAE which tokenizes patches of rasterized SVGs into discrete tokens which crucially can be reconstructed into SVG primitives (primarily bezier curves). This tokenizer can be trained end-to-end on purely raster images by a clever use of a differentiable renderer (DiffVG) in the VQ-VAE decoder which enables backpropagting through the L2 pixel space reconstruction loss into and through the now differentiable continuous SVG parameters. Once such a tokenizer has been trained the authors use it to tokenize MNIST, Fonts and FIGR-8 dataset and train a standard autoregressive transformer using a next token prediction loss to create an auto-regressive generative model for SVGs. The primary baseline for comparison is Im2Vec."
+},
+{
+"review_id": "icml_xYtLsWiUli_r2",
+"paper_id": "icml_xYtLsWiUli",
+"review_text": "This paper introduces a text-guided SVG generation model, i.e., GRIMOIRE, using only raster image supervision. The SVG generation task is formulated as the prediction of a series of individual shapes and positions. The experiments demonstrate the effectiveness of the proposed method.\n\n## update after rebuttal\n\nI appreciate the authors' clarifications. Most of my concerns have been addressed by the rebuttal. I would lean to keep my score by involving the additional evaluations and discussions in the revised version."
+},
+{
+"review_id": "icml_xYtLsWiUli_r3",
+"paper_id": "icml_xYtLsWiUli",
+"review_text": "This work focuses on SVG generation. Its model consists of two modules: a visual shape quantizer learns to map raster images onto a discrete codebook by reconstructing them as vector shapes, and an auto-regressive Transformer model jointly learns the distribution over shape tokens, positions and textual descriptions."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "icml_NE9ajrddxX_r0",
+"paper_id": "icml_NE9ajrddxX",
+"review_text": "The paper studies the problem of computing Nash equilibria for discounted tabular Mean Field Games, and proposes a trust region policy optimization framework to learn stable and optimal policies. It provides a theoretical analysis of the framework, showing theoretical guarantees of its convergence. \n\nThe paper considers the mean-field entropy-regularized objective, which is well-studied in the literature, and uses a TRPO framework to retain the standard $\\tilde{O}(1/L)$ error bounds in the trajectory estimates, but without assumptions of uniformly bounded away trajectories or continuous reward functions.\n\n## update after rebuttal\n\nThe authors have addressed all my concerns involving the Lipschitz continuity assumption: I am particularly glad that they can show the validity of the theorems under the (even) weaker assumption of the Lipschitz constant bound of $|r|_\\infty$. Moreover, I am happy that the authors have addressed my concerns about assumptions 3 and 4, and I am excited that there is a way for them to incorporate some notion of mean-field sampling, which demonstrates a lot of promise for faster runtimes under the (continued) assumption of homogeneity of the agents."
+},
+{
+"review_id": "icml_NE9ajrddxX_r1",
+"paper_id": "icml_NE9ajrddxX",
+"review_text": "This paper investigates the finite-sample complexity of a TRPO-inspired method for Mean Field Games (MFGs). It is a game with anonymous agents whose number goes to infinity. A mean-field game is formulated through a mean-field MDP that consists of a population distributions over the state spaces and the reward and transition function are dependent on the population density.\n\nA mean-field Nash equilibrium is a population distribution over state that is invariant to transition and also, the policy achieves the maximum value of the MDP for the particular population distribution.\n\nThe authors use the TRPO policy update along an update between consecutive population distributions. They begin by analyzing their algorithm for the exact case and show exponential convergence to the optimal population distribution.\n\nThen, the authors demonstrate how their method converges when samples are used to approximate the policy gradients."
+},
+{
+"review_id": "icml_NE9ajrddxX_r2",
+"paper_id": "icml_NE9ajrddxX",
+"review_text": "The authors formulate algorithms for learning equilibria in MFGs. They provide high-probability guarantees and\nfinite sample complexity in the ergodic setting, with relaxed assumptions.\n\n## update after rebuttal\nI thank the authors for their response and additional experiments. The additional experiments and clarifications sound good to me."
+},
+{
+"review_id": "icml_NE9ajrddxX_r3",
+"paper_id": "icml_NE9ajrddxX",
+"review_text": "This paper extends the known concept of trust region policy optimization (TRPO) from the general reinforcement learning literature to the case of ergodic and entropy regularized mean field games. Besides the exact TRPO, the authors also state a stochastic, sample based version of TRPO and present theoretical results for both the exact and stochastic version."
+},
+{
+"review_id": "icml_hw1kGPcSZ5_r0",
+"paper_id": "icml_hw1kGPcSZ5",
+"review_text": "The authors study model personalization under user-level differential privacy in a shared representation framework for the federated learning setting. Specifically, there are $n$ users, and the data for user $i\\in[n]$ is generated using $y = x^Tw^\\star_i + \\zeta$ where $\\zeta$ is sub-gaussian noise and $w_i^\\star = U^\\star v_i^\\star$ for some shared representation $U^\\star\\in \\mathbb{R}^{d\\times k}$ where $k<<d$. This setting was popularized by works such as [this one](https://arxiv.org/pdf/2002.11684) studying representation learning for meta-learning and other applications. This representation learning model has been previously shown to be useful for understanding the effectiveness of [Federated averaging](https://arxiv.org/pdf/2205.13692) and proposing a new algorithm called [FedRep for personalized federated learning](https://arxiv.org/pdf/2102.07078). \n\nIn this paper, the authors propose a federated algorithm that extends the FedRep method to ensure user-level differential privacy while including a private initialization step. Their algorithm accommodates sub-Gaussian feature distributions, noisy labels, and heterogeneous user data. In comparison to the [most closely related work](https://proceedings.neurips.cc/paper/2021/hash/f8580959e35cb0934479bb007fb241c2-Abstract.html) on private model personalization this paper relaxes the gaussian data assumption and allows federated training (i.e., without exchanging raw data and only sharing privatized model updates). The authors also improve the utility guarantee provided by this prior work in a reasonable low data regime. Overall, the theory in the paper and one small toy experiment show that the new approach improves the balance between privacy and utility for linear regression and matches or exceeds earlier methods\u2019 performance.\n\nThe paper also addresses the binary classification setting with a margin-based loss. It uses a Johnson-Lindenstrauss transform to reduce dimensionality and obtain a margin-based risk bound that does not depend on the original feature dimension."
+},
+{
+"review_id": "icml_hw1kGPcSZ5_r2",
+"paper_id": "icml_hw1kGPcSZ5",
+"review_text": "The paper addresses the problem of model personalization under user-level differential privacy (DP) in the federated learning setting. The authors propose a novel private federated learning algorithm based on the FedRep framework, which learns a shared low-dimensional embedding and user-specific local models while ensuring DP. The main contributions include: (1) an efficient private federated algorithm that handles noisy labels and sub-Gaussian data distributions, (2) improved privacy-utility trade-offs compared to prior work, (3) a private initialization algorithm for the shared embedding, and (4) dimension-independent risk guarantees for binary classification using the Johnson-Lindenstrauss transform. The paper claims to improve the privacy error term by a factor of $\\tilde{O}(dk)$ in certain parameter regimes and extends the applicability to broader data distributions compared to prior work.\n\n## update after rebuttal\nThe authors have addressed two of my concerns, and I am generally satisfied with the rebuttal, so I have raised my score. While I raised my score, I remain somewhat unenthusiastic about the paper overall."
+},
+{
+"review_id": "icml_1jUXprrfcb_r0",
+"paper_id": "icml_1jUXprrfcb",
+"review_text": "The paper proposes RLEdit, a novel Reinforcement Learning based hypernetwork approach to edit Large Language Models for knowledge update after model completes training. It primarily aims to solve the challenge that hypernetwork based editing methods are efficient yet struggle more on large amount of edits. By using the dynamic environmental feedback in RL process, the model can better capture and edit based on the dynamics in the LLM. The work introduces Memory Backtracking Component and Regularization to Reward function in addition to the basic component, knowledge update and preservation objective. The authors show that RLEdit can outperform previous methods both in speed and performance when applied to different LLMs and data, especially when edits increase."
+},
+{
+"review_id": "icml_1jUXprrfcb_r1",
+"paper_id": "icml_1jUXprrfcb",
+"review_text": "The paper proposes a model editing method, named RLEdit, for lifelong editing that extends meta-learning methods to sequential editing tasks. RLEdit's hypernetwork is trained using reinforcement learning algorithms, effectively maintaining Effectiveness, Generalization, and Locality at the knowledge sequence level. Experiments demonstrate that RLEdit shows advantages in both editing success rate and efficiency."
+},
+{
+"review_id": "icml_1jUXprrfcb_r2",
+"paper_id": "icml_1jUXprrfcb",
+"review_text": "This paper introduces RLEdit, a method addressing long-term continuous LLM knowledge editing, known as lifelong editing. The authors apply reinforcement learning modeling to meta-learning knowledge editing approaches, proposing a hypernetwork training method specifically designed for lifelong editing tasks. They focus on addressing knowledge forgetting and conflicts in lifelong editing by  designing a reward function with memory backtracking to optimize hypernetwork performance on long sequence editing. Experiments demonstrate the method's effectiveness across various configurations while maintaining high efficiency."
+},
+{
+"review_id": "icml_esBoQFmD7v_r0",
+"paper_id": "icml_esBoQFmD7v",
+"review_text": "This paper investigates why in-context learning (ICL), a capability that emerges in transformer models without explicit training, sometimes disappears after extended training periods. The authors study this phenomenon using a simplified experimental setup with 2-layer attention-only transformers trained on a synthetic few-shot learning task based on Omniglot handwritten characters.\nThe research demonstrates that after ICL disappears, the model does not simply revert to traditional in-weights learning (IWL). Instead, it adopts what the authors term \"context-constrained in-weights learning\" (CIWL) - a hybrid strategy that requires the correct label to be present in the context but does not need the full exemplar-label pairing that ICL uses. This CIWL strategy is implemented through skip-trigram mechanisms in Layer 2 of the network.\n\nMost notably, the paper uncovers that ICL and CIWL simultaneously compete and cooperate within the model architecture, a dynamic the authors call \"strategy coopetition.\" While the two strategies compete in Layer 1 (where heads switch from attending to previous tokens for ICL to self-attention patterns for CIWL), they share critical subcircuits in Layer 2. This sharing explains why ICL emerges at all, despite not being asymptotically preferred by the model. The authors further develop a minimal mathematical model that reproduces these key dynamics. Their model captures how competition drives ICL's eventual replacement by CIWL, while cooperation enables ICL's initial emergence. Using insights from this model, they identify data conditions where ICL becomes persistent rather than transient - specifically, when context exemplars exactly match query exemplars."
+},
+{
+"review_id": "icml_esBoQFmD7v_r1",
+"paper_id": "icml_esBoQFmD7v",
+"review_text": "Architecture: 2-layer attention-only transformer (appendix has other models)\n\nDataset: Omniglot, augmented to 12k+ classes. The majority of the classes are used for training, but the remaining 184 classes are used for testing.\n\nTraining sequences are set up with a few shot learning favor and constructed using the exemplars from the training classes. Specifically, each training sequence consists of a context (which contains two exemplar-label pairs) and a query. Training sequences follow the \u201cbursty\u201d structure, requiring that at least one of the exemplars in the context always belongs to the same class as the query.\n\nTesting sequences are constructed using the exemplars from the test classes and they are crafted to evaluate various strategies including ICL, in weight learning (IWL), a new strategy CIWL, and a balance between ICL and CIWL named FLIP.\n\nThe main finding is that in the beginning of training, ICL and CIWL cooperate and ICL can emerge. At some point ICL disappears and CIWL comes to the forefront.\n\n## update after rebuttal\nI maintain my score and positive impression of the paper."
+},
+{
+"review_id": "icml_esBoQFmD7v_r2",
+"paper_id": "icml_esBoQFmD7v",
+"review_text": "This paper systematicallly studies transient dynamics of in-context learning (ICL) in transformers. In particular, the authors identify that after ICL disappears, a hybrid strategy between in-weights and in-context learning called \"context-constrained in-weights learning\" (CIWL) emerges, which competes with and eventually replaces ICL. Despite this competition, the two strategies share sub-circuits, leading to cooperative dynamics. The paper also proposes a minimal mathematical model to explain these interactions and highlights a setup where ICL remains persistent after long training times."
+},
+{
+"review_id": "icml_j07qnZjYIU_r0",
+"paper_id": "icml_j07qnZjYIU",
+"review_text": "This paper introduces Unbalanced Optimal Transport Map for Unpaired Point Cloud Completion (UOT-UPC), which is a novel point cloud completion approach that uses unpaired point clouds during training. Unlike previous approaches that have formulated the point cloud completion task as an optimal transport problem, the authors propose to instead formulate it as an unbalanced optimal transport problem to loosen the exact matching constraint in OT, which helps with training on unbalanced datasets. They train a Neural OT to learn a UOT map that transports incomplete point cloud to complete point cloud using InfoCD as the cost function. The authors evaluate their approach on different, real, synthetic, and hybrid datasets and show impressive performance compared to other models."
+}
+]

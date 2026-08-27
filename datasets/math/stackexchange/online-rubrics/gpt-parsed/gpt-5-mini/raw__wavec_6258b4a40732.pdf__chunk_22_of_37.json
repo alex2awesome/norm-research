@@ -1,0 +1,200 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 22,
+  "n_chunks": 37,
+  "chunk_chars": 39768,
+  "model": "gpt-5-mini",
+  "elapsed_s": 235.87104429099418,
+  "input_tokens": 12048,
+  "output_tokens": 6882,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, macro writers, and typesetting/TeX implementers (readers of the TeXbook)",
+    "subtask_short": "tex math mode rules",
+    "subtask_description": "Precise operational rules for how TeX builds and manipulates math-mode lists and how it recovers from certain errors; intended as a reference for writing and debugging TeX input and macros involving math mode and displays.",
+    "subtask_keywords": [
+      "tex",
+      "math_mode",
+      "typesetting",
+      "macro_programming",
+      "display_math"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Accent construction and spacefactor",
+        "description": "When an accent is put on a character, the accent is placed into an hbox that is raised or lowered and effectively superposed on the character by means of kerns so that the width of the accent does not influence the width of the resulting horizontal list; finally TeX sets \\spacefactor=1000.",
+        "guidance": "Explains how accents are constructed (via an hbox and kerns) and the resulting setting of spacefactor; useful when predicting spacing after accented items."
+      },
+      {
+        "name": "Italic correction kern for final character/ligature",
+        "description": "If the last item on the current list is a character or ligature, an explicit kern for its italic correction is appended.",
+        "guidance": "This automatic kerning affects spacing at the end of atoms and should be considered when manipulating the final items of lists."
+      },
+      {
+        "name": "Discretionary general texts must be restricted and fixed-width",
+        "description": "The three general texts of \\discretionary{general text}{general text}{general text} are processed in restricted horizontal mode and should contain only fixed-width things; each discretionary general text's horizontal list must consist only of characters, ligatures, kerns, boxes, and rules (no glue or penalty items, etc.).",
+        "guidance": "The command appends a discretionary item to the current list; the space factor is not changed. The third general text (in math-mode usage) must produce an empty list (see duplicate constraint later). See Chapter 14 and Appendix H for related details."
+      },
+      {
+        "name": "Discretionary hyphen behavior",
+        "description": "The discretionary hyphen command (\\-) is defined (see Appendix H); usually equivalent to '\\\\discretionary{-}{}{}' so the '-' is interpreted as a hyphen, not as a minus sign.",
+        "guidance": "Useful to know when inserting discretionary hyphens in math/text contexts to ensure proper glyph meaning."
+      },
+      {
+        "name": "Math-shift ($) entry and exit rules",
+        "description": "A math-shift character causes TeX to enter math or display math mode as follows: TeX looks at the following token without expanding it; if that token is a $ and TeX is currently in unrestricted horizontal mode, TeX breaks the current paragraph, returns to vertical mode, computes parameters (\\prevgraf, \\displaywidth, \\predisplaysize), enters a new group, inserts \\everydisplay tokens and processes display math ('$$...$$'); otherwise TeX pushes the looked-at token back, enters a new group, inserts \\everymath tokens, and processes inline math ('$...$'); in either case the math material is converted as described and \\spacefactor is set to 1000. One consequence: '$$' in restricted horizontal mode yields an empty math formula.",
+        "guidance": "This specifies the exact branching behavior for '$' vs '$$' and the bookkeeping TeX performs (grouping, token insertion, page builder, etc.)."
+      },
+      {
+        "name": "Primitive commands in horizontal/math modes trigger errors with recovery attempts",
+        "description": "If any other primitive command of TeX occurs in horizontal mode (or math mode) an error message is given, and TeX will try to recover reasonably; for example, if a superscript/subscript symbol or other inherently mathematical command appears in horizontal mode, TeX will try to insert a '$' just before the offending token to enter math mode.",
+        "guidance": "Indicates TeX's automatic insertion behavior to try to keep processing; useful to anticipate inserted tokens when debugging."
+      },
+      {
+        "name": "Math-list atom structure and atom types",
+        "description": "Math lists contain three-pronged 'atoms' (see Chapter 17). Atoms come in thirteen flavors: Ord, Op, Bin, Rel, Open, Close, Punct, Inner, Over, Under, Acc, Rad, and Vcent. Each atom contains three fields called its nucleus, superscript, and subscript; each field is either empty or filled with a math symbol, a box, or a subsidiary math list.",
+        "guidance": "Fundamental data model for math-mode material; all subsequent math-mode behavior builds on these atom/field concepts."
+      },
+      {
+        "name": "Math symbol numeric encoding and \\fam substitution",
+        "description": "Every hmath symbol specifies a 15-bit number representable as 4096\u00b7c + 256\u00b7f + a with 0\u2264c<8, 0\u2264f<16, 0\u2264a<256. If c=7 TeX changes c to 0 and, if current \\fam is between 0 and 15, replaces f by \\fam. TeX initializes \\fam by implicitly doing '\\\\fam=-1' at the beginning of \\everymath and \\everydisplay.",
+        "guidance": "Explains how class (c), family (f), and position (a) are derived from a mathchar and when \\fam substitution occurs; relevant for defining and diagnosing math-character behavior."
+      },
+      {
+        "name": "hmath field grouping and brace removal rule",
+        "description": "A hmath field that is a math symbol places the f and a numbers directly into the atomic field; otherwise a hmath field begins with '{', causing TeX to start a new group and math list. When the group ends the resulting math list goes into the atomic field. If that math list is simply a single Ord atom without superscripts/subscripts, or an Acc whose nucleus is an Ord, the enclosing braces are effectively removed.",
+        "guidance": "Specifies when explicit braces create sublists vs when braces are elided; important for macro authors controlling grouping and atom creation."
+      },
+      {
+        "name": "Delimiter (\\delimiter and \\delcode) interpretation",
+        "description": "A hdelim defines both a 'small character' a in family f and a 'large character' b in family g (0\u2264a,b\u2264255, 0\u2264f,g\u226415). If the hdelim is given as a 27-bit number interpret it as c\u00b72^24 + f\u00b72^20 + a\u00b72^12 + g\u00b72^8 + b (ignoring c for some purposes). Otherwise use the 24-bit \\delcode value interpreted as f\u00b72^20 + a\u00b72^12 + g\u00b72^8 + b.",
+        "guidance": "Gives the bitfield decomposition used to select delimiter pieces for variable-size delimiters (see Appendix G)."
+      },
+      {
+        "name": "Glue and mathematical skip commands append to math lists",
+        "description": "Commands \\hskip, \\hfil, \\hfill, \\hss, \\hfilneg, and \\mskip append glue items to the current math list. Leaders with hbox or rule and 'mathematical skip' append glue items as well.",
+        "guidance": "Glue in math lists behaves analogously to glue elsewhere but must be used with awareness that spaces are otherwise ignored in math mode."
+      },
+      {
+        "name": "\\nonscript behavior",
+        "description": "\\nonscript appends a special glue item of width zero; when that \\nonscript is typeset in scriptstyle or scriptscriptstyle it will cancel the following glue item on the list (if that following item is glue).",
+        "guidance": "Allows fine control of glue that should vanish in superscript/subscript contexts."
+      },
+      {
+        "name": "\\noboundary has no effect in math modes",
+        "description": "\\noboundary is redundant and therefore has no effect in math modes; boundary ligatures are automatically disabled in math modes.",
+        "guidance": "Macro writers need not use \\noboundary inside math-mode constructs."
+      },
+      {
+        "name": "Spaces and control-space in math modes",
+        "description": "Spaces have no effect in math modes. A control-space command (\\ ) appends glue to the current list using the same amount that a hspace token inserts in horizontal mode when the space factor is 1000.",
+        "guidance": "Explains both the general absence of plain spaces and how to insert explicit interstitial glue when needed in math mode."
+      },
+      {
+        "name": "Boxes become Ord atoms (or Vcent) in math lists",
+        "description": "An \\hbox is constructed; if the result is nonvoid a new Ord atom is appended to the current math list with the box as its nucleus. \\raise/\\lower of an hbox act similarly (the box is shifted). \\vcenter forms a vbox and appends a Vcent atom to the math list with that box as nucleus.",
+        "guidance": "Key to embedding boxed material inside math atoms; note the difference between ordinary boxes and vcentered boxes (Vcent atom)."
+      },
+      {
+        "name": "Vertical rule in math list",
+        "description": "A vertical rule (hvertical rule) is appended to the current list (not as an atom).",
+        "guidance": "Rules are list items distinct from atoms; they have their own placement semantics."
+      },
+      {
+        "name": "\\halign restricted to display math mode and empty list",
+        "description": "\\halign{alignment material} is allowed only in display math mode and only when the current math list is empty. The alignment is carried out as in the enclosing vertical mode but shifted right by \\displayindent; TeX inserts \\abovedisplayskip and \\belowdisplayskip before and after the result. The closing '}' may be followed by optional hassignment commands other than \\setbox, after which '$$' must conclude the display.",
+        "guidance": "Use \\halign only inside displays and follow the exact closing/assignment rules; alignment behaves like vertical alignments but with display-specific shifting and glue."
+      },
+      {
+        "name": "\\indent and \\noindent in math mode",
+        "description": "\\indent appends an empty box of width \\parindent as the nucleus of a new Ord atom; \\noindent has no effect in math modes.",
+        "guidance": "Indentation primitives have limited/changed meanings inside math lists."
+      },
+      {
+        "name": "Explicit hmath-symbol-driven atom creation",
+        "description": "A math symbol (hmath symbol) determines values c,f,a and TeX appends an atom of type Ord/Op/Bin/Rel/Open/Close/Punct according as c=0..6. The nucleus of this atom is the math symbol defined by f and a.",
+        "guidance": "Shows how class codes in the mathchar determine the atom type placed into the list."
+      },
+      {
+        "name": "Explicit hmath-atom commands",
+        "description": "Commands \\mathord, \\mathop, \\mathbin, \\mathrel, \\mathopen, \\mathclose, \\mathpunct, \\mathinner, \\underline, \\overline cause TeX to process the following math field and then append a new atom of the specified type whose nucleus contains that field.",
+        "guidance": "These primitives force the atom type of the subsequently processed field; essential for adjusting parsing/classification of subexpressions."
+      },
+      {
+        "name": "\\mathaccent semantics",
+        "description": "\\mathaccent <15-bit number> <math field>: TeX converts the 15-bit number into c,f,a, processes the math field, and appends an Acc atom whose nucleus is the processed field; the accent character in the atom contains (a,f).",
+        "guidance": "Describes how accents are encoded into Acc atoms and which character/family pair is used as the accent glyph."
+      },
+      {
+        "name": "\\radical semantics",
+        "description": "\\radical <27-bit number> <math field>: TeX converts the 27-bit number into a,f,b,g as with a delimiter, processes the math field, and appends a Rad atom whose nucleus is the processed field and whose delimiter field contains (a,f) and (b,g).",
+        "guidance": "Used for radicals: both small/large delimiter codes are stored for stretchy radical construction."
+      },
+      {
+        "name": "Superscript/subscript attachment rules",
+        "description": "A superscript (category~7) or subscript (category~8) command: if the current list does not end with an atom, TeX appends a new Ord atom with all fields empty so the list ends with an atom. The superscript/subscript field of that atom (which must be empty) is then made nonempty by setting it to the result of the specified math field.",
+        "guidance": "This guarantees that every explicit superscript/subscript attaches to an atom; it explains why stray ^/_ can create implicit empty bases."
+      },
+      {
+        "name": "Limits placement modifiers apply only to Op atoms",
+        "description": "\\displaylimits, \\limits, and \\nolimits are allowed only if the current list ends with an Op atom. They modify a special field in that Op atom specifying conventions for limits placement; the normal value is \\displaylimits.",
+        "guidance": "These commands control whether limits are placed above/below (display) or to the side (inline) for operators."
+      },
+      {
+        "name": "Zero-width kern (\\/) adds italic correction",
+        "description": "\\/ appends a kern of width zero to the current list; this has the effect of adding the italic correction to the previous character if the italic correction would not normally have been added.",
+        "guidance": "Handy to force italic correction in tight sequences where it would otherwise be omitted."
+      },
+      {
+        "name": "\\discretionary in math mode requires empty third text",
+        "description": "In math mode \\discretionary{general text}{general text}{general text} behaves as in horizontal mode except that the third general text must produce an empty list (i.e., the post-break text must be empty).",
+        "guidance": "This restriction ensures that discretionary breaks inside math don't insert arbitrary trailing math lists."
+      },
+      {
+        "name": "\\mathchoice records four style-dependent lists",
+        "description": "\\mathchoice{<list1>}{<list2>}{<list3>}{<list4>} records four math lists (for display, text, script, scriptscript styles) in a choice item which is appended to the current list.",
+        "guidance": "Allows different expansions depending on the math style in effect; essential for macros that must behave across styles."
+      },
+      {
+        "name": "Style-change items in math lists",
+        "description": "\\displaystyle, \\textstyle, \\scriptstyle, \\scriptscriptstyle append a style-change item corresponding to the specified style to the current math list.",
+        "guidance": "Use to force a particular math style locally inside a formula."
+      },
+      {
+        "name": "\\left...\\right grouping and Inner atoms",
+        "description": "\\left <delim> <math material> \\right <delim> begins a group; TeX starts an internal math list that begins with a left boundary item containing the first delimiter and ends (on \\right) with a right boundary item containing the second delimiter. TeX then appends an Inner atom to the outer list whose nucleus is the internal math list.",
+        "guidance": "Describes the grouping and boundary items that allow scalable delimiters to surround a subformula."
+      },
+      {
+        "name": "Generalized-fraction handling (\\over, \\atop, etc.)",
+        "description": "When TeX sees a generalized fraction command (\\over, \\atop, \\above, \\overwithdelims, etc.) it takes the entire current list and puts it into the numerator field of a generalized-fraction item, leaves the denominator temporarily empty, sets delimiter fields, and saves this item in a special place for the current math level. There must be no other generalized-fraction item there. Later, when the math level completes, TeX moves the current list into the denominator and replaces the whole list by that single generalized-fraction item. Special case: if the current list began with \\left and will end with \\right, boundary items are extracted and the final list consists of three items: left boundary, generalized fraction, right boundary.",
+        "guidance": "Specifies both illegal constructs (e.g., nested \\over at same level) and the final composition rules for fractions inside grouped delimiters."
+      },
+      {
+        "name": "\\eqno and \\leqno only in display math; equation-number box creation",
+        "description": "\\eqno{math material}$ or \\leqno{math material}$ are allowed only in display math mode. Upon seeing them TeX enters a new group, inserts \\everymath tokens, enters non-display math mode to form a math list for the equation number, converts it to a horizontal list and puts the result into a box to be used as the equation number of the current display; the closing $ token will be put back into the input and will terminate the display.",
+        "guidance": "Explains how right/left equation numbers are assembled and boxed separately from the main display."
+      },
+      {
+        "name": "Final math-shift behavior and optional trailing space",
+        "description": "When the math-shift token that terminates a display is read, the math mode level ends, the group ends, TeX converts the math list into a horizontal list (see Appendix G), and TeX scans one optional space after completing a displayed formula (typically the implicit space at end of input line).",
+        "guidance": "Important for understanding trailing input token handling after displays."
+      },
+      {
+        "name": "\\unhbox and \\unhcopy with empty registers in math mode",
+        "description": "\\unhbox<8-bit number> and \\unhcopy<8-bit number>: the specified box register must be void (empty) in this context; nothing happens otherwise.",
+        "guidance": "Indicates a restriction/expectation on those primitives when encountered inside the described math processing cases."
+      },
+      {
+        "name": "General error handling in math mode",
+        "description": "If any other primitive command of TeX occurs in math mode, TeX will give an error message and try to recover sensibly (e.g., inserting '$' before the offending token to exit math mode). If a totally misplaced token like \\endcsname, \\omit, or # appears in math mode, TeX reports the error and ignores the token.",
+        "guidance": "Tells macro writers and debuggers what to expect when illegal tokens appear and how TeX attempts to proceed."
+      }
+    ]
+  }
+}

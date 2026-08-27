@@ -1,0 +1,908 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" class="no-js">
+    <head>
+        
+            <base href="https://consult.gov.scot/"/>
+        
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Find and participate in consultations run by The Scottish Government">
+        
+        
+        <title>
+            Scottish Government consultations
+            
+            - Citizen Space
+        </title>
+        
+        <link rel="stylesheet" href="/static_frontend/vendor/lato-2.015/fonts.css">
+        <link type="text/css" href="/static_frontend/vendor/dlb-public-ui/css/bootstrap.css" rel="stylesheet">
+        
+        <link type="text/css" href="https://consult.gov.scot/static_frontend/vendor/dlb-public-ui/css/dlb-public-ui-compiled.css" rel="stylesheet">
+        <link type="text/css" href="https://consult.gov.scot/static_frontend/css/citizenspace.css" rel="stylesheet">
+
+        
+
+        <!--Font Awesome-->
+        <link type="text/css" href="/static_frontend/vendor/dlb-public-ui/libraries/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <!--/Font Awesome-->
+
+        
+        
+
+        <!--jQuery -->
+        <script type="text/javascript" src="/static_frontend/vendor/dlb-public-ui/libraries/jquery/jquery.min.js"></script>
+        <!--/jQuery -->
+        <script type="text/javascript" src="/static_frontend/js/fluid-resize.js?version=8.14.0"></script>
+        
+        <script type="text/javascript" src="/static_frontend/js/tr-safe-embed.js?version=8.14.0"></script>
+        <script type="text/javascript" src="/static_frontend/js/text-truncate.js?version=8.14.0"></script>
+        <script type="text/javascript" src="/static_frontend/js/tr-pdf.js?version=8.14.0"></script>
+        <script type="text/javascript" src="/static_frontend/js/typeahead/typeahead.bundle.min.js?version=8.14.0"></script>
+        
+        
+        
+            <link rel="stylesheet" href="/static_frontend/js/ol/ol.css?version=8.14.0" type="text/css">
+            <script src="/static_frontend/js/ol/ol.js?version=8.14.0"></script>
+            <script src="/static_frontend/js/proj4js/proj4.js?version=8.14.0"></script>
+            <script></script>
+            <script type="text/javascript" src="/static_frontend/js/cs-mapping/mapping.js?version=8.14.0"></script>
+            <script type="text/javascript" src="/static_frontend/js/cs-mapping/styles.js?version=8.14.0"></script>
+            <script type="text/javascript" src="/static_frontend/js/cs-mapping/providers.js?version=8.14.0"></script>
+            <script type="text/javascript" src="/static_frontend/js/cs-mapping/modes.js?version=8.14.0"></script>
+            <script type="text/javascript" src="/static_frontend/js/cs-mapping/components.js?version=8.14.0"></script>
+
+            
+            <script>
+                citizenspace.mapping.utils.empty_popup_text = "No information to display";
+            </script>
+        
+
+        <!--
+            Part of the Bootstrap 5 migration involves prefixing Bootstrap JS attributes with bs-
+            This has been done in our codebase, but copy/pasted content such as fact banks may still have old attributes.
+            Shim these attributes to allow these to remain working.
+        -->
+        <script>
+            const bootstrapEventShim = function() {
+                document.querySelectorAll('[data-toggle]').forEach((el) => {
+                    let attrVal = el.dataset.toggle;
+                    el.dataset.bsToggle = attrVal;
+                });
+                document.querySelectorAll('[data-target]').forEach((el) => {
+                    let attrVal = el.dataset.target;
+                    el.dataset.bsTarget = attrVal;
+                });
+            }
+            document.addEventListener("DOMContentLoaded", bootstrapEventShim);
+        </script>
+
+         <!-- Bootstrap JS Components -->
+        <script src="/static_frontend/vendor/dlb-public-ui/libraries/bootstrap-5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+        
+
+        <!-- Page-specific CSS and JS can go here -->
+        
+
+        
+            
+        
+
+        <!-- Remove no-js class if scripts are enabled -->
+        <script>
+            document.documentElement.classList.remove('no-js')
+        </script>
+
+        <!-- Ensure collapsible content is displayed and misleading links are hidden if JS is disabled -->
+        <noscript>
+            <style>
+                .collapse {
+                    display: block;
+                }
+
+                .show-when-no-js {
+                    display:block;
+                }
+
+                .hide-when-no-js {
+                    display:none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+
+    <body
+          data-site-root="https://consult.gov.scot">
+        <div id="skip">
+            <a href="https://consult.gov.scot/#page-content">Skip to Main Content</a>
+        </div>
+        
+
+<script>
+
+    jQuery(document).ready(function() {
+        
+
+        var options = {};
+        // used to disable the go button when the selected page is the current page
+        var cur_page = jQuery("#preview-navigation-page-select").val()
+
+        jQuery("#preview-navigation-page-select").change(function() {
+            var page = jQuery(this).val();
+            var button = jQuery("#preview-navigation button");
+            if (page != "" && page != cur_page) {
+                button.prop('disabled',false);
+            } else {
+                button.prop('disabled','disabled');
+            }
+        });
+
+        jQuery("#preview-navigation button").click(function(event) {
+            var page = jQuery("#preview-navigation-page-select").val();
+            var consultation_root = jQuery("#preview-navigation").data("consultation-root");
+            var survey_root = jQuery("#preview-navigation").data("survey-root");
+            var cookie_path = jQuery("#preview-navigation").data("cookie-path");
+
+            function set_state(state) {
+                document.cookie="preview_state="+state+";path="+cookie_path+";";
+            }
+
+            set_state("open");
+            if (page === "_hub") {
+                window.location = survey_root;
+            } else if (page == "_overview_open") {
+                window.location = consultation_root;
+            } else if (page == "_overview_closed") {
+                set_state("closed");
+                window.location = consultation_root;
+            } else if (page == "_overview_forthcoming") {
+                set_state("forthcoming");
+                window.location = consultation_root;
+            } else if (page == "_response_submitted") {
+                window.location = survey_root + "confirm_submit_thankyou";
+            } else if (page == "_published_responses") {
+                set_state("closed");
+                window.location = survey_root + "published_select_respondent";
+            } else if (page == "") {
+                // No-op, shouldn't get here (hah..).
+            } else {
+                window.location = survey_root + page;
+            }
+        });
+
+    });
+</script>
+
+        <div id="global-wrapper">
+
+            
+
+            <header id="global-nav" class="navbar navbar-default navbar-expand-md navbar-static-top dss-navbar">
+                <div class="container-fluid">
+                    <div class="row flex-grow-1 py-2 pb-md-0 pt-lg-1">
+                        <div class="mb-md-2 py-lg-1 col-md-8 ">
+                            <div class="navbar-header d-flex justify-content-between">
+                                <div id="global-nav-main-heading">
+                                    
+                                        <a id="global-nav-site-title" href="https://www.gov.scot/">
+                                            <img src="https://consult.gov.scot/os-custom-logos/sg_dual_language_linear_rgb.png"
+                                                alt="The Scottish Government" class="global-nav-logo ms-3 ms-md-0" />
+                                        </a>
+                                    
+                                </div>
+                                <button class="navbar-toggler d-md-none align-self-center"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#global-navbar-collapse"
+                                    aria-expanded="false"
+                                    aria-controls="global-navbar-collapse">
+                                    <span class="fa fa-caret-down"></span>
+                                    <span>Menu</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col align-content-center d-flex align-items-center">
+                            <div id="cs-global-search-container-md" class="d-none d-md-block flex-grow-1">
+                                <!-- Javascript puts the search form here for sm viewports -->
+                                <form id="cs-global-search" action="https://consult.gov.scot/consultation_finder/" method="GET">
+                                    
+                                    <div role="search">
+                                        
+                                        <label for="cs-global-search-input" class="visually-hidden">Search</label>
+                                        <div class="input-group">
+                                            <input class="form-control" size="27" id="cs-global-search-input" type="text" name="keyword" placeholder="Search"/>
+                                            <button class="btn btn-primary" aria-label="Search" id="cs-global-search-button">
+                                                <span class="fa fa-search"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            
+                        </div>
+                        
+                        <div class="w-100"></div>
+                        <div>
+                            <nav class="collapse navbar-collapse navbar-left px-3 px-md-0"
+                                id="global-navbar-collapse"
+                                aria-label="primary">
+
+                                <div id="global-navbar-collapse-inner" class="py-2">
+
+                                    <div id="cs-global-search-container-xs" class="d-md-none">
+                                        <!-- Javascript puts the search form here for xs viewports -->
+                                    </div>
+                                    
+                                    <ul class="cs-navbar-nav-list">
+                                        <li class="cs-navbar-nav-list-item">
+    <a class="cs-navbar-nav-link" href="/">
+        <span class="cs-navbar-nav-link-text">Home</span>
+    </a>
+</li>
+<li class="cs-navbar-nav-list-item">
+    <a class="cs-navbar-nav-link" href="/consultation_finder/">
+        <span class="cs-navbar-nav-link-text">Find Consultations</span>
+    </a>
+</li>
+<li class="cs-navbar-nav-list-item">
+    <a class="cs-navbar-nav-link" href="/we_asked_you_said/">
+        <span class="cs-navbar-nav-link-text">We Asked, You Said, We Did</span>
+    </a>
+</li>
+
+                                    </ul>
+                                    
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main id="page-content-wrapper">
+                <div id="page-content" tabindex="-1">
+                    <div id="cs-page-hub_config">
+        <div class="cs-page-component-group " style="">
+            
+                <section class="dss-rhino cs-page-component-container cs-banner-container" style="">
+    <div class="container-fluid">
+        <div class="cs-page-component cs-html-component">
+        
+
+        <div class="row tiny-gutters cs-html-component-two-columns">
+            <div class="col-md-6">
+                <div class="cs-banner-inner cs-banner-inner-semi-transparent cs-html-component-left-column">
+                    <h1>Scottish Government consultations</h1>
+                    <p dir="auto">&#160;</p>
+
+<p dir="auto">Find and take part in consultations that interest or impact you. You can also view published responses and analysis.</p>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div>
+                        <div class="cs-banner-inner cs-html-component-right-column" style="">
+                            <h2 style="margin-top:0; font-size: 21.3px; line-height: 29.2875px;">Find consultations</h2>
+                            <p><a href="https://consult.gov.scot/advanced_consultation_finder/">Search for consultations <span class="fa fa-chevron-right icon-space-left"></span></a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="cs-banner-inner cs-html-component-right-column" style="margin-top:2px">
+                            <h2 style="margin-top:0; font-size: 21.3px; line-height: 29.2875px;">Stay updated</h2>
+                            <p><a href="https://consult.gov.scot/about/">Join our mailing list <span class="fa fa-chevron-right icon-space-left"></span></a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+    </div>
+</section>
+
+
+            
+        </div>
+        <div class="cs-page-component-group " style="">
+            
+                
+
+            
+                <section class="dss-rhino cs-page-component-container dss-rhino-2021-warm-light-grey" style="">
+    <div class="container-fluid">
+        <div class="cs-page-component cs-search-results-component-gallery cs-search-results-component-gallery1">
+    <div class="cs-page-component-preamble">
+        <h2 class="cs-page-component-title cs-page-component-contrast" style="margin-top:0">Open Consultations</h2>
+
+        
+    </div>
+
+    <div class="row" style="margin-top: -15px">
+        <div class="col-md-6 col-lg-4">
+            <div class="dss-card">
+
+                <h3 class="truncate">
+                    <a class="unstyled truncatable" href="https://consult.gov.scot/marine-scotland/future-catching-policy-selectivity-proposals/">
+                        Scotland’s Future Catching Policy: selectivity proposals 2026
+                    </a>
+                </h3>
+
+                <div class="horizontal-fill">
+                    <span class="cs-gallery-image"
+                        style="background-image:url(https://consult.gov.scot/marine-scotland/future-catching-policy-selectivity-proposals/user_uploads/consultation-thumbnails.png/%40%40images/image/preview);
+                                    min-height: 187px">
+                    </span>
+                </div>
+
+                <div>
+                    Closes 11 May 2026&nbsp;
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="dss-card">
+
+                <h3 class="truncate">
+                    <a class="unstyled truncatable" href="https://consult.gov.scot/justice/scottish-law-commission-report-section-53-title-co/">
+                        Scottish Law Commission’s Report on Section 53 of the Title Conditions (Scotland) Act 2003
+                    </a>
+                </h3>
+
+                <div class="horizontal-fill">
+                    <span class="cs-gallery-image"
+                        style="background-image:url(https://consult.gov.scot/justice/scottish-law-commission-report-section-53-title-co/user_uploads/consultation-thumbnails--1-.png/%40%40images/image/preview);
+                                    min-height: 187px">
+                    </span>
+                </div>
+
+                <div>
+                    Closes 15 May 2026&nbsp;
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="dss-card">
+
+                <h3 class="truncate">
+                    <a class="unstyled truncatable" href="https://consult.gov.scot/children-and-families/school-age-childcare-new-legal-definition/">
+                        School age childcare: a new legal definition
+                    </a>
+                </h3>
+
+                <div class="horizontal-fill">
+                    <span class="cs-gallery-image"
+                        style="background-image:url(https://consult.gov.scot/children-and-families/school-age-childcare-new-legal-definition/user_uploads/consultation-thumbnails--21-.png/%40%40images/image/preview);
+                                    min-height: 187px">
+                    </span>
+                </div>
+
+                <div>
+                    Closes 18 May 2026&nbsp;
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="dss-card">
+
+                <h3 class="truncate">
+                    <a class="unstyled truncatable" href="https://consult.gov.scot/dementia-and-unpaid-carers-unit/unpaid-carers-right-to-breaks-implementation/">
+                        Right to breaks for unpaid carers - implementation
+                    </a>
+                </h3>
+
+                <div class="horizontal-fill">
+                    <span class="cs-gallery-image"
+                        style="background-image:url(https://consult.gov.scot/dementia-and-unpaid-carers-unit/unpaid-carers-right-to-breaks-implementation/user_uploads/consultation-thumbnails--13-.jpg/%40%40images/image/preview);
+                                    min-height: 187px">
+                    </span>
+                </div>
+
+                <div>
+                    Closes 22 May 2026&nbsp;
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="dss-card">
+
+                <h3 class="truncate">
+                    <a class="unstyled truncatable" href="https://consult.gov.scot/safer-communities/https-www-gov-scot-isbn-9781806437603/">
+                         Scottish Biometrics Commissioner: Review of Functions
+                    </a>
+                </h3>
+
+                <div class="horizontal-fill">
+                    <span class="cs-gallery-image"
+                        style="background-image:none;
+                                    min-height: 187px">
+                    </span>
+                </div>
+
+                <div>
+                    Closes 26 May 2026&nbsp;
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="dss-card">
+
+                <h3 class="truncate">
+                    <a class="unstyled truncatable" href="https://consult.gov.scot/energy-and-climate-change-directorate/installation-maintenance-licences-heat-networks/">
+                        Installation and maintenance licences for heat networks 
+                    </a>
+                </h3>
+
+                <div class="horizontal-fill">
+                    <span class="cs-gallery-image"
+                        style="background-image:none;
+                                    min-height: 187px">
+                    </span>
+                </div>
+
+                <div>
+                    Closes 5 June 2026&nbsp;
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row cs-page-component-contrast">
+        <div style="text-align:right">
+            <a href="https://consult.gov.scot/consultation_finder/?_collection=eyJzb3J0X29uIjogImljb25zdWx0YWJsZV9lbmRkYXRlIiwgInNvcnRfb3JkZXIiOiAiYXNjZW5kaW5nIiwgInN0IjogIm9wZW4iLCAiaW4iOiAibWFpbiBodWIiLCAiY29sbGVjdGlvbl90aXRsZSI6ICJPcGVuIENvbnN1bHRhdGlvbnMifQ%3D%3D%3A2be041afff372947bace2c7fb06ad6e52d2f0b3b22fd06466865c05c9571653a#cs-finder-results-container" aria-label="See All Open Consultations">See All Open Consultations</a>
+        </div>
+    </div>
+</div>
+
+        
+    </div>
+</section>
+
+
+            
+                <section class="dss-rhino cs-page-component-container dss-rhino-2021-warm-light-grey" style="">
+    <div class="container-fluid">
+        <div class="cs-page-component cs-search-results-component-card cs-search-results-component-listing3">
+    <div class="cs-page-component-preamble">
+        <h2 class="cs-page-component-title cs-page-component-contrast" style="margin-top:0">Closed Consultations</h2>
+
+        
+    </div>
+
+    <ul class="list-unstyled" style="margin-bottom:0">
+        <li class="dss-card">
+            <div class="row cs-card-image">
+                 <span class="cs-gallery-image"
+                    style="background-image:url(https://consult.gov.scot/learning-directorate/supporting-childrens-learning-code-of-practice/user_uploads/consultation-thumbnails--10-.jpg/%40%40images/image/preview);">
+                </span>
+            </div>
+            <div class="row">
+                <h3 class="listing34-overview" data-height="28">
+                    <a class="unstyled listing34-overview-text" href="https://consult.gov.scot/learning-directorate/supporting-childrens-learning-code-of-practice/">
+                        Supporting children’s learning code of practice
+                    </a>
+                </h3>
+                <p class="listing34-overview " data-height="48">
+                    <span class="listing34-overview-text">Your response to this consultation should be informed by the refreshed  draft Supporting Children's Learning Code of Practice  and we recommend that you review this before responding. A  summary  and an  Easy Read  are also available. 
+
+      The  Education (Additional Support for Learning) (Scotland) Act 2004  (the 2004 Act) provides the legal framework for identifying and addressing the...</span>
+                </p>
+                <p class="cs-date">
+                    Closed 7 May 2026
+                </p>
+            </div>
+        </li>
+        <li class="dss-card">
+            <div class="row cs-card-image">
+                 <span class="cs-gallery-image"
+                    style="background-image:url(https://consult.gov.scot/safer-communities/stop-and-search-code-of-practice-review/user_uploads/consultation-thumbnails--2-.jpg/%40%40images/image/preview);">
+                </span>
+            </div>
+            <div class="row">
+                <h3 class="listing34-overview" data-height="28">
+                    <a class="unstyled listing34-overview-text" href="https://consult.gov.scot/safer-communities/stop-and-search-code-of-practice-review/">
+                        Stop and search code of practice: review
+                    </a>
+                </h3>
+                <p class="listing34-overview " data-height="48">
+                    <span class="listing34-overview-text">Respect for human rights lies at the heart of our democratic society. Everyone has the right to go about their daily lives without undue interference from the State. When the State is required to intervene &#8212; particularly through policing &#8212; the State must exercise its powers lawfully, fairly, and with respect for people&#8217;s freedoms and dignity.   
+
+   In Scotland, the Police and Fire Reform...</span>
+                </p>
+                <p class="cs-date">
+                    Closed 5 May 2026
+                </p>
+            </div>
+        </li>
+        <li class="dss-card">
+            <div class="row cs-card-image">
+                 <span class="cs-gallery-image"
+                    style="background-image:url(https://consult.gov.scot/infrastructure-and-investment-division/draft-infrastructure-strategy/user_uploads/consultation-thumbnails--1-.png/%40%40images/image/preview);">
+                </span>
+            </div>
+            <div class="row">
+                <h3 class="listing34-overview" data-height="28">
+                    <a class="unstyled listing34-overview-text" href="https://consult.gov.scot/infrastructure-and-investment-division/draft-infrastructure-strategy/">
+                        Draft Infrastructure Strategy 2027-2037
+                    </a>
+                </h3>
+                <p class="listing34-overview " data-height="48">
+                    <span class="listing34-overview-text">The Scottish Government wants Scotland's infrastructure to be planned and delivered in a way that supports net zero and environmental sustainability, inclusive economic growth and resilient and sustainable places. Our ambition is to create a system that makes best use of existing assets, embraces innovation, and ensures investment decisions deliver long-term public value.     
+
+ Why this...</span>
+                </p>
+                <p class="cs-date">
+                    Closed 5 May 2026
+                </p>
+            </div>
+        </li>
+    </ul>
+    <div class="row cs-page-component-contrast">
+        <div style="text-align:right">
+            <a href="https://consult.gov.scot/consultation_finder/?_collection=eyJzb3J0X29uIjogImljb25zdWx0YWJsZV9lbmRkYXRlIiwgInNvcnRfb3JkZXIiOiAiZGVzY2VuZGluZyIsICJzdCI6ICJjbG9zZWQiLCAiY29sbGVjdGlvbl90aXRsZSI6ICJDbG9zZWQgQ29uc3VsdGF0aW9ucyJ9%3Ad84936f0f8e5f6adb0ab2637f9cb80c1c18408ce2768ad54baf05b229bb09abc#cs-finder-results-container" aria-label="See All Closed Consultations">
+                See All Closed Consultations
+            </a>
+        </div>
+    </div>
+</div>
+
+        
+    </div>
+</section>
+
+
+            
+                <section class="dss-rhino cs-page-component-container dss-rhino-2021-warm-light-grey" style="">
+    <div class="container-fluid">
+        <div class="cs-page-component cs-wayswd-component">
+    
+    <div class="cs-page-component-preamble">
+        <h2 class="cs-page-component-title cs-page-component-contrast" style="margin-top:0">We Asked, You Said, We Did</h2>
+
+        <p class="cs-page-component-intro cs-page-component-contrast dss-easy-reading">
+            Here are some of the issues we have consulted on and their outcomes.
+            <a
+                aria-label="See all outcomes"
+                href="https://consult.gov.scot/we_asked_you_said/">See all outcomes</a>
+        </p>
+    </div>
+
+    <div>
+        <div class="dss-card" style="margin-top:0">
+            <div class="row">
+                <div>
+                    <a class="cs-no-underline" href="/environment-forestry/code-of-practice-managing-controlled-waste/">
+                        
+                        <h3>Duty of care: code of practice for managing controlled waste</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>We asked</h4>
+                </div>
+                <div class="col-md-9">
+                    <p>We asked for views on an updated waste &#8216;Duty of Care Code of&#160;Practice&#160;for managing controlled waste&#8217;&#160;and publish&#160;associated documents.&#160;The updated Code of Practice implements a Scottish Government&#160;commitment&#160;to require collection of plastic films for recycling from businesses from 31 March 2027.</p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>You said</h4>
+                </div>
+                <div class="col-md-9">
+                    <p>We received&#160;26&#160;responses to this consultation. Of these, 2 responded as individuals and&#160;24&#160;on behalf of an organisation. A full set of responses to this consultation can be viewed through the 'Published responses' link below.</p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>We did</h4>
+                </div>
+                <div class="col-md-9">
+                    <p>A summary of consultation answers and the government response has been published on the Scottish Government website. The document can be found here:&#160;<a href="https://www.gov.scot/publications/duty-care-code-practice-managing-controlled-waste-consultation-government-response/">Duty of Care: Code of Practice for Managing Controlled Waste consultation - Government Response - gov.scot (www.gov.scot)</a></p>
+
+<p>&#160;</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="dss-card">
+            <div class="row">
+                <div>
+                    <a class="cs-no-underline" href="/environment-forestry/draft-circular-economy-strategy/">
+                        
+                        <h3>Draft Circular Economy Strategy</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>We asked</h4>
+                </div>
+                <div class="col-md-9">
+                    <p><span><span>We asked for views on a draft Circular Economy Strategy for Scotland. The consultation was held between 21 October 2025 and 13 January 2026. The draft strategy set out the overarching framework for Scotland&#8217;s transition to a more circular economy, setting out our vision,&#160;key&#160;outcomes and priority areas for action across sectors and policy&#160;mechanisms.</span></span></p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>You said</h4>
+                </div>
+                <div class="col-md-9">
+                    <p><span><span>We received 190 responses from public sector, private sector, charitable and international organisations and individual respondents. We also received over 1200 campaign responses from Friends of the Earth Scotland. Feedback from the consultation was largely positive with a large number of respondents agreeing with the vision and outcomes in principle, and overall there was general support for the draft strategy&#8217;s aims and content. Headline findings include:</span></span></p>
+
+<ul>
+	<li><span><span>82% either agreed or strongly agreed with the vision and outcomes.</span></span></li>
+	<li><span><span>73% either agreed or strongly agreed with the policy mechanisms.</span></span></li>
+	<li><span><span>71% either agreed or strongly agreed with the priority sectors.</span></span></li>
+</ul>
+
+<p><span><span>An <a href="https://www.gov.scot/ISBN/9781807750893">independent analysis</a> was carried out of consultation responses.</span></span></p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>We did</h4>
+                </div>
+                <div class="col-md-9">
+                    <p><span><span>A detailed report of the consultation process and how responses were taken into account has been <a href="https://www.gov.scot/ISBN/9781807751142">published</a>. Headline updates to the strategy include:</span></span></p>
+
+<ul>
+	<li class="SGBullet"><span><span><span><span>The vision and outcomes were updated, in particular to recognise tackling consumption and international impacts. </span></span></span></span></li>
+	<li class="SGBullet"><span><span><span><span>Producer responsibility text was updated to provide more clarity and make explicit reference to the importance of reuse and repair, for example. </span></span></span></span></li>
+	<li class="SGBullet"><span><span><span><span>We emphasised the importance of plastics, chemicals and electronics and explained why we are considering these as part of our wider sector and product approach rather than as standalone sectors.</span></span></span></span></li>
+	<li class="SGBullet"><span><span><span><span>Updated wording around international impacts was included.</span></span></span></span></li>
+	<li class="SGBullet"><span><span><span><span>An additional &#8216;due diligence&#8217; policy mechanism and related priority was included.</span></span></span></span></li>
+</ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="dss-card">
+            <div class="row">
+                <div>
+                    <a class="cs-no-underline" href="/environmental-standards-scotland/environmental-standards-scotland-updated-strategy/">
+                        
+                        <h3>Environmental Standards Scotland - updated Strategy 2026-2031</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>We asked</h4>
+                </div>
+                <div class="col-md-9">
+                    <p><span><span>We invited feedback on an updated version of Environmental Standards Scotland&#8217;s (ESS&#8217;) draft Strategy for 2026-2031. The Strategy sets out ESS&#8217; approach to delivering our functions over the next five years. Our consultation sought views on updated aspects of the draft to inform the preparation of a final version to be submitted to the Scottish Parliament for approval.</span></span></p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>You said</h4>
+                </div>
+                <div class="col-md-9">
+                    <p><span><span>We received 17 responses to the consultation from a variety of organisations and individuals. We are grateful to all those who took the time to give us their views. All of the responses have been considered and have informed the preparation of a final version of the Strategy that has been submitted to the Scottish Parliament for approval. A summary of the responses has been prepared and is available on our <a href="https://environmentalstandards.scot/our-work/our-corporate-and-governance-reports/report-ess-strategy-2026-2031-a-summary-of-consultation-responses/">website</a>.</span></span></p>
+
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-12 col-lg-2">
+                    <h4>We did</h4>
+                </div>
+                <div class="col-md-9">
+                    <p><span><span>All of the responses were considered and have helped to inform the preparation of a final version of the <a href="https://environmentalstandards.scot/our-work/our-corporate-and-governance-reports/ess-proposed-strategy-2026-2031/">Proposed Strategy</a> that was submitted to the Scottish Parliament for approval on 5 February 2026. The Scottish Parliament now has 40 days to consider the Strategy and determine whether to approve it. If approved the Strategy will then be published on ESS&#8217; website and will guide our work between 2026 and 2031. </span></span></p>
+
+<p><span><span><span><span>We have made a number of changes to the Strategy to reflect the feedback </span></span>and suggestions made by consultees, including providing greater clarity on certain aspects of our approach to delivering our functions. Alongside our proposed Strategy, we have laid an <a href="https://environmentalstandards.scot/our-work/our-corporate-and-governance-reports/ess-accm-anying-statement-for-the-proposed-strategy-2026-2031/">Accompanying Statement</a> that summarises this feedback and sets out how it was taken into account in preparing the Strategy that has been laid in the Parliament.</span></span></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+    </div>
+</section>
+
+
+            
+        </div>
+
+        
+    </div>
+                </div>
+            </main>
+        </div>
+        <footer id="configurable-footer-wrapper">
+            <div class="cs-page-component-group">
+                
+                    <section class="dss-rhino cs-page-component-container dss-rhino-footer" style="">
+    <div class="container-fluid">
+        <div class="cs-page-component cs-page-component-contrast">
+    <div class="row" id="global-footer">
+            <div id="citizen-space-footer-nav" 
+                class="col-12 col-md-8 order-1 order-md-2" 
+                role="navigation"
+                aria-label="miscellaneous">
+                <ul class="list-inline">
+                    
+                        <li id="nav-item-accessibility_policy" class="list-inline-item"><a href="https://consult.gov.scot/accessibility_policy/">Accessibility</a></li>
+                    
+                        <li id="nav-item-terms_and_conditions" class="list-inline-item"><a href="https://consult.gov.scot/terms_and_conditions/">Terms of Use</a></li>
+                    
+                        <li id="nav-item-cookie_policy" class="list-inline-item"><a href="https://consult.gov.scot/cookie_policy/">Cookies</a></li>
+                    
+                        <li id="nav-item-privacy_policy" class="list-inline-item"><a href="https://consult.gov.scot/privacy_policy/">Privacy</a></li>
+                    
+                        <li id="nav-item-support" class="list-inline-item"><a href="https://consult.gov.scot/support/">Help / feedback</a></li>
+                    
+                </ul>
+            </div>
+            <div class="col-12 col-md-4 order-2 order-md-1">
+                <span id="citizen-space-footer-logo">
+                <a href="https://www.delib.net/citizen_space">Citizen Space</a>
+                <span>from</span> 
+                <a href="https://www.delib.net">Delib</a>
+                </span>
+            </div>
+    </div>
+
+</div>
+
+        
+    </div>
+</section>
+
+
+                
+            </div>
+        </footer>
+
+        
+        
+        <script type="text/javascript">
+            <!--
+                document.addEventListener('DOMContentLoaded', function(event) {
+                    $('.cs-map').each(function() {
+                        new CSMap(this.id);
+                    });
+                });
+            -->
+        </script>
+
+        <script type="text/javascript">
+            $(function() {
+                // Skip to content workaround for absolute skip links
+                jQuery('#skip a').bind("click", function(event) {
+                    var target = jQuery(this).attr('href').split('#')[1];
+                    jQuery("#"+target+"").focus();
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+        //<!-- js contains some invalid HTML characters
+            $(function() {
+                // Global search
+                var search_form = $("#cs-global-search");
+                var search_form_input = $("#cs-global-search-input");
+
+                // Scroll to search results on submit of global search form
+                search_form.submit(function() {
+                    if (search_form_input.attr('placeholder') == search_form_input.val()) {
+                        search_form_input.val('');
+                    }
+                    sessionStorage.setItem('saved-scrollTop', '500');
+                });
+
+                // Move the global search form into the appropriate container depending on viewport size
+                function move_global_search_form() {
+                    // if global nav (and global search) are turned off, bail
+                    if(!search_form.length) {
+                        return;
+                    }
+
+                    var md_container = $("#cs-global-search-container-md");
+                    var xs_container = $("#cs-global-search-container-xs");
+
+                    // btw we can't test if xs_container is visible because it's hidden inside the burger menu
+
+                    if (md_container.is(":visible")) {
+                        if(!md_container.find("#cs-global-search").length) {
+                            md_container.append(search_form);
+                        }
+                    }
+                    else {
+                        if(!xs_container.find("#cs-global-search").length) {
+                            xs_container.append(search_form);
+                        }
+                    }
+                }
+                move_global_search_form();
+                $(window).resize(move_global_search_form);
+
+                // Function to update the query string
+                function updateQueryStringParameter(uri, key, value) {
+                    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+                    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+                    if (uri.match(re)) {
+                        return uri.replace(re, '$1' + key + "=" + value + '$2');
+                    } else {
+                        return uri + separator + key + "=" + value;
+                    }
+                }
+
+                // Event listener to detect changes in the large viewport language `select`
+                var languageSelect = document.getElementById('language-picker-select');
+                if (languageSelect) {
+                    languageSelect.addEventListener('change', function() {
+                        var form = document.getElementById('global-language-picker');
+                        form.submit();
+                    });
+                }
+
+            });
+
+            // a11y hax. There are some elements generated by the ol libraries that need some extra attributes for a11y.
+            // Putting them here was preferable to overriding masses of ol code.
+            $(window).on("load", function() {
+              var zoomins = document.getElementsByClassName('ol-zoom-in');
+              for (let i=0; i<zoomins.length; i++) {
+                zoomins[i].setAttribute('aria-label', 'Zoom in');
+              }
+              var zoomouts = document.getElementsByClassName('ol-zoom-out');
+              for (let j=0; j<zoomouts.length; j++) {
+                zoomouts[j].setAttribute('aria-label', 'Zoom out');
+              }
+              var attributions = document.getElementsByClassName('ol-attribution');
+              for (let k=0; k<attributions.length; k++) {
+                attributions[k].getElementsByTagName('button')[0].setAttribute('aria-label', 'Attribution');
+              }
+              var recentre = document.getElementsByClassName('cs-zoom-to-extent');
+              for (let m=0; m<recentre.length; m++) {
+                recentre[m].getElementsByTagName('button')[0].setAttribute('aria-label', 'Recentre map');
+              }
+              var search = document.getElementsByClassName('cs-map-postcode-popup');
+              for (let m=0; m<search.length; m++) {
+                search[m].getElementsByTagName('button')[0].setAttribute('aria-label', 'Go to a postcode');
+              }
+            }
+            );
+        //-->
+        </script>
+
+        
+          
+          <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="b2ccb8aa-94ab-454c-825e-cfe943fabd83" data-blockingmode="auto" type="text/javascript"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZSPCFLZMKB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZSPCFLZMKB');
+</script>
+          
+        
+    </body>
+</html>
+

@@ -1,0 +1,146 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 86,
+  "n_chunks": 92,
+  "chunk_chars": 39944,
+  "model": "gpt-5-mini",
+  "elapsed_s": 530.2573595840004,
+  "input_tokens": 12071,
+  "output_tokens": 5630,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP core developers and package authors implementing help-book handlers, FOA (function-operation-attribute) triples, weak-pointer support, and backtrack/stabilizer-chain code",
+    "subtask_short": "GAP library development",
+    "subtask_description": "Implementation and extension of GAP internals and library code: help-book handlers (manual.six), help viewers, FOA triples (wrapper operations/attributes), weak pointer objects, stabilizer-chain/backtrack data structures and functions. This covers API contracts and required return formats/behaviour for these subsystems.",
+    "subtask_keywords": [
+      "gap",
+      "library_development",
+      "help_book",
+      "foa_triples",
+      "weak_pointers",
+      "stabilizer_chains"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Book installation condition (manual.six presence)",
+        "description": "The only condition necessary to make the installation of a book valid is that the directory dir must contain a file manual.six.",
+        "guidance": "A book can be (re)installed only if manual.six exists in the book directory."
+      },
+      {
+        "name": "manual.six format declaration",
+        "description": "The first non-empty line of manual.six should be of the form '#SIXFORMAT myownformat' where myownformat is an identifying string for this format.",
+        "guidance": "If such a line is present, reading is delegated to HELP_BOOK_HANDLER.myownformat.ReadSix which must exist. If missing, manual.six is assumed to comply with gapmacro.tex default format and reading is delegated to HELP_BOOK_HANDLER.default.ReadSix. No further regulations are imposed on manual.six beyond what you impose for your format."
+      },
+      {
+        "name": "ReadSix(stream) return record",
+        "description": "ReadSix(stream) must return a record info containing at least components bookname (short identifying name of the help book) and entries (a list with one entry per searchable string).",
+        "guidance": "Each entry in info.entries must be a list whose first element is a string printed by GAP when several matches are found (essentially the search string, possibly with case/markup). There may be other components in info as needed by handler functions."
+      },
+      {
+        "name": "ShowChapters(info)",
+        "description": "ShowChapters(info) must return a text string or list of text lines containing the chapter headers of the book info.bookname.",
+        "guidance": "Used to display book chapter structure in help interface."
+      },
+      {
+        "name": "ShowSection(info)",
+        "description": "ShowSection(info) must return a text string or list of text lines containing the section (and chapter) headers of the book info.bookname.",
+        "guidance": "Used to display section headings when navigating the help book."
+      },
+      {
+        "name": "SearchMatches(info, topic, frombegin) behaviour and return format",
+        "description": "SearchMatches(info, topic, frombegin) must return a list with two entries [exact, match] where exact is the list of indices for exact matches and match is a list of indices of the remaining matches.",
+        "guidance": "If frombegin is true then parts of topic separated by spaces are considered as beginnings of words for matching; if false, a substring search should be performed. topic can be assumed already normalized (lower case, whitespace normalized)."
+      },
+      {
+        "name": "Navigation match functions (MatchPrevChap/MatchNextChap/MatchPrev/MatchNext)",
+        "description": "MatchPrevChap(info,i) should return the match [info,j] for the beginning of the chapter containing match [info,i], or the beginning of the previous chapter if [info,i] is itself a chapter beginning. MatchNextChap, MatchPrev and MatchNext must analogously return matches for next/previous chapter or section positions.",
+        "guidance": "These correspond to navigation commands (?<<, ?>>, ?<, ?>) and must point to the appropriate document positions."
+      },
+      {
+        "name": "HelpData(info,i,type) contracts and supported types",
+        "description": "HelpData(info,i,type) must return data for match [info,i] depending on type or fail if not available. The handler must recognize at least the types 'text', 'url', 'dvi', 'pdf', and 'secnr'.",
+        "guidance": "'text' returns a text string in a format consumable by the Pager; 'url' returns a URL string (e.g., file:// URL with label) or fail; 'dvi' and 'pdf' return a record rec(file:=filename,page:=pagenumber) or fail; 'secnr' returns a pair like [[3,3,1], \"3.3.1\"] giving the chapter/section/subsection triple and a corresponding string for cross-referencing."
+      },
+      {
+        "name": "Help viewer registration (HELP_VIEWER_INFO) structure",
+        "description": "HELP_VIEWER_INFO is a global record containing one component per help viewer; each component is a record with '.type' and '.show'.",
+        "guidance": ".type refers to one of the types recognized by HelpData (currently 'text', 'url', 'dvi', or 'pdf'). .show is a function that receives the result of a corresponding HelpData call (if not fail) and performs the actual display (e.g., calling Pager or launching an external viewer). To introduce a new viewer extend HELP_VIEWER_INFO accordingly."
+      },
+      {
+        "name": "Document format naming",
+        "description": "The name for a document format (myownformat) can be any string but should be meaningful; case is significant (e.g., 'GapDocGAP').",
+        "guidance": "Choose a meaningful, case-sensitive identifier for your format so that HELP_BOOK_HANDLER.<name>.ReadSix can be found and invoked."
+      },
+      {
+        "name": "KeyDependentOperation declaration and semantics",
+        "description": "KeyDependentOperation(name, dom-req, key-req, key-test) declares two operations (name and nameOp), an attribute Computed<name>s, tester Has<name> and setter Set<name> and sets up the FOA wrapper semantics where the attribute stores results that depend on a key.",
+        "guidance": "dom-req and key-req specify required filters for the first and second arguments; key-test (possibly a named shorthand like 'prime') can be a function to validate the key and may raise errors. The attribute value (Computedname s) is mutable and stores pairs (key, value) sorted by key. Methods that do the real work should be installed for the operation nameOp, not the wrapper name; installing methods on the wrapper will signal a warning if InfoWarning level >= 1. Example: SylowSubgroup uses KeyDependentOperation('SylowSubgroup',IsGroup,IsPosInt,'prime') and stores ComputedSylowSubgroups."
+      },
+      {
+        "name": "InParentFOA declaration and default method behaviour",
+        "description": "InParentFOA(name, super-req, sub-req, AorP) declares name, nameOp, and nameInParent, and installs a default method for nameInParent which is D -> nameOp( Parent(D), D ).",
+        "guidance": "When called with arguments super and sub: if HasParent(sub) and IsIdenticalObj(super, Parent(sub)) are true, nameInParent(sub) is called and its result returned; otherwise nameOp(super, sub) is called. sub-req is the required filter for the attribute nameInParent. The fourth argument should be DeclareProperty if the InParent attribute is boolean, otherwise DeclareAttribute. No methods need be installed for the wrapper name or for the attribute nameInParent."
+      },
+      {
+        "name": "OrbitsishOperation declaration and default method behaviour",
+        "description": "OrbitsishOperation(name, reqs, usetype, AorP) declares an attribute op with name name; reqs specifies required filters for the five-argument methods that perform the real work.",
+        "guidance": "Default behaviour for op is: (1) If called as op(xset) and HasOrbits(xset) is true, return stored attribute. (2) If op(xset) and value unknown, obtain defaults from xset. (3) If gens and oprs not specified, set gens to Pcgs(G) if CanEasilyComputePcgs(G) else GeneratorsOfGroup(G); set oprs := gens. (4) Default opr is OnPoints. (5) For permutation group G on MovedPoints(G), if HasOrbits(G) returns true, return stored value. (6) Call Orbits(G,D,gens,oprs,opr) to compute result. (7) For external set or permutation group natural action, call attribute setter to store result. (8) Return result. If usetype is true then op(xset) will delegate to the five-argument call using xset as the second argument. For properties (e.g., IsTransitive) AorP must be NewProperty, else NewAttribute."
+      },
+      {
+        "name": "OrbitishFO declaration and semantics (operations with extra argument)",
+        "description": "OrbitishFO(name, reqs, famrel, usetype, realenum) declares a wrapper function name and operation nameOp for operations like Orbit( G, D, pnt ) which depend on an extra argument (pnt); reqs lists required filters for nameOp, famrel tests the family relation between second and third arguments (e.g., pnt \u2208 D).",
+        "guidance": "usetype can be a boolean or an attribute; if only some arguments are given, attr can be used to store results for the omitted-argument calls (special Blocks/BlocksAttr case). If realenum true, action for external set should use the enumerator, otherwise HomeEnumerator. The wrapper handles optional-argument call forms (e.g., Orbit(G,pnt) vs Orbit(G,D,pnt)) by using famrel to map to the appropriate nameOp call. Methods which perform the real work should be installed for nameOp (five/six-argument versions as required)."
+      },
+      {
+        "name": "Weak pointer semantics",
+        "description": "A weak pointer object is similar to a mutable plain list but does not keep its subobjects alive during garbage collection; its entries may become unbound at any time.",
+        "guidance": "Weak pointers are primarily intended for GAP internals and should be used extremely carefully. Some objects (small integers, small finite field elements, booleans) are not subject to GC or are always reachable and thus not collected. Global debugging variables (last, last2, last3) may keep objects alive, which can be confusing."
+      },
+      {
+        "name": "Weak pointer low-level API semantics",
+        "description": "Low-level functions: SetElmWPObj(wp,pos,val), UnbindElmWPObj(wp,pos), ElmWPObj(wp,pos), IsBoundElmWPObj(wp,pos), LengthWPObj(wp) provide access to weak pointer objects.",
+        "guidance": "ElmWPObj returns the element at position pos or fail; a return of fail may mean either the value fail is stored or no value is bound. Use IsBoundElmWPObj to distinguish. It is not safe to rely on IsBoundElmWPObj(w,i) followed by ElmWPObj(w,i) because a GC may happen in between; recommended pattern: x := ElmWPObj(w,i); if x <> fail or IsBoundElmWPObj(w,i) then ..."
+      },
+      {
+        "name": "Using weak pointer objects as lists \u2014 caution",
+        "description": "Weak pointer objects are members of ListsFamily and categories IsList and IsMutable; list-access methods are installed to allow them to be used as lists.",
+        "guidance": "Not recommended for programming because list methods may assume that after IsBound(w[i]) returns true, access to w[i] is safe; weak pointers can become unbound due to GC."
+      },
+      {
+        "name": "Copying and immutability rules for weak pointers",
+        "description": "ShallowCopy on a weak pointer returns a new weak pointer object containing the same subobjects. StructuralCopy creates a weak pointer containing copies of the objects. Applying Immutable returns an immutable plain list containing immutable copies; an immutable weak pointer is a contradiction.",
+        "guidance": "StructuralCopy may not be safe if a GC occurs during copying. Use Immutable to obtain a stable plain list copy."
+      },
+      {
+        "name": "Conjugation of stabilizer chains and generalized conjugation technique",
+        "description": "ConjugateGroup(G,p) equips the conjugated group with the chain of G conjugated by p by mapping points in orbit components and permutations in labels via conjugation gp; translabels lists are permuted by p and generators/transversal reconstructed.",
+        "guidance": "Generalized conjugation allows mapping points with an arbitrary map and permutations with a homomorphism hom if compatibility map(pnt).hom(g) = map(pnt.g) holds. The resulting 'conjugated' chain may not be a stabilizer chain for the image of hom unless map is injective (or hom right-inverse to a \u03d5 with kernel handled). When labels map to images equal to earlier labels, their corresponding vertices may be 'old' and need not be conjugated; handle kernel-generated generators to make chain valid in presence of non-injective map/hom."
+      },
+      {
+        "name": "Internal representation of ordered partitions",
+        "description": "An ordered partition is represented as a record with components: points (list of all points, cells consecutive), cellno (list whose i-th entry is number of the cell containing point i), firsts (list such that points[firsts[j]] is first point in cell j), lengths (list of cell lengths).",
+        "guidance": "These components allow efficient splitting and reuniting of cells. The m-th cell is P.points{[P.firsts[m] .. P.firsts[m]+P.lengths[m]-1]}. Avoid searching where possible; maintain redundancy (firsts/lengths/cellno) to make operations efficient."
+      },
+      {
+        "name": "Algorithm for splitting a cell in ordered partitions",
+        "description": "When splitting a cell m: (1) sort the points of the cell such that points remaining occupy positions [P.firsts[m] .. last], (2) points [last+1 .. P.firsts[m]+P.lengths[m]-1] form the new cell, so add P.firsts entry last+1 and P.lengths entry P.firsts[m]+P.lengths[m]-last-1, (3) set the corresponding entries in P.cellno for the new positions to the new cell number, (4) reduce P.lengths[m] to last-P.firsts[m]+1. Reuniting reverses these steps.",
+        "guidance": "P.points need not be rearranged when splitting; manipulating firsts/lengths/cellno suffices for efficient updates."
+      },
+      {
+        "name": "R-base required components for backtrack algorithms",
+        "description": "An R-base record (for partition-based backtracking) should contain: domain (Omega), base (sequence of base points), partition (ordered partition initially Pi0), where (list giving cell numbers of base points in each Pi), rfm (list of refinements taking \u03a3i to \u03a3i+1), chain (copy of stabilizer chain for G or special handling for symmetric groups), fix (for symmetric groups), level (stabilizer chain entries for levels), leva/lev2/level2 (for second group if used), nextLevel (function to choose next base point and refine Pi), etc.",
+        "guidance": "R.nextLevel(Pi,R) must choose a new base point ai+1 when needed, refine Pi to Pi+1, and store required information in R (e.g., record refinements). The R-base is passed to PartitionBacktrack and other backtracking routines; treat R as a black box except for setting/using its documented components and nextLevel callback."
+      },
+      {
+        "name": "NextLevel callback contract in backtracking",
+        "description": "R.nextLevel := function(Pi, rbase) is called whenever additional base points (one-point cells) are needed: it must choose a new base point ai+1, refine Pi to Pi+1 (changing the partition passed in), and store all necessary information in R (e.g., AddRefinement calls, ProcessFixpoint, etc.).",
+        "guidance": "The nextLevel function is responsible for maintaining 'fix', selecting and processing fixpoints, adding refinements via AddRefinement, and preparing R for the call to the core PartitionBacktrack routine. Ensure consistent updates so PartitionBacktrack can rely on R."
+      }
+    ]
+  }
+}

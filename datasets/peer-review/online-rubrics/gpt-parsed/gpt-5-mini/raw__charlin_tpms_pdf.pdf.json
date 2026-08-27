@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/charlin_tpms_pdf.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 11339,
+  "output_tokens": 3907,
+  "elapsed_s": 529.5751317499671,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference organizers, program chairs, and researchers building automated paper-reviewer matching systems",
+    "subtask_short": "paper-reviewer_matching_system",
+    "subtask_description": "Designing, implementing, and evaluating an automated system to estimate reviewer expertise and assign conference submissions to reviewers under load and coverage constraints using textual and elicited data.",
+    "subtask_keywords": [
+      "peer_review",
+      "conference_management",
+      "matching",
+      "expertise_modeling",
+      "machine_learning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Determine reviewers' expertise from archives",
+        "description": "Our aim is to determine reviewers\u2019 expertise. Specifically we are interested in evaluating the expertise of every reviewer with respect to each submission. ... an academic\u2019s expertise is naturally re\ufb02ected through his work, and most easily accessed by examining his published papers. Hence we use a set of published papers for each reviewer participating in a conference.",
+        "guidance": "Reviewer archives are formed by concatenating a reviewer\u2019s previously published papers (raw text / PDFs). Other possible features include citation or co-authorship graphs built from papers\u2019 bibliographies and co-authors. The system should provide means to populate archives (crawl URLs, upload PDFs, Google Scholar)."
+      },
+      {
+        "name": "Use self-assessed expertise scores (scores vs bids)",
+        "description": "We di\ufb00erentiate scores from more traditional bids: scores represent expertise rather than interest.",
+        "guidance": "Elicited scores are used to predict missing scores and to compute assignments; a reviewer may be assigned to a paper for which she did not provide a score. Treat scores as ground-truth expertise for supervised learning when available; be aware that elicited scores are biased by selection/matching."
+      },
+      {
+        "name": "Active expertise elicitation guided by initial scores",
+        "description": "Initial scores can be used to guide active elicitation of reviewer expertise. The direction we have followed is to run the matching program using the initial scores ... then, the reviewer expertise for all assignments (assigned reviewer-paper pair) are queried.",
+        "guidance": "Elicitation on likely assignments is informative because queries concern papers reviewers would actually review. Conference organizers can tailor number of elicited scores per user; it can be useful to query reviewers about more papers than warranted by the final assignment. Recognize elicited scores are not missing at random and are biased by the matching constraints (but this may be acceptable). Example: NIPS-10 two-round elicitation keeping about two-thirds of the papers the system was most confident about (confidence estimated as inverse entropy across area chairs per paper)."
+      },
+      {
+        "name": "Language model (word-LM) for initial scoring",
+        "description": "Language Model: This model predicts a reviewer\u2019s score as the dot product between a reviewer\u2019s archive representation and a submission: srp = f(Ar) f(Pp)\u2032. The incarnation used: word count representation for submissions and normalized word counts for archives.",
+        "guidance": "Use Dirichlet smoothing for reviewer normalized word counts (explicit smoothing formula provided). Be aware that raw dot products are uncalibrated: shorter papers receive higher scores; normalize scores by submission length if calibrated scores are needed. Alternative similarity metrics (e.g., KL-divergence) may be used."
+      },
+      {
+        "name": "Topic-based (LDA) initial scoring (topic-LM)",
+        "description": "LDA: utilize topic proportions learned by LDA to represent documents and then apply the same dot-product scoring (Equation 1) to calculate expertise scores from the LDA representations of archives and submissions.",
+        "guidance": "Learn topics over both archives and submissions; represent a reviewer by averaging topic vectors of her papers. Topic-space may remove stylistic noise and help separate top reviewers from the rest; the authors used 30 topics in experiments."
+      },
+      {
+        "name": "Supervised per-reviewer linear regression (LR)",
+        "description": "Linear Regressions: learn a separate model for each reviewer using the word counts of the submissions as features: srp = \u03b8r f(Pp)\u2032.",
+        "guidance": "Works well when many elicited scores are available per reviewer. The authors explored nonlinear and ordinal variants but observed no significant gains. Train per-reviewer when sufficient data; otherwise consider shared-parameter models."
+      },
+      {
+        "name": "Shared-parameter regression (LR-shared)",
+        "description": "Parameter sharing regression: srp = b + br + (\u03b8 + \u03b8p) f(Pp)\u2032 + (\u03c9 + \u03c9r) g(Ar)\u2032, where b is global bias, \u03b8 and \u03c9 are parameters shared across reviewers and papers, and br, \u03b8p, \u03c9r are reviewer/paper specific.",
+        "guidance": "Useful when some reviewers have few or no observed scores (cold-start). Train online (authors used Vowpal Wabbit) with squared loss and L2 regularization; carefully weight regularizers so shared parameters are learned at the expense of poorly-observed individual parameters. Include archive features g(Ar) to leverage reviewer histories."
+      },
+      {
+        "name": "Probabilistic Matrix Factorization (PMF) baseline",
+        "description": "PMF models scores probabilistically by srp = \u03b8r \u03c9p\u2032 (dot product between two low-rank matrices).",
+        "guidance": "PMF does not use side information about papers or reviewers and therefore performs poorly in cold-start regimes; nonetheless serves as a collaborative-filtering baseline to compare against feature-based and hybrid methods."
+      },
+      {
+        "name": "Handling cold-start and mixed-observed-scores regimes",
+        "description": "Model should handle a mixed set of reviewers ranging from cold-start (reviewers with no scores) to reviewers with many scores.",
+        "guidance": "Approaches include: use textual archives to estimate expertise for cold-start reviewers; share parameters across users/papers; combine collaborative filtering with textual side-information; re-use archives across conferences; consider re-using elicited scores across conferences."
+      },
+      {
+        "name": "Matching formulation: objective and constraints",
+        "description": "Matching is formulated as an optimization: maximize J(y) = \u03a3r \u03a3p srp yrp subject to xrp \u2208 {0,1}, \u2200r,p; \u03a3r yrp = Rtarget, \u2200p; \u03a3p yrp \u2264 Pmax, \u2200r.",
+        "guidance": "Rtarget = number of reviewers per paper; Pmax = reviewer load limit. In this objective expertise srp is the sole factor determining reviewing quality, but other facets (e.g., reviewer availability/time) may be considered by changing the utility (including non-linear functions of expertise). Use institutional matching software (e.g., CMT\u2019s matching) to combine TPMS scores with bids and subject areas."
+      },
+      {
+        "name": "Calibration and normalization of scores",
+        "description": "Since papers have di\ufb00erent lengths, scores will be un-calibrated. Namely, shorter papers will receive higher scores than longer papers.",
+        "guidance": "Normalize each score by the length of its paper when calibrated comparisons are required (e.g., to rank reviewers fairly across papers). Apply smoothing (Dirichlet) to archive word counts to handle rare words; choose smoothing parameter \u00b5 appropriately."
+      },
+      {
+        "name": "Evaluation using ranking and prediction metrics (NDCG, RMSE)",
+        "description": "Evaluate models both for score prediction and for ranking/matching quality. Example metrics used: NDCG@5/10 to compare top-ranked reviewers between word-LM and topic-LM; RMSE on held-out scores to evaluate supervised methods (LR, LR-shared, PMF).",
+        "guidance": "Use cross-validation (authors split into 5 folds) and tune hyperparameters on validation folds. Matching performance is tied to score-prediction quality: better predictions generally lead to better matching. When possible, run in-vivo experiments (conference user studies) to validate usefulness of ranked lists."
+      },
+      {
+        "name": "Select informative elicitation queries (confidence/information-based selection)",
+        "description": "Use initial scores to estimate confidence (e.g., inverse entropy of distribution across area chairs per paper) and select which paper-reviewer pairs to elicit.",
+        "guidance": "Selecting queries where the system is uncertain or where an assignment would occur yields informative labels. Example: NIPS-10 kept about two-thirds of the papers selected as the ones the system was most confident about for first-round elicitation; then used elicited scores to train supervised models and elicited remaining ones."
+      },
+      {
+        "name": "System integration and data exchange protocol",
+        "description": "TPMS acts as a paper repository and communicates with conference management systems via SWORD (Atom Publishing Protocol) messages: deposit documents, send reviewer information and bids, request scores, retrieve computed scores.",
+        "guidance": "Design API endpoints to accept submissions and reviewer metadata, process PDFs, compute scores according to chosen models, and return scores in a format consumable by conference management systems (e.g., CMT). Consider building connectors for common platforms (CMT) and use standard protocols for interoperability."
+      },
+      {
+        "name": "Software operational considerations (archive population, formats)",
+        "description": "The system stores reviewers\u2019 previously published papers (archives). Reviewers can register/login, provide URLs that are crawled for PDFs, upload PDFs locally, or allow crawling of their Google Scholar profile. PDF is the default format.",
+        "guidance": "Provide robust PDF crawling and parsing (wget-like tooling), web interface for reviewers to curate archives, and fallback options for organizers to populate archives. Aim to ease interaction so reviewers can manage their archive; automate harvesting where possible."
+      },
+      {
+        "name": "Practical workflow for assignments",
+        "description": "Typical conference workflow: collect reviewers\u2019 previous publications, build reviewer profiles to estimate expertise (initial scores), use initial scores to produce assignments or guide score elicitation (active learning), use elicited + initial scores to predict final scores, and use final scores to create per-paper reviewer rankings or directly in the matching procedure.",
+        "guidance": "Compute reviewer expertise ahead of submission deadline where possible to reduce organizer workload after submissions. Use TPMS-generated ranked lists to assist area chairs and reviewers when bidding/assigning. Customize elicitation and matching steps to conference-specific constraints."
+      },
+      {
+        "name": "Sustainability and reuse across conferences",
+        "description": "Centralizing archived data from multiple conferences can allow reuse of reviewer archives and potentially elicited scores; maintaining a central system reduces per-conference tailoring cost but requires resources.",
+        "guidance": "Consider trade-offs between releasing a weakly-supported public release (local installs) versus hosting a central service. Central data allows cross-conference reuse of archives and possibly scores, but requires ongoing manpower; automation and better integration with conference management software reduce per-conference costs."
+      },
+      {
+        "name": "Limitations and scope-of-utility: expertise as readily-evaluated factor",
+        "description": "In the matching objective a reviewer\u2019s expertise is the sole factor determining his reviewing quality. There are likely other facets that affect the quality of a reviewer (e.g., how much time a reviewer can allocate to his reviews), however expertise is the only one we can readily evaluate from this data.",
+        "guidance": "Be explicit about which reviewer attributes are modeled; when possible augment expertise estimates with other signals (availability, conflict-of-interest, past review quality) or incorporate non-linear utility terms to capture diminishing returns or balancing criteria."
+      }
+    ]
+  }
+}

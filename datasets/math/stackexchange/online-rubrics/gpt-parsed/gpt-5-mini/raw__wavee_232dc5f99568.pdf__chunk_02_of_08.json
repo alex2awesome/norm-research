@@ -1,0 +1,200 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_232dc5f99568.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_232dc5f99568.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 8,
+  "chunk_chars": 39988,
+  "model": "gpt-5-mini",
+  "elapsed_s": 109.9208127919992,
+  "input_tokens": 13737,
+  "output_tokens": 5980,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "Users of MetaPost creating technical graphics for TeX/LaTeX (graphics authors/programmers)",
+    "subtask_short": "creating graphics with metapost",
+    "subtask_description": "Guidance and language rules for producing vector graphics with MetaPost: path construction, filling, color models, pens, dashing, affine transforms, low-level operators and options. Intended for authors coding figures in MetaPost/TeX.",
+    "subtask_keywords": [
+      "metapost",
+      "graphics",
+      "paths",
+      "pens",
+      "postscript"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "setbounds and truecorners behavior",
+        "description": "setbounds \u27e8picture variable\u27e9 to \u27e8path expression\u27e9 makes a picture behave as if its bounding box were the same as the given (closed) path; truecorners internal variable, when positive, causes MetaPost to report the true bounding box of a picture (instead of a setbounds 'lied-about' bounding box).",
+        "guidance": "Path must be a cycle (closed). Example: show urcorner btex ... etex produces smaller coords unless truecorners:=1 is set which reveals true bounding box. (Note: setbounds and truecorners only in MetaPost v0.30+.)"
+      },
+      {
+        "name": "fill requires cyclic path",
+        "description": "The fill statement requires a \u27e8path expression\u27e9 that is cyclic (closed), e.g., using ..cycle or --cycle notation.",
+        "guidance": "fill uses PostScript\u2019s non-zero winding number rule; orientation (clockwise or counter-clockwise) does not matter. Example: fill p{up}..(0,0){-1,-2}..{up}cycle; (See Figure 22.)"
+      },
+      {
+        "name": "fill withcolor syntax and supported color models",
+        "description": "fill \u27e8path expression\u27e9 withcolor \u27e8color expression\u27e9 supports multiple notations mapping to color models: rgb, cmyk, greyscale, numeric, withoutcolor, and boolean true/false mapping to current default.",
+        "guidance": "Remapped forms include withrgbcolor, withcmykcolor, withgreyscale, withcolor \u27e8numeric\u27e9, withoutcolor, withcolor \u27e8true/false\u27e9. Table of models: no model, greyscale, rgb (default), cmyk. defaultcolormodel internal variable sets current default. Examples: fill p withcolor .7white; fill ab withcolor .4white."
+      },
+      {
+        "name": "single color model per image object",
+        "description": "An image object cannot have more than one color model; the last specification among withcolor/withrgbcolor/withcmykcolor/withgreyscale/withoutcolor sets the color model for that object.",
+        "guidance": "Be careful when chaining color options; the final withcolor-like specification determines the object's model."
+      },
+      {
+        "name": "withoutcolor behavior (suppress color selection)",
+        "description": "Specifying withoutcolor means MetaPost will not write a color selection statement for that object into the PostScript output.",
+        "guidance": "Use when you do not want a color selection/operator emitted for the object. This is distinct from picking a specific color value."
+      },
+      {
+        "name": "fill statement overwrites previous content (ordering matters)",
+        "description": "Each fill statement assigns the given color to all points in the region covered, wiping out whatever was there previously including lines and text as well as filled regions.",
+        "guidance": "It is important to issue fill commands in the correct order. Example (Figure 23): filling circles a and b twice affects overlap region colors depending on order; use unfill or draw order carefully to get intended result."
+      },
+      {
+        "name": "unfill semantics (cutouts)",
+        "description": "unfill is shorthand for filling withcolor background (normally white), effectively erasing regions bounded by an argument like bbox pa.",
+        "guidance": "Use pictures for labels so their bounding boxes can be measured and then unfilled to create cutouts for labels. Can reassign background if necessary."
+      },
+      {
+        "name": "store labels in pictures before drawing",
+        "description": "Labels should be stored in picture variables (e.g., pa = thelabel(...)) to allow measuring their bounding boxes before drawing them onto currentpicture.",
+        "guidance": "This allows unfill bbox pa and then draw pa so labels overwrite a portion of already drawn content, producing clean cutouts."
+      },
+      {
+        "name": "buildcycle constructs cyclic paths from multiple paths",
+        "description": "buildcycle( p1, p2, ... ) tries to piece given paths into a cyclic path by selecting intersection points and concatenating appropriate subpaths.",
+        "guidance": "When pairs of consecutive paths have unique intersections, buildcycle picks intersections 'as late as possible on p_i and as early as possible on p_{i+1}' favoring forward-going subpaths. Avoid cases where path pairs intersect multiple times (ambiguous). Use intersectionpoint/intersectiontimes for precise control."
+      },
+      {
+        "name": "intersectionpoint macro behavior",
+        "description": "intersectionpoint finds a point where two given paths intersect; if more than one intersection exists, it just chooses one; if none, it generates an error.",
+        "guidance": "Use when you only need one intersection; for multiple or precise control use intersectiontimes and time-based operations."
+      },
+      {
+        "name": "intersectiontimes operator returns parametric times or (-1,-1)",
+        "description": "a intersectiontimes b returns (-1,-1) if there is no intersection; otherwise returns a pair (t_a, t_b) giving the time parameters on each path where an intersection occurs.",
+        "guidance": "When multiple intersections exist, MetaPost chooses among them using a preference for smaller time values (and ta tends to get priority). Exact tie-breaking rules are complex (see METAFONTbook). Useful for parametric subpath operations."
+      },
+      {
+        "name": "point \u27e8numeric\u27e9 of \u27e8path\u27e9 and path parameterization",
+        "description": "point t of p returns the point on path p corresponding to time t, where path times are 0..n for n segments; time values outside range normally yield endpoints; cyclic paths treat times modulo length p; infinity constant often used to access the end.",
+        "guidance": "Use infinity when dealing with endpoints of non-cyclic paths. For cyclic paths, time values are reduced modulo n (length p)."
+      },
+      {
+        "name": "subpath operator semantics",
+        "description": "subpath (t1,t2) of p returns the path following p from point t1 to point t2; if t2 < t1 the subpath runs backwards along p.",
+        "guidance": "Useful to extract segments of a path for building composites. Works with fractional time values as well."
+      },
+      {
+        "name": "cutbefore and cutafter behavior",
+        "description": "p1 cutbefore p2 returns p1 with the part before the first intersection with p2 removed (tries to cut as little as possible) and sets variable cuttings to the portion cut off. cutafter is analogous, cutting off part after the last intersection.",
+        "guidance": "If paths do not intersect, cutbefore returns the first argument unchanged. These operators rely on intersectiontimes to choose which intersection to use when multiple exist."
+      },
+      {
+        "name": "precontrol and postcontrol operators (control points retrieval)",
+        "description": "precontrol t of p and postcontrol t of p return the control points before and after a cardinal point of a path; for integers t they return control points surrounding the cardinal point; for fractional t they correspond to virtual cardinal points.",
+        "guidance": "For segment z_{t-1}..z_t, control points are postcontrol t-1 and precontrol t. For fractional times treat as if a virtual point were inserted at that time without changing path shape."
+      },
+      {
+        "name": "direction, directiontime, and directionpoint operators",
+        "description": "direction t of p yields a vector in the direction of path p at time t (used to make tangent lines). directiontime \u27e8pair\u27e9 of p returns the first time t where path has that direction (or -1). directionpoint returns the first point where given direction is achieved or errors if none.",
+        "guidance": "Combine point and direction constructions to compute tangents and related geometry. Example: directiontime (1,1) of a returns 0.2084 in example."
+      },
+      {
+        "name": "arclength and arctime operators",
+        "description": "arclength p gives the arc length of a path p. arctime a of p gives the time t such that the arc length of subpath (0,t) equals a.",
+        "guidance": "arclength/arctime available in MetaPost v0.50+. Use to relate parametric time to geometric length."
+      },
+      {
+        "name": "envelope operator for polygonal pens",
+        "description": "envelope returns the envelope of a path p drawn with a polygonal pen; it returns an error if the pen is not polygonal.",
+        "guidance": "Used to compute contours produced by stroking a path with a polygonal pen. Example: envelope of elliptical-pen approximation shown in Figure 28."
+      },
+      {
+        "name": "affine transformation operators and meanings",
+        "description": "Transformation operators (shifted, rotated, slanted, scaled, xscaled, yscaled, zscaled) apply affine transforms to pairs, paths, pictures, pens, and transforms. zscaled(a,b) acts like complex multiplication (rotate+scale). rotated \u03b8 rotates counter-clockwise by \u03b8 degrees.",
+        "guidance": "Transform expressions can be chained (e.g., identity xscaled -1 rotated 90 shifted (1,1)). There are also reflectedabout(p,q) and rotatedaround(p,\u03b8) forms."
+      },
+      {
+        "name": "transform expressions, identity and inverse, and solving for transforms",
+        "description": "Transforms are represented by six parameters (tx, ty, xxpart, xypart, yxpart, yypart) accessible by xpart, ypart, xxpart, etc. identity is the identity transform. inverse T gives a transform that undoes T (illegal to inverse an unknown transform). Unknown transforms can be solved by linear equations involving transformed points.",
+        "guidance": "You can determine an unknown transform T' by giving three equations of the form (pair transformed T' = pair). Example provided with three mappings that determine T' coefficients. Use xxpart T = yypart T etc. to constrain transforms (e.g., enforce shape-preserving)."
+      },
+      {
+        "name": "dashed lines syntax and predefined dash patterns",
+        "description": "draw \u27e8path expression\u27e9 dashed \u27e8dash pattern\u27e9 draws dashed lines. Predefined patterns include evenly (dashes 3pt with equal gaps) and withdots (dots 5pt apart). Dash patterns can be scaled and phase-shifted.",
+        "guidance": "Examples: dashed withdots scaled 2; dashed evenly scaled 4. Phase shifting moves dash pattern along the path (use shifted(x,y) on the dash pattern)."
+      },
+      {
+        "name": "dashpattern semantics and specification",
+        "description": " dashpattern(on/off list) returns a picture used as a dash pattern. The picture's line segments are projected onto the x-axis and replicated end-to-end to create the repeating dash/gap pattern. General syntax: dashpattern(on \u27e8num\u27e9 off \u27e8num\u27e9 ...).",
+        "guidance": "Dash lengths start at x=0 scanning positive x. If pattern copies abut, end segments can merge producing longer dashes. Example: dashpattern(on 6bp off 12bp on 6bp)."
+      },
+      {
+        "name": "restrictions for dash pattern pictures",
+        "description": "A picture used as a dash pattern must contain no text or filled regions; it may contain lines (including dashed lines) and is intended to be used with pencircle or no pen \u2014 avoid complex/polygonal pens.",
+        "guidance": "Using polygonal pens (e.g., pensquare or makepen results) with dash patterns is discouraged because PostScript setdash does not interact well with filled paths created by polygonal pens (see Section 9.7). Small dashes inside larger dashes can be achieved by dashed patterns that themselves contain dashed lines."
+      },
+      {
+        "name": "dashpattern length and replication rule details",
+        "description": "The replication length \u2113(d) of a dashpattern picture d is based on the x-range of its x-projection and the picture's contents y coordinate; MetaPost uses max(|y0(d)|, dmax - dmin) as the length measure and replicates by integer multiples of \u2113(d).",
+        "guidance": "This determines how the picture is tiled to infinity when applied as a dash pattern; experimentation helps to understand concrete patterns (example llcorner/urcorner values given)."
+      },
+      {
+        "name": "withprescript and withpostscript nesting order",
+        "description": "withprescript\u27e8string\u27e9 and withpostscript\u27e8string\u27e9 attach raw PostScript strings before and after the current object in the output. Multiple withprescript items are written last-in-first-out; multiple withpostscript items are written first-in-first-out.",
+        "guidance": "Each string is written on its own line; multiple occurrences are allowed but be mindful of nesting order semantics when stacking scripts."
+      },
+      {
+        "name": "linecap, linejoin, and miterlimit parameters affect stroke appearance",
+        "description": "linecap controls appearance of line ends (rounded, butt, squared). linejoin controls corner joins (rounded, beveled, mitered). miterlimit controls when mitered joins revert to beveled joins (default 10.0).",
+        "guidance": "Defaults: linecap := rounded, linejoin := rounded in Plain MetaPost. Setting linecap := butt yields flush cut ends; squared extends past endpoints. Mitered joins can produce long pointed features when angle is sharp; use miterlimit to limit extremes."
+      },
+      {
+        "name": "arrow drawing primitives and arrow parameters",
+        "description": "drawarrow \u27e8path\u27e9 draws a path with an arrowhead at the last point; drawdblarrow draws double-headed arrows. reverse operator flips path direction to place arrow at start. ahlength and ahangle control arrowhead length and tip angle.",
+        "guidance": "Arrowhead size is guaranteed to be larger than line width but adjust ahlength if line width is large. Example: increase ahlength to 1.5cm to create large arrowhead; default ahangle is 45 degrees. Arrowheads are produced by filling a triangular region then stroking it."
+      },
+      {
+        "name": "filldraw, undraw, and unfilldraw semantics",
+        "description": "filldraw fills a closed path and then draws around it (combines filling and drawing). undraw draws withcolor background to erase (like unfill). unfilldraw exists similarly.",
+        "guidance": "These statements accept dashed, withpen, and withcolor options. Use undraw to create white lines (erasures) as in Figure 39 where white lines outline triangular arrow regions."
+      },
+      {
+        "name": "drawoptions global drawing options and overriding behavior",
+        "description": "drawoptions(\u27e8text\u27e9) sets a sequence of dashed, withcolor, and withpen options to be applied automatically to all drawing statements until reset. drawoptions() clears them (beginfig resets it).",
+        "guidance": "Options in specific draw/fill statements override drawoptions. Irrelevant options are ignored for statements where they don't apply (e.g., dashed ignored for fill). Example: drawoptions(withcolor .8white) then draw ... withcolor black overrides the default for that draw."
+      },
+      {
+        "name": "rules for which options affect which drawing statements",
+        "description": "The dashed option affects only draw \u27e8path\u27e9 statements; text in draw \u27e8picture\u27e9 is only affected by withcolor; withpen can affect both draw and fill (drawoptions withpen affects fill too); other combinations may affect some parts of a picture but not others.",
+        "guidance": "When applying global options, remember dashed won't affect fill, and withcolor applies to picture text but not necessarily to all picture content."
+      },
+      {
+        "name": "pencircle scaled and affine-transformed pens",
+        "description": "pencircle scaled \u27e8numeric\u27e9 is the basic pen (circle 1pt diameter scaled). Applying affine transforms (xscaled, yscaled, rotated, etc.) to pens yields elliptical or otherwise transformed pen shapes; line width depends on orientation relative to pen's long axis.",
+        "guidance": "Operators lft, rt, top, bot answer where the pen's left/right/top/bottom edges lie when placed at a given position; beginfig resets currentpen to pencircle scaled 0.5bp; use pickup defaultpen to reselect default."
+      },
+      {
+        "name": "polygonal pens, makepen and pensquare, and restrictions",
+        "description": "MetaPost supports polygonal pen shapes (compatibility with METAFONT). pensquare is predefined and equivalent to makepen of a unit square path. makepen(convex-polygon-path) creates a pen of that shape; non-convex or non-polygonal paths are straightened.",
+        "guidance": "makepen and pensquare should not be used with dash patterns (PostScript setdash doesn't work well with polygonal pen filled paths). makepen will straighten or drop vertices if necessary."
+      },
+      {
+        "name": "makepath is inverse of makepen",
+        "description": "makepath \u27e8pen expression\u27e9 returns the corresponding cyclic path representation of a pen. For example, makepath pencircle produces a circular path identical to fullcircle.",
+        "guidance": "Useful to convert pen descriptions back into paths for inspection or further operations."
+      },
+      {
+        "name": "primitive drawing statements require explicit picture variables",
+        "description": "Primitive drawing statements (lower-level versions of draw, fill, etc.) require specifying a picture variable to hold the results; higher-level draw/fill direct results to currentpicture.",
+        "guidance": "The syntax for primitive drawing statements is compatible with METAFONT and each primitive can accept its own \u27e8option list\u27e9 (equivalent to appending that option list to the higher-level version). Use primitive forms when you need explicit control over picture variables."
+      }
+    ]
+  }
+}

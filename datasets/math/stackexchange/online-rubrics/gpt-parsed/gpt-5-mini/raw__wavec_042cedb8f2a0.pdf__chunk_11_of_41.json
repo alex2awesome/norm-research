@@ -1,0 +1,171 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 11,
+  "n_chunks": 41,
+  "chunk_chars": 39911,
+  "model": "gpt-5-mini",
+  "elapsed_s": 101.42097954099881,
+  "input_tokens": 12505,
+  "output_tokens": 4796,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Users of the Magma computer algebra system (students, researchers, and programmers writing Magma code)",
+    "subtask_short": "magma loop_and_intrinsic_guidelines",
+    "subtask_description": "Guidelines and language rules for writing iterative statements (repeat, for, continue, break), idiomatic non-loop constructs (set/sequence constructors, reductions), and creating/testing/packaging intrinsics in the Magma language. Covers semantics, scoping, performance, and error-checking.",
+    "subtask_keywords": [
+      "magma",
+      "programming",
+      "loops",
+      "intrinsics",
+      "packages",
+      "error_handling"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "repeat-statement semantics",
+        "description": "The iteration continues until the Boolean expression evaluates to true. Therefore the statement body is always executed at least once in this kind of iterative statement.",
+        "guidance": "Use a repeat-statement when you require the loop body to run at least once (example: testing the first Fermat number). The until-condition is evaluated at the end of each loop; if multiple termination possibilities exist, join them with logical operators (e.g., or)."
+      },
+      {
+        "name": "choose repeat vs while based on required first-pass",
+        "description": "A repeat-statement is a slightly better choice than a while-statement for situations where at least one pass through the loop must be made.",
+        "guidance": "Example: when computing and testing the first item (Fermat numbers) a repeat makes intent and correctness clearer than a while. If termination may occur after the first pass, structure the until-condition appropriately."
+      },
+      {
+        "name": "for-statement general structure and domain evaluation",
+        "description": "for identifier in domain do statements end for; The domain is calculated when the execution of the for-statement begins, and cannot be changed during the iteration.",
+        "guidance": "The domain should evaluate to an iterable structure (sequence, set, or finite magma Magma can list). The loop identifier takes successive values from the domain and the statements are executed for each such value."
+      },
+      {
+        "name": "domain must be iterable / listable by Magma",
+        "description": "The domain of the loop identifier should be an expression that evaluates to some iterable structure, that is, an iterable aggregate structure or a finite magma whose elements Magma is able to list.",
+        "guidance": "If domain is not listable/iterable, the for-statement is not appropriate. The domain is fixed at loop start; it cannot be mutated to affect iterations."
+      },
+      {
+        "name": "loop identifier scope (local to loop)",
+        "description": "The loop identifier is local to the loop. It effectively has no existence outside the loop; any identifer with the same name outside the loop remains unchanged.",
+        "guidance": "This scoping rule protects the user from destroying important data outside the loop. Even inside functions, the function scope adds another level so loop variables have no existence outside the function."
+      },
+      {
+        "name": "loop identifier is value-class (cannot be reassigned)",
+        "description": "Loop identifiers of for-statements may not be reassigned in the statement body. They exist to be inspected for their current value rather than to be changed by the user.",
+        "guidance": "Because they're value-class identifiers you should not write code that assigns to the loop identifier within the loop body; use different temporaries instead."
+      },
+      {
+        "name": "sequence domains iterate in indexing order and repeat elements",
+        "description": "If the domain of a for-loop is a sequence (or a list or indexed set), the loop identifier will run through the elements of the domain in the standard indexing order. If it has repeated elements, those elements will be assigned to the loop identifier the corresponding number of times.",
+        "guidance": "Example: for j in [9/2, 1, 3/4, 2, 3/4, 3/4, 54/11] do ... end for prints in sequence order, including repeats."
+      },
+      {
+        "name": "use Seqset(Q) to avoid iterating repeated terms",
+        "description": "If the domain is a sequence with repeated terms and it is undesirable to repeat the iteration for the same value, the for-statement should be given the enumerated set Seqset(Q) as its domain.",
+        "guidance": "This is important when each iteration is expensive and the sequence contains many duplicates."
+      },
+      {
+        "name": "use arithmetic-progression sequences for ranges",
+        "description": "To make the loop identifier take values i, i+k, i+2k, ..., j, construct the domain as an arithmetic-progression sequence using syntax [i..j by k] or [i..j] for k = 1.",
+        "guidance": "This idiom simplifies common tasks (sums, factorials) because the for-loop handles incrementing automatically, often making code clearer than a while-loop with manual increment."
+      },
+      {
+        "name": "empty domain behaviour (for-loop does not execute body)",
+        "description": "If the domain sequence is empty then the statements in the body of the for-loop are never executed, so variables initialized before the loop retain their values.",
+        "guidance": "Example: factorial implementation using for c in [n..2 by -1] do ... end for; when n is 0 or 1 the domain is empty and answer remains 1 (correct for 0! and 1!)."
+      },
+      {
+        "name": "continue to skip rest of current iteration",
+        "description": "continue; causes Magma to omit the rest of the statements in the loop body for the current iteration and proceed to the next iteration.",
+        "guidance": "Use continue when you determine the current object doesn't meet conditions and it's desirable to proceed immediately to the next one; it avoids nested/incomplete if-statements and tangles."
+      },
+      {
+        "name": "break to exit entire loop immediately",
+        "description": "break; causes immediate exit from the entire iterative statement.",
+        "guidance": "Useful in search algorithms looking for a single value or handling special cases. Using a for-loop with break often yields clearer logic than complex repeat/until conditions."
+      },
+      {
+        "name": "break/continue in nested loops apply to innermost loop unless named",
+        "description": "Within nested loops, continue or break refer to the innermost loop by default. For for-loops you can override this by specifying the loop identifier after continue or break (e.g., break x;).",
+        "guidance": "Use the identifier form (break x) to terminate an outer loop from an inner loop when required; otherwise the inner loop will be affected."
+      },
+      {
+        "name": "prefer non-iterative set/sequence constructors when concise",
+        "description": "Many iterative tasks can be performed in Magma with set/sequence constructors and associated operations (comprehensions, reductions) without explicit iterative statements.",
+        "guidance": "Examples: [n: n in ResidueClassRing(18) | IsSquare(n)] or {n^2: n in ResidueClassRing(18)} for squares; order_elts := func< G, k | {g: g in G | Order(g) eq k} > ; sum := &+[ i^3 : i in [1..t] ]; return &*[n..2 by -1]; use forall(...) to test predicates over ranges. These forms often increase clarity and succinctness."
+      },
+      {
+        "name": "use &+ / &* and reductions for aggregate operations",
+        "description": "Magma provides reduction operators &+ and &* to sum or multiply elements of a sequence directly.",
+        "guidance": "These operators handle empty aggregates by convention (empty product = 1), which can simplify corner cases (e.g., factorial for n=0 or 1)."
+      },
+      {
+        "name": "use forall for global predicate tests",
+        "description": "Use forall(ex){n: n in [1..6] | IsPrime(2^2^n + 1) } to test that a predicate holds for all elements in a range.",
+        "guidance": "This can replace loops that would otherwise search for counterexamples and is often more concise and expressive."
+      },
+      {
+        "name": "use time command for CPU timing",
+        "description": "Placing time at the beginning of a statement executes it as usual and also prints the number of seconds of CPU time taken to execute the statement.",
+        "guidance": "Use time to compare algorithm performance (example comparing fiboA and fiboB). Helpful in choosing more efficient algorithms for large inputs."
+      },
+      {
+        "name": "intrinsic signature format and retrieval",
+        "description": "The signature of an intrinsic is a short description listing its arguments and their categories, return value categories (if any), parameters, and a brief textual description. The signature may be printed using print <Intrinsic>.",
+        "guidance": "Signatures indicate argument and return categories, and functions with multiple argument kinds have multiple signatures (overloads). Use printing to learn an intrinsic's expected categories and behavior."
+      },
+      {
+        "name": "operators are intrinsics with special syntax",
+        "description": "Operators such as +, # or @ are system intrinsics with special syntax. If enclosed in apostrophes (e.g., 'cat') Magma treats the operator as a standard intrinsic and you can print its signature.",
+        "guidance": "Use print 'operator' to inspect operator signatures and behavior (concatenation signatures for sequences, lists, strings are shown)."
+      },
+      {
+        "name": "ListSignatures(C) usage",
+        "description": "ListSignatures(C) lists signatures of all intrinsics having an argument or return value belonging to category C; parameters Isa and Search refine results.",
+        "guidance": "Use ListSignatures(FldFin) to find intrinsics relevant to finite fields. Set Isa := false to restrict to signatures explicitly for C. Set Search to 'Arguments' or 'ReturnValues' to limit search direction."
+      },
+      {
+        "name": "user intrinsic definition syntax and compulsory comment",
+        "description": "User intrinsic functions and procedures are defined with intrinsic ... end intrinsic; the comment text enclosed in braces is compulsory and provides the textual description used in signatures.",
+        "guidance": "Function form: intrinsic name(argument list) -> return list {comment text} statements end intrinsic. Procedure form: intrinsic name(argument list) {comment text} statements end intrinsic. The argument list uses name::simple_type or [simple_type] forms; reference args use ~name; parameters may follow the arg list as param := default. Include required comment text or package compilation fails."
+      },
+      {
+        "name": "intrinsic argument and return typing",
+        "description": "Return lists are comma-separated simple types (category names, variety names, '.' for any type, or bracket forms for sets/sequences). Arguments use name::simple_type or aggregate forms; ~name for reference args without prior value.",
+        "guidance": "Types in signatures enable automatic category checking at call time. Use correct category names for argument validation and to get helpful runtime errors for bad argument types."
+      },
+      {
+        "name": "package files and packaging user intrinsics",
+        "description": "To incorporate user intrinsics into Magma they must be placed in a package file (a text file) containing intrinsic definitions; package files may also contain assignment statements and comments.",
+        "guidance": "Constants defined in a package file are scoped to the package unless explicitly imported. Create a package file (e.g., mypck1) with intrinsics and Attach(\"mypck1\") to bring them into the session."
+      },
+      {
+        "name": "attaching/detaching packages and package compile errors",
+        "description": "Attach(F) attaches a package file; Detach(F) detaches it. If Magma detects an error while attaching a package it gives an error message including [PC] for 'package compiler'.",
+        "guidance": "After Attach the intrinsics are indistinguishable from system intrinsics. Fix syntax or missing compulsory comment text and re-save; failed attaches must be corrected and re-attached."
+      },
+      {
+        "name": "automatic package updating and freeze",
+        "description": "When a package file attached to Magma is edited and saved, Magma automatically updates the intrinsics by recompiling the package if the file's save time is newer than its last processing time. This time-checking occurs before each top-level statement; placing freeze; at the top of the package file prevents automatic updates.",
+        "guidance": "Automatic updating eases development but incurs slight time overhead due to file-time comparisons; freeze a stable package to avoid this overhead. Attach or start-up attachment also triggers update."
+      },
+      {
+        "name": "error checking in intrinsics via signatures and special require statements",
+        "description": "Argument types are checked against intrinsic signatures at call time and produce runtime errors for bad types. Additional special statements for user intrinsics\u2014require, requirerange, requirege\u2014are provided to check runtime conditions on arguments/parameters.",
+        "guidance": "require condition: expression_list; prints the provided expression list (often an error string) if condition false. requirerange v, L, U; checks integer v falls in [L,U]. requirege v, L; checks v >= L. Use these to give informative runtime messages (example: LowerToUpperCase checks that characters are in 'a'..'z')."
+      },
+      {
+        "name": "use require to validate argument contents beyond types",
+        "description": "The require-statement allows arbitrary condition checking and printing of diagnostic expressions when conditions fail.",
+        "guidance": "Syntax: require condition: expression list; If condition false Magma stops and prints a runtime error message containing the expression list. Use this to enforce preconditions (e.g., character ranges) that signatures cannot express."
+      },
+      {
+        "name": "functions/procedures provide additional scope",
+        "description": "Functions provide an additional level of scope so that variables (including loop identifiers) inside the function have no existence outside the function.",
+        "guidance": "Example: in order_elts function neither g nor eltset exist outside the function. Rely on function scope to isolate internals and avoid polluting global namespace."
+      }
+    ]
+  }
+}

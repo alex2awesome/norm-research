@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_166df419cb92.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16813,
+  "output_tokens": 3654,
+  "elapsed_s": 2144.8464794999454,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in multimodal NLP/ML working on humor understanding, cartoon captioning, and evaluation (e.g., NYCC benchmarks)",
+    "subtask_short": "NYCC multimodal humor understanding",
+    "subtask_description": "Modeling and evaluating humor in New Yorker-style cartoons via structured, interpretable reasoning: identify visual incongruities, generate coherent resolutions, and align model outputs with human preferences (matching and ranking tasks).",
+    "subtask_keywords": [
+      "humor",
+      "multimodal",
+      "cartoon_captioning",
+      "nycc",
+      "incongruity_resolution"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Incongruity Modeling (IM)",
+        "description": "Identifies mismatches in the visual scene: the salient visual tension or unexpected element(s) that violate expectation and make the scene humor-relevant.",
+        "guidance": "Implemented via domain-adaptive pretraining on captionist discussions/editorial analyses to bias representations toward humor-relevant concepts, lexical economy, narrative framing, and culturally grounded references. IM alone may not improve accuracy and can degrade performance unless paired with Resolution Modeling (see ablation notes). Full corpus details in Appendix A."
+      },
+      {
+        "name": "Resolution Modeling (RM)",
+        "description": "Constructs coherent reinterpretations of identified incongruities \u2014 i.e., explains how the mismatch can be reframed into a punchline or humorous reading.",
+        "guidance": "Supervised via captionist reasoning traces that encode step-by-step analyses (scene reconstruction \u2192 incongruity identification \u2192 narrative resolution). RM is reported as the main source of performance improvement in ablations and is essential for converting incongruity priors into usable humor reasoning."
+      },
+      {
+        "name": "Preference Alignment (PA)",
+        "description": "Evaluates candidate interpretations against human judgments to align model preference ordering with crowd/expert preferences.",
+        "guidance": "Implemented via reinforcement learning with humor-aware rewards (accuracy, format, visual perception, style). PA provides complementary gains, particularly on ranking tasks that depend on perceptual grounding and stylistic quality."
+      },
+      {
+        "name": "Captionist reasoning traces (structured supervision format)",
+        "description": "Train/dev/test outputs and supervision are structured as explicit reasoning traces using <think> reasoning steps and <answer> final choice (i.e., \"<think>...<\\/think><answer>...<\\/answer>\").",
+        "guidance": "Traces are generated following an expert-derived template (scene reconstruction, incongruity identification, narrative resolution), verified under human supervision, and rephrased to emphasize concise, observational, image-grounded commentary. Enforcing this format encourages internalization of captionist-style reasoning and enables automated parsing and judge evaluation. Prompt templates and examples in Appendices C and D."
+      },
+      {
+        "name": "Domain-adaptive continual pretraining (CPT) for humor priors",
+        "description": "Continual pretraining on a curated corpus of captionist discussions, editorial analyses, caption-writing guides, and complementary general-knowledge text to shape model priors toward humor-relevant signals.",
+        "guidance": "CPT uses a standard causal LM objective as preparatory stage; it biases what the model attends to (stylistic conventions, editorial heuristics, culturally grounded expectations) rather than directly optimizing downstream tasks. IM is implemented via CPT; see Appendix A for corpus details."
+      },
+      {
+        "name": "Accuracy reward (R_a)",
+        "description": "Binary correctness signal: verifies whether the final caption choice is correct (gold caption for matching; crowd-preferred caption for ranking).",
+        "guidance": "Forms a primary scaffold for PA; perception/style rewards are conditioned on correctness to avoid distracting from accurate caption selection. Included in composite reward with weight \u03bb_a."
+      },
+      {
+        "name": "Format reward (R_f)",
+        "description": "Ensures adherence to the structured reasoning output format so outputs remain parseable and interpretable (e.g., correct use of <think>/<answer> tags).",
+        "guidance": "Provides scaffolding for downstream judge evaluation and automated metrics. Included in composite reward with weight \u03bb_f."
+      },
+      {
+        "name": "Visual perception reward (R_p)",
+        "description": "Rewards reasoning that is grounded in salient visual elements and incongruities (i.e., whether model reasoning references the curated visual facts of the cartoon).",
+        "guidance": "Computed by comparing model reasoning to curated visual references (up to ten per cartoon) via an LLM-as-judge (Qwen2.5-7B-Instruct). Operates on reasoning traces and returns binary per-attribute grounding signals aggregated into R_p. Conditioned on R_a=1 in the composite reward to reinforce rather than distract from correctness."
+      },
+      {
+        "name": "Style reward (R_s)",
+        "description": "Evaluates linguistic/captionist quality of the explanation/caption along dimensions such as everyday phrasing, punctuation, wordplay, metaphor, and punchline placement.",
+        "guidance": "Implemented as an LLM-as-judge producing binary outputs per stylistic dimension; aggregated into R_s (binary signals aggregated). Judge operates solely on reasoning traces (no access to ground-truth captions). Conditioned on R_a=1 in the composite reward. Prompts and judge details in Appendix C; style dimensions explicitly listed in Appendix D (Fig. D.5)."
+      },
+      {
+        "name": "Reward composition and conditioning",
+        "description": "Composite reward formula: R = \u03bb_a R_a + \u03bb_f R_f + I[R_a = 1] (\u03bb_p R_p + \u03bb_s R_s), i.e., perception and style rewards are applied only when the answer is correct.",
+        "guidance": "Conditioning perception/style on correctness ensures these signals reinforce accurate caption selection rather than distracting optimization. RL objective uses clipped importance sampling (GRPO-style) and (in practice) removing KL penalty improved reasoning coherence for this task (per experiments)."
+      },
+      {
+        "name": "Curated visual references for perception alignment",
+        "description": "For each cartoon, collect concise descriptions of entities, scene context, and key incongruities (used as anchors to evaluate visual grounding).",
+        "guidance": "References extend prior annotations (Hessel et al., 2023) and are used by the visual perception judge to assess whether model reasoning is grounded in salient scene elements. Up to ten reference descriptions per cartoon; examples in Fig. 3 and Appendix C."
+      },
+      {
+        "name": "Standardized evaluation protocol and \"think before answering\" requirement",
+        "description": "All multimodal evaluations require models to follow the controlled output format (<think>...</think><answer>...</answer>) and to produce explicit reasoning traces prior to final choice.",
+        "guidance": "This standardization ensures fair comparison across models, enables automatic parsing/evaluation, and reduces differences due to prompting. Prompts/templates provided in Appendix C (Figures C.8, C.9)."
+      },
+      {
+        "name": "Matching task (NYCC matching)",
+        "description": "Select the gold caption from five candidates given a cartoon image.",
+        "guidance": "Evaluates the ability to identify the correct visual interpretation from distractors; rewards localization of salient incongruities and elimination of off-topic options. Used as a primary benchmark (Hessel et al., 2023)."
+      },
+      {
+        "name": "Ranking task (NYCC ranking)",
+        "description": "Select the crowd-preferred caption from two options for a given cartoon image.",
+        "guidance": "Emphasizes preference alignment, perceptual grounding, and stylistic judgment between plausible resolutions; sensitive to PA and style/perception rewards."
+      },
+      {
+        "name": "Hard ranking splits: 10-vs-1000 and 30-vs-300",
+        "description": "10-vs-1000: discriminate between a top-10 caption and one ranked 1000\u20131009; 30-vs-300: discriminate between a caption ranked 30\u201339 and one ranked 300\u2013309.",
+        "guidance": "These settings increase difficulty and test fine-grained preference discrimination and ranking robustness; 30-vs-300 is noted as the most challenging because stylistically competent captions make preferences ambiguous."
+      },
+      {
+        "name": "LLM-as-judge operational constraints",
+        "description": "Judges (visual perception and style) evaluate only the model's reasoning traces and have no access to ground-truth captions.",
+        "guidance": "This prevents reward signals from directly optimizing for answer matching and ensures the reward reflects reasoning quality (grounding and stylistic consistency) rather than answer leakage. Reward prompts and judge examples in Appendix C/D."
+      },
+      {
+        "name": "Ablation-guided design rules (empirical guidance/anti-patterns)",
+        "description": "Empirical findings from ablations: RM is the main source of improvement; IM alone can degrade performance; IM is helpful only when paired with RM; PA complements RM especially on ranking; removing KL penalty improved reasoning coherence.",
+        "guidance": "Design implication: prioritize supervised resolution traces (RM) and pair domain adaptation (IM) with RM; include PA with humor-specific rewards for better ranking; avoid domain adaptation without resolution supervision (IM+PA underperforms Base+PA). Use ablation tables (Table 2, Table 3) as guidance for component inclusion."
+      },
+      {
+        "name": "Zero-shot generalization as an evaluation criterion",
+        "description": "Measure transfer to out-of-domain humor benchmarks (e.g., YesBut, DeepEval) without additional training to assess whether learned reasoning patterns generalize beyond NYCC.",
+        "guidance": "Strong zero-shot gains indicate learning of transferable reasoning (contrastive/structural patterns) rather than dataset-specific heuristics; reported large gains on YesBut and DeepEval in Appendix F."
+      },
+      {
+        "name": "Qualitative caption generation as emergent competence",
+        "description": "Although IRS is trained for selection/ranking, evaluate zero-shot caption generation quality qualitatively as an indicator that supervised reasoning traces enable generation-capable captionist-style outputs.",
+        "guidance": "Assess grounding, concision, wordplay, and resolution of incongruity in zero-shot generated captions (Appendix G examples). Not an explicit training objective but an auxiliary evaluation of transfer."
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_7569e80e749a.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16103,
+  "output_tokens": 3891,
+  "elapsed_s": 1409.3693444170058,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners building LLM-driven automated theorem provers (Isabelle/HOL users), formal methods and ML for code/proof communities",
+    "subtask_short": "LLM-driven Isabelle proof synthesis",
+    "subtask_description": "Designing, training, and evaluating LLM-based systems that generate and refine formal proofs for Isabelle/HOL (combining whole-proof synthesis and tactic-level generation). Includes dataset curation, prompt/output format, integration with Sledgehammer, and experimental evaluation on miniF2F.",
+    "subtask_keywords": [
+      "isabelle",
+      "theorem_proving",
+      "llm",
+      "whole_proof",
+      "tactic_generation",
+      "miniF2F"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Proof success rate (miniF2F)",
+        "description": "Measure of how many theorems in the miniF2F test set are proved (verified by Isabelle) by the system; reported as a percentage (e.g., HybridProver achieves 59.4% on miniF2F).",
+        "guidance": "Use consistent sampling parameters (e.g., sampling rate @128) and Isabelle verification to compare with prior SOTA. Report ablations to show contributions of components. Success rate is the primary empirical metric for system effectiveness."
+      },
+      {
+        "name": "Syntax correctness / proof filter",
+        "description": "Generated proofs must pass a syntactic filter before being sent to Isabelle: responses must be in the required JSON/structured format and begin with Isabelle keywords; otherwise they are abandoned.",
+        "guidance": "Implement proof patterns in a proof_filter to ensure Isabelle proof syntax. If the response is not in the JSON format required or does not begin with keywords in Isabelle, it must be wrong and should be filtered out prior to expensive verification."
+      },
+      {
+        "name": "Isabelle checker verification",
+        "description": "A generated whole proof is only considered valid if Isabelle (the ITP) verifies it\u2014i.e., check(p, L) = True.",
+        "guidance": "Always run the Isabelle trusted kernel to verify candidate proofs; only proofs passing the checker are returned as valid. Use concurrency to evaluate many candidates efficiently."
+      },
+      {
+        "name": "Proof sketch correctness (replace tactics with sorry)",
+        "description": "Construct proof sketches by substituting all detailed tactics with the Isabelle keyword sorry, then verify the sketch with Isabelle; correct sketches indicate a valid high-level proof plan.",
+        "guidance": "Mechanically build sketches from candidate whole proofs and filter/sanitize them. Most sketches from whole-proof synthesis are correct; evaluating sketches (without tactics) can yield up to ~90% pass rate on miniF2F, so sketch correctness is a strong intermediate signal."
+      },
+      {
+        "name": "Proof sketch refinement (tactic-level filling)",
+        "description": "Refine verified proof sketches by generating tactic proofs for each subgoal (via a tactic-based LLM and Sledgehammer) and substituting them into the sketch; the refined whole proof must pass Isabelle verification.",
+        "guidance": "For each subgoal Gi, generate multiple tactic responses (LLMstep(Gi) \u222a Sledgehammer(Gi)) and iteratively replace sorry occurrences until the IsabelleVerify(prefined, L) = True or resources are exhausted."
+      },
+      {
+        "name": "Dataset purification and structured output format",
+        "description": "Training data should be purified (remove extra blanks/tabs, delete comments, rewrite problematic symbols) and transformed into a structured output format {Isabelle_proof: proof code} for models to learn.",
+        "guidance": "Data purification significantly improves model outputs (passes improve >=10%). Enforce a uniform structured format and remove noisy tokens to avoid polluting model output."
+      },
+      {
+        "name": "Split dataset by proof style (Isar vs apply-style)",
+        "description": "Maintain separate datasets depending on proof style: Isar proofs to fine-tune whole-proof synthesis models and apply-style proofs to fine-tune tactic-based generation models.",
+        "guidance": "Leverage the two Isabelle proof styles as distinct training regimes because Isar is high-level and verbose, while apply-style emphasizes incremental tactic steps. Splitting enables specialized learning for planning vs detail generation."
+      },
+      {
+        "name": "Filter training examples by proof-step counts",
+        "description": "Filter proofs based on number of proof steps to focus model capacity: apply-style proofs generally 1\u20135 steps (filter out >5), Isar proofs typically 11\u201330 steps (filter out >50 or <5).",
+        "guidance": "This keeps the tactic-based model focused on concise subgoal solving and the whole-proof model on reasonable-length sketches; remove examples that are too simple or too complex for reliable learning."
+      },
+      {
+        "name": "Premise selection strategy",
+        "description": "Two approaches to premise handling: (a) retrieve premises from a library, or (b) train the whole-proof synthesis model to memorize/use premises; HybridProver chooses the latter.",
+        "guidance": "Decide whether to build an external retrieval library or train the model to include premises. Training the whole-proof model to select premises worked in HybridProver, while hammers and Sledgehammer can also provide premise selection during proving."
+      },
+      {
+        "name": "Integration and configuration of hammers (Sledgehammer)",
+        "description": "Integrate Sledgehammer as an automated tool to assist tactic-level proving; configure timeouts and ATPs (default Sledgehammer config: 30s timeout, ATPs: E, SPASS, Vampire, Z3, CVC4).",
+        "guidance": "Use Sledgehammer to find relevant premises and short proofs; complement with heuristics (e.g., 'by auto', 'by simp', 'by blast', etc.). Note Sledgehammer does not handle induction well\u2014LLMs can help on such cases."
+      },
+      {
+        "name": "Prompt and output constraints",
+        "description": "Prompts must instruct the model to 'Generate proof code in Isabelle/HOL' and to 'Make sure that the generated proof can be verified by Isabelle/HOL. Do not generate extra natural language descriptions.'",
+        "guidance": "Enforce prompts and examples (few-shot) that produce structured Isabelle proofs only. Also require model outputs to follow the required structured/JSON format to pass the proof filter."
+      },
+      {
+        "name": "Sampling diversity and temperature settings",
+        "description": "Sampling temperature T and sampling rate (number of samples per theorem) affect success: moderate temperatures (T\u22480.6\u20130.9) are best; too high T leads to hallucinated nonexistent facts. Higher sampling rates (@128 vs @32) increase success (\u2248+4%).",
+        "guidance": "For formatted/syntactic tasks, keep T low-to-moderate (0.2\u20130.9 depending on tradeoff) to maintain syntactic correctness while allowing diversity. Use larger sampling counts to boost chance of a correct sample but account for evaluation cost."
+      },
+      {
+        "name": "Fine-tuning hyperparameters and parameter-efficient tuning",
+        "description": "Fine-tuning settings that worked: LoRA to train ~1% of params (lora_rank 32), learning rate ~1e-5, 3 epochs (more causes overfitting), context length 2048 tokens, batch size 64, linear warmup then cosine decay.",
+        "guidance": "Tune learning rate, number of epochs, and data quality; LoRA rank had trivial impact in experiments. 3 epochs and lr e-5 were empirically best for the reported setup. Document LoRA rank tried (8\u2013256) and observed marginal effects."
+      },
+      {
+        "name": "Evaluation environment & resource/time constraints",
+        "description": "Evaluation requires an interactive Isabelle-client environment with concurrency and timeouts; Isabelle evaluation is time-consuming (e.g., 300 CPU hours to evaluate 244 theorems at sampling rate 32).",
+        "guidance": "Use Isabelle-client (server/client/sessions) and set watchdog_timeout (e.g., 30s) and concurrency (e.g., 64 processes). Plan for large CPU costs for high sampling rates and full ablations."
+      },
+      {
+        "name": "Heuristics for Sledgehammer and tactic suggestions",
+        "description": "Complement Sledgehammer with a fixed set of heuristics for 'by' tactics (e.g., 'by auto', 'by simp', 'by blast', 'by fastforce', 'by force', 'by eval', 'by presburger', 'by sos', 'by arith', 'by linarith', 'by (auto simp: field_simps)').",
+        "guidance": "Include these heuristics as candidate tactics to boost short-proof coverage. They yield modest improvements (~2%) when combined with LLMs."
+      },
+      {
+        "name": "Structured verification pipeline (generate \u2192 filter \u2192 check \u2192 sketch \u2192 refine)",
+        "description": "Pipeline: generate n candidate whole proofs \u2192 proof_filter for syntax \u2192 Isabelle check for valid whole proofs \u2192 if none valid, build sketches (replace tactics with sorry) \u2192 verify sketches \u2192 for valid sketches, extract subgoals and run tactic-based generation + Sledgehammer \u2192 substitute tactics and re-check.",
+        "guidance": "Implement the pipeline as parallel/concurrent steps and bail out early if a valid whole proof is found. Set n (e.g., 128) large enough to capture diverse attempts but balance compute costs."
+      },
+      {
+        "name": "Prompting interventions (few-shot examples and labels) impact",
+        "description": "Providing few-shot examples (three classical examples) or labels (file-path categories) had trivial impact on miniF2F success in this setup; providing premises reduced undefined fact errors but gave trivial miniF2F improvement.",
+        "guidance": "Do not assume few-shot or labeling will meaningfully improve fine-tuned model performance on datasets closely matching training distribution; but providing premises can help reduce hallucinated facts in general."
+      },
+      {
+        "name": "Proof-style-specific modeling (apply-style for tactics; Isar for whole proofs)",
+        "description": "Train the tactic-based generation model primarily on apply-style proofs (1\u20135 steps) to focus on stepwise refinement, and train whole-proof synthesis on Isar proofs for high-level planning (11\u201330 steps).",
+        "guidance": "Exploit the complementary strengths: apply-style for detail-oriented tactic generation, Isar for readable structured whole proofs; sketches bridge the two. Combine outputs to improve overall success relative to either model alone."
+      },
+      {
+        "name": "Empirical ablation reporting and error analysis",
+        "description": "Report ablation studies isolating whole-proof synthesis alone, tactic-based generation alone, their union, sketch+refinement, sampling temperature/rate effects, data quality, learning rate, epochs, and LoRA rank effects; analyze error messages to attribute failure modes (e.g., hallucinated facts, undefined facts, incorrect tactics).",
+        "guidance": "Use ablations to attribute gains (e.g., whole-proof model alone 37.7%, tactic-based 34.8%, union 41.4%, sketch+refinement 56.1%, full HybridProver 59.4%). Collect and analyze Isabelle error logs to guide dataset and training improvements."
+      },
+      {
+        "name": "Output formatting and machine-readability enforcement",
+        "description": "Enforce strict, machine-readable outputs (JSON/structured) and prevent extra natural language so automated filters and Isabelle-client can parse and validate generated proofs.",
+        "guidance": "Prompt templates and training data should reflect exact output format; models that produce extraneous tokens or uncontrolled formatting must be purified or filtered to avoid failing the syntactic checks."
+      }
+    ]
+  }
+}

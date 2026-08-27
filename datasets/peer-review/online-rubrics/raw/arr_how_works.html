@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>How ARR works – ACL Rolling Review – A peer review platform for the Association for Computational Linguistics</title>
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="How ARR works" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A peer review platform for the Association for Computational Linguistics" />
+<meta property="og:description" content="A peer review platform for the Association for Computational Linguistics" />
+<link rel="canonical" href="http://aclrollingreview.org/reviewing" />
+<meta property="og:url" content="http://aclrollingreview.org/reviewing" />
+<meta property="og:site_name" content="ACL Rolling Review" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="How ARR works" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A peer review platform for the Association for Computational Linguistics","headline":"How ARR works","url":"http://aclrollingreview.org/reviewing"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+
+<meta property="og:description" content="A peer review platform for the Association for Computational Linguistics" />
+
+<meta name="author" content="ACL Rolling Review" />
+
+
+<meta property="og:title" content="How ARR works" />
+<meta property="twitter:title" content="How ARR works" />
+
+
+
+<meta property="og:image" content="http://aclrollingreview.org/images/ARR.png"/>
+<meta property="twitter:image" content="http://aclrollingreview.org/images/ARR.png"/>
+
+
+
+  <link rel="stylesheet" type="text/css" href="/assets/style.css" />
+  <link rel="alternate" type="application/rss+xml" title="ACL Rolling Review - A peer review platform for the Association for Computational Linguistics"
+    href="/feed.xml" />
+  <link rel="canonical" href="http://aclrollingreview.org/reviewing" />
+
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ARR.png">
+  
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-NQ9259P3ZZ"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NQ9259P3ZZ');
+      </script>
+
+
+  <style>
+.svg-icon.bluesky {
+  background-image: url('/images/icons/bluesky.svg.png');
+  background-size: 32px 32px;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+}
+
+.svg-icon.bluesky:hover {
+  opacity: 1;
+}
+</style> 
+
+<script>
+  function searchSite() {
+    var query = document.getElementById('search-input').value;
+    if (query) {
+      window.location.href = "/search?q=" + encodeURIComponent(query);
+    }
+  }
+
+  function handleKeyPress(event) {
+    if (event.key === "Enter") {
+      searchSite();
+    }
+  }
+</script>
+
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .menu-icon {
+      position: fixed;
+      top: 10px;
+      right: 100px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .line {
+      background-color: #000;
+      height: 3px;
+      margin: 5px 0;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -480px;
+      width: 400px;
+      height: 100%;
+      background-color: #333;
+      padding: 20px;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+      transition: right 0.3s ease;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    /* Completely disable hover effects for dropdown buttons */
+    .sidebar .dropdown .dropbtn {
+      transition: none !important;
+    }
+    
+    .sidebar .dropdown .dropbtn:hover,
+    .sidebar .dropdown a.dropbtn:hover,
+    nav .dropdown .dropbtn:hover,
+    #sidebar .dropdown .dropbtn:hover {
+      background-color: transparent !important;
+      background: transparent !important;
+      color: #fff !important;
+      box-shadow: none !important;
+    }
+
+    /* Keep hover effect only for regular links and dropdown content links */
+    .sidebar > a:not(.dropbtn):hover,
+    .dropdown-content a:hover {
+      background-color: #575757;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: relative;
+      background-color: #333;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .dropdown.active .dropdown-content {
+      display: block;
+      max-height: 500px;
+    }
+
+    .dropbtn {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .dropbtn::after {
+      content: "▼";
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .dropdown.active .dropbtn::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .dropdown-content a {
+      color: #fff;
+      padding: 10px;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #575757;
+    }
+
+    .menu-icon.active .line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-icon.active .line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-icon.active .line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+    @media (max-width: 768px) {
+      .menu-icon {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .sidebar {
+        width: 80%;
+        right: -100%;
+      }
+
+      .sidebar.active {
+        right: 0;
+      }
+
+      .dropdown-content {
+        position: static;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+      }
+
+      .dropdown.active .dropdown-content {
+        max-height: 500px;
+      }
+
+      .wrapper-container {
+        padding-top: 60px;
+      }
+    }
+
+.search-container {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-container input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: white;
+  color: black;
+  outline: none;
+  height: 44px;
+  font-size: 16px;
+}
+
+.search-container button {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #575757;
+  color: white;
+  cursor: pointer;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    width: 100%;
+    max-width: 90%;
+  }
+
+  .search-container input {
+    font-size: 14px;
+    padding: 10px;
+    height: 40px;
+  }
+
+  .search-container button {
+    height: 40px;
+    padding: 10px;
+    min-width: 40px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="menu-icon" id="menu-icon">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
+  <nav id="sidebar" class="sidebar">
+    <a href="/">Home</a>
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">CFP & Submissions</a>
+      <div class="dropdown-content">
+        <a href="/reviewing">How ARR works</a>
+        <a href="/cfp">Call for papers</a>
+        <a href="/dates">Dates & Venues</a>
+        <a href="/organizers">Information for Organizers</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">Guidelines</a>
+      <div class="dropdown-content">
+        <a href="/authors">Authors guidelines</a>
+        <a href="/authorchecklist">Common submission problems</a>
+        <a href="/areas">Guide for ARR track selection</a>
+        <a href="/responsibleNLPresearch">Responsible NLP checklist</a>
+        <a href="/reviewerguidelines">Reviewer guidelines</a>
+        <a href="/acguidelines">Area Chair guidelines</a>
+        <a href="/sacguidelines">Senior Area Chair guidelines</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">People</a>
+      <div class="dropdown-content">
+        <a href="/organization">ARR team</a>
+        <a href="/saes">SACs</a>
+        <a href="/aes">ACs</a>
+        <a href="/reviewers">Reviewers</a>
+        <a href="/others">Others</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropbtn">ARR reporting</a>
+      <div class="dropdown-content">
+        <a href="http://stats.aclrollingreview.org/">Statistics</a>
+        <a href="/changelog">ARR changelog</a>
+        <a href="/future">Future plans</a>
+      </div>
+    </div>
+    <a href="https://openreview.net/group?id=aclweb.org/ACL/ARR">ARR@OpenReview</a>
+
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Search..." onkeypress="handleKeyPress(event)">
+      <button onclick="searchSite()">🔍</button>
+    </div>
+
+  </nav>
+
+  <div class="wrapper-container">
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="/images/ARR.png"
+              alt="" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">ACL Rolling Review</a></h1>
+            <p class="site-description">A peer review platform for the Association for Computational Linguistics</p>
+          </div>
+        </header>
+      </div>
+    </div>
+
+    <div class="wrapper-main">
+      <div id="main" role="main" class="container">
+        <article class="page">
+
+  <h1>How ARR works</h1>
+
+  <div class="entry">
+    <h1 id="timeline">Timeline</h1>
+
+<p>Below is an approximate timeline for a February ARR review cycle. The other cycles follow the same pattern. The submission deadline is always the 15th of the month; other dates vary due to the length of months, timing of weekends, etc. There are also some simplifications, e.g., the ethics process runs mostly in parallel to these steps, and there are additional tasks for first-time reviewers.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Month (example)</th>
+      <th>Date / Date range</th>
+      <th>What</th>
+      <th>Who</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>January</td>
+      <td>25</td>
+      <td>Confirm availability to review</td>
+      <td>reviewers + ACs</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>1</td>
+      <td>Submission site opens</td>
+      <td>authors</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>15</td>
+      <td><strong>Submission deadline</strong></td>
+      <td>authors</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>17</td>
+      <td>Deadline to withdraw without penalty</td>
+      <td>authors</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>18-21</td>
+      <td>Finalize AC assignments and check papers</td>
+      <td>SACs</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>22-25</td>
+      <td>Finalize reviewer assignments and check papers</td>
+      <td>ACs</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>29</td>
+      <td>Receive and check assignments</td>
+      <td>reviewers</td>
+    </tr>
+    <tr>
+      <td>March</td>
+      <td>20</td>
+      <td>Reviews due</td>
+      <td>reviewers</td>
+    </tr>
+    <tr>
+      <td>March</td>
+      <td>18-20</td>
+      <td>Check review quality and prompt reviewers to reconsider the paper where appropriate</td>
+      <td>ACs</td>
+    </tr>
+    <tr>
+      <td>March</td>
+      <td>26-30</td>
+      <td>Author response</td>
+      <td>authors</td>
+    </tr>
+    <tr>
+      <td>March - April</td>
+      <td>March 31 - April 2</td>
+      <td>Reviewer discussion, updating reviews</td>
+      <td>reviewers + ACs</td>
+    </tr>
+    <tr>
+      <td>April</td>
+      <td>7</td>
+      <td>Meta-reviews due</td>
+      <td>ACs</td>
+    </tr>
+    <tr>
+      <td>April</td>
+      <td>1-11</td>
+      <td>Complete ethics review process</td>
+      <td>Ethics reviewers</td>
+    </tr>
+    <tr>
+      <td>April</td>
+      <td>14</td>
+      <td>Final reviews released to authors</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="peer-review-process-participants">Peer review process participants</h1>
+<p>Peer review for ACL venues is made possible by the efforts of a huge number of <a href="/people">people</a>, almost all of them volunteers. This page breaks down the different roles within the scientific review process in ARR.</p>
+
+<ul>
+  <li><strong>Editors in Chief</strong> coordinate each cycle of ARR review – both the scientific considerations and the supporting infrastructure. They are available to answer questions from members of the review team.</li>
+  <li><a href="/reviewing#SACs"><strong>Senior Area Chairs</strong></a> check and refine the automatic assignment of papers to ACs and supervise the review effort. Unlike a conference, SACs do not make accept / reject recommendations.</li>
+  <li><a href="/reviewing#ACs"><strong>Area Chairs</strong></a> (a.k.a. meta-reviewers) coordinate review of submissions, including (a) checking and refining the automatic assignment of reviewers, (b) coordinating reviewer discussions, and (c) writing meta-reviews. ACs and authors are anonymous to each other. ACs know the identity of their reviewers, but not vice versa (by default).</li>
+  <li><a href="/reviewing#reviewers"><strong>Reviewers</strong></a> read papers and write thorough reviews. A review should briefly state what the paper is about, highlight its strengths/weaknesses, and offer constructive advice to authors (regarding potential improvements) while signaling whether it merits acceptance in its current form. Reviewers and authors are anonymous to each other.</li>
+  <li><a href="/reviewing#ethics"><strong>The Ethics Chairs</strong></a> coordinate the process of reviewing potential ethical issues in submissions flagged by reviewers, ACs, or SACs as needing such review.</li>
+  <li><a href="/reviewing#ethics"><strong>Ethics Reviewers</strong></a> carefully read and review papers that have ethical issues deemed significant enough by the Ethics Chairs.</li>
+  <li><a href="/reviewing#PCs"><strong>Venue Program Committees</strong></a> (typically a conference or workshop team formed and headed by PC chairs) receive a pool of papers with completed reviews and meta-reviews and decide which ones to accept. They are outside the ARR process, receiving reviews from ARR.</li>
+</ul>
+
+<p>Click on one of the roles for a detailed explanation.</p>
+
+<h1 id="reviewers">Reviewers</h1>
+
+<p>Each submission receives at least three reviews. The reviewer’s main tasks are (1) checking the appropriateness of the submission and its assignment to this reviewer, (2) writing a well-justified review, (3) updating the review as appropriate based on author-reviewer discussion.</p>
+
+<p>ARR maintains a pool of qualified reviewers. Reviewer eligibility requirements are defined in the Call for Papers (CFP), under <em>Reviewing Requirements</em> (see: <a href="https://aclrollingreview.org/cfp">https://aclrollingreview.org/cfp</a>). Researchers who meet these requirements and are interested in volunteering as ARR reviewers should contact the editorial team via email at <strong><a href="mailto:support@aclrollingreview.org">support@aclrollingreview.org</a></strong>, using a clear subject line <em>“ARR Reviewer Volunteering Inquiry”</em>.</p>
+
+<p>Authors of submissions are expected to be willing to review. Researchers with a sufficient publication record (e.g., as indexed in DBLP) may be added to the reviewer pool accordingly. Prior to each ARR cycle, reviewers are asked to indicate their availability by answering two questions: (1) their maximum reviewing load for new submissions (where 0 indicates no availability for new assignments), and (2) whether they are willing to review resubmissions, even if they indicated 0 availability for new submissions. Agreeing to review resubmissions is encouraged, as it allows authors to receive continuity in feedback when possible.</p>
+
+<p>Researchers who do not yet meet the ARR reviewing requirements may still be eligible to serve as reviewers for workshops outside of ARR, subject to the discretion of individual workshop organizers.</p>
+
+<p>Quick links:
+- <a href="reviewertutorial">Reviewer Guidelines</a>
+- <a href="https://docs.google.com/presentation/d/1CkfR94WxEPEZEyCN--ydC7K3wY4g-5ZiFd2HM8LRSXg/edit#slide=id.p">Reviewers’ Guide to OpenReview</a>
+- <a href="reviewform">Review Form</a>
+- <a href="https://docs.google.com/document/d/1_UEnoQVl27vg-IGyHZlt09nfShZxSofef2GDXo2pipI/edit">How to Set Your Max Load / Availability for a Cycle</a></p>
+
+<h1 id="ACs">Area Chairs</h1>
+
+<p>Every submission is assigned to an area chair (AC), whose job is to oversee a team of reviewers evaluating the paper, and to write a meta-review summarizing the conclusions. You should treat the papers as submissions to ACL when evaluating them.</p>
+
+<p>All AC tasks occur through the AC console for the cycle.
+Access it by going to the OpenReview page for the cycle and opening the “Area Chair Console” link.</p>
+
+<h3 id="pre-cycle-tasks">Pre-cycle tasks</h3>
+
+<p>The first time you are an AC, you must complete a form indicating which areas you have the <strong>expertise</strong> to be an AC for and confirming that your OpenReview profile is complete.</p>
+
+<p>Before every cycle, there is a request for <strong>availability</strong> with two questions: (1) what is your maximum load for new assignments, where 0 indicates you are not able to be an AC for any new submissions, and (2) whether you are willing to be an AC for resubmissions, even if you answered ‘0’ to (1). It is helpful to agree to return as an AC for any resubmissions so the authors have continuity (assuming they did not request a change of AC).</p>
+
+<p>In a cycle right before a major conference commitment date, the average AC load is 7 papers (the range has been 1-12). In other cycles, where there are fewer submissions, the average AC load is 2 papers (range 1-5). Note, these values are calculated based only on the ACs who were assigned papers. In the quieter cycles, most ACs are not assigned any papers.</p>
+
+<p>ACs should also take care that their <strong>OpenReview profile</strong> and list of imported papers is up to date to facilitate COI detection and paper matching. Being up to date means having: links to DBLP and Semantic Scholar profiles, current affiliation, and current and past email addresses.</p>
+
+<h3 id="in-cycle-tasks">In-cycle tasks</h3>
+
+<p>Area Chairs have duties at every stage of the two-month review cycle.
+- Checking for violations of submission requirements.<br />
+- <strong>Checking and adjusting the reviewer assignments</strong> that were generated by the matching algorithm (3 reviewers are automatically selected but may not be a great fit).
+- Nudging reviewers who write low quality reviews to reconsider the paper and update their review.
+- Following up on late reviews and assigning emergency reviewers if necessary.
+- Encouraging discussion between reviewers, both before and after the author respone.
+- <strong>Writing a meta-review</strong> with clear recommendations for authors (regarding any important revisions) and for conference program committees (regarding whether it could be accepted in its current form).</p>
+
+<p>The <a href="/aetutorial"><strong>Area Chair tutorial</strong></a> has advice for interacting productively with reviewers and writing the meta-review.</p>
+
+<p>ACs can <strong>communicate</strong> with authors, reviewers, and senior members of the review team by posting messages (or “comments”) in the OpenReview interface. In particular, the SAC for the paper can help you figure out how to deal with concerns about the content of a review or how to handle missing reviews. The process for communication is the same as the process for reviewers to make comments (see step-by-step instructions <a href="https://docs.google.com/document/d/1Zdc57K54tJaDii2DccH0ZxtakOrNdsUF1SK7svqDBIU/edit#heading=h.kpesxugglxbq">here</a>). Slides 20-22 of the <a href="https://docs.google.com/presentation/d/1OynnI8TxlBcSt3J1YCJbxdLsMT91D2Hr1zVtorLkeao/edit#slide=id.p">Area Chairs’ Guide to OpenReview</a> also show other ways to contact reviewers, including how to get their email address if they are unresponsive on OpenReview. 
+Note that reviewers of a paper are anonymous to each other, identified by pseudonyms in the discussion period, and do not see the identity of their AC in OpenReview.
+For issues with OpenReview itself, contact <a href="mailto:tech@aclrollingreview.org">tech@aclrollingreview.org</a>.</p>
+
+<p>Quick Links:
+- <a href="https://docs.google.com/presentation/d/1OynnI8TxlBcSt3J1YCJbxdLsMT91D2Hr1zVtorLkeao/edit#slide=id.p">Area Chairs’ Guide to OpenReview</a>
+- <a href="reviewform">Review Form</a> and <a href="actioneditorform">Meta-review Form</a>
+- <a href="/aetutorial">Area Chair Tutorial</a>
+- <a href="https://docs.google.com/document/d/1_UEnoQVl27vg-IGyHZlt09nfShZxSofef2GDXo2pipI/edit">How to Set Your Max Load / Availability for a Cycle</a></p>
+
+<h1 id="SACs">Senior Area Chairs</h1>
+
+<p>ARR submissions include a metadata field for topic area (see the <a href="cfp">Call for Papers</a>) to help direct it to appropriate area chairs and reviewers. Each area is supervised by Senior Area Chairs (SACs), who are appointed by the Editors-in-Chief. The main duties of SACs are:</p>
+
+<ul>
+  <li>Checking the assignments of papers to ACs in the area</li>
+  <li>Monitoring and following up with ACs to ensure review steps are on track; assigning emergency ACs if necessary</li>
+  <li>Responding to AC questions about the process (in OpenReview or by email)</li>
+  <li>Responding to confidential author questions raised in OpenReview</li>
+</ul>
+
+<p>Unlike the traditional conference model, SACs do not make acceptance/rejection recommendations. Those are made by venues in the commitment phase.</p>
+
+<p>ACs, reviewers, and authors are not told who their SAC is. SACs are able to see the identities of ACs and reviewers, but not authors.</p>
+
+<p>SACs can <strong>communicate</strong> with authors, reviewers, and area chairs in two ways:
+1. Via email. Using the SAC Console, select papers and press the ‘Message Reviewers’ button, then select a group to contact, write a message and send it.
+Note that this approach maintains anonymity.  If ACs or reviewers are unresponsive, their email address is visible in the SAC console.  Note that reviewers of a paper are anonymous to each other, identified by pseudonyms in the discussion period, and do not see the identity of their AC in OpenReview.
+2. Via messages (or “comments”) in the OpenReview interface for each paper.  The process for communication is the same as the process for reviewers to make comments (see step-by-step instructions <a href="https://docs.google.com/document/d/1Zdc57K54tJaDii2DccH0ZxtakOrNdsUF1SK7svqDBIU/edit#heading=h.kpesxugglxbq">here</a>).</p>
+
+<h3 id="sac-faq">SAC FAQ</h3>
+
+<p><strong>Q</strong>: How can I modify reviewer assignments?<br />
+<strong>A</strong>: You can access and modify these as follows:
+- Go to Senior Area Chair console
+- Click Paper Status tab
+- In the table that shows up, next to each paper there should be a “Modify Reviewer Assignments” link. Click on that.
+- It shows the Area Chair assignments (not reviewer). So next you need to look for the paper you care about and click on “Assignments (x) »”. 
+- Edit the options that appear.</p>
+
+<p>SACs should direct questions about the process to the Editors-in-Chief.</p>
+
+<h1 id="ethics">Ethics Chairs/Reviewers</h1>
+
+<p>During ARR review, some submissions are flagged for ethics review. These submissions are considered by the ethics chairs and if necessary, sent to ethics reviewers, who are supervised by the ethics chairs. Ethics reviewers read the paper and offer supplementary feedback targeted at potential ethical issues. See the <a href="ethicsreviewertutorial"><strong>ethics guidelines</strong></a> for specific criteria and examples.</p>
+
+<p>Ethics reviewing happens in parallel to regular reviewing, and the ethics reviews are not shown to regular reviewers. After flagging a paper, reviewers and ACs should complete their work without further consideration for the ethical issues raised.</p>
+
+<p>Papers can be flagged for ethics review at any time in the review process. Most are flagged early, through the checklists ACs and reviewers complete. Some are only flagged during the main review process. In either case, the process is the same. The guidelines for flagging papers for ethics review are <a href="https://aclrollingreview.org/ethics-flagging-guidelines/">here</a>.</p>
+
+<h1 id="PCs">Venue Program Committees</h1>
+
+<p>Any conference or workshop that would like to consider ARR-reviewed submissions (either exclusively or in hybrid fashion, alongside direct submissions) is welcome to subscribe to ARR. The venue sets a commitment deadline, which will be advertised on the ARR website. Authors of submissions with complete ARR reviews/meta-reviews may send them for the venue’s consideration: this is called <a href="authors#step5">commitment</a>. Venues select their own program committees, enact their own decision-making procedures (maintaining confidentiality of the submissions/reviews), and communicate acceptance decisions directly to authors. See <a href="organizers">this page</a> for details.</p>
+
+<p>Note that the ARR review process is not customized to any particular venue. All ARR submissions are anonymous and in the format of a short paper (up to 4 pages) or long paper (up to 8 pages). ARR reviewers are instructed to write a review as if the paper were being considered for the ACL conference. Thus low scores may indicate the submission is not a good fit for ACL, even if it may be a good fit for other/more specialized venues.</p>
+
+<p>Questions from venues about subscribing to ARR should be directed to the Editors-in-Chief.</p>
+
+<style>
+  .panel {
+    display: none; /* 默认隐藏所有内容 */
+    margin-top: 0;
+  }
+
+  h1 {
+    cursor: pointer;
+    margin-bottom: 0.5em;
+  }
+
+  h1.active + .panel {
+    display: block; /* 当标题被点击后显示内容 */
+  }
+
+  /* 强制第一个和第二个标题下的内容显示 */
+  h1:first-of-type + .panel,
+  h1:nth-of-type(2) + .panel {
+    display: block !important;
+  }
+
+  /* Style for the "Click to view full content" message */
+  .view-content-msg {
+    font-size: 14px;
+    color: gray;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-bottom: 1em;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Get all <h1> elements within the <article> tag
+    var headers = document.querySelectorAll("article h1");
+
+    headers.forEach(function(header, index) {
+        var content = [];
+        var sibling = header.nextElementSibling;
+
+        // Collect all content under each <h1> until the next <h1> is found
+        while (sibling && sibling.tagName !== "H1") {
+            content.push(sibling);
+            sibling = sibling.nextElementSibling;
+        }
+
+        // Create a <div class="panel"> to wrap the content
+        var panel = document.createElement("div");
+        panel.className = "panel";
+
+        // Append the collected content to the new panel
+        content.forEach(function(item) {
+            panel.appendChild(item);
+        });
+
+        // Insert the panel right after the <h1> element
+        header.parentNode.insertBefore(panel, header.nextElementSibling);
+
+        // Ensure the content under the first and second <h1> is always displayed
+        if (index === 0 || index === 1) {
+            panel.style.display = "block";
+            console.log("Displaying content for:", header.textContent);
+        }
+
+        // Add a click event for the third and subsequent <h1> elements to toggle content
+        if (index > 1) {
+            var viewMessage = document.createElement("span");
+            viewMessage.className = "view-content-msg";
+            viewMessage.innerText = "Click to view full content";
+            header.parentNode.insertBefore(viewMessage, panel);
+
+            // Function to toggle the visibility of the content
+            function toggleContent() {
+                header.classList.toggle("active");
+                panel.style.display = panel.style.display === "block" ? "none" : "block";
+                viewMessage.style.display = panel.style.display === "block" ? "none" : "block";
+            }
+
+            // Bind the click event to both the header and the message
+            header.addEventListener("click", toggleContent);
+            viewMessage.addEventListener("click", toggleContent);
+        }
+    });
+
+    // Ensure all content before the first <h1> is visible
+    var firstH1 = document.querySelector("h1");
+    if (firstH1) {
+        var sibling = firstH1.previousElementSibling;
+        while (sibling) {
+            sibling.style.display = "block";
+            sibling = sibling.previousElementSibling;
+        }
+    }
+});
+</script>
+
+
+  </div>
+</article>
+
+      </div>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:support@aclrollingreview.org"><i class="svg-icon email"></i></a>
+
+
+
+
+
+
+<a href="/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/ReviewAcl"><i class="svg-icon twitter"></i></a>
+<a href="https://bsky.app/profile/aclrollingreview.bsky.social"><i class="svg-icon bluesky"></i></a>
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var menuIcon = document.getElementById('menu-icon');
+    var sidebar = document.getElementById('sidebar');
+    var searchInput = document.getElementById("search-input");
+    var dropdowns = document.querySelectorAll('.dropdown');
+    var dropdownButtons = document.querySelectorAll('.dropbtn');
+
+    // Toggle main menu on click
+    menuIcon.addEventListener('click', function (e) {
+      e.stopPropagation();
+      sidebar.classList.toggle('active');
+      menuIcon.classList.toggle('active');
+    });
+
+    // Handle dropdown menu clicks
+    dropdownButtons.forEach(function(button) {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var dropdown = this.closest('.dropdown');
+        var isActive = dropdown.classList.contains('active');
+        
+        // Close all other dropdowns first
+        dropdowns.forEach(function(dd) {
+          dd.classList.remove('active');
+        });
+        
+        // Toggle current dropdown (open if it was closed, keep closed if it was open)
+        if (!isActive) {
+          dropdown.classList.add('active');
+        }
+      });
+    });
+
+    // Close menu and dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      // Don't close if clicking inside the sidebar
+      if (!sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
+        // Close main menu
+        sidebar.classList.remove('active');
+        menuIcon.classList.remove('active');
+        
+        // Close all dropdowns
+        dropdowns.forEach(function(dropdown) {
+          dropdown.classList.remove('active');
+        });
+      }
+    });
+
+    // Prevent closing when clicking inside sidebar (except on dropdown buttons)
+    sidebar.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+
+    // Search functionality
+    if (searchInput) {
+      searchInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          searchSite();
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>

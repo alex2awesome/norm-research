@@ -1,0 +1,162 @@
+[
+{
+"review_id": "neurips_CLMuNJSJfhv_r1",
+"paper_id": "neurips_CLMuNJSJfhv",
+"review_text": "\n\n**Summary:**\nThe authors propose a heuristic, deep learning approach to computing agent/feature importance in complex cooperative game theoretic settings. Such setting are known to be hard to solve and understand exactly (for example computing the Shapley value in voting games is #P-complete), motivating the study of the paper. "
+},
+{
+"review_id": "neurips_CLMuNJSJfhv_r2",
+"paper_id": "neurips_CLMuNJSJfhv",
+"review_text": "\n\n**Summary:**\nThe paper discusses using neural computation to compute values of cooperative game theory in weighted voting games and feature importance games.  For weighted voting games, models for both fixed and variable numbers of players are given.  While fixed models outperformed variable models, results on random games indicates that both models do relatively well.  Furthermore, predictions fro feature importance games are quite good after training on only a small amount of training data."
+},
+{
+"review_id": "neurips_CLMuNJSJfhv_r3",
+"paper_id": "neurips_CLMuNJSJfhv",
+"review_text": "\n\n**Summary:**\nThis paper applies a multi-layer perceptron to learning to approximate the Shapley value of a weighted voting game (where the input is a description of the voting weights of each player, and the output is a vector of Shapley values for each voter).  The fixed-dimension case (for which the number of voters is constant) and variable dimension case are both considered; the variable dimension case is handled simply by zero-padding (i.e., non-players are added with weight 0 to every empty slot).\n\nAlthough weighted voting games are simple, approximating their Shapley value within a multiplicative factor is known to be intractable in the worst case.\n"
+},
+{
+"review_id": "neurips_SLA4t66xln9_r1",
+"paper_id": "neurips_SLA4t66xln9",
+"review_text": "\n\n**Summary:**\nThis paper proposes a novel segmentation framework that could be aware of depth distribution density and thus improve the segmentation performance using unsupervised domain adaptation. The proposed network is based on the multi-task learning architecture that enables three different tasks: segmentation, depth regression, and depth density distribution estimation. At the end of the architecture, the adversarial network is appended, and thus the segmentation performance is significantly improved. The main contributions of this paper are (1) the suggestion of the probability density of depth distribution to bridge the gap in the unsupervised domain adaptation, (2) a novel idea of branch balance training that enables improving the segmentation performance, and (3) pseudo-labels refinement algorithm that utilizes the aggregation priors of pixels in the different categories on the source images. The evaluation was performed using synthetic images as the source domain and real-world images as the target domain. The experiments demonstrate the effectiveness of the proposed method in the unsupervised domain adaptive semantic segmentation task.\n\n- The proposed architecture mainly aims at segmenting target objects in the images from the target domain, which has not been annotated from the source domain's knowledge (especially depth distribution density), which includes the annotated labels of segmentation map and depth distribution.\n\n- The architecture is based on the simple multi-task learning architecture but utilizes the additional adversarial training architecture to improve the segmentation performance. \n\n- In multi-task learning, three tasks of segmentation, depth regression, and estimating the depth distribution density are included. \n  - The segmentation task is the same as the general semantic segmentation task (supervised learning with annotated labels) using cross-entropy loss. \n  - The depth regression is also supervised learning with the annotated labels, and the regression is performed using the berHu loss function.\n  - From the segmentation map and the depth information, annotation for the density distribution can be generated. Then, the depth distribution density estimation is performed using the estimated density from the other two branches and the predicted density (branch balance training). \n\n- The proposed method was evaluated using two datasets of Cityscapes and Mapillary as the target domain. In addition, the SYNTHIA dataset is utilized as the source domain. The images in the target domain are real-world images, whereas the images in the source domains are generated synthetic images.  \n\n- The experiments report the state-of-the-art performance of the proposed depth distribution-aware unsupervised domain adaptation network compared to other state-of-the-art deep learning models.\n"
+},
+{
+"review_id": "neurips_SLA4t66xln9_r2",
+"paper_id": "neurips_SLA4t66xln9",
+"review_text": "\n\n**Summary:**\nThis work is about unsupervised domain adaptation for semantic segmentation and how to improve the domain transfer with depth information. In contrast to prior work, the authors investigate the distribution of depth for individual categories as a better bridge between domains than plain depth prediction. Specifically, a Gaussian Mixture Model (GMM) is fit to the source training data (x-y location and depth of each pixel, separately for each class), which is then used to compute a per-pixel density map, i.e., the probability of observing a depth value at a certain pixel location and with a certain semantic class. Then, a neural network is extended to not only predict semantics and depth, but also the depth distribution. For domain adaptation, an adversarial loss is computed on features that are a combination of the semantic and depth distribution branch. Finally, a spatial-aggregation prior to compute better pseudo labels for self-training is also proposed. Experiments on standard benchmarks (that include depth ground truth in the source domain) show state-of-the-art results and an ablation study investigates the impact of the individual contributions."
+},
+{
+"review_id": "neurips_SLA4t66xln9_r3",
+"paper_id": "neurips_SLA4t66xln9",
+"review_text": "\n\n**Summary:**\nFor the UDA task, the authors propose to utilize the probability density of depth distribution to bridge the domain gap for semantic segmentation. \nThe proposed method conduct experiments on the SYNTHIA-to-Cityscapes and SYNTHIA-to-Mapillary setting."
+},
+{
+"review_id": "neurips_SLA4t66xln9_r4",
+"paper_id": "neurips_SLA4t66xln9",
+"review_text": "\n\n**Summary:**\nThis paper addresses the task of unsupervised domain adaptation in semantic segmentation. Following the same line as previous works [11,12,13], the paper leverages depth supervision in source domain as the privileged information to improve segmentation in target domain. The paper presents an intuitive idea based on the observation that: pixels of a particular semantic class often have similar positions in the image space and have similar depth ranges across source and target. Based on which, the paper proposes a task of estimating depth distribution density 2D maps, which are then used to guide the final output-level adversarial adaptation. Reported results are better than previous SOTAs.\n\n** Technical details **\nThe network architecture is a standard MTL with three heads: one for the main task of segmentation, one for monocular depth and one for estimation the ``depth distribution density maps'' (see below for more details); the three branches are attached to the same Resnet101 backbone. The two branches segmentation and depth are supervised in source with cross-entropy and berHu losses as done in [12]. Depth distribution density supervision is gotten from segmentation prediction $\\hat{P}$ and either ground-truth depth $Z_s$ in source or estimated depth $\\hat{Z}_t$ in target.\n\nThe depth distribution of each semantic class is modeled as a Gaussian mixture model (GMM) in the image space; GMM parameters are estimated using source data. The number of components is fixed as 5. For each source image, using the depth ground-truth $Z_s$ and segmentation prediction $\\hat{P}_s$, one can produce a depth distribution density map $D_s\\in\\mathbb{R}^{H\\times W}$, i.e. at the position $(x,y)$, the value $D_s(x,y)$ is determined as the depth distribution density at $(x,y)$ of class $\\hat{P}_s(x,y)$. For each target image, depth distribution density map $D_t$ is estimated using depth prediction $\\hat{Z}_t$ and segmentation prediction  $\\hat{P}_t$.\n\nFor adaptation, this work applies adversarial training using an additional discriminator [19,12]. Input to the discriminator is a fusion of segmentation prediction $\\hat{P}$ and estimated depth density map $D$. To further boost performance with self-training, a heuristic pseudo-labelling procedure is used."
+},
+{
+"review_id": "neurips_HEcYYV5MPxa_r1",
+"paper_id": "neurips_HEcYYV5MPxa",
+"review_text": "\n\n**Summary:**\nThe paper proposes Dict-TTS that can infer the corresponding pronunciations for the given input text sequence by incorporating the prior information from the online website dictionary.  For deriving the pronunciations, the paper proposes a semantics-to-pronunciation attention (S2PA) module which finds the correct pronunciations by matching the semantic information between the input text sequence and the dictionary entries.  The proposed S2PA module can be incorporated into the end-to-end TTS system and can be trained simultaneously with the TTS system using the mel-spectrogram reconstruction loss.  The idea is interesting and is validated by extensive experiments on three datasets with different languages."
+},
+{
+"review_id": "neurips_HEcYYV5MPxa_r2",
+"paper_id": "neurips_HEcYYV5MPxa",
+"review_text": "\n\n**Summary:**\nThis paper describes an approach to leverage available human readable dictionaries to help improve TTS pronunciation modeling, specifically for polyphonous lexical items.  The aim here is to leverage the semantic information from the definition and example to guide selection of an appropriation pronunciations.  "
+},
+{
+"review_id": "neurips_HEcYYV5MPxa_r4",
+"paper_id": "neurips_HEcYYV5MPxa",
+"review_text": "\n\n**Summary:**\nPolyphone disambiguation is a big challenge for end-to-end TTS systems. The paper proposes Dict-TTS, an approach for phonemic disambiguation that can be trained jointly with an end-to-end neural TTS system. The key intuition behind the approach is that semantic context in the input text can be used to select the most appropriate pronunciation from a dictionary. To achieve this goal, the input text is first encoded using a transformer based semantic encoder. The output of this encoder is then used to compute attention weights over the entries in a dictionary using a semantic-to-pronunciation attention module. The embeddings of the most likely pronunciation and the corresponding semantic encoding are fed to the linguistic encoder in the end-to-end TTS system.  The paper shows that DictTTS outperforms character and phoneme baselines (obtained using commonly used grapheme-to-phoneme systems) in terms of pronunciation accuracy in Chinese, Japanese and Cantonese. Pre-training on an ASR dataset can further improve accuracy. The paper also shows that compared to a phoneme-based system, an end-to-end TTS system that incorporates DictTTS achieves similar overall MOS scores and better MOS-prosody scores.\n"
+},
+{
+"review_id": "neurips_WyiM4lDJOcK_r1",
+"paper_id": "neurips_WyiM4lDJOcK",
+"review_text": "\n\n**Summary:**\nThe paper presents a set of sufficient criteria that guarantee the stability of numerical schemes used to solve scalar hyperbolic PDEs with periodic BCs and presents a predictor-corrector algorithm to implement such schemes. The prediction step is performed by a Machine Learned function (can also be other functions? such as Method of Lines) and finds the values of fluxes at desired locations to propagate the flow. The corrector step modifies the predicted flux values to ensure \"sufficient criteria for stability\" are satisfied.\nThe approach was applied to two examples, and the results show that this approach achieves \"stabilization of unstable numerical schemes\" and \"reduction of numerical damping\" while globally preserving conserved properties."
+},
+{
+"review_id": "neurips_WyiM4lDJOcK_r2",
+"paper_id": "neurips_WyiM4lDJOcK",
+"review_text": "\n\n**Summary:**\nThe paper is concerned with designing stable solvers for scalar conservation laws on rectangular domains with periodic boundary conditions.\nThe central idea is to translate a stability condition into the requirement that in the continuous-time limit, the discrete $L^2$-norm of the solution must be non-decreasing.\nThis is equivalent to requiring $\\sum_j u_j(f_{j+1/2} - f_{j-1/2}) \\geq 0$ ($u_j$ and $f_{j\\pm1/2}$ are discretisations of the variables in the PDE).\nNow the main idea of the paper is to rewrite this inequality condition with summation-by-parts and to identify what needs to be added to each $f_{j+1/2}$ for the condition to always hold.\n\n"
+},
+{
+"review_id": "neurips_WyiM4lDJOcK_r3",
+"paper_id": "neurips_WyiM4lDJOcK",
+"review_text": "\n\n**Summary:**\nThis paper studies the scalar hyperbolic PDE problems on a uniform grid with periodical boundary conditions. The paper proposes a numerical finite-volume solver that guarantees to generate stable solutions to the PDEs by construction. The key observation is to notice that the stability of the solution can be enforced by properly reconstructing the cell boundary flux so that it ensures a non-increasing L2 norm of the solution. Therefore, it proposes a correction scheme for the cell boundary flux called \u201cglobal stabilization\u201d. While the main result is theoretical, one can properly combine it with machine learning solvers to generate a stable solver."
+},
+{
+"review_id": "neurips_WyiM4lDJOcK_r4",
+"paper_id": "neurips_WyiM4lDJOcK",
+"review_text": "\n\n**Summary:**\nI thank the authors for an interesting read.\n\nRollout stability of PDE solvers for time-dependent hyperbolic PDEs is a property baked into classical solvers, yet it is unaddressed in the machine learning for PDEs community. As such it is a common problem for learned solvers that they are sometimes unstable. When and under what conditions this instability arises is poorly understood and often swept under the table.\n\nThis submission seeks to resolve that with a technique that the authors call `global stabilization\u2019. They introduce an L2-stability criterion, which states that the L2 norm of the solution is non-increasing over time. This is a well-known property of hyperbolic PDEs in conservation form. The beauty of this is that enforcing this property directly ensures that stability is met, since stability is defined as the solution blowing up and this cannot happen if solutions are norm non-increasing in time.\n\nThe technique is general and works as an ad hoc projection step to be used on the output of any model, but it is also handcrafted and there is no guarantee that it is the most general such stabilization method.\n"
+},
+{
+"review_id": "neurips_x8DNliTBSYY_r1",
+"paper_id": "neurips_x8DNliTBSYY",
+"review_text": "\n\n**Summary:**\nThis manuscript analyses the neural tangent kernel in the regime of minimum over-parameterization. In detail, the authors prove the lower bound about the NTK eigenvalue for deep nets with minimum over-parameterization. Then, they apply the theorems to the aspects of networks' memorization and training."
+},
+{
+"review_id": "neurips_x8DNliTBSYY_r2",
+"paper_id": "neurips_x8DNliTBSYY",
+"review_text": "\n\n**Summary:**\nThis submission studies the problem of minimum over-parameterization in deep neural networks. More specifically, the authors investigated the settings with sublinear layer width and provides the lower bound in terms of the smallest NTK eigenvalue."
+},
+{
+"review_id": "neurips_x8DNliTBSYY_r3",
+"paper_id": "neurips_x8DNliTBSYY",
+"review_text": "\n\n**Summary:**\nFor an $L$-layer (loosely) pyramidal network, this paper gives a probabilistic lower bound on the smallest eigenvalue of the empirical neural tangent kernel Gram matrix, which is proportional to the product of the width of the last two hidden layers. When combined with known results on NTK, this lower bound implies that $\\sim \\sqrt{N}$ neurons are enough to learn a solution (via GD) that memorizes $N$ copies of data. "
+},
+{
+"review_id": "neurips_x8DNliTBSYY_r4",
+"paper_id": "neurips_x8DNliTBSYY",
+"review_text": "\n\n**Summary:**\nThis paper shows that NTK can be well-conditioned in a sub-linear setup. In particular, they proved that roughly  $\\Omega (N)$ parameters are needed to get a good NTK matrix, and also $O(N)$ parameters are enough to memorize the training data. Based on those NTK bounds, they further provide results on the memorization capacity and the optimization via gradient descent and square loss.  "
+},
+{
+"review_id": "neurips_R1fj6401HJF_r1",
+"paper_id": "neurips_R1fj6401HJF",
+"review_text": "\n\n**Summary:**\nThis paper characterizes the instance-dependent PAC sample complexity of contextual bandits based on a designed quantity. Matching upper and lower bounds are showed based on this quantity for both agnostic and contextual linear cases. In addition, the paper constructs an instance under which any minimax-optimal regret minimization algorithm suffers from sample complexity that scales quadratically with the optimal sample complexity. The paper further proposes an algorithm with near-optimal sample complexity that only needs a polynomial number of calls to an argmax oracle."
+},
+{
+"review_id": "neurips_R1fj6401HJF_r2",
+"paper_id": "neurips_R1fj6401HJF",
+"review_text": "\n\n**Summary:**\nThis paper analyzes the sample complexity of contextual bandit optimization in several setting.\n- When the reward and the policy class are both linear, the sample complexity of $(\\epsilon, \\delta)$-optimal algorithm is upper and lower bounded. The lower bounds are for $\\epsilon = 0$.\n- Roughly similar analysis is given for when the policy class is linear but no assumption about the reward class has been made. In this case, it is assumed that an empirical distribution over the contexts is known. \nIn doing so, the paper establishes how realizability reduces sample complexity. \n\nAuthors further establish that min-max optimal algorithms can not be simultaneously instance optimal. By giving a lower bound on the sample complexity of an $\\alpha$-minmax optimal algorithm.\n\nLastly, two algorithms that are nearly min-max instance optimal are introduced (without empirical evaluation)."
+},
+{
+"review_id": "neurips_R1fj6401HJF_r3",
+"paper_id": "neurips_R1fj6401HJF",
+"review_text": "\n\n**Summary:**\nThis paper designs instance-optimal PAC algorithms for contextual bandits in both agonistic and linear realizable settings. This paper proves matching upper and lower instance-optimal bounds for any PAC algorithms. The proposed algorithm is oracle efficient and optimal up to logarithmic factors. Interestingly, this paper also proves that, on some instances, algorithms with minimax-optimal regret guarantees cannot be PAC instance-optimal."
+},
+{
+"review_id": "neurips_R1fj6401HJF_r4",
+"paper_id": "neurips_R1fj6401HJF",
+"review_text": "\n\n**Summary:**\nThis paper is concerned with instance-optimal PAC property for contextual bandits. Both agnostic and realizable cases are investigated. One advantage is that the algorithm is computationally efficient."
+},
+{
+"review_id": "neurips_wwWCZ7sER_C_r1",
+"paper_id": "neurips_wwWCZ7sER_C",
+"review_text": "\n\n**Summary:**\nConsidering the fact that the worst-case performance of algorithms could be improved by equipping them with good machine-learned predictions, together with the increased use of \"multiple\" machine-learned models for solving a specific task, with each of them being specialized on a part of the problem, the paper tries to adapt algorithms for the case where multiple machine-learned predictors are used instead of a single one. They try to design algorithms for this case and bound the overhead caused compared to the single predictor case (since now the best predictor should be identified among the $k$ predictors) and the error that the algorithm incurs compared to the case where it is given the best predictor only. They investigate this problem for 3 fundamental problems being bipartite matching, load balancing and clairvoyant scheduling. \n\nThey start by proving that the complexity of looking for $k$ predictions is a factor of $k$ larger than that of a single predictor. \n\nThey further move to the three specific problems. First, they consider the min-cost bipartite matching problem with multiple predictions available. They show the running time of the state of the art algorithm for solving this problem for the case of single prediction is comparable to that of considering $k$ predictions when $k\\leq O(\\sqrt{n})$ which suggests that learning with $k$ predictions is coming for free in this case.\n\nThey further consider the problem of online load balancing (where a weight vector is to be learned to distribute a task between several machines with the goal of minimizing the maximum machine load) and show that there is a polynomial time algorithm that can output $k$ weight vectors which can minimize the expected minimum error with some bounded error which comes with a logaritmic cost with respect to $k$.\n\nFinally they consider the problem of scheduling $n$ jobs on a machine when the time that each process takes for completion is not known prior to the completion of the process (clairvoyant scheduling). The goal is to minimize the sum of the completion times. They show that learning the best $k$ permutations is doable in polynomial time with bounded error compared to the best predictor."
+},
+{
+"review_id": "neurips_wwWCZ7sER_C_r2",
+"paper_id": "neurips_wwWCZ7sER_C",
+"review_text": "\n\n**Summary:**\nThe paper attempts to examine solving certain online problems using a set of $k$ predictions and examine the statistical complexity of obtaining a good algorithm that uses such $k$ predictions. These problems include min-cost perfect matching, online load balancing and non-clairvoyant scheduling for total completion time. The task is to perform as well as the best prediction.\n"
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "neurips_wwWCZ7sER_C_r3",
+"paper_id": "neurips_wwWCZ7sER_C",
+"review_text": "\n\n**Summary:**\nThe paper considers using multiple machine-learned predictions to improve classic algorithm design. In particular, the work is focused on three problem: min-cost bipartite matching, online makespan minimization, and non-clairvoyant scheduling. For the first problem, the goal is to improve run-time, whereas for the last two the goal is to improve competitive ratio. \n\nIn each setting, the paper gives an efficient algorithms that makes use of multiple predictions. When (at least one of) the predictions are good, the resulting learning-augmented algorithm can achieve better performance than classic, worst-case counterparts. Moreover, the paper works out the learnability conditions, showing that good predictions can be efficiently PAC learned from data."
+},
+{
+"review_id": "neurips_wwWCZ7sER_C_r4",
+"paper_id": "neurips_wwWCZ7sER_C",
+"review_text": "\n\n**Summary:**\nOver the last 10 years, a significant line of work has focused on how to augment optimization algorithms with predictions so that (a) improved performance is achieved when the predictions are accurate and (b) worst-case performance is recovered when the predictions are not accurate. In this work, the authors build on the more recent idea to augment optimization algorithms with $k$ predictions. For three canonical tasks, the authors quantify the computational cost (which they show is mostly quite small) to obtain equivalent performance to augmenting the optimization algorithm with the (unknown) best of the $k$ predictors."
+},
+{
+"review_id": "neurips_vKBdabh_WV_r2",
+"paper_id": "neurips_vKBdabh_WV",
+"review_text": "\n\n**Summary:**\nIn this work, the authors introduce a new and very efficient procedure to solve optimal transport problems between both discrete and continuous distributions using amortized optimization. More precisely, in the setting where one aims at solving multiple OT problems between distributions sharing similar structures, the authors propose to learn, in an unsupervised manner, a predictor able to infer the optimal coupling instead of solving from scratch each OT problem considered. Such learned function can then be applied to quickly predict the optimal coupling between two test distributions (in the sense that they have not been used in the training stage) sharing the same structures as the distributions considered in the training stage. To do so, the authors propose to learn a function parametrized by neural networks mapping the input distributions and the underlying cost to the optimal potential. In order to learn such function, the authors  minimize the expectation on a distribution of problems (defined by two input measures and an underlying cost) of the dual objective of the OT problem under the same constraints. Note that if the family of functions generated by the network is sufficiently expressive, then solving such problem is the same as solving each single OT problem and therefore finding the true optimal potential on each of these problems. Note also that the proposed method is completely unsupervised as they do not require to solve each OT problem considered in the training stage. In the discrete setting, the authors consider the dual formulation of the entropic OT which is an unconstrained problem, therefore they end up with an unconstrained optimization problem studied and propose a simple gradient-descent procedure to solve it. In the continuous setting, the authors restrict themselves to the learning of the Wasserstein-2 distance, and take advantage of a reformulation of its dual involving convex potential to recover an unconstrained optimization problem too. Indeed in this case, the authors aim at predicting an ICNN by learning a function mapping the input measures to the parameters of the ICNN. The authors propose also to refine the prediction on test problems by applying few steps of either the Sinkhorn algorithm in the discrete setting or of the W2GN algorithm in the continuous one. Finally, they show on various experiments on real-world data that the proposed approach is able to recover almost the true potentials (and couplings) while being much faster. \n"
+},
+{
+"review_id": "neurips_vKBdabh_WV_r3",
+"paper_id": "neurips_vKBdabh_WV",
+"review_text": "\n\n**Summary:**\nAs an experimental paper, Meta OT provides better initialization to OT solvers by leveraging shared representations from previous tasks. It helps accelerate the training of OT solvers which is well supported by experimental results provided in this paper. One key requirement is that downstream tasks must follow the identical distribution as the previous tasks. This was acknowledged by the authors under the limitations of meta OT.\n\nIn general, the paper is concise and well-written. The main idea is clear. My major concerns are listed in the main review. I am willing to raise my score if these concerns are properly addressed. \n\n"
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "neurips_vKBdabh_WV_r4",
+"paper_id": "neurips_vKBdabh_WV",
+"review_text": "\n\n**Summary:**\nThis paper views the dual problem of optimal transport via the lens of amortized optimization. Then the authors propose a novel method to efficiently predict the optimal transport maps from the input measures. The predicted solutions can be then used as an initialization for standard OT solvers. Empirically, this method improves the computational time of standard OT solvers by multiple orders of magnitude in both discrete and continuous settings.\n"
+},
+{
+"review_id": "neurips_0ucMtEKCihU_r1",
+"paper_id": "neurips_0ucMtEKCihU",
+"review_text": "\n\n**Summary:**\nThis paper proposes a stochastic window strategy for training transformers and elaborates layer expectation propagation algorithm during the testing. This strategy consistently improves the performance of several image restoration tasks."
+}
+]

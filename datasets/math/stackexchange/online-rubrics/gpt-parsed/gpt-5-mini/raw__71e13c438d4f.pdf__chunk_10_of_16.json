@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/71e13c438d4f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "71e13c438d4f.pdf",
+  "chunk_idx": 10,
+  "n_chunks": 16,
+  "chunk_chars": 39343,
+  "model": "gpt-5-mini",
+  "elapsed_s": 85.48080816599395,
+  "input_tokens": 11336,
+  "output_tokens": 5845,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Authors/users of Metamath databases and proofs; Metamath program users and proof verifiers",
+    "subtask_short": "metamath language/database authoring",
+    "subtask_description": "Guidelines and formal-language rules for writing and verifying Metamath databases and proofs: scoping and frames, proof construction (RPN/unification/stack), comment and typesetting markup, and redeclaration/scope rules for symbols. Useful for authors of Metamath source files and users of the Metamath program.",
+    "subtask_keywords": [
+      "metamath",
+      "proof_assistant",
+      "database_authoring",
+      "formal_proofs",
+      "typesetting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "$d statements are non-mandatory variable restrictions",
+        "description": "$d statements are not part of the set of mandatory hypotheses and their order doesn\u2019t matter (as long as they satisfy the fourth property for a frame). They specify restrictions on variables that must be satisfied (and are checked by the proof verifier) when expressions are substituted for them in a proof, and the $d statements themselves are never referenced directly in a proof.",
+        "guidance": "Order of $d statements irrelevant; they are enforced during substitution/unification. Violations of mandatory $d statements cause proof verification errors (see Section 4.1.4 / 4.2.4)."
+      },
+      {
+        "name": "Extended frame and optional variables/hypotheses",
+        "description": "An extended frame is a frame plus zero or more $d and $f statements that reference variables not among the mandatory variables of the frame. Any new variables referenced are optional variables. If an $f references an optional variable it is an optional hypothesis; if a $d references optional variables it is an optional disjoint-variable restriction.",
+        "guidance": "Optional hypotheses and optional disjoint-variable restrictions may be added or removed without affecting subsequent proofs that reference the underlying assertion; proofs ignore extensions to a frame when referencing an assertion."
+      },
+      {
+        "name": "Optional variables meaningless for $a statements",
+        "description": "The concept of optional variables does not apply to $a statements because $a statements have no proofs that might use them. Including optional hypotheses in an extended frame for a $a statement is allowed but serves no purpose.",
+        "guidance": "Do not rely on optional variables for $a statements; they are only useful in $p statements with proofs."
+      },
+      {
+        "name": "Mandatory hypothesis sequence is RPN order",
+        "description": "The sequence of mandatory hypotheses for a statement is considered in Reverse Polish Notation (RPN) order; optional hypotheses are omitted from this RPN sequence.",
+        "guidance": "When an assertion is referenced in a proof, the most recent stack entries are associated with the mandatory hypotheses in this RPN order (most recent with the last mandatory hypothesis)."
+      },
+      {
+        "name": "Scoping statements ${ and $} define blocks and nesting levels",
+        "description": "The scoping statements ${ (start of block) and $} (end of block) delimit blocks. Blocks may be nested; each block has a nesting level indicating its depth. The entire database is the outermost block with nesting level 0 (not bracketed by scoping statements).",
+        "guidance": "Think of the database as a sequence of frames when parsing; scoping controls which statements are 'active' at a given place in the database."
+      },
+      {
+        "name": "Statement types that become inactive at block end",
+        "description": "The statement types that become inactive at the end of the block in which they appear are: $c, $v, $d, $e, and $f.",
+        "guidance": "These statements are only active within their defining block; when their block ends they are no longer recognized as active (affects scope of variables, types, and disjoint-variable restrictions)."
+      },
+      {
+        "name": "Statement types that remain active forever",
+        "description": "The statement types that remain active through the end of the database (i.e., forever) are: $a and $p.",
+        "guidance": "Assertions and provable assertions declared anywhere remain usable later in the database regardless of scoping blocks."
+      },
+      {
+        "name": "$c statements must be in outermost block",
+        "description": "All $c statements (constant declarations) must be placed in the outermost block and thus are effectively global for the entire database.",
+        "guidance": "Because $c statements are global, constants never become inactive."
+      },
+      {
+        "name": "Scope: when statements and symbols are active",
+        "description": "The scope of a statement is the set of statements that recognize it as active. Math symbols (constants and variables) become active in the $c and $v declarations that declare them. A variable becomes inactive when its declaration becomes inactive; constants never become inactive.",
+        "guidance": "Active-ness affects whether a symbol can be used in frames, hypotheses, and proofs at a given point in the source."
+      },
+      {
+        "name": "Redeclaration rules for variables and constants",
+        "description": "A variable may not be declared a second time while it is active, but it may be declared again after it becomes inactive. A previously declared variable may not be redeclared as a constant. A constant may not be redeclared, and constants must be declared in the outermost block.",
+        "guidance": "Use redeclaration to create local (temporary) variables by letting their original declaration go inactive first; constants are fixed globally."
+      },
+      {
+        "name": "Frames conversion algorithm (database normalization)",
+        "description": "To convert a database into the simple sequence of extended frames: collect all $c and $v declarations (ignoring duplicate declarations in different scopes) and put them at the beginning so they are global. For each assertion, determine its extended frame as the collection of $f, $e, and $d statements whose scope includes the assertion; the frame is the extended frame with optional hypotheses removed.",
+        "guidance": "This is how Metamath internally stores the database; order of $f and $e follows their appearance (order irrelevant for $d)."
+      },
+      {
+        "name": "Proofs must be provided for $p statements and are sequences of labels",
+        "description": "Each provable assertion ($p statement) must include a proof between the $= and $. keywords. In basic Metamath the proof is a sequence of statement labels that the program uses to construct math symbol sequences; the constructed sequence must match the $p statement's math symbol sequence exactly.",
+        "guidance": "If the constructed sequence does not match, the proof verifier reports an error. By default proofs are not auto-verified on load unless /verify is used."
+      },
+      {
+        "name": "Permitted labels within proofs",
+        "description": "Every label in a proof must be either the label of a previous assertion ($a or $p) or the label of an active hypothesis ($e or $f) of the $p statement containing the proof. Hypothesis labels may reference both mandatory and optional hypotheses.",
+        "guidance": "Referencing a later assertion or an inactive hypothesis will cause verification errors."
+      },
+      {
+        "name": "Proofs are processed in RPN using a stack",
+        "description": "The proof label sequence specifies a construction in reverse Polish notation (RPN). Hypothesis labels push their symbol sequence onto the stack; assertion labels associate recent stack entries with the assertion's mandatory hypotheses (most recent with last mandatory hypothesis), compute substitutions, pop matched entries, and push the substituted assertion result.",
+        "guidance": "Understand stack mechanics to build correct proofs; order of mandatory hypotheses is significant for matching."
+      },
+      {
+        "name": "Unification during assertion application",
+        "description": "When an assertion label is encountered, Metamath determines substitutions that make the assertion's mandatory hypotheses identical to the corresponding stack entries (this process is called unification). After applying those substitutions to the assertion itself, the matched stack entries are popped and the substituted assertion pushed.",
+        "guidance": "If no substitutions exist that produce a match, the proof is incorrect and an error is issued."
+      },
+      {
+        "name": "Uniqueness of substitutions ensured by $f type annotations",
+        "description": "Uniqueness of the required substitutions is guaranteed by the requirement that each variable have a type specified with a $f statement and that $f hypotheses have the restricted syntax of a typecode (a constant) followed by a variable. The typecode must match the first symbol of the stack entry, so the only possible match for the variable is the remainder of that stack entry.",
+        "guidance": "This makes the unification algorithm trivial in Metamath's basic mode; the Proof Assistant may use a more general algorithm and prompt the user if multiple unifications are possible while developing a proof."
+      },
+      {
+        "name": "Proof verification error conditions",
+        "description": "Metamath will report errors if at finalization the stack does not contain exactly one element equal to the $p statement's math sequence; if the stack contains more than one entry at the end; if there were insufficient stack entries at any point to match an assertion's mandatory hypotheses; or if no substitution is possible to match an assertion's hypotheses. Also, verification checks that no mandatory $d statement is violated after substitutions.",
+        "guidance": "Experimenting with small changes to an example proof will show different kinds of errors; use verify proof * or /verify when desired."
+      },
+      {
+        "name": "Proof notation and display options (/lemmon, /essential, /all)",
+        "description": "Metamath's proof notation favors compactness over human readability. The show proof command can display proofs in different formats: /lemmon for a more readable short-proof format, omission of /lemmon shows a tree structure useful for longer proofs. By default syntax construction (formula construction steps) is hidden via /essential; use /all to see syntax construction.",
+        "guidance": "Use the tree display (omit /lemmon) for long proofs. Indentation and 'hypothesis associations' in the tree help locate corresponding assertions and steps."
+      },
+      {
+        "name": "Proof Assistant's more general unification behavior",
+        "description": "In the Proof Assistant, a more general unification algorithm may be used; while a proof is being developed, Metamath may ask the user to choose among multiple possible unifications when not enough information is available to determine a unique one.",
+        "guidance": "Expect interactive prompts during proof development in the assistant environment; this differs from the basic verifier's determinism."
+      },
+      {
+        "name": "Comment syntax and semantics: $( text $)",
+        "description": "Comments are enclosed with $( and $) and act as whitespace (ignored by the verifier). A comment may be placed at the beginning, end, or between any two tokens. Nested comments are not permitted: the strings $( and $) may not appear inside the comment text.",
+        "guidance": "To comment out Metamath code sections that contain $ characters, authors sometimes change $ to @ in those sections as a workaround for non-nesting."
+      },
+      {
+        "name": "Headings inside comments for table-of-contents",
+        "description": "If $( is immediately followed by a newline starting with a heading marker, it is a header. Markers: '####' (major part header), '#*#*' (section header), '=-=-' (subsection header), '-.-.' (subsubsection). The line after the marker is used for the table-of-contents entry; the next line should be a matching closing marker.",
+        "guidance": "Text after the marker but before closing $) is included on mmtheoremsNNN.html page; run help write_theorem_list for more information."
+      },
+      {
+        "name": "Math mode in comments using grave accents",
+        "description": "Within comments, a string of tokens enclosed in grave accents (\u2018 ... \u2019) enters math mode; tokens are interpreted as math symbol tokens and looked up in the $t comment to be replaced with standard mathematical symbols for typeset output. Two consecutive grave accents \u2018\u2018 are treated as a single actual grave accent.",
+        "guidance": "Tokens must be separated by whitespace and the delimiters should be spaced for easier parsing. If a token is not found in $t, it is output as-is and a warning issued. Tokens need not be active but missing $c/$v declarations also cause warnings."
+      },
+      {
+        "name": "Label mode in comments using tilde (~)",
+        "description": "Outside math mode, a tilde ~ indicates label mode: the token following ~ (up to next whitespace) is treated as a statement label or URL. In LATEX output the tilde-initiated token is formatted in typewriter font with the tilde removed. In HTML the token must be a URL or a valid label and will be hyperlinked; using '~~' yields a literal tilde.",
+        "guidance": "When using ~ prefer spaces around it and a space after the token for robust global substitutions; HTML output will produce errors if the token after ~ is not valid."
+      },
+      {
+        "name": "Bibliographic reference linking in comments",
+        "description": "Text of the form [author ] in comments is treated as a link to a bibliographical reference when generating HTML. To be properly included in a bibliography cross-reference file generated by write_bibliography, the surrounding comment must follow the format: keyword label noise-word [author ] p. number, where keyword must be one of a specified list and noise-word is one of (of, in, from, on).",
+        "guidance": "The write_bibliography command performs error checking; ensure the exact format and allowed keywords/noise-words are used for cross-references to work."
+      },
+      {
+        "name": "Recognized parentheticals at end of comments and DATE format",
+        "description": "Certain parenthetical phrases at the end of a comment are specially recognized and may generate warnings or document provenance: (Contributed by NAME, DATE.), (Revised by NAME, DATE.), (Proof shortened by NAME, DATE.), (Proof modification is discouraged.), (New usage is discouraged.). The DATE must be YYYY-MMM-DD where MMM is the English month abbreviation.",
+        "guidance": "Use these parentheticals to document authorship, revisions, or usage guidance; adhere to the DATE format to avoid warnings."
+      },
+      {
+        "name": "Other in-comment markup: underscore, <HTML>, &ref;, spacing conventions",
+        "description": "Additional markup in comments: underscore with surrounding space starts italics until next non-space space; underscore directly before non-space string makes subscript. <HTML>...</HTML> disables angle-bracket conversion for HTML output. '&ref;' inserts an HTML character reference. It is recommended to have spaces around ~ and \u2018 tokens and a space after the label following ~.",
+        "guidance": "Spaces around tokens ease automated global substitutions and avoid ambiguity; final output removes these spaces per normal punctuation rules."
+      },
+      {
+        "name": "Typesetting comment $t: purpose and placement",
+        "description": "The typesetting comment is identified by $t inside a comment ($( $t ... $) ) and provides LaTeX and HTML definitions for math symbols and page customization for typeset output. Programs that only verify databases may ignore $t; Metamath consults $t only when generating LaTeX or HTML output.",
+        "guidance": "In v0.177 there may be only one $t comment per database. Place $t where authors want to define presentation mappings (see set.mm for example)."
+      },
+      {
+        "name": "$t syntax and definition format",
+        "description": "Between $t and the matching $) are one or more typesetting definitions; each definition has the form: definition-type arg arg ... ; using quoted strings for typesetting data. Definitions end with an unquoted semicolon and should start on a new line. Quoted strings cannot include line breaks and may include repeated quotes to embed quote characters; long strings can be joined with + across lines.",
+        "guidance": "Adhere to quoting and semicolon rules; keep definitions on separate lines for readability and compatibility with current Metamath versions."
+      },
+      {
+        "name": "LaTeX and HTML typesetting definitions (latexdef, htmldef, althtmldef, etc.)",
+        "description": "latexdef 'math-token' as 'latex-string'; defines how a token maps to LaTeX. htmldef and althtmldef define HTML representations (e.g., Unicode vs gif). Additional $t options control htmltitle, htmlhome, htmlvarcolor, htmlbibliography, htmldir, althtmldir, and extended variants (exthtmltitle, exthtmlhome, exthtmlbibliography) with exthtmllabel to indicate where the extended section starts.",
+        "guidance": "Update $t when adding new tokens if you intend to produce typeset output. Use althtmldef/htmldef combinations and directory settings to support alternate output formats and cross-linking."
+      },
+      {
+        "name": "Typesetting data quoting and concatenation rules",
+        "description": "Typesetting data are quoted strings (double or single quotes). A quoted string may include a matching quote by repeating it twice. Multiple quoted strings can be concatenated with +; concatenation may span lines if each line except the last ends with + surrounded by whitespace. C-style comments /*...*/ are also supported inside $t.",
+        "guidance": "Follow these rules for complex LaTeX/HTML snippets; repeated-quote escaping and + concatenation let you include special characters and long definitions."
+      },
+      {
+        "name": "Extended HTML/title configuration for multiple output kinds",
+        "description": "When generating multiple kinds of pages from one database (e.g., extended explorers), declare exthtmltitle, exthtmlhome, exthtmlbibliography and provide exthtmllabel identifying the starting statement of the extended section. During generation, the 'extended' html code is used for statements at or after that label.",
+        "guidance": "Use these fields to provide specialized page headers/home-links/bibliography for database subsections (e.g., a Hilbert Space Explorer embedded in another database)."
+      },
+      {
+        "name": "Additional-information comment $j for structured metadata",
+        "description": "The $j comment provides a way to add additional structured information that can be optionally parsed by systems (i.e., machine-parseable metadata attached to database entries).",
+        "guidance": "Use $j to include structured metadata for downstream tools; format and parsing rules are left to systems that consume $j."
+      }
+    ]
+  }
+}

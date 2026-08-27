@@ -1,0 +1,176 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_d2b9e2308e9d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_d2b9e2308e9d.pdf",
+  "chunk_idx": 7,
+  "n_chunks": 13,
+  "chunk_chars": 39945,
+  "model": "gpt-5-mini",
+  "elapsed_s": 76.83163791699917,
+  "input_tokens": 12129,
+  "output_tokens": 5366,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "Developers and contributors to the SageMath codebase and documentation",
+    "subtask_short": "developing Sage library code",
+    "subtask_description": "Guidance and standards for writing, testing, linting, and documenting code and objects in the SageMath project (Python/Cython), including devcontainer usage, CI-local tooling, and documentation conventions.",
+    "subtask_keywords": [
+      "sagemath",
+      "developer",
+      "python",
+      "testing",
+      "documentation",
+      "coding_style"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Docker image naming and purpose",
+        "description": "Images with specific suffixes denote particular build stages and contents.",
+        "guidance": "Examples: suffix -with-targets-optional: full builds + make ptest logs + source tree; -with-system-packages: system installation with system packages, no source tree; -configured: partial source tree and configure finished; -with-targets-pre: partial source tree with full installation of non-Python packages; -with-targets: full source tree and full installation but make ptest not run. Note some images may be outdated due to build errors; standard and minimal images discontinued."
+      },
+      {
+        "name": "Use VS Code Dev Containers for development",
+        "description": "Use the VS Code Dev Containers extension to develop inside prebuilt Docker dev containers.",
+        "guidance": "Install 'Dev Containers' extension, use provided sample devcontainer.json files in $SAGE_ROOT/.devcontainer/*, open folder in container (Reopen Folder in Container), or use 'Dev Containers: Open Folder in Container'. Choose appropriate devcontainer (e.g. ubuntu-jammy-standard). See 'onCreateCommand' and 'updateContentCommand' logs to understand install/bootstrap steps."
+      },
+      {
+        "name": "Dev container side-effect caution (symlinks and scripts)",
+        "description": "After configuring and using the dev container, certain files are symlinks that work only inside the container.",
+        "guidance": "Files like $SAGE_ROOT/venv, $SAGE_ROOT/prefix, and (possibly) $SAGE_ROOT/logs will be symlinks valid only inside the container; $SAGE_ROOT/sage script will not work locally. After using the dev container, remove logs if they are symlinks and rerun the configure script in the local environment."
+      },
+      {
+        "name": "Maintain uv.lock for reproducible dependencies",
+        "description": "uv.lock captures exact package versions for all systems to ensure consistent, reproducible installations.",
+        "guidance": "uv.lock is automatically updated during uv operations (uv add, uv run) and periodically by Renovate. Manually update with 'uv lock -U' when necessary."
+      },
+      {
+        "name": "Use tox as the standard entry point for testing and linting",
+        "description": "Sage includes a tox configuration (SAGE_ROOT/src/tox.ini) used for portability testing, modularized distributions, and library testing/linting.",
+        "guidance": "Invoke via './sage --tox' (or 'tox' if tox is in system). The tox configuration exposes named 'tox environments' (doctest, coverage, startuptime, pycodestyle-minimal, relint, codespell, rst, ruff-minimal, etc.). Use '-e <envlist>' to run specific environments and '--help' for options (e.g. -p auto for parallel)."
+      },
+      {
+        "name": "Doctest environment requirements",
+        "description": "The doctest tox environment runs Sage's doctester and requires that Sage has already been built.",
+        "guidance": "Invoke with './sage -tox -e doctest' or './sage -t'. A tox virtual environment is created but Sage is invoked in the normal Sage environment."
+      },
+      {
+        "name": "Coverage (doctest under Coverage.py)",
+        "description": "Run doctests under Coverage.py to measure coverage and optionally generate HTML reports.",
+        "guidance": "Use './sage -tox -e coverage.py' for coverage and './sage -tox -e coverage.py-html' for HTML reports. Coverage environments require Sage to be built; a virtualenv is created but coverage is executed with Sage in the normal environment. See [coverage:run] configuration in SAGE_ROOT/src/tox.ini."
+      },
+      {
+        "name": "coverage (ensure functions have doctests)",
+        "description": "The 'coverage' environment checks that each function has at least one doctest (typically in EXAMPLES or TESTS blocks).",
+        "guidance": "Run './sage -tox -e coverage' (equivalent to './sage --coverageall') for a summary; pass file/directory args for detailed reports. Documentation: coverage.readthedocs.io."
+      },
+      {
+        "name": "startuptime measurement",
+        "description": "Measure time to load components during Sage startup.",
+        "guidance": "Run './sage -tox -e startuptime' (equivalent to './sage --startuptime'). Without args it gives modules sorted by contribution to startup time; with args it gives details for specific modules/files."
+      },
+      {
+        "name": "pycodestyle-minimal as baseline style check",
+        "description": "A minimal pycodestyle configuration is defined; as of Sage 9.5 the whole library conforms to it.",
+        "guidance": "Run './sage -tox -e pycodestyle-minimal -- src/sage/' to verify. Developers preparing a branch for a Sage ticket should ensure this passes."
+      },
+      {
+        "name": "pycodestyle (thorough style check) and PR guidance",
+        "description": "A more thorough pycodestyle configuration checks full PEP8/pycodestyle rules; new code in PRs should not introduce warnings.",
+        "guidance": "When preparing a PR that adds new code, verify './sage -tox -e pycodestyle' does not issue warnings for the added code to avoid later cleanup PRs. Avoid mixing coding-style fixes with productive changes in the same PR because it makes review harder. Use '--count -qq' to reduce output to counts only for planning clean-up work."
+      },
+      {
+        "name": "Ruff linting configurations",
+        "description": "Ruff is used with two configurations: ruff-minimal (baseline) and ruff (thorough).",
+        "guidance": "As of Sage 10.3 the library conforms to ruff-minimal; developers should verify './sage -tox -e ruff-minimal' passes. For PRs that add new code, ensure './sage -tox -e ruff' emits no warnings for the added code. Same anti-pattern advice: don't mix style fixes and functional changes in same PR."
+      },
+      {
+        "name": "relint forbidden-pattern checks",
+        "description": "Relint checks all source files for forbidden text patterns defined by regular expressions.",
+        "guidance": "Relint flags outdated Python constructions, plain TeX commands when LaTeX alternatives exist, common doc markup mistakes, and modularization anti-patterns. Configuration at SAGE_ROOT/src/.relint.yml."
+      },
+      {
+        "name": "codespell for misspellings",
+        "description": "Use codespell to check for misspelled words in source code.",
+        "guidance": "Run './sage -tox -e codespell -- <path>' and configure skips and dictionaries via SAGE_ROOT/src/.codespell-dictionary.txt and SAGE_ROOT/src/.codespell-ignore.txt. The codespell invocation in Sage skips many binary and doc formats and language doc directories; errors can cause non-zero exit codes."
+      },
+      {
+        "name": "Cython-lint for Cython files",
+        "description": "Use cython-lint to check coding style in Cython sources.",
+        "guidance": "Invoke via the corresponding tox environment; ensures Cython files meet project style expectations."
+      },
+      {
+        "name": "Pytest use and invocation",
+        "description": "Pytest is available but used only in limited parts of Sage; can run tests in parallel.",
+        "guidance": "Install via './sage -i pytest pytest_xdist'. Usage: './sage -pytest path/to/test_file.py' or './sage -pytest' to run all tests. Use '-n' to run tests in parallel (e.g. '-n 4' or '-n auto'). VS Code integration via the Python extension. Configuration: SAGE_ROOT/conftest.py."
+      },
+      {
+        "name": "Pyright for static typing",
+        "description": "Use Pyright as the static type checker for Python code.",
+        "guidance": "Install manually via 'npm install -g pyright'. Usage: './sage -tox -e pyright path/to/file.py' or 'pyright path/to/file.py'. Checking whole library may need increased Node memory: NODE_OPTIONS='--max-old-space-size=8192' pyright. VS Code: use Pylance extension. Configuration: SAGE_ROOT/pyrightconfig.json."
+      },
+      {
+        "name": "Pyflakes for common error checking",
+        "description": "Pyflakes checks for common coding errors.",
+        "guidance": "Run via the relevant tox environment or local pyflakes invocation as part of linting."
+      },
+      {
+        "name": "Use act to run GitHub Actions locally",
+        "description": "act (or 'gh act') can run GitHub Actions locally using Docker to speed up development of Actions.",
+        "guidance": "Install via gh extension facility (gh extension install https://github.com/nektos/gh-act) or standalone act. Use 'gh act -l' to list actions, 'gh act -j <job>' to run a job. act can cache pulled data to speed repeated runs; flags like '-p false' (use already pulled images) and '-r' (do not remove images after run) control behavior. See act documentation for extra Docker configuration steps."
+      },
+      {
+        "name": "Documentation is ReST + Sphinx and build process",
+        "description": "Sage manuals are written in reStructuredText and built with Sphinx via the 'sage --docbuild' wrapper.",
+        "guidance": "Manuscripts located under SAGE_ROOT/src/doc/en/<manual>. Build with 'sage --docbuild <document-name> <format>' (e.g. 'sage --docbuild tutorial html' or 'sage --docbuild reference html'). Use 'sage --docbuild -h' or '-H' for help. To see changes in reference manual (generated from source), build Sage ('sage -b') then 'sage --docbuild reference html'. Output formats supported by Sphinx (pdf, html, etc.) can be used."
+      },
+      {
+        "name": "Run doctests and tests on documentation changes",
+        "description": "All documentation files must pass tests (doctests) after modification.",
+        "guidance": "After editing docs, run 'sage -tp SAGE_ROOT/src/doc/en/tutorial/' or the appropriate doctest invocation. The 'coverage'/doctest tox environments discussed earlier apply when testing docs too."
+      },
+      {
+        "name": "Sphinx cross-referencing and link roles",
+        "description": "Use appropriate Sphinx roles (:mod:, :class:, :meth:, :func:, etc.) for cross-references; Sage also defines custom roles.",
+        "guidance": "Examples: ':mod:`sage.module_name`', ':func:`~sage.mod1.mod2.func1`' (short link using ~). Local names allowed for linking methods within the same class. Intersphinx can reference other packages; Sage-specific roles include :issue:, :sage_root:, :wikipedia:, :arxiv:, :oeis:, :doi:, :mathscinet:, and many package/library-specific roles. Use './sage -python -m sphinx.ext.intersphinx src/doc/common/_vendor/numpy.inv' to inspect available cross references."
+      },
+      {
+        "name": "Anonymous hyperlinks to avoid duplicate targets",
+        "description": "Use anonymous hyperlinks (two underscores) to avoid duplicate explicit target name errors in Sphinx pages.",
+        "guidance": "Using a single underscore creates an explicit target name and must be unique in the page; using two underscores (..) creates anonymous targets that avoid the 'Duplicate explicit target name' warning."
+      },
+      {
+        "name": "Report broken links with --warn-links",
+        "description": "Use the '--warn-links' flag when building documentation to report broken links.",
+        "guidance": "Note: Sphinx will not rebuild a document that hasn't been updated, so it may not report broken links in unchanged files. Example: 'sage --docbuild --warn-links reference html'."
+      },
+      {
+        "name": "Include new modules in the reference manual index",
+        "description": "To have a new file appear in the reference manual, add it to the appropriate index file.",
+        "guidance": "Add the new file name to SAGE_ROOT/src/doc/en/reference/<module>/index.rst. For files under combinat/, add the file to the package __init__.py index and to SAGE_ROOT/src/doc/en/reference/combinat/module_list.rst."
+      },
+      {
+        "name": "Python language version and backports policy",
+        "description": "Follow the time-window-based support policy for minimum supported Python versions; features must be available in that version.",
+        "guidance": "Minimum supported Python version is declared in pyproject.toml. Backports are allowed via: 'from __future__ import annotations' to modernize annotations per PEP 563 (include this import for code using annotations), and via typing_extensions package which is declared as a dependency."
+      },
+      {
+        "name": "Design to fit the Sage class hierarchy",
+        "description": "When adding new functionality, design classes and objects to integrate with existing Sage structures and hierarchies.",
+        "guidance": "E.g., implement elements of a ring by deriving from sage.structure.element.RingElement rather than creating unrelated classes. Think about how new code fits with other Sage code and structure to promote reuse and consistency."
+      },
+      {
+        "name": "Sage special methods and naming conventions",
+        "description": "Naming conventions: Python predefined special methods use double leading+trailing underscores (__XXX__), Sage-defined special methods use leading+trailing single underscores (_XXX_), single leading underscore = semi-private, double leading underscore = really private.",
+        "guidance": "Sage special methods are typically _XXX_. Eventually trailing underscores will be used consistently. Implement required special methods appropriate to the object (e.g., _latex_, _repr_, others depending on object nature)."
+      },
+      {
+        "name": "Implement LaTeX representation for objects",
+        "description": "Every Sage object should support latex(x) by implementing a _latex_ method returning a LaTeX representation suitable for math mode.",
+        "guidance": "Define _latex_(self) returning LaTeX that can be typeset within math mode (do not include $ delimiters). When typesetting components, call latex(c) rather than c._latex_() to handle cases where c may not implement _latex_. Include a docstring and an example demonstrating LaTeX generation. Allowed macros: those from amsmath, amssymb, amsfonts, or macros defined in sage.misc.latex_macros."
+      }
+    ]
+  }
+}

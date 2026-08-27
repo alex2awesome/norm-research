@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 34,
+  "n_chunks": 160,
+  "chunk_chars": 39719,
+  "model": "gpt-5-mini",
+  "elapsed_s": 211.9657510830002,
+  "input_tokens": 16334,
+  "output_tokens": 4579,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "users of Singular (mathematicians, researchers, and students doing computational algebra / singularity computations)",
+    "subtask_short": "using Singular for computational algebra",
+    "subtask_description": "Practical guidance and examples for performing elimination, free resolutions, graded-module handling, Ext, factorization, primary decomposition, normalization, kernel computations, algebraic dependence tests, and singularity invariants in the computer algebra system Singular.",
+    "subtask_keywords": [
+      "singular",
+      "computational_algebra",
+      "groebner_bases",
+      "singularity_theory",
+      "symbolic_computation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of eliminate vs. standard-basis elimination",
+        "description": "In Singular the most convenient way is to use the eliminate command. In contrast to the first method, with eliminate the result needs not be a standard basis in the given ordering.",
+        "guidance": "There may be cases where the first method (producing a standard basis) is preferred. For local or mixed orderings elimination needs special care: eliminate computes the closure of the image of V(J) under projection pr : k^r \u00d7 (k^n,0) \u2192 (k^n,0) (so components meeting fibers outside the origin are included). Achieve this by using an ordering where the block of t-variables has a global ordering (preceding the x-variables) and the x-variables have a local ordering."
+      },
+      {
+        "name": "Handling weighted-homogeneous (quasihomogeneous) input",
+        "description": "If the input is weighted homogeneous (=quasihomogeneous), the weights given to the variables should be chosen accordingly.",
+        "guidance": "Singular offers function weight which proposes integer weights so the ideal/module is as homogeneous as possible (works if input is weighted homogeneous but may be slow for many variables). Use qhweight to check quasihomogeneity: it returns an intvec of correct weights if input is quasihomogeneous and an intvec of zeros otherwise."
+      },
+      {
+        "name": "Choosing free resolution command based on input and goal",
+        "description": "Several commands compute free resolutions, each with different methods and input requirements (res, fres, lres, mres, sres, nres, minres, syz).",
+        "guidance": "res: heuristic preferred method. fres/sres: use Schreyer\u2019s method; input must be a standard basis. lres: LaScala\u2019s method; input must be homogeneous. mres: minimal free resolution via syzygy method. nres: standard-basis method. minres: minimizes a free resolution. syz: computes first syzygy module. Use res(i,r), lres(i,r), sres(i,r), mres(i,r), nres(i,r) to compute first r modules (r=0 for full resolution if basering not qring). Note: betti does not require a minimal resolution for minimal Betti numbers."
+      },
+      {
+        "name": "Resolution object structure and conversion",
+        "description": "A free resolution in Singular has type resolution, storing all information related to free resolutions; conversion to type list yields a list of modules.",
+        "guidance": "The k-th module in the converted list is the first syzygy-module of the (k-1)-st module. Use list conversion to inspect modules, syzygies, and differentials; many commands (e.g., minor, reduce, size) can be used to verify relations between ideals obtained from resolution matrices."
+      },
+      {
+        "name": "Testing Hilbert\u2013Burch situation via minors",
+        "description": "For an ideal i of a reduced curve in K^3, Hilbert\u2013Burch theorem: i has a free resolution of length 2 and i is given by the 2x2 minors of the second matrix in the resolution.",
+        "guidance": "Compute resolution (e.g., mres), extract the appropriate syzygy matrix (resi[2]), take its 2x2 minors, and check containment via reduce/std to verify equality."
+      },
+      {
+        "name": "Selecting generators not containing certain variables",
+        "description": "Use the proc 'nselect' from elim.lib to select generators from a std-basis that do not contain specified variables.",
+        "guidance": "Typical use: compute std basis j, then j = nselect(j,1..4) to select generators not containing variables 1..4."
+      },
+      {
+        "name": "Assigning and checking graded-structure of modules",
+        "description": "Check and assign homogeneity attributes for modules: attrib(I,\"isHomog\") and homog(I).",
+        "guidance": "homog(I) assigns an admissible weight vector (example: 2,2,1,1,0) which becomes attribute 'isHomog' (accessible via attrib). Use betti(...,0) to infer degrees from Betti diagram; attrib does not get checked for admissibility by Singular; assigned attributes are lost under type conversion (e.g., module to matrix). You can shift degrees by attrib(J,\"isHomog\",DV)."
+      },
+      {
+        "name": "Reading degrees from Betti diagrams and rowShift attribute",
+        "description": "The degree corresponding to the first non-zero row of the Betti diagram is accessible via the attribute 'rowShift' of the betti matrix (type intmat).",
+        "guidance": "Compute betti(res,0) or betti(I,0) and inspect attrib(betti(...)) and the matrix to get graded information and row shifts."
+      },
+      {
+        "name": "Computing Ext groups via resolutions",
+        "description": "To calculate the n-th Ext group of an ideal: calculate a (minimal) resolution at least up to length n, apply the Hom functor (transpose), calculate the (n)-th homology group (ker/im).",
+        "guidance": "Practical steps: compute resolution rs = mres(I,n+1); let tAn_1 = transpose(rs[n]); compute kernel via syz on appropriate transposed entry; image is generated by columns; compute quotient via modulo(ker, image). Example proc ext shows this sequence. The library homolog.lib provides more advanced procedures (e.g., Ext, Ext_R) and options to return SB and vector space bases when third argument given."
+      },
+      {
+        "name": "Meaning of Ext1 and Ext2 in deformation theory",
+        "description": "Ext1(M,M) and Ext2(M,M) are the modules of infinitesimal deformations and of obstructions of M (analogous to T1 and T2 for singularities).",
+        "guidance": "If Ext1 is finite-dimensional, semiuniversal deformations can be computed using Ext1, Ext2 and the cup product. Use specialized procedures (Ext, Ext_R) for faster computations in common cases like Ext^k(R/J,R) with J an ideal."
+      },
+      {
+        "name": "Computing depth via Auslander\u2013Buchsbaum and resolutions",
+        "description": "Compute the resolution over the polynomial ring; by Auslander\u2013Buchsbaum, depth = number of variables minus length of a minimal resolution.",
+        "guidance": "Example: build module of K\u00e4hler differentials D, compute sres/std and betti, then compute N - ncols(B) + 1 to get desired depth-related quantity."
+      },
+      {
+        "name": "Factorization libraries and output format",
+        "description": "Factorization uses C++ libraries Factory and libfac, and NTL for univariate factoring; factorize returns factors and multiplicities, first factor usually a constant.",
+        "guidance": "Behavior depends on characteristic and extension fields: in char 2 or over algebraic extensions results differ (examples show factors and multiplicities). Use ring specifications (characteristic, extension) to control factoring domain."
+      },
+      {
+        "name": "Primary decomposition algorithms and returned format",
+        "description": "Two primary decomposition algorithms are provided: primdecGTZ (Gianni/Trager/Zacharias) and primdecSY (Shimoyama/Yokoyama).",
+        "guidance": "Both return a list of pairs of ideals where the second is the prime ideal and the first the corresponding primary ideal. primdecSY can produce embedded components; use minAssChar and radical to get minimal associated primes and the radical of the ideal."
+      },
+      {
+        "name": "Understanding normalization output",
+        "description": "normal(I) computes normalization of a reduced ring R/I and returns a list of rings; ideals in these rings are named norid. The normalization of R/I is the product of factor rings of the list quotiented by norid.",
+        "guidance": "Access rings via nor[1][i], setring to inspect norid and normap. For nor[2][i] let ci be its last generator; the integral closure of R/P_i is generated as R-submodule of total ring of fractions by 1/ci * nor[2][i]. Use setring/def to navigate returned rings."
+      },
+      {
+        "name": "Computing kernel of map into quotient via modulo",
+        "description": "For matrices A: R^r \u2192 R^m and B: R^s \u2192 R^m, modulo(A,B) = ker(R^r \u2192 R^m/Im(B)).",
+        "guidance": "The output is a module whose generating vectors span the kernel on the right-hand side. After computing C = modulo(A,B) one can verify A*matrix(C) lies in Im(B)."
+      },
+      {
+        "name": "Testing algebraic dependence and subring membership via elimination/block ordering",
+        "description": "Given g, f1,...,fr \u2208 K[x1,..,xn], construct I = (Y1 - f1, ..., Yr - fr) \u2286 K[x,Xvars,Yvars]. Then I \u2229 K[Y] are algebraic relations between f1,...,fr; g \u2208 K[f1,...,fr] iff normal form of g w.r.t. I and block ordering X>Y is in K[Y].",
+        "guidance": "The provided procedure algebraicDep(J,g) implements this: if g==0 it eliminates to get relations; otherwise it reduces g modulo std(I) to check membership. Beware ring creation and restoration (Rhelp) and use imap to map objects between rings."
+      },
+      {
+        "name": "Milnor and Tjurina numbers: definitions and computation in Singular",
+        "description": "milnor(f) = dim_K(K[[x]]/jacob(f)), tjurina(f) = dim_K(K[[x]]/((f)+jacob(f))). tjurina(f) finite iff f has isolated singularity; milnor finite in char 0 under same condition. Singular displays -1 if dimension is infinite.",
+        "guidance": "Compute these via working in Loc(x)K[x] (ring with local monomial ordering such as ds, Ds, ls, ws, Ws). Use std/ vdim to get vector space dimensions; use option(prot) to shorten protocol during standard basis computation. Library sing.lib contains dedicated commands (see D.6.15)."
+      },
+      {
+        "name": "Practical distinction between local (ds) and polynomial (dp) computations for critical points",
+        "description": "Using ds (local series ordering) computes Milnor/Tjurina numbers (local/germ information); using dp (polynomial ring) computes number of critical points in affine space (counted with multiplicity) and number of singular points of f on affine hypersurface f=0.",
+        "guidance": "Map polynomials between rings using imap or fetch. Compare vdim(std(j)) in dp vs ds to deduce counts: difference between vdim in polynomial ring and localized ring gives number of critical points away from origin, and equality vdim(std(j+f)) indicates smoothness outside origin."
+      },
+      {
+        "name": "Computing polar curves via partial derivatives and saturation/ideal quotient",
+        "description": "Define polar curve for f(x,t) w.r.t t as Zariski closure of V(\u2202f/\u2202x1,...,\u2202f/\u2202xn) \\ V(f) if it is a curve; some authors take V(\u2202f/\u2202xi) itself as polar curve.",
+        "guidance": "Compute j = diff(f,x1),...,diff(f,xn). To remove branches contained in f=0 (set-theoretic polar curve) take ideal quotient q = quotient(j, ideal(f)) or saturation qsat = sat(j,f)[1] (for large k j:f^k). Use elim.lib for saturation and sing.lib for singular-locus queries; check q and qsat coincide by testing both reductions reduce(qsat, std(q)) and reduce(q, std(qsat)) equal zero."
+      },
+      {
+        "name": "Use imap and fetch for ring mappings",
+        "description": "imap is a convenient ringmap for inclusions and projections of rings; fetch works for almost identical rings (e.g., differing only in ordering or variable names) and may be used to rename variables.",
+        "guidance": "Use imap to map objects defined in one ring to another ring with same variable names; fetch is suitable for nearly identical rings. Integers and strings are global and do not belong to any ring."
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_f649a40a39c6.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17103,
+  "output_tokens": 3311,
+  "elapsed_s": 1409.7489030000288,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and practitioners evaluating LLM mathematical reasoning / benchmark designers",
+    "subtask_short": "llm math-reasoning benchmark",
+    "subtask_description": "Designing, generating, and evaluating controllable grade-school math word-problem variants (GSM-Symbolic, GSM-NoOp, difficulty variants) to probe robustness and reasoning fragility of large language models. Involves template creation, automated and manual validation, and distributional statistical evaluation across many instantiations.",
+    "subtask_keywords": [
+      "llm",
+      "math_reasoning",
+      "benchmark",
+      "gsm-symbolic",
+      "evaluation",
+      "chain_of_thought"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "GSM-Symbolic: use symbolic templates to generate diverse question variants",
+        "description": "GSM-Symbolic: an improved benchmark created from symbolic templates that allow for the generation of a diverse set of questions.",
+        "guidance": "Create parsable templates from GSM8K examples by identifying variables, domains, and necessary conditions; use common proper names; generate many instantiations per template (paper used 100 templates \u00d7 50 samples \u2192 5000 examples per benchmark). Purpose: enable controllable evaluations and measure model behavior across varied instantiations rather than a single fixed test set."
+      },
+      {
+        "name": "Treat model performance as a distribution across instances (not single-point accuracy)",
+        "description": "The performance of LLMs can be viewed as a distribution with unwarranted variance across different instantiations of the same question.",
+        "guidance": "Generate many datasets (paper: 50 datasets of 100 examples each), compute empirical distributions (mean \u00b1 std), and report gaps between worst and best performances. Compare the GSM8K single-point accuracy to the GSM-Symbolic distribution to detect optimistic bias or data contamination."
+      },
+      {
+        "name": "Robustness to superficial (name) changes vs numerical changes",
+        "description": "LLMs exhibit more robustness to changes in superficial elements like proper names but are very sensitive to changes in numerical values.",
+        "guidance": "Evaluate separate conditionals: change only names, change only numbers, change both. Observe mean shifts and variance changes across distributions; report that name-changes yield lower variance than number-changes, and combining both amplifies degradation."
+      },
+      {
+        "name": "Difficulty manipulation via clauses (GSM-M1, GSM-P1, GSM-P2)",
+        "description": "Question difficulty should be varied by removing or adding clauses: GSM-Symbolic-Minus-1 (GSM-M1), GSM-Symbolic-Plus-1 (GSM-P1), GSM-Symbolic-Plus-2 (GSM-P2).",
+        "guidance": "Measure how the mean and variance of accuracy evolve as clauses (and thus problem complexity) increase. Expect accuracy to decrease and variance to increase; report trends across models to assess fragility with increased reasoning steps."
+      },
+      {
+        "name": "GSM-NoOp: test sensitivity to irrelevant but seemingly relevant clauses",
+        "description": "Introduce 'No-Op' clauses \u2014 seemingly relevant statements that are ultimately inconsequential to the reasoning chain \u2014 and measure model performance drops.",
+        "guidance": "Design templates that add irrelevant statements (e.g., irrelevant discounts, donation amounts) and evaluate models' tendency to convert such statements into operations. Report catastrophic drops (paper reports up to ~65% for some models) and include example failure cases."
+      },
+      {
+        "name": "Template annotation and validation procedures",
+        "description": "When constructing templates, identify variables, domains, and necessary conditions (e.g., divisibility) and apply automated and manual checks to ensure annotation correctness.",
+        "guidance": "Specific checks: verify that none of the original variable values appear in the template; verify original values satisfy all conditions and final answer matches original; after generation, review 10 random samples per template manually; after model evaluation, verify that at least two models answer each generated question correctly \u2014 otherwise review question manually again."
+      },
+      {
+        "name": "Select numerical ranges aligned to original dataset to focus on logical reasoning",
+        "description": "Choose numeric ranges close to those in the original GSM8K test set so the benchmark assesses logical reasoning rather than arithmetic difficulty.",
+        "guidance": "Ranges may be slightly expanded to ensure enough valid instances, but should stay within boundaries where models maintain arithmetic accuracy (paper shows majority of answers < 5 digits). Document chosen ranges and justify that arithmetic difficulty is unlikely to explain observed performance drops."
+      },
+      {
+        "name": "Evaluation protocol: Chain-of-Thought prompting and dataset sizing",
+        "description": "Follow a common evaluation setup on GSM8K variants that includes Chain-of-Thought (CoT) prompting with 8-shots and greedy decoding, unless otherwise stated.",
+        "guidance": "Paper reports nearly 500 total evaluations using 100 templates \u00d7 50 samples. Note that preliminary experiments showed number of shots did not significantly change conclusions; however, report shot config and decoding strategy explicitly for reproducibility."
+      },
+      {
+        "name": "Use distributional comparison to detect potential data contamination",
+        "description": "Compare original GSM8K accuracy to the GSM-Symbolic performance distribution; if GSM8K accuracy lies far to the right (much higher than distribution center) this may indicate data contamination (e.g., test examples present in model training).",
+        "guidance": "Plot per-model distributions and show GSM8K single-point as reference; quantify drops from GSM8K to GSM-Symbolic and report models where the gap is unusually large."
+      },
+      {
+        "name": "Arithmetic-accuracy ablation to rule out arithmetic errors",
+        "description": "Perform an ablation measuring arithmetic accuracy for operations (addition, subtraction, multiplication, division) across digit lengths to ensure arithmetic mistakes do not explain performance drops.",
+        "guidance": "Test models zero-shot on operation prompts for many cases (paper used \u22651000 cases per digit length/operation). Also extract arithmetic from model-generated responses (eqns with =) to compute empirical arithmetic accuracy. Report that modern LLMs are nearly perfect up to 3\u20134 digits, implying logical issues cause observed failures."
+      },
+      {
+        "name": "Automated generation constraints: impose conditions (e.g., divisibility) for whole-number answers",
+        "description": "When generating instantiations from templates, include necessary conditions (such as divisibility) to ensure questions remain grade-school level and answers are whole numbers.",
+        "guidance": "Annotate constraints in template metadata so sampling only produces valid instances. Document these constraints and include them in generation code so that generated examples are valid and comparable to original dataset difficulty."
+      },
+      {
+        "name": "Manual-review thresholds after generation and evaluation",
+        "description": "Use human review checkpoints: review a sample of generated instances immediately after generation and re-review questions that no model (or fewer than two models) answers correctly after evaluation.",
+        "guidance": "Paper practice: 10 random samples per template manually reviewed; after evaluating all models, verify at least two models answer each question correctly, otherwise manually review the question again. This guards against generation errors and labeling mistakes."
+      },
+      {
+        "name": "Probe generalization via shot-source variation (NoOp-Symb vs NoOp-NoOp)",
+        "description": "Vary the source of in-context shots to probe whether example provenance helps models ignore No-Op information: (a) provide 8 shots from GSM-Symbolic (same question variants), (b) provide 8 shots from GSM-NoOp (different No-Op questions).",
+        "guidance": "Measure whether providing exact-variation shots improves performance on NoOp target questions; in practice the paper reports that performance often remains within standard deviation and does not recover catastrophically, indicating deeper brittleness."
+      },
+      {
+        "name": "Report mean and variance (\u00b1 std) across multiple sampled datasets; check distribution normality",
+        "description": "When presenting results, report empirical mean \u00b1 standard deviation over multiple sampled datasets and test distributions for normality before applying parametric tests.",
+        "guidance": "Paper used 50 datasets and performed a normality test based on skewness and kurtosis (p = 0.1 threshold) before further analysis. Note caveats about the t-test and distributional assumptions and include discussion of alternative interpretations (e.g., degenerate vs Bernoulli assumptions)."
+      },
+      {
+        "name": "Document and justify statistical assumptions and interpretability choices",
+        "description": "Explicitly state the philosophical/statistical assumptions used to interpret performance distributions (e.g., whether ideal reasoner should have degenerate distribution over variants), and discuss alternative analyses and limitations.",
+        "guidance": "Paper discusses disagreement with other re-analyses (Ivanova et al., 2025), describes rationale for conditional probability reasoning (P(x=true | o=true) vs Bernoulli), and emphasizes transparency about assumptions in statistical interpretation."
+      },
+      {
+        "name": "Report per-model sensitivity metrics (gap between worst and best instance performance)",
+        "description": "Quantify per-model sensitivity by measuring the gap between worst and best performance across instantiations (or between GSM8K and GSM-Symbolic).",
+        "guidance": "Paper reports example gaps (e.g., Gemma2-9B gap >12%, Phi-3.5-mini gap ~15%), and shows bar charts of GSM8K\u2192GSM-NoOp accuracy drops per model. Use these metrics to rank robustness and detect anomalous models."
+      },
+      {
+        "name": "Ensure reproducibility: publish templates, generated data, and prompts",
+        "description": "Make templates, generated datasets, and prompt templates available to the community to enable reproduction and further study.",
+        "guidance": "Paper provides repository link for GSM-Symbolic templates and generated data; include prompt template (paper references Fig. 9) and full evaluation config in appendix for transparency."
+      }
+    ]
+  }
+}

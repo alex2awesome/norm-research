@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 4,
+  "n_chunks": 160,
+  "chunk_chars": 39945,
+  "model": "gpt-5-mini",
+  "elapsed_s": 62.64293295799871,
+  "input_tokens": 13124,
+  "output_tokens": 5015,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Developers/authors of Singular libraries and procedures",
+    "subtask_short": "writing Singular libraries",
+    "subtask_description": "Guidelines and requirements for implementing, documenting, packaging, and debugging Singular libraries and their procedures (help strings, examples, naming, loading, doc generation, and debug tooling).",
+    "subtask_keywords": [
+      "singular",
+      "library",
+      "procedure",
+      "documentation",
+      "texinfo"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "LIB command syntax",
+        "description": "Syntax: LIB \"lib1.lib\"; ... LIB \"libr.lib\"; Note: The keyword LIB must be followed by at least one space.",
+        "guidance": "Purpose: Loads libraries used by the library under consideration. Example: LIB \"primdec.lib\"; LIB \"normal.lib\"; Also libraries can be loaded with load string expression ; (see loading rules and SearchPath behavior)."
+      },
+      {
+        "name": "Declare non-user-accessible procedures static",
+        "description": "Each procedure not meant to be accessible by users should be declared static.",
+        "guidance": "Static (local) procedures are intended to be internal to the library. libparse and the formal checker will report parsing/visibility information; use 'l' prefix in libparse output to denote static procedures."
+      },
+      {
+        "name": "Procedure header must include help and example",
+        "description": "The header of each procedure not declared static must comply with the guidelines described in Section 3.7.1 and Section 3.7.3. In particular, it must have a help and example section, and assumptions made should be carefully explained.",
+        "guidance": "If assumptions are checked at run-time, errors may be reported using the ERROR function. Example sections are used during the automatic build process and must be written so they do not require interactive input unless guarded by printlevel checks."
+      },
+      {
+        "name": "Explain assumptions and use ASSUME for debugging",
+        "description": "Assumptions made should be carefully explained. ASSUME ( int constant , expression ) tests the expression for correctness if the int constant is smaller as a variable assumeLevel.",
+        "guidance": "ASSUME shall be used for documentation and debugging; production code of a library must never define assumeLevel. Example: ASSUME(0,2==2); // always tested. Behavior: if expression is evaluated and not true an error is raised."
+      },
+      {
+        "name": "Procedure naming conventions",
+        "description": "Names of procedures should not be shorter than 4 characters and should not contain any special characters. In particular, the use of _ in names of procedures is discourraged.",
+        "guidance": "If the name of the procedure is composed of more than one word, each new word should start with a capital letter, all other letters should be lower case (e.g. linearMapKernel)."
+      },
+      {
+        "name": "No nested procedure definitions",
+        "description": "No procedures should be defined within the body of another procedure.",
+        "guidance": "Procedures must be top-level in the library source; nesting is disallowed by the library syntax and will be reported by libparse or load errors."
+      },
+      {
+        "name": "Control printed output with dbprint, printlevel and voice",
+        "description": "Procedures may print comments, but printing should be controlled using dbprint (and the reserved variables printlevel and voice).",
+        "guidance": "dbprint takes two arguments and prints the second if the first is positive. printlevel is a predefined global variable (default 0) that users can change; voice is an internal variable representing nesting level (value 1 on top level, 2 inside first procedure, ...). Use these to avoid unwanted output when procedures are called from others; remember to reset printlevel in examples to the old value."
+      },
+      {
+        "name": "Examples must be non-interactive or guarded",
+        "description": "Singular functions such as pause or read allow and require interactive user-input; if such a command is used inside the procedure of a library to be distributed with Singular, the example section of the procedure has to be written with some care \u2013 the procedure should only be called from within the example if the value of printlevel is 0.",
+        "guidance": "Otherwise the automatic build process will not run through since the examples are carried out during the build process. Guard example calls with checks on printlevel, and restore any changed global variables afterwards."
+      },
+      {
+        "name": "Example-section behavior and resetting globals",
+        "description": "The example part of a procedure behaves in this respect like the procedure on top level (the nesting level is 1, that is, the value of voice is 2). Therefore, due to the command printlevel=1;, 'comment1' will be displayed when entering example Test;.",
+        "guidance": "Because printlevel is global, it should be reset to its old value at the end of the example part. Also, at the beginning of the example part echo is set to the value 2 so input lines may be echoed if echo>=voice."
+      },
+      {
+        "name": "Typesetting: start texinfo strings with @",
+        "description": "Users familiar with texinfo may write help and info strings directly in the texinfo format. The string should, then, start with the @ sign. In this case, no parsing will be done.",
+        "guidance": "If you write texinfo directly, include full texinfo markup; otherwise write plain help strings that the parser will convert. Examples in the manual show both pure ASCII and texinfo help strings."
+      },
+      {
+        "name": "Help/info strings are typeset within @table @asis",
+        "description": "Help and info strings are typeset within a @table @asis environment (similar to LaTeX description environment).",
+        "guidance": "This implies that lines starting with uppercase words up to a colon are interpreted as item description-strings (label) and the following text as item content, which is used to generate separate texinfo nodes and index entries."
+      },
+      {
+        "name": "Recognized item labels in info strings",
+        "description": "If the description-string of an item matches SEE ALSO or KEYWORDS or LIBRARY or PROCEDURES then special parsing rules apply.",
+        "guidance": "SEE ALSO / KEYWORDS: content is assumed to consist of comma-separated words valid as references to other texinfo nodes (or semicolon-separated phrases for index keys). LIBRARY: content assumed to be one-line description of the library (uppercase content typeset lowercase). PROCEDURES: content assumed to consist of lines of '<proc_name>(); <one line description>' and separate texinfo nodes are created for those procedures."
+      },
+      {
+        "name": "Recognized texinfo markup and constraints",
+        "description": "The following texinfo markup elements are recognized in help/info strings: @* (line-break), @ref/xref/pxref (references), @math{..}, @code{..}, @example...@end example, @format...@end format, @texinfo...@end texinfo.",
+        "guidance": "Notes/constraints: @math{..} and @code{..} must not contain the characters {,}, and @. Inside @example and @format environments the characters {,},@ must be escaped by an @ sign. @ref/@xref/@pxref produce different phrasing depending on placement; examples are provided in the manual."
+      },
+      {
+        "name": "Automatic line-break before short previous lines",
+        "description": "A line-break is inserted before each line whose previous line is shorter than 60 characters and does not contain any of the recognized texinfo markup elements.",
+        "guidance": "This affects the formatting of help/info strings when parsed to texinfo and should be considered when structuring lines to produce the desired typeset output."
+      },
+      {
+        "name": "Use lib2doc to generate library documentation",
+        "description": "lib2doc is a utility to generate the stand-alone documentation for a Singular library in various formats. The lib2doc utility should be used by developers of Singular libraries to check the generation of the documentation of their libraries.",
+        "guidance": "Requirements: perl (version 5 or higher), texinfo (3.12+), Singular and libparse (version 1-3-4 or higher). Typical steps: unpack lib2doc.tar.gz, edit Makefile to set SINGULAR, LIBPARSE, PERL, LATEX2HTML, copy your library, run make mylib.hlp / mylib.dvi / mylib.ps / mylib.html; 'make clean' deletes generated files. You can safely ignore messages about undefined references."
+      },
+      {
+        "name": "Library loading and SearchPath construction",
+        "description": "Libraries can be loaded with the LIB or the load command. If the given filename does not start with . or / and if the file cannot be located in the current directory, the SearchPath is checked for a directory containing a file with this name.",
+        "guidance": "The SearchPath is constructed at Singular start-up by appending directories from SINGULARPATH and standard locations ($RootDir/../LIB, $RootDir/LIB, $BinDir/LIB, $DefaultDir/LIB, $DefaultDir/../LIB). Non-existing directories are removed. The special standard.lib is automatically loaded at start-up unless Singular is started with --no-stdlib. After LIB/load only procedure names are loaded; bodies are read on first call. Starting with -q / --quiet unsets loadLib and disables monitoring of library loading."
+      },
+      {
+        "name": "Formal library checker usage",
+        "description": "A formal library checker for SINGULAR can be used online: after uploading your library file, you will receive an output of hints, warnings, and errors which may help you to improve your library.",
+        "guidance": "Use the online tool (link provided in manual) prior to distribution to catch issues. The checker reports hints/warnings/errors to guide fixes."
+      },
+      {
+        "name": "libparse as a debugging tool and its checks",
+        "description": "libparse is a stand-alone program which performs the same checks as the load command in Singular but generates more output during parsing. It is useful if an error occurs while loading the library but the real error might have occurred earlier.",
+        "guidance": "Usage: libparse [options] singular-library. Options: -d Debuglevel (0-4) increases output; -s turns on reporting about violations of unenforced syntax rules. Always-performed syntax checks: matching pairs of brackets {,}, [,], (,) ; even number of quotes \" ; general library syntax (only LIB, static, proc (with parameters, help, body and example) and comments // and /*...*/ are allowed). libparse output lists parsed procedures with positions and abbreviations (g = global, l = static) and byte offsets. Example error: missing close bracket reported with line and position."
+      },
+      {
+        "name": "Set TRACE variable for procedure tracing",
+        "description": "Setting the TRACE variable to 1 (resp. 3) results in reporting of all procedure entries and exits (resp. together with line numbers). If TRACE is set to 4, Singular displays each line before its interpretation and waits for the RETURN key being pressed.",
+        "guidance": "Use TRACE for lightweight tracing during development. Example: TRACE=3; t1(); produces entering/leaving messages and a trace sequence. See section on TRACE variable for details."
+      },
+      {
+        "name": "Enable source code debugger (sdb) with -d or --sdb",
+        "description": "The source code debugger (sdb) is an experimental feature; to enable it Singular has to be started with the option -d or --sdb.",
+        "guidance": "sdb commands are single characters possibly followed by parameters: b (print backtrace), c (continue), e (edit current procedure and reload), h/? (help), n (execute current line and break at next), p <identifier> (display type and value), Q (quit this Singular session), q <flags> (quit debugger with flags 0,1,2). Syntactical errors in procedures will start the source code debugger if enabled. Up to seven sdb breakpoints can be set/cleared (see breakpoint command)."
+      },
+      {
+        "name": "Use ~ for breakpoints inside procedures",
+        "description": "A break point can be put into a proc by inserting the command ~. If Singular reaches a break point it asks for lines of commands (line-length must be less than 80 characters) from the user.",
+        "guidance": "Singular returns to normal execution if given an empty line. Breakpoints allow inspection of local variables and control during execution. Example shows interactive prompt with local variable access."
+      },
+      {
+        "name": "option(warn) to surface suspicious constructs",
+        "description": "If option(warn) is set some constructs which may lead to bugs will result in a warning.",
+        "guidance": "Examples of constructs that produce warnings: change of options during a procedure call (is this side effect intended?), use of def (avoids type checking but useful for variable-type results), ASSUME outside of procedures. Consider these warnings to review code quality."
+      },
+      {
+        "name": "Dynamic modules must comply with internal structure",
+        "description": "Dynamic modules (functions written in C/C++ or other languages) are handled similarly to libraries and a collection of such functions is called a dynamic module and can be loaded by LIB or load. To have the full functionality of a built-in function, dynamic modules need to comply with certain requirements on their internal structure.",
+        "guidance": "A separate, more detailed guide on how to write and use dynamic modules is available. After loading the dynamic module, its functions can be used like built-in Singular functions and general information can be displayed by help package_name."
+      }
+    ]
+  }
+}

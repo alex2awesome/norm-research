@@ -1,0 +1,162 @@
+[
+{
+"review_id": "colm_NmGSvZoU3K_r5",
+"paper_id": "colm_NmGSvZoU3K",
+"review_text": "The paper investigates the Gemma 2 9b model using sparse autoencoder (SAE) features from the perspective of multilinguality via multilingual multiple choice tasks (m-MMLU-STEM and m-ARC).  \nThe paper argues that the presence of 'active' SAE features correlate well with the prompt structure.  \nSpecifically, the authors distinguish Task Instruction-focused (TF) and Heading-focused (HF) features.  \nThe presence of such features are contrasted between low and high resource languages.  \nAs TF-features are less frequent for lower-resource languages, the paper also proposes a technique for their amplification."
+},
+{
+"review_id": "colm_pm9ykfhknK_r0",
+"paper_id": "colm_pm9ykfhknK",
+"review_text": "This paper addresses the challenge of mimicking human behavior when two agents work together to solve complex, multi-step tasks. While this is an important and difficult problem, the authors suggest that in goal-oriented dialogue settings with a clear focus, such behavior can be approximated quite effectively. The goal of this work is to model the interaction between two agents: a Reasoner and a Guide. The Reasoner is a language model that processes and generates information, while the Guide is designed to imitate a human participant in a dialogue (also implemented as a language model). The current approach focuses on training the language model acting as the Guide. The authors argue that, after training a relatively small language model, it performs better as a Guide than a more powerful language model. They also argue that this is true whether the Reasoner is a small or a large language model.\n\nTwo training strategies are used in this work: fine-tuning and reinforcement learning (RL). The main difference between them is that fine-tuning involves training models on data where each conversation leads to the correct solution, while RL is conducted on data where conversations may result in either correct or incorrect answers. Each dialogue act generated is assigned a measure: if it leads to the correct answer, +1 is added to the count, otherwise -1 is added to it. This is used to fine-tune the model, called the Critique model. Additionally, the paper introduces an ensemble approach for to further train the Critique model. Instead of generating a single turn at each dialogue step, the model produces K-top outputs of the beam search, which increases the diversity and the sheer number of conversations, and thus results in an expanded training set. The evaluation is conducted for four datasets: two question-answering (QA) dataset, a puzzle dataset, and a constraint generation dataset. For the QA and puzzle tasks, performance is measured against ground truth labels. In the constraint generation task, the performance is evaluated against human performance (i.e., human written texts), with GPT-4 serving as the judge. The authors also report conducting human experiments to compare human performance to their models for the question-answering tasks.\n\nThe findings are interesting. One of them is that performance drops when a powerful Reasoner is combined with a smaller Guide model. For both smaller and larger Guides, RL boosts performance. The authors claim that humans usually give information in advance before asking a question in QA tasks, but this approach is absent in their models, which is a very interesting finding, given that in some other aspects, the models do really well, e.g. their RL model does better than humans in correcting intermediate reasoning steps."
+},
+{
+"review_id": "colm_pm9ykfhknK_r1",
+"paper_id": "colm_pm9ykfhknK",
+"review_text": "This paper proposes to develop a model which mimics human in collaborating and guiding LM in solving reasoning tasks. The proposed approach starts from real human interaction with strong LMs like GPT-4, then collect these seed conversations for few-shot examples to collect more conversations. The guide model is then fine-tuned with these data, and further refined via RL. Experiments show the effectiveness of this approach compared with commonly used baselines."
+},
+{
+"review_id": "colm_pm9ykfhknK_r2",
+"paper_id": "colm_pm9ykfhknK",
+"review_text": "In this paper, the authors investigate collaborative problem solving involving two models, a reasoner (e.g., a frozen LLM that directly solves tasks) and guide model (i.e., any agent or model providing feedback to the reasoning model), with the aim of mimicking the kinds of human-machine interactions studied in HCI. They specifically ask (line 30): \u201ccan LLMs simulate the role of humans in these interactions [i.e., these guide models that provide feedback to the reasoners]?\u201d (I was initially very confused by their described aim of \u201csimulating humans\u201d expressing in line 30, with the thoughts that all language models to some degree simulate humans, but this confusion was made more clear by section 3. What is still left clear is if their framing on line 131 is in any way different from a standard chat format, for which we have loads of publicly available and models). \n\nTo accomplish this, they propose the following processing pipeline (nicely summarized in Figure 1): collect a small number of seed interactions from humans (I initially thought that this involved significant human annotation, but this is just about getting in-context examples; they don't say who the human are here, is it the authors?); 2) use this seed data as in-context examples to elicit human-like feedback data from chatGPT; 3) filter these dialogues for end task correctness (i.e., checking whether the interactions between these two models terminated in the reasoning answer predicting the correct answer) ; 4) use this filtered \u201cclean\u201d data to train a series of SFT and reward/RL models resulting in a final \u201cguide\u201d model (these models are all small llama models). This guide model is then coupled with a large frozen LLM reasoner (ChatGPT 4o-mini) in a dialogue loop and evaluated on 2 QA datasets (commonsenseQA 2 and socialIQA), a puzzle dataset (NYT Connections) and a constrained generation task (CommonGen). \n\nThey compare against a comprehensive set of baselines: two different CoT approaches, self-refine (i.e., an approach with a self critique and revision components both performed by a single model) and multi-agent debate (MAD) (i.e., an approach involving multiple agents debating their responses with the aim of arriving at a consensus). The results are impressive: their full approach with a small RL guide model outperforms all approaches, and has sizable gains over ablations of the guide learning components (e.g., removing the RL or SFT training altogether, or just using a prompt-based GPT model. In the latter case, this also does well, but is still outperformed by their full approach, which has the advantage of relying on a much smaller model and hence incurring (probably) considerably less inference costs). Particularly intriguing is the improving over MAD and the self-refine, showing that their particular style of multi-agent interaction is effective."
+},
+{
+"review_id": "colm_jST2VzWUFb_r0",
+"paper_id": "colm_jST2VzWUFb",
+"review_text": "This paper presents an exploratory study of how LLMs might generalize implicitly from exposure to patterns when performing in-context learning as compared to humans\u2019 implicit learning of the same patterns. The study consists of replicating three psychological studies (1. Schuler et al. (2016), 2. Valian & Coulson (1988), 3. Alamia et al. (2020)) using LLMs as the subject instead of humans as used in the original studies. Two LLMs are tested: GPT-4o (temperature 0) and GPT-o3-mini.\n\nThe general conclusion of this study is that the alignment of human and in-context LLM implicit learning varies across the studied tasks. The main contribution of the paper is the recreation of these studies using LLM subjects, and the comparison against the original human-subject results.\n\nThese three psychological studies function by presenting the subject with a set of training examples, followed by a set of testing examples, and finally followed by a \u201cpost-testing\u201d prompt that elicits reasoning patterns used by the model. 1. and 2. focus on morphosyntactic agreement, and 3. focuses on learning a finite-state grammar (FSG) and uniquely involves dynamic feedback during the testing phase.\n\nThe psychological studies are recreated as originally performed on humans except for the exact prompt used for testing models and 1. which relies on a verbalization of the context as opposed to an image used in the original study.\n\nIn a little more detail, 1. studies agreement in grammatical number for nonce words; 2. studies a simple rule-based grammar; and 3. studies an FSG grammar."
+},
+{
+"review_id": "colm_jST2VzWUFb_r1",
+"paper_id": "colm_jST2VzWUFb",
+"review_text": "This paper compares the behavior on GPT-4o and o3-mini on modified versions of three artificial language learning tasks. It finds that the models behave in many ways differently from each other and from humans in the original experiments, though there are some similarities"
+},
+{
+"review_id": "colm_jST2VzWUFb_r2",
+"paper_id": "colm_jST2VzWUFb",
+"review_text": "This paper systematically investigates whether LLMs exhibit human-like implicit learning capabilities during in-context learning by adapting three classic artificial language learning experiments spanning morphology, morphosyntax, and syntax. The work is well written with clear motivations and experiments. It adapts existing studies on humans to LLMs and reveals domain-specific similarities between LLMs and humans, which could provide insights into both human cognition and artificial intelligence mechanisms."
+},
+{
+"review_id": "colm_L4HHkCDz2x_r0",
+"paper_id": "colm_L4HHkCDz2x",
+"review_text": "- The paper targets the lack of formal scheduling and resource-isolation support in today\u2019s LLM-agent frameworks, where agents can overload the GPU or external tools.\n- It proposes AIOS, a three-layer architecture. (1) A core layer that handles scheduling (deciding which agent runs when). (2) Tools that manage memory, storage, and access to resources. (3) An interface that lets AI agents use these tools easily.\n- Experiments on five agent frameworks show equal or better benchmark success rates and up to 2.1\u00d7 higher throughput plus lower average latency on a single RTX-A5000."
+},
+{
+"review_id": "colm_L4HHkCDz2x_r1",
+"paper_id": "colm_L4HHkCDz2x",
+"review_text": "This paper proposes the architecture of AIOS in the context of managing LLM-based agents.\n\nThe primary contribution of this paper is the design and implementation of AIOS, a novel operating system-like architecture specifically tailored for managing LLM-based agents."
+},
+{
+"review_id": "colm_L4HHkCDz2x_r2",
+"paper_id": "colm_L4HHkCDz2x",
+"review_text": "This paper introduces the AIOS framework, designed to enhance the parallel efficiency of multiple LLM-based agents. By isolating the resources of LLM services within a dedicated AIOS kernel, the framework achieves up to a 2.1\u00d7 improvement in efficiency. Additionally, it provides an SDK to improve usability and ease of integration.\n\nThe paper clearly outlines the architecture of AIOS and presents experimental results across various agent frameworks. The proposed system significantly improves concurrency and overall task efficiency for agent-based applications."
+},
+{
+"review_id": "colm_L4HHkCDz2x_r3",
+"paper_id": "colm_L4HHkCDz2x",
+"review_text": "The blueprint for a native operating system for artificial intelligence is visionary but incomplete, and will require more stringent technical requirements and broader validation to realise its potential."
+},
+{
+"review_id": "colm_8xofWL61S9_r0",
+"paper_id": "colm_8xofWL61S9",
+"review_text": "This paper introduces CRUST-Bench, a novel and comprehensive benchmark designed to evaluate the capability of Large Language Models (LLMs) in transpiling C code to safe and idiomatic Rust. It comprises 100 real-world C repositories, each paired with manually written Rust interfaces and accompanying test cases. It allows for rigorous validation of both functional correctness and adherence to Rust's memory safety and idiomatic patterns. The authors evaluate several state-of-the-art LLMs, revealing that C-to-safe-Rust transpilation remains a significant challenge. The paper also explores the effectiveness of self-repair mechanisms, including compiler and test feedback loops, and agentic systems, demonstrating improvements in performance and providing a detailed error analysis to guide future research."
+},
+{
+"review_id": "colm_8xofWL61S9_r1",
+"paper_id": "colm_8xofWL61S9",
+"review_text": "The paper presents CRUST-Bench, a dataset of 100 C repositories paired with manually-written safe Rust interfaces and test cases to evaluate C-to-Rust transpilation systems. Unlike existing benchmarks, it considers entire repositories to capture the complexities of real-world projects. Evaluation of state-of-the-art large language models on CRUST-Bench reveals that generating safe and idiomatic Rust from C remains a significant challenge, with the best model solving only 15% of tasks in a single-shot setting. The research also provides insights into common LLM errors and demonstrates that iterative self-repair significantly improves success rates, though substantial room for improvement remains."
+},
+{
+"review_id": "colm_8xofWL61S9_r2",
+"paper_id": "colm_8xofWL61S9",
+"review_text": "This paper presented a benchmark called CRUST-bench. It evaluates whether LLMs can correctly transpile C code repositories into safe Rust counterparts. The repositories are collected from GitHub after rounds of data cleaning and filtering. Then, the authors manually label Rust interfaces and test cases for the C repos. The Rust interface is used as part of the LLM input along with the original C code. Evaluation is done by checking whether the LLM-generated Rust programs satisfy the interface and function correctly.\n\nA variety of LLMs, both open-sourced and closed-sourced, were evaluated from which the authors found the benchmark is challenging to current LLMs. Self-repair loops with error messages from the compiler or test cases were found helpful to improve model performance. They also tested off-the-shelf agentic frameworks, e.g., SWE-Agent. They found SWE-Agent helps LLM performance in the single-shot setting but struggles to perform self-repair in the configuration of this benchmark. A thorough error analysis is also provided as part of the study."
+},
+{
+"review_id": "colm_8xofWL61S9_r3",
+"paper_id": "colm_8xofWL61S9",
+"review_text": "This research effectively highlights the challenges and current capabilities in C-to-Rust transpilation, clearly identifying limitations in existing benchmarks regarding memory safety and idiomatic Rust code generation. The paper provides a convincing justification for CRUST-Bench by demonstrating how previous benchmarks fail to adequately handle multi-file systems and ensure safe Rust code production.\nThe study delivers a comprehensive evaluation of both closed-source and open-weight large language models using the CRUST-Bench benchmark, introducing innovative iterative self-repair strategies that leverage feedback from compiler errors and test cases to improve model performance. The benchmark itself represents a significant contribution by enabling systematic evaluation of C-to-Rust transpilation through repository-scale projects, annotated Rust interfaces, and correctness-enforcing test cases.\nMethodologically, the research demonstrates depth through a pilot study that determines the optimal number of self-repair rounds, ensuring evidence-based experimental parameters. The iterative refinement process allows models to address syntactic and type-level issues flagged by the Rust compiler, while also providing valuable insights into specific errors made by LLMs during transpilation.\nCRUST-Bench distinguishes itself by focusing on entire repositories rather than isolated functions, capturing the complexity of real-world projects. The comprehensive comparison across different model types and empirical analysis identifies key challenges for future research in automated code migration, establishing a clear pathway for continued advancement in this field."
+},
+{
+"review_id": "colm_ruWC5LIMSo_r0",
+"paper_id": "colm_ruWC5LIMSo",
+"review_text": "The manuscript introduces **LONGPROC**, a six\u2011task benchmark specifically aimed at evaluating long\u2011context language models (LCLMs) in *long\u2011form procedural generation* scenarios.  Each task forces a model to (i) retrieve information scattered across \u2265\u202f32\u202fK\u2011token inputs, (ii) execute a deterministic multi\u2011step procedure, and (iii) emit structured outputs as long as **8\u202fK tokens**.  Three difficulty tiers (0.5\u202fK\u202f/\u202f2\u202fK\u202f/\u202f8\u202fK) are provided.  \nThe authors benchmark **23** contemporary LCLMs (open and closed weight, instruction\u2011tuned and reasoning\u2011trained) and report that:\n\n* open\u2011weight models fail already at 2\u202fK outputs, whereas even GPT\u20114o and Gemini\u20111.5\u2011Pro collapse at 8\u202fK;\n* model scale is a stronger predictor of success than architecture choice;\n* models distilled on long chain\u2011of\u2011thought traces (\u201creasoning\u201d variants) consistently beat instruction\u2011only counterparts;\n* generation quality degrades sharply in later output chunks, highlighting long\u2011range coherence limits.\n\nCode, prompts and evaluation scripts will be released, supporting reproducibility."
+},
+{
+"review_id": "colm_ruWC5LIMSo_r1",
+"paper_id": "colm_ruWC5LIMSo",
+"review_text": "This paper proposes a benchmark for evaluating long-context language models (LCLMs), LongProc, focusing on long procedural generation, testing LCLMs on their ability to integrate highly dispersed information and to generate long procedural text. LongProc not only requires long text understanding, as has been the main focus of existing benchmarks, but also long text generation of up to 8K tokens. However, evaluations can still rely on rule-based approaches as the generated texts are procedural, as opposed to the LongWriter benchmark where the generated open-ended texts are inherently subjective. Analysis shows how even strong closed-source models like GPT-4o and Gemini-1.5-pro struggle at generating output for 8K tasks. And while reasoning models outperform instruction-tuned models across length-based difficulty levels (0.5K, 2K, 8K), they usually fail to generate final solutions for the 8K tasks within the enforced 16K output token budget."
+},
+{
+"review_id": "colm_ruWC5LIMSo_r2",
+"paper_id": "colm_ruWC5LIMSo",
+"review_text": "This work builds a new benchmark LongProc for long-context processing of LLMs. This benchmarks allows to evaluate LLMs long-context processing capabitilies along following directions: 1) how well does it understand long structured input 2) how good it is at generating long structured output. It includes 6 tasks, that allow reliable evaluation. This is the first benchmark for long context that proposes to asses simultaneously how well LLM is with long inputs, long outputs, and reliable and objective evaluation of these outputs. Benhcmark proposes 3 different difficulty leves limiting the generations to 500, 2k or 8k tokens.  Authors analyse behavour of  23 existing LLMs on such benchmark, including strong closed source and various open-source (instruction-tuned and reasoning) models.   They provide some interesting insights in models behavour: 1) even the strongest  models still struggle at generating 8K coherent output 2) coherence of the output decreases with amount of generated tokens 3) larger models are usually better at handling long context 4) reasinong models are generally better than instruction-tuned models in LC handling."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "colm_ruWC5LIMSo_r3",
+"paper_id": "colm_ruWC5LIMSo",
+"review_text": "The paper describes an analysis of LLMs for effective use of large contexts over different levels of sizes and access of the information in the contexts. The authors curated several datasets across tasks which involves long context like HTML to CSV. The tasks are created with different context lengths and are easily to be verified using simple matches rather than having to rely on an other LLM as evaluator. They performed a deep analysis over several LLMs and studied their performance across the tasks and the different sizes of context."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "colm_X39dK0SX9W_r0",
+"paper_id": "colm_X39dK0SX9W",
+"review_text": "This paper proposes a multi-step approach involving multiple LLM based agents that helps a system to restrict the generation of texts involving a predefined set of topics/keywords. The proposed method operates based on multiple agents based on LLM. Each agent is responsible for completing a specific step of the proposed multi-step unlearning process. The unlearning happens at an external layer and does not deal with updating the model weights. The authors evaluated the method on TOFU, WPU, and WMDP benchmarks, and jailbreaking techniques. They compared this post-hoc method of 'unlearning' with optimization based unlearning approach and other post-hoc methods.\n\n* I have increased my support after reading the author response."
+},
+{
+"review_id": "colm_X39dK0SX9W_r1",
+"paper_id": "colm_X39dK0SX9W",
+"review_text": "This paper aims to tackle the challenge of machine and learning for large language models by prompting an agentic system of four prompted language models: a vanilla LLM, an eraser, a critic, and a composer. They tested their method against some reasonable baseline, found good results, did ablation studies, and applied some adversary pressure to the method. It did pretty well."
+},
+{
+"review_id": "colm_X39dK0SX9W_r2",
+"paper_id": "colm_X39dK0SX9W",
+"review_text": "This paper addresses the challenge of unlearning large language models. The authors propose the agentic LLM unlearning (ALU) method\u2014a multi-agent, retrain-free, and model-agnostic framework that performs unlearning without modifying model weights. The authors propose agentic LLM unlearning (ALU), the first multi-agent, retrain-free, and model-agnostic framework for LLM unlearning. ALU works by orchestrating multiple LLM agents in a fine-grained post hoc unlearning pipeline: The Vanilla Agent generates an initial, unmodified response. The AuditErase module detects references to the unlearning target (even indirectly) and produces k sanitized variations. The Critic scores these variants on a 1\u20135 scale. The Composer synthesizes the top-rated outputs into a final, polished response."
+},
+{
+"review_id": "colm_X39dK0SX9W_r3",
+"paper_id": "colm_X39dK0SX9W",
+"review_text": "This paper proposes Agentic LLM Unlearning (ALU), a novel, post-hoc, multi-agent pipeline designed for targeted unlearning in LLMs without retraining or access to model weights. ALU is evaluated on established benchmarks (TOFU, WPU, WMDP) and tested for scalability (up to 1000 targets), multilingual robustness, and resistance to jailbreaking. It outperforms both optimization-based and other post-hoc methods in most dimensions, especially scalability, response utility, and robustness to adversarial prompts."
+},
+{
+"review_id": "colm_KtGsJm8bOC_r0",
+"paper_id": "colm_KtGsJm8bOC",
+"review_text": "The paper presents 2 benchmarks for open-domain multi-document summarization (ODMDS). It does so by modifying two query-focused  multi-document summarization (QMDS) and reframing them as ODMDS:\n1. ODSum-Story: The book-length query-focused summarization dataset SQuaLITY is converted to an ODMDS problem by chunking the books based on chapters and aggregating the chapters from different books in the dataset. The queries are decontextualized, and hints are added to enable the retrieval of the correct books.\n2. ODSum-Meet: Similarly, the dataset of meeting transcript QA QMSum is transformed into ODMDS. The meetings have similar themes. So queries are clustered by an embedding model. Next, the query cluster is merged into one target query by an LLM. The corresponding summary for every query in the cluster is combined to form the target summary.\n\nThe authors manually verify the integrity of their post-processing by sampling 40 queries each from the two benchmarks and annotating them for (1) coherence and fluency, (2) need for open-domain retrieval, (3) need for multi-document aggregation, (4) query-summary relevance and coverage, and (5) factual consistency and accuracy. On all 5 metrics, more than 85-90% of the samples achieve a Likert score >= 4 out of 5.\n\nThe authors evaluate several retrievers (sparse, dense) with/without a reranker for information retrieval metrics on the benchmark. Similarly, several LLMs are evaluated for end-to-end retrieve-and-read performance paired with the different retrievers. Summary quality is measured by ROUGE and automated LM scoring (G-Eval) against the reference summary.\n\nResults show that there is significant room for improvement in all stages: retrievers and summary writers. The performance with the Oracle documents is also low (70% on ODSum-Story and 54% on ODSum-Meet). The need for any retrieval, and in particular the retrieval of multiple documents, is established by ablations.\n\n---\n\nAfter Author Rebuttal (6/18)\n---\n\nI may be late in updating my review, but I feel my queries were sufficiently answered. Raising the score from 6 to 8."
+},
+{
+"review_id": "colm_KtGsJm8bOC_r1",
+"paper_id": "colm_KtGsJm8bOC",
+"review_text": "The paper introduces ODSUM, a set of benchmarks designed to evaluate Retrieval-Augmented Generation (RAG) systems that require multi-document reasoning and synthesis capabilities. Traditional RAG systems typically operate on single-document retrieval and generation, but many real-world applications demand the integration of information from multiple sources. The authors propose a scalable approach for constructing multi-source RAG datasets from query-focused summarization datasets, resulting in two new benchmarks: ODSUM-STORY and ODSUM-MEET, that test retrieving complementary information from large data sources based on given queries. These benchmarks require systems to retrieve and synthesize information from large corpora in response to realistic queries that reflect users' information needs. The paper outlines the construction process, experimental setup, and results, highlighting significant variations in retrieval effectiveness across different tasks and methods."
+},
+{
+"review_id": "colm_KtGsJm8bOC_r2",
+"paper_id": "colm_KtGsJm8bOC",
+"review_text": "The paper presents a new benchmark for open-domain multi document summarisation (ODMDS). The authors leverage two pre-existing single document query oriented long-context summarisation datasets in the stories (SQuALITY) and meetings domains (QMSum). They convert the stories dataset into a ODMDS dataset by breaking the stories into chapters (each chapter is considered a document) and decontextualizing the query/question by re-writing it with an LLM. A question may seek information that is present in multiple chapters. For the meetings dataset they cluster queries and summaries in domains, merging similar queries and summaries into a single more comprehensive ones. The generated new resources are human validated for quality. Finally, the author test various RAG+LLM pipelines to assess the performance of various models in the newly generated benchmark. In terms of retrievers, dense retrievers seem to clearly outperform sparse one in the stories dataset, while sparse retrievers are more competitive in the more challenging meetings dataset. In terms of LLMs, DeepSeek v3 performs the best in the stories dataset while GPT-4o (and mini) perform the best in the meets dataset. The LLMs performance vary depending on the retriever."
+},
+{
+"review_id": "colm_KtGsJm8bOC_r3",
+"paper_id": "colm_KtGsJm8bOC",
+"review_text": "This paper presents two novel datasets for open-domain, query-based multi-document summarization, and an extensive evaluation of retrievers and generative models. The work is designed as an improvement over Giorgi et al. EMNLP 2023 in terms of both query quality and document corpus.\n\nThe two datasets have been obtained from two corresponding datasets for long-context, single-document, question-based summarization through a process of subdivision and re-annotation.\n\nAmple results for the retrievers and the generators are presented in Sections 5.1 and 5.2, respectively."
+},
+{
+"review_id": "colm_Sz3ZU6oeVJ_r0",
+"paper_id": "colm_Sz3ZU6oeVJ",
+"review_text": "This work systematically disentangle the impact of annotations, instructions and response pairs on the efficacy of preference datasets. They conduct controlled experiments to study each dataset component in open-source models. The work yields actionable insights to understand preference dataset design and can be useful for practitioners."
+},
+{
+"review_id": "colm_Sz3ZU6oeVJ_r1",
+"paper_id": "colm_Sz3ZU6oeVJ",
+"review_text": "This paper introduces the AIR (Annotations, Instructions, and Response Pairs) framework to systematically analyze the independent impacts of three key components\u2014Annotations, Instructions, and Response Pairs\u2014on aligning large language models (LLMs) with human preferences. Through experiments, it identifies three empirically validated principles: simplifying annotations with generative scoring, prioritizing low-variance instruction selection, and optimizing response pairs for quality and diversity. Aggregating all strategies, the authors observed substantial gain over baseline."
+},
+{
+"review_id": "colm_Sz3ZU6oeVJ_r2",
+"paper_id": "colm_Sz3ZU6oeVJ",
+"review_text": "Preference learning for LLMs requires preference annotations, instructions, and response pairs; these three aspects are typically conflated in current work, which makes it difficult to disentangle their effects. The authors propose AIR, an analysis framework that attempts to isolate, analyze, and optimize for each of the three aspects separately. For Annotations, the authors investigate the effects of annotator model choice, prompt design, and scoring methods (e.g., pairwise vs scoring). For Instructions, they investigate score variance and number of prompt turns. For Response, they investigate how to construct pairs from scored examples, varying the score margins, thresholds, and on/off-policy mixing. Preference data is generated by 17 open-source LLMs; instructions through ShareGPT and UltraFeedback; all experiments are conducted on the Llama-3.1-Tulu-8B-SFT base model with 30k preference pairs and vanilla DPO; and alignment is assessed using 6 benchmark datasets across a range of domains. Based on experiments conducted using this framework, the authors recommend the following for alignment dataset design: (i) use point-wise scoring, (ii) select instructions with low score variance across different LLMs, and (iii) optimize for high quality response pairs with clear preference score margins. Combining all strategies yields substantial performance gains."
+}
+]

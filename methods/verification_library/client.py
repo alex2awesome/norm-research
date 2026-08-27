@@ -43,10 +43,17 @@ class LLMClient:
         self.backend = backend  # "anthropic" or "openai"
         self.client = client
         self.model = model
+        self._concurrency = concurrency
         self.semaphore = asyncio.Semaphore(concurrency)
+        self._sem_loop = None  # loop self.semaphore is bound to; rebind on change (see generate)
 
     @classmethod
-    def from_anthropic(cls, model: str = "claude-sonnet-4-20250514", concurrency: int = 10):
+    def from_anthropic(cls, model: Optional[str] = None, concurrency: int = 10):
+        # Model pointer is env-overridable: `export SONNET_MODEL=claude-sonnet-5` switches it
+        # (default preserves prior behavior). Resolved at call time, not import time, so a shell
+        # export takes effect without re-importing. Explicit `model=` still wins.
+        if model is None:
+            model = os.environ.get("SONNET_MODEL", "claude-sonnet-4-20250514")
         from anthropic import AsyncAnthropic
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
@@ -98,6 +105,15 @@ class LLMClient:
         temperature: float = 0.7,
         system: str = "",
     ) -> str:
+        # The client (and its semaphore) can outlive a single event loop: callers in
+        # metrics_tree_infilling drive us via asyncio.run() per batch, each with a fresh
+        # loop. asyncio.Semaphore binds to the loop of first use and then raises
+        # "bound to a different event loop" on the next loop. Rebind to the current
+        # loop whenever it changes; within one loop behavior is unchanged.
+        loop = asyncio.get_running_loop()
+        if self._sem_loop is not loop:
+            self.semaphore = asyncio.Semaphore(self._concurrency)
+            self._sem_loop = loop
         async with self.semaphore:
             for attempt in range(3):
                 try:

@@ -1,0 +1,205 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/880af501fe43.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "880af501fe43.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39885,
+  "model": "gpt-5-mini",
+  "elapsed_s": 80.79297462500108,
+  "input_tokens": 12837,
+  "output_tokens": 5504,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "students and practitioners learning Coq for practical software verification",
+    "subtask_short": "coq proof-assistant tutorial",
+    "subtask_description": "An introductory tutorial on using the Coq proof assistant for defining inductive types and relations, writing functions (fixpoints), and proving properties using tactics; includes worked examples (board game, lists, Needham\u2013Schroeder protocol) and guidance on recursion/termination and extraction.",
+    "subtask_keywords": [
+      "coq",
+      "proof_assistant",
+      "inductive_types",
+      "fixpoint",
+      "functional_programming"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Constructors are injective and distinct",
+        "description": "The constructors of an inductive type are injective and distinct (e.g., S n = S m \u2192 n = m and S n \u2260 0).",
+        "guidance": "These lemmas are part of the standard library for nat but must be proved for new inductive types; tactics exist to automate proving such contradictions/equalities."
+      },
+      {
+        "name": "Use discriminate to exploit constructor-distinctness",
+        "description": "discriminate H will prove any goal if H is a proof of t1 = t2 with t1 and t2 starting with different constructors.",
+        "guidance": "With no argument discriminate will try to find such a contradiction in the context. Example: discriminate H solves S (S n) = 1 contradiction."
+      },
+      {
+        "name": "Use injection to exploit constructor-injectivity",
+        "description": "injection H assumes H is a proof of t1 = t2 with t1 and t2 starting with the same constructor and deduces equalities between corresponding subterms.",
+        "guidance": "It will add equalities u1 = u2, v1 = v2, ... as new hypotheses. Example: injection H yields n = S m from S n = S (S m)."
+      },
+      {
+        "name": "Inductive propositions represent logical connectives",
+        "description": "Propositional connectives (except negation, implication and \u2200) are declared using inductive definitions: False has no constructors, True has one proof I, conjunction corresponds to product type, disjunction to inductive with two constructors, existentials and equality are also inductively defined.",
+        "guidance": "You can Print and Check these inductive propositions (e.g., Print False, Print or, Check or_ind) to see their induction/elimination principles."
+      },
+      {
+        "name": "Explicit vs implicit type arguments",
+        "description": "The Coq kernel requires explicit type arguments for polymorphic constructors/constructs, but you can ask Coq to infer them.",
+        "guidance": "Use Set Implicit Arguments to tell Coq to infer type arguments when possible; use Implicit Arguments name [args] to set implicit arguments for a specific object."
+      },
+      {
+        "name": "Use notation to make constructors readable",
+        "description": "Introduce notations to make compound constructors more readable (e.g. Notation \"[ x | y | z ]\" := (Triple x y z)).",
+        "guidance": "Notations help reuse functions and make inputs closer to intended surface syntax."
+      },
+      {
+        "name": "Pattern-matching syntax and coverage",
+        "description": "Pattern-matching uses 'match term with c1 args1 \u21d2 term1 ... cn argsn \u21d2 termn end' where patterns are examined sequentially and must cover the whole domain of the inductive type.",
+        "guidance": "Patterns may be nested and contain the universal pattern; generalized pattern-matching compiles to primitive patterns. Equivalent surface constructs: let (...) := t in u for single-constructor types and if t then u1 else u2 for two-constructor booleans."
+      },
+      {
+        "name": "Only structural recursion (Fixpoint) is allowed by default",
+        "description": "General fixpoints are disallowed because they lead to unsoundness; only structural recursion is accepted: each recursive call must be on a term structurally smaller than the chosen recursive argument.",
+        "guidance": "Use 'Fixpoint name (args){struct xi} : type := term' where xi is the recursive argument; if {struct xi} is omitted the system will attempt to infer it."
+      },
+      {
+        "name": "Fixpoint syntax enforces decreasing argument discipline",
+        "description": "The declared type of the fixpoint is forall (x1:type1)...type and occurrences of name in term must be applied to at least i arguments and the i-th must be structurally smaller than xi.",
+        "guidance": "You can define multiple variants (recursing on different arguments) as long as each recursive call decreases the specified structural argument (examples: plus1 and plus2)."
+      },
+      {
+        "name": "Syntactic restrictions on fixpoint declarations",
+        "description": "There are strong syntactic restrictions: there should be one decreasing argument per fixpoint; Coq may reject definitions if it cannot guess a decreasing argument.",
+        "guidance": "If needed, refactor recursion using higher-order functions, local let fix, or well-founded recursion to express more complex recursive schemes (e.g., Ackermann via nested let fix)."
+      },
+      {
+        "name": "Computation behaviour of fixpoints and simplification",
+        "description": "A fixpoint can be computed when the recursive argument starts with a constructor; simpl simplifies fixpoint definitions applied to constructors; simpl name simplifies only the named fixpoint.",
+        "guidance": "Equations corresponding to fixpoint definitions are not always solved by reflexivity \u2014 they may require case analysis or destruct on the recursive argument; recommended to prove defining equations and use rewrite in a controlled way when full simplification is too aggressive."
+      },
+      {
+        "name": "Empty inductive types imply proof irrelevance consequences",
+        "description": "Coq allows empty inductive data-types; there are no closed values of such types, but one can write functions from that empty type to any type and prove False from an hypothesis of that empty type.",
+        "guidance": "Example: Inductive E : Set := Ei. Fixpoint Eany A x : A := match x with (Ei y) => Eany A y end. From x : E one can derive False."
+      },
+      {
+        "name": "Use Eval compute to inspect normal forms",
+        "description": "Use 'Eval compute in term.' to reduce terms and print normal forms (examples: arithmetic, function application, triple_map results).",
+        "guidance": "Useful to check expected computational behaviour of definitions."
+      },
+      {
+        "name": "Use List library and established notations for list algorithms",
+        "description": "Represent arrays by functional lists and import List/ZArith; use standard notations (a::l, l1++l2) and library functions (skipn, In) when proving algorithms on lists.",
+        "guidance": "Define sum and max by Fixpoint; when pattern-matching is non-elementary, prove auxiliary equations (e.g., max_cons) to facilitate rewriting and proofs."
+      },
+      {
+        "name": "Specify function behavior via inductive predicates or equations",
+        "description": "Use predicates (e.g., In) or equational properties (sum nil=0, sum (a::l)=a+sum l) as functional specifications for correctness proofs.",
+        "guidance": "State the correctness property (e.g., sum_max_prop) and prove by induction and simplification plus arithmetic reasoning."
+      },
+      {
+        "name": "All functions in Coq must terminate",
+        "description": "Termination is enforced by Coq; all definable functions must be provably terminating.",
+        "guidance": "For more sophisticated termination arguments use well-founded recursion or encode termination proofs via accessibility predicates (Acc/Event) and then recurse on those proofs."
+      },
+      {
+        "name": "Define inductive relations by closure properties",
+        "description": "Inductive definitions model relations specified by closure properties (inference rules); each clause is a constructor whose type is the logical formula of the clause (e.g., LE, move, moves).",
+        "guidance": "Coq automatically generates induction/elimination principles (e.g., LE_ind) capturing minimality; there are often multiple equivalent implementations and choices affect ease of proofs (use parameters to factor out common args)."
+      },
+      {
+        "name": "Prefer parameterizing inductive definitions for proof convenience",
+        "description": "Making arguments parameters (rather than indices) in inductive definitions often simplifies subsequent proofs; different encodings are possible and the choice impacts proof difficulty.",
+        "guidance": "Example: two encodings of \u2264 on nat differ; factor out n as a parameter when helpful."
+      },
+      {
+        "name": "Model complex state via nested inductive types",
+        "description": "Represent structured state (e.g., 3\u00d73 board) by nested inductive/polymorphic types (triple (triple color)), and define operations (turn_row/turn_col) via reusable functions (triple_map, triple_map_select).",
+        "guidance": "Use Notation and Set Implicit Arguments to keep surface syntax concise; define move relations either with logical connectives (exists) or as direct inductive relations to suit proof style."
+      },
+      {
+        "name": "Define reflexive-transitive closure as an inductive relation",
+        "description": "To define reachability, introduce an inductive relation for reflexive-transitive closure with constructors for step and init (moves_step, moves_init).",
+        "guidance": "Prove simple lemmas (move_moves) by applying the inductive constructors; prove reachability by sequencing steps and using auto/replace when needed."
+      },
+      {
+        "name": "Represent optional/partial results using option type",
+        "description": "When a function may fail to return a value, use option type (Some/None) rather than, e.g., an arbitrary default, to encode absence explicitly.",
+        "guidance": "Example: linear search returns option nat; define specification predicates (correct) to capture intended behavior and use Hint Constructors to help auto."
+      },
+      {
+        "name": "Hint Constructors to help automation",
+        "description": "Use 'Hint Constructors inductive_name.' to add constructors to the auto hint database for tactic automation.",
+        "guidance": "This helps tactics like auto find and apply constructors for inductive predicates used in proofs."
+      },
+      {
+        "name": "destruct tactic for proof by case analysis",
+        "description": "destruct t generates a subgoal per constructor of t, introducing variables/hypotheses for constructor arguments; use 'destruct t as pat' to name introduced variables.",
+        "guidance": "If the goal is \u2200x:I, P then 'intros pat' will introduce x and immediately destruct it using the pattern; when more control is needed use case (more elementary)."
+      },
+      {
+        "name": "induction tactic generalizes dependent hypotheses",
+        "description": "induction term applies the induction principle generated for the inductive type; it generalizes dependent hypotheses of term and builds the property used in the induction from occurrences of term in the goal.",
+        "guidance": "If only some occurrences should be abstracted, use 'pattern term at occs' first; if you need to generalize the goal before induction use 'cut' (to add a proposition) or 'generalise' for variables."
+      },
+      {
+        "name": "Induction on proofs vs inversion",
+        "description": "When term belongs to an inductive relation, induction uses the minimality principle. If recursion is not needed prefer inversion which exploits all information of the hypothesis.",
+        "guidance": "If some arguments xi are complex terms, transform the goal to \u2200y, (I ... y ...) \u21d2 xi = y \u21d2 G and then do induction on the proof of (I ... y ...)."
+      },
+      {
+        "name": "Find invariants for proofs that cannot be done by plain induction",
+        "description": "Some proofs (e.g., showing impossibility of moves to a certain board) require finding a preserved invariant (e.g., number of white tokens in corners) and deriving contradiction from hypothesized reachability.",
+        "guidance": "Look for conserved quantities and express them as predicates to enable contradiction-based proofs rather than direct induction on a bad hypothesis."
+      },
+      {
+        "name": "Advanced inductive definitions: infinite branching and Acc",
+        "description": "Coq's inductive mechanism can express infinite branching constructors (e.g., lim : (nat -> ord) -> ord) and the accessibility predicate Acc capturing well-foundedness: Acc_intro : (forall y, R y x -> Acc R y) -> Acc R x.",
+        "guidance": "Acc is the key to define general fixpoints/recursion on well-founded relations."
+      },
+      {
+        "name": "Dependent types for indexed data (vectors)",
+        "description": "Introduce types indexed by values (dependent types) to capture invariants like length: Inductive vect (A:Type): nat -> Type := v0 : vect 0 | v1 : forall n, A -> vect n -> vect (S n).",
+        "guidance": "Dependent types allow expressing size/other invariants at the type level and can be used to ensure correctness of operations by construction."
+      },
+      {
+        "name": "Model protocols with mutually inductive relations",
+        "description": "Encode distributed protocols and adversary capabilities using (possibly mutually) inductive relations for send, receive and known; messages and composition/encryption are modeled as inductive message terms.",
+        "guidance": "Parametrize protocol sections (Section Protocol; Variable X:agent) and prove lemmas formalizing desired/counterexample behaviors (e.g., Lemma flaw showing protocol failure)."
+      },
+      {
+        "name": "Partiality patterns: option, relations, subset types",
+        "description": "For partial functions choose between: (1) extend by arbitrary value (bad for polymorphic B), (2) return option B (requires case analysis), or (3) model as relation A\u2192B\u2192Prop and prove functionality; subset types carry preconditions in types.",
+        "guidance": "Option can be hidden with monadic notations; relations require introducing y and proof F x y; subset types {x:A | dom x} package the proof with the value and are useful to hide proof arguments in function calls."
+      },
+      {
+        "name": "Annotated programs and proof-term overhead",
+        "description": "Annotated programs combine program and proof but contain proof-terms that can bloat printing/equality checking/reduction; Coq lacks systematic proof-irrelevance to hide these.",
+        "guidance": "Use Program and type classes to separate programming from proof obligations when possible; use extraction to remove proof artifacts for executable code."
+      },
+      {
+        "name": "Use extraction to obtain executable OCaml/Haskell code",
+        "description": "Coq's extraction mechanism removes proof-related parts and outputs equivalent OCaml or Haskell programs.",
+        "guidance": "Extraction gives back the expected recursive implementations (example: findP extraction yields a simple recursive OCaml function matching the intended algorithm)."
+      },
+      {
+        "name": "Model loops / non-structural recursion via Event or well-founded recursion",
+        "description": "Encode termination proofs via inductive predicates (Event P n) to represent 'P true now or in the future', and use decidability to implement loop/find functions; more generally use well-founded relations (Fix with well_founded R) and Acc to define general recursion.",
+        "guidance": "Construct Event/Acc proofs and recurse structurally on those proofs; use Fix combinator from Coq.Init.Wf (Fix : well_founded R -> ... ) and use the provided Fix_eq to reason about the fixpoint equation."
+      },
+      {
+        "name": "Use decidability (sumbool) for constructive case-splitting",
+        "description": "sumbool {A}+{B} encodes decidable propositions carrying the witness of which disjunct holds; useful to write constructive algorithms that branch on decidable predicates.",
+        "guidance": "Check patterns like forall n m : nat, { n <= m }+{ m < n } to express decidability of order; use Left/Right constructors in implementation and extraction yields typical if/then/else branching."
+      },
+      {
+        "name": "Design optimized algorithms with auxiliary inductive invariants",
+        "description": "To optimize algorithms (e.g., sub-linear search) introduce inductive predicates capturing input properties (decrease: successive elements do not decrease by more than 1) and use library functions (skipn) plus well-founded recursion to prove correctness and termination.",
+        "guidance": "Define the inductive property, add 'Hint Constructors' for automation, and implement recursive functions that exploit the invariant to skip elements safely."
+      }
+    ]
+  }
+}

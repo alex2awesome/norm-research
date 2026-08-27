@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/ecd555e6bc6d.pdf",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "ecd555e6bc6d.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39983,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.43974945801892,
+  "input_tokens": 11808,
+  "output_tokens": 3531,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers, dataset builders, and ML practitioners working on caption-contest/humor generation and evaluation",
+    "subtask_short": "caption_contest_evaluation",
+    "subtask_description": "Designing, sampling, deduplicating, and evaluating datasets and models for New Yorker-style caption matching, quality-ranking, and explanation generation tasks. Covers instance construction, annotation, prompt design, automatic metrics, and human evaluation procedures.",
+    "subtask_keywords": [
+      "humor",
+      "caption_contest",
+      "dataset_creation",
+      "explanation_generation",
+      "nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Forming matching instances",
+        "description": "For each high quality caption, create a matching instance that serves as the correct answer; randomly assign captions to mismatched contests to form negative, mismatched sets to serve as false options.",
+        "guidance": "Two constraints on the random assignment: 1) assign within cross-validation splits only, to ensure that training/validation/testing captions are disjoint; and 2) construct the corpus with no answer-only biases by performing the negative assignment such that each answer appears exactly once as a correct answer and exactly 4 times as an incorrect answer."
+      },
+      {
+        "name": "Forming quality-ranking instances",
+        "description": "For each high quality caption, sample from the larger set of submissions captions that are just \u201cokay\u201d to form quality ranking pairs.",
+        "guidance": "When crowd ratings are available (later contests), discard the top third and bottom third by mean crowd rating \u2014 the middle tertile forms the \u201cokay\u201d set. For earlier contests without ratings, train a text-only quality ranking model (conditioned on caption text) using crowd-labelled data to estimate quality and sample accordingly."
+      },
+      {
+        "name": "Handling contests with missing entries",
+        "description": "Some early contests were missing entries, limiting negative sampling to a subset of contests.",
+        "guidance": "Because 25 contests from early contest history were missing entries, sampling negatives is limited to 679 contests; account for this when constructing quality-ranking instances."
+      },
+      {
+        "name": "Deduplicate exact-copy captions for 'okay' sampling",
+        "description": "Deduplicate on string matching so that \u201cokay\u201d captions are not exact copies of the identified high quality captions or any other sampled \u201cokay\u201d captions.",
+        "guidance": "Remove exact duplicates before sampling to ensure 'okay' set contains distinct textual instances."
+      },
+      {
+        "name": "Quality-ranking model training corpus construction",
+        "description": "Construct a training corpus for quality ranking by selecting top and bottom entries per contest according to mean crowdsourced score.",
+        "guidance": "Select the top and bottom 1000 entries from each contest (by mean crowdscore) to form a dataset of ~506K captions. Form two sets of labelled data based on contest parity (even vs. odd) and train/validate separate models (T5-Large) on these splits."
+      },
+      {
+        "name": "Quality-ranking model evaluation targets",
+        "description": "Assess the quality-ranking model's ability to identify bad vs. very-good captions using standard precision-at-k metrics and validation accuracy.",
+        "guidance": "Reported average validation accuracy ~65%; higher precision in identifying the 'bad' label: precision-at-10 = 83, precision-at-20 = 77, precision-at-30 = 72. Identifying very good captions is harder: precision-at-10 = 77, precision-at-20 = 73, precision-at-30 = 70."
+      },
+      {
+        "name": "Discarding low-predicted-score entries",
+        "description": "Use the trained quality-ranking models to filter contest submissions without crowd ratings.",
+        "guidance": "Perform inference on all captions in contests without crowd ratings and discard the 25% of entries with the lowest predicted score. Low-scoring entries often lack New Yorker 'gestalt', have many typos/formatting issues, or include submitter contact information."
+      },
+      {
+        "name": "Characteristics of very low-quality captions",
+        "description": "Observed common characteristics of captions that should be discarded as low quality.",
+        "guidance": "Examples include: they don\u2019t have the gestalt of a New Yorker caption, they have many typos/formatting issues, they include the contact information of the submitter, or they are nonsensical."
+      },
+      {
+        "name": "Sampling 'okay' captions (matching constraints)",
+        "description": "When selecting an 'okay' caption to pair with a high-quality caption, control for superficial confounds.",
+        "guidance": "Sample an 'okay' caption with: 1) similar estimated quality according to the text-only models; 2) similar length in words; 3) similar length in characters; 4) similar amount of punctuation; and 5) a dissimilar SBERT embedding (to avoid near-duplicates/conceptual clones)."
+      },
+      {
+        "name": "Semantic deduplication via SBERT + hierarchical clustering",
+        "description": "Perform semantic deduplication to reduce redundancy after basic filtering.",
+        "guidance": "Extract SentenceBERT embeddings for each entry, compute hierarchical clustering into 0.7 \u00b7 N clusters, and sample a single representative from each cluster. This removes about 30% of the data with close neighbors in the final set (e.g., many 'tastes like chicken' variants downsampled to one exemplar)."
+      },
+      {
+        "name": "Explanation corpus annotation practice",
+        "description": "Create a corpus of human-written explanations for high-quality captions to train/evaluate explanation models.",
+        "guidance": "Sample a high-quality caption per contest (prefer New Yorker finalists; otherwise high-quality crowd captions). One author annotated explanations for 704 sampled captions, understanding 651 and writing an explanation for each; the resulting corpus has a mean of ~60 words per explanation and total ~39.3K words."
+      },
+      {
+        "name": "Prompt/system behavior for explanation/matching tasks",
+        "description": "System prompt guidelines for a model acting as an expert CaptionContestGPT.",
+        "guidance": "Be well versed in New Yorker Caption contest history and humor theories; follow contest weekly; analyze entries and winners; think step-by-step but not overly verbose; express uncertainty in reasoning but ultimately pick a single best answer and respond in the requested format. For multi-choice tasks, reason step-by-step and end with 'Answer: X'."
+      },
+      {
+        "name": "Automatic evaluation metrics for explanations",
+        "description": "Use standard automatic metrics to evaluate generated explanations.",
+        "guidance": "Report BLEU-4 (higher is better), ROUGE-L (higher is better), and Perplexity (lower is better). Note: log probabilities (and thus perplexity) are unavailable for some APIs (GPT-3.5/GPT-4), so PPL cannot always be computed. Prefer human evaluations for higher-quality measures."
+      },
+      {
+        "name": "Experimental reporting and settings",
+        "description": "Report results averaged over cross-validation splits and compare zero-shot, few-shot, and fine-tuned model variants across settings.",
+        "guidance": "Use 5 cross-validation splits for averages; distinguish From Pixels (FP) vs From Description (FD) settings at test time; mark best results per setting; show differences between zero-shot, 5-shot, and fine-tuned variants in figures and tables."
+      },
+      {
+        "name": "Human vs. machine preference evaluation",
+        "description": "Use pairwise human judgments to compare machine-generated explanations/captions with human-authored references.",
+        "guidance": "Collect multiple annotators (e.g., 3) per example and report cases where machine output was preferred by all annotators (e.g., GPT-4 5-shot preferred to human in 8/130 cases by 3/3 annotators). Perform close-reading of these cases to understand why machines were preferred (e.g., more succinct, mention meaningful detail or pop-culture reference missed by humans). Also report cases where machines are incorrectly preferred and analyze errors."
+      },
+      {
+        "name": "Qualitative analysis of machine strengths and failure modes",
+        "description": "Examine where machine-generated explanations/captions outperform or underperform human references.",
+        "guidance": "Machines may be preferred when they are more succinct or mention salient pop-culture details; they can fail by missing subtle points, hallucinating details, or producing non-sequiturs. Use close readings (example-by-example) to diagnose these phenomena."
+      }
+    ]
+  }
+}

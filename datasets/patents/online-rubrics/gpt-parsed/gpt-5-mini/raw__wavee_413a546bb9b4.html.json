@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_413a546bb9b4.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17582,
+  "output_tokens": 4694,
+  "elapsed_s": 3117.5783582078293,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in economics/finance, patent analytics, and machine learning (academic and industry) interested in patent valuation and acceptance prediction",
+    "subtask_short": "patent acceptance and value prediction",
+    "subtask_description": "Designing, training, and evaluating machine-learning models (LLM embeddings + structural features) to predict USPTO patent application acceptance and the economic value of patents (KPSS measure), and using those predictions for screening, valuation adjustment, and portfolio strategies.",
+    "subtask_keywords": [
+      "patent",
+      "ml",
+      "llm_embedding",
+      "valuation",
+      "acceptance_prediction",
+      "economics"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Data sources and sample selection",
+        "description": "Primary data from USPTO PatentsView (applications from 2001) and USPTO BDSS for full text, supplemented by CRSP/Compustat (WRDS) for market data; sample restricted to observations with a valid assignee 'permno' and observations with multiple assignees dropped to avoid duplication.",
+        "guidance": "Final sample contains applications and patents from 2001\u20132020 (applications effectively tested 2004\u20132019); exclude 2021\u20132022 due to truncation and exclude 2020 because pandemic introduced new trends not present in training; use rolling-window training (models trained on the three preceding years) to maintain contextual relevance and avoid using unavailable future information."
+      },
+      {
+        "name": "Textual embedding input (Ada-002, 1536-dim)",
+        "description": "Combine title and abstract of each application/patent and feed through OpenAI's Ada-002 embedding model to obtain a 1,536-dimensional numeric vector representing many textual aspects (sentiment, topic, writing quality, technicality, etc.).",
+        "guidance": "The embedding supplies rich high-level textual features previously inaccessible; use embedding as part of the feature vector alongside structural variables rather than as sole input unless intentionally isolating text effects."
+      },
+      {
+        "name": "Structural variables to include",
+        "description": "Include CPC classification (Class A,B,C,...), USPTO-generated AI patent measure, industry flags (ICT, biotechnology, high tech) defined via EU classification, number of CPC classes, ln(number of claims), research-institution assignee flag, and Fama-French 12 industry classification. For application prediction, include natural log of market capitalization (nearest quarter prior to publication, inflation-adjusted).",
+        "guidance": "These structural/contextual variables provide critical context for textual embeddings and should be combined with the embedding vector in the feature matrix; omit variables not available in processed PatentView application data when necessary."
+      },
+      {
+        "name": "Dependent variable definitions",
+        "description": "For acceptance prediction, dependent is a binary dummy equal to 1 if application is granted as a patent and 0 if rejected. For value prediction, use the KPSS measure (market reaction to announcement of patent acceptance in a three-day window), scaled by market capitalization as appropriate.",
+        "guidance": "Ensure consistent calculation of KPSS per the KPSS (2017) procedure and the correct timing of market-cap and return data."
+      },
+      {
+        "name": "Training regime: rolling three-year window",
+        "description": "Train predictive models using a rolling window composed of the three preceding years for the year being predicted (e.g., model for 2004 trained on 2001\u20132003).",
+        "guidance": "This prevents look-ahead bias, ensures contextual relevance for temporal trends, and maintains a sufficiently large training sample for deep learning."
+      },
+      {
+        "name": "Handling skewness in acceptance prediction: optimize binary cross-entropy (log-loss)",
+        "description": "Because the acceptance dependent is heavily skewed (~70% grants), optimize the model for binary cross-entropy rather than raw accuracy or F1 to adapt to class imbalance.",
+        "guidance": "Optimizing for Accuracy or F1 tends to bias models toward the null predictor in skewed samples; use log-loss and AUC for better discrimination."
+      },
+      {
+        "name": "Evaluation metrics for binary classification (preference for AUC)",
+        "description": "Report AUC (area under ROC) as the primary evaluation metric for acceptance prediction, and also report Accuracy, Precision, Recall, and F1 Score.",
+        "guidance": "AUC is preferred due to sample skewness because it measures ranking performance and is less fooled by the null predictor; Accuracy and F1 can be deceptively similar across models that actually differ in ranking (AUC). Provide year-by-year statistics and averages."
+      },
+      {
+        "name": "Benchmarking strategy",
+        "description": "Benchmark the primary model (embedding + structural features in advanced deep network) against: (1) an otherwise identical neural network trained without the textual embedding features, and (2) an XGBoost model trained on the full set of features.",
+        "guidance": "Comparisons should include the same evaluation metrics (AUC, Accuracy, F1, etc.) to quantify the incremental value of the embedding and the chosen network architecture; also test simpler classifiers (e.g., linear SVC) though they may fail in high-dimensional settings."
+      },
+      {
+        "name": "Neural network architecture (three-layer MLP with geometric node counts)",
+        "description": "Feed the 1,536-dim embedding plus structural variables into a three-layer feed-forward neural network (multi-layer perceptron) with node counts set as a roughly geometric series; final layer has no activation (linear output).",
+        "guidance": "Design the penultimate layer to produce an output that OLS-like regression can act upon; include implementation details (Appendix A) and ensure architecture supports high-dimensional embedding interactions."
+      },
+      {
+        "name": "Activation function choice: use Mish",
+        "description": "Use the Mish activation function (Mish(x) = x * tanh(ln(1 + e^x))) as the primary activation for hidden layers.",
+        "guidance": "Mish was found to perform significantly better in large-sample, high-feature-count settings versus ReLU, ELU, or Swish, likely due to better handling of negative inputs and capturing non-linear interactions; still compare alternatives where possible."
+      },
+      {
+        "name": "Regularization: 20% dropout preferred over L1/L2",
+        "description": "Apply dropout regularization at 20% to prevent overfitting, which outperformed L1 and L2 regularization in maintaining high-degree interactions within the embedding.",
+        "guidance": "Dropout helps avoid near-interpolation of the training sample and reduces overfitting while preserving complex embedding interactions; test and report robustness versus other regularizers."
+      },
+      {
+        "name": "Optimizer: Adam",
+        "description": "Use the Adam optimizer to train the neural networks, which parametrizes learning rate for improved convergence.",
+        "guidance": "Tune learning-rate-related hyperparameters as needed; Adam is a default proven choice for such networks."
+      },
+      {
+        "name": "Value prediction: dependent transformation via Box\u2013Cox",
+        "description": "Transform highly skewed KPSS patent-value dependent using Box\u2013Cox (compute \u03bb on training set only), as Box\u2013Cox outperformed ln(1+y), quantile normal, and standardization for improving R-squared in ML models.",
+        "guidance": "Compute \u03bb only on the training set and apply the same transformation to test data to avoid contaminating test statistics; transforming the dependent stabilizes variance and improves ML predictive performance."
+      },
+      {
+        "name": "Model comparison metric for value prediction: adjusted R-squared",
+        "description": "Use adjusted R-squared as a primary performance metric for value prediction (model achieved ~42% adjusted R-squared; embedding adds ~24% improvement over no-embedding benchmark).",
+        "guidance": "Report MSE, R2, and adjusted R2 year-by-year and averaged; compare to XGBoost and no-embedding baselines to show incremental gains from embedding and architecture."
+      },
+      {
+        "name": "Exclude variables unavailable in processed PatentView application data from application prediction",
+        "description": "Omit variables not present in PatentView's processed application data (example: number of claims and an AI classification variable) from the application prediction feature set.",
+        "guidance": "Document excluded variables explicitly and explain potential impacts on comparability; ensure fairness in benchmarking models by using features actually available at prediction time."
+      },
+      {
+        "name": "Measuring text change between application and grant via embedding cosine distance",
+        "description": "Measure the magnitude of textual change between application and granted-patent abstracts using cosine distance between their ChatGPT embeddings; a major change is defined as cosine distance \u2265 0.05 (also tested with threshold 0.02).",
+        "guidance": "Use embedding-based semantic distance rather than crude text-difference measures (character changes); selecting thresholds (0.05, 0.02) influences subsample size and statistical power \u2014 report robustness to threshold choice."
+      },
+      {
+        "name": "Application screening workflow (practical procedure for firms)",
+        "description": "Introduce an intermediate screening step where firms iteratively run prospective applications through the acceptance model, revise the text until a satisfactory acceptance-probability threshold is reached, and optionally apply the value model to balance acceptance probability and expected market reaction.",
+        "guidance": "Screening is especially valuable for startups and small firms lacking patent-law expertise; firms should monitor revisions using the embedding distance metric and consider both acceptance and predicted value rather than acceptance alone."
+      },
+      {
+        "name": "Constructing firm-level application strength",
+        "description": "Define application strength for a firm-month as the mean predicted chance of acceptance for all the firm's applications published that month, multiplied by the square root of the number of applications.",
+        "guidance": "This measure proxies both the average quality and the scale of firm application activity; use it for firm sorting in portfolio analysis and as a latent indicator of innovative strength."
+      },
+      {
+        "name": "Portfolio construction and evaluation using application-strength signals",
+        "description": "Sort firms monthly into above- vs. below-median application-strength groups; construct a long-short portfolio (long high-strength, short low-strength) with a one-month horizon and evaluate abnormal returns using Fama-French three-, four-, and five-factor regressions.",
+        "guidance": "Report monthly and annualized abnormal returns and significance (one-tailed t-tests); the paper finds significant annual abnormal returns (~3.3% yearly) for portfolios based on application strength."
+      },
+      {
+        "name": "Interpretability caution and qualitative validation",
+        "description": "Acknowledge that there are no consistent, general methods for global interpretation of neural networks; use qualitative inspection and case studies (e.g., unreadable or repetitive abstracts flagged as low-quality) to validate model intuition.",
+        "guidance": "Complement quantitative metrics with manual review of extreme predictions (top/bottom predicted applications) to identify textual patterns (vague, repetitive, or unclear writing) driving model outputs."
+      },
+      {
+        "name": "Prevention of statistical contamination when transforming dependents",
+        "description": "When applying transformations like Box\u2013Cox, calculate transformation parameters (\u03bb) only on the training set and then apply them to the test set to avoid invalidating statistical results.",
+        "guidance": "Report robustness checks demonstrating that training-only \u03bb yields similar results to in-sample \u03bb when sample sizes are large, and document the procedure clearly in appendices."
+      },
+      {
+        "name": "Regular reporting of year-by-year performance",
+        "description": "Report model evaluation metrics (AUC, Accuracy, Precision, Recall, F1 for acceptance; MSE, R2, adjusted R2 for value) on a year-by-year basis and present means/medians across years.",
+        "guidance": "Temporal reporting reveals trends (e.g., increasing R2 over time) and indicates whether market incorporation or model performance is improving; include tables for transparency."
+      },
+      {
+        "name": "Limitations of LLM-based patent evaluation",
+        "description": "LLMs currently lack robust symbolic processing and are not qualified to evaluate engineering or design quality; models likely capture writing quality and self-reported importance rather than deep scientific inventiveness.",
+        "guidance": "Treat model outputs as proxies for perceived application quality or market-signaling content; anticipate future improvements from multimodal models (figures/drawings) and exercise caution in consequential decisions relying solely on text embeddings."
+      }
+    ]
+  }
+}

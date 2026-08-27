@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/93d4b98223c5.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15007,
+  "output_tokens": 4347,
+  "elapsed_s": 1987.3503852090798,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "Users and developers of the Rocq Prover / Coq who write proofs, libraries or plugins",
+    "subtask_short": "using rocq core libraries",
+    "subtask_description": "Guidance and conventions for using Rocq/Coq standard libraries, the prelude, notations, datatypes, recursion and tactics when developing proofs, libraries or projects in Rocq.",
+    "subtask_keywords": [
+      "rocq",
+      "coq",
+      "libraries",
+      "prelude",
+      "notations",
+      "recursion"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Core library / preloaded files",
+        "description": "The core library contains definitions and theorems for the most commonly used elementary logical notions and data types, primitive objects, and support for tactics/commands (e.g., setoid_rewrite, Program, ssreflect, Ltac2). Rocq automatically loads many of these files when it starts; this set of preloaded files is called the prelude.",
+        "guidance": "The content of the corelib and the prelude can be browsed online (corelib and Corelib.Init.Prelude). Rely on corelib for basic primitives and commonly used constructions; expect many corelib files to be available without explicit loading."
+      },
+      {
+        "name": "Explicit loading of standard library files",
+        "description": "Other libraries like the standard library are general-purpose libraries (sets, lists, arithmetic, etc.) that are not automatically loaded and must be loaded explicitly by the user.",
+        "guidance": "To use standard library files, load them with an explicit command such as 'From Stdlib Require ...' (see the Compiled files section)."
+      },
+      {
+        "name": "Notations: purpose and precedence/associativity rules",
+        "description": "The Notations module defines parsing and pretty-printing of many symbols (infixes, prefixes) but does not assign semantic meaning; its purpose is to fix precedence and associativity of very common notations in the initial state.",
+        "guidance": "Use the predefined precedence and associativity table when writing code to avoid ambiguity. The documentation lists the main notations and their precedence/associativity (examples: '->' precedence 99 right; '<->' 95 no; '\\/' 85 right; '/\\' 80 right; '~' 75 right; '=' 70 no; '+' 50 left; '*' 40 left; '^' 30 right; '-' and '/' at 35 right)."
+      },
+      {
+        "name": "Zero notation: O vs 0",
+        "description": "In Coq's standard definitions zero is the letter 'O' (capital O), not the numeral '0'.",
+        "guidance": "When writing natural-number values or pattern-matching on nats, use O for zero. Decimal notation is also provided (see nat_scope) so decimal numerals may be used as sugar, but the canonical constructor is O."
+      },
+      {
+        "name": "nat_scope and decimal notation for numbers",
+        "description": "The Peano module provides a scope nat_scope gathering standard notations for common operations (+, *, etc.) and a decimal notation for numbers; nat_scope is opened by default.",
+        "guidance": "You may write decimal numerals (e.g., 3) as sugar for S (S (S O)); decimal notation also works on the left-hand side of match expressions."
+      },
+      {
+        "name": "Recursive/guarded Fixpoint definitions and termination discipline",
+        "description": "Recursive functions (Fixpoint) must be structurally/guardedly defined so that termination is evident to the system; examples show recursion guarded on the first argument.",
+        "guidance": "Ensure recursive definitions are accepted by the guard checker (struct annotation). For more complex termination, use well-founded recursion tools (Acc/well_founded) described in Wf.v and Fix/Fix_F constructs."
+      },
+      {
+        "name": "Well-founded recursion and Fix via Acc",
+        "description": "The Wf module provides Acc, well_founded and machinery to define functions by fixpoints justified by well-founded relations, together with well-founded induction principles.",
+        "guidance": "To define functions that are not structurally recursive, prove a relation well_founded and use the provided Fix/Fix_F scheme (Acc_intro, Fix_F_eq, Fix_eq). Ensure any extensionality hypotheses required for equality of fixpoints are satisfied."
+      },
+      {
+        "name": "Dependent sums: sig (Prop) vs sigT (Type)",
+        "description": "sig (notation { x : A | P x }) is a weak dependent sum producing a Type when P : A -> Prop; the justification (proof) is hidden and not extractable. sigT (existT) is the strong dependent sum for P : A -> Type, residing in Type and exposing both witness and evidence.",
+        "guidance": "Choose sig when the second component is a Prop and you want the proof to remain hidden (abstract); use sigT when the second component is a Type and you need to access both parts. Use projT1/projT2 to extract witness and (when available) the second component from sigT values."
+      },
+      {
+        "name": "Constructive sums for decidability: sumbool and sumor",
+        "description": "sumbool implements a constructive sum {A} + {B} of two propositions as a Set (left/right with evidence), useful to represent decidability; sumor mixes a Type/Set component with a Prop (A +{B}).",
+        "guidance": "Use sumbool as an indexed boolean-like datatype when you need an explicit decidability result (left/right constructors). Use sumor when combining a data component (Set) with a proposition (Prop)."
+      },
+      {
+        "name": "Equality: inductive eq and associated lemmas",
+        "description": "Equality is defined as an inductive relation eq with constructor eq_refl; standard lemmas and eliminators (eq_rect, eq_ind, eq_sym, eq_trans, f_equal, f_equal2..f_equal5) are provided in the basic library.",
+        "guidance": "Use the provided equality lemmas and registers (Hint Immediate eq_sym not_eq_sym : core) and the f_equal family when reasoning about equalities under functions of several arguments. Use the eq_ind/_rect variants for elimination/transport tasks."
+      },
+      {
+        "name": "Specif constructs and usage (exist, existT, projections)",
+        "description": "Specif.v supplies constructs such as { x : A | P x } (sig), exist, existT and projection utilities (projT1, projT2); exist builds a witness + justification; from exist you can extract the witness but not the justification for sig.",
+        "guidance": "When pattern-matching on exist/existT values use match/return idioms as shown in examples; use the provided projection functions to extract components when appropriate."
+      },
+      {
+        "name": "Sumbool-based choice and choice lemmas",
+        "description": "The basic library provides variants of the axiom of choice and lemmas (Choice, Choice2, bool_choice) making use of constructive dependent sums and sumbool to build choice functions under constructive hypotheses.",
+        "guidance": "When writing constructive choice proofs, use the provided lemmas to convert local existence/decidability hypotheses into functions or boolean-valued choices as illustrated."
+      },
+      {
+        "name": "Tactics provided in initial state and tactic-language support",
+        "description": "A few tactics are provided at user level in the initial state (Tactics module of Corelib); the documentation also documents ssreflect, Ltac2 and many tactic support facilities.",
+        "guidance": "Rely on the preloaded tactic support for common proof patterns; consult the Tactics/ssreflect/Ltac2 sections for usage, compatibility issues and migration guidance."
+      },
+      {
+        "name": "Opam repository and user-contributed packages",
+        "description": "Many user contributions are packaged and available in the Rocq Opam repository with metadata (author, institution, description) and can be downloaded or installed with opam.",
+        "guidance": "Browse the packages page for existing libraries, installation instructions and information on how to submit new packages to the repository."
+      },
+      {
+        "name": "Notation conflicts and overriding",
+        "description": "Notations can conflict or be overridden; the system may issue warnings when a notation (e.g., '_ <= _' in nat_scope) is already used and gets overridden.",
+        "guidance": "Be careful when declaring new notations or importing modules that introduce notations; check for warnings and prefer reserving/qualifying notations to avoid accidental overrides."
+      }
+    ]
+  }
+}

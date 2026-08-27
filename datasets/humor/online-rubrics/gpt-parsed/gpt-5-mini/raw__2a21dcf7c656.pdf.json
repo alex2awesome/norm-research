@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/2a21dcf7c656.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 10714,
+  "output_tokens": 3856,
+  "elapsed_s": 775.4176690829918,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / computational-linguistics and machine-learning researchers interested in computational humor recognition",
+    "subtask_short": "one-liner humor recognition",
+    "subtask_description": "Automatic recognition of verbally expressed humor restricted to one-liners (short single-sentence jokes). The task is framed as a supervised text classification problem using stylistic heuristics, content features, and ensemble methods.",
+    "subtask_keywords": [
+      "humor",
+      "one_liner",
+      "text_classification",
+      "computational_linguistics",
+      "machine_learning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "One-liner selection (positive examples)",
+        "description": "A one-liner is a short sentence with comic effects and an interesting linguistic structure: simple syntax, deliberate use of rhetoric devices (e.g. alliteration, rhyme), and frequent use of creative language constructions meant to attract the reader's attention. Usually 15 or less words; produces the humorous effect 'in one shot'.",
+        "guidance": "Use one-sentence jokes (typically \u226415 words) as positive training data; examples provided (e.g. 'Take my advice; I don\u2019t use it anyway.'). One-liners are chosen because humor-producing features are guaranteed to be present in the single sentence."
+      },
+      {
+        "name": "Web-based bootstrapping \u2014 thematic constraint (URL keywords)",
+        "description": "When bootstrapping one-liners from the Web, require that at least one keyword indicating humor-related content appears in the URL of a retrieved webpage.",
+        "guidance": "The implementation used a small set of keywords (oneliner, one-liner, humor, humour, joke, funny) to bias retrieved pages toward humor-related content (e.g. http://www.berro.com/Jokes). This helps steer the bootstrap away from noisy, non-humor pages."
+      },
+      {
+        "name": "Web-based bootstrapping \u2014 structural constraint (HTML enumerations)",
+        "description": "Exploit HTML structure (enumerations) to find pages where seed one-liners appear in lists; other items in the same enumeration are likely to be one-liners.",
+        "guidance": "Detect HTML list tags (e.g. <li>) and extract candidate lines in the same enumeration as a seed one-liner. Assumes enumerations include texts of similar genre; repeat iterations to expand seed set."
+      },
+      {
+        "name": "Duplicate removal / string-similarity filtering",
+        "description": "Remove duplicate or near-duplicate entries using a string-similarity measure based on longest common subsequence.",
+        "guidance": "In practice two iterations of bootstrapping produced ~24,000 candidates; duplicate removal left ~16,000 distinct one-liners. Manual verification on a sample indicates ~9% noise remains."
+      },
+      {
+        "name": "Negative data selection: structurally and stylistically similar negatives",
+        "description": "Select negative examples that are non-humorous but similar in structure and style to one-liners so classifiers cannot rely on trivial cues like length or obvious vocabulary differences.",
+        "guidance": "The paper used three negative sets: (1) Reuters news titles, (2) Proverbs from online collections, (3) BNC sentences selected to be content-similar. This forces models to learn humor-specific features rather than surface differences."
+      },
+      {
+        "name": "Length restriction for positives and negatives (10\u201315 words)",
+        "description": "Enforce the same length restriction on negative examples as on one-liners: one sentence, average length 10\u201315 words.",
+        "guidance": "Keeps structural and stylistic properties comparable between classes to avoid confounding classification by length."
+      },
+      {
+        "name": "BNC negative selection via IR (tf.idf + cosine similarity)",
+        "description": "Select BNC sentences most similar to each one-liner using an information retrieval approach: tf.idf weighting and cosine similarity (SMART system).",
+        "guidance": "An index of BNC sentences of length 10\u201315 words is used; the most similar sentence to each one-liner is retrieved and used as a negative example to ensure topical similarity."
+      },
+      {
+        "name": "Stylistic feature \u2014 Alliteration/rhyme chains",
+        "description": "Count the number of alliteration/rhyme chains in each sentence as an indicator of stylistic humor.",
+        "guidance": "Alliteration and phonetic devices are important; extraction used an index built on top of the CMU pronunciation dictionary. Alliteration was found to be the most useful single stylistic indicator in experiments."
+      },
+      {
+        "name": "Stylistic feature \u2014 Antonymy (semantic opposition)",
+        "description": "Detect presence of antonyms in a sentence using WordNet antonymy relations (nouns, verbs, adjectives, adverbs) and indirect antonymy via 'similar-to' for adjectives.",
+        "guidance": "Antonymy is a proxy for incongruity/opposition. Coverage is limited by WordNet; deeper semantic analysis (word-sense/domain disambiguation) could improve detection."
+      },
+      {
+        "name": "Stylistic feature \u2014 Adult slang (sexuality domain)",
+        "description": "Detect sexual-oriented lexicon by extracting synsets labeled with the domain SEXUALITY from WordNet Domains, remove highly polysemous words, and check presence in sentences.",
+        "guidance": "Useful for humor based on adult slang; WordNet Domains coverage is incomplete and highly polysemous words are filtered out to reduce noise."
+      },
+      {
+        "name": "Heuristic application & thresholding for stylistic features",
+        "description": "Treat stylistic features (alliteration, antonymy, adult slang) as numerical heuristics requiring a threshold to decide humorous vs non-humorous.",
+        "guidance": "Thresholds are learned automatically using a decision tree on a small labeled subset (1000 examples); apply learned threshold to remaining data. These features act as heuristics rather than features that always improve with more data."
+      },
+      {
+        "name": "Content-based features and classifiers (bag-of-words / tf.idf; Naive Bayes and SVM)",
+        "description": "Formulate humor-recognition as a text classification task using content-based features (e.g., tf.idf weighted word features) and standard classifiers: multinomial Naive Bayes and Support Vector Machines.",
+        "guidance": "Naive Bayes (multinomial) and SVM were chosen for prior strong performance and methodological diversity. Reported accuracies: Naive Bayes and SVM achieve substantially higher accuracy than stylistic heuristics in most settings."
+      },
+      {
+        "name": "Feature combination via stacked learner (ensemble)",
+        "description": "Combine content-based classifier output with stylistic features in a stacked learning framework: feed text-classifier output + stylistic features into a memory-based learner (Timbl).",
+        "guidance": "Use a memory-based learner in the second stage to avoid discarding low-performance but informative stylistic features; using a decision tree in the second stage led to ignoring stylistic features in favor of content."
+      },
+      {
+        "name": "Evaluation protocol: stratified ten-fold cross-validation and baselines",
+        "description": "Evaluate models with stratified ten-fold cross-validation. Use appropriate baselines: 50% for balanced class distributions and 75% when using 75/25 negative/positive splits.",
+        "guidance": "Report accuracy and perform statistical significance testing (paired t-test) when comparing methods. Also examine performance under uneven class distributions to reflect harder settings."
+      },
+      {
+        "name": "Primary performance metrics: classification accuracy and learning curves",
+        "description": "Use classification accuracy as the main performance metric and plot learning curves (accuracy vs fraction of training data) to study learning behavior.",
+        "guidance": "Learning curves reveal how accuracy improves with data size; the paper observed significant learning up to ~60% of the data (~10,000 positive examples) and a plateau/drop beyond that, suggesting more sophisticated features are needed rather than simply more data."
+      },
+      {
+        "name": "Use of multiple negative sets and mixed negatives to test bias",
+        "description": "Use diverse negative sets (Reuters titles, proverbs, BNC sentences) and also a mixed negative set to ensure reported results are not biased by a particular negative collection.",
+        "guidance": "Experiments across multiple negative types help verify that classifiers learn humor-specific features rather than artifacts of a single negative source; comparable results on mixed negatives validate robustness."
+      },
+      {
+        "name": "Manual verification and acceptable noise level",
+        "description": "Manually inspect a sample of automatically collected positive examples to estimate noise; in the paper a random sample of 200 one-liners indicated ~9% potential noise.",
+        "guidance": "Accept some level of noise from automatic collection; be aware noise may explain learning curve plateaus for very large data sets. Report and consider noise in analysis."
+      },
+      {
+        "name": "Feature analysis for future feature engineering",
+        "description": "Analyze learned content features to discover useful indicators (e.g., frequent human-related words and negative word forms in one-liners), and use these observations to guide future feature development (semantic opposition, ambiguity).",
+        "guidance": "Inspect top content features from classifiers to identify patterns (references to man/woman/person/you/I; negative verb/adjective forms). Use such analyses to propose new humor-specific semantic or pragmatic features for improved recognition."
+      }
+    ]
+  }
+}

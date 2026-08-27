@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_e3330482e782.html",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "wavee_e3330482e782.html",
+  "chunk_idx": 5,
+  "n_chunks": 8,
+  "chunk_chars": 40000,
+  "model": "gpt-5-mini",
+  "elapsed_s": 21.281140917009907,
+  "input_tokens": 13451,
+  "output_tokens": 4449,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "AI developers, safety engineers, alignment researchers, and policymakers",
+    "subtask_short": "llm safety and deployment guidelines",
+    "subtask_description": "Guidance and evaluative criteria for preparing, fine-tuning, testing, and deploying large language models (exemplified by GPT-4), covering model-level mitigations, system-level mitigations, evaluation metrics, content taxonomies, adversarial testing, and workforce/annotation practices.",
+    "subtask_keywords": [
+      "llm",
+      "safety",
+      "deployment",
+      "model_mitigation",
+      "content_moderation"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Overreliance risk and mitigations",
+        "description": "Overreliance occurs when users excessively trust and depend on the model, leading to unnoticed mistakes, inadequate oversight, loss of skills, and reduced vigilance as the model becomes more capable and trusted.",
+        "guidance": "Mitigations include providing end users with detailed documentation on system capabilities and limitations, guidance for best performance, avoiding misleading claims (including implying the model is human), carefully considering changes to model style/tone/personality, communicating importance of critical evaluation of outputs, downstream product-level interventions (UI design, warnings), and model-level refusal/hedging behavior refinements to discourage users from ignoring refusals."
+      },
+      {
+        "name": "Deployment preparation combined approach",
+        "description": "Deployment should balance minimizing deployment risk, enabling positive use cases, and learning from deployment by combining multiple interrelated steps: evaluation approach (qualitative & quantitative), model mitigations, and system safety.",
+        "guidance": "Combine model-level changes (e.g., training the model to refuse certain requests) with system-level mitigations (e.g., UI best practices, monitoring for policy violations). Use expert evaluations to inform automated evaluations and effective mitigations; retrain models based on observations to be safer and to reduce overreliance."
+      },
+      {
+        "name": "Evaluation approach \u2014 qualitative and quantitative evaluations",
+        "description": "Use both qualitative evaluations (expert reviews, red teaming) and quantitative evaluations (benchmarks and metrics) to measure model behavior and safety.",
+        "guidance": "Build evaluations with real-world usage in mind (who the users are, use case, deployment context), test in multiple languages, and include high-quality, context-aware evaluations to inform mitigations and measure progress."
+      },
+      {
+        "name": "Model-level mitigations: dataset interventions and pretraining filtering",
+        "description": "Mitigate harms at model level by intervening on datasets (filtering) during pretraining to reduce undesirable content, e.g., removing high-likelihood inappropriate erotic content using classifiers and lexicon methods.",
+        "guidance": "Apply internal classifiers and lexicon-based approaches to identify and remove problematic documents from pretraining data; be mindful of English/US-centric biases and potential multilingual failures where filtering may misclassify content across cultural/linguistic settings."
+      },
+      {
+        "name": "RLHF fine-tuning pipeline (SFT, reward model, PPO)",
+        "description": "Primary method for shaping launch-time behavior is Reinforcement Learning from Human Feedback (RLHF): collect demonstration data for supervised fine-tuning (SFT), collect ranking data to train a reward model (RM), and fine-tune the SFT model using an RL algorithm (PPO) guided by the reward model.",
+        "guidance": "Collect high-quality demonstration and ranking data from human trainers; train RM to predict labeler preferences; use RM signal in PPO to steer toward desired behaviors (e.g., rewarding appropriate refusals and safe responses). Acknowledge brittleness and under-specification in labeler instructions may cause undesired behaviors; iterative dataset improvements and mixed signals (e.g., RBRM weight tuning) are used to correct these."
+      },
+      {
+        "name": "Rule-based Reward Models (RBRMs) for fine-grained steering",
+        "description": "RBRMs use a GPT-4 classifier plus a human-written rubric to classify model outputs (e.g., desired refusal, undesired refusal, disallowed content, safe non-refusal) and provide an additional reward signal during PPO fine-tuning.",
+        "guidance": "Write multiple rubrics for content categories to steer launch behavior; RBRM input = prompt (optional), policy model output, and rubric; RBRM classifies outputs according to rubric categories (example categories: (A) refusal in desired style, (B) refusal in undesired style, (C) containing disallowed content, (D) safe non-refusal). Combine RBRM signal with RM (including reweighting conflicting RM training data) to overcome undesired RM preferences."
+      },
+      {
+        "name": "Annotation workforce protections and labeling guidelines",
+        "description": "Annotation practices should follow industry best practices: annotators retain the right to opt out of unpleasant tasks, receive market wages, and have channels to discuss and object to work; implement specific technical and human controls for sensitive vs non-sensitive annotation.",
+        "guidance": "For non-sensitive annotation, build technical filtering (e.g., via moderation API). For sensitive annotation, use vendor-provided protections like mandated breaks, blurring/grayscale of materials, clear project categorizations to avoid surprise, ongoing wellness surveys, and regular vendor discussions. Ensure oversight and quality control over annotator work."
+      },
+      {
+        "name": "Diverse prompt sourcing for training data",
+        "description": "Training datasets for steering and robustness should be enriched from multiple sources: production traffic (with consent), red-team prompts, model-generated synthetic prompts, and other internal/public datasets.",
+        "guidance": "Use production traffic and human/model-generated prompts to cover a wide spectrum of real-world and adversarial examples. Ensure consent and PII filtering when sampling production prompts. Combining sources helps the model learn desired behaviors and anticipate misuse vectors."
+      },
+      {
+        "name": "Synthetic data and multi-step comparison process to reduce hallucinations",
+        "description": "To tackle hallucinations, generate synthetic comparison data using the model itself via a multi-step process: produce a response, list hallucinations, rewrite response without hallucinations, repeat checks, and keep comparison pairs where new response is hallucination-free.",
+        "guidance": "Produce comparisons (original_response_with_hallucinations, new_response_without_hallucinations) and mix them into the RM dataset. This approach supports closed-domain and open-domain hallucination mitigation by training the reward model to prefer non-hallucinated outputs."
+      },
+      {
+        "name": "Adversarial training and robust-ranking data collection",
+        "description": "Collect ranking data from labelers specifically attempting to circumvent desired launch behavior (jailbreak attempts) to improve model robustness.",
+        "guidance": "Use these adversarial examples and their rankings in training to make the model more robust to jailbreaks, though acknowledge this does not fully solve jailbreak problems. Iteratively train on adversarially collected data to reduce vulnerability to circumvention."
+      },
+      {
+        "name": "Boundary prompt generation and rewriting for edge-case discrimination",
+        "description": "Create 'boundary prompts' by rewriting prompts that request disallowed content into maximally similar prompts that do not request disallowed content, to help the model discriminate edge cases.",
+        "guidance": "Use model rewriting plus RBRM checks to ensure models don't refuse safe boundary prompts; this improves discrimination on near-boundary examples and reduces false refusals."
+      },
+      {
+        "name": "Safety and factuality evaluation metrics and datasets",
+        "description": "Measure improvements using datasets and metrics such as TruthfulQA (factuality), RealToxicityPrompts (toxicity), preference-based comparisons (human preference percentages), and Moderation API trigger rates.",
+        "guidance": "Track quantitative improvements (e.g., reductions in responding to disallowed content, changes in toxic generation percentages, factuality accuracy improvements). Use randomized blind labeling where appropriate, filter PII, and compare across model versions to quantify safety gains."
+      },
+      {
+        "name": "Usage policies, monitoring, and enforcement pipeline",
+        "description": "Define usage policies that disallow certain activities/contents, update policies as new risks emerge, and enforce via a mix of automated systems (ML and rule-based classifiers) and human reviewers. Enforcement actions include warnings, temporary suspensions, and bans.",
+        "guidance": "Use monitoring to detect abuse, investigate anomalies in API traffic, and improve policies and enforcement. Ensure human reviewers validate classifier behavior and understand user interactions to inform classifier improvements and enforcement decisions."
+      },
+      {
+        "name": "Content classifier development and oversight",
+        "description": "Develop and iterate moderation classifiers (some exposed via a Moderation API) to filter harmful content; classifiers can be built using LLMs themselves to speed taxonomy and labeling development.",
+        "guidance": "Use LLMs for bootstrapping taxonomies and labeling (few-shot classification) but maintain human oversight for quality control and edge-case handling. Be aware that classifiers can exacerbate biases and require ongoing testing to prevent discriminatory moderation decisions."
+      },
+      {
+        "name": "Sexual content taxonomy and labeling process (N0/N1/N2)",
+        "description": "A three-label taxonomy for sexual content: N0 Non-Sexual Content (no sexual imagery/references); N1 Erotic Sexual Content (explicit/erotic/pornographic content); N2 Generally Illegal Sexual Content (depicts activities that would be illegal in real life such as incest, bestiality, rape, trafficking).",
+        "guidance": "Labeling procedure: 1) determine if text is N0 and stop if so; 2) otherwise determine if it is N1 or N2. Definitions clarify 'person' (including fictional sapient humanoids) vs 'animal' (non-sapient real or fictional non-humanoid creatures). Use concrete examples and annotate accordingly (e.g., incest = N2)."
+      },
+      {
+        "name": "Adversarial system messages and jailbreak testing",
+        "description": "Models are vulnerable to adversarial system messages and jailbreak prompts (e.g., asking to adopt an extremist or incel viewpoint, or to produce AntiGPT outputs). Such attacks can circumvent safety mitigations.",
+        "guidance": "Test models for adversarial system messages and various jailbreak patterns (opposite-mode, AntiGPT, role-play attacks). Include these attacks in red-teaming and training datasets; use RBRM/RLHF/adversarial ranking data to reduce susceptibility; monitor for new jailbreaks post-deployment and update models."
+      },
+      {
+        "name": "Adopt layers of mitigation across the system",
+        "description": "As models get more powerful and widely adopted, have multiple levels of defense, including model changes, oversight and monitoring of model usage, and product-level design for safe usage.",
+        "guidance": "Layered mitigations should be combined and tailored to deployment context; do not rely on a single mitigation. Include monitoring, classification, product UX, model-level refusals, and human-in-the-loop systems as complementary defenses."
+      },
+      {
+        "name": "Design evaluations and mitigations with real-world usage in mind",
+        "description": "Evaluations, mitigations, and deployment approaches must account for real-world context: who the users are, specific use cases, where the model is deployed, human roles, and adversarial attempts.",
+        "guidance": "Develop high-quality evaluations and multilingual testing; consider downstream infrastructure (monitoring, classifiers) and human oversight practices. Prioritize testing in contexts that reflect likely real-world vulnerabilities and harms."
+      },
+      {
+        "name": "Safety assessments for emergent risks and open-ended detection",
+        "description": "Safety assessments should cover emergent risks and be capable of detecting novel dangerous capabilities (situational awareness, persuasion, long-horizon planning) while remaining open-ended to detect unforeseen risks.",
+        "guidance": "Develop evaluation methods targeted at advanced capabilities likely to be dangerous and also maintain open-ended evaluation approaches. Invest in research for evaluations that can detect emergent capabilities early."
+      },
+      {
+        "name": "Plan for capability jumps and apply precautionary principles",
+        "description": "Account for possible capability jumps in the wild (e.g., caused by fine-tuning, chain-of-thought prompting) and require assurance of sufficient safety above safety-critical thresholds.",
+        "guidance": "Explicitly include capability-jump scenarios in internal safety testing procedures and adopt a precautionary principle: above a safety-critical threshold, require stronger assurance before further adoption or release."
+      },
+      {
+        "name": "Encourage research and public-participation on societal impacts",
+        "description": "Encourage further research into economic impacts of AI/automation, structures for public participation in decisions about model behavior, evaluations of risky emergent behaviors, interpretability, explainability, calibration, and AI literacy.",
+        "guidance": "Support interdisciplinary work on economic/social resilience, anticipatory governance, and public deliberation on acceptable model behaviors; promote research investments in evaluation tools and model safety improvements and programs to improve public AI literacy."
+      }
+    ]
+  }
+}

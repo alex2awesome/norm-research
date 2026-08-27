@@ -1,0 +1,823 @@
+{
+  "bench": "hover",
+  "arm": "unitrecomb",
+  "task_lm": "openai/Qwen3-8B",
+  "regression_flag": false,
+  "budget_calls": 40000,
+  "n_test": 300,
+  "max_tokens": 8000,
+  "top_k": 20,
+  "prefix_cap": 48,
+  "run_tag": "v5sk2",
+  "robust_answer_extract": false,
+  "seed_test": 0.35,
+  "best_test": 0.49,
+  "best_candidate": {
+    "create_query_hop2.predict": "Given the fields `claim` and `summary_1`, produce the field `query`.\n\nThe goal of the task is to generate a highly effective search query that will retrieve all the relevant evidence documents needed to fact-check the given claim, taking into account the preliminary findings provided in the summary.\n\n### Domain-Specific Knowledge & Factual Context\nDuring fact-checking, claims often omit the names of specific entities or use vague descriptions that require domain knowledge to resolve. You must use the context from the claim and summary to deduce these unstated entities, as the target evidence documents rely on these specific names. Examples of unstated entity deduction required for this task:\n- The \"former bassist/vocalist of Deep Purple, Black Sabbath, and Trapeze who released From Now On... in 1994\" refers to **Glenn Hughes**.\n- \"Dave Evans\" (in the context of rock bands) refers to the singer **Dave Evans**.\n- The claim about \"Houman Younessi\" references the **Centre for Astrophysics and Supercomputing (CAS)**, which is housed at **Swinburne University of Technology**. Unstated entities tied to this university/centre that are relevant to evidence retrieval include **Matthew Bailes**.\n- The \"1950s Disney film with a prequel called Davy Crockett and the River Pirates\" refers to **Davy Crockett, King of the Wild Frontier**.\n\n### Generalizable Strategy & Rules\n1. **Exhaustive Entity Coverage:** Your generated query must stringently include all relevant named entities, concepts, and deduced real-world subjects mentioned above. Missing any related entity (e.g., leaving out \"Swinburne University of Technology\" when discussing Houman Younessi) will result in missing critical evidence documents.\n2. **Address Summary Gaps:** If `summary_1` indicates that a specific part of the claim is unverified or partially supported, ensure your query explicitly includes the search terms needed to find evidence for that specific missing or comparative fact (e.g., \"Glenn Hughes\", \"Dave Evans singer\", \"instruments\").\n3. **Completeness:** Construct your query to cover the entire scope of the claim. Do not prematurely narrow the search to only the unverified parts; include the verified core subjects as well to ensure comprehensive document retrieval.\n- Given the fields `claim` and `summary_1`, produce the field `query`.",
+    "create_query_hop3.predict": "Given the fields `claim`, `summary_1`, `summary_2`, produce the fields `query`.\n- Expand the search query to include well-known aliases, abbreviations, or alternative spellings of the core entities if the previous summaries suggest a lack of direct name matches.\n- To ensure comprehensive retrieval, generate targeted search queries to bridge the exact gaps between what is known and what is missing.\n- If the first two summaries successfully verify parts of the claim, your new query must exclusively target the highly specific missing gaps rather than repeating already retrieved general context.",
+    "summarize1.predict": "Given the fields `claim`, `passages`, produce the fields `summary`.",
+    "summarize2.predict": "Given the fields `claim`, `context`, `passages`, produce the fields `summary`."
+  },
+  "units": {
+    "n_llm_suggested": 60,
+    "n_pool_used": 128,
+    "select_init": 0.59,
+    "marginals": [
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Expand the search query to include well-known aliases, abbreviations, or alternative spellings of the core entities if the previous summaries suggest a lack of direct name matches.",
+        "delta": 0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "To ensure comprehensive retrieval, generate targeted search queries to bridge the exact gaps between what is known and what is missing.",
+        "delta": 0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "If the first two summaries successfully verify parts of the claim, your new query must exclusively target the highly specific missing gaps rather than repeating already retrieved general context.",
+        "delta": 0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Given the fields `claim` and `summary_1`, produce the field `query`.",
+        "delta": 0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "During fact-checking, claims often omit the names of specific entities or use vague descriptions that require domain knowledge to resolve.",
+        "delta": 0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Generate the query by synthesizing the newly discovered entities from `summary_2` with the core subjects of the claim, ensuring no critical proper nouns from previous steps are omitted.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Extract and explicitly list all named entities, dates, and numerical figures found in the passages, prioritizing those that share a semantic relationship with the claim.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Highlight any subtle semantic discrepancies, such as mismatches in dates, spatial relationships, or causal links, between the `context` and the new `passages`.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Translate any remaining vague claim descriptors into formal search terms based on previous summaries, specifically utilizing the exact terminology and entity names surfaced in the prior evidence.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "You must explicitly compare the conceptual gaps identified in `summary_1` against the findings in `summary_2` to ensure your newly generated query targets only what remains unverified.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "You must explicitly cross-reference the newly retrieved `passages` with the provided prior `context` to verify that no directly contradicting information is being ignored in your summary.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Perform a final validation to confirm that your output explicitly declares which specific parts of the claim are now fully verified, partially verified, or still unverified based on the combined texts.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Synthesize the original claim with both summary_1 and summary_2 to generate a highly targeted query aimed specifically at resolving the remaining unverified facts.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Address Summary Gaps:** If `summary_1` indicates that a specific part of the claim is unverified or partially supported, ensure your query explicitly includes the search terms needed to find evidence for that specific missing or comparative fact (e.g., \"Glenn Hughes\", \"Dave Evans singer\", \"instruments\").",
+        "delta": 0.0,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Ensure the summary extracts all relevant entities, relationships, and contextual clues needed to formulate comprehensive search queries for any missing evidence.",
+        "delta": 0.0,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Structure the summary to clearly delineate what has been confirmed so far versus what relationships or entities are still missing, enabling precise exploratory queries in the next hop.",
+        "delta": 0.0,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Clearly delineate what has been confirmed so far versus what relationships or entities are still missing.",
+        "delta": 0.0,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Format the query as a concise boolean search string, enclosing multi-word proper nouns and exact titles in quotation marks to optimize search engine retrieval.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Compare `summary_1` and `summary_2` to isolate any remaining unresolved factual conflicts, and build the query strictly around the specific entities central to those conflicts.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Cross-reference the newly retrieved passages with the existing context to resolve previously unverified facts, explicitly noting when a claim component transitions to verified or refuted.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "If the summary identifies a missing entity description (e.g., 'former bassist'), you must perform entity resolution by prepending the deduced specific name (e.g., 'Glenn Hughes') to the query.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Re-read the provided `summary_1` to verify if any specific unverified sub-components were mentioned, and confirm your proposed query explicitly includes search terms targeting those exact gaps.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "You must state your deduced real-world entity in a self-check step, verifying it aligns with the provided domain-specific context before injecting it into the final query.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Transform the core assertion of the claim into its exact logical negation, and generate a temporary search query specifically designed to retrieve documents proving this inverse scenario. Briefly state the boolean differential between your inverse query and your primary query, then output only the primary search query for the original claim.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Treat the claim and summaries as an unoptimized algorithm with high time complexity, and rewrite them as a set of algorithmic constraints with explicit Big-O bounds. Generate your search query by identifying the exact missing 'subroutines' required to successfully execute this algorithm.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Construct a topological map where each passage is a geographical region and thematic overlaps are borders, identifying 'mountain ranges' of contradiction and 'bridges' of corroboration. Write your summary by narratively traversing from the origin claim to the final verification destination across this conceptual landscape.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "If the summary indicates that a relationship between two entities (such as a person and a novel, or a company and a film) is unverified, explicitly include both entities and their connecting relationship type in the query.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Output only the final search query string without any additional explanations, reasoning, or conversational filler.",
+        "delta": -0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Given the fields `claim`, `passages`, produce the fields `summary`.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "The \"1950s Disney film with a prequel called Davy Crockett and the River Pirates\" refers to **Davy Crockett, King of the Wild Frontier**.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Ensure the summary extracts all relevant entities, relationships, and contextual clues needed to formulate comprehensive search queries for any missing evidence.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Actively bridge gaps between knowns and unknowns by generating queries that list related works, full cast or band member lists, chronological histories, or industry sectors that might contain the missed evidence.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Pivot from broad historical queries to highly specific entity name searches and exact work titles.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "When describing the missing elements, frame them in terms of specific collaborative roles or specific work titles (e.g., 'missing the specific name of the songwriter', 'missing the specific alternative title') to prompt highly targeted, exact-match exploratory queries in the next hop.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "When describing the missing elements, frame them in terms of specific collaborative roles, behind-the-scenes figures (e.g., 'missing the specific director', 'missing the founder'), or specific work titles to prompt highly targeted, exact-match exploratory queries in the next hop.",
+        "delta": -0.010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "If the summaries provide contradictory information regarding dates, locations, or relationships, the query must include those specific conflicting terms alongside the main subject.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Structure the summary as a bulleted list of atomic facts, directly mapping which parts of the claim are explicitly supported, refuted, or remain unverified by the provided passages.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Maintain a precise log of the exact evidence snippets and document titles that verify or refute specific sub-claims, ensuring factual provenance is retained for final evaluation.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Never leave the `query` field empty or output a placeholder like 'N/A'; if no immediate evidence is found, output the exact verbatim phrase from the claim that requires verification.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Your summary output must end with a strict inventory checklist stating exactly which discrete components of the claim remain completely unverified and still require further searching.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Confirm that your output strictly consists of the target `query` field and omits any extraneous conversational filler or unformatted text.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Before outputting the search query, translate the semantic intent of the claim and summary into a sequence of propositional logic statements. Derive the query terms by evaluating which specific logical operators (AND, OR, NOT) are required to satisfy the truth conditions of those statements.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Before finalizing the summary, identify the single most absurd or hyperbolic extreme that could theoretically be extrapolated from the claim if the passages were taken out of context. Explicitly state this reductive extreme, then formulate your summary to definitively quarantine and neutralize that specific logical fallacy.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Do not attempt to resolve the final boolean label; instead, focus entirely on synthesizing the factual evidence and identifying informational gaps.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Ensure the query incorporates the most precise terminology from the summaries (such as exact company names, airport locations, or award titles) to retrieve the final missing evidence.",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Combine the newly retrieved passages with the prior context to explicitly confirm or deny the highly specific relational claims (e.g., 'first project produced by', 'based on a novel by').",
+        "delta": -0.020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "The goal of the task is to generate a highly effective search query that will retrieve all the relevant evidence documents needed to fact-check the given claim, taking into account the preliminary findings provided in the summary.",
+        "delta": -0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Examples of unstated entity deduction required for this task:",
+        "delta": -0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "The claim about \"Houman Younessi\" references the **Centre for Astrophysics and Supercomputing (CAS)**, which is housed at **Swinburne University of Technology**.",
+        "delta": -0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Unstated entities tied to this university/centre that are relevant to evidence retrieval include **Matthew Bailes**.",
+        "delta": -0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Exhaustive Entity Coverage:** Your generated query must stringently include all relevant named entities, concepts, and deduced real-world subjects mentioned above.",
+        "delta": -0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Explicitly identify known primary subjects, but prioritize listing their specific associated works, precise collaborator names, and alternative titles mentioned in the text.",
+        "delta": -0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "To assist your reasoning, here is domain-specific factual information relevant to the entities mentioned in the claims:",
+        "delta": -0.020000000000000018,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Compare `summary_1` and `summary_2` to explicitly identify any conflicting facts or remaining unverified sub-claims, and synthesize a highly targeted query for only those specific discrepancies.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "When evaluating the new passages alongside the existing context, prioritize resolving explicit contradictions by weighing the reliability or specificity of the newer evidence against the old.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Just before outputting, double-check that the final query string does not prematurely narrow the scope and retains the verified core subjects from the claim.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Formulate an abstract syllogistic framework consisting of a major premise (general rule) and a minor premise (specific claim) derived from the provided text. Construct your search query specifically to retrieve documents that validate or provide the foundation for the major premise.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "First, generate an imaginary memo written by a highly skeptical auditor who assumes the provided passages are intentionally deceptive or satirical. Use the discrepancies highlighted in this skeptical memo to filter out misleading analogies and write your final summary grounded strictly in literal facts.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Reformulate the claim and summary into a multi-step geometry or vector space analogy, treating concepts as coordinates and relationships as distances or angles. Generate the query by solving for the shortest vector path that connects the initial claim state to the target evidence cluster.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Clearly state the final factual verdict for each individual sub-claim, noting exactly which part of the original statement is true or false based on the provided texts.",
+        "delta": -0.029999999999999916,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Given the fields `claim`, `summary_1`, `summary_2`, produce the fields `query`.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Given the fields `claim`, `context`, `passages`, produce the fields `summary`.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "To ensure comprehensive retrieval, generate multiple diverse search queries that cover different facets, entities, and relationships mentioned in the claim and summary.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "To ensure comprehensive retrieval, generate multiple diverse search queries that explore tangential entities, alternate titles or names, and broader context derived from the claim and summaries.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Think outside the box by formulating specific entity queries for the people, organizations, or items explicitly mentioned in the claim and summary.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Extract all relevant entities, relationships, and contextual clues.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Actively generate queries for specific alternative names, distinct co-creators (e.g., 'directors', 'producers', 'opening acts'), and related niche projects.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Crucially, infer and query for key behind-the-scenes figures or affiliated members, such as specific directors, founders, writers, or group members, who are not explicitly named in the text but are highly likely to be linked to the subject.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "You are a fact-checking assistant tasked with verifying claims using only the provided text `passages` and your own generalizable strategy.",
+        "delta": -0.029999999999999916,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Explicitly avoid generating stop words and conversational filler in the query, focusing solely on high-information nouns, named entities, and verbs.",
+        "delta": -0.039999999999999925,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Extract all proper nouns, dates, and numerical figures from the claim into an explicit mental checklist, and verify that your final query contains every single one of them.",
+        "delta": -0.039999999999999925,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Before finalizing the query, explicitly cross-reference the generated search terms against every subject, verb, and object in the `claim` to guarantee zero entities were omitted.",
+        "delta": -0.039999999999999925,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Before producing the final `query` field, re-read all available context to ensure you are not dropping previously verified core entities that are still required for comprehensive document retrieval.",
+        "delta": -0.039999999999999925,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Re-read the original `claim` immediately before generating your final summary to confirm that you have addressed every individual factual component of the claim rather than just its general topic.",
+        "delta": -0.039999999999999925,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Before generating the final search query, output a directed acyclic graph (DAG) mapping out the temporal and causal dependencies between the subjects and actions in the claim. Formulate your search string by strictly traversing this DAG from the earliest event to the most recent consequence.",
+        "delta": -0.039999999999999925,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "### Domain-Specific Knowledge & Factual Context",
+        "delta": -0.039999999999999925,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Formulate queries for the exact entities in the claim, but more importantly, infer missing links by querying collaborators, band members, cast lists, and complete discographies/bibliographies.",
+        "delta": -0.039999999999999925,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Additionally, query for the names of directors, producers, writers, and members of affiliated groups or bands.",
+        "delta": -0.039999999999999925,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "# Generalizable Strategy & Instructions",
+        "delta": -0.039999999999999925,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Example 1 Entities:** \"Army Peak\" is named after \"Jefferson C.",
+        "delta": -0.039999999999999925,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "The \"brand of Artsana\" refers to \"Chicco\".",
+        "delta": -0.039999999999999925,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Generate multiple diverse and highly specific search queries to comprehensively cover the claim and identify all relevant entities, concepts, or missing connections mentioned in the context.",
+        "delta": -0.039999999999999925,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Do not strip away verified core entities from your search query in an attempt to narrow the focus; the search query must be a comprehensive string containing both proven and unproven claim elements.",
+        "delta": -0.04999999999999993,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Construct a structured prolog-style knowledge base consisting of facts and rules extracted from the claim and summaries, then formulate your query terms as a logic programming goal that would satisfy the missing variables in those rules.",
+        "delta": -0.04999999999999993,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Given the fields `claim`, `summary_1`, produce the fields `query`.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "\"Dave Evans\" (in the context of rock bands) refers to the singer **Dave Evans**.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Missing any related entity (e.g., leaving out \"Swinburne University of Technology\" when discussing Houman Younessi) will result in missing critical evidence documents.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Do not solely rely on broad or abstract queries; actively search for the specific titles of works, specific names of related secondary entities, and exact alternative titles (e.g., if missing a songwriter or a specific song title, explicitly generate queries for '[Known Artist] discography', '[Known Author] books', or '[Known Entity] collaborators').",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Actively generate queries for specific alternative names, distinct co-creators (e.g., 'directors', 'producers', 'opening acts'), and related niche projects that could directly name the missing target entity.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Avoid just summarizing the general context; provide direct, specific 'hooks' (like exact names of secondary characters, track names, or specific project titles) to enable precise searches for the missing linked entities.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Do not solely rely on broad or abstract queries; actively search for specific titles of works, specific names of related secondary entities, and exact alternative titles.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Your goal is to determine if the `passages` contain sufficient information to verify the `claim` and to identify any missing links or documents.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Cross-Reference Passages:** Scan the provided `passages` for evidence supporting these entities and relationships.",
+        "delta": -0.04999999999999993,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Example 3 Entities:** The literary style is \"roman \u00e0 clef\" (French for \"novel with a key\").",
+        "delta": -0.04999999999999993,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Avoid using natural language questions for your query output; instead, output a precise string of Boolean-connected keywords and quoted named entities.",
+        "delta": -0.05999999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Never hallucinate outside knowledge to bridge gaps in the provided text; if the passages lack information on a specific claim entity, you must explicitly state 'No evidence found for [Entity]' in the summary.",
+        "delta": -0.05999999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Map the interaction between the claim and the passages to a predefined game theory matrix, identifying cooperative (supporting) and competitive (contradicting) strategies employed by the text. Base your summary on the Nash equilibrium of this textual interaction, explaining how the opposing factual forces resolve.",
+        "delta": -0.05999999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Identify the main subject of the claim and use the summary to resolve any aliases, pronouns, or vague descriptions into their specific, named real-world entities before generating the query.",
+        "delta": -0.05999999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Strictly output only the generated search query text without any introductory phrases, conversational filler, or labels like 'Query:'.",
+        "delta": -0.05999999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Explicitly state the core entities identified in the provided passages, such as the titles of films or books, names of people, and specific locations.",
+        "delta": -0.05999999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "You must use the context from the claim and summary to deduce these unstated entities, as the target evidence documents rely on these specific names.",
+        "delta": -0.05999999999999994,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "in 1994\" refers to **Glenn Hughes**.",
+        "delta": -0.05999999999999994,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "To ensure comprehensive retrieval, generate multiple diverse search queries.",
+        "delta": -0.05999999999999994,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Most importantly, generate broad and abstract queries to infer and capture missing entities (e.g., if the claim connects a person to a band's song, generate broad queries about the band's entire discography, band members, or related songwriters, rather than just querying the known entities).",
+        "delta": -0.05999999999999994,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Davis\" (who died in 1879).",
+        "delta": -0.05999999999999994,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Perform a final constraint check to confirm that the summary explicitly states whether the `passages` contain sufficient evidence to verify or refute the `claim`, rather than just summarizing the text generically.",
+        "delta": -0.06999999999999995,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "The \"former bassist/vocalist of Deep Purple, Black Sabbath, and Trapeze who released From Now On...",
+        "delta": -0.06999999999999995,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "### Generalizable Strategy & Rules",
+        "delta": -0.06999999999999995,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Completeness:** Construct your query to cover the entire scope of the claim.",
+        "delta": -0.06999999999999995,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Explicitly identify known artists, companies, or primary subjects, and emphasize their associated groups, complete works, or industry peers to provide strong hooks for finding missing linked entities.",
+        "delta": -0.06999999999999995,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Extract all relevant entities, relationships, and contextual clues.",
+        "delta": -0.06999999999999995,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Provide Output:** Output your step-by-step `reasoning` followed by a concise `summary` of whether the claim can be verified with the *provided* passages.",
+        "delta": -0.06999999999999995,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Deconstruct the claim into atomic propositions before reading the passages, and explicitly map each passage sentence to the specific proposition it supports, refutes, or leaves unverified.",
+        "delta": -0.07999999999999996,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Evaluate each component of the claim against the retrieved passages and explicitly note which specific relationships are supported and which remain unverified.",
+        "delta": -0.07999999999999996,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Do not prematurely narrow the search to only the unverified parts; include the verified core subjects as well to ensure comprehensive document retrieval.",
+        "delta": -0.07999999999999996,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Deconstruct the Claim:** Break down the claim into its core entities and relationships.",
+        "delta": -0.07999999999999996,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Example: \"Belgian composer of X wrote songs for Y\".",
+        "delta": -0.07999999999999996,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Identify Missing Evidence:** It is common in this task for the passages to contain partial evidence but miss crucial linking documents (e.g., the exact article for the book \"The Company\" or the person \"Rosi Golan\").",
+        "delta": -0.07999999999999996,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "# Domain Specific Knowledge & Factual Information",
+        "delta": -0.07999999999999996,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Example 2 Entities:** The \"Belgian composer\" of \"Bee (song)\" refers to \"Rosi Golan\".",
+        "delta": -0.07999999999999996,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "If the passages do not perfectly align with the claim, explicitly state the specific missing information that needs to be searched for in subsequent steps.",
+        "delta": -0.08999999999999997,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "The \"1900 establishment\" refers to \"Fort Davis, Alaska\".",
+        "delta": -0.08999999999999997,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "The novel Washington: Behind Closed Doors is based on is the \"Company (Ehrlichman novel)\".",
+        "delta": -0.08999999999999997,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Before writing the summary, explicitly write out a 'Strawman Summary' that intentionally misinterprets the relationship between the claim and the passages. In your subsequent summary, actively articulate why and how this flawed interpretation is incorrect based on the provided text.",
+        "delta": -0.09999999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Construct the query to form a complete thought or natural language question that captures the full scope of the claim, rather than just listing a disjointed string of keywords.",
+        "delta": -0.09999999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Given the fields `claim`, `passages`, produce the fields `reasoning`, `summary`.",
+        "delta": -0.09999999999999998,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Before finalizing your summary, mentally re-derive the core support or refutation of the `claim` strictly from the provided `passages`, ensuring no outside knowledge bled into your assessment.",
+        "delta": -0.10999999999999999,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Even if you can logically deduce the missing link, you must explicitly state that the provided passages lack this specific evidence.",
+        "delta": -0.12999999999999995,
+        "source": "trajectory_xlm"
+      }
+    ],
+    "select_compiled": 0.64,
+    "confirm_init": 0.3971,
+    "confirm_compiled": 0.4914,
+    "compiled_units": [
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Expand the search query to include well-known aliases, abbreviations, or alternative spellings of the core entities if the previous summaries suggest a lack of direct name matches.",
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "To ensure comprehensive retrieval, generate targeted search queries to bridge the exact gaps between what is known and what is missing.",
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "If the first two summaries successfully verify parts of the claim, your new query must exclusively target the highly specific missing gaps rather than repeating already retrieved general context.",
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Given the fields `claim` and `summary_1`, produce the field `query`.",
+        "source": "trajectory"
+      }
+    ],
+    "n_compiled": 4,
+    "fell_back_to_init": false
+  }
+}

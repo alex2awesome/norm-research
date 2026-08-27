@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/llms_favor_llms_html.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18945,
+  "output_tokens": 4138,
+  "elapsed_s": 796.7800430001225,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference organizers studying peer review and the effects of LLM assistance (machine learning research community)",
+    "subtask_short": "LLM effects in peer review",
+    "subtask_description": "Analysis and measurement framework for how LLM-assisted papers and LLM-assisted reviews interact in conference peer review; includes detection, causal/regression identification, within-paper paired analyses, synthetic LLM review generation, and metrics for review influence and alignment.",
+    "subtask_keywords": [
+      "peer_review",
+      "llm_use",
+      "causal_inference",
+      "conference_review",
+      "ICLR_NeurIPS_ICML"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "LLM detection (\u03b1 mixture estimation)",
+        "description": "Use the statistical method from Liang et al. which models LLM-generated and human text as distinct distributions and estimates the fraction \u03b1 of LLM-generated text via maximum likelihood estimation (treating text as drawn from a weighted mixture of LLM and Human token distributions).",
+        "guidance": "\u03b1 depends on a bag-of-words token probability model; reference LLM distribution is based on GPT-3.5 and GPT-4o outputs. Advantages: ease of use, fast inference, robustness to partially LLM-aided text. Limitations: may underestimate use of other models (e.g., Claude, Gemini) and depends on reference distribution choice. See Appendix A.3 for details."
+      },
+      {
+        "name": "Classification as LLM-aided (\u03b1 threshold)",
+        "description": "Classify documents (papers or reviews) as LLM-aided if \u03b1 > \u03b1_threshold where \u03b1_threshold = 0.15.",
+        "guidance": "This binary classification is used throughout analyses (e.g., to form quadrants of (Paper, Review) LLM status). Choice of threshold affects counts and sensitivity; authors note using \u03b1_threshold = 0.15 to mark 'substantial LLM modification.'"
+      },
+      {
+        "name": "Review score components (presentation, contribution, soundness)",
+        "description": "Reviews include auxiliary numeric scores for Presentation, Contribution, and Soundness (each scored 1\u20134 in ICLR reviewer template).",
+        "guidance": "These fields are analyzed alongside the overall rating to study where LLM-aided reviews differ (e.g., presentation or soundness). The synthetic review prompts request these exact fields in JSON to enable direct comparison."
+      },
+      {
+        "name": "Overall rating and conference-specific rating scales",
+        "description": "Overall rating is the principal outcome variable; ICLR uses the mapping {1: Strong Reject, 3: Reject, 5: Marginally below acceptance, 6: Marginally above acceptance, 8: Accept, 10: Strong accept}. Other conferences use similar numerical scales (NeurIPS 1\u20136, ICML 1\u20135 as used in generation).",
+        "guidance": "Overall rating is used in regressions, within-paper differences, and alignment calculations. Synthetic LLM reviews are generated to output ratings consistent with each conference's official scale (prompts embed the conference rating scale)."
+      },
+      {
+        "name": "Confidence score (reviewer certainty)",
+        "description": "Reviewers provide a Confidence score indicating certainty about their assessment (ICLR confidence scale described from 1 to 5 where 1 = not confident, 5 = absolutely certain).",
+        "guidance": "Confidence is used as an auxiliary metric (e.g., comparing confidence for LLM-aided vs. human reviews). Synthetic reviews are asked to supply a confidence score per the conference scale."
+      },
+      {
+        "name": "Definition of treatment and paper LLM status (causal variables)",
+        "description": "Define treatment T_{ij} \u2208 {0,1} as whether review slot j for paper i was assigned to a reviewer that used LLM assistance; define X_i^{LLM} \u2208 {0,1} as whether paper i contains LLM-assisted text.",
+        "guidance": "These variables are the core inputs to the causal model and regression (Eq. 2) and to within-paper paired analyses; precise definitions matter for identification and interpretation of effects."
+      },
+      {
+        "name": "Regression causal model and interpretation of coefficients (\u03b20, \u03b21, \u03b22, \u03b23)",
+        "description": "Model rating Y_{ij} = \u03b20 + \u03b21 X_i^{LLM} + \u03b22 T_{ij} + \u03b23 (X_i^{LLM} \u00d7 T_{ij}) + \u03b3' Z_i + \u03b5_{ij}. \u03b20 is baseline (human paper, human review); \u03b21 difference for LLM-assisted papers; \u03b22 is CATE of LLM-aided review on human papers; \u03b22+\u03b23 is CATE on LLM papers; \u03b23 is the interaction capturing relative leniency of LLM reviews to LLM-assisted papers.",
+        "guidance": "Include area fixed effects in Z_i to control for confounding by subject area. \u03b23 is the primary quantity of interest for detecting differential kindness. Report estimates with 95% CI and p-values; be cautious of unobserved confounding, multicollinearity, and collider bias."
+      },
+      {
+        "name": "Key identification assumption: conditional ignorability",
+        "description": "Assume T_{ij} \u27c2 {Y_{ij}(0), Y_{ij}(1)} | X_i (treatment assignment independent of potential outcomes conditional on observed paper covariates).",
+        "guidance": "Authors condition on paper area and paper LLM status; discuss limitations (unobserved paper-level characteristics may still bias estimates) and motivate within-paper paired analysis as a more stringent identification strategy."
+      },
+      {
+        "name": "SUTVA and interference considerations",
+        "description": "Account for potential violations of SUTVA because OpenReview allows post-rebuttal edits and reviewer discussions; authors note (1) most reviews (75\u201381%) remain unchanged and (2) co-reviewer influence tends to push reviews toward consensus, which they argue would likely dampen amplification of differential effects.",
+        "guidance": "Acknowledge that access only to final post-rebuttal ratings limits claims; check sensitivity to pre/post-rebuttal interference where possible."
+      },
+      {
+        "name": "Within-paper paired analysis (\u0394_i)",
+        "description": "For papers that received at least one human review and at least one LLM-assisted review, compute per-paper treatment effect \u0394_i = \u000bar{Y}_i^{LLM} - \u000bar{Y}_i^{Human}; estimate CATEs by averaging \u0394_i over LLM vs human papers and test distributional differences.",
+        "guidance": "This controls for between-paper confounding by holding paper fixed. Restricting to such papers introduces selection bias; use Mann-Whitney U test (one-tailed) to compare \u0394_i distributions between paper types and report p-values and effect sizes."
+      },
+      {
+        "name": "Hold-out human review as quality indicator and quality buckets",
+        "description": "Stratify papers by quality using a randomly selected hold-out human review as the quality indicator and create quality buckets (e.g., rating \u22643, =5, =6, \u22658 for ICLR) to analyze how LLM-review kindness varies with paper quality.",
+        "guidance": "Exclude the hold-out review when computing other metrics for that paper. Use bucket-specific regressions and within-paper analyses to reveal quality-dependent patterns (e.g., LLM-aided reviews inflate low-quality papers most)."
+      },
+      {
+        "name": "Review alignment with final decision (measure of review influence)",
+        "description": "A review 'aligns' with the final decision if its rating > 5 for accepted papers and \u2264 5 for rejected papers (ICLR threshold used here). Alignment rate = fraction of reviews aligning with outcome; compare alignment between human and LLM-aided reviews.",
+        "guidance": "Used as a proxy for influence in final decisions; stratify alignment by paper quality buckets to examine whether LLM-aided reviews have different alignment in borderline cases. Report misalignment breakdowns (e.g., percent of LLM misalignments due to recommended acceptance for ultimately rejected papers)."
+      },
+      {
+        "name": "Quadrant summary statistics for (Paper, Review) LLM status",
+        "description": "Partition (paper, review) pairs into four quadrants (Human paper, Human review), (Human paper, LLM review), (LLM paper, Human review), (LLM paper, LLM review) and report mean \u00b1 std dev for Rating, Confidence, Presentation, Contribution, Soundness.",
+        "guidance": "These descriptive stats reveal initial patterns (e.g., LLM-assisted papers receive lower ratings on average; LLM-assisted reviews concentrate toward intermediate ratings) but can be confounded, motivating causal analyses."
+      },
+      {
+        "name": "Statistical testing framework (Mann-Whitney U, regressions with CIs and p-values)",
+        "description": "Use Mann-Whitney U tests (one-tailed) to compare distributions of within-paper \u0394_i and other nonparametric comparisons; use linear regressions with area fixed effects, report coefficient estimates, 95% confidence intervals, t-stats, and p-values to assess significance of effects (\u03b2 coefficients).",
+        "guidance": "Interpret effect sizes (e.g., small, very small, large) alongside p-values; run regressions within quality buckets to probe heterogeneity. Be careful about multiple testing and selection biases."
+      },
+      {
+        "name": "Synthetic fully LLM-generated review generation protocol",
+        "description": "Generate fully LLM reviews by prompting GPT-4o (avoid GPT-5) using conference-specific reviewer guidelines and a JSON review template; prompts request specific fields (e.g., Summary, Strengths, Weaknesses, Questions, Flag for ethics review, Presentation/Contribution/Soundness scores, Rating, Confidence).",
+        "guidance": "Prompts are one-shot, include reviewer guidelines from conference websites, and explicitly require the JSON format. Sampling strategy: oversample LLM-aided papers to ensure sufficient power; generate reviews for randomly sampled papers from 2025 editions. Do not add instructions to be lenient/harsh to avoid biasing synthetic outputs."
+      },
+      {
+        "name": "Measure of rating compression and discriminative failure in fully LLM-generated reviews",
+        "description": "Assess whether fully LLM-generated reviews exhibit rating compression (narrow distribution, e.g., almost exclusively between 6 and 7) and fail to discriminate paper quality (minimal slope across quality buckets).",
+        "guidance": "Compare synthetic LLM ratings to human ratings across quality buckets; compression implies inflated ratings for weak papers and poor signal for merit. Human-in-the-loop moderation can partially mitigate compression."
+      },
+      {
+        "name": "Metareview generation protocol and decision output format",
+        "description": "Prompt area-chair simulator LLM to make final accept/reject decisions based on provided reviews and output exactly one JSON field: \"decision\": 1 (Accept) or 0 (Reject).",
+        "guidance": "Used to measure whether LLM-assisted metareviews are more likely to render accept decisions than human metareviews given equivalent reviewer scores. Note: fully LLM-generated metareviews tended to be harsher in observational findings, while LLM-assisted metareviews were more likely to accept given equal scores."
+      },
+      {
+        "name": "Use of area fixed effects and control covariates",
+        "description": "Control for paper area via indicator variables (Z_i) in regressions to address confounding because certain subject areas may have both higher LLM adoption and different baseline rating distributions.",
+        "guidance": "Area fixed effects are necessary to reduce bias from area-level confounding; report significant area coefficients where relevant. Beware of residual unobserved confounding and potential collider bias when adding many controls."
+      },
+      {
+        "name": "Sampling and dataset inclusion criteria",
+        "description": "Analyses conducted on OpenReview data for ICLR (2024, 2025), NeurIPS (2024, 2025), ICML (2025); double-blind peer review conferences; collect full paper and review text, ratings, and paper metadata. Note ICLR keeps public pages for all papers; NeurIPS and ICML publicly keep mostly accepted papers.",
+        "guidance": "Dataset composition affects representativeness (e.g., overrepresentation of accepted papers for NeurIPS/ICML). Report counts (e.g., ~6.5k papers and 25k reviews per conference on average) and be transparent about public availability biases."
+      },
+      {
+        "name": "Interpretation of \u03b23 as differential kindness and caution about confounding",
+        "description": "Interpret interaction coefficient \u03b23 as the additional benefit of switching to an LLM-assisted reviewer for LLM-assisted papers relative to human papers; a positive \u03b23 implies positive differential kindness.",
+        "guidance": "Authors emphasize that regression \u03b23 can be affected by between-paper heterogeneity (e.g., LLM-assisted papers overrepresented in low-quality buckets) and that within-paper analyses reduce but may not fully eliminate biases. Report both regression and within-paper estimates for robustness."
+      }
+    ]
+  }
+}

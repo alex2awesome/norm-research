@@ -1,0 +1,146 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 82,
+  "n_chunks": 92,
+  "chunk_chars": 39992,
+  "model": "gpt-5-mini",
+  "elapsed_s": 502.6129272499966,
+  "input_tokens": 11594,
+  "output_tokens": 4905,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP package authors and developers implementing new object kinds, representations, lists, iterators, enumerators, and global-library interfaces",
+    "subtask_short": "implementing new GAP objects",
+    "subtask_description": "Guidance for implementing new representations, lists, iterators, enumerators, external representations, mutability/copy semantics, and package-level globals in the GAP system. Covers which operations/methods to install, representation- vs. interface-level concerns, and recommended declaration/implementation division.",
+    "subtask_keywords": [
+      "gap",
+      "package_development",
+      "representations",
+      "lists_iterators_enumerators",
+      "mutability",
+      "global_variables"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Careful use of positional access operator (![])",
+        "description": "When using the ![] operator (access or assignment to positions) be very careful to interpret the position correctly and to keep the information stored in pobj consistent.",
+        "guidance": "pos must be among the admissible positions for the representation of pobj (see NewRepresentation). Preferably only a few low-level functions should use ![]; this operator should not occur in \u201cuser interactions\u201d. Note: even if pobj claims it is immutable (its type does not contain IsMutable), access and assignment via ![] work \u2014 this is necessary to store newly discovered information in immutable objects. Methods that use ![] should be representation-dependent; avoid installing methods that rely on library/package internal representations (these may change)."
+      },
+      {
+        "name": "Admissible positions per representation",
+        "description": "Any access or assignment to a position pos in a positional object must use a pos that is admissible for that representation.",
+        "guidance": "Check admissible positions as specified by the representation (NewRepresentation). Violating admissible positions can lead to inconsistent internal data."
+      },
+      {
+        "name": "Implementing iterator representations",
+        "description": "Create a representation for an iterator as a subrepresentation of IsPositionalObjectRep with the appropriate admissible positions and initial values.",
+        "guidance": "Use DeclareRepresentation / NewType/Objectify to produce an iterator object lying in IteratorsFamily, category IsIterator, and the chosen iterator representation. Set initial stored position(s) appropriately (example: first position value 0 for integer iterator)."
+      },
+      {
+        "name": "Provide iterator operations IsDoneIterator and NextIterator with correct semantics",
+        "description": "Install IsDoneIterator and NextIterator methods for iterator representations; they must follow the semantics of the iteration.",
+        "guidance": "Example: for integers IsDoneIterator must always return false (infinite iteration). NextIterator must return the next element and update the stored position in the iterator representation (e.g., increment stored counter). Ensure NextIterator updates internal state so subsequent calls proceed correctly."
+      },
+      {
+        "name": "Prefer representation-local methods for representation-dependent behavior",
+        "description": "Methods that depend on the internal representation of objects should be implemented in places that know that representation.",
+        "guidance": "Representation-dependent code (including use of !. and ![]) should be restricted to low-level/library code that intentionally depends on that representation; avoid doing this in general user-level methods because representations may change between versions."
+      },
+      {
+        "name": "Implementing new list-like objects: declare IsList and provide basic operations",
+        "description": "A list in GAP is an object in the category IsList; implement new list objects by creating objects in IsList and installing methods for the basic list operations.",
+        "guidance": "Install methods for Length, [] (element access), and IsBound[] (bound-check). If lists shall be mutable also install methods for []:= (assignment) and Unbind[]. Other list operations (Add, Append, Sum, etc.) will be built on these basics, so implementing the basics is sufficient."
+      },
+      {
+        "name": "Design choice: new lists as existing-family vs new-family",
+        "description": "Decide whether new lists should lie in the same family as existing GAP lists or in a new family (affecting equality and operator applicability).",
+        "guidance": "If new lists represent the same mathematical objects and should be interchangeable, use the same family; if you want different arithmetic/operation behavior (e.g., Lie-product matrices whose product with plain matrices should be undefined), put them in a different family so '=' distinguishes them even if entries coincide."
+      },
+      {
+        "name": "Implementing enumerators via EnumeratorByFunctions",
+        "description": "To create enumerators (lists encoding a bijection to positive integers) prefer using EnumeratorByFunctions with ElementNumber and NumberElement components.",
+        "guidance": "If the domain D has a Size method, provide functions for computing the n-th element and for computing the position of a given element and call EnumeratorByFunctions(D, rec(ElementNumber := ..., NumberElement := ...)). If the set is not a domain, also provide Length and decide the family (CollectionsFamily of element family or ListsFamily). Store the ElementNumber, NumberElement, Length, and PrintObj components as needed."
+      },
+      {
+        "name": "Enumerator for non-domain sets: provide Length and determine family",
+        "description": "When S is not a domain, you must provide at least a method for computing the Length of the enumerator list and choose the family in which the enumerator lies.",
+        "guidance": "If S is nonempty and all elements lie in the same family, take CollectionsFamily(FamilyObj(some_element)). Otherwise use ListsFamily. Ensure Length is consistent (e.g., Length := function(enum) return Length(enum!.set)^enum!.k end in tuples example)."
+      },
+      {
+        "name": "Implementing generic iterators using IteratorByFunctions",
+        "description": "Use IteratorByFunctions to create iterator implementations by supplying NextIterator, IsDoneIterator, and ShallowCopy functions.",
+        "guidance": "Install an Iterator method that returns IteratorByFunctions(rec(NextIterator := ..., IsDoneIterator := ..., ShallowCopy := ...)). ShallowCopy must return a record (not an iterator) suitable as argument to IteratorByFunctions to create the shallow copy. Ensure NextIterator and IsDoneIterator follow expected semantics for the collection."
+      },
+      {
+        "name": "Decide arithmetic behavior of new list objects (filters)",
+        "description": "Decide whether the new lists should support default arithmetic, no arithmetic, or custom arithmetic and set the appropriate filters.",
+        "guidance": "To disable arithmetic, do not set IsGeneralizedRowVector/IsMultiplicativeGeneralizedRowVector or IsListDefault. To enable default arithmetic methods set IsListDefault. If arithmetic structure is important, do not set IsListDefault and implement custom arithmetic methods. The categories IsGeneralizedRowVector and IsMultiplicativeGeneralizedRowVector prescribe structure of additive/multiplicative results and enable interoperability with default methods."
+      },
+      {
+        "name": "Use attribute-storing representations to cache arithmetic metadata",
+        "description": "If arithmetic needs cached metadata (e.g., additive/multiplicative nesting depths), store these values in an attribute-storing representation to avoid expensive recomputation.",
+        "guidance": "Set IsAttributeStoringRep for representations where storing additive/multiplicative nesting depth makes sense; this allows default arithmetic operations to use stored values and treat objects as black boxes without accessing internal rows."
+      },
+      {
+        "name": "External representation: implement ExtRepOfObj and ObjByExtRep",
+        "description": "Provide an external representation for objects in a family so representation-independent code can use a uniform description of object data.",
+        "guidance": "Install methods for ExtRepOfObj(obj) to return a list/record describing obj's composing data, and ObjByExtRep(fam, data) to recreate an object in family fam with that external representation. It must hold that ObjByExtRep(FamilyObj(obj), ExtRepOfObj(obj)) is equal to obj w.r.t '='. External representation is not required to equal the object's internal representation and often will be in a different family. If you add a new internal representation, you must install a method to compute the external representation for it."
+      },
+      {
+        "name": "External representation cannot assume single standard representation",
+        "description": "Do not assume a single standard internal representation exists for all objects in a family; external reps describe composing data rather than providing one standard representation.",
+        "guidance": "Because a uniform 'standard representation' may be impossible, design external representations to encode the data from which an equal object can be created, rather than converting everything to one internal form."
+      },
+      {
+        "name": "Decide mutability and copyability via type filters",
+        "description": "Decide whether objects are mutable, immutable-but-copyable, or constants by including IsMutable or IsCopyable in their type.",
+        "guidance": "For constants: no methods should change the underlying element. For copyables: provide ShallowCopy methods. For mutables: methods that change underlying elements should explicitly require IsMutable in their method filter. Be aware kernel enforcement differs for built-in vs external objects."
+      },
+      {
+        "name": "Semantics of ShallowCopy and StructuralCopy",
+        "description": "ShallowCopy should return a new mutable object sharing top-level subobjects with the original; StructuralCopy should return a new mutable object sharing no mutable subobjects (and return the object itself for immutable inputs).",
+        "guidance": "ShallowCopy on a constant returns the constant. StructuralCopy is a special kernel-level operation and typically used less. Provide ShallowCopy methods for copyable/mutable objects; document what counts as top-level subobjects for your object kind."
+      },
+      {
+        "name": "Immutable vs external objects: kernel vs method guarantees",
+        "description": "For built-in immutable objects the kernel prevents changes; for external objects marking them immutable resets IsMutable filter but does not prevent use of !. and ![] on underlying data.",
+        "guidance": "External immutable objects should not admit methods that change the element they represent; the kernel can't enforce this for external objects, so implementers must avoid installing such methods. Allow for immutable versions of any objects you create and prefer installing representation-dependent methods for external objects."
+      },
+      {
+        "name": "Rules for implementing external objects (summary)",
+        "description": "When implementing external objects decide mutability/copyability and install methods respecting that decision.",
+        "guidance": "1) Include IsMutable/IsCopyable as appropriate. 2) Install no mutating methods for constants. 3) Provide ShallowCopy for copyables. 4) For mutables allow mutating methods and require IsMutable in their filters."
+      },
+      {
+        "name": "Global library variables: prefer DeclareGlobalName",
+        "description": "Use DeclareGlobalName in the declaration part of a package to name globals that will later be assigned; this avoids syntax warnings when a value is referred to before assignment.",
+        "guidance": "DeclareGlobalName should be used instead of DeclareGlobalVariable or DeclareGlobalFunction whenever possible. Declarations belong in the declaration part of a package; assign values in the implementation part (preferably via BindGlobal)."
+      },
+      {
+        "name": "DeclareGlobalVariable for flushable values and InstallValue restrictions",
+        "description": "Use DeclareGlobalVariable when you need flushable global variables and assign values via InstallValue/InstallFlushableValue/InstallFlushableValueFromFunction.",
+        "guidance": "InstallValue does not work with immediate objects (small integers/finite-field elements) or booleans; use lists/records (other types are deprecated). InstallFlushableValue only works for lists/records and will cause FlushCaches to reset the global to a structural copy of the initial value. FlushCaches should be used only for debugging because flushable globals may include important cached structures."
+      },
+      {
+        "name": "DeclareGlobalFunction and InstallGlobalFunction placeholder behavior",
+        "description": "DeclareGlobalFunction returns a placeholder function (prints error if called) and InstallGlobalFunction assigns the real implementation in the implementation part.",
+        "guidance": "Prefer DeclareGlobalName/BindGlobal for forward references where possible; use DeclareGlobalFunction when appropriate. Use DeclareSynonym and DeclareSynonymAttr to create aliases for globals or attributes, but verify whether a synonym is necessary."
+      },
+      {
+        "name": "Declaration vs implementation part: representation independence",
+        "description": "Split package code into a declaration part (representation-independent) and an implementation part (representation-dependent).",
+        "guidance": "Calls that belong to the declaration part include DeclareAttribute, DeclareCategory, DeclareFilter, DeclareOperation, DeclareGlobalFunction, DeclareGlobalName, DeclareGlobalVariable, DeclareSynonym, DeclareSynonymAttr, DeclareProperty, InstallTrueMethod. Calls that belong to the implementation part include DeclareRepresentation, InstallGlobalFunction, InstallValue, InstallMethod, InstallImmediateMethod, InstallOtherMethod, NewFamily, NewType, Objectify. DeclareRepresentation is considered implementation-level because representations are rarely part of the public interface. Prefer DeclareSomething over NewSomething when both exist to protect globals."
+      },
+      {
+        "name": "Declaration does not define semantics; implement consequences",
+        "description": "Declaring a category, property, or name notifies GAP but does not define its meaning; you must implement methods and implications for actual behavior.",
+        "guidance": "For example declaring a category IsInteresting does not tell GAP what that means: you must implement ways to create objects with that category or install property testers/methods to compute it."
+      }
+    ]
+  }
+}

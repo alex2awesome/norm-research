@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_4fb905894630.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 20926,
+  "output_tokens": 4576,
+  "elapsed_s": 1559.3695867909119,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in computational social science, network science, and machine learning studying information diffusion and building Bayesian mixture Hawkes models for social media cascades",
+    "subtask_short": "modeling social-media diffusion (BMH)",
+    "subtask_description": "Designing, implementing, and evaluating a Bayesian Mixture Hawkes (BMH) hierarchical model that jointly learns source-, item-, and cascade-level influences on online content spread, and using it for cold-start popularity prediction, temporal-profile generalization, and counterfactual headline-style analysis.",
+    "subtask_keywords": [
+      "social_media",
+      "information_diffusion",
+      "hawkes_process",
+      "bayesian",
+      "mixture_model",
+      "news_cascades"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Cold-start popularity prediction (ARE)",
+        "description": "Task: predict the popularity N_a* of an out-of-sample article a* using the trained publisher-level BMH-P model. Evaluation metric: Average Relative Error (ARE) over test articles, where ARE(a) = |(N\u0302_a - N_a) / N_a|.",
+        "guidance": "Estimate expected cascade size per cascade class and average across cascade-feature empirical distribution; use Eq. (5) (\u02c6N_a* \u2248 \u0108_\u03c1 \u00b7 \u03a3_k z_{a*,c}^{\u03b1,k} \u00b7 [1 + exp(\u03b4_{a*,\u03b1,k} + \u03b3_{\u03b1,k} \u00b7 y_{a*})]^{-1} \u00b7 f\u0302_\u03c1(x) summed over x). Report median and 25th/75th quantiles across articles; lower ARE is better."
+      },
+      {
+        "name": "Temporal-profile generalization (holdout log-likelihood / NLL)",
+        "description": "Task: evaluate how well the BMH-K model captures the inter-event (interarrival) time distribution of unseen cascades of unpublished articles. Metric: log-likelihood (negative log-likelihood reported as NLL or holdout log-likelihood).",
+        "guidance": "Compute the log-likelihood of test interevent-time sequences under the trained BMH-K (L(P_\u0398 | {T_ac})). Use Eq. (8) for half-life predictions where needed. Report median and quantiles; higher log-likelihood (lower NLL) indicates better temporal generalization."
+      },
+      {
+        "name": "Model comparison to benchmarks",
+        "description": "Compare BMH model performance against baselines and competing models: Dual Mixture Model (DMM), Empirical Bayes (EB), cascade-size regression (CR) models, and publisher-level joint Hawkes process (HP).",
+        "guidance": "Evaluate all methods on the same Fit/Test splits using the same metrics (ARE for popularity, holdout log-likelihood for temporal). Visualize and report medians and 25/75 quantiles (e.g., box/dot plots) to compare central tendency and spread."
+      },
+      {
+        "name": "Separable Hawkes process modeling (\u00b5 = 0 for retweet cascades)",
+        "description": "Use separable Hawkes processes for cascades: conditional intensity \u03bb(t) with branching factor \u03b1 and memory kernel g(t; \u0398); for Twitter retweet cascades assume \u00b5 = 0 so all retweets are offspring of the original tweet.",
+        "guidance": "Exploit separability to split estimation into popularity (\u03b1) and kernel (\u0398) subproblems (Eq. (1)). Use formulations that yield Borel-distributed cascade sizes for \u03b1 estimation and interevent-time likelihood for \u0398 estimation."
+      },
+      {
+        "name": "Mixture of separable Hawkes processes (BMH structure)",
+        "description": "Model cascade groups using a hierarchical mixture: K_\u03b1 popularity classes (branching factor \u03b1) and K_\u0398 kernel classes (\u0398 = [\u03b8, d]), where each cascade's \u03b1 and \u0398 are drawn from mixtures with membership probabilities influenced by features.",
+        "guidance": "BMH divides into two independent submodels: BMH-P (popularity) and BMH-K (kernel). Learn both class centers (\u03b4 parameters) and membership logits (z expressions) using item- and cascade-level features (Eqs. (2)-(3), (6)-(7))."
+      },
+      {
+        "name": "Feature role assumptions (which features affect what)",
+        "description": "Assumptions: item-level features (y_a, e.g., headline embedding) influence the centers (location) and membership probabilities of popularity and kernel classes; cascade-level features (x_ac, e.g., seed user follower count) influence only the membership probabilities (not the class centers).",
+        "guidance": "Concretely, in BMH-P logit(\u03b1_ac) = \u03b4_{a,\u03b1,k} + \u03b3_{\u03b1,k} \u00b7 y_a and membership zac_{\u03b1,k} depends on \u03b2 terms times x_ac and \u03b3_z\u03b1,k times y_a (Eqs. (2)-(3)). In BMH-K y_a affects \u03b8 but not d for identifiability (Eq. (6))."
+      },
+      {
+        "name": "Choice of kernel parametrization (power-law kernel preferred)",
+        "description": "Use a power-law memory kernel g(t) = \u03b8 \u00b7 d^\u03b8 \u00b7 (t + d)^{-(1+\u03b8)} for Hawkes processes, as it empirically outperforms alternatives for popularity prediction.",
+        "guidance": "Estimate \u0398 = [\u03b8, d] per cascade class; when using power-law kernel, compute derived quantities such as half-life \u03c4_{1/2} = d \u00b7 (2^{1/(2\u03b8)} - 1?) (paper uses closed-form expression per chosen parametrization) and use it for temporal interpretation (Eq. (8))."
+      },
+      {
+        "name": "Selecting number of mixture components (K_\u03b1, K_\u0398)",
+        "description": "Determine K_\u03b1 and K_\u0398 by fitting non-Bayesian mixtures first (DMM/KMM) and inspecting modality of fitted parameter distributions (e.g., bimodality in logit(\u03b1) suggests K_\u03b1 = 2; trimodality in (log c, log \u03b8) suggests K_\u0398 = 3).",
+        "guidance": "Fit DMM/KMM across publishers with multiple EM initializations, examine distribution modes, and set hyperparameters K accordingly. Use informative priors in Bayesian fit to identify classes."
+      },
+      {
+        "name": "Priors and identifiability (informative priors to identify classes)",
+        "description": "Informative priors must be set on class-center parameters (e.g., \u03b4_{\u03b1,k}, \u03b4_{z\u03b1,k}, \u03b4_{\u03b8,k}, \u03b4_{d,k}, \u03b4_{z\u0398,k}) to identify mixture classes in parameter space; weakly informative priors elsewhere.",
+        "guidance": "Use prior locations guided by DMM/KMM fits (paper lists numeric priors in Supplement). Provide regularization where needed (Laplace priors for high-dim feature effects)."
+      },
+      {
+        "name": "Regularization for high-dimensional item features (Laplace priors)",
+        "description": "Apply Laplace (L1) priors on \u03b3 parameters that map item-level headline embeddings to class centers/membership (e.g., \u03b3_{\u03b1,1}, \u03b3_{\u03b1,2}, \u03b3_{z\u03b1,2}, \u03b3_{\u03b8,2}, \u03b3_{\u03b8,3}, \u03b3_{z\u0398,2}, \u03b3_{z\u0398,3}) to impose sparsity/regularization given |y_a| = 32.",
+        "guidance": "Choose Laplace scale small enough to regularize but not to zero-out necessary signals; paper uses Laplace(0, 0.01) for many \u03b3 priors."
+      },
+      {
+        "name": "Cold-start prediction assumptions and marginalization",
+        "description": "Cold-start prediction marginalizes over unobserved cascade-level features x_ac for a new article: assume independence f_\u03c1(x | y) \u2248 f_\u03c1(x) and approximate the expectation by summing over empirical follower-count distribution f\u0302_\u03c1(x); use \u0108_\u03c1 as estimated cascade count (average cascades per article) in final scaling.",
+        "guidance": "Assume cascade feature is 1D discrete nonnegative (e.g., follower count) to turn integrals into sums; set \u0108_\u03c1 from training data and compute \u02c6N_a* per Eq. (9) / Eq. (5)."
+      },
+      {
+        "name": "Half-life prediction and interpretation",
+        "description": "Predict cascade half-life \u03c4_{1/2} for an out-of-sample item using the BMH-K model and power-law kernel parameters via Eq. (8): \u02c6\u03c4_{a*}^{1/2} \u2248 \u03a3_k z_{a*,c}^{\u0398,k} \u00b7 e^{\u03b4_{a*,d,k}} \u00b7 [2 exp(\u03b4_{a*,\u03b8,k} + \u03b3_{\u03b8,k}\u00b7y_{a*}) - 1]^{-1}, marginalizing over cascade features.",
+        "guidance": "Marginalize over empirical cascade-feature distribution f\u0302_\u03c1(x) as with popularity prediction; interpret half-life differences across classes and publishers for dynamics (fast/slow/usual diffusion)."
+      },
+      {
+        "name": "Implementation & Bayesian inference settings",
+        "description": "Implement BMH-P and BMH-K in Stan, use NUTS (Hamiltonian Monte Carlo) via CmdStanPy, employ non-centered parameterizations, and sample posterior with multiple chains.",
+        "guidance": "Paper settings: 4 chains, adapt_delta = 0.9, 500 warmup iterations and 500 post-warmup iterations; use non-centered parametrization for normally distributed priors to speed convergence."
+      },
+      {
+        "name": "Ablation study design (feature/component variants)",
+        "description": "Assess importance of item and cascade features and model components with ablated variants: (1) \u03b1(y) + z(x,y) (full), (2) \u03b1(y) + z(y) (no cascade features), (3) \u03b1(\u2205) + z(y) (no item effects in \u03b1), and (4) \u03b1(\u2205) + z(\u2205) (no features). Analogous ablations for \u03b8/d and z in BMH-K.",
+        "guidance": "Fit each variant per publisher and compare ARE / holdout log-likelihood to quantify the contribution of y_a and x_ac. Use these ablations to show whether seed-user or publisher-level signals dominate across publisher types (controversial vs reputable)."
+      },
+      {
+        "name": "Counterfactual headline-style profiling methodology",
+        "description": "Use trained publisher-level BMH-P/-K models to predict how articles with different headline styles (neutral, clickbait, inflammatory) would perform if published by each publisher, using an external HEADLINES dataset of labeled headlines.",
+        "guidance": "For counterfactuals where cascade features are unavailable, use item-only model variants (\u03b1(y) + z(y), \u03b8(y) + z(y)). Predict expected cascade size (set \u0108_\u03c1 = 1 for heatmap visualization) and half-life, compute probability a headline is better-than-publisher-average, and visualize via performance heatmaps and contour plots."
+      },
+      {
+        "name": "Evaluation protocol and dataset splitting",
+        "description": "Split CNIX and RNIX datasets into Fit (training) and Test (evaluation) periods with a one-month gap to ensure cascades in training are finished before test period: Fit = Jun 30, 2017 \u2013 Jan 1, 2019; Test = Feb 1, 2019 \u2013 Dec 31, 2019.",
+        "guidance": "Use the temporal split and one-month gap to avoid leaking ongoing cascades; compute publisher-level empirical distributions (f\u0302_\u03c1(x), \u0108_\u03c1) from Fit set and apply models to Test set."
+      },
+      {
+        "name": "Feature engineering conventions",
+        "description": "Article features: standardized 32-dimensional PCA-reduced all-MiniLM-L6-v2 headline embeddings as y_a. Cascade features: standardized log-follower count of seed user as x_ac.",
+        "guidance": "Standardize features before modeling; reduce headline embeddings to manageable dimensionality (32-D) to trade-off expressivity and identifiability/regularization needs."
+      },
+      {
+        "name": "Reporting & interpretation conventions",
+        "description": "Report predictive performance using medians and 25th/75th quantiles; interpret differences across publisher groups (CNIX vs RNIX) to infer roles of seed-user popularity versus publisher reputation in cascade dynamics.",
+        "guidance": "Show both popularity (ARE) and temporal (NLL) comparisons; use ablation and counterfactual analyses to support substantive claims (e.g., clickbait effectiveness differs between controversial and reputable publishers)."
+      }
+    ]
+  }
+}

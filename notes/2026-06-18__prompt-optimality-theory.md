@@ -3568,6 +3568,213 @@ never bounded by the unit accounting; the separate fixed-target `M_omega-X-M_p` 
 forever, no estimator upgrade changes this; (iii) no label-free unconditional ideal-intent ceiling. The ledger
 records assumptions and failure modes; it is not itself a certificate.
 
+## 12.9 From novelty to value — the improving-mass identity, the `theta` estimator, and why no lower bound exists. **[new, 2026-07-13; closes the §12.6.4 bridge]**
+
+§12.6.4 left the flux-to-gap bridge "proposed, not currently certified": we could estimate
+`P(new behavior)` but had no honest route from it to `P(new behavior that changes the certified value)`.
+This section closes that. Three of the four links are **derived** (assumption-free); the fourth is
+an **open empirical question** with a cheap CPU test.
+
+### 12.9.0 Objects (ASCII)
+
+- `p` — a mined prompt; `sigma(p)` in `{0,1}^N` — its behavior (executor verdicts on the `N=300` probe bank).
+- `z(p) := sigma(p)|_T` in `{0,1}^k` — its **code** on panel `T` (`k=8`). `z = proj_T . sigma`, a quotient map.
+- `v(c)` — value of code `c`; `V(p) = v(z(p))`. Value factors through the code (the load-bearing FACT of §12.6b-P.1a).
+- `A := max over SEEN prompts of V(p)` — the incumbent.
+- `U_0 := sum_{c unseen} p(c)` — **missing mass on the CODE partition** (Good-Turing / Clopper-Pearson).
+- `U_A := sum_{c : v(c) > A} p(c)` — **improving mass**: probability one fresh draw beats the incumbent.
+- `V_cap` — exact enumerated max over the code space (§12.6b-B).
+
+### 12.9.1 Lemma V1 — the improving-mass identity. **[derived; free; assumption-free]**
+
+`A` is the max over seen prompts, so every SEEN code has `v(c) <= A`. Therefore every code that
+strictly improves must be one we have never drawn:
+
+    { c : v(c) > A }  SUBSET  { c unseen }        ... (V1a)
+
+    =>   U_A  <=  U_0                              ... (V1b)
+
+**This is the bridge.** `P(new behavior that affects the output) <= P(new code) = U_0`, not as a
+heuristic but because improving codes are *necessarily* unseen codes. All value headroom lives inside
+the missing mass and nowhere else. `U_0` is exactly what our existing CP/Good-Turing machinery estimates.
+
+Why V1 is legitimate where the retracted zero-hit CP was not: **the code partition is value-blind.**
+It is fixed by the panel indices before any value is computed. The retracted bound tried to run CP
+*on the set* `{v > A}`, which is defined FROM the sample — construction, not evidence. V1 never does
+inference on that set; it bounds its MASS by the mass of a value-blind partition.
+
+The full novelty-collapse ladder, each link now with its status:
+
+    P(new behavior)  >=  P(new code)  >=  P(new improving code)
+         [free: z = proj . sigma,          [free: Lemma V1]
+          so new code => new behavior]
+
+### 12.9.2 The slack is a single scalar
+
+V1b is maximally conservative: it prices every unseen code as if it improves. Define
+
+    theta := P( v(c) > A | c unseen )  in [0,1]
+
+    =>   U_A = theta * U_0                          ... (V2)
+
+    =>   gain(m)  <=  [ 1 - (1 - theta*U_0)^m ] * (V_cap - A)      ... (V3)
+
+`theta` IS the question "how much of the novelty actually matters." V1b is the special case `theta = 1`.
+The roadmap's current §4e bound pins `theta = 1`; (V3) is strictly tighter and equally honest.
+
+### 12.9.3 Lemma V2 — `theta` is estimable with NO distributional assumption. **[derived]**
+
+Split the mined draws into halves `H1` (size `n/2`) and `H2` (size `n/2`).
+
+1. Compute `A_1 := max over H1 of V(p)` and the seen-code set `Z_1`. **Freeze both.**
+2. Sweep `H2`. Count `X := #{ p in H2 : z(p) NOT IN Z_1  AND  v(z(p)) > A_1 }`.
+3. `X ~ Binomial(n/2, U_A(n/2))` — the threshold and the seen-set were frozen BEFORE `H2` was looked at,
+   so this is a clean binomial and Clopper-Pearson applies directly. This is the "freeze-on-discovery"
+   discipline; it is what makes the count evidential rather than definitional.
+
+**Conservativeness (the direction that matters).** As `n` grows, `A` rises (weakly) and the unseen set
+shrinks (weakly). Both push `U_A` down. Hence
+
+    U_A(n)  <=  U_A(n/2)
+
+so the split-sample CP upper bound computed at `n/2` is a **valid upper bound on the improving mass at
+full `n`**. Using it costs conservatism, never validity. Same for `theta_hat := U_A(n/2) / U_0(n/2)`.
+
+### 12.9.4 The second, structure-free route — and why we quote the min. **[derived; imported]**
+
+The record/rank bound reaches the same target through machinery that never mentions behaviors or codes.
+Under exchangeability of the draws, all `(n+m)!` rank orderings are equally likely, so the probability
+that the maximum of the pooled `n+m` sample falls among the last `m` is exactly `m/(n+m)`:
+
+    P( max of next m  >  max of n )  =  m / (n + m)          [exact, distribution-free]
+
+    =>   gain(m)  <=  [ m / (n + m) ] * (V_cap - A)          ... (V4)
+
+(V3) and (V4) are tight in **opposite regimes**. (V4) wins when `n` is large — records get hard to break
+regardless of structure. (V3) wins when the code space is near-saturated — there is simply little unseen
+mass left to draw. They are independent facts, so
+
+    headline_gain_upper(m)  :=  min{ (V3), (V4) }
+
+is not hedging; it is using both. (V4) additionally survives data-dependent thresholds by exchangeability
+of ranks, which is why it is the PRIMARY bound and (V3) the complement.
+
+### 12.9.5 Theorem V3 — no nontrivial LOWER bound exists. **[derived; this is the important negative result]**
+
+There is no function `L` with `P(new improving code) >= L( P(new behavior) )` that is anywhere nonzero.
+
+*Proof (construction).* Let `v` be constant on the unseen region, or let `A` already equal `max_c v(c)`.
+Then `P(new improving code) = 0` while `P(new behavior)` can be made arbitrarily close to 1 (let the
+proposer emit a fresh `N`-bit behavior on every draw). The quotient maps `sigma -> z -> v` annihilate
+novelty, and nothing about the novelty rate upstream constrains the value downstream. QED
+
+**Consequence, and it should be stated as a result rather than a limitation:** the capture-recapture
+machinery can certify **when to STOP mining** (an upper bound near zero ⇒ no headroom) and can NEVER
+certify that mining **will pay**. Only upper bounds survive the quotient. This asymmetry is structural,
+not an artifact of our estimators, and it retroactively explains why the raw novelty numbers were
+misleading: they were measuring a quantity that provably does not transfer.
+
+It also explains the observed ties quantitatively. Three nested partitions, each brutally coarser:
+
+    behaviors           codes                 values
+    2^N possible        2^k = 256 per panel   6-41 DISTINCT per panel (measured, t8c tables)
+    (N = 300)
+
+Novelty must survive two collapses to reach the value axis. Mostly it does not.
+
+### 12.9.6 The one genuinely open question: is rarity correlated with value? **[open; cheap CPU test]**
+
+Everything above is distribution-free. The single thing no theorem settles is whether **rare codes are
+systematically better** — i.e. whether the proposer under-samples the good region.
+
+- If rarity ⊥ value, the unseen region looks like the seen one and (V3) is close to tight.
+- If singletons skew high-value, the proposer is failing to articulate good rules, there is MORE headroom
+  than any upper bound reveals, and — more interestingly — **that is itself a finding about articulability**,
+  not a correction term.
+
+**Test (CPU-only, existing ledgers, no GPU, no new mining):** stratify observed codes by draw multiplicity.
+Compare the value distribution of singleton codes (`f_1`, the Good-Turing frontier) against codes with
+multiplicity `>= 2`, and against the top multiplicity decile. Report the Spearman correlation between
+`log(multiplicity)` and `v(c)`, plus the two value CDFs. A null (flat, CDFs coincide) licenses the
+plug-in tightening; a positive skew on singletons is a publishable result about proposer coverage.
+
+Guard: this is a diagnostic on the value-blind code partition, so it does not contaminate any certificate.
+It informs how loose (V3) is; it never enters the bound.
+
+### 12.9.7 What to report
+
+Per metric × instrument, alongside the existing certificate:
+
+| quantity | estimator | status |
+|---|---|---|
+| `P(new behavior)` | CP / Good-Turing on the `N`-bit behavior partition | derived |
+| `P(new code)` = `U_0` | CP / Good-Turing on the `k`-bit code partition | derived |
+| `P(new improving code)` = `U_A` | split-sample freeze-on-discovery CP (§12.9.3) | derived |
+| `theta_hat` = `U_A / U_0` | ratio of the above | derived |
+| `gain(m)` via (V3) | mass route | derived |
+| `gain(m)` via (V4) | record/rank route | derived |
+| headline | `min{(V3), (V4)}` | derived |
+| rarity-value Spearman | frequency-stratified value CDFs (§12.9.6) | diagnostic, never in the bound |
+| `gamma_V` | log-log regression over draw prefixes (§12.9.8) | scaling law; diagnostic |
+
+Plot all three ladder rungs as curves over draw prefixes (not endpoints) — the collapse between rungs
+IS the result. A large `P(new behavior)` with `theta_hat ~ 0` is the signature finding: the proposer is
+productive, and its productivity does not reach the output.
+
+### 12.9.8 `gamma_V` — the value elasticity of unseen mass. **[new, 2026-07-13; the scaling law the diminishing-returns story actually needs]**
+
+§12.9.6 asks "is rarity correlated with value?" as a yes/no. The sharper object is the **rate**: how fast
+does improving mass drain as total novelty drains? Define
+
+    gamma_V  :=  d log(U_A) / d log(U_0)          (value elasticity of unseen mass)
+
+**Identity linking it to `theta` (§12.9.2).** Since `U_A = theta * U_0`:
+
+    log U_A  =  log theta  +  log U_0
+
+    =>   gamma_V  =  1  +  d log(theta) / d log(U_0)         ... (V5)
+
+So `gamma_V` is exactly "1 plus the elasticity of `theta`", and the three regimes read off directly:
+
+| regime | meaning | consequence |
+|---|---|---|
+| `gamma_V = 1` | `theta` constant | **rarity ⊥ value** — the tail looks like the body; the plug-in tightening of (V3) is honest |
+| `gamma_V > 1` | `U_A` drains FASTER than `U_0` | **the proposer finds good codes early**; diminishing returns are real and stopping is safe |
+| `gamma_V < 1` | `U_A` PERSISTS as `U_0` vanishes | **the value is in the tail**; mining systematically under-explores where the good rules live — and that is a finding about the proposer, not a nuisance |
+
+**Estimation (CPU-only, existing ledgers, no new draws, no GPU).** Per metric:
+
+1. Fix a stable-hash permutation of the mined draws. (Mining is sequential and may be adaptive; the
+   prefix sweep needs **exchangeable** draw order or the `U_0(n)` curve is an artifact of mining order.
+   This is a hard requirement, not hygiene.)
+2. For each prefix length `n` in a declared grid: split the prefix into `H1 = first n/2`, `H2 = last n/2`.
+   Compute `U_0(n)` (missing mass on the code partition) and `U_A(n)` by the frozen split-sample
+   freeze-on-discovery count of §12.9.3 — `A` and `Z_seen` from `H1`, counted on `H2`. The freeze must
+   be re-done INSIDE each prefix; reusing a global `A` across prefixes reintroduces the data-dependent
+   threshold this whole section exists to avoid.
+3. Regress `log U_A(n)` on `log U_0(n)` across the grid. Slope = `gamma_V`. Report the CI.
+
+**Guards (each is a failure mode already seen on this project):**
+- **Singleton degeneracy (Lemma 12.6.0).** If `f_1/N -> 1`, then `U_0 -> 1`, the `log U_0` axis collapses to a
+  point, and the slope is unidentified. Refuse to fit; report `UNIDENTIFIED`, not a number.
+- **Sparse tail.** `U_A` gets small by construction, so the high-`n` end of the sweep is a few-count
+  binomial. Fit only over the prefix range where the `H2` improving count is `>= 5`; `log()` the CP
+  midpoints, carry the CP bands into the regression, and **declare the truncated range** (silent
+  truncation reads as full coverage).
+- **Value-blindness.** The whole sweep rides the code partition, which is value-blind (§12.9.1). It
+  therefore informs how loose (V3) is and **never enters a certificate**. Diagnostic only.
+
+**Why this is the version the paper wants.** "Diminishing returns" is currently an assertion backed by a
+flattening curve, which is exactly the kind of claim §12.6.0 showed can be mechanical. `gamma_V` makes it
+falsifiable and per-metric: it *separates* "we have exhausted the good rules" (`gamma_V > 1`) from
+"we have exhausted our ability to propose them" (`gamma_V < 1`), which are the same picture on a Heaps
+plot and opposite conclusions about articulability. It is also the natural per-metric constant to
+correlate against the other axes (task, level, executor rung) once the 35-metric fan-out lands.
+
+Notation guard: **`gamma_V` is NOT the replay-`γ`** of the CR-3 replay curves (`γ ∈ [−.63,−.05]`,
+metric-specific, memory `project_prompt_optimality_capture_recapture`). Different object, different sign
+convention; always subscript.
+
 ## 13. The Certified Unit Framework (CUF) — unithood itself becomes a certificate. **[new, 2026-07-04/05; full spec in notes/2026-07-04__unit-certification-theory.md; implemented: unit_certificate.py + run_unit_certificate.py, 15/15 CPU tests]**
 
 §6.5/§B8 defined the atomic unit doctrinally (behavioral partition operator; species under the

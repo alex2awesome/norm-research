@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_de71f3321b81.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10745,
+  "output_tokens": 3397,
+  "elapsed_s": 1220.9274566250388,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and developers of automated story-generation systems and improvisational-theatre practitioners interested in human-machine co-creation",
+    "subtask_short": "improv story beat generation",
+    "subtask_description": "Generating concise, ambiguous narrative 'beats' (platforms) and optional 'tilts' for live improvisational performance by traversing a plot-graph (Plotto) and augmenting with plot-tropes (TV Tropes), plus evaluating tilt selection quality. The focus is on producing prompts that are coherent, open-ended, and useful to human performers.",
+    "subtask_keywords": [
+      "improv",
+      "story_beats",
+      "plot_generation",
+      "plotto",
+      "tv_tropes"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Plotto graph coherence",
+        "description": "Use Plotto\u2019s plot fragments as nodes and the edges describing allowed connections/modifications to produce coherent story sequences by performing walks through the graph.",
+        "guidance": "Generate stories by walking the Plotto graph starting at any node; maintain coherence through the graph structure and follow edge instructions (e.g., character symbol modifications). The graph structure yields step-to-step coherence even when fragments are abstract."
+      },
+      {
+        "name": "Ambiguity / open-endedness suited for improv",
+        "description": "Prefer abstract, ambiguous plot fragments (platforms) rather than fully-prescribed actions or dialogue, since vague prompts give actors freedom to explore the scene.",
+        "guidance": "Keep system outputs concise and open-ended (present only platform descriptions and trope names), avoid prescribing lines or stage directions. The ambiguity is desirable: it inspires actors and lets them supply concrete dialogue and actions."
+      },
+      {
+        "name": "Platform vs. tilt distinction",
+        "description": "Distinguish between a 'platform' (the scene\u2019s definition of normal: who, what, when, where) and a 'tilt' (a re-framing that adds flavour or guidance). Platforms are primary beats; tilts provide optional refinement.",
+        "guidance": "Present platform beats as the base scene. Make tilts optional to actors; tilts should expand or refine the scene rather than force plot progression. Use tilts to give direction when actors request more detail."
+      },
+      {
+        "name": "Paragraph-vector semantic matching for candidate selection",
+        "description": "Represent plot fragments and trope descriptions as dense vectors using paragraph vectors (Doc2Vec) to enable semantic similarity comparisons.",
+        "guidance": "Train Doc2Vec on full texts of plot fragments and trope descriptions, but present only concise trope names to actors. Use cosine distance over vectors to find semantically related tropes or plot fragments when matching a context or prompt."
+      },
+      {
+        "name": "Return top-5 candidates and sample randomly",
+        "description": "For tilts, compute the five tropes with minimum cosine distance and return a random sample from that related set to the actors.",
+        "guidance": "This balances relevance with variety: compute top-5 by cosine distance then randomly sample one to avoid deterministic, overly-repetitive suggestions. Present the list of 5 candidates when appropriate (the system returns 5 tilt options)."
+      },
+      {
+        "name": "Top-N accuracy as evaluation metric",
+        "description": "Evaluate tilt-selection quality using top-5 accuracy (or top-N error), i.e., the probability the human-annotated tilt appears in the system's top-N returned candidates.",
+        "guidance": "Top-N metrics acknowledge human annotation ambiguity and the multiplicity of plausible tilts; prefer top-5 (reported top-5 error) over top-1 for this multi-class problem."
+      },
+      {
+        "name": "Use TV Tropes graph-distance to quantify tilt closeness",
+        "description": "Measure distance between system-generated and human-annotated tropes as the number of links between them in the TV Tropes graph.",
+        "guidance": "Use median/mean distances over the TV Tropes graph to contextualize how far system choices are from human labels (e.g., median distance over entire set is 3; system median excluding exact matches was 2). This provides a graded measure beyond exact-match accuracy."
+      },
+      {
+        "name": "Filter redundant tilts by word intersection",
+        "description": "Exclude candidate tropes that are redundant with the platform by computing the word intersection (words > 3 letters) between the platform text and trope and discarding tropes whose intersection is non-zero.",
+        "guidance": "This prevents returning tilts that add no new information (e.g., the trope 'Reincarnation' when the platform explicitly contains that word). Use simple lexical filters to eliminate trivial matches before sampling top candidates."
+      },
+      {
+        "name": "Handle trope specificity vs generality",
+        "description": "Acknowledge that tropes vary in specificity: some are broad (apply to many fragments) and add little detail, others are very specific and give strong direction to actors.",
+        "guidance": "Treating all tropes equally leads to variable usefulness. Consider filtering or ranking tropes by narrative-building qualities (learned or heuristic) or utilize the structural metadata (supertropes/subtropes) to prefer tropes that provide actionable guidance rather than overly generic ones."
+      },
+      {
+        "name": "Plot-tree generation with configurable depth",
+        "description": "Generate a plot tree (root node chosen randomly) where each node\u2019s children are its successors from Plotto, expanded up to a configurable depth; performances proceed down the tree with child selection influenced by actor prompts.",
+        "guidance": "Default behavior uses the current plot fragment as context for the next platform, but actors may prompt for alternatives; the tree allows multiple future branches to be available depending on actor choices."
+      },
+      {
+        "name": "Contextual tilts based on semantic similarity",
+        "description": "Use the current platform (or an actor-supplied prompt) as context to find semantically similar plot tropes from the TV Tropes corpus as tilts.",
+        "guidance": "Compute similarity across the full textual descriptions (even if only trope names are presented). Return multiple similar tropes and sample to produce varied, contextually-relevant tilts; ensure redundant candidates are filtered first."
+      },
+      {
+        "name": "Stage-presence and concise presentation",
+        "description": "Provide outputs in the form of short platform beats and tilts presented concisely for live performance; interaction should be responsive and unobtrusive.",
+        "guidance": "Implement simple interaction loops (console or speech) where actors request 'platform' or 'tilt' and the system presents the next beat. Keep textual output concise; for live shows prefer speech I/O or simple keyword triggers to minimize disruption."
+      },
+      {
+        "name": "Speech I/O and actor-triggered prompts",
+        "description": "Support speech-to-text and text-to-speech so actors may request platforms/tilts by voice during performance.",
+        "guidance": "Use off-the-shelf STT (e.g., pocketsphinx) and system TTS for readout. Interaction model: present(platform); loop: get input (request, prompt); use prompt as context if provided; return platform or tilt per request keywords."
+      },
+      {
+        "name": "Character-code replacement with consistent names",
+        "description": "Replace Plotto character codes (A, B, AU X, etc.) with consistent character names for clarity when presenting fragments.",
+        "guidance": "Control character-name mapping via a configuration file; present fragments with codes replaced for clarity. Do not attempt automatic pronoun changes (coreference resolution) unless explicitly implemented."
+      },
+      {
+        "name": "Limit story length to balance coherence and focus",
+        "description": "Short stories (very short chains) tend not to have enough happening; very long walks through Plotto can meander into unrelated lines.",
+        "guidance": "Empirically set a maximum story length (the authors used 5) to produce compact narratives with beginning/middle/end while avoiding wandering; adjust depth/configurable length based on performance needs."
+      },
+      {
+        "name": "Human-in-the-loop qualitative evaluation",
+        "description": "Evaluate system usefulness via qualitative feedback from professional improvisors to capture aspects like fun, justifiability, and when tilts are helpful or disruptive.",
+        "guidance": "Include practitioner debriefs and quotes to understand how the system supports real performance (e.g., actors prefer control over when hints arrive; tilts add flavour but can throw difficult curveballs). Combine qualitative insights with quantitative metrics."
+      }
+    ]
+  }
+}

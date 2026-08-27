@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/07b82b9df768.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 9719,
+  "output_tokens": 4777,
+  "elapsed_s": 1904.1115930839442,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Authors/contributors writing proofs and assertions in the Metamath Proof Explorer (set.mm / MPE)",
+    "subtask_short": "writing Metamath deduction-form proofs",
+    "subtask_description": "Guidance for creating, labeling, converting, and using deduction-form assertions and natural-deduction-style proofs inside the Metamath Proof Explorer (set.mm / MPE). Covers conventions, special cases, conversion algorithms, and when to apply weak or standard deduction theorems.",
+    "subtask_keywords": [
+      "metamath",
+      "deduction_form",
+      "natural_deduction",
+      "set.mm",
+      "proof_development"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Deduction form (definition and identification)",
+        "description": "An assertion is in deduction form if the conclusion is an implication with a wff variable as the antecedent (usually \u03c6), and every MPE hypothesis ($e statement) is either a definition or is also an implication with the same wff variable as the antecedent (usually \u03c6).",
+        "guidance": "In practice, a proof in deduction form will also contain many steps that are implications where the antecedent is either that wff variable (normally \u03c6) or is a conjunction (...) \u2227 (...) including that wff variable (\u03c6). A definition can be for a class variable (classvar = ...) or a wff variable (wffvar \u2194 ...); in practice definitions used are for class variables. Assertions in deduction form have a label suffix 'd' if there are other forms of the same assertion (example: pm2.43d). Example: lhop is in deduction form. Use deduction form to mimic the context handled in the deduction theorem and to support ND-style reasoning by putting temporary assumptions into the antecedent."
+      },
+      {
+        "name": "Inference form (definition and identification)",
+        "description": "An assertion with hypotheses but no common antecedent is in inference form.",
+        "guidance": "Inference-form assertions have a label suffix 'i'. An inference form can be converted to deduction form (or closed form) using mechanical processes described on this page, but converting an arbitrary inference form into deduction form may require the deduction theorem or variants in the general case."
+      },
+      {
+        "name": "Closed form (definition and identification)",
+        "description": "An assertion is in closed form when it has no hypotheses at all; all of its preconditions (if any) are part of its implication's antecedent and the assertion label has no suffix.",
+        "guidance": "Closed form is the form of a theorem with no $e hypotheses. You can convert deduction-form assertions to closed form via a mechanical process (select conjunction of all hypothesis consequents, prove implications to each hypothesis by eliminating conjuncts, then apply the deduction-form assertion). Closed form can be turned into inference form via modus ponens (ax-mp)."
+      },
+      {
+        "name": "Labeling conventions for multiple forms",
+        "description": "When an assertion exists in multiple forms, use consistent label suffixes: 'd' for deduction form, 'i' for inference form, and no suffix for closed form.",
+        "guidance": "Compare variants such as pm2.43 (closed), pm2.43i (inference), and pm2.43d (deduction) to see naming conventions in practice."
+      },
+      {
+        "name": "Prefer deduction form (deduction style) over using the standard deduction theorem",
+        "description": "Current MPE conventions encourage using forms that are easier to deal with directly; there is a preference today for writing assertions in 'deduction form' instead of writing a proof that would require use of the deduction theorem. Applying this approach is called 'deduction style'.",
+        "guidance": "Metamath's philosophical goal is to show all proofs directly from the axiom system in its database and not rely on metatheorems outside that system. Mario Carneiro's natural deduction method (prefixing hypotheses/conclusions with a universal antecedent) provides a practical way to avoid the standard Deduction Theorem. Use deduction form where it makes proofs easier to manipulate directly in the Hilbert-style MPE environment."
+      },
+      {
+        "name": "Conversion: deduction form \u2192 inference form (mechanical)",
+        "description": "To prove an assertion Ti in inference form from an assertion Td in deduction form, insert a 'T. ->' prefix on each Ti hypothesis (using a1i), use Td to prove the resulting conclusion with a 'T. ->' prefix, then remove that prefix using mptru to obtain the desired conclusion.",
+        "guidance": "This is a simple, mechanical three-step conversion: (1) prefix hypotheses with T. ->, (2) apply Td, (3) remove the T. -> prefix with mptru. Use this when you have a deduction-form theorem and need its inference-form version."
+      },
+      {
+        "name": "Conversion: deduction form \u2192 closed form (mechanical)",
+        "description": "To obtain a closed-form theorem from a deduction-form assertion Td, form the conjunction of all the consequents of Td's hypotheses, prove that this conjunction implies each separate hypothesis by eliminating conjuncts (using simp* theorems and syl chaining), then apply Td to get the closed-form assertion.",
+        "guidance": "If nested conjunctions occur, break out inner conjuncts by chaining simp* theorems with syl. There are many specialized simp* theorems (e.g., simp333) but you can just chain simpler ones and let metamath.exe 'minimize_with' later optimize the proof. This conversion is mechanical and used frequently."
+      },
+      {
+        "name": "Converting deduction-form hypothesis into nested implication",
+        "description": "Given a deduction-form theorem THM with hypothesis $e (\u03c6 \u2192 \u03c8) and conclusion (\u03c6 \u2192 \u03c7), you can convert THM into (\u03c6 \u2192 (\u03c8 \u2192 \u03c7)).",
+        "guidance": "Process: (1) use simpr to prove \u22a2 ((\u03c6 \u2227 \u03c8) \u2192 \u03c8), (2) apply THM to deduce \u22a2 ((\u03c6 \u2227 \u03c8) \u2192 \u03c7) by substituting (\u03c6 \u2227 \u03c8) for \u03c6 in THM's hypothesis, (3) use ex (exportation) to get (\u03c6 \u2192 (\u03c8 \u2192 \u03c7)). This conversion is straightforward for deduction-form assertions and does not require the general deduction theorem."
+      },
+      {
+        "name": "Use of the deduc\u00adtion-form antecedent to represent ND context",
+        "description": "The deduction-form antecedent (e.g., \u03c6) mimics the context (\u0393) of natural-deduction systems; if the antecedent is a conjunction, other conjuncts can represent temporary assumptions used in ND.",
+        "guidance": "To add an assumption in an ND-style scope inside MPE, add it to the implication antecedent (typically using simpr) and then use that antecedent for later claims in that scope. If you need to use an assertion whose ND hypothesis scope is outside the current scope, modify the assertion so the ND assumption is added to its antecedent (typically using adantr)."
+      },
+      {
+        "name": "Natural deduction system minimal criteria (from Indrzejczak)",
+        "description": "A natural-deduction system should: (1) provide means for entering and eliminating assumptions with bookkeeping for scopes and discharged assumptions; (2) have few or no axioms, relying instead on primitive intro/elimination rules for logical constants; (3) admit freedom in proof-construction and various proof-search strategies (conditional proof, proof by cases, reductio, etc.).",
+        "guidance": "These are theoretical criteria for what counts as an ND system; the MPE implementations aim to satisfy these by using deduction form plus proven assertions that correspond to ND introduction/elimination rules."
+      },
+      {
+        "name": "Practical ND in MPE: use proven ND-equivalent theorems",
+        "description": "MPE is Hilbert-style but ND-style proofs are implemented by using deduction form and MPE-proven assertions equivalent to ND rules (e.g., jca \u2261 \u2227I).",
+        "guidance": "Rely on Metamath's wff metavariables and use proven deduction-form assertions rather than only basic ND rules to keep proofs shorter and clearer. Examples: many ex-natded* proofs illustrate both direct ND-rule translations (long) and concise reused-theorem variants (short). For short clear proofs, reuse already-proven assertions in deduction form instead of starting from ND primitives or axioms each time. The metamath.exe 'minimize_with' command can often shorten proofs that start from ND primitives."
+      },
+      {
+        "name": "When to use weak deduction theorem",
+        "description": "Use the weak deduction theorem when converting an inference to a closed-form theorem is much cheaper overall than restating and reproving many preceding theorems in closed or ND-prefixed form.",
+        "guidance": "Example: if you have a chain of 100 inferences and only the last theorem needs to be closed, using the weak deduction theorem to convert the last theorem can be far more space- and effort-efficient than rewriting many prior theorems. Historically, use of dedth decreased as more theorems were available directly in deduction or closed form. The weak deduction theorem does not require metalogic outside the axiom system and converts an inference directly into closed form with a rigorous in-system proof."
+      },
+      {
+        "name": "Avoid relying on the standard Deduction Theorem where possible",
+        "description": "The standard Deduction Theorem requires metalogic outside the axiom system; Metamath prefers constructions that avoid stepping outside the Hilbert-style axiom system.",
+        "guidance": "Prefer Mario Carneiro's natural-deduction method and the weak deduction theorem (which do not require additional metalogic) before resorting to the full standard Deduction Theorem. Metamath's goal is to show proofs directly from the axiom system stored in the database."
+      },
+      {
+        "name": "Special-case handling: existence (sethood) hypotheses",
+        "description": "For $e hypotheses of the form \u22a2 A \u2208 V, it is common to omit the \u03c6 \u2192 antecedent in a theorem's deduction form because adding \u03c6 \u2192 would often be unnecessary.",
+        "guidance": "If you do want to add \u03c6 \u2192, first turn A \u2208 V into an antecedent using vtoclg and related theorems (e.g., unisng), then convert back to deduction form. Omitting the \u03c6 \u2192 where not needed can shorten proofs since you avoid applying a1i to match hypotheses."
+      },
+      {
+        "name": "Special-case handling: not-free-in hypotheses",
+        "description": "For $e hypotheses of the form \u22a2 nfi x \u03c8 (\u2132 x \u03d5) or \u22a2 nfi x A (\u2132 x A), it is usually unnecessary to include \u03c6 \u2192 in set.mm, due to other assumptions like A \u2208 V, B \u2208 V enabling substitution rules.",
+        "guidance": "There are nf5di and many 'nf*d' theorems to assist if you must prepend \u03c6 \u2192. In some rare cases you may need to reprove the not-free theorem through previous theorems; examples and techniques are in Mario's demonstrations (e.g., nfnlem of peano.mm1). Practically, this is hardly needed."
+      },
+      {
+        "name": "Special-case handling: definitional hypotheses",
+        "description": "For definitional hypotheses (e.g., \u22a2 (\u03c8 \u2194 (\u03c7 \u2227 \u03b8)) or \u22a2 A = (B + C)), it is often acceptable to omit the \u03c6 \u2192 antecedent.",
+        "guidance": "To prepend \u03c6 \u2192 when needed, eliminate the original definitional hypothesis with biid or eqid, then rewrite the proof where steps are simplified with the new \u03c6 \u2192 prefixed definitional hypotheses. See Mario's discussion. Definitions do not require an antecedent because they can be discharged by eqid or by matching definition hypotheses."
+      },
+      {
+        "name": "Special-case handling: implicit substitution hypotheses",
+        "description": "For hypotheses of the form \u22a2 (x = y \u2192 (\u03d5 \u2194 \u03c8)) or \u22a2 (x = y \u2192 A = B), to prepend \u03c6 \u2192 first convert the theorem to explicit-substitution form and then convert back to implicit substitution form.",
+        "guidance": "This can be somewhat tedious but is possible; see examples like fsumshftd and related mailing-list discussions. The conversion is less tedious when A and B are closed terms (i.e., used in a context rather than proving the substitution theorem itself)."
+      },
+      {
+        "name": "Definitions in deduction form: when definitions need no antecedent",
+        "description": "Definitions (X = ...) typically do not require the \u03c6 antecedent in deduction form because a definition hypothesis will either be satisfied by a similar hypothesis or by theorem eqid, allowing the hypothesis to be discharged without assumptions.",
+        "guidance": "If you intend to discharge such hypotheses with something other than eqid, you may add ph -> to equalities as well. Example usage includes structure-builder theorems and bootstrapping tricks (mygroupval / mygroupbaslem / mygroupaddlem) to create self-referential component definitions. Rule of thumb: use X = ... abbreviations unless you need non-identity abbreviation for X later."
+      },
+      {
+        "name": "Proof-writing practice: reuse vs reconstructing from ND primitives",
+        "description": "Only using primitive ND rules directly can lead to very long proofs. For short and clear proofs, prefer reusing already-proven assertions (in deduction form) rather than rederiving everything from ND primitives or axioms.",
+        "guidance": "Examples: ex-natded5.8 (line-for-line ND rule translation) is much longer than ex-natded5.8-2 (which reuses other proven statements) and ex-natded5.2i (which doesn't worry about context). Use metamath.exe 'minimize_with' to compress proofs; balance clarity vs brevity in choosing whether to reuse theorems or give a full ND-style derivation."
+      },
+      {
+        "name": "Use of metamath.exe tools to simplify/shorten proofs",
+        "description": "Tools like 'minimize_with' can greatly shorten proofs, especially those written by applying only fundamental ND-equivalent rules.",
+        "guidance": "If a proof uses only ND-equivalent primitives and becomes long, run 'minimize_with' with appropriate proven-theorem sets to collapse chained simp* steps, eliminate redundant steps, and find shorter equivalent sequences."
+      },
+      {
+        "name": "Alternative ND approaches in Metamath and tool support",
+        "description": "There are alternative approaches to ND in Metamath such as Alan Sare's 'virtual deduction' (replacing \u2192 with \u25b6) and Fr\u00e9d\u00e9ric Lin\u00e9's separate Metamath-based ND system. Tools like completeusersproof support visual/alternative styles.",
+        "guidance": "These alternatives may offer different visualization or syntactic convenience. They are practically equivalent in power to Mario Carneiro's method but may be preferred by some users; examples and tools are linked (wvd1, iunconlem2vd). Choose approach based on readability preferences and toolchain support."
+      }
+    ]
+  }
+}

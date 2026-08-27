@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peerreview4all_jmlr.pdf",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "peerreview4all_jmlr.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 6,
+  "chunk_chars": 39578,
+  "model": "gpt-5-mini",
+  "elapsed_s": 75.7725580840015,
+  "input_tokens": 13599,
+  "output_tokens": 5826,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing/evaluating conference peer-review assignment algorithms (e.g., ML conference program chairs, algorithm designers, peer-review systems researchers)",
+    "subtask_short": "conference_reviewer_assignment",
+    "subtask_description": "Designing and evaluating algorithms that assign reviewers to conference papers to (approximately) recover the top-k papers under various statistical models and similarity structures. Includes theoretical minimax guarantees and empirical metrics for assignment quality and downstream acceptance accuracy.",
+    "subtask_keywords": [
+      "peer_review",
+      "assignment_algorithm",
+      "similarity_matrices",
+      "minimax_analysis",
+      "conference_paper_selection"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "k-separation threshold \u2206k",
+        "description": "\u2206k := \u03b8*_{(k)} \u2212 \u03b8*_{(k+1)} > 0. (Equation 14)",
+        "guidance": "Intuition: if the difference between kth and (k+1)th papers is large enough, it should be easy to recover top k papers. Used as the central quantity controlling exact top-k recoverability; appears in sufficient and necessary (converse) conditions for recovery."
+      },
+      {
+        "name": "Family F_k(\u03b4) of papers' scores",
+        "description": "Fk(\u03b4) := { (\u03b81, ..., \u03b8m) \u2208 R^m : \u03b8_(k) \u2212 \u03b8_(k+1) \u2265 \u03b4 }. (Equation 15)",
+        "guidance": "Used to state uniform (worst-case) recovery guarantees: theorems consider sup over \u03b8* in Fk(\u03b4). Sets the hypothesis class under which probability bounds are derived."
+      },
+      {
+        "name": "Boundedness and monotonicity of h (reviewer noise function)",
+        "description": "Assume function h is bounded, h : [0,1] \u2192 [0,1], and monotonically decreasing. (Assumption before Theorem 3)",
+        "guidance": "This assumption implies every reviewer can provide a minimum level of expertise even if similarity sij = 0. The paper also treats unbounded h later (h : [0,1] \u2192 [0,\u221e)) and extends results to sub-Gaussian noise; monotonic decrease captures 'higher similarity \u2192 lower noise'."
+      },
+      {
+        "name": "Similarity-family S(q) defined by fairness threshold",
+        "description": "S(q) := { S \u2208 [0,1]^{n\u00d7m} : \u0393_S^{1\u2212h} \u2265 q }. (Equation 16 and explanation)",
+        "guidance": "Interpretation: if similarity matrix S belongs to S(q), then the fairness of the optimally fair assignment (with respect to f = 1\u2212h) is at least q. The tractability of top-k recovery depends on q; q must lie in [\u03bb (1\u2212h(0)), \u03bb] for non-vacuous results."
+      },
+      {
+        "name": "Approximation factor \u03c4_q",
+        "description": "\u03c4_q := inf_{S\u2208S(q)} ( \u0393_S^{1\u2212h}(APR4A) / \u0393_S^{1\u2212h}(AHARD) ). (Equation 17)",
+        "guidance": "Captures quality of approximation provided by PeerReview4All relative to optimal (AHARD). Theorem 1 gives lower bounds on \u03c4_q. Worst-case \u03c4_q \u2265 1/\u03bb, but in many practical similarity matrices \u03c4_q can be much better."
+      },
+      {
+        "name": "Sufficient condition (Theorem 3) for exact top-k recovery",
+        "description": "For monotonically decreasing h : [0,1]\u2192[0,1], q \u2208 [\u03bb(1\u2212h(0)), \u03bb], and \u03b1 \u2208 (0,1/4), if \u03b4 exceeds a function of (\u03bb \u2212 q \u03c4_q), ln m, \u03bb and \u03b1 then for APR4A with \u03b8_MEAN and \u03b8_MLE (constructed appropriately) we have P(estimated top-k = true top-k) \u2265 1\u2212\u03b1. (Theorem 3(a))",
+        "guidance": "The theorem gives explicit \u03b4 thresholds (dependent on \u03c4_q, q, \u03bb, ln m) that guarantee exact recovery with high probability. A converse (Theorem 3(b)) provides matching lower bounds (up to constants and \u03c4_q factor), establishing near-minimax optimality."
+      },
+      {
+        "name": "Estimator selection: \u03b8_MLE versus \u03b8_MEAN",
+        "description": "\u03b8_MLE is preferred when the (Gaussian) model (11) is correct; \u03b8_MEAN is more robust to model mismatches, especially when h(s) \u2208 [0,1]. (Remarks after Theorem 3)",
+        "guidance": "Recommendation: use \u03b8_MLE when confident in the generative noise model; otherwise \u03b8_MEAN may be safer. In the subjective-score model, \u03b8_MEAN is the natural estimator."
+      },
+      {
+        "name": "Extension to sub-Gaussian noise",
+        "description": "Upper bound of Theorem 3 holds for a more general reviewer noise model y_{ij} = \u03b8*_{j} + s_G(h(s_{ij})) where s_G is mean-zero sub-Gaussian with scale parameter \u03c3^2. (Remark 5)",
+        "guidance": "The theoretical guarantees are not limited to Gaussian noise; they extend to sub-Gaussian noise, increasing practical applicability."
+      },
+      {
+        "name": "Family S_\u03ba(v) parameterizing 'strong reviewer' structure",
+        "description": "S_\u03ba(v) := { S \u2208 [0,1]^{n\u00d7m} : s*_\u03ba \u2265 v }, where s*_\u03ba defined earlier (Equation 20 and following text)",
+        "guidance": "Here v defines the threshold for 'strong' reviewer similarity and \u03ba denotes the maximum number of strong reviewers that can be assigned to each paper (\u03ba \u2208 [\u03bb]). This family models structures from worst-case (few strong reviewers) to ideal (\u03bb strong reviewers per paper)."
+      },
+      {
+        "name": "Adaptive minimax optimality for S_\u03ba(v) (Corollary 4)",
+        "description": "For any v\u2208[0,1], \u03ba\u2208[\u03bb] and monotonically decreasing h : [0,1]\u2192[0,\u221e), if \u03b4 > function involving h(v), h(0), \u03ba, (\u03bb\u2212\u03ba), ln m then APR4A with \u03b8_MLE achieves exact top-k recovery (probability \u2265 1\u2212\u03b1) without an approximation factor. (Corollary 4(a))",
+        "guidance": "Implication: PeerReview4All with \u03b8_MLE is simultaneously minimax (near-)optimal across a broad family of similarity-structure classes S_\u03ba(v). This shows adaptivity to the underlying S structure."
+      },
+      {
+        "name": "Generalized separation threshold \u2206_{k,t} for Hamming-error recovery",
+        "description": "\u2206_{k,t} := \u03b8*_{(k\u2212t)} \u2212 \u03b8*_{(k+t+1)}; used when allowing Hamming error tolerance t. (Section 6.3.2)",
+        "guidance": "When boundary scores are close, exact recovery may be impossible; \u2206_{k,t} is the key quantity controlling approximate recovery guarantees under Hamming distance tolerance t."
+      },
+      {
+        "name": "Hamming distance DH as approximate recovery metric",
+        "description": "DH(T_k(A,\u03b8), T*_k) measures closeness between accepted set and true top-k using Hamming distance; interest is in bounding P(DH > 2t) for user-defined t \u2208 [k\u22121]. (Section 6.3.2 and Theorem 5)",
+        "guidance": "Theorems provide sufficient and necessary \u03b4 thresholds (involving \u03c4_q, q, \u03bb, ln m, and t) that control the probability the Hamming error exceeds 2t."
+      },
+      {
+        "name": "Minimax characterization / approximation gap dependence on \u03c4_q",
+        "description": "Upper and lower bounds for both exact and approximate recovery differ by the approximation factor \u03c4_q (and constant pre-factors). (Remarks after Theorem 3 and Theorem 5)",
+        "guidance": "Interpretation: PeerReview4All's performance is near-minimax up to \u03c4_q; improving \u03c4_q (i.e., producing assignments closer to AHARD) tightens guarantees."
+      },
+      {
+        "name": "Subjective-score model (full-competence reviewer scores \u0398_{ij})",
+        "description": "Model: imagine fully-competent reviewer i would give score \u03b8_{ij}; real-world observed y_{ij} \u223c N(\u03b8_{ij}, h(s_{ij})). The goal is to recover top-k in terms of mean full-competence subjective scores \u03b8\u0304_j = (1/\u03bb) \u2211_{i\u2208RA(j)} \u03b8_{ij}. (Section 7.1)",
+        "guidance": "This separates subjective reviewer-specific opinions (\u0398) from noise; assignment aims to ensure reviewers can convey their subjective opinions (higher similarity \u2192 less noisy). The averaging estimator \u03b8_MEAN is natural for this model."
+      },
+      {
+        "name": "Family F_k(A, \u03b4) for subjective model (assignment-dependent)",
+        "description": "Fk(A,\u03b4) = { \u0398 \u2208 R^{n\u00d7m} : \u03b8\u0304_{(k)}(A) \u2212 \u03b8\u0304_{(k+1)}(A) \u2265 \u03b4 }. (Equation 22)",
+        "guidance": "Because ranking now depends on assignment A, the class of 'separated' instances is assignment-dependent; theorems (Theorem 7) state recovery guarantees uniformly over this class."
+      },
+      {
+        "name": "Recovery guarantees for subjective-score model (Theorems 7 and 8)",
+        "description": "Analogues of previous theorems: for monotonically decreasing h and q \u2208 [\u03bb(1\u2212h(0)),\u03bb], if \u03b4 exceeds a threshold depending on (\u03bb \u2212 q \u03c4_q), ln m, \u03bb and \u03b1 then APR4A with \u03b8_MEAN recovers top-k (or bounds Hamming error) with high probability; converses give lower bounds. (Theorems 7,8)",
+        "guidance": "PeerReview4All provides minimax guarantees both under objective-score and subjective-score models for the appropriate estimators (\u03b8_MLE in objective, \u03b8_MEAN in subjective)."
+      },
+      {
+        "name": "Fairness measure \u0393_S^f(A)",
+        "description": "Fairness objective \u0393_S (with transformation f, typically f(s)=1\u2212h(s) or f(s)=s): used to evaluate the worst-off paper's total transformed similarity under assignment A. (Multiple references e.g., Equation 3 context and S(q) def.)",
+        "guidance": "PeerReview4All explicitly optimizes fairness (minimize neglect of worst-off paper). S(q) uses fairness threshold to define similarity matrix classes. Choice of f affects algorithm behavior and approximation bounds (ILPR may perform poorly when f is unbounded)."
+      },
+      {
+        "name": "Sum of similarities GS(A) as alternative objective",
+        "description": "GS(A) := sum of assigned similarities; TPMS aims to maximize this cumulative sum. (Section 8 introduction and experiments)",
+        "guidance": "Trade-off: maximizing GS can hurt fairness (worst-off papers), which can reduce acceptance accuracy. PeerReview4All uses a max-cost heuristic to balance fairness and GS."
+      },
+      {
+        "name": "Load constraints \u03bb (reviewers per paper) and \u03bc (papers per reviewer)",
+        "description": "Each paper must be assigned to \u03bb reviewers; each reviewer has capacity at most \u03bc. (Experiment setups: \u03bb=4, \u03bc=2 etc.)",
+        "guidance": "Feasibility and approximation guarantees depend on \u03bb and \u03bc. Worst-case approximation factor 1/\u03bb arises from these load constraints; algorithm implementations must enforce conflicts as additional constraints."
+      },
+      {
+        "name": "Worst-case approximation guarantee 1/\u03bb for PeerReview4All",
+        "description": "Theorem 1 guarantees a worst-case approximation factor at least 1/\u03bb for fairness objective; empirical \u03c4_q often much better (e.g., \u2265 0.98 in ICLR experiment). (Multiple remarks)",
+        "guidance": "Designers should expect theoretical worst-case but often see much better practical approximation ratios; use empirical evaluation to measure \u03c4_q on real similarity matrices."
+      },
+      {
+        "name": "Empirical evaluation metrics for assignment algorithms",
+        "description": "Metrics used: fairness \u0393_S(A), mean sum of similarities (1/m) GS(A), fraction of papers incorrectly accepted (error fraction), ordered-sum-similarity ratios, Hamming error fraction plots across separation thresholds. (Sections 8.1\u20138.2 and figures/tables)",
+        "guidance": "To evaluate assignments, both assignment-quality metrics (fairness, GS) and downstream selection accuracy (fraction wrongly accepted, Hamming distance) should be measured. Experiments include synthetic cases and approximated real conference similarity matrices (ICLR'18)."
+      },
+      {
+        "name": "Max-cost max-flow heuristic (implementation detail)",
+        "description": "Implementation of PeerReview4All picks max-flow with maximum cost in Step 6 of Subroutine 1 to break ties and improve average quality. (Section 8 intro and experiments)",
+        "guidance": "Heuristic helps the average quality (total sum similarity) of APR4A be close to or better than ILPR/AHARD while preserving fairness. Recommended as practical tie-breaking strategy."
+      },
+      {
+        "name": "Early-stopping guarantee after first iteration",
+        "description": "Fairness guarantees of Theorem 1 are achieved after the first iteration of Steps 2 to 7 of Algorithm 1; the first-iteration assignment APR4A_1 is therefore a valid, computationally cheaper alternative. (Section 8.2)",
+        "guidance": "In large-scale problems, one can use APR4A_1 to obtain fairness guarantees quickly; additional iterations improve fairness for the second worst-off and so on."
+      },
+      {
+        "name": "Adaptivity / robustness of PeerReview4All to similarity structure",
+        "description": "PeerReview4All adapts to structures of similarity matrices \u2014 from cases when optimal assignment provides only one strong reviewer for some papers to ideal cases with \u03bb strong reviewers \u2014 ensuring even the most disadvantaged paper gets sufficient expertise. (Corollary 4 remarks and end of Section 6.3)",
+        "guidance": "Practical implication: algorithm will allocate reviewers to improve worst-off papers and maintain good average quality; corroborated by synthetic and approximate-real experiments."
+      },
+      {
+        "name": "Synthetic scenario design for stress-testing algorithms (C1\u2013C5)",
+        "description": "Five constructed cases: (C1) Non-mainstream papers; (C2) Many weak reviewers; (C3) Few super-strong reviewers; (C4) Adverse case (hard for algorithm); (C5) Sparse similarities. (Section 8.1)",
+        "guidance": "Use diverse, interpretable scenarios to reveal strengths/weaknesses: fairness vs GS trade-offs, approximation behavior, and downstream selection accuracy."
+      },
+      {
+        "name": "Conflict-of-interest handling",
+        "description": "In ICLR\u201918 approximation experiment, a conflict matrix C disallows assigning a reviewer to any paper they authored; assignments enforce these constraints. (Section 8.2.1)",
+        "guidance": "Assignments must respect conflicts; experiments demonstrate PeerReview4All can incorporate conflict constraints while optimizing fairness."
+      },
+      {
+        "name": "Limitations of ILPR when f(s) unbounded",
+        "description": "ILPR algorithm's approximation guarantee (9) becomes weak when f(s)=1/(1\u2212s) is large/unbounded, leading to poor performance in some cases (C2, C3). (Section 8.1.1)",
+        "guidance": "Be cautious using ILPR when the transformation f(s) is unbounded; choose f(s) compatible with algorithmic assumptions or prefer algorithms robust to unbounded f."
+      }
+    ]
+  }
+}

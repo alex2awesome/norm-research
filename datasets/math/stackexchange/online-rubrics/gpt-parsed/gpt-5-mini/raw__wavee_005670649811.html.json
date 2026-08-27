@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_005670649811.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12758,
+  "output_tokens": 5572,
+  "elapsed_s": 1440.9895314159803,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "mathematicians and formal-methods researchers involved in large formalization projects (proof-assistant users, formalizers, verification engineers)",
+    "subtask_short": "formalization of mathematical proofs",
+    "subtask_description": "Guidance and retrospective criteria for producing and evaluating a large formal proof project (the Flyspeck formalization of the Kepler conjecture), covering statement formulation, choice of partitions, numerical verification, proof assistant/library selection, tooling, and project organization.",
+    "subtask_keywords": [
+      "formalization",
+      "proof_assistant",
+      "hol_light",
+      "flyspeck",
+      "mathematical_verification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Formal statement avoids measure and transcendental dependence",
+        "description": "We took pains to remove all mention of measure from the theorem, which might naturally appear when speaking of densities.",
+        "guidance": "State the theorem in combinatorial/counting form (e.g., count centers of balls) to avoid measure-theoretic complications and reliance on transcendental constants where possible. By stating in terms of number of balls rather than ball volumes, constants like \u03c0 can be eliminated (or avoided by choosing containers appropriately)."
+      },
+      {
+        "name": "Normalize scale and encode container/finite packing",
+        "description": "The statement is invariant under rescalings of the radius of the balls, and it is convenient to normalize the radius of each ball at R = 1. To simplify the main statement, the Kepler conjecture is formulated as a statement about a finite packing of balls within a large spherical container of radius r.",
+        "guidance": "Normalize geometric parameters to reduce bookkeeping. Reduce infinite/measure problems to finite statements about packings in large bounded containers; include explicit error terms (e.g., c * r^2 after dividing by r^3 or c/r) to account for boundary effects and to encode \u2018sufficiently large\u2019 conditions."
+      },
+      {
+        "name": "Choose a geometric partition adapted to the packing",
+        "description": "A geometric partition of space is used to reduce the theorem to a local statement about a single ball and its immediately neighboring balls. There is an enormous amount of freedom in choosing the partition of space. Much of our effort in proving the Kepler conjecture went into the design of a good partition of space.",
+        "guidance": "Evaluate trade-offs: Voronoi cells work in 2D but fail in 3D for sharp bounds; Fejes T\u00f3th's weighted/truncated Voronoi approach is plausible but unwieldy computationally; hybrid partitions (decomposition stars) versus Marchal cells \u2014 the latter simplified the text but increased case counts and computation. Choose a partition that balances human-readable proofs and computational tractability."
+      },
+      {
+        "name": "Reduce global theorem to local configurations (single ball + neighbors)",
+        "description": "The first major step of the proof reduces the theorem to a local statement about a single ball and its immediately neighboring balls.",
+        "guidance": "Use the partition to translate a global density statement into a finite (local) combinatorial/geometric problem about one center and neighbors; this reduction enables enumeration and mechanized checking of finite cases."
+      },
+      {
+        "name": "Encode neighbor combinatorics as tame planar graphs and enumerate them",
+        "description": "The combinatorial structure of the neighboring congruent balls is encoded as a planar graph. A list of combinatorial properties is established that must hold for any planar graph that encodes a counterexample. A graph with these properties is called a tame planar graph. A computer search enumerates all tame planar graphs, up to isomorphism.",
+        "guidance": "Define precise combinatorial constraints (the long list of technical conditions) making up the \u2018tame\u2019 predicate, then use exhaustive computer enumeration (up to isomorphism) to reduce possibilities to a finite list for further elimination."
+      },
+      {
+        "name": "Use linear programming and relaxations to rule out geometric realizations",
+        "description": "To realize a counterexample, it would be necessary to realize the graph as a geometric configuration with nodes realized as centers of nonoverlapping congruent balls. The constraints can be relaxed to linear constraints, and linear programming is used to rule out each potential counterexample. When a single linear program does not suffice, branch and bound algorithms are used.",
+        "guidance": "Formulate relaxations of nonlinear feasibility problems as LPs and use LP certificates plus branch-and-bound to eliminate cases; ensure that LP outputs are translated back into rigorous bounds on the original nonlinear problem."
+      },
+      {
+        "name": "Prove nonlinear inequalities using interval arithmetic and certified Taylor approximations",
+        "description": "The proof relies on about a thousand nonlinear inequalities over the real numbers. These inequalities are proved by computer using interval arithmetic. We settled on using automatic differentiation to compute second order Taylor expansions of the nonlinear functions with certified bounds on the error terms. When a Taylor expansion fails, branch-and-bound on boxes is used; monotonicity can reduce dimension.",
+        "guidance": "Use interval arithmetic, automatic differentiation, and Taylor interval approximations with certified bounds. Implement adaptive box subdivision (branch-and-bound), exploit monotonicity to reduce dimension, and target hot spots where functions are near zero. Record domain decomposition and decision points for replay in formal verification."
+      },
+      {
+        "name": "Independent cross-checks and multiple implementations",
+        "description": "Ferguson and I gave independent implementations of the algorithms (in C and C++) that we used to cross-check our code for bugs. All parts of the verification have been checked by at least three groups: the Flyspeck team before announcement, Josef Urban, and an anonymous referee.",
+        "guidance": "Use independent implementations and have multiple independent groups/audits reconfirm results. Cross-check different codebases and re-run verifications to detect implementation bugs and increase confidence."
+      },
+      {
+        "name": "Modularize the proof and document top-level architecture",
+        "description": "The proof was modularized by breaking it into largely independent sections. The top-level architecture of the project shows how the main theorem follows from the lemmas.",
+        "guidance": "Structure the formalization into modules and a dependency graph that make it clear how lemmas and components combine to yield the main theorem; this supports parallel work and easier verification of subcomponents."
+      },
+      {
+        "name": "Align informal and formal texts with persistent identifiers",
+        "description": "The informal text (DSP) was aligned with formal scripts through randomly generated seven letter tracking codes. As the informal and formal texts were edited and rearranged, the codes gave persistent names to lemmas that enabled tracking across different versions.",
+        "guidance": "Adopt persistent identifiers (tracking codes, labels) linking LaTeX/ informal statements to formal lemmas. This aids maintenance, cross-referencing, and tooling; consider automated alignment via controlled natural languages for future projects to reduce duplicated effort."
+      },
+      {
+        "name": "Prefer minimal, project-focused formulations in libraries",
+        "description": "Most lemmas were formulated minimally rather than in generality, because our main interest was the narrow goal of formalizing the Kepler conjecture rather than general library development. For example, the formalization avoids matrices, integration on manifolds, and the general Jordan curve theorem (using only a special case).",
+        "guidance": "When the project goal is narrow, minimize the scope of lemma generality to reduce formalization burden. However, be aware that more organized/general libraries (e.g., Math Components) may pay off for reuse; strike a balance between minimality and reusability."
+      },
+      {
+        "name": "Choose proof assistant based on domain libraries, usability, and integration",
+        "description": "I made the decision to use HOL Light, based on advice from Freek Wiedijk. HOL Light has its advantages: it has a well-developed theory of real analysis; the system is easy to learn; and no boundaries separate computer code from proof scripts.",
+        "guidance": "Select a proof assistant with strong support in the mathematical domains required (e.g., real analysis), an approachable language/tactic infrastructure, and convenient integration of proof scripts and code. Consider extraction/performance trade-offs (Isabelle exports to ML for speed)."
+      },
+      {
+        "name": "Never verify code not written with verification in mind",
+        "description": "One of the cardinal rules of code verification is never to verify code that has not been written with verification in mind. The cardinal rule is violated for algorithm X.",
+        "guidance": "Design algorithms and data structures from the start to be amenable to formalization/verification. Avoid black-box legacy code and highly redundant encodings that complicate proofs of correctness and synchronization lemmas."
+      },
+      {
+        "name": "Avoid hand-translated assumptions between systems; prefer verified translations or a single system",
+        "description": "The Bauer-Nipkow classification is the only part of the formalization done in Isabelle. Currently the statement of the classification theorem is translated by hand from Isabelle to HOL Light, and the translated statement is accepted as an unproved postulate in the HOL Light part of the formalization. This hand translation is the weak link in the entire Flyspeck project.",
+        "guidance": "Avoid relying on unproved hand translations across proof assistants. Prefer automated/verified translation tools, code export facilities, or consolidating components in one system to close the weakest link in trust."
+      },
+      {
+        "name": "Formally verify auxiliary computational artifacts (LP certificates, generated code)",
+        "description": "Solovyev developed a stand-alone tool for the verification of linear programming certificates in HOL Light. His tool is highly optimized. The linear programming part of the proof is not simply a matter of running linear programs: the output must be translated back into bounds on an underlying nonlinear optimization generated from the graph.",
+        "guidance": "Provide formal checkers for computational artifacts (certificate verifiers, executable translations) rather than trusting informal numerical outputs. Ensure the mapping from computational outputs to formal mathematical conclusions is explicit and verified."
+      },
+      {
+        "name": "Optimize formal numeric computations aggressively for performance",
+        "description": "An enormous amount of code optimization was necessary to bring the formal calculation within the reach of a large cloud computation. Some optimizations included performing arithmetic in a large base rather than base 2, building massive addition and multiplication tables inside HOL Light so that each arithmetic operation could be done by a simple look-up, precomputing the number of digits precision needed for each calculation and using the minimum possible, computing all the decision points informally and then replaying the decision-point scripts in the formal verification, and caching intermediate expressions to avoid recomputation.",
+        "guidance": "Plan and implement many layers of optimization: choose numeric representations and bases for speed, precompute precisions and lookup tables, cache intermediate results, minimize primitive inference operations, and where possible compute decision logic informally and replay deterministically in the formal environment to save time."
+      },
+      {
+        "name": "Design the collection of nonlinear inequalities with verification cost in mind",
+        "description": "There was an extraordinary amount of freedom in the creation of a finite set of nonlinear inequalities that collectively imply the Kepler conjecture. In no sense is the current collection optimal. Machine learning might be tried to learn a collection C that minimizes cost.",
+        "guidance": "When selecting the set of inequalities/lemmas to be verified, consider verification time as an explicit cost metric. Explore automated or heuristic approaches (including ML) to minimize total verification cost and to choose inequalities that are easy to certify."
+      },
+      {
+        "name": "Provide robust search and naming conventions for theorem discovery",
+        "description": "Roland Zumkeller and Harrison developed a heavily used search tool for HOL Light. Theorems can be searched by name (according to any regular expression) and by matching subterms (including type information) in the theorem statement or conclusion. The theorem name includes the module name, permitting localized search within a given module.",
+        "guidance": "Implement good tooling for searching theorems by name and content, adopt systematic naming conventions (including module prefixes), and record common search queries to ease lemma discovery and reuse."
+      },
+      {
+        "name": "Design the project architecture to support international/distributed collaboration",
+        "description": "Formalization is an activity that naturally lends itself to international collaboration. The definitions and statements of lemmas act as a specification of the project. The top-level architecture shows how the main theorem follows from the lemmas. Any formal proof of a lemma \u2013 no matter where, how, or by whom it is produced \u2013 advances the project.",
+        "guidance": "Use formal definitions and lemma statements as a spec boundary; modularize so contributors can work independently; maintain consistent conventions and provide mechanisms for integrating heterogeneous tactic and proof styles."
+      },
+      {
+        "name": "Audit by exporting to other systems and reconfirming results",
+        "description": "As part of a systematic audit of the formalization, Mark Adams exported the main part of the verification to the HOL Zero system and reconfirmed our results.",
+        "guidance": "Where feasible, export proofs or checks to alternative proof assistants or independent systems and reconfirm results to increase confidence and detect implementation-specific errors."
+      },
+      {
+        "name": "Exploit proof assistant code-extraction/performance trade-offs",
+        "description": "Isabelle is much faster because it exports code to ML, then executes without the overhead of HOL primitive inferences. Solovyev\u2019s experiments suggest that a verification of the tame graph classification might be done in HOL Light in a 3000 hours computation.",
+        "guidance": "Consider proof assistant features for code extraction or fast execution when heavy computation is required. Use systems that can generate efficient executable code for performance-critical components, or provide optimized verified checkers when execution inside the proof assistant would be too slow."
+      },
+      {
+        "name": "Plan for computational resource needs and runtimes",
+        "description": "The main part of the verification can be processed on a laptop computer in about five hours. Three separate auxiliary verifications are also required. The verification of nonlinear inequalities takes about 5000 CPU hours in a cloud computation.",
+        "guidance": "Estimate and provision necessary computational resources (CPU hours, cloud resources). Identify costly subcomponents (e.g., nonlinear inequality verification) and plan optimizations or distributed computation strategies ahead of time."
+      }
+    ]
+  }
+}

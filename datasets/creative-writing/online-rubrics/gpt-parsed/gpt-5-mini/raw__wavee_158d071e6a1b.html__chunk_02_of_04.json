@@ -1,0 +1,161 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_158d071e6a1b.html",
+  "task": "creative-writing",
+  "source_dir": "raw",
+  "source_file": "wavee_158d071e6a1b.html",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39937,
+  "model": "gpt-5-mini",
+  "elapsed_s": 79.57037029099956,
+  "input_tokens": 13209,
+  "output_tokens": 5945,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners working on long-form story generation and evaluation",
+    "subtask_short": "long-form_story_generation_evaluation",
+    "subtask_description": "Guidelines and evaluation criteria for building datasets, generating, and evaluating long-form story continuations and reasoning traces for LLM-based story generation. Includes dataset curation, generation/truncation rules, automated metrics, reward formulations, hyperparameter guidance, and human annotation procedures.",
+    "subtask_keywords": [
+      "long-form_story",
+      "generation",
+      "evaluation",
+      "nlp",
+      "human_annotation",
+      "dataset_curation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Book selection criteria",
+        "description": "We selected fiction books based on popularity, critical acclaim, and the availability of chapter summaries on SuperSummary. We excluded all sequels and books based on previous stories (e.g., retellings of myths) to ensure that all relevant information was contained within the book itself. We also excluded collections of short stories, stories featuring existing characters (e.g., a known detective character), and stories relying on visual information (e.g., graphic novels).",
+        "guidance": "Purpose: ensure all relevant information is internal to the book and comparable across items. Use availability of chapter summaries as a selection filter; exclude works that depend on external continuities or visual media which would confound textual reasoning."
+      },
+      {
+        "name": "Genre diversity constraints for dataset splits",
+        "description": "We also aimed to include a variety of genres; our train/test/validation set all satisfy the following conditions: 1) At least one Sci\u2011Fi book (that is not also fantasy), one fantasy book (that is not also Sci\u2011Fi), and one book that is neither; 2) One historical\u2011fiction book; 3) One romance book; 4) One young\u2011adult book, and one adult book.",
+        "guidance": "These constraints are meant to ensure that when testing for generalization the dataset is not overfitted to a specific genre/type of book."
+      },
+      {
+        "name": "Chapter summarization generation hyper-parameters",
+        "description": "We generate our high-level story plans and prior-story summaries using the following hyper-parameters (mostly taken from the default generation config): temperature = 0.6, top p = 0.9, top k = 50, max tokens = min(4096, |text-tokens| \u00b7 0.8).",
+        "guidance": "Use these settings to produce chapter summaries/plan text; adjust max tokens relative to input length to limit context. These hyper-parameters largely mirror the generation config used in related prior work."
+      },
+      {
+        "name": "Character sheet selection and summarization procedure",
+        "description": "We selected the top three characters based on SuperSummary\u2019s Character Analysis details, aiming to represent the main protagonists and antagonists where applicable. When two characters seemed equally important, we broke ties via name occurrences in the corresponding book. We use the same generation hyper-parameters as the original CHIRON work but adapted to the generation config of Llama 3.3 70B (temperature = 0.6, top p = 0.9). We also use the zero-shot entailment module setting with Llama 3.3 70B, relying on its implicit reasoning abilities for the entailment task instead of explicit CoT and ICL prompting. For summarizing the character sheets we use the same hyper-parameters as used for chapter summarization, but with fewer generated tokens: max tokens = min(2048, |text-tokens| \u00b7 0.8). We summarize each character sheet individually, and concatenate them together in our final story-information prompt.",
+        "guidance": "Select top ~3 characters to represent central agents; resolve ties by name frequency. Summarize individually to compress context and then concatenate summaries to build a denser story-information prompt; use zero-shot entailment where available to reduce compute."
+      },
+      {
+        "name": "Filtering datapoints (chapter-level inclusion rules)",
+        "description": "We filter out datapoints based on the following criteria: Chapters (ci+1) must have \u2265 200 words and \u2264 5000 words. We also apply the upper limit filter to the previous chapter to reduce the potential size of the prompt. We filter out the first two and last two chapters, as they often heavily feature prologue/epilogue text, and are difficult to apply reasoning to (e.g., too little information or too few possibilities). For books at the beginning of a series, the end is also often used to set up future installments.",
+        "guidance": "Purpose: reduce training complexity and ensure datapoints are informative. Enforce minimum length to have sufficient content for reasoning; enforce upper bounds to keep prompt sizes manageable."
+      },
+      {
+        "name": "Final dataset partitioning and statistics (split counts and token stats)",
+        "description": "The dataset is partitioned into Train/Val/Test splits with reported counts and token statistics (e.g., mean and max tokens for next chapter and prompts reported per split).",
+        "guidance": "Track split sizes and token distributions to evaluate coverage and ensure comparable train/val/test distributions; use tokenizer-specific token counts (Qwen-2.5 3B tokenizer in this work) for planning context limits."
+      },
+      {
+        "name": "Training selection criterion (checkpoint selection)",
+        "description": "In both GRPO and SFT training we selected the best performing checkpoint via validation performance (percent improvement for GPRO and loss for SFT).",
+        "guidance": "Use appropriate validation metrics to select final checkpoints: reward/percent-improvement for RL objectives, loss for supervised fine-tuning."
+      },
+      {
+        "name": "SFT hyperparameter sweep guidance",
+        "description": "We ran small sweeps to test different SFT hyper-parameters, evaluating learning rates of {2e-5, 5e-7, 5e-6, 4e-5} and found 2e-5 performed best by validation loss.",
+        "guidance": "Perform limited hyperparameter sweeps when compute constrained; prioritize learning-rate tuning and validate on held-out loss."
+      },
+      {
+        "name": "Improvement measure and piecewise reward formulation (VR-CLI)",
+        "description": "We defined our perplexity-based Improvement measure as: I\u03c0G(x,y,a) = [1 \u2212 PPL\u03c0G(y|x,a) / PPL\u03c0G(y|x)] \u00d7 100, and our reward as a piecewise function: R = 0 if I < 0.05; 0.5 if 0.05 \u2264 I < 1; 0.9 if 1 \u2264 I < 2; 1 if I \u2265 2.",
+        "guidance": "Reward is discretized into bins to map perplexity-based improvements into bounded reward signals. This definition is proposed but alternative reward formulations should be evaluated (see ablations)."
+      },
+      {
+        "name": "Reward ablation and evaluation methodology",
+        "description": "Instead of costly human annotations, different reward formulations are evaluated via their average percent (perplexity) improvement on the test set, using reasoning produced after RL-training. We sample 5 plans to reduce variance.",
+        "guidance": "When human labels are unavailable, evaluate reward formulations by their effect on automated improvement metrics. Use multiple sampled plans per example to reduce variance in measured improvements."
+      },
+      {
+        "name": "Alternative reward formulations tested (NLL/log-likelihood and unbounded variants)",
+        "description": "Ablations included switching perplexity for log-likelihood in the Improvement calculation (NLL), an 'unbounded NLL improvement' where the improvement is reduced to log-likelihood, and 'unbounded PPL improvement' variants. These ablations changed percent-improvement and sometimes affected training convergence and interpretability.",
+        "guidance": "Test both PPL- and NLL-based formulations; be aware that unbounded reward definitions may give better numerical improvement but reduce interpretability during training and cause metric domination by a few samples."
+      },
+      {
+        "name": "Hyper-parameter tuning lessons for RL and SFT",
+        "description": "Findings: a low KL-divergence coefficient (we used 1e-6 vs common defaults like 0.05) improved performance; increasing maximum generation length (e.g., to 2048) prevented rewards converging early to low values; increasing the number of generations per sample improved performance; prompt tuning to increase positive reward likelihood is fruitful; and selecting informative datapoints during training is recommended.",
+        "guidance": "Recommendations: use small KL penalty to promote exploration, allow long generation length to avoid truncating informative traces, increase samples per prompt where compute allows, and invest time in prompt/data selection to increase early positive signal."
+      },
+      {
+        "name": "Chapter generation length constraint",
+        "description": "To make model generations comparable to original chapters and each other, bound the length of next-chapter generations to be between half and 1.5 times the length of the original (in tokens): [0.5 \u00b7 |ci+1|, 1.5 \u00b7 |ci+1|].",
+        "guidance": "Enforce length bounds to avoid trivial solutions (too short/too long) and make automated metrics like Rouge-L comparable across variants."
+      },
+      {
+        "name": "Automatic formatting/truncation rules for generated chapters",
+        "description": "Automatic formatting rules applied to completions: \u2022 Cut off text after end-of-chapter signifiers (e.g., '### End of Chapter'); \u2022 Cut off text after lines of more than 10 words are repeated three times; \u2022 Cut off text after a chunk of 20 words has been seen 10 times; \u2022 Cut off text after a chunk of 20 words has been seen once before and contains 9 or fewer unique words. These rules are applied to completions but not to reasoning traces.",
+        "guidance": "Use truncation rules to remove degenerated repeated text and to replicate realistic chapter boundaries; do not apply these truncation rules to reasoning traces if the intention is to analyze reasoning behavior without interference."
+      },
+      {
+        "name": "Automated metrics for generated chapters and reasoning traces",
+        "description": "Automated measures: # Words (average words per chapter), % Unique Words (percentage of unique words within a chapter), % Unseen Trigrams (percent of trigrams in a chapter not present in Story-Information), Rouge-L F1, Rouge-L Precision. Use one-way ANOVA to test statistical significance between variants per metric.",
+        "guidance": "These metrics capture length, lexical diversity, novelty relative to story info, and overlap. Automated metrics can indicate lexically similar stories across variants; lack of significant differences (p > 0.05) implies human judgments are less likely to be swayed by superficial lexical differences."
+      },
+      {
+        "name": "Use of Rouge-L Precision against different story-information references",
+        "description": "Break down Rouge-L Precision by using different pieces of story information as reference: Previous Chapter, Prior Summary, Plot Sketch, Character Sheets, Next Chapter Synopsis. Reasoning traces show greater overlap with Story-Information and especially with Next Chapter Synopsis and Character Sheets.",
+        "guidance": "Measure overlap with multiple SI components to understand which source the generation most draws from. Higher Rouge-L Precision against a given SI piece implies the output extracts content from that piece."
+      },
+      {
+        "name": "Human annotator recruitment and screening criteria",
+        "description": "Annotators were recruited through Prolific if their primary language was English and their employment is in creative writing. We filtered for useful annotators by duration spent on the task (at least 50 minutes per 3 datapoints) and thoughtful justifications (at least 10 words on average). We paid annotators \u00a314 per three datapoints (\u2248 \u00a39.33/hour).",
+        "guidance": "Recruit annotators with domain-relevant expertise and enforce time/justification thresholds to improve annotation quality. Report payment and task burden to ensure ethical treatment."
+      },
+      {
+        "name": "Human evaluation task design (pairwise preference with SI exposure)",
+        "description": "Annotators saw only the story information SIi (instead of the full story text) and performed pairwise preference comparisons between continuations. The task is time-consuming (\u224830 minutes per comparison). Annotators provided justifications (sample justifications are shown in the paper) along multiple dimensions.",
+        "guidance": "Showing only condensed story-information simulates realistic authoring tools and reduces annotation cost; require written justifications to encourage engagement. Use pairwise comparisons to reduce rating scale issues."
+      },
+      {
+        "name": "Annotation dimensions for pairwise evaluation",
+        "description": "Annotators judged continuations along six dimensions: Plot, Character, Development, Creativity, Language, Overall Quality.",
+        "guidance": "Use multiple focused dimensions to capture different aspects of story quality. Collect short justifications per dimension to validate annotator engagement and provide qualitative insight."
+      },
+      {
+        "name": "Operational descriptions/examples for annotation dimensions",
+        "description": "Sample content from annotator justifications illustrates the dimensions: Plot \u2014 does the continuation progress the established plot and themes? Character \u2014 does the continuation enhance insight into characters and their development? Development \u2014 does it provide plausible/understated/consistent development of setting and character? Creativity \u2014 are there imaginative and engaging details consistent with theme? Language \u2014 is the language varied, rich, and rhetorically effective? Overall Quality \u2014 alignment with character arcs and plot points while introducing engaging elements.",
+        "guidance": "Provide annotators with examples of what counts as strength/weakness per dimension (as in Table 11) to reduce ambiguity. Note that language judgments may be more subjective."
+      },
+      {
+        "name": "Annotator agreement measurement and interpretation",
+        "description": "Annotator agreement was evaluated using Fleiss's Kappa (N = 20, k = 3) on an initial dataset; observed Kappa values: Plot 0.180, Character 0.102, Creativity 0.218, Development 0.186, Language 0.060, Overall Quality 0.210. Lowest agreement was Language; highest agreement was Creativity and Overall Quality.",
+        "guidance": "Measure inter-annotator agreement to validate annotation reliability. Expect lower agreement for more subjective dimensions (e.g., Language); interpret Kappa in light of task difficulty and domain subjectivity."
+      },
+      {
+        "name": "Preference encoding and correlational analysis",
+        "description": "Pairwise judgments were converted to ordinal values 0 (preferred Base continuation), 1 (no preference), and 2 (preferred continuation with reasoning). Correlate these ordinal judgments with automated Improvement using Spearman\u2019s rank correlation (\u03c1 reported; e.g., \u03c1 = 0.33, p = 0.01, N = 60).",
+        "guidance": "Encode pairwise preferences into ordinal scale for correlation analysis. Use nonparametric correlation (Spearman) to assess alignment between automated improvement metrics and human judgments."
+      },
+      {
+        "name": "Comparative evaluation metrics for variants (win-rate and Bradley-Terry probabilities)",
+        "description": "When comparing generation variants, report win-rate percentages (including ties) and Bradley\u2011Terry pairwise preference probabilities. Note that win-rate includes 'same' annotations while preference probabilities do not, so settings with win-rates < 50% may still be preferred by Bradley\u2011Terry.",
+        "guidance": "Report both raw win-rates (including ties) and Bradley\u2011Terry derived probabilities to fully characterize comparative performance between variants."
+      },
+      {
+        "name": "Evaluation of reasoning traces and their overlap with Story-Information",
+        "description": "Reasoning traces tend to contain more overlap with all pieces of the Story-Information than final generated chapters, often drawing more heavily from Next Chapter Synopsis and Character Sheets. Trained reasoning traces also tend to have higher Rouge-L Precision than untrained reasoning.",
+        "guidance": "Assess reasoning trace quality by measuring overlap with story-information pieces (e.g., Rouge-L Precision) and by qualitative inspection to see whether the reasoning highlights thematic/stylistic/plot elements that align with the true next chapter."
+      },
+      {
+        "name": "Plan-to-chapter matching as evidence of plan quality",
+        "description": "Matching generated plan excerpts to sentences in the true next chapters indicates that the Improvement metric aligns with plan usefulness. Table 19 provides examples where generated plans included thematic/plot elements later present in the next chapter.",
+        "guidance": "Use manual or automated plan-to-chapter matching to validate that generated plans capture elements that later appear in the target continuation; consider such overlap as supporting evidence that an automated improvement metric is meaningful."
+      },
+      {
+        "name": "Assessing genre effects on reasoning/performance",
+        "description": "Break down average percent-improvement and win-rates by genre (e.g., Sci\u2011Fi, Fantasy, Romance, Historical) and model size. Trained reasoning produces higher average improvements across genres; Sci\u2011Fi showed the largest improvements.",
+        "guidance": "Evaluate and report per-genre performance since effectiveness of reasoning or training variants may vary by genre. Small sample sizes per genre should be noted when interpreting results."
+      }
+    ]
+  }
+}

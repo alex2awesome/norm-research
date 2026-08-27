@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_69f08d7253e0.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17989,
+  "output_tokens": 4200,
+  "elapsed_s": 1418.2661791250575,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "mathematicians and formal-methods researchers working on formalization and verification of the Kepler conjecture (Flyspeck) and similar large computer-assisted proofs",
+    "subtask_short": "formalizing Kepler conjecture proof",
+    "subtask_description": "Guidance and standards for reorganizing, reimplementing, and formally verifying the original proof of the Kepler conjecture (the Flyspeck project), including requirements for formal proofs, code reimplementation, inequality verification, graph enumeration, measure theory, and tooling/automation. Targets producing a fully formal, machine-checked proof and trustworthy executable code.",
+    "subtask_keywords": [
+      "kepler_conjecture",
+      "flyspeck",
+      "formal_proof",
+      "theorem_proving",
+      "proof_assistant"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Formal proof: exhaustive checking to axioms",
+        "description": "A formal proof is a proof in which every logical inference has been checked, all the way back to the foundational axioms of mathematics. No step is skipped no matter how obvious it may be to a mathematician.",
+        "guidance": "Because of the large number of inferences involved, a computer is used to check the steps of a formal proof. The process requires expanding the traditional proof in greater detail (filling in steps a reader would regard as obvious), supplying background knowledge, and transcribing the detailed text into a computer-readable format inside a proof assistant which validates each new lemma by stepping through each inference."
+      },
+      {
+        "name": "Formal proof as certification of computer verification",
+        "description": "A formal proof of a computer verification can be viewed as a formal proof of the correctness of the computer code used in the verification; the formal proof certifies that the code is a bug-free implementation of its specification.",
+        "guidance": "For proofs that rely on computer computations (e.g., four color theorem, Kepler conjecture), the formalization should treat the computation as an object of verification so that the proof assistant certifies both the mathematics and the computational implementation."
+      },
+      {
+        "name": "Aim for single-proof-assistant formalization (or provably translated proofs)",
+        "description": "The ultimate aim is to develop a complete formal proof within a single proof assistant, but different assistants may be used for different parts.",
+        "guidance": "Because multiple proof assistants (HOL Light, Coq, Isabelle/HOL) have been used, automated translation among proof assistants is necessary; implementations of automated translation among HOL, Isabelle, and Coq exist and should be used to reconcile multi-assistant formalizations."
+      },
+      {
+        "name": "Blueprint edition: explicit, simplified, systematized text suitable for formalization",
+        "description": "Produce a second-generation 'blueprint' edition of the proof that contains far more explicit detail than the original and is written to permit easy formalization.",
+        "guidance": "Simplify and systematize proofs, extract and isolate frequently used elementary lemmas, and write the text so that assumptions match what is available in the target proof assistant libraries."
+      },
+      {
+        "name": "Extract elementary lemmas for separate treatment",
+        "description": "Collect elementary geometric lemmas (about 200) that put the greatest burden on a reader's geometric intuition and place them in a separate collection that can be stated without reference to the Kepler conjecture machinery.",
+        "guidance": "State these lemmas in the first-order language of the reals where possible; this isolation enables reuse, easier automated proofs, and clearer mapping to proof assistant theories."
+      },
+      {
+        "name": "Align proof background with proof assistant libraries",
+        "description": "Ensure close match between the background material assumed in the (blueprint) text and the mathematical material available in the proof assistant (e.g., HOL Light).",
+        "guidance": "Develop or port required background (trigonometry, measure and integration, hypermaps, fans, volumes of primitives) so the formal text directly uses supported theories and primitives in the assistant."
+      },
+      {
+        "name": "Formalize Euclidean space theory sufficiently (RN and R3)",
+        "description": "Develop a solid general theory of Euclidean space RN (specializing to R3 as needed) covering vectors, linear operators, dimensions, metric/topological notions, convexity, sequences/series, derivatives, and essential theorems (Heine-Borel, Banach fixed-point, Brouwer, Helly, Carath\u00e9odory, inverse function theorem, Rolle, MVT).",
+        "guidance": "Prefer general RN formalizations (with type-indexing) for reuse; include formal statements of theorems and ensure instantiation to dimension 3 when needed for Flyspeck."
+      },
+      {
+        "name": "Formalize measure and integration to compute volumes",
+        "description": "Provide a formal development of integrals (Kurzweil\u2013Henstock gauge integral leading to Lebesgue integral), measurable sets, measure zero, finite measure, and additivity, so volumes of relevant geometric sets can be computed.",
+        "guidance": "Develop stronger Fubini-type results to evaluate multivariate integrals by iterated 1D integrals; ensure ability to compute volumes of primitives (ball, tetrahedron, right circular cone) used in the proof."
+      },
+      {
+        "name": "Limit formalization to required special cases where possible (e.g., JCT on sphere)",
+        "description": "Only formalize the versions of background theorems necessary for the proof (e.g., a spherical polygonal version of the Jordan curve theorem for arcs of great circles on the unit sphere).",
+        "guidance": "This targeted formalization reduces workload by avoiding extraneous generality not needed in Flyspeck."
+      },
+      {
+        "name": "Prefer automation methods that produce checkable certificates",
+        "description": "Use decision/automation techniques that produce concrete certificates (e.g., sums-of-squares certificates from semidefinite programming) that can be reconstructed and formally checked inside the proof assistant.",
+        "guidance": "Avoid relying on large, opaque external computations without certificates. For purely universally quantified formulas reduce to semidefinite programming and reconstruct SOS certificates that are easy to verify formally; for linear reasoning use decision procedures in general vector/normed spaces where efficient."
+      },
+      {
+        "name": "Avoid relying on floating-point rounding modes in proof-critical code",
+        "description": "Do not base interval arithmetic or other proof-critical computations on changing IEEE 754 rounding modes or other fragile floating-point stateful features.",
+        "guidance": "Rationale: relying on processor rounding mode changes (global effects), compiler/library/processor implementation variability, and millions of explicit mode changes reduces trustworthiness. Prefer implementations that can be checked with arbitrary-precision interval libraries (e.g., MPFI) or exact dyadic/rational arithmetic for certification."
+      },
+      {
+        "name": "Reimplement computational code in a formally-specified, modular language",
+        "description": "Reimplement original code in a language with a formal definition (Standard ML chosen here) to make programs have a meaning apart from a particular compiler, and to support modular abstract interval types and clear interfaces.",
+        "guidance": "Use an efficient compiler (e.g., MLton), leverage the module system to write code against abstract interval arithmetic types so multiple independent implementations can be swapped in, and control external solvers/libraries from one environment."
+      },
+      {
+        "name": "Provide a single executable interface and organized outputs",
+        "description": "Organize reimplemented computations so that all computations can be executed from a single command-line program and produce organized output, making it easy to locate, reproduce, and check computations that the proof depends on.",
+        "guidance": "This improves traceability versus the original multi-language, multi-program codebase where computations were difficult to find (e.g., calc-821707685)."
+      },
+      {
+        "name": "Minimize code complexity and document optimizations",
+        "description": "Avoid opaque optimizations and extensive undocumented code copying; strive for clarity over micro-optimizations that impede verification and understanding.",
+        "guidance": "Where performance-oriented hacks are used, document them; ensure that correctness does not rely on subtle, architecture-specific behavior."
+      },
+      {
+        "name": "Use modular verification strategy (multiple implementations for checking)",
+        "description": "Allow using fast floating-point interval implementations for daily work, but double-check important computations with slower, more trustworthy arbitrary-precision interval libraries (MPFI) or formalized alternatives.",
+        "guidance": "Abstract interval arithmetic in the code so different backends can be used; this supports both practical development and formal certification."
+      },
+      {
+        "name": "Prove nonlinear inequalities via polynomial domination and Bernstein bases",
+        "description": "For hard nonlinear inequalities, replace nonpolynomial components (\u00b7, 1/\u00b7, arctan, sqrt) with polynomial upper/lower approximations to get a dominating polynomial g such that \u03b3 \u2264 g \u2264 pt, then bound g using Bernstein polynomial representations.",
+        "guidance": "Choose approximations so positive occurrences use upper approximations and negative occurrences use lower ones; arrange approximations so g matches \u03b3 at a key point (e.g., y=(2,...,2)) to permit tight bounds; factor transcendental parts to obtain rational coefficients where possible; convert to Bernstein representation and use max Bernstein coefficient as an upper bound; implement efficient multivariate Bernstein conversion algorithms and rely on dyadic/rational arithmetic to avoid rounding."
+      },
+      {
+        "name": "Avoid the dependency problem in interval arithmetic via subdivision or alternative methods",
+        "description": "Recognize interval arithmetic overestimates due to dependency (e.g., x-x \u2260 0 numerically) and either subdivide domains or prefer polynomial/SOS/Bernstein methods that mitigate dependency explosion.",
+        "guidance": "Subdivision can lead to combinatorial explosion; polynomial approximation + Bernstein/SOS can be more efficient for many Flyspeck inequalities."
+      },
+      {
+        "name": "Represent combinatorial objects in executable logical form for enumeration",
+        "description": "Model plane graphs (and related combinatorial objects) as executable data structures inside the logic (e.g., lists of faces with orientation, faces as lists of vertices, final/non-final face flags) so enumeration procedures are definitional and executable within the theorem prover.",
+        "guidance": "This approach allows running enumerators inside the prover (Isabelle/HOL) and treating the execution as proof (term evaluation yields theorem t = v). Carefully handle orientations, degeneracies, and symmetries."
+      },
+      {
+        "name": "Prove completeness of enumerations inside the proof assistant and compare outputs",
+        "description": "Formally prove that the executable enumeration is complete for the class of interest (e.g., any tame plane graph is isomorphic to a graph in the Archive), run the formal enumerator, and compare the output to existing archives to validate completeness and redundancy claims.",
+        "guidance": "Parameterize enumeration (e.g., Seedp) to control final face sizes, prune nonpromising branches, and use efficient evaluation in the prover to handle large enumerations (millions of graphs)."
+      },
+      {
+        "name": "Make massive computation in the formalization feasible and auditable",
+        "description": "For tasks that generate very large computation (e.g., 23 million plane graphs, 10^5 linear programs), ensure the formalization architecture supports efficient execution and that the computations are auditable within the proof infrastructure.",
+        "guidance": "Use theorem provers with executable languages (Isabelle/HOL), structure computations so evaluation counts as proof, and arrange interfaces to external solvers in a way that their results can be checked or reconstructed formally."
+      },
+      {
+        "name": "Generate and verify linear programs inside the proof assistant",
+        "description": "The linear programming subtask must be able to generate and verify the many linear programs (approx. 10^5) used in eliminating potential counterexamples inside the proof assistant (Isabelle/HOL was used).",
+        "guidance": "Develop technology to generate LPs in a proof-producing way and to verify solutions inside the assistant rather than trusting opaque external solver outputs."
+      },
+      {
+        "name": "Maintain public, precise errata and code corrections",
+        "description": "Keep an errata list and corrections to both the mathematical text and the computer code, with precise location annotations referring to the original proof, and make these public so reviewers and formalizers can apply corrections.",
+        "guidance": "Use precise location conventions (counting lines from top/bottom, section/lemma numbering) and host errata and corrected source files in accessible repositories (project website, code repository)."
+      }
+    ]
+  }
+}

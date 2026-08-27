@@ -70,6 +70,7 @@ def select_extension_texts(
 def score_extension_codebook(
     executor, *, codebook: Mapping[str, object], extension_texts: Sequence[str],
     executor_revision: str, readout_id: str, query_batch_size: int = 2048,
+    max_text_chars: int = 4000,
 ) -> dict:
     """Score exact frozen description-form orbits on only the appended probes."""
     texts = list(map(str, extension_texts))
@@ -89,7 +90,10 @@ def score_extension_codebook(
             values = []
             for start in range(0, len(texts), int(query_batch_size)):
                 batch = texts[start:start + int(query_batch_size)]
-                prompts = [_YESNO_TEMPLATE.format(rubric=form, text=text) for text in batch]
+                prompts = [
+                    _YESNO_TEMPLATE.format(rubric=form, text=text[:int(max_text_chars)])
+                    for text in batch
+                ]
                 values.extend(executor.score_binary_constrained(
                     prompts, system=None, pos="YES", neg="NO", seed=0,
                 ))

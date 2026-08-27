@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/amr4i_reviewer_recommendation.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 8731,
+  "output_tokens": 3658,
+  "elapsed_s": 417.0411900829058,
+  "extracted": {
+    "orientation": "academic_page",
+    "intended_audience": "students and researchers (ML/NLP) building paper-reviewer recommendation / conference assignment systems",
+    "subtask_short": "paper-reviewer recommendation system design",
+    "subtask_description": "Designing and evaluating automated systems that recommend the best k reviewers for a given (unseen) paper using topic models, collaborative filtering, matrix factorization, and citation/section-based signals. The report documents datasets, preprocessing, algorithms, evaluation (RMSE/10-fold CV), and practical issues.",
+    "subtask_keywords": [
+      "paper_review_assignment",
+      "reviewer_recommendation",
+      "topic_modeling",
+      "collaborative_filtering",
+      "matrix_factorization"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Problem formulation: recommend top-k reviewers",
+        "description": "Given a paper and a list of available reviewers, recommend the reviewers best suited for reviewing the given paper; formally, given a set of N reviewers, find the subset of best k reviewers for a given 'unseen' paper using the available resources.",
+        "guidance": "This is the canonical task definition that guides dataset construction, model output, and evaluation."
+      },
+      {
+        "name": "Assumption on paper format and sections",
+        "description": "The work assumes papers have a format close to the NIPS format and each paper has an explicit Experiment Section or a Related works section.",
+        "guidance": "Approach can be applied generally with slight algorithm modifications, but some methods (section extraction, weighting) rely on identifiable sections."
+      },
+      {
+        "name": "Represent papers and reviewers with topic vectors (LDA)",
+        "description": "Represent papers as vectors of topics obtained from an LDA model trained on a scientific corpus; represent a reviewer as the average vector comprising all his/her paper vectors (author profile = average of authored paper vectors).",
+        "guidance": "Used as initial paper/reviewer vectors (ui, vj) for downstream methods and as a baseline (TPMS-like)."
+      },
+      {
+        "name": "Hybrid collaborative filtering (user+item)",
+        "description": "Use both user-based and item-based collaborative filtering to fill the incomplete reviewer-paper relevance matrix; compute user-based and item-based relevance scores and take their average.",
+        "guidance": "Update formulas provided (with \u03c1user, \u03c1item weighting); relies on similarity metrics between reviewers and between papers."
+      },
+      {
+        "name": "Similarity metrics to compute vector similarity",
+        "description": "Use cosine, Jaccard, and Pearson similarity metrics to compute similarity between any two vectors (reviewer-reviewer or paper-paper).",
+        "guidance": "Formulas given; use cross-validation to select the best metric for predictions."
+      },
+      {
+        "name": "Use of initial fill value for unfilled entries in CF",
+        "description": "Set an initial value (reported as 1.0) to each unfilled entry in the relevance matrix before running collaborative filtering.",
+        "guidance": "Initialization affects CF behavior; the system uses all three similarity metrics and picks the best via cross-validation."
+      },
+      {
+        "name": "Evaluation metric: RMSE with 10-fold cross-validation",
+        "description": "Evaluate predicted relevance scores against ground truth using Root Mean Square Error (RMSE) computed by 10-fold cross validation.",
+        "guidance": "Divide actual relevance scores into 10 parts, train on 9 parts and compute RMSE on the held-out part; relevance scores range from 0 to 3 (Very Relevant=3, Relevant=2, Slightly Relevant=1, Irrelevant=0)."
+      },
+      {
+        "name": "Problem with BoW/LDA semantic richness (TPMS limitation)",
+        "description": "LDA or BoW topic modelling used by TPMS is not semantically rich enough; substituting with richer embeddings (e.g., Word2Vec) can improve results.",
+        "guidance": "Motivates exploring vector-based sentence/paper embeddings rather than purely topic counts."
+      },
+      {
+        "name": "Sections should be weighted differently for reviewer assignment",
+        "description": "Not all sections of the paper are equally important; Related Works and Experiment/Results sections often yield more useful topics for reviewer assignment and should be given higher weight.",
+        "guidance": "Propose clustering sentences and assigning priority weights to clusters; use weights to boost relevance scores for cited authors or boost topic frequencies for high-priority clusters."
+      },
+      {
+        "name": "Sentence clustering + priority weighting",
+        "description": "Cluster all sentences in the paper and assign priority weights to clusters to identify important sections/topics for reviewer assignment.",
+        "guidance": "Weights can be used (1) to boost the relevance score of cited persons if available in the reviewer list, and (2) to boost topic frequency whose sentences lie in higher-priority clusters."
+      },
+      {
+        "name": "Sent2Vec (vector averaging) for sentence embeddings and its limitation",
+        "description": "Compute a sentence vector as the average of word vectors (S = sum wi / n).",
+        "guidance": "Averaging causes loss of information (example: two-word sentence with vectors -1 and +1 averages to 0), leading to poor clustering; observe large central cluster and high merger distances in agglomerative clustering."
+      },
+      {
+        "name": "Bag-of-vectors sentence similarity (pairwise word cosines)",
+        "description": "Compute sentence similarity by summing cosines of all word vector pairs between two sentences and build an affinity matrix for spectral clustering.",
+        "guidance": "After removing stop words, form all (ui,vj) pairs and compute normalized sum of dot-products to obtain sentence similarity; apply spectral clustering to this affinity matrix."
+      },
+      {
+        "name": "Alternating optimization to jointly optimize relevance matrix and vectors",
+        "description": "Hypothesize that initial LDA vectors are suboptimal; alternate between (1) optimizing the reviewer-paper relevance matrix given current paper and reviewer vectors and (2) using matrix factorization to obtain optimal paper and reviewer vectors from the matrix.",
+        "guidance": "Initialize ui, vj to LDA vectors; repeat updates (they implemented 5 epochs) to refine both matrix and vectors."
+      },
+      {
+        "name": "Low-rank matrix factorization with SGD",
+        "description": "Factor the reviewer-paper relevance matrix into paper and reviewer matrices using low-rank matrix factorization optimized with stochastic gradient descent (SGD), minimizing squared error plus L2 regularization.",
+        "guidance": "Objective and SGD update rules provided; used 5000 iterations, step length 0.0002, \u03bb = 0.02 in experiments."
+      },
+      {
+        "name": "Regularize factorization to stay close to initial LDA vectors",
+        "description": "Modify the matrix factorization objective to penalize deviation of learned vectors from initial LDA vectors (add terms ||ui \u2212 ui*||^2 and ||vi \u2212 vi*||^2), ensuring document topics keep influence on relevance scores.",
+        "guidance": "This change enforces the paper and reviewer vectors not to deviate too much from the LDA vectors."
+      },
+      {
+        "name": "Model cited authors as high-relevance reviewers",
+        "description": "Authors of papers cited in the Experiments or Related Works sections are likely good reviewers; if cited authors are in the reviewer list assign them high relevance; if not, compute their author profiles and add them as new reviewer rows with high scores for the cited paper.",
+        "guidance": "Completing the matrix with these added rows increases relevance scores of reviewers similar to the cited authors."
+      },
+      {
+        "name": "Preprocessing standards",
+        "description": "Standard NLP preprocessing used: Porter stemming, stop-word removal, manual extracting of Experiment section (due to diverse section titles), extracting references via bibtex files, and creating author profiles as the average of an author's paper vectors.",
+        "guidance": "These preprocessing steps are necessary to create consistent inputs for LDA/embeddings and for identifying cited authors and experiment sections."
+      },
+      {
+        "name": "Dataset composition and ground-truth relevance labels",
+        "description": "Recommendation dataset should include abstracts/papers, a reviewer list, and paper-reviewer relevance judgments; example dataset used: 148 NIPS 2006 papers, 364 reviewers, 650 relevance judgments.",
+        "guidance": "Ground truth relevance used: Very Relevant=3, Relevant=2, Slightly Relevant=1, Irrelevant=0. Using reviewer feedback and reviewer ratings from conference websites can serve as training/validation signals."
+      },
+      {
+        "name": "Implementation hyperparameter choices (example settings)",
+        "description": "Practical parameter settings used in experiments: LDA with unigrams, 127 topics, 5 passes, minimum probability 0; Alternating Optimization run for 5 epochs; matrix factorization 5000 iterations, step length 0.0002, \u03bb = 0.02.",
+        "guidance": "These are example settings; hyperparameter tuning (hypertuning) is suggested in future work for improved performance."
+      },
+      {
+        "name": "Selection of similarity metric by cross-validation",
+        "description": "Use cross-validation accuracy (RMSE) to choose which similarity metric (cosine, Jaccard, Pearson) yields best predictions for collaborative filtering.",
+        "guidance": "Train CF using all metrics and select the best according to CV; reported RMSE comparisons for cosine/jaccard/pearson in experiments."
+      },
+      {
+        "name": "Practical challenges that affect system quality",
+        "description": "Be aware of dataset scarcity/confidentiality for reviewer-paper assignments, partial/non-portable code availability, and author name-disambiguation issues when extracting cited author profiles.",
+        "guidance": "These factors limit reproducibility and evaluation; solutions include requesting datasets from authors, robust name disambiguation, and advocating for open-sourcing code/data."
+      },
+      {
+        "name": "Recommended future extensions as quality criteria",
+        "description": "Suggested improvements include hypertuning methods, using full papers instead of abstracts to construct profiles, finding important sections independent of relevance scores, extending to papers without clear experiment/related-work sections, and pursuing citation-graph-based matching.",
+        "guidance": "These directions indicate criteria to improve coverage, robustness, and semantic fidelity of reviewer recommendation systems."
+      }
+    ]
+  }
+}

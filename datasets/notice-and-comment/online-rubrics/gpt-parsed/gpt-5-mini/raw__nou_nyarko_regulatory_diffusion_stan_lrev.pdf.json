@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 18664,
+  "output_tokens": 3685,
+  "elapsed_s": 884.2687482081819,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "administrative law scholars, empirical legal researchers, judges, agency rulemakers, and policy analysts",
+    "subtask_short": "analyzing_regulatory_text_diffusion",
+    "subtask_description": "Empirical and normative study of how and why U.S. administrative agencies reuse substantially similar codified regulatory text, including methods to detect reuse, metrics of agency leadership in diffusion, and proposals for administrative and judicial responses.",
+    "subtask_keywords": [
+      "administrative_law",
+      "text_reuse",
+      "federal_register",
+      "empirical_legal_study",
+      "regulatory_interpretation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of Regulatory Diffusion",
+        "description": "Regulatory diffusion refers to the use of substantially similar codified texts across agencies; specifically, the interagency spread of policy choices and the reuse of regulatory language as reflected in the operative text codified in the Code of Federal Regulations (CFR).",
+        "guidance": "Focus is on operative CFR text (not preambles/analyses). Diffusion can indicate both policy alignment and drafting choices; ambiguity in text can mean policy choices are ambiguous too."
+      },
+      {
+        "name": "Forms of Diffusion: joint, common, and successive rulemaking",
+        "description": "Diffusion can occur through (1) joint rulemaking (a single rule signed by multiple agencies and codified in one place), (2) common rules (virtually identical rules concurrently published in different agencies' CFR sections), and (3) successive rulemaking (one agency reuses text from another rule promulgated earlier).",
+        "guidance": "Distinguish these forms empirically and conceptually: joint/common indicate coordination during drafting; successive indicates later reuse and suggests informal channels of diffusion."
+      },
+      {
+        "name": "Unit of Analysis: paragraph-level operative text in the CFR",
+        "description": "Use individual codified paragraphs (operative regulatory paragraphs) as the basic unit for identifying and measuring text reuse.",
+        "guidance": "The authors operationalized text reuse at paragraph granularity across the Federal Register/CFR corpus; this isolates the 'operative text' that carries substantive and procedural regulatory content."
+      },
+      {
+        "name": "Text-similarity representation: shingled k-grams",
+        "description": "Represent texts as shingled k-grams (overlapping contiguous sequences of k consecutive words) to capture exact-sequence textual similarity.",
+        "guidance": "k is a threshold: lower k increases false positives (matching incidental short phrases), higher k increases false negatives (minor edits break shingles). The paper uses k = 5 as an applied choice and illustrates trade-offs with examples."
+      },
+      {
+        "name": "Similarity metric: Jaccard similarity on shingles",
+        "description": "Measure pairwise textual similarity using the Jaccard index: number of overlapping shingles divided by total unique shingles.",
+        "guidance": "Jaccard captures lexical overlap of contiguous sequences; it is sensitive to exact wording but not to semantic synonymy (e.g., 'document' vs 'writing' breaks shingles)."
+      },
+      {
+        "name": "Reuse detection threshold: Jaccard similarity >= 0.5",
+        "description": "Treat pairs of paragraphs with Jaccard similarity of 0.5 or higher as candidates for text reuse; below 0.5, reuse can be virtually ruled out for this application.",
+        "guidance": "After manual inspection, the authors set parameters so that detection probability is effectively 1 at J = 0.5 (see LSH parameters). This threshold balances false positives/negatives in their corpus."
+      },
+      {
+        "name": "Scalable computational pipeline: minhashing and locality-sensitive hashing (LSH)",
+        "description": "To identify similar documents at scale, use minhashing to approximate Jaccard similarity and LSH to bucket candidates so only likely-similar pairs are compared pairwise.",
+        "guidance": "Concrete parameterization used: m = 120 hash values and n = 40 bands (and earlier discussion of 360 random draws for Jaccard estimation), chosen so the pipeline reliably detects pairs with J >= 0.5 while keeping computations tractable."
+      },
+      {
+        "name": "Focus on Federal Register / CFR as authoritative dataset",
+        "description": "Use the Federal Register and the codified CFR (final rules) as the comprehensive and legally required source of agency rule text rather than self-reported sources like the Unified Agenda.",
+        "guidance": "Final rules are legally required to be published and thus provide the most complete record for studying regulatory drafting and text reuse."
+      },
+      {
+        "name": "Classifier distinction: substantive vs procedural paragraphs",
+        "description": "Distinguish substantive regulatory paragraphs from procedural ones using trained classifiers and evaluate classification performance with standard metrics (Accuracy, F1, AUC).",
+        "guidance": "The authors trained and validated classifiers to separate paragraph types and reported performance (figures/tables for Accuracy, F1, AUC). This distinction supports analysis of what kinds of text are being reused."
+      },
+      {
+        "name": "Leadership scoring: counting how often an agency's regulatory text is reused",
+        "description": "Define an agency's 'leadership score' as an expression of how often other agencies borrow that agency's regulatory paragraphs.",
+        "guidance": "Raw counts of reused paragraphs indicate influence, but must be adjusted/weighted to avoid overcounting when texts are reused through chains or joint rulemaking (see weighting scheme and adjusted leadership score)."
+      },
+      {
+        "name": "Weighting scheme for leadership points (avoiding overcounting)",
+        "description": "When a borrowing agency's text can be traced to multiple preceding agencies (e.g., A3 reuses text that A2 previously reused from A1), divide the 'leadership point' equally among preceding agencies to prevent overcounting.",
+        "guidance": "Example: if A3 copied text present in both A1 and A2, assign 0.5 leadership point to each pair (A1,A3) and (A2,A3). For joint rulemaking participants, treat the joint rule as a single lending entity and distribute shares equally among participants; formula noted: each agency within a joint rule receives (1 \u00f7 n) * (1 \u00f7 k) leadership points, where n\u22121 is the number of lending agencies and k is number of agencies in the joint rule."
+      },
+      {
+        "name": "Adjusted leadership score normalization",
+        "description": "Normalize absolute leadership scores by an agency's regulatory output to create adjusted leadership scores (leadership per unit of regulatory activity).",
+        "guidance": "This allows comparison across agencies with different volumes of regulatory paragraphs (the paper divides leadership points by the amount of regulatory activity for each agency)."
+      },
+      {
+        "name": "Temporal scope selection for trend analysis",
+        "description": "Use a multi-decade (twenty-year) window of Federal Register/CFR data to estimate trends in text reuse over time.",
+        "guidance": "The authors analyze roughly 2000\u20132020 and report changes in reuse share (e.g., <3% in 2000 to >10% in 2020), which informs trend in diffusion."
+      },
+      {
+        "name": "Interpretive recommendation: agencies should explain why they borrowed text",
+        "description": "Normative proposal that agencies be required to explain, in rulemaking, why they are emulating other regulatory texts, with such explanations subject to review by OIRA.",
+        "guidance": "Requiring explanations would allow executive-branch oversight to distinguish desirable from undesirable reasons for text reuse and improve transparency for subsequent judicial and public review."
+      },
+      {
+        "name": "Judicial interpretive recommendation: apply in pari materia where appropriate",
+        "description": "Argue in favor of applying the in pari materia canon\u2014treating similar regulations across agencies as interpretable with reference to one another\u2014so that similar regulatory texts are interpreted similarly by judges.",
+        "guidance": "The paper proposes ways for judges to decide when to apply the canon: textualists would require strong textual similarity (lexical overlap); purposivists would look to whether the rules implicate the same policy, using institutional proxies (e.g., OIRA coordination or shared working groups) to infer coordinated intent."
+      },
+      {
+        "name": "Diagnostic caveat: lexical vs semantic similarity",
+        "description": "Textual similarity measures detect lexical (contiguous word sequence) overlap, not semantic equivalence; synonyms or paraphrase can break shingle chains and reduce measured similarity despite semantic closeness.",
+        "guidance": "Be aware that measures like shingled Jaccard will miss semantically similar but lexically different text (example: 'document' vs 'writing'); choose k and downstream interpretation accordingly."
+      },
+      {
+        "name": "Channels and hypotheses for diffusion (explanatory criteria)",
+        "description": "Enumerate candidate reasons and channels for diffusion that should be evaluated: resource constraints (staffing/budget), learning from other agencies, presidential or congressional directives, interagency working groups, staff migration, informal interagency interactions, and interest-group influence.",
+        "guidance": "These channels form testable hypotheses in empirical work and guide qualitative data collection (e.g., interviews with government officials) to explain observed diffusion patterns."
+      },
+      {
+        "name": "Detection-parameter justification and manual validation",
+        "description": "Select LSH/minhash parameters (m, n, k) and similarity threshold based on manual inspection and validation to ensure acceptable detection probability and error rates.",
+        "guidance": "The authors manually inspected results and chose parameters m = 120 and n = 40 so that the probability of detecting pairs with J >= 0.5 is effectively 1; they also discuss using 360 independent random draws for Jaccard estimation to control standard error (~0.06)."
+      }
+    ]
+  }
+}

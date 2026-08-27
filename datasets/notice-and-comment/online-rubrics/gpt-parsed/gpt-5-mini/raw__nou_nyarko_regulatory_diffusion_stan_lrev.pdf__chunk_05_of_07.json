@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "chunk_idx": 5,
+  "n_chunks": 7,
+  "chunk_chars": 38955,
+  "model": "gpt-5-mini",
+  "elapsed_s": 46.61363487498602,
+  "input_tokens": 13385,
+  "output_tokens": 3372,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "administrative law scholars, agency lawyers, judges, and regulatory policy researchers",
+    "subtask_short": "reading regulations in pari materia",
+    "subtask_description": "Assessing when and how similar regulations across agencies should be interpreted consistently (in pari materia), and empirically identifying textual reuse between agency rules using scalable text-similarity methods.",
+    "subtask_keywords": [
+      "administrative_law",
+      "regulatory_interpretation",
+      "in_pari_materia",
+      "text_reuse",
+      "empirical_methods"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Auer/Kisor deference conditions",
+        "description": "An agency\u2019s interpretation of its own regulation is eligible for deference only when the interpretation (1) represents the agency\u2019s high-level \u201cofficial position\u201d rather than an informal staff ruling, (2) exhibits the agency\u2019s expertise and \u201cconsidered judgment,\u201d and (3) the regulation remains genuinely ambiguous even after the court has used all standard tools of interpretation; if those conditions are satisfied, the agency\u2019s \u201creasonable\u201d view within the court-identified zone of ambiguity may receive deference.",
+        "guidance": "Judge must first attempt to disambiguate the regulation using text, structure, history, and purpose; only if genuine ambiguity remains and the interpretation is official, expert, and considered, may deference be given. The agency\u2019s view must be reasonable (within the zone of ambiguity)."
+      },
+      {
+        "name": "What counts as the relevant regulatory 'text'",
+        "description": "The relevant regulatory \u201ctext\u201d may include only the codified text in the Code of Federal Regulations (CFR) or may also include the preamble/statement of basis and purpose and other materials; commentators disagree on whether preambles and statements of basis and purpose should be treated as part of the regulatory text.",
+        "guidance": "Sources to consider: CFR text, preamble (statement of basis and purpose), regulatory analyses, notices of proposed rulemaking, internal agency memoranda, and recollections of drafters. Different interpretive approaches (textualist vs. others) will treat these sources differently."
+      },
+      {
+        "name": "Use and appropriateness of interpretive canons (in pari materia)",
+        "description": "The in pari materia canon\u2014similar statutes/regulations on the same subject should be interpreted similarly\u2014may be more justifiable in the regulatory context than the statutory context because executive-branch mechanisms (e.g., OIRA review, interagency coordination) promote coherence.",
+        "guidance": "Assess the empirical grounding for coherence: whether OIRA or other coordinating mechanisms have reviewed/encouraged consistency; consider APA nonarbitrariness concerns and whether commenters have raised cross-agency inconsistency. Recognize debate about importing statutory canons wholesale into regulatory interpretation."
+      },
+      {
+        "name": "When to apply in pari materia to regulations (textualist vs purposivist tests)",
+        "description": "Textualist approach: apply in pari materia when linguistic/textual coherence justifies treating the regulations as one (apply canons to harmonize language). Purposivist approach: apply in pari materia when the two regulations implicate the same policy goals, even if wording differs.",
+        "guidance": "Textualist judges focus on language similarity and may not rely on quantitative similarity metrics used by the authors; purposivist judges may rely on institutional proxies (e.g., OIRA coordination, same working group) or evidence that an accountable executive actor intended policy consistency."
+      },
+      {
+        "name": "Institutional proxies for regulatory similarity",
+        "description": "To determine whether two regulations are appropriate to read against each other, courts can consider institutional indicators such as whether rules were coordinated by OIRA, arose from the same working group, or were subject to interagency collaboration.",
+        "guidance": "If an accountable executive actor (e.g., OIRA or a working group) coordinated the rules, a court can treat that as evidence supporting application of an in pari materia canon to achieve policy coherence."
+      },
+      {
+        "name": "APA arbitrary-and-capricious coherence requirement as a cross-agency criterion",
+        "description": "The APA\u2019s prohibition against arbitrary and capricious agency action entails a requirement of policy coherence; when commenters raise concerns about inconsistent regulations across agencies, agencies must consider those concerns and address potential interagency conflict.",
+        "guidance": "Courts reviewing a rule under arbitrary-and-capricious review may require agencies to explain how they resolved or considered interagency inconsistencies; failure to address such concerns can undermine deference or agency credibility."
+      },
+      {
+        "name": "Shingled k-grams and Jaccard similarity for textual reuse",
+        "description": "Represent texts as overlapping k-word shingles (k-grams) and compute Jaccard similarity (intersection over union of shingles) to measure textual overlap; the choice of k determines the minimum consecutive-word match required to count as reuse.",
+        "guidance": "Small k (e.g., k=2) yields many false positives (common short phrases); large k yields false negatives (minor edits break k-grams). Choose k to balance false positives/negatives depending on desired sensitivity to exact sequences."
+      },
+      {
+        "name": "Tradeoffs and interpretation of textual vs semantic similarity",
+        "description": "The k-gram/Jaccard approach is sensitive to textual (lexical) similarity but not semantic similarity; semantically equivalent substitutions (e.g., 'document' vs 'writing') break consecutive-word chains and lower measured similarity.",
+        "guidance": "Be aware that low Jaccard scores may hide semantic reuse; the measure captures verbatim or near-verbatim reuse, not paraphrase or conceptual similarity."
+      },
+      {
+        "name": "Approximation of Jaccard via random sampling and minhashing",
+        "description": "Exact Jaccard computation is expensive for long texts; approximate Jaccard can be obtained by drawing random shingles (e.g., 360 independent random draws yielding a standard error ~0.06) and via minhashing, which hashes shingles and retains minimum hash values to estimate similarity efficiently.",
+        "guidance": "Select the number of random draws (or minhash signatures) to achieve acceptable standard error; repeated minhashing with independent hash functions yields reliable low-cost estimates of Jaccard similarity."
+      },
+      {
+        "name": "Locality-sensitive hashing (LSH) for scalability and bucketed candidate comparison",
+        "description": "Use LSH to partition documents into buckets so that similar documents are likely hashed to the same bucket; represent each document by m hash values, break them into n bands (each with m/n rows), hash bands to buckets, and compare only documents sharing a bucket.",
+        "guidance": "Choose m and n so that documents above a target Jaccard similarity threshold are very likely to be compared; parameters (e.g., m=120, n=40 used by authors) can be tuned to make detection probability \u22481 at chosen threshold."
+      },
+      {
+        "name": "Threshold for considering documents as reused (Jaccard >= 0.5)",
+        "description": "After manual inspection the authors determined that two documents with Jaccard similarity below 0.5 can be virtually ruled out as having reused the same text; they set LSH parameters to ensure pairs with Jaccard \u2265 0.5 would be compared.",
+        "guidance": "Treat J >= 0.5 as a practical cutoff for likely text reuse in this empirical application; document that this threshold is empirical and depends on the project's goals and manual validation."
+      },
+      {
+        "name": "Parameter selection and detection-probability calibration",
+        "description": "For given m (number of hashes) and n (bands), one can compute the probability that a pair of documents with a given Jaccard similarity will be assigned to the same bucket (and thus be compared).",
+        "guidance": "Calibrate parameters so detection probability meets objectives (authors chose m=120 and n=40 to guarantee detection at J=0.5). Visualize detection probability as a function of J to justify parameter choices."
+      },
+      {
+        "name": "Implementation tool: textreuse R package",
+        "description": "Practical implementation can use the text-reuse package in R (textreuse) to detect text reuse and compute document similarity.",
+        "guidance": "Cite and use stable software implementations to reproduce methods; authors used Lincoln Mullen's textreuse package (version referenced)."
+      },
+      {
+        "name": "Weighted leadership score to avoid overcounting in cascades",
+        "description": "When assigning leadership (influence) scores to agencies based on how often their text is reused, avoid simple counts that double- or triple-count cascading reuse; instead divide the leadership credit among preceding agencies so that a downstream copier that reused from one of several predecessors does not cause overcounting.",
+        "guidance": "Example: if A2 reused from A1 in 2005 and A3 reused that text in 2010, the dataset would show pairs (A1,A2), (A1,A3), (A2,A3); to avoid double-counting A1\u2019s influence on A3, apportion credit among plausible upstream sources rather than summing raw pairs. Operationalize weighting rules carefully and justify assumptions about transmission paths."
+      },
+      {
+        "name": "OIRA review and explanation requirement for interagency consistency",
+        "description": "Executive Order No. 12,866 requires agencies (except statutorily independent regulatory agencies) to ensure that regulatory actions do not 'create a serious inconsistency or otherwise interfere with an action taken or planned by another agency'; thus agencies should explain how their rules are consistent with others as part of OIRA review.",
+        "guidance": "To reduce burden, such explanations could be made verbally in intra\u2013executive-branch deliberations rather than always appearing in published preambles; OIRA could require agencies to explain borrowing from other agencies as part of review."
+      }
+    ]
+  }
+}

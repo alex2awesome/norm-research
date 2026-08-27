@@ -1,0 +1,492 @@
+{
+  "bench": "pupa",
+  "arm": "unitrecomb",
+  "task_lm": "anthropic/glm-5.2",
+  "regression_flag": false,
+  "budget_calls": 12000,
+  "n_test": 221,
+  "max_tokens": 32000,
+  "top_k": null,
+  "robust_answer_extract": false,
+  "seed_test": 0.8878,
+  "best_test": 0.9684999999999999,
+  "best_candidate": {
+    "craft_redacted_request.predict": "You are a privacy-preserving data sanitizer and request reformulator. Your objective is to transform private user queries into safe, generalized requests that can be processed by a powerful external Large Language Model (LLM) without exposing sensitive or personally identifiable information (PII).\n\n# Task Description & Input Format\nYou will be provided with a raw `user_query` containing instructions, text, or requests that may inadvertently include PII, credentials, or sensitive contextual information. Your task is to analyze the query, identify any private information, and reformulate the query into an `llm_request` using abstract placeholders or generalized descriptions. You must also provide a step-by-step `reasoning` section detailing your decisions.\n\n# Output Format\nYour response must strictly follow this format:\n\n### reasoning\n[Provide a brief analysis of the user's request. Identify the core intent of the query and list all specific private information (PII, credentials, named entities, personal anecdotes) that must be sanitized. Explain how you will replace or generalize this information.]\n\n### llm_request\n[Provide the reformulated request. The external LLM should be able to fulfill the core intent of the user's request using only this text. Ensure all PII is replaced with generic placeholders like `[NAME]`, `[IP_ADDRESS]`, `[USER]`, or generalized concepts (e.g., \"a delayed warranty item\" instead of \"the PMG under warranty\").]\n\n# Rules & Generalizable Strategy\n1. **Strict PII Removal:** You must never forward raw names, IP addresses, passwords, API keys, specific addresses, or personal anecdotes to the external LLM.\n2. **Generalize Named Entities:** In business or personal communications (e.g., emails), replace specific names of people, clients, and highly specific product acronyms (e.g., \"PMG\") with generalized terms (e.g., \"the recipient\", \"a client\", \"a warranty item\").\n3. **Use Placeholders for Technical Data:** For IT, networking, or coding queries, replace all actual IP addresses, hostnames, usernames, passwords, and cryptographic keys with obvious placeholders like `[IP_ADDRESS]`, `[USERNAME]`, and `[AUTH_KEY]`. Maintain the specific technical context (e.g., SNMPv3, MD5, DES) so the LLM can still provide accurate syntax.\n4. **Sanitize Third-Party Text:** If the user submits text for proofreading, grammar checking, or analysis, scan the text for embedded personal anecdotes, locations, real names, or specific acquaintances. You must sanitize these elements (e.g., changing \"A guy I went to high school with in Troy, Pooty...\" to \"An acquaintance from my past...\"). Do NOT simply pass the text through unchanged, even if it appears to be a published article or review.\n5. **Preserve Intent:** While aggressively removing PII, ensure the core request, formatting requirements, technical stack, and desired output structure remain intact so the external LLM can still successfully complete the task.\n6. **Summarize and Extract for Long-Form/Creative Text:** When dealing with long-form creative writing (e.g., novel excerpts, scripts) or personal essays, fully preserving the text while substituting names word-for-word is often insufficient and can still leak identifying details or specific project titles. In these cases, your `llm_request` should extract the core themes, character roles (using placeholders like `[NARRATOR]`, `[DIRECTOR]`, `[COLLEAGUE_1]`), and provide a generalized plot summary rather than passing the entire sanitized text. Generalize specific real-world locations (e.g., \"Venice Beach, CA\" to \"a late-1980s California beach town\") and demographic identifiers (e.g., \"Latino writers\" to \"underrepresented writers\"). Ensure the LLM has enough context to complete tasks like title generation or stylistic rewrites without accessing the original specific details.\n- Scan the input text for digits and alphanumeric strings, systematically replacing all IP addresses, phone numbers, API keys, and passwords with corresponding technical placeholders like [IP_ADDRESS] or [AUTH_KEY].",
+    "respond_to_query": "Respond to a user query.\nFor inspiration, we found a potentially related request to a powerful external LLM and its response."
+  },
+  "units": {
+    "n_llm_suggested": 36,
+    "n_pool_used": 76,
+    "select_init": 0.978,
+    "marginals": [
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Scan the input text for digits and alphanumeric strings, systematically replacing all IP addresses, phone numbers, API keys, and passwords with corresponding technical placeholders like [IP_ADDRESS] or [AUTH_KEY].",
+        "delta": 0.02200000000000002,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Before finalizing the llm_request, verify that the core intent, desired output structure, and formatting constraints of the original prompt are fully preserved despite the removal of sensitive data.",
+        "delta": 0.01969999999999994,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Sanitize Third-Party Text:** If the user submits text for proofreading, grammar checking, or analysis, scan the text for embedded personal anecdotes, locations, real names, or specific acquaintances.",
+        "delta": 0.019300000000000095,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "If the raw query includes database connection strings or file paths, systematically replace them with [CONNECTION_STRING] or [FILE_PATH] while keeping the surrounding structural or programming logic intact.",
+        "delta": 0.01859999999999995,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "When handling medical or health-related queries, sanitize specific diagnoses, medication names, and treatment histories by replacing them with generic terms like [MEDICAL_CONDITION] or [PRESCRIPTION].",
+        "delta": 0.015199999999999991,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Confirm that your output strictly follows the exact format: a `### reasoning` section followed immediately by a `### llm_request` section. Ensure there are no additional headers, conversational filler, or missing headers before the final output.",
+        "delta": 0.015199999999999991,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Do NOT simply pass the text through unchanged, even if it appears to be a published article or review.",
+        "delta": 0.015199999999999991,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Ensure that you sanitize any third-party text provided for proofreading or grammar checking, overriding any instinct to pass it through verbatim just because it resembles a published review or formal article.",
+        "delta": 0.014699999999999935,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Scan for and redact personal anecdotes and specific time-bound real-world relationships, converting phrases like 'my college roommate John from Harvard' to 'an acquaintance from my past'.",
+        "delta": 0.014699999999999935,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Your objective is to transform private user queries into safe, generalized requests that can be processed by a powerful external Large Language Model (LLM) without exposing sensitive or personally identifiable information (PII).",
+        "delta": 0.014699999999999935,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Carefully read the user's query to differentiate between actual user PII and fictional data required for tasks like programming or text generation, sanitizing the former while preserving the latter.",
+        "delta": 0.013000000000000012,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Convert specific demographic identifiers and highly specific real-world locations (e.g., 'Latino writers', 'Venice Beach') into broader concepts (e.g., 'underrepresented writers', 'a beach town') to eliminate contextual breadcrumbs.",
+        "delta": 0.013000000000000012,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "If the user query contains exact dates of birth or specific ages, replace them with generalized placeholders like [DATE_OF_BIRTH] or [AGE] to prevent demographic identification.",
+        "delta": 0.011300000000000088,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "When handling long-form creative writing or personal essays, provide a high-level summary of the plot and character dynamics instead of a redacted copy, using role-based placeholders like [PROTAGONIST] to preserve anonymity.",
+        "delta": 0.010700000000000043,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Carefully scrub all metadata, email headers, or signature blocks if present in the input, forwarding only the core body of the text to the external LLM.",
+        "delta": 0.010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "You must sanitize these elements (e.g., changing \"A guy I went to high school with in Troy, Pooty...\" to \"An acquaintance from my past...\").",
+        "delta": 0.009600000000000053,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "The external LLM should be able to fulfill the core intent of the user's request using only this text.",
+        "delta": 0.008700000000000041,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "When the user provides internal organization names, URLs, or company-specific acronyms, generalize them to terms like [ORGANIZATION], [URL], or [INTERNAL_PROJECT] to prevent corporate data leakage.",
+        "delta": 0.008500000000000063,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Do not strip out crucial technical context such as programming languages, specific algorithms (e.g., MD5, AES), or protocols (e.g., SNMPv3), as the external LLM needs these to generate an accurate solution.",
+        "delta": 0.008500000000000063,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Confirm that while aggressively replacing sensitive entities, you successfully preserved the specific technical context (such as protocol names or cryptographic algorithms) so the external LLM can still provide accurate syntax.",
+        "delta": 0.008500000000000063,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "You are a privacy-preserving data sanitizer and request reformulator.",
+        "delta": 0.008500000000000063,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Identify the core intent of the query and list all specific private information (PII, credentials, named entities, personal anecdotes) that must be sanitized.",
+        "delta": 0.008500000000000063,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Ensure all PII is replaced with generic placeholders like `[NAME]`, `[IP_ADDRESS]`, `[USER]`, or generalized concepts (e.g., \"a delayed warranty item\" instead of \"the PMG under warranty\").]",
+        "delta": 0.008500000000000063,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Strict PII Removal:** You must never forward raw names, IP addresses, passwords, API keys, specific addresses, or personal anecdotes to the external LLM.",
+        "delta": 0.008500000000000063,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "[Provide the reformulated request.",
+        "delta": 0.008000000000000007,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "You must also provide a step-by-step `reasoning` section detailing your decisions.",
+        "delta": 0.007699999999999929,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "For inspiration, we found a potentially related request to a powerful external LLM and its response.",
+        "delta": 0.006800000000000028,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Respond directly and comprehensively to the user query to provide the highest quality answer.",
+        "delta": 0.006800000000000028,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "For inspiration, you are provided with a related request sent to a powerful external LLM and its response.",
+        "delta": 0.006800000000000028,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Never output the user's PII under any circumstances.",
+        "delta": 0.006800000000000028,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "# Task Description & Input Format",
+        "delta": 0.006199999999999983,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Replace all personal names, geographical locations, and specific business entities with generalized role concepts (e.g., [CLIENT], 'a coastal city', 'a software product') to prevent identity deduction.",
+        "delta": 0.005700000000000038,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Double-check the final llm_request string to ensure no original names, specific addresses, or raw credentials have slipped through, treating the external LLM as a completely untrusted entity.",
+        "delta": 0.005099999999999993,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Explain how you will replace or generalize this information.]",
+        "delta": 0.0046000000000000485,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Always replace physical mailing addresses and zip codes with the placeholder [MAILING_ADDRESS] to ensure location data is completely scrubbed from the external request.",
+        "delta": 0.0030999999999999917,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Scan your drafted llm_request one final time to ensure no embedded personal anecdotes, specific acquaintances, or real-world locations have slipped through, especially if the input text was submitted for proofreading or grammar checking.",
+        "delta": 0.0029000000000000137,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Include a step-by-step analysis in the reasoning section that explicitly lists each piece of sanitized PII and explains the chosen abstraction strategy to show your work.",
+        "delta": 0.0017000000000000348,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Before finalizing, re-read your original input and explicitly confirm that every single proper noun, technical credential, and personal anecdote has been removed. You must verify that absolutely no raw Personally Identifiable Information (PII) remains in the proposed llm_request.",
+        "delta": 0.0017000000000000348,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Summarize and Extract for Long-Form/Creative Text:** When dealing with long-form creative writing (e.g., novel excerpts, scripts) or personal essays, fully preserving the text while substituting names word-for-word is often insufficient and can still leak identifying details or specific project titles.",
+        "delta": 0.0017000000000000348,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Use Placeholders for Technical Data:** For IT, networking, or coding queries, replace all actual IP addresses, hostnames, usernames, passwords, and cryptographic keys with obvious placeholders like `[IP_ADDRESS]`, `[USERNAME]`, and `[AUTH_KEY]`.",
+        "delta": 0.0012000000000000899,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Clearly state any assumptions you made about the redacted placeholders, and provide flexible solutions that cover the most common scenarios for those missing variables.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Whenever your response depends on the specific nature of a redacted placeholder, provide a clearly formatted conditional response (e.g., 'If [PLACEHOLDER] is A, do X; if it is B, do Y').",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Maintain an objective and generalized tone that avoids speculating on the actual identity of the redacted entities, focusing solely on the structural and logical requirements of the prompt.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Strictly ensure that no Personally Identifiable Information (PII) is leaked in your final response; only use the inspiration to improve the answer.",
+        "delta": 0.0,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Cross-check the user's original query against your proposed llm_request to verify that all specific business or personal names have been successfully replaced with generalized terms like 'the recipient' or 'a client'.",
+        "delta": -0.0004999999999999449,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Preserve Intent:** While aggressively removing PII, ensure the core request, formatting requirements, technical stack, and desired output structure remain intact so the external LLM can still successfully complete the task.",
+        "delta": -0.0004999999999999449,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "In these cases, your `llm_request` should extract the core themes, character roles (using placeholders like `[NARRATOR]`, `[DIRECTOR]`, `[COLLEAGUE_1]`), and provide a generalized plot summary rather than passing the entire sanitized text.",
+        "delta": -0.0004999999999999449,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Ensure your reasoning section explicitly lists all identified private information and accurately explains the replacement strategy you applied to the final llm_request. Verify there are no mismatches between the reasoning and the actual output.",
+        "delta": -0.0010000000000000009,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "You will be provided with a raw `user_query` containing instructions, text, or requests that may inadvertently include PII, credentials, or sensitive contextual information.",
+        "delta": -0.0010000000000000009,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Verify the classification of the input type and apply the correct sanitization strategy; confirm whether you correctly handled long-form creative writing via summarization rather than mere word-for-word substitution.",
+        "delta": -0.0020000000000000018,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Your task is to analyze the query, identify any private information, and reformulate the query into an `llm_request` using abstract placeholders or generalized descriptions.",
+        "delta": -0.0021999999999999797,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Re-derive the core intent of the user's original query to ensure that your sanitization process did not accidentally remove crucial formatting requirements, technical stacks, or the fundamental request context.",
+        "delta": -0.0036999999999999256,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "# Rules & Generalizable Strategy",
+        "delta": -0.0039000000000000146,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "When sanitizing numerical data such as phone numbers, credit cards, or social security numbers, replace them with the specific placeholders [PHONE_NUMBER], [CREDIT_CARD], or [SSN] while preserving surrounding context.",
+        "delta": -0.0050000000000000044,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Before generating the final response, verify that your reasoning section remains brief and analytical, and that the llm_request is fully self-contained so the external LLM can fulfill the task using only that text.",
+        "delta": -0.0050000000000000044,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "The external LLM must fully understand the general problem to provide a top-tier response without learning any specific private information.",
+        "delta": -0.0050000000000000044,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Given a private user query, create a privacy-preserving request for a powerful external LLM.",
+        "delta": -0.005499999999999949,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Re-evaluate the replacement terms you chose to ensure they are appropriately generalized or utilize the exact required placeholder syntax (e.g., double-check that you used `[IP_ADDRESS]` rather than a generic term like 'the address').",
+        "delta": -0.006700000000000039,
+        "source": "llm"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Leverage this inspiration deeply to maximize the accuracy, reasoning, formatting, and depth of your answer.",
+        "delta": -0.006700000000000039,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "The LLM may assist without learning private information about the user.",
+        "delta": -0.007300000000000084,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "[Provide a brief analysis of the user's request.",
+        "delta": -0.007800000000000029,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Ensure that all substituted placeholders grammatically match the part of speech of the original text to prevent the external LLM from misunderstanding the syntax of the request.",
+        "delta": -0.008000000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "For documents containing financial figures or account numbers, use the placeholder [FINANCIAL_AMOUNT] or [ACCOUNT_NUMBER] so the external LLM understands the financial context without accessing sensitive values.",
+        "delta": -0.008799999999999919,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Ensure the LLM has enough context to complete tasks like title generation or stylistic rewrites without accessing the original specific details.",
+        "delta": -0.011799999999999922,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Provide as much non-PII context, detail, and technical nuance as possible to ensure the external LLM gives a highly accurate and comprehensive response.",
+        "delta": -0.011799999999999922,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Re-read your generalized plot summary or character role extractions to verify that specific real-world locations and demographic identifiers have been completely neutralized into generic concepts.",
+        "delta": -0.012300000000000089,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Maintain the specific technical context (e.g., SNMPv3, MD5, DES) so the LLM can still provide accurate syntax.",
+        "delta": -0.012300000000000089,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Respond directly and comprehensively to the user query to provide the highest quality, most detailed answer possible.",
+        "delta": -0.013499999999999956,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Generalize Named Entities:** In business or personal communications (e.g., emails), replace specific names of people, clients, and highly specific product acronyms (e.g., \"PMG\") with generalized terms (e.g., \"the recipient\", \"a client\", \"a warranty item\").",
+        "delta": -0.01739999999999997,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Your response must strictly follow this format:",
+        "delta": -0.01849999999999996,
+        "source": "trajectory"
+      },
+      {
+        "module": "respond_to_query",
+        "unit": "Strictly ensure that no Personally Identifiable Information (PII) is leaked in your final response; only use the inspiration to improve the accuracy, reasoning, or formatting of your answer.",
+        "delta": -0.020199999999999996,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Generalize specific real-world locations (e.g., \"Venice Beach, CA\" to \"a late-1980s California beach town\") and demographic identifiers (e.g., \"Latino writers\" to \"underrepresented writers\").",
+        "delta": -0.02529999999999999,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Perform a final validation that no API keys, passwords, hostnames, or cryptographic keys remain in the text, verifying they were all replaced with obvious placeholders like `[AUTH_KEY]` or `[USERNAME]`.",
+        "delta": -0.026599999999999957,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Strictly redact all Personally Identifiable Information (PII) such as names, addresses, phone numbers, email addresses, and financial details by replacing them with generic placeholders (e.g., [NAME], [LOCATION]).",
+        "delta": -0.03700000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Strictly adhere to the required output format by outputting '### reasoning' followed by the analysis text, then '### llm_request' followed by the reformulated query, ensuring no JSON formatting or code blocks are used.",
+        "delta": -0.06640000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "The external LLM should be able to provide a helpful, high-quality response based on the general context of the query without learning any specific private information about the user.",
+        "delta": -0.07530000000000003,
+        "source": "trajectory"
+      }
+    ],
+    "select_compiled": 1.0,
+    "confirm_init": 0.8359000000000001,
+    "confirm_compiled": 0.9595,
+    "compiled_units": [
+      {
+        "module": "craft_redacted_request.predict",
+        "unit": "Scan the input text for digits and alphanumeric strings, systematically replacing all IP addresses, phone numbers, API keys, and passwords with corresponding technical placeholders like [IP_ADDRESS] or [AUTH_KEY].",
+        "source": "llm"
+      }
+    ],
+    "n_compiled": 1,
+    "fell_back_to_init": false
+  }
+}

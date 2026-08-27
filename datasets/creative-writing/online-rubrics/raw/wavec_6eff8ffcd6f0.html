@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>“Choice” in Interactive Fiction - General Design Discussions - The Interactive Fiction Community Forum</title>
+    <meta name="description" content="If you will allow me to introduce a couple of definitions to clarify some questions I want to ask about craft, I recently rewatched an Extra Credits video in which the word calculations is defined as “decisions based sol&amp;hellip;">
+    <meta name="generator" content="Discourse 2026.1.3 - https://github.com/discourse/discourse version b3f024ce9587e678216892cbd967201b2450e197">
+<link rel="icon" type="image/png" href="https://intfiction.org/uploads/default/optimized/2X/0/0c2f47500d92ad1c3136c0051c9bff2d52d64dc7_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="https://intfiction.org/uploads/default/optimized/3X/f/e/fe55cab3207540e4a0c73476d6e319cbc281e2cb_2_180x180.png">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#3771C8">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111111">
+
+<meta name="color-scheme" content="light dark">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="https://intfiction.org/t/choice-in-interactive-fiction/48977" />
+
+
+<link rel="search" type="application/opensearchdescription+xml" href="https://intfiction.org/opensearch.xml" title="The Interactive Fiction Community Forum Search">
+
+    
+    <link href="/stylesheets/color_definitions_intfiction_3_2_0c0e7d6d4d7c9b4910865e694085a817f1f5e2df.css?__ws=intfiction.org" media="(prefers-color-scheme: light)" rel="stylesheet" class="light-scheme" data-scheme-id="3"/><link href="/stylesheets/color_definitions_dark_1_2_3af7240d0e4badc6f19e23f1c76ce978670d8f7e.css?__ws=intfiction.org" media="(prefers-color-scheme: dark)" rel="stylesheet" class="dark-scheme" data-scheme-id="1"/>
+
+<link href="/stylesheets/common_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common"  />
+
+  <link href="/stylesheets/mobile_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile"  />
+  <link href="/stylesheets/desktop_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop"  />
+
+
+
+    <link href="/stylesheets/chat_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="chat"  />
+    <link href="/stylesheets/checklist_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="checklist"  />
+    <link href="/stylesheets/discourse-calendar_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-calendar"  />
+    <link href="/stylesheets/discourse-data-explorer_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-data-explorer"  />
+    <link href="/stylesheets/discourse-details_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-details"  />
+    <link href="/stylesheets/discourse-knowledge-explorer_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-knowledge-explorer"  />
+    <link href="/stylesheets/discourse-lazy-videos_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+    <link href="/stylesheets/discourse-local-dates_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+    <link href="/stylesheets/discourse-narrative-bot_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+    <link href="/stylesheets/discourse-patreon_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-patreon"  />
+    <link href="/stylesheets/discourse-presence_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-presence"  />
+    <link href="/stylesheets/discourse-solved_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-solved"  />
+    <link href="/stylesheets/discourse-templates_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-templates"  />
+    <link href="/stylesheets/discourse-topic-voting_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+    <link href="/stylesheets/docker_manager_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="docker_manager"  />
+    <link href="/stylesheets/footnote_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="footnote"  />
+    <link href="/stylesheets/poll_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="poll"  />
+    <link href="/stylesheets/spoiler-alert_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="spoiler-alert"  />
+    <link href="/stylesheets/chat_mobile_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="chat_mobile"  />
+    <link href="/stylesheets/discourse-calendar_mobile_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-calendar_mobile"  />
+    <link href="/stylesheets/discourse-solved_mobile_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-solved_mobile"  />
+    <link href="/stylesheets/discourse-topic-voting_mobile_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-topic-voting_mobile"  />
+    <link href="/stylesheets/chat_desktop_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(min-width: 40rem)" rel="stylesheet" data-target="chat_desktop"  />
+    <link href="/stylesheets/discourse-topic-voting_desktop_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(min-width: 40rem)" rel="stylesheet" data-target="discourse-topic-voting_desktop"  />
+    <link href="/stylesheets/poll_desktop_175b57145819e00d65522745db58a3248e1fa2ec.css?__ws=intfiction.org" media="(min-width: 40rem)" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="/stylesheets/common_theme_82_f5fcd1308733561860391fde3292bdab37f8ab70.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="82" data-theme-name="category banners"/>
+<link href="/stylesheets/common_theme_19_182969b17fbbf226b1656b32381e05e701dbd849.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="19" data-theme-name="nav links component"/>
+<link href="/stylesheets/common_theme_80_54f7c40a8fe886bc43ef48291a8b16ba580cd65d.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="80" data-theme-name="quote callouts"/>
+<link href="/stylesheets/common_theme_12_2679b6251609e797c05e420e5621a8077182b2e4.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="12" data-theme-name="scrollable post content"/>
+<link href="/stylesheets/common_theme_49_6359f7426169c74c5bb000dde64665c5a76effde.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="49" data-theme-name="unformatted code detector"/>
+<link href="/stylesheets/common_theme_23_de68c903934b963c4b4d4f559e82c057d9f8b511.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="23" data-theme-name="more highlighted solutions"/>
+<link href="/stylesheets/common_theme_2_b96586f5c0f3e5812ea8201345758f5e85a48a93.css?__ws=intfiction.org" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="intfiction"/>
+    
+    
+
+    
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;“Choice” in Interactive Fiction&#39;" href="https://intfiction.org/t/choice-in-interactive-fiction/48977.rss" />
+    <meta property="og:site_name" content="The Interactive Fiction Community Forum" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://intfiction.org/uploads/default/original/2X/b/b5c2672fa7e9439ea931f157e4b8d2fcb8776c03.png" />
+<meta property="og:image" content="https://intfiction.org/uploads/default/original/2X/b/b5c2672fa7e9439ea931f157e4b8d2fcb8776c03.png" />
+<meta property="og:url" content="https://intfiction.org/t/choice-in-interactive-fiction/48977" />
+<meta name="twitter:url" content="https://intfiction.org/t/choice-in-interactive-fiction/48977" />
+<meta property="og:title" content="“Choice” in Interactive Fiction" />
+<meta name="twitter:title" content="“Choice” in Interactive Fiction" />
+<meta property="og:description" content="If you will allow me to introduce a couple of definitions to clarify some questions I want to ask about craft, I recently rewatched an Extra Credits video in which the word calculations is defined as “decisions based solely on reason with a clear correct answer”, and choice as “overcoming internal conflict”. To give an example of the former, when I made a certain decision in I-0 based solely on my belief that it was clearly the only option that would allow me to avoid getting stung by a scorpion..." />
+<meta name="twitter:description" content="If you will allow me to introduce a couple of definitions to clarify some questions I want to ask about craft, I recently rewatched an Extra Credits video in which the word calculations is defined as “decisions based solely on reason with a clear correct answer”, and choice as “overcoming internal conflict”. To give an example of the former, when I made a certain decision in I-0 based solely on my belief that it was clearly the only option that would allow me to avoid getting stung by a scorpion..." />
+<meta property="og:article:section" content="Authoring" />
+<meta property="og:article:section:color" content="0433ff" />
+<meta property="og:article:section" content="General Design Discussions" />
+<meta property="og:article:section:color" content="0433ff" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="6 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="28 ❤" />
+<meta property="article:published_time" content="2021-01-12T21:01:47+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"QAPage","name":"“Choice” in Interactive Fiction","mainEntity":{"@type":"Question","name":"“Choice” in Interactive Fiction","text":"If you will allow me to introduce a couple of definitions to clarify some questions I want to ask about craft, I recently rewatched <a href=\"https://youtu.be/lg8fVtKyYxY\" rel=\"noopener nofollow ugc\">an Extra Credits video<\/a> in which the word calculations is defined as “decisions based solely on reason with a clear correct answer”, and choice as “overcoming internal c&hellip;","upvoteCount":3,"answerCount":0,"datePublished":"2021-01-12T21:01:47.831Z","author":{"@type":"Person","name":"Karona","url":"https://intfiction.org/u/Karona"}}}</script>
+  </head>
+  <body class="crawler ">
+    
+    <header>
+  <a href="/">The Interactive Fiction Community Forum</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="/t/choice-in-interactive-fiction/48977">“Choice” in Interactive Fiction</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/c/authoring/8" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #0433ff'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Authoring</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="/c/authoring/general-design-discussions/17" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #0433ff'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>General Design Discussions</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="2" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope itemtype='http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='“Choice” in Interactive Fiction'>
+      <link itemprop='url' href='https://intfiction.org/t/choice-in-interactive-fiction/48977'>
+      <meta itemprop='datePublished' content='2021-01-12T21:01:47Z'>
+        <meta itemprop='articleSection' content='General Design Discussions'>
+      <meta itemprop='keywords' content=''>
+      <div itemprop='publisher' itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop='name' content='The Interactive Fiction Technology Foundation'>
+          <div itemprop='logo' itemscope itemtype="http://schema.org/ImageObject">
+            <meta itemprop='url' content='https://intfiction.org/uploads/default/original/2X/6/6fd7528bf77fc131f0fd896d29a870fd9ef89e01.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/Karona'><span itemprop='name'>Karona</span></a>
+                (Karona)
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="https://intfiction.org/t/choice-in-interactive-fiction/48977">
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2021-01-12T21:01:47Z' class='post-time'>
+                    January 12, 2021,  9:01pm
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-12T21:01:47Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>If you will allow me to introduce a couple of definitions to clarify some questions I want to ask about craft, I recently rewatched <a href="https://youtu.be/lg8fVtKyYxY" rel="noopener nofollow ugc">an Extra Credits video</a> in which the word <strong>calculations</strong> is defined as “decisions based solely on reason with a clear correct answer”, and <strong>choice</strong> as “overcoming internal conflict”. To give an example of the former, when I made a certain decision in <strong>I-0</strong> based solely on my belief that it was clearly the only option that would allow me to avoid getting stung by a scorpion, I made a calculation based on the information available and not a choice. On the other hand, if I am playing a CRPG, and I decide to fight one more mob before returning to town for more supplies, then I have arguably made a choice because the game has set my desire to level up quickly against my desire to avoid losing a battle for a lack of supplies. (More examples can be found in <a href="https://youtu.be/lg8fVtKyYxY" rel="noopener nofollow ugc">the video</a>.)</p>
+<p>One more note before my questions: It seems to me that while many games suffer for a lack of choice, parser IF—or most of the best-loved parser IF anyway—has thrived while offering few decisions other than calculations. Take <strong>Counterfeit Monkey</strong> for example. If I am waving the t-remover at an object, I am almost certainly not resolving a conflict; rather I am making the calculation that the transformed object will help me solve a puzzle. And in the age of parser IF that avoids “cruelty”, it is not even the case that a short-term desire to test everything that can be done to an object will ever be pitted against the long-term goal of completing the work.</p>
+<p>Anyway, I have been wanting to ask,</p>
+<p>(1) Can you think of a well-loved IF work that relies to a significant extent on choice?<br>
+(2) Would you say the “choices” offered in CYOA tend to be choices, calculations, or neither?<br>
+(3) What role does choice play in the IF you write?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="3" />
+              <span class='post-likes'>3 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/Stian'><span itemprop='name'>Stian</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-12T22:02:34Z' class='post-time'>
+                    January 12, 2021, 10:02pm
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-12T22:02:34Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>This is a very interesting distinction. With that definition of choice, I don’t think I ever feel conflicted enough when playing to regard a choice-decision as anything but arbitrary. The good choice-IF I have played told a good story with my arbitrary decisions, and would probably have done so with other choices, but all my favourite moments with IF have definitely been with curious calculations tickling my mind. The only example I can come up with at the moment that clearly features a solid mix of the two is Tavern Crawler.</p>
+<p>There are, however, a few aspects of playing IF that is not covered with this distinction. I’m thinking specifically about exploration. In Emily Short’s Galatea, your actions are neither based on choice nor calculations with the above definitions.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/severedhand'><span itemprop='name'>severedhand</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-12T22:46:37Z' class='post-time'>
+                    January 12, 2021, 10:46pm
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-12T22:46:37Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Yech! The video sure did get up my nose! Not that I take incredible issue with its ideas, I just detested the presentation, which is typical of our Youtube times. Illustrate every second word or point with a dumb cutaway pic, keep throwing in unnecessary and insincere verbal moments of self-deprecation while also managing to be patronising by cutting back to pictures of cartoon characters at a podium. But also, coming on pretty strong – ‘this is how it all is!’</p>
+<p>With my rant aside, this just doesn’t resonate much with my playing of IF. The video is full of console game talk and pictures of cartoon characters playing console games, and I think that setup is what it ideas have been built around. Everything isn’t an A and B exchange, a la the toad in Super Mario Bros example in the video. It’s rare in parser IF that I’m dealing with binary choices. Most of the time, it’s more like a vista of little particles. The video is really addressing big moments, and I feel parser games are made up of a zillion smaller moments.</p>
+<p>I could go and watch their ‘illusion of choice’ video, which may be more applicable, but since their whole schtick annoys me so much, I won’t.</p>
+<p>-Wade</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/Karona'><span itemprop='name'>Karona</span></a>
+                (Karona)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T00:21:40Z' class='post-time'>
+                    January 13, 2021, 12:21am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T00:21:40Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Stian" data-post="2" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/stian/48/2631_2.png" class="avatar"> Stian:</div>
+<blockquote>
+<p>The only example I can come up with at the moment that clearly features a solid mix of the two is Tavern Crawler.</p>
+</blockquote>
+</aside>
+<p>Thank you for the example! Now I definitely need to check out <strong>Tavern Crawler</strong>.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/Karona'><span itemprop='name'>Karona</span></a>
+                (Karona)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T00:34:12Z' class='post-time'>
+                    January 13, 2021, 12:34am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T00:34:12Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Thank you for mentioning the thing about displaying a picture for every other word! I love most aspects of <strong>Extra Credits</strong>, but that has always rubbed me the wrong way.</p>
+<aside class="quote no-group" data-username="severedhand" data-post="3" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/severedhand/48/10679_2.png" class="avatar"> severedhand:</div>
+<blockquote>
+<p>Most of the time, it’s more like a vista of little particles.</p>
+</blockquote>
+</aside>
+<p>Could you expand on this? What are some examples of particles in IF works?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/mathbrush'><span itemprop='name'>mathbrush</span></a>
+                (Brian Rushton)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T03:14:47Z' class='post-time'>
+                    January 13, 2021,  3:14am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T03:14:47Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>I haven’t watched the video, but I’ve been playing through all the Choice of Games games, and I can definitely say that the best ones (to me) are the ones that do choices over calculations, mostly because they are all in ‘hard mode’ with no way to undo your choices, so calculation-based games tend to be frustrating and those with neither tend to be boring.</p>
+<p>Jolly Good: Cakes and Ale has a great example of Choice, where there are 3 or 4 incredibly important things for your life (the future of your club being at stake, pleasing the rich uncle who gives you all your money, helping a friend in dire need, etc.) and they are scheduled at the same time, so you have to divide your time between them.</p>
+<p>Similarly, Creme de la Creme sets up several situations where you invest a lot of time and interest with a person or goal and then the game reveals a dramatic new side to things that makes it a lot harder or morally questionable to continue that goal, so players have to double down and sacrifice or give up.</p>
+<p>Another example is in Choice of Rebels, where you can choose to not steal from people, but the longer you avoid stealing the more of your people die in the winter. This one’s a bit of a calculation in terms of strategy, but the calculation is clear: mechanically, stealing is much better, the only reason not to is for roleplay reasons.</p>
+<p>Another game that mixes the two a bit is Metahuman Inc. You can choose to invest in magic or technology, and it shows you (in greyed-out text) what awesome gadgets you can create if you invest in those directions, but only one can be achieved at a time. In another part of the game, you are tricked into publicly pledging most of your working funds to charity by your rival, so you have to choose between your pride and your money.</p>
+<p>I agree that things like this are rare in parser games, but Blue Lacuna, Fate, Slouching Towards Bedlam and Floatpoint are some games I can think of with real, consequential, conflict-resolving choices.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="6" />
+              <span class='post-likes'>6 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/DeusIrae'><span itemprop='name'>DeusIrae</span></a>
+                (Mike Russo)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T04:15:25Z' class='post-time'>
+                    January 13, 2021,  4:15am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T04:15:25Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Stian" data-post="2" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/stian/48/2631_2.png" class="avatar"> Stian:</div>
+<blockquote>
+<p>There are, however, a few aspects of playing IF that is not covered with this distinction. I’m thinking specifically about exploration. In Emily Short’s Galatea, your actions are neither based on choice nor calculations with the above definitions.</p>
+</blockquote>
+</aside>
+<p>Indeed – I’d also add expressive decisions as an additional, key category to consider.  Lots of choice-based games have places where the player can make a decision that’s not about navigating a story or puzzle successfully, but about allowing them to express themselves.  On one extreme this can be (and be signposted as) purely cosmetic – like, three different dialogue options that respond in a slightly different way but lead to the same next line and don’t change the world-state in any way – or they can be enormously consequential without either being based on reason or overcoming internal conflict.  To go a different way with the Choice of Games examples Mathbrush lifted up, a lot of those allow the player to define their gender and preferred romantic partners, which can impact the story and other characters in really significant ways but don’t generally make it either easier or harder to get a “good” ending.</p>
+<p>For parser-based IF that does use more of the “choice” kind of decisions you’d flag, I’d echo many of the examples other folks have mentioned in the thread, though it occurs to me that it’s potentially interesting to separately consider games where the “choice” is primarily about which ending you want, but the process of getting to that particular ending is largely about “calculation” gameplay (say, Slouching Towards Bedlam, which has reasonably traditional puzzles but can opt for several different resolutions, no one of which is clearly the “best” one), vs. those where the gameplay itself is “choice” based (Kerkerkruip, Floatpoint).  These two kinds of games have similarities but I think can feel very different when playing them.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="4" />
+              <span class='post-likes'>4 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_8' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/mirality'><span itemprop='name'>mirality</span></a>
+                (Gavin Lambert)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T05:35:35Z' class='post-time'>
+                    January 13, 2021,  5:35am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T05:35:35Z'>
+              <span itemprop='position'>8</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote group-ifcomp-2021-authors" data-username="DeusIrae" data-post="7" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/letter_avatar_proxy/v4/letter/d/958977/48.png" class="avatar"> DeusIrae:</div>
+<blockquote>
+<p>On one extreme this can be (and be signposted as) purely cosmetic – like, three different dialogue options that respond in a slightly different way but lead to the same next line and don’t change the world-state in any way – or they can be enormously consequential without either being based on reason or overcoming internal conflict.</p>
+</blockquote>
+</aside>
+<p>S’funny, actually – in the visual novel space, there’s a great divide between the people who like the VNs that only ever pop up a choice when it’s actually producing a significantly branching path (even if that’s only two or three choices for an entire game), and those that prefer exactly those kind of “fluff” choices that pop up every few minutes (or even more often) but rarely affect more than a line or three following.  My preference is usually for the latter, though the former seems to have more vocal supporters at least.</p>
+<p>I think part of it may be that there’s more of an expectation that everyone should “100%” the VN by completing all the endings and/or filling in the whole image gallery (or get all the achievements, in some cases) – things that are easier to keep track of if there are fewer, more significant choices.  But I think the story immersiveness suffers a bit as a result.  Conversely the games with lots of fluff choices are a bit harder to keep track of, and even once you do 100% the gallery you’ve probably still missed a lot of the alternative lines.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_9' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/severedhand'><span itemprop='name'>severedhand</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T07:11:41Z' class='post-time'>
+                    January 13, 2021,  7:11am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T07:11:41Z'>
+              <span itemprop='position'>9</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Karona" data-post="5" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/letter_avatar_proxy/v4/letter/k/c57346/48.png" class="avatar"> Karona:</div>
+<blockquote>
+<p>Could you expand on this? What are some examples of particles in IF works?</p>
+</blockquote>
+</aside>
+<p>I think others have done a much more helpful job in this topic than myself <img src="https://intfiction.org/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> but to return to my feeling about parser games – I say ‘vista’ because a typical parser game offers a view of the location. It might be a big, scenic view, or it might be small (a closed room), but it still has the quality of being a view, and there will be elements in it you can interact with. They’ll range in significance, whereas a choice-based game typically won’t offer up for interaction a lot of the things in the prose.</p>
+<p>So when I say particles, I’m talking about the range of elements in a parser game (the number of things that will be recognised as nouns and implemented to some extent) and probably using Particles as a synonym along the lines of grains, coming from ‘granularity’ which people often talk about in relation to IF. Are the gameplay mechanics taking place at the macroscopic level or the microscopic? Or where on that continuum? That distinction is granularity.</p>
+<p>So I said ‘a vista of particles’ to (poetically!) describe this sense of taking in a view of an environment, perceiving the interactive elements in that view and considering what interactions might take place. This all tends to be at a higher level of granularity than what happens in a choice game. So a choice game might open with four things you can choose from. A parser game might open in a field with a tree and a mailbox and you can go somewhere or investigate the tree or the mailbox or parts thereof, or yourself, or that forest over there. There are a lot of verbs – a lot of them might not do much in this first scene, but you can still try them. Trying to literally graph all the possibilities of even a moderately complex scene like this, in a finite sense, is probably not possible, but nor is it useful. The world model allows for a lot of combinations of things that the game supports but that don’t need to be mechanically investigated further, nor graphed explicitly, unlike choices which need to be mapped to track nodes when creating a choice game, etc.</p>
+<p>I feel I’ve been going on a bit. But summarily, I think the granularity of the choices and decisions, at least as the video wants to describe them, is more applicable to the design of choice-based games than parser-based ones. If mathbrush can only think of a handful that are relevant, there probably aren’t a ton more than that!</p>
+<p>-Wade</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_10' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/Karona'><span itemprop='name'>Karona</span></a>
+                (Karona)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T16:48:12Z' class='post-time'>
+                    January 13, 2021,  4:48pm
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T16:48:12Z'>
+              <span itemprop='position'>10</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Thank you for bearing with me while I grapple with this topic.</p>
+<aside class="quote no-group" data-username="severedhand" data-post="9" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/severedhand/48/10679_2.png" class="avatar"> severedhand:</div>
+<blockquote>
+<p>A parser game might open in a field with a tree and a mailbox and you can go somewhere or investigate the tree or the mailbox or parts thereof, or yourself, or that forest over there.</p>
+</blockquote>
+</aside>
+<p>So in parser IF there needs to be a response to EXAMINE MAILBOX, but it would be a strange game in which the player or a playable character should feel conflicted about this decision or calculate that the benefits of doing so are comparable to the benefits of, say, taking off one’s silver breastplate and wearing a golden breastplate instead. More generally, the input in parser IF consists mostly of such decisions—decisions which are not and ought not be as consequential as decisions in most video games.</p>
+<p>Have I gotten it?</p>
+<aside class="quote no-group" data-username="severedhand" data-post="9" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/severedhand/48/10679_2.png" class="avatar"> severedhand:</div>
+<blockquote>
+<p>If mathbrush can only think of a handful that are relevant, there probably aren’t a ton more than that!</p>
+</blockquote>
+</aside>
+<p>I concur; mathbrush really knows his stuff!</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_11' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/JoshGrams'><span itemprop='name'>JoshGrams</span></a>
+                (Josh Grams)
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-13T18:34:50Z' class='post-time'>
+                    January 13, 2021,  6:34pm
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-13T18:34:50Z'>
+              <span itemprop='position'>11</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group quote-modified" data-username="severedhand" data-post="3" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/severedhand/48/10679_2.png" class="avatar"> severedhand:</div>
+<blockquote>
+<p>The video sure did get up my nose! Not that I take incredible issue with its ideas, I just detested the presentation […] But also, coming on pretty strong – ‘this is how it all is!’</p>
+</blockquote>
+</aside>
+<p>Yeah, I’ve always been uncomfortable with Extra Credits for much the same reasons. They often talk about an idea which would be great as “here’s <strong>an</strong> interesting way to look at this problem” and then present it (completely implicitly, but pretty strongly) as the one true way.</p>
+<p>So…I don’t have anything to say about <a class="mention" href="/u/karona">@Karona</a>’s  three questions, though I’d second Stian’s Tavern Crawler recommendation. But some other ways to think about categorizing choices and adjacent things:</p>
+<ul>
+<li>Sam Kabo Ashwell’s <a href="https://heterogenoustasks.wordpress.com/2014/09/22/a-bestiary-of-player-agency/">A Bestiary of Player Agency</a></li>
+<li>Emily Short <a href="https://emshort.blog/2019/04/09/choice-poetics-peter-mawhorter/">talks about</a> Peter Mawhorter’s paper <em>Toward a Theory of Choice Poetics</em></li>
+<li>Also her post <a href="https://emshort.blog/2016/05/25/not-all-choice-interfaces-are-alike/">Not all Choice Interfaces Are Alike</a> gives a bunch of ways to categorize <em>interfaces</em></li>
+<li><a href="https://www.academia.edu/40931313/On_Links_Exercises_in_Style">On Links: Exercises in Style</a> (Stacey Mason, Mark Bernstein) says that “links are the most important new punctuation mark since the invention of the comma” and talks about different ways to use them. Short but thought-provoking, for me anyway.</li>
+</ul>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="3" />
+              <span class='post-likes'>3 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_12' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/KitParsing'><span itemprop='name'>KitParsing</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-14T02:11:18Z' class='post-time'>
+                    January 14, 2021,  2:11am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-14T02:11:18Z'>
+              <span itemprop='position'>12</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>It’s interesting that you choose Counterfeit Monkey as an example because, while primarily puzzle-based, it has a very clear choice near the end of the game (throw a rando to the wolves, thereby sabotaging Alex’s dad, vs. turning Brock in, if I recall correctly) which affects the PC’s future.</p>
+<p>I’ve written things that are more choice-focused than calculation-focused, generally (and this conversation also comes at an opportune time because I’m working on revising a LARP I wrote last year in order to increase opportunities for player choice without either fundamentally overhauling the game or going down the path of least resistance, which is calculation/resource-management). But I agree with <a class="mention" href="/u/deusirae">@DeusIrae</a> that, when a writer allows for it, the player’s choices are themselves a creation of narrative and character. It can depend on the game, but one of the most pleasing pieces of feedback I got on my last game was - paraphrasing - that the player was able to create an emergent narrative for themselves through their choices and reactions. (This was a single-room game where the player tries to complete an emotionally significant task while an NPC to whom the player has a complicated relationship stands there and jibes them.)</p>
+<p>As with so many theory questions, a large part of it comes down to scale, doesn’t it?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_13' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/Falsoon'><span itemprop='name'>Falsoon</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-19T17:01:14Z' class='post-time'>
+                    January 19, 2021,  5:01pm
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-19T17:01:14Z'>
+              <span itemprop='position'>13</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Interesting topic. I was a member of a life-philosophy group once that defined “choice” as a preference, and “decision” as a result of reasoning, like your ‘calculation’ definition. To answer your question, I’ve seen some people <em>decide</em> on options based on their likelihood of a good result; but other players (or the same player at other times) <em>choose</em> options almost randomly. When A and B are equally likely to one’s knowledge, reason cannot come into the decision. (That’s what hints and foreshadowing are for.) <img src="https://intfiction.org/images/emoji/twitter/wink.png?v=9" title=":wink:" class="emoji" alt=":wink:"></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_14' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='https://intfiction.org/u/GiannisG'><span itemprop='name'>GiannisG</span></a>
+                (Giannis Georgiou)
+              </span>
+
+
+                <link itemprop="image" href="https://intfiction.org/uploads/default/original/2X/5/5b281ccf52aa7bd48b39dc862e706c20018e9964.jpeg">
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2021-01-20T07:51:53Z' class='post-time'>
+                    January 20, 2021,  7:51am
+                  </time>
+                  <meta itemprop='dateModified' content='2021-01-20T08:03:11Z'>
+              <span itemprop='position'>14</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Falsoon" data-post="13" data-topic="48977">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://intfiction.org/user_avatar/intfiction.org/falsoon/48/3166_2.png" class="avatar"> Falsoon:</div>
+<blockquote>
+<p>When A and B are equally likely to one’s knowledge, reason cannot come into the decision.</p>
+</blockquote>
+</aside>
+<p>I think it was Robert McKee who wrote in his <em>Story</em> book (about screenwriting) that a dilemma exists only if choice A and choice B are of equal importance. I agree, that’s when reason gives up. Not everything is a Sophie’s Choice, but true dilemmas always create deep tension in storytelling (and life).</p>
+<p>Great discussion!</p>
+<p>EDIT: And now I see that Peter Mawhorter says it better in Choice Poetics (thanks <a class="mention" href="/u/joshgrams">@JoshGrams</a> for the links):</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="https://intfiction.org/uploads/default/original/2X/5/5b281ccf52aa7bd48b39dc862e706c20018e9964.jpeg" data-download-href="https://intfiction.org/uploads/default/5b281ccf52aa7bd48b39dc862e706c20018e9964" title="image"><img src="https://intfiction.org/uploads/default/optimized/2X/5/5b281ccf52aa7bd48b39dc862e706c20018e9964_2_345x198.jpeg" alt="image" data-base62-sha1="d0podbOt4Wa5PZSq3UmhoFyK6pK" width="345" height="198" srcset="https://intfiction.org/uploads/default/optimized/2X/5/5b281ccf52aa7bd48b39dc862e706c20018e9964_2_345x198.jpeg, https://intfiction.org/uploads/default/optimized/2X/5/5b281ccf52aa7bd48b39dc862e706c20018e9964_2_517x297.jpeg 1.5x, https://intfiction.org/uploads/default/optimized/2X/5/5b281ccf52aa7bd48b39dc862e706c20018e9964_2_690x396.jpeg 2x" data-dominant-color="E0E0E0"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">image</span><span class="informations">1221×704 241 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='/' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='/categories' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='/guidelines' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='/tos' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='/privacy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="https://www.discourse.org">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    
+    
+  </body>
+  
+</html>

@@ -1,0 +1,109 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_1e8362fb2db4.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 11103,
+  "output_tokens": 3615,
+  "elapsed_s": 1087.0932769582141,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in natural language generation / machine learning working on story generation from prompts",
+    "subtask_short": "hierarchical_story_generation",
+    "subtask_description": "Developing and evaluating neural models that generate long, coherent stories conditioned on short writing prompts by first generating a premise and then transforming it into a full story. Covers dataset construction, model architectures (conv seq2seq, gated multi-scale self-attention, fusion), generation/sampling, and evaluation.",
+    "subtask_keywords": [
+      "story_generation",
+      "hierarchical",
+      "neural_networks",
+      "nlg",
+      "writing_prompts"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset inclusion criteria (WRITINGPROMPTS)",
+        "description": "Stories must be at least 30 words, avoid general profanity and inappropriate content, and should be inspired by the prompt (but do not necessarily have to fulfill every requirement). Dataset scraped from Reddit WRITINGPROMPTS; remove bot posts, deleted posts, special announcements, moderator comments.",
+        "guidance": "The paper scrapes prompts and responses from the forum, cleans by removing automated/deleted/announcement/mod posts, and enforces the >=30-word minimum to ensure human-readable stories. Example prompt/story pairs are shown (Figure 1)."
+      },
+      {
+        "name": "Dataset preprocessing and vocabulary constraints",
+        "description": "For experiments limit stories to 1000 words maximum; limit vocabulary to words appearing more than 10 times for prompts and stories; model an unknown word token and an end-of-document token.",
+        "guidance": "These choices lead to vocabulary sizes reported (19,025 for prompts; 104,960 for stories). Rationale: the scraped forum contains many rare words and misspellings making modeling the full vocabulary challenging and computationally intensive."
+      },
+      {
+        "name": "Hierarchical generation (premise then story)",
+        "description": "Decompose generation into two levels: first generate the premise/prompt (a sketch of structure), then use a seq2seq model to generate a story conditioned on that premise to provide high-level planning and reduce topic drift.",
+        "guidance": "Conditioning on the prompt makes it easier to generate consistent stories and provides grounding for overall plot\u2014improves consistency beyond word-by-word language models (Section 3.1). Human evaluation demonstrates hierarchical generation is preferred (Table 4)."
+      },
+      {
+        "name": "Conditioning on the prompt / topical relevance",
+        "description": "Generated stories should strongly reflect and be relevant to the input prompt rather than degenerating into generic language-model output that ignores the prompt.",
+        "guidance": "The paper identifies prompt conditioning failure in seq2seq models and proposes fusion to improve relevance. Relevance is evaluated with prompt-ranking accuracy and human prompt/story pairing tasks (Sections 3.4, 5.5)."
+      },
+      {
+        "name": "Use convolutional seq2seq for efficiency on long documents",
+        "description": "Use convolutional sequence-to-sequence architectures (Conv seq2seq) to allow parallel encoding/decoding of long stories and to better handle long sequences than RNNs for efficiency.",
+        "guidance": "Convolutional models allow parallelism and are connected with attention modules at each decoder layer (Section 3.2). RNNs process tokens sequentially and are less efficient for very long stories (~734 words average in dataset)."
+      },
+      {
+        "name": "Model unbounded context with gated multi-scale self-attention",
+        "description": "Supplement the decoder with a gated multi-scale self-attention mechanism: multi-head attention where each head uses gated deep nets (GLU), and each head operates at a different downsampled time-scale to capture different ranges of context and keep attention maps sharp.",
+        "guidance": "Design details: queries/keys/values given by gated downsampling networks; allow model to optionally attend to a 0 vector (ignore past); do not allow attending to the current timestep. Benefits: models long-range dependencies with limited computational impact and sharper attention (Section 3.3, Figures 2\u20133)."
+      },
+      {
+        "name": "Fusion training to improve prompt-conditioning",
+        "description": "Train a second seq2seq model that has access to the hidden states of a pretrained seq2seq model, using gating to combine hidden states so the second model focuses on dependencies the first model failed to learn (e.g., conditioning on the prompt).",
+        "guidance": "Implementation: pretrain Conv seq2seq + self-attention, fix it, then train a second Conv seq2seq + self-attention that concatenates hidden states after gates (gt = \u03c3(W[...]+b)), followed by GLU activations and layer normalization. Termed a modified 'cold fusion' (Section 3.4, Figure 4). Fusion empirically improves topicality and perplexity compared to baselines."
+      },
+      {
+        "name": "Sampling strategy for generation (top-k random sampling)",
+        "description": "Generate story text using top-k random sampling (k=10), tuning a temperature parameter; avoid beam search and completely random sampling for open-ended story generation.",
+        "guidance": "Rationale: Beam search tends to produce short, generic, repetitive phrases; completely random sampling can produce very unlikely words not seen at training. Restricting to the top-10 candidates reduces low-probability errors. For human evaluation, generate 150-word stories and do not generate unknown-word tokens (Section 5.4)."
+      },
+      {
+        "name": "Perplexity as an automatic fluency metric",
+        "description": "Use model perplexity on validation/test sets to assess how fluently the model predicts next words; lower perplexity indicates better fluency.",
+        "guidance": "Perplexity is used alongside other metrics; Tables 2\u20133 report validation/test perplexities showing improvements from self-attention, multiscale gating, and fusion (Section 5.5)."
+      },
+      {
+        "name": "Prompt ranking accuracy to quantify prompt dependence",
+        "description": "Measure how strongly a model's outputs depend on its input by decoding a story under 10 different prompts (9 random, 1 true) and measuring the percentage where the true prompt yields the highest likelihood for the story.",
+        "guidance": "This prompt-ranking metric isolates input-output dependency; evaluate on 1000 stories per model (Section 5.5). Fusion and hierarchical approaches improve prompt ranking accuracy (Figures 6 and 7)."
+      },
+      {
+        "name": "Human triple pairing task for prompt-story association",
+        "description": "Present groups of three stories (and their prompts shuffled) to human judges who must select the correct prompt-story pairings; used to evaluate topicality/link between prompts and generated stories.",
+        "guidance": "Experimental setup: generate stories from held-out prompts, group 105 stories per model into questions, evaluate each question by 15 judges on Mechanical Turk (Section 5.5). This measures human ability to match generated stories to their prompts (Figures 5\u20137)."
+      },
+      {
+        "name": "Human preference blind tests for hierarchical vs non-hierarchical",
+        "description": "Use blind human comparisons (pairwise) to measure overall preference between hierarchical-generation stories and non-hierarchical language-model stories.",
+        "guidance": "Example: 400 story pairs, evaluated by 5 judges each; humans preferred hierarchical model stories 67% of the time (Table 4, Section 6)."
+      },
+      {
+        "name": "Originality / copying metric (longest common subsequence)",
+        "description": "Measure average longest common subsequence (LCS) between generated stories and training-set stories to quantify how much the model copies from training data; lower LCS indicates more novel text.",
+        "guidance": "Reported: fusion model average LCS 8.9 (for 150-word stories), baseline Conv seq2seq copies 10.2 words on average, KNN copies all 150 words (Section 7.1)."
+      },
+      {
+        "name": "Analysis of attention and fusion gate usage",
+        "description": "Inspect encoder-decoder attention maps and fusion gate values to understand which model contributes which words and whether decoder timesteps attend to salient prompt words or recent output.",
+        "guidance": "Findings: fusion model attention focuses on salient prompt words and fusion gates show pretrained model produces common/generic words while the trained model focuses on rare, prompt-specific words (Figure 8, Section 7.2)."
+      },
+      {
+        "name": "Training best practices and regularization",
+        "description": "Recommended optimization and regularization techniques: use Nesterov accelerated gradient, gradient clipping, layer normalization after fully connected layers, hyperparameter optimization by cross-validation with random search; pretrain/fix models for fusion.",
+        "guidance": "Implementation used fairseq-py in PyTorch; describe training details and hyperparameter search; these practices support stable training of deep conv seq2seq + attention models (Section 5.3\u20135.4)."
+      },
+      {
+        "name": "Evaluation generation constraints for human studies",
+        "description": "To ease human evaluation, generate stories of 150 words and forbid generation of unknown word tokens during evaluation runs.",
+        "guidance": "For prompt generation, use a self-attentive GCNN LM with top-k sampling and stop when end-of-prompt token generated; for story generation produce fixed-length 150-word outputs for readability and consistency in human tests (Section 5.4\u20135.5)."
+      },
+      {
+        "name": "Baselines and comparison methodology",
+        "description": "Evaluate against multiple baselines: language models (GCNN), seq2seq (LSTM and conv), conv seq2seq + self-attention, ensembles, and KNN retrieval; compare on perplexity, prompt-ranking, human pairing, and copying metrics.",
+        "guidance": "KNN baseline uses TF-IDF with FASTTEXT and FAISS; retrieved stories limited to 150 words for fair comparison. Ensembling can improve perplexity but does not improve prompt-story pairing as fusion does (Section 5.1, 6)."
+      }
+    ]
+  }
+}

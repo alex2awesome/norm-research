@@ -102,6 +102,11 @@ def run_liveness_constructor_controls(
         constructor, requests=requests, store=store,
         corpus_counts=corpus_token_counts([*data["demo_texts"], *data["heldout_texts"]]),
     )
+    voided = [key for key, row in induced.items() if row.get("void")]
+    if voided:
+        # Planted liveness criteria are constructed to be explainable without their
+        # keywords; a void here is an instrument failure and must halt the gate.
+        raise RuntimeError(f"liveness induction voided {len(voided)} planted cells")
 
     target_scores = np.zeros((1, len(data["demo_texts"])), dtype=float)
     target_scores[0] = data["demo_labels"]

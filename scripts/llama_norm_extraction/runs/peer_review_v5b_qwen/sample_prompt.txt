@@ -1,0 +1,280 @@
+You are an expert academic peer reviewer evaluating a research paper.
+
+# Your task
+
+You will read one review and extract every quality judgment the reviewer makes about the paper, then tag each judgment against a fixed list of canonical academic quality norms.
+
+# Two levels of structure
+
+LEVEL 1 — PASSAGE: a paragraph or multi-sentence span where the reviewer is making a quality judgment. Each review usually contains 3-10 passages.
+
+CRITICAL: a passage is NEVER just a section label like "Strengths:" or "Weaknesses:" — it MUST include the actual content of the judgment. The header may be at the start but the passage_text MUST extend through the substantive text. A passage_text of less than 50 characters is almost always wrong.
+
+LEVEL 2 — SIGNAL: a specific phrase INSIDE the passage that EVIDENCES a academic quality norm (without necessarily BEING the academic quality norm). For example, the phrase "ablations on n_layers are missing" is a complaint that evidences an 'ablation rigor' norm without quoting any norm by name; the phrase "the comparison with DeBERTa-v3 is welcome" is praise that evidences a 'baseline coverage' norm.
+
+Each signal has:
+- signal_text: an exact substring of THE PASSAGE (not the full review), 10-200 chars
+- signal_type: exactly one of `complaint`, `praise`, `observation`, `suggestion`
+- polarity: exactly one of `positive`, `negative`, `neutral`
+- rubric_matches: a list of 0-3 integer ids from the vocabulary below. Empty list `[]` is allowed when the signal does not match any canonical rubric.
+
+# Norm vocabulary
+
+Each item below has the format `[id] name — short description`. Multi-label tagging: a signal can match 0-3 rubrics. Be strict — only tag a rubric if the signal genuinely instantiates that rubric. Do not match by surface keyword alone.
+
+[1] Procedural and analytical detail sufficient for replication — Methods and analyses are described with enough clarity, completeness, and rationale (including groups/controls, who did what/when/where/how, materials used, pre
+[2] Methods, data/code transparency and reproducibility readiness — Methods and analyses are described with clear rationale and sufficient detail; data/materials/code and documentation are accessible and usable; transparency abo
+[3] Discussion and conclusions — interpretation and implications — Findings are interpreted in light of objectives, prior evidence, and theory; alternative explanations and limitations are considered; conclusions are clear and 
+[4] CARE case report guideline adherence and completeness — Case reports adhere to CARE/SCARE with complete reporting of required elements (e.g., structured abstract, patient information, therapeutic interventions, timel
+[5] Abstract accuracy, completeness, and balance — The abstract concisely and accurately reflects background/objectives, design/methods, key quantitative/qualitative results, and conclusions without hype.
+[6] Clinical trial registration — prospective registration and reporting — Trials are prospectively registered in an accredited registry; manuscripts report registry name/identifier and registration date; note and justify any retrospec
+[7] Ethics approvals/oversight and compliance statements (human/animal research) — State institutional ethics/IRB/IACUC approvals or exemptions and adherence to human/animal research standards; include oversight identifiers and, where required
+[8] Data/code/materials availability statement with access details — Manuscript includes a clear availability statement specifying whether, where, and how underlying data/code/materials can be accessed, with repository links/iden
+[9] Methods reporting completeness and replicability — Report design and procedures with sufficient detail (who/what/when/where/how; timing, dosages/equipment) to permit independent replication; include necessary me
+[10] CONSORT participant flow and recruitment reporting — Report participant flow per CONSORT (assessed/eligible/enrolled/completed/analyzed) with reasons for attrition and recruitment dates; include a flow diagram.
+[11] Open/public development history ≥6 months with visible activity and engagement — Software projects must show ≥6 months of open, public development prior to submission, evidenced by releases/tags, public issues and/or pull requests, and prefe
+[12] Systematic review results presentation and certainty — Present synthesis clearly with appropriate figures/tables (e.g., forest plots) and Summary of Findings with GRADE; provide transparent RoB displays and sufficie
+[13] Systematic review data items and characteristics tables — Pre-specify data items; extract and tabulate key characteristics of included (and excluded, if relevant) studies to support comparison and synthesis.
+[14] Ethical/legal compliance and human‑data transparency — Ethical/legal compliance and documentation (e.g., approvals, rights), transparency about human data collection/provenance/PII/compensation, and consideration of
+[15] Review/synthesis design quality and reporting — For scoping/systematic reviews, aims/feasibility are appropriate; search/selection/synthesis methods are fit for purpose, transparently reported, and judiciousl
+[16] Data/materials availability, rationale, and reusability — Clear rationale for data/material selection; artifacts are accessible with sufficient documentation and intended uses/restrictions specified to enable verificat
+[17] PRISMA — reporting systematic reviews/meta-analyses (core and extensions) — Systematic reviews comply with PRISMA 2020 and applicable extensions (e.g., NMA, Harms, DTA, Abstracts, Living/Rapid); include required checklists, flow diagram
+[18] Journal/venue fit and baseline eligibility — The submission fits the venue’s aims and policies and meets baseline eligibility (original research where required, scientific validity/technical soundness, and
+[19] CHEERS — economic evaluations (reporting standards) — Economic evaluations comply with CHEERS (including CHEERS-AI when applicable).
+[20] Meta-analysis reporting and model adequacy (choices, dependence control, effect sizes) — For meta-analyses/syntheses, justify model choices, disclose exclusions with reasons, control dependence/non‑independence appropriately, and report effect sizes
+[21] CONSORT participant flow and recruitment reporting — Report participant flow per CONSORT (assessed/eligible/enrolled/completed/analyzed) with reasons for attrition and recruitment dates; include a flow diagram.
+[22] Methods, data/code transparency and reproducibility readiness — Methods and analyses are described with clear rationale and sufficient detail; data/materials/code and documentation are accessible and usable; transparency abo
+[23] Participant characteristics, setting, and missingness reporting — Report participant eligibility/selection, baseline characteristics by group, study setting/region, and numbers with missing data (and follow-up time for cohorts
+[24] PRISMA study selection flow and transparency — Provide a transparent PRISMA-compliant account of screening and study selection (flow diagram with numbers and reasons at each step) and materials enabling repr
+[25] Audience‑tailored communication and accessibility — Content, titles/abstracts, and plain‑language components are tailored to intended audiences (experts, adjacent fields, practitioners, cross‑disciplinary readers
+[26] Introduction — background, context/scope, and justification — The Introduction summarizes current knowledge, uses pertinent and up‑to‑date literature, provides necessary background and scope justification, and clearly esta
+[27] Societal impacts and responsible release — Balanced assessment of positive/negative societal impacts, misuse risks, affected stakeholders, and safeguards for responsible release/deployment with real‑worl
+[28] Ethics approvals/oversight and compliance statements (human/animal research) — State institutional ethics/IRB/IACUC approvals or exemptions and adherence to human/animal research standards; include oversight identifiers and, where required
+[29] Observational analyses: confounding control and model specification — Justify non-randomized/complex designs; specify proper model forms with fixed effects/control covariates, present confounder distributions, and report adjusted 
+[30] Protocol availability, consistency, and deviation reporting — Make protocols available/registered; align registry, protocol, SAP, manuscript, and supplements; report and justify important protocol deviations/discrepancies.
+[31] Discussion and conclusions: evidence‑aligned, contextualized, and balanced — Interpretations and conclusions are supported by the data, appropriately contextualized with prior work, distinguish speculation, emphasize limitations, and art
+[32] Open/public development history ≥6 months with visible activity and engagement — Software projects must show ≥6 months of open, public development prior to submission, evidenced by releases/tags, public issues and/or pull requests, and prefe
+[33] Systematic review data items and characteristics tables — Pre-specify data items; extract and tabulate key characteristics of included (and excluded, if relevant) studies to support comparison and synthesis.
+[34] Systematic review results presentation and certainty — Present synthesis clearly with appropriate figures/tables (e.g., forest plots) and Summary of Findings with GRADE; provide transparent RoB displays and sufficie
+[35] STROBE adherence for observational studies — Observational studies (cohort, case–control, cross-sectional) comply with STROBE and relevant extensions (e.g., RECORD), including setting/dates and data source
+[36] Sample size planning, reporting, and adequacy — Report planned and per-group sample sizes, determination methods and assumptions; provide a priori power/precision/Bayes-factor justifications; state n for each
+[37] Meta-analysis reporting and model adequacy (choices, dependence control, effect sizes) — For meta-analyses/syntheses, justify model choices, disclose exclusions with reasons, control dependence/non‑independence appropriately, and report effect sizes
+[38] External validity, scope, and generalizability claims — Accurately characterizes where findings apply, limits to transferability, robustness and alternative explanations, and avoids unjustified causal or over‑general
+[39] IPD meta-analysis: methods and reporting (PRISMA-IPD) — Conduct and report IPD meta-analyses per PRISMA-IPD and dedicated guidance, including data collection/harmonization, analyses, and transparency.
+[40] Dataset provenance, composition, and representativeness — Document dataset origin/provenance, collection timeframe, composition/coverage, inclusion/exclusion/filtering, representativeness of the final sample, and requi
+[41] Appropriate reporting guidelines adherence (EQUATOR-aligned) — Manuscripts identify and follow the correct reporting guideline(s) for their design/domain (e.g., CONSORT, PRISMA, STROBE, SRQR/APA), cite them, and provide com
+[42] Intervention and comparator description (TIDieR-complete) — Provide TIDieR-complete descriptions of interventions and comparators (components, delivery, dose, timing, provider qualifications, co-interventions, similarity
+[43] Statistical methods: appropriateness, transparency, and robustness (primary studies) — Use appropriate models/tests with stated assumptions and software; detail confounding control, subgroup/interaction and missing-data handling, diagnostics/prior
+[44] STROBE adherence for observational studies — Observational studies (cohort, case–control, cross-sectional) comply with STROBE and relevant extensions (e.g., RECORD), including setting/dates and data source
+[45] Image integrity: authenticity, permissible processing, and disclosure — Figures/images must be authentic and not misleading: prohibit inappropriate manipulation (duplication/relabeling, adding/removing/moving features, undisclosed s
+[46] Plain‑language summary accuracy and clarity — Plain‑language summaries clearly, accurately, and completely convey the population/problem, interventions/comparators, evidence quality, and key findings in acc
+[47] Theoretical framing, coherence, and use of theory — A coherent theoretical framework motivates the study and interprets findings; concepts/terms are correctly used and integrated; propositions/hypotheses are logi
+[48] Dataset/model documentation quality and stewardship — Rich, FAIR‑aligned documentation detailing characteristics, intended uses/limits, known gaps, prior uses, maintenance/versioning, and stewardship for reuse.
+[49] Reproducibility and research asset availability — Provide transparent availability of data/code/materials with instructions enabling reproduction; repository links are actionable; where applicable, pass editori
+[50] ARRIVE-aligned reporting for animal/preclinical studies (core items) — Animal/preclinical studies report per ARRIVE core: animal characteristics; inclusion/exclusion and reasons; group n; sourcing; procedural details/controls; prim
+[51] Randomization and blinding: adequacy and reporting — Describe and implement randomization/allocation with adequate concealment and unpredictability; report sequence generation, allocation ratio, blinding (who/how)
+[52] Intervention and comparator description (TIDieR-complete) — Provide TIDieR-complete descriptions of interventions and comparators (components, delivery, dose, timing, provider qualifications, co-interventions, similarity
+[53] Scoping review — sources selection and reporting completeness — Scoping reviews report information sources, selection of evidence, and any critical appraisal per scoping‑review guidance, with transparent selection procedures
+[54] Proposal coherence, feasibility, and potential impact — Aims, theory, methods, and outputs are coherently integrated; the workplan/milestones/resources are realistic; risks are justified; potential impacts are articu
+[55] Patient-reported outcomes (PROs): instruments, analysis, and reporting — Justify PRO instrument selection and properties; pre-plan psychometric/ancillary analyses; report/summarize PRO results appropriately and address mode equivalen
+[56] PRISMA study selection flow and transparency — Provide a transparent PRISMA-compliant account of screening and study selection (flow diagram with numbers and reasons at each step) and materials enabling repr
+[57] Venue/track scope and submission‑type fit — The submission aligns with the venue’s aims, topical scope, accepted contribution types/tracks, and readership.
+[58] Ethical/legal compliance and human‑data transparency — Ethical/legal compliance and documentation (e.g., approvals, rights), transparency about human data collection/provenance/PII/compensation, and consideration of
+[59] Meta-analysis methods and reporting quality — Select and justify effect measures, weighting and variance estimation; choose suitable fixed/random/multilevel models; address unit-of-analysis issues (multi-ar
+[60] Methods, data/code transparency and reproducibility readiness — Methods and analyses are described with clear rationale and sufficient detail; data/materials/code and documentation are accessible and usable; transparency abo
+[61] FAIR metadata — completeness and machine‑actionability — Provide rich, standards‑aligned, machine‑readable metadata with persistent identifiers, content/use semantics, protocol/versioning, and robust links between dat
+[62] Pre-specification and analysis transparency (confirmatory vs exploratory) — Clearly preregister/prespecify analyses and outcomes, distinguish confirmatory from exploratory work, adhere to the prespecified plan at Stage 2 (if applicable)
+[63] PRISMA study selection flow and transparency — Provide a transparent PRISMA-compliant account of screening and study selection (flow diagram with numbers and reasons at each step) and materials enabling repr
+[64] Meta-analysis methods and reporting quality — Select and justify effect measures, weighting and variance estimation; choose suitable fixed/random/multilevel models; address unit-of-analysis issues (multi-ar
+[65] Adherence to reporting guidelines/checklists — The manuscript complies with relevant reporting standards (e.g., PRISMA, CONSORT, TRIPOD/RR), using checklists to ensure transparency without stifling narrative
+[66] Study design description (groups/units/allocation/timing) — Clearly describe the study design, groups/arms and controls, experimental units, allocation/assignment approach, timing/sequence, and relationships among sample
+[67] TRIPOD adherence for prediction model studies — Prediction model studies (development/validation/update) comply with TRIPOD, stating study type, data sources, modelling/validation methods, and reporting perfo
+[68] Patient-reported outcomes (PROs): instruments, analysis, and reporting — Justify PRO instrument selection and properties; pre-plan psychometric/ancillary analyses; report/summarize PRO results appropriately and address mode equivalen
+[69] Health economic evaluation reporting (CHEERS-aligned) — Report economic evaluation methods and results per CHEERS (or equivalent), including analysis plans, valuation of outcomes, discounting, and transparent, consis
+[70] Positioning within and comparison to prior work — The manuscript situates its contribution within the literature, differentiates from prior art, and, for empirical work, compares against strong baselines or pri
+[71] Statistical methods: appropriateness, transparency, and robustness (primary studies) — Use appropriate models/tests with stated assumptions and software; detail confounding control, subgroup/interaction and missing-data handling, diagnostics/prior
+[72] Sample size planning, reporting, and adequacy — Report planned and per-group sample sizes, determination methods and assumptions; provide a priori power/precision/Bayes-factor justifications; state n for each
+[73] Open data, code, models, and materials provided for reproduction — Authors provide the data, code, models/weights, and materials with working links/repositories, version identifiers, and sufficient instructions/documentation to
+[74] Dataset/model documentation quality and stewardship — Rich, FAIR‑aligned documentation detailing characteristics, intended uses/limits, known gaps, prior uses, maintenance/versioning, and stewardship for reuse.
+[75] CARE case report guideline adherence and completeness — Case reports adhere to CARE/SCARE with complete reporting of required elements (e.g., structured abstract, patient information, therapeutic interventions, timel
+[76] Pre-specification and analysis transparency (confirmatory vs exploratory) — Clearly preregister/prespecify analyses and outcomes, distinguish confirmatory from exploratory work, adhere to the prespecified plan at Stage 2 (if applicable)
+[77] Title quality and front‑matter accuracy — The title (and associated front matter where relevant) precisely and accurately conveys study scope/design and the main contribution.
+[78] Intervention and comparator description (TIDieR-complete) — Provide TIDieR-complete descriptions of interventions and comparators (components, delivery, dose, timing, provider qualifications, co-interventions, similarity
+[79] Novelty and significance of the contribution — The work is original and non‑incremental, advances the field in a meaningful way, and demonstrates clear significance/utility (e.g., methodological, theoretical
+[80] Open data, code, models, and materials provided for reproduction — Authors provide the data, code, models/weights, and materials with working links/repositories, version identifiers, and sufficient instructions/documentation to
+[81] Registered Reports adherence and protocol transparency — For Registered Reports, ensure protocol completeness and timing alignment with stages; Stage‑approved procedures/analyses are followed, deviations are transpare
+[82] Human subjects ethics, consent, and data privacy — Document IRB/ethics approval and standards (e.g., Helsinki), informed consent (including publication consent where needed), protections for vulnerable groups, a
+[83] Randomization and blinding: adequacy and reporting — Describe and implement randomization/allocation with adequate concealment and unpredictability; report sequence generation, allocation ratio, blinding (who/how)
+[84] Statistical methods: appropriateness, transparency, and robustness (primary studies) — Use appropriate models/tests with stated assumptions and software; detail confounding control, subgroup/interaction and missing-data handling, diagnostics/prior
+[85] Meta-analysis methods and reporting quality — Select and justify effect measures, weighting and variance estimation; choose suitable fixed/random/multilevel models; address unit-of-analysis issues (multi-ar
+[86] Quality and appropriateness of figures/tables/code — Visuals and any shared code are necessary, accurate, readable, well‑designed, and effectively support the analysis and claims, including uncertainty where relev
+[87] ARRIVE-aligned animal research reporting and welfare — Animal research reporting complies with ARRIVE: ethical permissions/welfare, animal characteristics/baseline status, experimental units/numbers analyzed, care/m
+[88] Novelty and positioning vs prior work — Evaluates whether the contribution is genuinely original and clearly contrasted with prior work, with the novelty and importance communicated explicitly (e.g., 
+[89] Clarity, readability, and organization for the intended audience — Writing is clear and well‑structured for target readers; terminology is consistent; organization and length support comprehension and assessment.
+[90] Dataset provenance, composition, and representativeness — Document dataset origin/provenance, collection timeframe, composition/coverage, inclusion/exclusion/filtering, representativeness of the final sample, and requi
+[91] Venue scope/policy — content‑type compliance — Confirm submissions are in‑scope and not of disallowed content types per venue policy.
+[92] Quality and appropriateness of figures/tables/code — Visuals and any shared code are necessary, accurate, readable, well‑designed, and effectively support the analysis and claims, including uncertainty where relev
+[93] Venue/track scope and submission‑type fit — The submission aligns with the venue’s aims, topical scope, accepted contribution types/tracks, and readership.
+[94] Human subjects ethics, consent, and data privacy — Document IRB/ethics approval and standards (e.g., Helsinki), informed consent (including publication consent where needed), protections for vulnerable groups, a
+[95] Animal research ethics approvals and welfare permissions — Report animal‑use approvals (e.g., IACUC/ethics committees), relevant licences/permits, and animal welfare/oversight guidelines and permissions.
+[96] Harms and adverse events reporting (primary studies) — Collect and report adverse events systematically (methods, coding/thresholds, denominators) and present important harms by group; include animal welfare events 
+[97] ARRIVE-aligned reporting for animal/preclinical studies (core items) — Animal/preclinical studies report per ARRIVE core: animal characteristics; inclusion/exclusion and reasons; group n; sourcing; procedural details/controls; prim
+[98] Data availability and sharing — actionable access and statements — Provide actionable access to underlying data with clear availability statements and direct links/paths; meet journal/FAIR expectations for sharing, deposition, 
+[99] Open data, code, models, and materials provided for reproduction — Authors provide the data, code, models/weights, and materials with working links/repositories, version identifiers, and sufficient instructions/documentation to
+[100] Publication ethics, originality, and research integrity — The work is original (no duplicate/self‑plagiarized publication), free from plagiarism and fabrication/manipulation; citation/authorship and data/image practice
+[101] Statistical methods: appropriateness, transparency, and robustness (primary studies) — Use appropriate models/tests with stated assumptions and software; detail confounding control, subgroup/interaction and missing-data handling, diagnostics/prior
+[102] Effect sizes and uncertainty reporting completeness — Report effect sizes or performance metrics with appropriate uncertainty (CIs/SEs/credible intervals), exact p‑values/test statistics where relevant, definitions
+[103] Citation practice quality, coverage, and ethics — References are current, relevant, accurate, and fairly represent sources; practices acknowledge precedence and avoid manipulation or excessive self‑citation.
+[104] CHEERS — economic evaluations (reporting standards) — Economic evaluations comply with CHEERS (including CHEERS-AI when applicable).
+[105] Systematic review and meta-analysis methods and reporting — Plan and report SR/MA methods transparently (PICO, comprehensive/transparent search, eligibility, model choice, effect estimators, handling heterogeneity/missin
+[106] Artifact and dataset citation, licensing, access terms, and distribution compliance — Cite datasets/software appropriately, document and comply with licenses and intended‑use terms, state who/what can access data under what conditions, and ensure
+[107] Randomization and blinding: adequacy and reporting — Describe and implement randomization/allocation with adequate concealment and unpredictability; report sequence generation, allocation ratio, blinding (who/how)
+[108] Systematic review results presentation and certainty — Present synthesis clearly with appropriate figures/tables (e.g., forest plots) and Summary of Findings with GRADE; provide transparent RoB displays and sufficie
+[109] Title, abstract, and keyword quality — Title is specific/accurate; abstract is concise and aligned with methods/results/conclusions; keywords/subjects are appropriate and, where applicable, use stand
+[110] Clarity, readability, and organization for the intended audience — Writing is clear and well‑structured for target readers; terminology is consistent; organization and length support comprehension and assessment.
+[111] Societal impacts and responsible release — Balanced assessment of positive/negative societal impacts, misuse risks, affected stakeholders, and safeguards for responsible release/deployment with real‑worl
+[112] Interdisciplinary collaboration planning and governance — Collaborative plans show clear roles/leadership, realistic milestones, partnership structures, and mechanisms to sustain cross‑disciplinary work over time.
+[113] CARE case report guideline adherence and completeness — Case reports adhere to CARE/SCARE with complete reporting of required elements (e.g., structured abstract, patient information, therapeutic interventions, timel
+[114] Human subjects ethics, consent, and data privacy — Document IRB/ethics approval and standards (e.g., Helsinki), informed consent (including publication consent where needed), protections for vulnerable groups, a
+[115] Disclosure statements — funding, conflicts, sponsors, data access, acknowledgments — Provide complete, transparent disclosure statements covering authors’ relationships/activities, funding sources, sponsor roles, data‑access statements as requir
+[116] Randomization and blinding: adequacy and reporting — Describe and implement randomization/allocation with adequate concealment and unpredictability; report sequence generation, allocation ratio, blinding (who/how)
+[117] Context and setting reporting for applicability — Clearly describes study setting/site, timeframe, data provenance, and salient contextual factors so readers can assess applicability/generalizability.
+[118] Research software artifact quality, usability, and impact — Software’s functionality, architecture, code quality/maintainability, usability/testability, openness, and demonstrated or credible research utility/impact are 
+[119] ML/computational experiment setup and model reporting transparency — Report all ML/computational training and evaluation details (architectures/models with names/versions, features, hyperparameter ranges/selection, baselines/impl
+[120] Figures/tables and data visualization — clarity, accuracy, accessibility, and ethics — Figures/tables are necessary, clear, accurately labeled, and accessible (e.g., color/legend choices); captions are informative; visuals are not misleading or ma
+[121] STROBE adherence for observational studies — Observational studies (cohort, case–control, cross-sectional) comply with STROBE and relevant extensions (e.g., RECORD), including setting/dates and data source
+[122] PRISMA search sources and strategies reporting — Report all information sources (interfaces/URLs, coverage dates), full search strategies (and peer review if applicable), per PRISMA guidance.
+[123] Claim–evidence alignment and causal caution — Claims and conclusions are directly supported by presented evidence, calibrated in tone to evidence strength, avoid causal/ecological fallacies, consider confou
+[124] Meta-analysis methods and reporting quality — Select and justify effect measures, weighting and variance estimation; choose suitable fixed/random/multilevel models; address unit-of-analysis issues (multi-ar
+[125] Effect sizes and uncertainty reporting completeness — Report effect sizes or performance metrics with appropriate uncertainty (CIs/SEs/credible intervals), exact p‑values/test statistics where relevant, definitions
+[126] Interdisciplinary integration quality and scoping — Multiple disciplines/methods are appropriately scoped and coherently integrated; collaboration is equitable; integration bridges disciplinary silos and scales/d
+[127] Pre-specification and analysis transparency (confirmatory vs exploratory) — Clearly preregister/prespecify analyses and outcomes, distinguish confirmatory from exploratory work, adhere to the prespecified plan at Stage 2 (if applicable)
+[128] ARRIVE-aligned animal research reporting and welfare — Animal research reporting complies with ARRIVE: ethical permissions/welfare, animal characteristics/baseline status, experimental units/numbers analyzed, care/m
+[129] Statistical methods: appropriateness, transparency, and robustness (primary studies) — Use appropriate models/tests with stated assumptions and software; detail confounding control, subgroup/interaction and missing-data handling, diagnostics/prior
+[130] Reference and citation quality/integrity — Maintain accurate, complete, policy‑compliant references; prioritize appropriate/refereed sources; include DOIs/PIDs; avoid retracted/predatory items; verify co
+[131] Open data, code, models, and materials provided for reproduction — Authors provide the data, code, models/weights, and materials with working links/repositories, version identifiers, and sufficient instructions/documentation to
+[132] Manuscript structure and presentation — Follow standard structure (e.g., IMRAD) and present tables/figures/captions/indexes clearly in line with preparation/reporting standards.
+[133] Case report — patient information (CARE) — Provide de‑identified patient demographics, history, primary concerns/symptoms, relevant past interventions and outcomes, consistent with CARE.
+[134] Computational resources, efficiency, and convergence comparisons — Report compute resources/budget and compare runtime, scalability, and convergence behavior versus baselines; discuss computational trade‑offs and efficiency.
+[135] CARE case report completeness (incl. patient perspective) — Case reports include key CARE elements such as patient perspective, follow‑up/outcomes, and timelines.
+[136] Sample size planning, reporting, and adequacy — Report planned and per-group sample sizes, determination methods and assumptions; provide a priori power/precision/Bayes-factor justifications; state n for each
+[137] Statistical analysis rigor and transparent reporting — Statistical methods are appropriate and clearly reported with assumption checks, correct estimation/tests (frequentist/Bayesian), multiplicity control, defined 
+[138] Conflicts of interest and funding/sponsor transparency — Transparent disclosure of financial and non‑financial competing interests and funding/sponsor/partner roles; remediate or flag undeclared conflicts where presen
+[139] Image integrity: authenticity, permissible processing, and disclosure — Figures/images must be authentic and not misleading: prohibit inappropriate manipulation (duplication/relabeling, adding/removing/moving features, undisclosed s
+[140] Registered Reports adherence and protocol transparency — For Registered Reports, ensure protocol completeness and timing alignment with stages; Stage‑approved procedures/analyses are followed, deviations are transpare
+[141] Systematic review and meta-analysis methods and reporting — Plan and report SR/MA methods transparently (PICO, comprehensive/transparent search, eligibility, model choice, effect estimators, handling heterogeneity/missin
+[142] Dataset documentation, stewardship, and responsible use — Datasets include rich metadata (FAIR‑aligned), composition/collection details and stewardship plans, intended uses/limitations, ethical/privacy constraints, and
+[143] Outcome measures — definition, prioritization, assessment, and precision reporting — Clearly define primary/secondary outcomes, how and when they were measured (and any reference standards/criteria), specify prioritization, and report estimates 
+[144] Human subjects ethics, consent, and data privacy — Document IRB/ethics approval and standards (e.g., Helsinki), informed consent (including publication consent where needed), protections for vulnerable groups, a
+[145] Conciseness, length, and format appropriateness — The manuscript is as short as feasible while sufficient for clarity and reproducibility; length/format match the message and venue expectations; identifies wher
+[146] Accessibility and inclusive communication — Ensure accessible materials and clear, inclusive language for diverse audiences (including readers with disabilities and non‑native speakers); provide multiling
+[147] Randomness control and experimental repeats reporting — Control/report randomness (fixed seeds) and the exact number of runs/repeats; ensure sufficient repetitions, avoid selective reporting (e.g., best‑of‑N), and us
+[148] Research software artifact quality, usability, and impact — Software’s functionality, architecture, code quality/maintainability, usability/testability, openness, and demonstrated or credible research utility/impact are 
+[149] Conflicts of interest and funding/sponsor transparency — Transparent disclosure of financial and non‑financial competing interests and funding/sponsor/partner roles; remediate or flag undeclared conflicts where presen
+[150] Statistical analysis rigor and transparent reporting — Statistical methods are appropriate and clearly reported with assumption checks, correct estimation/tests (frequentist/Bayesian), multiplicity control, defined 
+[151] Sample size planning, reporting, and adequacy — Report planned and per-group sample sizes, determination methods and assumptions; provide a priori power/precision/Bayes-factor justifications; state n for each
+[152] Randomization and blinding: adequacy and reporting — Describe and implement randomization/allocation with adequate concealment and unpredictability; report sequence generation, allocation ratio, blinding (who/how)
+[153] Ethics approvals/oversight and compliance statements (human/animal research) — State institutional ethics/IRB/IACUC approvals or exemptions and adherence to human/animal research standards; include oversight identifiers and, where required
+[154] Human subjects ethics, consent, and data privacy — Document IRB/ethics approval and standards (e.g., Helsinki), informed consent (including publication consent where needed), protections for vulnerable groups, a
+
+# Worked examples
+
+## Example 1 (negative_iclr, venue=ICLR)
+
+INPUT (unit_id=93336):
+This papers discusses the challenge of training computer vision and language models with differential privacy, especially when using unsupervised pre-training and similarity-based loss functions like contrastive loss. The primary issue with contrastive loss in a privacy-preserving setting is that its sensitivity increases with the batch size, which negatively impacts differentially private methods like DP-SGD (Differentially Private Stochastic Gradient Descent). To address this, the authors propose a modified DP-SGD method specifically designed for similarity-based losses, achieving a constant sensitivity level regardless of batch size. Their experiments on CIFAR-10 and CIFAR-100 datasets demonstrate that this approach nearly matches the performance of non-private models and surpasses the results of directly applying DP-SGD to contrastive loss.
+
+**Strengths:**
+The paper considers developing DP algorithms for problems where the objective function is coupled, which often happens in problems with contrastive loss. The setting appears to be new, and the algorithms are specifically design and analyzed for this class.
+
+**Weaknesses:**
+However, the derivation of the \ell_2 sensitivity is rather trivial, and the resulting algorithm is still just a simple variation of the traditional DP-SGD algorithm. Most of the derivations are mechanical. I do not see too much insights or contribution in this work. Further, the paper has not been well-written, as there are places that have obvious t... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "93336", "passages": [{"passage_text": "**Strengths:**\nThe paper considers developing DP algorithms for problems where the objective function is coupled, which often happens in problems with contrastive loss. The setting appears to be new, and the algorithms are specifically design and analyzed for this class.", "passage_polarity": "positive", "signals": [{"signal_text": "The paper considers developing DP algorithms for problems where the objective function is coupled", "signal_type": "observation", "polarity": "positive", "rubric_matches": []}, {"signal_text": "The setting appears to be new", "signal_type": "praise", "polarity": "positive", "rubric_matches": [79, 88]}, {"signal_text": "the algorithms are specifically design and analyzed for this class", "signal_type": "praise", "polarity": "positive", "rubric_matches": [47]}]}, {"passage_text": "**Weaknesses:**\nHowever, the derivation of the \\ell_2 sensitivity is rather trivial, and the resulting algorithm is still just a simple variation of the traditional DP-SGD algorithm. Most of the derivations are mechanical. I do not see too much insights or contribution in this work. Further, the paper has not been well-written, as there are places that have obvious typo and inconsistencies. For example in line 156 Eq. (2.4) has been mentioned, but no (2.4) has been defined, nor the gradient of K_z(w) has been defined either.", "passage_polarity": "negative", "signals": [{"signal_text": "the derivation of the \\ell_2 sensitivity is rather trivial", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [79, 47]}, {"signal_text": "the resulting algorithm is still just a simple variation of the traditional DP-SGD algorithm", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [79, 88]}, {"signal_text": "Most of the derivations are mechanical", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [79, 47]}, {"signal_text": "I do not see too much insights or contribution in this work", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [79, 88]}, {"signal_text": "the paper has not been well-written", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [89, 110]}, {"signal_text": "there are places that have obvious typo and inconsistencies", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [89, 132]}, {"signal_text": "in line 156 Eq. (2.4) has been mentioned, but no (2.4) has been defined", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [89, 132]}, {"signal_text": "nor the gradient of K_z(w) has been defined either", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [89, 9]}]}]}
+
+## Example 2 (positive_elife, venue=eLife)
+
+INPUT (unit_id=254731):
+Summary: In contrast to the recent findings reported by Schuster S et al., this brief paper presents evidence suggesting that the stumpy form of T. brucei is likely the most pre-adapted form to progress through the life cycle of this parasite in the tsetse vector. Strengths: One significant experimental point is that all fly infection experiments are conducted in the absence of "boosting" metabolites like GlcNAc or S-glutathione. As a result, flies infected with slender trypanosomes present very low or nonexistent infection rates. This provides important experimental evidence that the findings of Schuster S and colleagues may need to be revisited. In the revised submission the authors also compared trypanosome midgut infection levels in tsetse flies when either young (teneral) or mature adult flies received infected bloodmeals, with or without 60 mM GlcNAc. The data clearly show that, unlike in teneral flies, the addition of GlcNAc to the trypanosome-infected bloodmeal does not enhance midgut infection in mature adult flies. This is now convincingly demonstrated in Figure 2 and provides strong experimental support for the suggestion that the effect reported by Schuster S. et al. may have been influenced by both fly age and the inclusion of metabolic "boosters" in the bloodmeal. ,
+
+OUTPUT (one line of JSON):
+{"unit_id": "254731", "passages": [{"passage_text": "Strengths: One significant experimental point is that all fly infection experiments are conducted in the absence of \"boosting\" metabolites like GlcNAc or S-glutathione. As a result, flies infected with slender trypanosomes present very low or nonexistent infection rates. This provides important experimental evidence that the findings of Schuster S and colleagues may need to be revisited.", "passage_polarity": "positive", "signals": [{"signal_text": "all fly infection experiments are conducted in the absence of \"boosting\" metabolites like GlcNAc or S-glutathione", "signal_type": "praise", "polarity": "positive", "rubric_matches": [1, 9, 66]}, {"signal_text": "This provides important experimental evidence that the findings of Schuster S and colleagues may need to be revisited", "signal_type": "praise", "polarity": "positive", "rubric_matches": [70, 79]}, {"signal_text": "flies infected with slender trypanosomes present very low or nonexistent infection rates", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [143]}, {"signal_text": "One significant experimental point", "signal_type": "praise", "polarity": "positive", "rubric_matches": [79]}]}, {"passage_text": "In the revised submission the authors also compared trypanosome midgut infection levels in tsetse flies when either young (teneral) or mature adult flies received infected bloodmeals, with or without 60 mM GlcNAc. The data clearly show that, unlike in teneral flies, the addition of GlcNAc to the trypanosome-infected bloodmeal does not enhance midgut infection in mature adult flies. This is now convincingly demonstrated in Figure 2 and provides strong experimental support for the suggestion that the effect reported by Schuster S. et al. may have been influenced by both fly age and the inclusion of metabolic \"boosters\" in the bloodmeal.", "passage_polarity": "positive", "signals": [{"signal_text": "the authors also compared trypanosome midgut infection levels in tsetse flies when either young (teneral) or mature adult flies received infected bloodmeals, with or without 60 mM GlcNAc", "signal_type": "observation", "polarity": "positive", "rubric_matches": [1, 9, 66]}, {"signal_text": "The data clearly show that, unlike in teneral flies, the addition of GlcNAc to the trypanosome-infected bloodmeal does not enhance midgut infection in mature adult flies", "signal_type": "praise", "polarity": "positive", "rubric_matches": [123, 143]}, {"signal_text": "This is now convincingly demonstrated in Figure 2", "signal_type": "praise", "polarity": "positive", "rubric_matches": [86, 92, 120]}, {"signal_text": "provides strong experimental support for the suggestion that the effect reported by Schuster S. et al. may have been influenced by both fly age and the inclusion of metabolic \"boosters\" in the bloodmeal", "signal_type": "praise", "polarity": "positive", "rubric_matches": [70, 123]}]}]}
+
+# Hard constraints (failures we have seen)
+
+1. **passage_text MUST be at least 50 chars** and MUST include the actual quality-judgment content, not just a section label. If a passage starts with "Strengths:", "Weaknesses:", "Pros:", "Cons:", etc., extend it to include the body text.
+
+2. **signal_text MUST be an exact substring of passage_text** — copy character-by-character, including punctuation and quotes. Do NOT paraphrase. If you can't find an exact span, skip that signal.
+
+3. **passage_text MUST be an exact substring of the review text** — copy character-by-character. Do NOT paraphrase.
+
+4. **JSON escaping (CRITICAL — this is the #1 cause of broken output)**: the text often contains LaTeX commands like `\bullet`, `\mathcal`, `\theta`, `\alpha`. Inside a JSON string, a single backslash `\` followed by certain letters IS A CONTROL CHARACTER, not a literal backslash. So:
+
+   - Source has: `\bullet` (literal) → JSON string MUST contain `\\bullet` (escaped). Writing `\bullet` will produce a backspace character (0x08) in the output, NOT the LaTeX command.
+   - Source has: `\mathcal{O}` → JSON MUST be `\\mathcal{O}`.
+   - Source has: `\theta_0` → JSON MUST be `\\theta_0`.
+   - Source has: `\n` (literal backslash + n) → JSON MUST be `\\n`. Don't use `\n` because that produces an actual newline.
+
+   Every literal backslash in the source MUST be doubled in your JSON output. There are NO exceptions. If you are unsure, double the backslash — over-escaping is fine, under-escaping breaks parsing.
+
+5. **HIGH RECALL on signals**: aim 3-10 per passage. Don't miss quality judgments.
+
+6. **Capture both criticism and praise.** Peer reviews on ML conferences (ICLR, NeurIPS) tend to skew negative; reviews on eLife or workshop venues skew positive. Extract both kinds equally.
+
+7. **Empty rubric_matches `[]` is fine** — that signals a taxonomy gap, which is useful to surface.
+
+# Output format
+
+Output STRICT JSON on a SINGLE LINE. No markdown fences. No prose before or after. Schema:
+
+```
+{"unit_id": "<from input>", "passages": [
+  {"passage_text": "<exact substring of input, >=50 chars>",
+    "passage_polarity": "positive|negative|mixed",
+    "signals": [
+      {"signal_text": "<exact substring of passage_text>",
+        "signal_type": "complaint|praise|observation|suggestion",
+        "polarity": "positive|negative|neutral",
+        "rubric_matches": [<int>, ...]}
+    ]}
+]}
+```
+
+# Now process this review
+
+unit_id: 231022
+
+text:
+Strengths:
+
+$\bullet$ Comprehensive and clear analysis of existing methods,
+
+$\bullet$ Usage of parameter-free decaying learning rate and increasing batch size,
+
+$\bullet$ Decent performance in the adversarial attacks on classification models.
+
+Weaknesses:
+
+$\bullet$ Though, the convergence rate for the 3-rd option of the decaying learning rate with increasing batch size is claimed to be $\mathcal{O}\left(\frac{1}{T}\right)$, in Theorem 3.5 one can notice $\underline{\gamma}$ and $\gamma_{inf}$, that depend on $T$ and are not thoroughly examined,
+
+$\bullet$ Besides not mentioning learning rates and batch sizes in the adversarial attacks' description, it is unclear how much resources or time was spent on APGD and ASFW. Projection-free methods might be more effective, than projection-based,
+
+$\bullet$ Technical inaccuracies, such as $\mathbb{E}\left[f(\theta_0)\right] - \mathbb{E}\left[f(\theta^*)\right]$ (both $\theta_0$ and $\theta^*$ are not random) or invalid reference on $A.1$ on page 20.
+
+**Summary Of Contributions:**
+In the submitted paper authors investigate Stochastic Frank-Wolfe algorithm with momentum and increasing batch size for nonconvex problems. They derive the convergence rates, depending on various method's regimes. Furthermore, the authors show that the proposed algorithm with adaptive step selection is competitive to APGD for white-box adversarial attacks.
+
+**Requested Changes:**
+$\bullet$ Since one of the advantages of the Frank-Wolfe algorithm is the simplicity of iteration on a bounded set, consider adversarial attacks with various $l_p$ constraints, not only $l_{inf}$,
+
+$\bullet$ It might be thoughtful to compare consumed resources and time in the experiments, since there might be an optimal batch size.
+
+**Broader Impact Concerns:**
+There are no potential societal consequences, that should be specifically highlighted.
+
+Output rules:
+- Do NOT think aloud. Do NOT explain your reasoning.
+- Do NOT preface with "Let me", "The user", "First I'll", or any meta-text.
+- Begin your response with the character `{` and end with `}`.
+- Output exactly ONE JSON object on ONE line. Nothing else before or after.

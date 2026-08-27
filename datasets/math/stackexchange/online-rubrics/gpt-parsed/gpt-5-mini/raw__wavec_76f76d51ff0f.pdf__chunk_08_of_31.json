@@ -1,0 +1,340 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 8,
+  "n_chunks": 31,
+  "chunk_chars": 39909,
+  "model": "gpt-5-mini",
+  "elapsed_s": 118.07607129200187,
+  "input_tokens": 14330,
+  "output_tokens": 8123,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users of the PARI/GP library (mathematicians, computational number theorists, and developers calling GEN functions)",
+    "subtask_short": "PARI/GP library reference",
+    "subtask_description": "Reference documentation for PARI/GP library functions: descriptions, parameter semantics, algorithmic notes, flags, warnings, and examples for a broad set of number-theoretic and algebraic routines.",
+    "subtask_keywords": [
+      "pari_gp",
+      "library_reference",
+      "number_theory",
+      "function_docs",
+      "api_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "factorint (integer factorization engine)",
+        "description": "Provides direct access to the integer factoring engine called by most arithmetical functions. Optional binary-encoded flag controls which algorithms to avoid or skip: 1 avoid MPQS, 2 skip first-stage ECM, 4 avoid Rho and SQUFOF, 8 don't run final ECM (which may cause a huge composite to be declared prime). Uses a (strong) probabilistic primality test; composites might not be detected though no example is known.",
+        "guidance": "You may set factor_proven default to 1 or run isprime on results to guarantee primality. Use gp\u2019s debug parameter to inspect internals (level 3+). Note risks when disabling ECM/fallbacks; probabilistic nature implies rare false primes; monitor debug to see warnings about untested cofactors."
+      },
+      {
+        "name": "factormod (factor polynomial mod p)",
+        "description": "Factors polynomial x modulo prime p using Berlekamp; coefficients of x must be operation-compatible with Z/pZ. Returns two-column matrix: irreducible polynomials and their exponents. If flag non-zero, outputs only degrees of irreducibles.",
+        "guidance": "A different algorithm factorcantor may be faster in some cases. Ensure coefficient types are compatible; examples show usage for finite-field factorization and option to return degrees (useful for e.g. L-functions)."
+      },
+      {
+        "name": "ffgen (finite field generator)",
+        "description": "Return a t_FFELT generator for finite field with q elements (q = p^f). Computes an irreducible monic polynomial P \u2208 Fp[X] of degree f via ffinit and returns g = X (mod P(X)). If v provided, use its variable name for display.",
+        "guidance": "Alternative inputs: pair [p,f] or directly the polynomial P (must be monic irreducible with t_INTMOD coefficients). If P is not irreducible, an invalid object is created and behavior is undefined \u2014 testing irreducibility is costlier than producing P via ffinit. Errors shown if q is not a prime power. Use ffgen(ffinit(...)) idiom to combine init and generator creation."
+      },
+      {
+        "name": "ffinit (compute monic irreducible polynomial)",
+        "description": "Computes a monic irreducible polynomial of degree n over Fp (p prime) using a fast variant of Adleman\u2013Lenstra\u2019s algorithm.",
+        "guidance": "Useful with ffgen to represent elements of F_{p^n}. Example: P=ffinit(3,2) then ffgen(P,'t'). Library syntax includes variable selection. Assumes input p is prime (no primality test performed)."
+      },
+      {
+        "name": "fflog (discrete logarithm in finite field)",
+        "description": "Discrete logarithm of finite-field element x in base g: returns e in Z such that g^e = x. Optional parameter o represents multiplicative order of g (preferred format [ord, factor(ord)]). If o omitted, g assumed primitive root. Result undefined if logarithm does not exist.",
+        "guidance": "Algorithms used vary by field: generic discrete-log (via znlog), cubic-sieve index-calculus for large fields deg\u22655, Coppersmith\u2019s algorithm for small characteristic \u22645. Providing o (order and factorisation) speeds/assists computation; can be obtained by ffprimroot. Examples demonstrate computing o and fflog with/without o."
+      },
+      {
+        "name": "ffnbirred (number of monic irreducible polynomials)",
+        "description": "Computes number of monic irreducible polynomials over F_q of degree exactly n (flag=0) or at most n (flag=1).",
+        "guidance": "Multiple wrappers available (ffnbirred, ffsumnbirred). Ensure q is a prime power input in accepted formats."
+      },
+      {
+        "name": "fforder (multiplicative order in finite field)",
+        "description": "Multiplicative order of t_FFELT element x. Optional o may be provided as a multiple of the order in format [N, factor(N)] where N is group cardinality.",
+        "guidance": "Providing o accelerates or avoids recomputation; examples show timing difference when o provided. Use ffprimroot to obtain o for generator elements."
+      },
+      {
+        "name": "ffprimroot (primitive root of multiplicative group)",
+        "description": "Return a primitive root of the multiplicative group of the definition field of finite-field element x. Optional output o set to [ord, fa] where ord is group order and fa its factorization.",
+        "guidance": "o is useful for fflog and fforder. Note returned primitive root may not lie in field generated by x. Example shows computing o and using it to compute discrete logs quickly."
+      },
+      {
+        "name": "fibonacci (fibo)",
+        "description": "fibonacci(x) returns the x-th Fibonacci number.",
+        "guidance": "Library syntax is GEN fibo(long x). Straightforward; used for integer-indexed Fibonacci values."
+      },
+      {
+        "name": "gcd (greatest common divisor)",
+        "description": "Creates gcd(x,y). If y omitted and x is vector, returns gcd of components (equiv. to content(x)). For vector/matrix inputs, gcd applied recursively with semantics depending on which argument is vector/matrix; gcd is not commutative for these types.",
+        "guidance": "Algorithms: naive Euclid generally, but special cases: integers use modified right-shift binary algorithm; univariate polynomials over same number field use modular gcd; general polynomials use subresultant when coefficient explosion likely. For inexact polynomial coefficients gcd is scalar; use polresultant to check near-degeneracy, or gcdext to compute approximate gcd and cofactors. Multiple wrappers exist: ggcd0, ggcd, content."
+      },
+      {
+        "name": "gcdext (extended gcd)",
+        "description": "Returns [u, v, d] with d = gcd(x,y) and x*u + y*v = d; u and v minimal. Arguments must be integers or polynomials. For inexact polynomial coefficients it computes u,v,d with approximate division properties rather than the scalar gcd.",
+        "guidance": "Examples show integer and polynomial outputs. For inexact inputs outputs are not mathematically well-defined but give explicit polynomials to check approximation quality. Library wrapper gcdext0."
+      },
+      {
+        "name": "hilbert (Hilbert symbol)",
+        "description": "Hilbert symbol of x and y modulo prime p; p=0 denotes the infinite place. Result undefined if p\u22600 is not prime.",
+        "guidance": "p may be omitted: take p=0 if both x,y rational or one real; take p=q if one argument is t_INTMOD modulo q or a q-adic. Incompatible types raise an error. Syntax long hilbert(GEN x, GEN y, GEN p = NULL)."
+      },
+      {
+        "name": "isfundamental (fundamental discriminant check)",
+        "description": "True (1) if x equals 1 or the discriminant of a quadratic field, false (0) otherwise.",
+        "guidance": "Simple predicate; library syntax long isfundamental(GEN x)."
+      },
+      {
+        "name": "ispolygonal (s-gonal number test)",
+        "description": "ispolygonal(x,s,{&N}) returns true if integer x is s-gonal (s>2 t_INT). If &N provided, sets N to index n such that x is n-th s-gonal number.",
+        "guidance": "Example shows usage with &N. Ensure s is integer >2 and types correct. Syntax long ispolygonal(GEN x, GEN s, GEN *N = NULL)."
+      },
+      {
+        "name": "ispower (k-th power detection/maximal power)",
+        "description": "If k given, returns true if x is k-th power (meaning depends on x type). If k omitted, for integer/fraction x returns maximal k\u22652 with x = n^k else 0. If &n provided and x is k-th power set n to k-th root.",
+        "guidance": "For t_FFELT x omitting k not allowed; one may set k = (x.p^x.f - 1)/fforder(x). Also gisanypower exists to return type information. Library syntax long ispower(GEN x, GEN k = NULL, GEN *n = NULL)."
+      },
+      {
+        "name": "ispowerful (powerful integer test)",
+        "description": "True if integer x is powerful (valuation at all primes dividing x \u2265 2), false otherwise.",
+        "guidance": "Examples show 50 -> 0, 100 -> 1, support for huge expressions. Library syntax long ispowerful(GEN x)."
+      },
+      {
+        "name": "isprime (primality test and proven certificates)",
+        "description": "True (1) if x is prime, false (0) otherwise. This routine proves/disproves rigorously (slow for large primes > ~1000 digits). For quick compositeness check use ispseudoprime. Accepts vectors/matrices componentwise.",
+        "guidance": "flag=0: uses Baillie-PSW, Selfridge p-1 if x-1 smooth enough, and APRCL for general x. flag=1: use Selfridge-Pocklington-Lehmer p-1 test and output a primality certificate: returns 0 composite, 1 if small enough that Baillie-PSW suffices (currently x<2^64), 2 if large prime provable only by APRCL, or a three-column matrix certificate when x-1 is smooth enough. Algorithm may fail extremely rarely if pseudo-prime factors are composite \u2014 monitor debug warnings about untested cofactors. flag=2: use APRCL. Use isprime to get rigorously proven primes; otherwise probabilistic pseudoprimality tests may be faster."
+      },
+      {
+        "name": "isprimepower (prime power detection)",
+        "description": "If x = p^k with p prime and k>0, return k else 0. If &n given and true, sets n to p.",
+        "guidance": "Syntax long isprimepower(GEN x, GEN *n = NULL). Straightforward predicate for prime-power structure."
+      },
+      {
+        "name": "ispseudoprime (strong pseudoprime testing)",
+        "description": "Returns true if x is a strong pseudoprime by specified test, false otherwise. If false then x is composite; if true x is only highly likely prime. Accepts vectors/matrices componentwise.",
+        "guidance": "flag=0: check small prime divisors up to 101 and Baillie-Pomerance-Selfridge-Wagstaff pseudo-prime (Rabin-Miller base 2 followed by Lucas test for sequence (P,-1)). No known composites pass this test; all composites \u2264 2^64 are correctly detected. flag>0: strong Miller-Rabin pseudo prime for flag randomly-chosen bases (with end-matching for sqrt(-1) detection). Use isprime for rigorous proof."
+      },
+      {
+        "name": "ispseudoprimepower (pseudo-prime power detection)",
+        "description": "If x = p^k with p a pseudoprime (per ispseudoprime) and k>0, return k else 0. If &n given and true, sets n to p.",
+        "guidance": "k is maximal such that x = n^k, and when n \u2264 2^64 the function returns k>0 iff n is truly prime; for n > 2^64 a pseudoprime test is used so composite factors may be mistaken for prime."
+      },
+      {
+        "name": "issquare (square detection and root)",
+        "description": "True if x is a square, false otherwise. Meaning of square depends on type: all complex numbers are squares; nonnegative real are squares; exact types t_INT,t_FRAC,t_INTMOD squares as per their domains. If &n given, sets n to a square root.",
+        "guidance": "Polynomials: detect characteristic 2 or assume 2 invertible and verify by squaring truncated power series. For t_POLMOD only support t_POLMODs of t_INTMODs encoding finite fields (assume without checking that modulus p is prime and polynomial irreducible). Deprecated GP wrappers exist. Syntax long issquareall(GEN x, GEN *n = NULL). Examples show different contexts (integer, real, mod, p-adic)."
+      },
+      {
+        "name": "issquarefree (squarefree test)",
+        "description": "True if x is squarefree, false otherwise. x may be integer or polynomial with coefficients in an integral domain. A polynomial is declared squarefree if gcd(x, x') = 1. Non-zero polynomials with inexact coefficients are considered squarefree.",
+        "guidance": "Note possible inconsistency with factor which rounds input to an exact approximation before factoring; use polresultant to check closeness to inseparability. Errors shown when domain invalid (e.g., Z/4Z). Syntax long issquarefree(GEN x)."
+      },
+      {
+        "name": "istotient (totient value test)",
+        "description": "Returns true if x = \u03c6(n) for some integer n, false otherwise. If &N provided, set N = n as well.",
+        "guidance": "Example: istotient(4,&n) gives n=10. Syntax long istotient(GEN x, GEN *N = NULL)."
+      },
+      {
+        "name": "kronecker (Kronecker symbol)",
+        "description": "Kronecker symbol (x|y) for integer arguments, extension of Legendre symbol by multiplicativity with special rules for y=0,-1,2: (x|0)=1 if |x|=1 else 0; (x|-1)=1 if x\u22650 else -1; (x|2)=0 if x even, 1 if x\u22611 or -1 mod 8, -1 if x\u22613 or -3 mod 8.",
+        "guidance": "Input types must be integer. Syntax long kronecker(GEN x, GEN y). Use for quadratic character computations."
+      },
+      {
+        "name": "lcm (least common multiple)",
+        "description": "Least common multiple of x and y such that lcm(x,y)*gcd(x,y) = x*y up to units. If y omitted and x is a vector, returns lcm of components (a scalar). For vector/matrix arguments recursion rules produce result type matching vector/matrix argument; lcm is not commutative for these types.",
+        "guidance": "Note lcm(v) differs from iterative lcm accumulation l = v[1]; for(i,..) l=lcm(l,v[i]) \u2014 former returns scalar and uses divide-and-conquer tree for efficiency, especially with GMP kernel. Example demonstrates performance difference on large vectors. Syntax GEN glcm0(GEN x, GEN y = NULL)."
+      },
+      {
+        "name": "logint (integer logarithm floor)",
+        "description": "Return largest integer e such that b^e \u2264 x for integers b>1 and x>0. If z provided set it to b^e. May replace floor(log(x)/log(b)) which can be incorrect due to rounding.",
+        "guidance": "Useful to compute digit counts: #digits(1000!,10)=1+logint(1000!,10). Syntax long logint0(GEN x, GEN b, GEN *z = NULL)."
+      },
+      {
+        "name": "moebius (Moebius \u03bc function)",
+        "description": "Compute Moebius \u00b5(|x|) where x must be integer.",
+        "guidance": "Simple arithmetic function; syntax long moebius(GEN x)."
+      },
+      {
+        "name": "nextprime (next pseudoprime \u2265 x)",
+        "description": "Finds smallest pseudoprime (per ispseudoprime) greater than or equal to x. If x itself is pseudoprime it is returned. To rigorously prove primality, use isprime.",
+        "guidance": "Accepts real-type x. Returned value may be pseudoprime; call isprime if a proven prime is required. Syntax GEN nextprime(GEN x)."
+      },
+      {
+        "name": "numbpart (number of unrestricted partitions p(n))",
+        "description": "Gives number p(n) of unrestricted partitions of integer n (n<10^15); algorithm uses Hardy\u2013Ramanujan\u2013Rademacher formula. Trivial values p(n)=0 for n<0 and p(0)=1.",
+        "guidance": "If explicit enumeration needed use partitions. Syntax GEN numbpart(GEN n)."
+      },
+      {
+        "name": "numdiv (number of divisors)",
+        "description": "Number of divisors of |x| for integer x.",
+        "guidance": "Simple arithmetic function; syntax GEN numdiv(GEN x)."
+      },
+      {
+        "name": "omega and bigomega (count prime divisors)",
+        "description": "omega(x) = number of distinct prime divisors of |x|. bigomega (implied) = number of prime divisors counted with multiplicity.",
+        "guidance": "Example factor(392) leads to omega(392)=2 and bigomega=5. Syntax long omega(GEN x)."
+      },
+      {
+        "name": "partitions (list partitions with bounds)",
+        "description": "Returns vector of partitions of integer k as sums of positive integers; optional parameters a (part bounds) and n (length bounds) allow restricting parts and lengths. By default zero entries removed unless amin \u2264 0 then fixed-length vectors returned.",
+        "guidance": "Parts are Vecsmall sorted nondecreasingly. Examples show limiting parts \u22642, at most 2 parts, etc. Use numbpart to get counts. Syntax GEN partitions(long k, GEN a = NULL, GEN n = NULL)."
+      },
+      {
+        "name": "polrootsff (roots in finite field defined by poly)",
+        "description": "Returns vector of distinct roots of polynomial x in field F_q defined by irreducible polynomial a over F_p. Coefficients of x must be operation-compatible with Z/pZ. Either a or p may be omitted if x has t_FFELT coefficients.",
+        "guidance": "If insufficient information to determine base field an error occurs. Better syntax uses ffgen for readability. t_FFELT coefficients avoid specifying p,a explicitly. Syntax GEN polrootsff(GEN x, GEN p = NULL, GEN a = NULL)."
+      },
+      {
+        "name": "precprime (previous pseudoprime \u2264 x)",
+        "description": "Find largest pseudoprime \u2264 x; returns 0 if x \u2264 1. If x is a prime it is returned; use isprime for rigorous proof.",
+        "guidance": "Accepts real-type x. As with nextprime, returned value may be pseudoprime \u2014 call isprime if needed. Syntax GEN precprime(GEN x)."
+      },
+      {
+        "name": "prime (nth prime)",
+        "description": "prime(n) returns nth prime number. Uses checkpointing and naive O(n) algorithm.",
+        "guidance": "Example prime(10^9) yields large prime. Not optimized for huge n. Syntax GEN prime(long n)."
+      },
+      {
+        "name": "primepi (prime counting function)",
+        "description": "primepi(x) returns number of primes p \u2264 x. Implementation uses checkpointing and naive O(x) algorithm.",
+        "guidance": "Examples show large values; expect slow behavior for very large x due to naive algorithm. Syntax GEN primepi(GEN x)."
+      },
+      {
+        "name": "primes (list primes or primes in interval)",
+        "description": "Creates row vector of first n primes, or if input is vector [a,b] returns primes in [a,b].",
+        "guidance": "Returns empty vector for n \u2264 0. Examples show primes(10) and primes([a,b]). Syntax GEN primes0(GEN n)."
+      },
+      {
+        "name": "qfbclassno (ordinary class number of quadratic order)",
+        "description": "Compute class number of quadratic order discriminant D for 'small' D. If D>0 or flag=1 use O(|D|^{1/2}) algorithm (approx functional equation). If D<0 and flag=0 use O(|D|^{1/4}) Shanks baby-step/giant-step method. Function gives unconditionally correct results for |D|<2e10 in Shanks mode but may be incorrect for larger D if class group has many cyclic factors.",
+        "guidance": "Recommendation: double-check results for larger D using quadclassunit, which is 2\u20133x slower but more robust (assumes GRH for provable correctness in some regimes). Warning about naming: qfbclassno does not compute number of classes of primitive forms (narrow class number) in all cases; use QFBclassno(D) = qfbclassno(D) * if(D<0||norm(quadunit(D))<0,1,2) to correct in some situations. Syntax GEN qfbclassno0(GEN D, long flag) and wrapper functions classno/classno2 exist. Use hclassno for imaginary quadratic fields via O(|D|) algorithm."
+      },
+      {
+        "name": "qfbcompraw (composition of binary quadratic forms without reduction)",
+        "description": "Composition of binary quadratic forms x and y without reducing the result. Useful to compute generating element of an ideal. Result undefined if discriminants differ.",
+        "guidance": "Raw composition may be needed prior to reduction. Syntax GEN qfbcompraw(GEN x, GEN y)."
+      },
+      {
+        "name": "qfbhclassno (Hurwitz class number)",
+        "description": "Hurwitz class number of x for x\u22650, x\u22610 or 3 mod 4. For x>5e5 assume GRH and use quadclassunit with default parameters.",
+        "guidance": "Syntax GEN hclassno(GEN x). Note GRH assumption for large x."
+      },
+      {
+        "name": "qfbnucomp (NUCOMP composition for primitive positive definite forms)",
+        "description": "Composition of primitive positive definite binary quadratic forms x and y (type t_QFI) using NUCOMP/NUDUPL algorithms; requires L parameter (optimal L\u2248|D/4|^{1/4}). Result undefined if discriminants differ.",
+        "guidance": "Implementation slower than generic routine for small D and becomes faster near D with about 45 bits. Use nudupl when x=y. Syntax GEN nucomp(GEN x, GEN y, GEN L)."
+      },
+      {
+        "name": "qfbnupow (n-th power using NUCOMP/NUDUPL)",
+        "description": "n-th power of primitive positive definite binary quadratic form x using NUCOMP/NUDUPL; optional L should equal sqrt_nint(abs(D)>>2,4).",
+        "guidance": "Faster for large discriminant; slower than generic for small D; becomes faster for D\u22482^45. Syntax GEN nupow(GEN x, GEN n, GEN L = NULL)."
+      },
+      {
+        "name": "qfbpowraw (n-th raw power without reduction)",
+        "description": "Compute n-th power of binary quadratic form x without reduction, using qfbcompraw. Here n must be non-negative and <2^31.",
+        "guidance": "Use when reduction is not desired or will be handled separately. Syntax GEN qfbpowraw(GEN x, long n)."
+      },
+      {
+        "name": "qfbprimeform (prime binary quadratic form)",
+        "description": "Prime binary quadratic form of discriminant x whose first coefficient is p (|p| prime). p=\u00b11 returns unit form. Error if x not quadratic residue mod p or x<0 and p<0. Negative definite t_QFI not implemented. For x>0 distance component set to zero according to current precision.",
+        "guidance": "Syntax GEN primeform(GEN x, GEN p, long prec). Check residue conditions before calling."
+      },
+      {
+        "name": "qfbred (reduce binary quadratic form)",
+        "description": "Reduce binary quadratic form x; optional flag binary digits: 1 perform single reduction step, 2 don't update Shanks's distance. Optional arguments supply discriminant and square-root values (no checking). For d<0 Shanks distance irrelevant.",
+        "guidance": "Multiple wrappers available for de/indefinite, real/imag reductions: redimag, redreal, rhoreal, redrealnod, rhorealnod. Provide precomputed discriminant/sqrt to avoid recomputation but ensure correctness. Syntax GEN qfbred0(GEN x, long flag, GEN d = NULL, GEN isd = NULL, GEN sd = NULL)."
+      },
+      {
+        "name": "qfbredsl2 (reduction with SL(2,Z) transform)",
+        "description": "Reduce real or imaginary binary quadratic form x and return [y,g] where y reduced and g in SL(2,Z) with g\u00b7x = y. Optional data [D, sqrtint(D)] may be supplied. For t_QFR forms distance component unaffected.",
+        "guidance": "Useful when the SL(2,Z) transform is also needed. Syntax GEN qfbredsl2(GEN x, GEN data = NULL)."
+      },
+      {
+        "name": "qfbsolve (solve Q(x,y)=p over integers)",
+        "description": "Solve equation Q(x,y)=p where Q binary quadratic form and p prime. Returns [x,y] as two-component vector or 0 if no solution. Returns only one solution, not all.",
+        "guidance": "Algorithm: probabilistic polynomial time in p (needs sqrt of D mod p); polynomial in D if Q imaginary, exponential if Q real (full cycle of reduced forms). For real case bnfisprincipal may give heuristic subexponential solution assuming GRH. Syntax GEN qfbsolve(GEN Q, GEN p)."
+      },
+      {
+        "name": "quadclassunit (Buchmann\u2013McCurley sub-exponential class group algorithm)",
+        "description": "Compute class group of quadratic order discriminant D (sub-exponential algorithm). Recommended instead of qfbclassno or quadregulator when D < -1e25, D>1e10, or when structure is wanted. Returns vector v with member functions v.no (class number), v.cyc (structure as product of cyclic groups), v.gen (generators), v.reg (regulator) computed to internal accuracy or default precision.",
+        "guidance": "Flag obsolete; tech parameter [c1,c2] can balance relation finding vs linear algebra, but typical use should not change defaults. c1 influences relation ease/linear algebra cost; c2 mostly obsolete and overwritten to provably-correct choice under GRH. Alternatives: Buchquad wrapper for experimenting with tech. Syntax GEN quadclassunit0(GEN D, long flag, GEN tech = NULL, long prec). Use bnfnarrow for narrow class group when needed."
+      },
+      {
+        "name": "quaddisc (discriminant of quadratic \u00e9tale algebra)",
+        "description": "Discriminant of \u00e9tale algebra Q(sqrt(x)): returns 0 for x=0, 1 for x square, otherwise discriminant of quadratic field Q(sqrt(x)).",
+        "guidance": "Example: quaddisc(7)=28, quaddisc(-7)=-7. Syntax GEN quaddisc(GEN x)."
+      },
+      {
+        "name": "quadgen (canonical quadratic generator)",
+        "description": "Create quadratic number \u03c9 = (a + sqrt(d))/2 making (1,\u03c9) an integral basis for quadratic order of discriminant D. D must be integer congruent 0 or 1 mod 4 and not a square.",
+        "guidance": "Syntax GEN quadgen(GEN D). Use with quadpoly/quadunit etc."
+      },
+      {
+        "name": "quadhilbert (Hilbert class field equation)",
+        "description": "Return relative equation defining Hilbert class field of quadratic field of discriminant D. For D<0 uses complex multiplication (Schertz variant); for D>0 uses Stark units and may return vector of extensions whose compositum is requested class field (see bnrstark).",
+        "guidance": "May return several relative equations in positive D case. Syntax GEN quadhilbert(GEN D, long prec)."
+      },
+      {
+        "name": "quadpoly (canonical quadratic polynomial)",
+        "description": "Creates canonical quadratic polynomial (in variable v) corresponding to discriminant D \u2014 minimal polynomial of quadgen(D). D integer \u22610 or 1 mod 4 and not a square.",
+        "guidance": "Optional variable selection; syntax GEN quadpoly0(GEN D, long v = -1)."
+      },
+      {
+        "name": "quadray (relative ray class field equation)",
+        "description": "Relative equation for ray class field of conductor f for quadratic field of discriminant D using analytic methods. Accepts bnf for x^2\u2212D in place of D. For D<0 uses \u03c3 function and Schertz method; for D>0 uses Stark\u2019s conjecture and may return vector of relative equations.",
+        "guidance": "Uses advanced analytic techniques; see bnrstark for details. Syntax GEN quadray(GEN D, GEN f, long prec)."
+      },
+      {
+        "name": "quadregulator (quadratic regulator)",
+        "description": "Regulator of quadratic field of positive discriminant x. Returns error if x not a discriminant or if x is a square. For large x see quadclassunit.",
+        "guidance": "Syntax GEN quadregulator(GEN x, long prec). Use appropriate precision for regulator computations."
+      },
+      {
+        "name": "quadunit (fundamental unit of real quadratic field)",
+        "description": "Return fundamental unit of real quadratic field Q(sqrt(D)) where D positive discriminant. If D not fundamental discriminant, probably returns fundamental unit of corresponding order. D must be integer \u22610 or 1 mod 4 and not a square. Result is quadratic number.",
+        "guidance": "Syntax GEN quadunit(GEN D). Use with quadclassunit/quadregulator when needed."
+      },
+      {
+        "name": "ramanujantau (Ramanujan\u2019s tau function at n)",
+        "description": "Compute \u03c4(n) assuming GRH (to compute class numbers quickly via quadclassunit). Algorithm complexity ~O\u0303(n^{1/2}) using O(log n) space for individual n. If all values up to N required, use q*eta(q+O(q^N))^24 expansion for O\u0303(N) time and O\u0303(N) space.",
+        "guidance": "Example shows tauvec vs individual calls: vector approach much faster if many values required. Syntax GEN ramanujantau(GEN n). Note GRH used for speed of class number subroutines."
+      },
+      {
+        "name": "randomprime (generate pseudoprime in interval)",
+        "description": "Returns a strong pseudoprime in [2,N\u22121] by default N=2^31. If input is vector [a,b] returns pseudoprime a \u2264 p \u2264 b; infinite loop if no pseudoprime exists in interval. If upper bound < 2^64 the returned pseudoprime is a proven prime.",
+        "guidance": "Returned value may be only pseudoprime; use isprime to prove primality. Syntax GEN randomprime(GEN N = NULL)."
+      },
+      {
+        "name": "removeprimes (remove primes from private prime table)",
+        "description": "Removes primes listed in x from PARI's private prime table; removeprimes(addprimes()) empties extra prime table. x may be single integer or list. If x omitted list current extra primes.",
+        "guidance": "Manage private prime table carefully; syntax GEN removeprimes(GEN x = NULL)."
+      },
+      {
+        "name": "sigma / sumdiv (sum of kth powers of divisors)",
+        "description": "sigma(x,{k=1}) returns sum of k-th powers of positive divisors of |x|. x and k must be integers. sumdiv is alias for k=1.",
+        "guidance": "Use for divisor-sum arithmetic functions; syntax GEN sumdivk(GEN x, long k)."
+      },
+      {
+        "name": "sqrtint (integer square root)",
+        "description": "Return integer square root of non-negative integer x (largest y such that y^2 \u2264 x).",
+        "guidance": "Useful to avoid floating rounding issues: sqrtint(N) gives exact integer while sqrt(N) may be floating. Syntax GEN sqrtint(GEN x)."
+      },
+      {
+        "name": "sqrtnint (integer n-th root)",
+        "description": "Return integer n-th root of non-negative integer x (largest y with y^n \u2264 x). Special case n=2 is sqrtint.",
+        "guidance": "Syntax GEN sqrtnint(GEN x, long n). Use to avoid floating rounding errors when computing integer roots."
+      },
+      {
+        "name": "stirling (Stirling numbers of first/second kind)",
+        "description": "stirling(n,k,{flag=1}) returns Stirling number of first kind s(n,k) (flag=1) or second kind S(n,k) (flag=2), for non-negative integers n,k. s(n,k) = (\u22121)^{n\u2212k} times number of permutations with k cycles; S(n,k) number of ways partitioning n elements into k non-empty subsets.",
+        "guidance": "If many s(n,k) needed it's faster to compute polynomial x(x\u22121)...(x\u2212n+1) and extract coefficients; similarly for many S(n,k) with fixed k use generating-function identity. Syntax as documented; choose algorithms suited to batch vs single queries."
+      }
+    ]
+  }
+}

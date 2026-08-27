@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_acbf1a83c069.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "rej_acbf1a83c069.html",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39835,
+  "model": "gpt-5-mini",
+  "elapsed_s": 46.41998604100081,
+  "input_tokens": 18485,
+  "output_tokens": 3577,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "research mathematicians / computational number theorists working on lattice-based searches for large values of arithmetic sums (Mertens function, related h_P and h_StR functions)",
+    "subtask_short": "lattice_enumeration_for_mertens_counterexample",
+    "subtask_description": "Design and run lattice-based enumeration experiments to find x (via an auxiliary parameter y) that maximize or minimize arithmetic test functions (h_P or h_StR), choosing lattice construction, reduction and enumeration parameters, and computational precision to make the search feasible and effective.",
+    "subtask_keywords": [
+      "number_theory",
+      "lattice_enumeration",
+      "mertens_function",
+      "computational",
+      "zeta_zeros"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Choice of N (dimension) vs available computational power",
+        "description": "N is 'the bigger the better', but the only constraint is the amount of computational power available. In experiments N\u2208{120,130,140}.",
+        "guidance": "Higher N improves the search but increases time and memory; try several large values (e.g. 120\u2013140) and pick the best candidate empirically. Larger N may not always give better candidates in practice."
+      },
+      {
+        "name": "Scaling factor \u03b3 (controls candidate count)",
+        "description": "\u03b3\u22651 is a parameter that controls the number of candidate points to be enumerated since |L \u2229 Ball_n(t,K)| \u2248 \u03b3^{N+1}. In experiments \u03b3\u2208[1,1.28] (examples: \u03b3=1.19,1.23,1.25,1.28).",
+        "guidance": "Choose \u03b3 modestly above 1 (e.g. 1.19\u20131.25) to keep enumeration feasible; larger \u03b3 explodes the Gaussian-heuristic candidate count. Use \u03b3 together with reduction/pruning so actual enumerated points remain tractable (experiment logs show far fewer enumerated points than the heuristic count)."
+      },
+      {
+        "name": "Parameters \u03bd, \u03bd_y, \u03bd_t \u2014 relative sizes and constraints",
+        "description": "The parameters \u03bd, \u03bd_y, \u03bd_t strongly influence the entry sizes of the lattice (3.3). Heuristics suggest \u03bd\u2212\u03bd_t needs to be at least comparable to N to make certain quantities small; \u03bd_t must not be too small (previous constructions with \u03bd_t=0 were problematic). If \u03bd is large, \u03bd_y must be of comparable size to \u03bd for (3.7) to be reasonable.",
+        "guidance": "Select \u03bd,\u03bd_y,\u03bd_t to balance entry sizes and maintain efficiency: in experiments choices like \u03bd=130, \u03bd_y=100, \u03bd_t between 12 and 30 worked well. Avoid \u03bd_t too small; ensure \u03bd\u2212\u03bd_t ~ O(N) for favorable scaling in (3.6). If increasing \u03bd, adjust \u03bd_y and \u03bd_t accordingly \u2014 there is a 'sweet spot' found empirically by trial and error."
+      },
+      {
+        "name": "Handle unbalanced lattice and avoid enumerating trivial translates",
+        "description": "When \u03bd\u226b\u03bd_y the lattice defined by (3.2) is unbalanced: the top row has norm much smaller than det(L)^{1/(N+1)}, so many integer translates u + m b1 lie in the ball. Therefore enumeration should avoid returning all lattice points corresponding to such translates.",
+        "guidance": "Enumerate points in the projection of L onto the hyperplane orthogonal to b1 (Alg.1 variant) to avoid enumerating O(\u2124\u22c5b1) translates. Practically, filter enumerated u so there is no nonzero m\u2208\u2124 with ||t\u2212u\u2212m b1|| < ||t\u2212u||."
+      },
+      {
+        "name": "Use progressive 1\u2011round BKZ reduction (LLL then BKZ tours)",
+        "description": "Compute a progressive 1-round BKZ reduced basis by running LLL, then one tour of BKZ-20, BKZ-21, ..., up to a target (examples given: BKZ-83 or BKZ-88).",
+        "guidance": "Use fplll to perform LLL followed by incremental BKZ tours up to the desired blocksize (e.g. BKZ-83 or BKZ-88) to obtain a well-reduced basis before enumeration. This often takes a few hours on a single core for N\u2248120\u2013140."
+      },
+      {
+        "name": "Use pruned enumeration (variant of LN13) with suitable pruning/scaling",
+        "description": "Run pruned enumeration (Alg.1, variant of LN13) with chosen scaling factor radius \u03b3 and target t'; examples: \u03b3=1.23 gave 37,937 lattice points (\u22482 days single core), \u03b3=1.19 gave 17,406 points (few hours).",
+        "guidance": "Tune pruning and scaling (\u03b3) to balance runtime and coverage. Monitor actual enumerated counts (much smaller than Gaussian heuristic) and adjust \u03b3 or pruning to keep runtimes to a few core\u2011days. Expect that each enumerated projected point may correspond to many translates (accounted for by projection strategy)."
+      },
+      {
+        "name": "Software and numeric precision requirements",
+        "description": "Use Arb for guaranteed interval arithmetic to compute h_P and h_StR; fplll for basis reduction (LLL/BKZ); NTL for implementation of pruned enumeration. Zeta zeros up to height 14,000 were used with Hurst data computed to \u224810,000 decimal digits; for heights up to 74,000 Arb with \u2248300 decimal digits sufficed.",
+        "guidance": "Choose high-precision arithmetic appropriate to the height of zeros and the function being computed (10,000 digits for lower heights, \u2248300 digits for higher ranges when using Arb). Plan runtime: some computations took less than a core day; others (enumeration) took a few core-days."
+      },
+      {
+        "name": "Use heuristics (3.6) and (3.7) to predict ranges for components and y",
+        "description": "Heuristics predict sqrt(\u03b1_i^*)|\u03b3_i y \u2212 \u03c8_i|_{2\u03c0} \u2208 2^{-3.6\u2212(\u03bd\u2212\u03bd_t)/(N+1)}\u22c5[1,\u03b3] for each i, and y \u2208 2^{-3.6 + \u03bd_y \u2212 \u03bd_t \u2212 (\u03bd\u2212\u03bd_t)/(N+1)}\u22c5[1,\u03b3]. These serve as guides to where good y values lie.",
+        "guidance": "Treat these heuristics 'with a grain of salt' \u2014 they give useful search intervals and in experiments y values fell within a factor 2^4 of the heuristic predictions. Use them to set search ranges and pruning radii."
+      },
+      {
+        "name": "Enumerate a ball of appropriate radius \u2014 not too large",
+        "description": "Enumeration should be over a ball (center t, radius R \u2248 K), but the radius must not be too large: maxima of h_StR(y) are not necessarily the closest lattice points, but h_P(y)>1 seems unlikely when the distance is beyond a threshold.",
+        "guidance": "Choose radius close to the predicted K (K depends on \u03b3, det L, N, \u03bd, \u03bd_t etc). Empirically enumerate a ball large enough to find candidates but small enough to avoid excessive unrelated points; use correlation plots (as in paper) to set a sensible threshold."
+      },
+      {
+        "name": "Focus on partial sums with largest weights \u03b1_i^*",
+        "description": "When checking the soundness of approximations, restrict to the partial sum terms with largest \u03b1_i^*; high (resp. low) values of h_StR are found among high (resp. low) values of this partial sum.",
+        "guidance": "Use the partial sum on the lattice terms (largest \u03b1_i^*) to guide the search \u2014 it correlates with the full function and lets you prioritize promising lattice points."
+      },
+      {
+        "name": "Evaluation criterion for candidate y (target function magnitude)",
+        "description": "We seek y for which |h_P(y)| or |h_StR(y)| exceeds 1 (or is large in magnitude); tables report y values where h_P(y)\u2248\u22121.012, h_StR(y)\u2248\u22121.007, and near-misses slightly below/above 1.",
+        "guidance": "Compute the target function h_P or h_StR reliably using high-precision arithmetic; track near-misses and keep candidates with values >1 (or close to critical thresholds). Slight perturbations of y can sometimes improve the value (see perturbation example given by referee)."
+      },
+      {
+        "name": "Perturbation and refinement of found y",
+        "description": "Slight perturbations of a found y can improve the target function (example: a tiny change in decimal expansion improved h_StR from \u22121.007 to \u2248\u22121.001).",
+        "guidance": "After finding a promising candidate, perform small local perturbations (and recompute with adequate precision) to refine y and potentially improve the target function. Also consider using refined theoretical bounds (e.g. for fraktur_x) to tighten conclusions."
+      },
+      {
+        "name": "Be aware of scaling pitfalls from integer flooring effects",
+        "description": "Differences between x\u22c5\u230a\u03b1\u230b and \u230ax\u22c5\u03b1\u230b can scale with x; this can make expectations (like (3.5)) diverge from heuristics if \u03bd_t is too small.",
+        "guidance": "Ensure \u03bd_t not too small to prevent large scaling errors; account for floor effects when estimating how discretization impacts sums and distances. Prior constructions fixing \u03bd_t=0 were problematic for this reason."
+      },
+      {
+        "name": "Balance parameter trade-offs empirically (no closed-form optimum)",
+        "description": "There are trade-offs when tuning parameters (e.g. increasing \u03bd may require increasing \u03bd_y, which may break \u03bd\u226b\u03bd_y condition crucial for efficiency). The paper suggests these must be determined by trial and error; there may be a 'sweet spot.'",
+        "guidance": "Perform systematic experiments varying N, \u03bd, \u03bd_y, \u03bd_t, \u03b3, reduction blocksize and pruning to find best empirical performance; monitor both enumeration counts and final target function values to guide tuning."
+      }
+    ]
+  }
+}

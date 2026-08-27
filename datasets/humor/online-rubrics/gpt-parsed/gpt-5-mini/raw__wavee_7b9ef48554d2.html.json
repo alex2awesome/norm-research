@@ -1,0 +1,164 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_7b9ef48554d2.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 19334,
+  "output_tokens": 5378,
+  "elapsed_s": 2203.8205191660672,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on multimodal humor generation and captioning",
+    "subtask_short": "funny_image_caption_generation",
+    "subtask_description": "Generate humorous captions for images (cartoons/memes) using LLM-based, theory-grounded methods; evaluate outputs with automatic and human-centered humor metrics. Focuses on extracting script oppositions, imagining humorous associations, and producing short witty captions.",
+    "subtask_keywords": [
+      "humor",
+      "multimodal",
+      "caption_generation",
+      "gtvh",
+      "llm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "GTVH knowledge resources (overall)",
+        "description": "The General Theory of Verbal Humor (GTVH) models humor as the interaction of several knowledge resources: script opposition, situation, target, narrative strategy, and language.",
+        "guidance": "Use these five knowledge resources as the theoretical foundation for generating and analyzing humor. The framework centers on script opposition as the core humor mechanism and integrates the other resources to form a structured, interpretable humor-generation pipeline. (Original wording: \"modeling humor as the interaction of several knowledge resources: script opposition, situation, target, narrative strategy, and language\")"
+      },
+      {
+        "name": "Script opposition (central humor mechanism)",
+        "description": "Script opposition captures conflicts between semantic frames (scripts) and underlies humor by establishing expectations and then violating them, enabling surprise, incongruity, and cognitive resolution.",
+        "guidance": "Identify pairs of conflicting scripts (phrases or short sentences) present in the image/description and use these oppositions as the primary foundation for generating humorous captions. Example: \"normal coffee cups vs. oversized cups\". The extractor should emphasize inherent conflicting elements in the scene."
+      },
+      {
+        "name": "Situation (situation description requirements)",
+        "description": "A script-opposition-central situation description D that describes location, characters, facial expressions, actions and emphasizes inherent conflicting elements in the image.",
+        "guidance": "The conflicting-script extractor must derive a detailed situation description (D) as the contextual background of the caption (e.g., meeting room, professional figures, oversized steaming cups). D and C (conflicting scripts) serve as the foundation for subsequent imagination and generation steps."
+      },
+      {
+        "name": "Target (identify humor targets)",
+        "description": "The humor target is the entity in the image that the caption will center on (e.g., oversized cups).",
+        "guidance": "Hierarchical Imaginator must identify candidate targets {ti} from local and global views. Targets form ancestor nodes of imagination trees and guide creative chains. Not all identified targets must be used; the generator samples among them."
+      },
+      {
+        "name": "Narrative strategy (\u2126) and linguistic style",
+        "description": "Select narrative strategy and linguistic style \u2126 \u2208 N_S \u00d7 LA to control how the imagination path and situation are realized in language.",
+        "guidance": "Caption generator conditions on \u2126 to produce captions with desired narrative framing and stylistic expressions (e.g., short narrative, wordplay). Style control is enabled by curated imagination trees and explicit prompt directives."
+      },
+      {
+        "name": "Conflicting-script extractor: functionality and prompt guidance",
+        "description": "Extract(\u00b7) analyzes image I to yield a script-opposition-centric situation description D and to systematically identify and analyze conflicting or incongruous elements, producing a set of conflicting scripts C.",
+        "guidance": "Design prompt \u03a6_script including the definition of script opposition and GTVH theory. The extractor should list pairs of conflicting scripts directly and emphasize features like location, characters, facial expressions, actions, and incongruous elements. D = Extract(I); C = Extract(\u03a6_script(I, D))."
+      },
+      {
+        "name": "Imaginator \u2014 local and global view candidate target identification",
+        "description": "Define views V = {loc, glob}. Local observation O_loc captures fine-grained unexpected features; global observation O_glob emphasizes obvious scene entities. For each view, extract m entities Ent(O_v, C) as candidate targets; T_root = union across views.",
+        "guidance": "Use both views because coarse-grained and fine-grained entities evoke different associative chains. m is determined by LLM analysis; identified targets become roots of imagination trees."
+      },
+      {
+        "name": "Imaginator \u2014 deep-pattern imagination / backbone chains (fchain)",
+        "description": "For each target ti, construct deep-pattern imaginative chains (backbone) via an LLM-driven first-order association function f_chain(\u00b7), forming sequences e^{(i)}_1,...,e^{(i)}_\u03c4 with empirical average length E[\u03c4] \u2248 4.",
+        "guidance": "Each successor is imagined from its direct predecessor (conditional dependency). Merge local and global chains by aligning identical entities and removing duplicates to form unique Ti per target."
+      },
+      {
+        "name": "Imaginator \u2014 broad-pattern imagination via humor-relevance retrieval",
+        "description": "Expand backbone chains by retrieving top-K relevant jokes from a joke database J: construct query embedding z_q = f_emb(D, C, e^{(i)}_\u03c4), compute cosine similarities sim(z_q, z_j) and select J_topK.",
+        "guidance": "Tokenize and lemmatize retrieved jokes into leaf nodes Ej for query node e^{(i)}_\u03c4. Combine LLM free-associations (deep) with humor-relevance retrieval (broad) to create imagination trees T_im. k (top-k) is a hyperparameter (default top-k = 5)."
+      },
+      {
+        "name": "HOMER-pruning: humor-relevance score and retention threshold \u03b4",
+        "description": "Prune retrieved leaf nodes with weak humor relevance using a humor-relevance score H(e^{(i)}_\u03c4, \u03b5) that combines relevance-opposition, humor-frequency, and POS-diversity. Retain tokens for which rank(H(e^{(i)}_\u03c4, \u03b5)) \u2264 \u03b4.",
+        "guidance": "\u03b4 is a hyperparameter controlling pruning; default \u03b4 = 5. Pruning removes weakly relevant retrieved entities to derive high-quality imagination trees."
+      },
+      {
+        "name": "Hrel \u2014 relevance-opposition score (definition and behavior)",
+        "description": "H_rel(e^{(i)}_\u03c4, \u03b5) = TSS(se_\u03c4, s_\u03b5) + f(TSS(se_\u03c4, s_\u03b5)) \u00b7 CO(se_\u03c4, s_\u03b5), where TSS is Wu-Palmer similarity between synsets, CO is conceptual opposition defined as 1 \u2212 max_jaccard_overlap(R(se_\u03c4), R(s_\u03b5)), and f(x) = x exp(\u2212x).",
+        "guidance": "H_rel balances semantic similarity and conceptual opposition: (i) dominated by semantic similarity; (ii) similarity-gated bounded bonus for opposition (f peaks at x=1/e); (iii) principled balance so opposition helps only at intermediate similarity. Use WordNet to compute synsets and neighborhood R(s)."
+      },
+      {
+        "name": "Hfreq \u2014 humor-frequency score",
+        "description": "H_freq(\u03b5) quantifies importance of \u03b5 as the geometric mean of token frequency in a retrieved joke Ej and normalized joke frequency across J_topK (indicator counts).",
+        "guidance": "Higher H_freq indicates \u03b5 appears frequently and across many retrieved jokes, evidencing a statistically meaningful association. Use count(\u03b5, Ej) and indicator I[\u03b5 \u2208 Ej] in the calculation (see paper Eq.5)."
+      },
+      {
+        "name": "Hdiv \u2014 POS-diversity score",
+        "description": "H_div(\u03b5) measures lexical richness of \u03b5 via POS diversity based on WordNet POS inventory: normalized count of distinct POS tags N(\u03b5) > 0 across POS set P.",
+        "guidance": "Higher H_div indicates more lexical ambiguity (e.g., multiple POS uses), increasing opportunities for puns and wordplay. Use POS tagging and normalize by |P| (see paper Eq.6)."
+      },
+      {
+        "name": "Imagination tree construction and traversal (Pi selection)",
+        "description": "For each target ti, imagination tree Ti is traversed to enumerate all possible ancestor\u2192leaf paths Pi via depth-first search (DFS). A single imagination path Pi is sampled to represent a creative chain of associations.",
+        "guidance": "Generator randomly selects key conflicting scripts C and target ti, samples an imagination path Pi from Ti, and integrates Pi with D, C, \u2126 to create the generation prompt \u03a6(C,D,Pi,\u2126). Enumeration + sampling produces diverse captions."
+      },
+      {
+        "name": "Caption generation prompt composition (\u03a6(C, D, Pi, \u2126))",
+        "description": "Construct prompt by integrating situation description D, selected conflicting scripts C, creative imagination path Pi of selected target ti, and generation options \u2126 (narrative strategy and linguistic style).",
+        "guidance": "Feed \u03a6 into LLM-based generator Gen(\u00b7) to produce Cap(I) = Gen(\u03a6). The system prompt should instruct to generate short, witty, smart captions that spotlight central incongruity and combine key keywords. Use style directives when desired."
+      },
+      {
+        "name": "Sampling and randomness controls (temperature and randomness)",
+        "description": "Base LLMs use temperature = 1 for creative generation; humor evaluators (e.g., GPT-5) use temperature = 0 for stable reproducible evaluation.",
+        "guidance": "Set other parameters to defaults unless specified. Temperature choices balance creativity (generator) vs. reproducibility (evaluator)."
+      },
+      {
+        "name": "Pass@K metric for automatic evaluation",
+        "description": "Pass@K measures the probability that a HOMER-generated caption wins against a human-written caption over multiple trials: pass@k = (1/N) \u03a3_{i=1..N} [1 \u2212 \u03a0_{t=1..k} (1 \u2212 c_i/n_i) ???] (paper provides specific unbiased Pass@K formula and references).",
+        "guidance": "Compute pass@K at K \u2208 {1,3,5}; average over multiple trials (paper averages five trials). Use Pass@K as an unbiased measure of creative-caption generation quality; compare against human captions grouped by ranking levels (#top10, #200-#209, #1000-#1009)."
+      },
+      {
+        "name": "Human evaluation: 5-point funniness scale and inter-rater agreement",
+        "description": "Human raters score captions on a five-point funniness rating rule (1: not funny \u2014 5: very funny). Inter-rater agreement measured by Cohen's kappa \u03ba.",
+        "guidance": "Use multiple raters (paper used 20 raters) and collect sufficient ratings (paper: 5600 scores). Report mean \u00b1 std and Cohen's \u03ba; expect subjectivity in humor (paper reports \u03ba = 0.49 as acceptable)."
+      },
+      {
+        "name": "Evaluator reliability and ranking accuracy",
+        "description": "Assess ranking accuracy of automated evaluators (open-source and closed-source LLMs) on human caption pairs and adopt the most reliable (paper: GPT-5) as primary humor evaluator.",
+        "guidance": "Report evaluator ranking accuracy (%) on held-out caption pairs and prefer evaluators with higher accuracy/correlation with humans. Also report Pearson correlation between evaluator scores and human ratings for alignment analysis."
+      },
+      {
+        "name": "Statistical significance testing",
+        "description": "Use two-sided Wilcoxon signed-rank test on pass@k scores to assess significance of improvements (paper uses \u03b1 = 0.05 and reports p-values).",
+        "guidance": "Report p-values per pairwise comparison and mark significance; use agreement/correlation analyses to corroborate automatic and human evaluation alignment."
+      },
+      {
+        "name": "Toxicity / harmfulness evaluation",
+        "description": "Detect harmful outputs using Detoxify across seven dimensions: toxicity, severe_toxicity, obscene, identity_attack, insult, threat, sexual_explicit.",
+        "guidance": "Report average scores across datasets and base models to ensure generated captions are safe. Paper reports low harmfulness across dimensions."
+      },
+      {
+        "name": "Joke database composition and leakage controls",
+        "description": "Joke DB is reorganized from 11\u201312 open-source one-liner joke datasets (e.g., Reddit r/jokes) for humor-relevance retrieval; explicitly excludes cartoon/image captions. Test set consists of New Yorker captions; empirical instance-level overlap checks confirm negligible leakage.",
+        "guidance": "Ensure dataset separation by source and format; verify zero exact-match or normalized overlap between joke DB and test captions; ablate DB scale (0\u2013100%) to measure contribution."
+      },
+      {
+        "name": "Module necessity and ablation criteria (I, D, C, Tim)",
+        "description": "Ablation across modules (Image I, Situation D, Conflict Scripts C, Imagination trees Tim, Generator) to quantify each module's contribution. Removing any single module degrades performance\u2014particularly removing C causes largest drop.",
+        "guidance": "Evaluate variants like Image-only, I+D, I+C, I+Tim, I+C+Tim, I+D+Tim to quantify the necessity of conflict scripts, situation descriptions, and imagination trees. Use pass@K to report impacts."
+      },
+      {
+        "name": "Hyperparameter robustness: top-k (k) and pruning threshold (\u03b4)",
+        "description": "Two main hyperparameters: number of retrieved jokes k and number of humor-relevant entities \u03b4; vary across [3,5,7,9] to test stability.",
+        "guidance": "Report performance curves over k and \u03b4; paper finds stability across tested ranges. Default values used: k=5, \u03b4=5."
+      },
+      {
+        "name": "Fairness of computational budget (LLM calls per output)",
+        "description": "When comparing to baselines, match or exceed HOMER's LLM call budget per output (paper balances calls across methods) to ensure improvements derive from method design, not higher compute.",
+        "guidance": "Report number of LLM calls per output for each method and corresponding pass@1 to demonstrate fairness. Example: HOMER uses 7 calls per output; baselines adjusted accordingly."
+      },
+      {
+        "name": "Efficiency consideration: preprocessing vs. real-time API calls",
+        "description": "Compare full model (real-time imaginator API calls) vs. naive model with pre-processed imagination results: extractor/generator calls identical; imaginator calls differ (full: 3, naive: 0).",
+        "guidance": "Report API call counts and trade-offs between runtime real-time imagination and pre-processing to balance efficiency and up-to-date association generation."
+      },
+      {
+        "name": "N-gram coverage and NLI diversity metrics",
+        "description": "Report n-gram coverage (1/2/3-gram \u2191) and NLI diversity (\u2191) of generated captions as measures of lexical variety and semantic diversity.",
+        "guidance": "Higher n-gram coverage and NLI diversity indicate richer, less repetitive captions. Paper reports these metrics per method and dataset to support claims of creativity and diversity."
+      },
+      {
+        "name": "Robustness failure modes and qualitative analysis",
+        "description": "Document failure cases where script opposition is hard to detect or images are non-humorous; such cases degrade caption humor quality.",
+        "guidance": "Include qualitative case studies showing intermediate extractor/imaginator outputs and the generator\u2019s final captions to explain successes and failures; use this analysis to guide future improvements."
+      }
+    ]
+  }
+}

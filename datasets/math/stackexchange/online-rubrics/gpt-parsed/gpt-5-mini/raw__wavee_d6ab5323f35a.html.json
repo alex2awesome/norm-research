@@ -1,0 +1,139 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_d6ab5323f35a.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13391,
+  "output_tokens": 4432,
+  "elapsed_s": 1417.2292497078888,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and developers working on automated theorem proving / interactive theorem provers (HOL Light, Coq, Lean, etc.)",
+    "subtask_short": "higher-order theorem proving ML",
+    "subtask_description": "Designing, benchmarking, and training machine-learning-driven automated theorem provers for higher-order logic using an instrumented HOL Light environment (HOList) and the DeepHOL neural prover. Includes environment/API requirements, dataset/split conventions, model architectures, training/loop design, and evaluation metrics.",
+    "subtask_keywords": [
+      "higher_order_logic",
+      "theorem_proving",
+      "reinforcement_learning",
+      "hol_light",
+      "benchmark"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Benchmark composition (core, complex, flyspeck)",
+        "description": "The benchmark consists of three corpora: \"core\", \"complex\", and \"flyspeck\" drawn from HOL Light, totaling 2199 definitions and 29,462 theorems and lemmata. Table 1 enumerates counts of definitions, theorems, and proof states for each corpus.",
+        "guidance": "Provide a large-scale corpus that covers foundational mathematics and a variety of complexity; include counts and separate corpora for basic theorems (core), complex calculus (complex), and large formalization efforts (flyspeck) so that the benchmark is a practical seed for auto-formalization research."
+      },
+      {
+        "name": "Measured tasks on the benchmark",
+        "description": "Two tasks are proposed: (1) Predict the tactic and tactic arguments employed in the human proof. (2) Prove each theorem while utilizing only those theorems as tactic arguments that humans had available (theorems provided in one unified list in the order they were proven).",
+        "guidance": "Benchmark tasks should include both imitation-style prediction (tactic+args) and full-proof automation constrained to human-available premises to reflect realistic formalization constraints."
+      },
+      {
+        "name": "Environment stability and reproducibility (prepackaged HOL Light)",
+        "description": "Fix a particular version of HOL Light with a pre-selected subset of tactics and a fixed library of basic theorems; provide a prepackaged docker image and open-source the changes so it can serve as a reliable black box for proof search and RL environments.",
+        "guidance": "Ensure reproducible, stable environment by shipping a fixed ITP build, expose a simple API, and allow forks/modifications by third parties. Optimize startup capabilities for proof search and allow replay and strict verification of produced proofs."
+      },
+      {
+        "name": "Proof Assistant API: stateless tactic application and theorem registration",
+        "description": "API provides two functions: (1) to apply tactics to goals and (2) to register theorems for future use in tactic applications. Tactic applications are stateless and contain goal, tactic, and tactic arguments. Theorem registration is stateful and uses fingerprint numbers to reference theorems in arg lists.",
+        "guidance": "Design API so tactic application requests are compact (fingerprints for theorems), allow stateless tactic calls to free proof search from strict subgoal ordering, and provide registration for resolving fingerprints."
+      },
+      {
+        "name": "Proof checking and trusted-core verification",
+        "description": "Implement a proof checker that compiles proofs into OCaml code that can be loaded in HOL Light and must pass through the trusted core; avoid trusting the proof search and even the API implementation.",
+        "guidance": "To guarantee correctness, always verify generated proofs via the theorem prover's small trusted core rather than trusting external search code or APIs."
+      },
+      {
+        "name": "Proof logging for human proofs",
+        "description": "Instrument the prove method to dump proven theorems and their proofs into files when executed in proof-dump mode, enabling conversion of human proofs into training examples.",
+        "guidance": "Record human proof traces systematically so they can be converted into supervised training data (tactic applications, argument lists, subgoals)."
+      },
+      {
+        "name": "Training example format (goal, tactic, arglist, negarglist)",
+        "description": "Training examples consist of a goal, a tactic (ID from a preselected small set, currently 41 tactics), an arglist (list of theorems passed as arguments, or a special empty-arg marker), and an optional negarglist (high-scoring theorems that were not actually used).",
+        "guidance": "Structure training examples to capture successful tactic applications and include hard negatives (negarglist) collected during search; use a fixed set of tactic IDs to simplify the action space."
+      },
+      {
+        "name": "Data splits and split assignment",
+        "description": "Split top-level theorems into training/validation/test in a 60:20:20 ratio. Assign goals occurring in the proof of a theorem to the same split as the theorem to avoid leakage.",
+        "guidance": "Use validation for continuous monitoring and occasional end-to-end checks; use test set only rarely for final assessment to avoid overfitting to the test set."
+      },
+      {
+        "name": "Representation of expressions (S-expressions and normalization)",
+        "description": "Present expressions as S-expressions with few non-leaf node types; current models observe the string version. Normalize generic types and variables (e.g., ?345882, GEN%PVAR%9675) by mapping them to a small set of names to avoid huge vocabulary and inadvertent leakage. After normalization the number of distinct tokens is 1254. Average goal tokens ~500, median ~300.",
+        "guidance": "Use a representation that is uniquely parsable and easy to convert to a tree; normalize ephemeral/generated identifiers to reduce vocabulary size and prevent trivial correlations that leak information to models."
+      },
+      {
+        "name": "Action generator decomposition",
+        "description": "Split action generation into two subtasks: (1) rank the tactics, and (2) create an argument list for each tactic (a list of theorems). DeepHOL currently does not support tactics that take arbitrary terms as parameters.",
+        "guidance": "Treat tactic selection and argument selection as distinct prediction tasks; keep the action generator modular so it can rank tactic applications for proof search."
+      },
+      {
+        "name": "Neural two-tower architecture for action ranking",
+        "description": "Two-tower network: goal tower G computes embedding G(g) and predicts tactic logits via head S; premise tower P computes embeddings P(ti) for possible tactic arguments; combiner network C scores theorems via r(ti)=C(G(g),P(ti),Tj) (tactic-conditioned) or r(ti)=C(G(g),P(ti)) (unconditioned).",
+        "guidance": "Use separate encoders for goals and premises and a combiner that optionally conditions on the tactic. This hybrid architecture predicts both tactic class and ranks premise parameters for the tactic."
+      },
+      {
+        "name": "Proof search graph structure and subgoal sharing",
+        "description": "Proof search graph nodes are goals; tactic applications are labelled hyperedges producing subgoals. Implement subgoal sharing by pointing identical subgoals to the same node. Propagate information about closed or unsuccessful subgoals through the graph to prune branches.",
+        "guidance": "Maintain a proof search graph that supports tracing closures back to parents, marking branches unsuccessful when all tactics fail, sharing identical subgoals to avoid oscillation, and propagating status updates for efficient pruning."
+      },
+      {
+        "name": "Proof search algorithm: BFS with expansion limits",
+        "description": "Use a breadth-first search that in each iteration expands all leaf nodes by calling the action generator and applying tactics in order. Stop applying tactics to a goal when a maximum number of unsuccessful tactic applications or a minimum number of successful tactic applications is reached. Terminate search on proof found, timeout, or when search graph reaches prescribed limit on number of subgoals.",
+        "guidance": "A simple BFS with per-goal limits works well when combined with action ranking and graph-level pruning; enforce global caps (subgoal count, timeout) to bound computation."
+      },
+      {
+        "name": "Proof pruning for training argument lists (greedy reverse-score omission)",
+        "description": "For successful tactic applications, iterate arguments in reverse score order and greedily omit those arguments that do not change the outcome of the tactic application. Removed parameters are stored as \"hard negatives\" and utilized during training.",
+        "guidance": "Prune superfluous arguments to obtain concise, high-quality training labels for argument prediction; greedy reverse-score omission yields short lists with minimal computation."
+      },
+      {
+        "name": "Reinforcement learning loop design and training pools",
+        "description": "The RL loop includes a trainer and many provers. Training can be seeded optionally with (1) human training examples and (2) inherited computer-generated examples. The system maintains four pools: human seed, inherited seed, fresh loop examples (last k rounds), and historical loop examples (all but last k rounds). Batches are filled with examples from each pool according to a prescribed split ratio so the training mixture remains stable.",
+        "guidance": "Mix examples from different pools deterministically to keep training distributions stable and quickly incorporate fresh examples; seeding with human proofs often improves final models."
+      },
+      {
+        "name": "Distributed RL proof search and precomputation",
+        "description": "At each RL round attempt to prove a (random) sample of theorems (2000 in their setup) distributed over many cores (1000 cores in their experiments). Precompute theorem argument embeddings before proof search to accelerate ranking. Use per-application timeout (5s), per-theorem timeouts (300s), and a limit on explored proof states (100).",
+        "guidance": "Use distributed proof search with precomputed embeddings and reasonable time/step budgets to scale RL; choose sample sizes and core counts consistent with computing resources."
+      },
+      {
+        "name": "Proof search randomness and parameter ranges",
+        "description": "Randomize prover options per example by sampling uniformly from ranges (e.g., Maximum number of top tactics explored [6,16], Maximum successful tactic applications [3,6], Number of selected tactic arguments [1,32]) to increase diversity of generated proofs.",
+        "guidance": "Introduce randomized search parameters to diversify the proofs discovered during RL and to increase the chance of finding proofs for harder statements."
+      },
+      {
+        "name": "Reporting and evaluation conventions",
+        "description": "Report both validation and test set performance to verify no overfitting on validation. Use proxy metrics (tactic prediction accuracy, positive-argument selection success rate) for model development but evaluate final performance by end-to-end theorem proving (percentage of theorems closed).",
+        "guidance": "Always present end-to-end prover success rates (e.g., % theorems closed) in addition to proxy metrics and provide continuous monitoring on validation; reserve test set for final assessments."
+      },
+      {
+        "name": "Proxy evaluation metrics used",
+        "description": "Track proxy metrics such as (1) Accuracy of tactic prediction out of the 41 tactics (reported between 38% and 42%) and (2) Success rate of selecting a positive tactic argument over a randomly selected negative argument (~1% error rate).",
+        "guidance": "Use these proxy metrics for ablations and architecture comparisons, but do not treat them as substitutes for end-to-end proof success."
+      },
+      {
+        "name": "Model architecture and hyperparameter recommendations",
+        "description": "Use WaveNet-style encoders for token sequences; architectures tried include shallow (two WaveNet blocks of 4 layers) and deeper variants (four blocks of 5 layers). Number of filters (128 vs 256) affected results; dropout ratio 0.3. Train with Adam starting lr 0.0001, exponential decay 0.98 every 100k steps, and exponential moving average of parameters at rate 0.9999 per step.",
+        "guidance": "Tune encoder depth and width; in their experiments the deeper network with more parameters performed better for some settings, but narrower networks were used for RL experiments. Use recommended optimizer settings and parameter averaging for stable training."
+      },
+      {
+        "name": "Proof-closure serialization and storage",
+        "description": "When a complete proof is found, serialize the whole proof search graph and store it as the result.",
+        "guidance": "Keep the full search graph as output to enable replay, analysis, and extracting training examples; serialization supports later proof checking and dataset enrichment."
+      },
+      {
+        "name": "Loop variants and ablation of sampling granularity",
+        "description": "Experiment with loop variants: 'Loop' (tactic-independent argument selection), 'Loop tactic dependent' (argument ranking depends on selected tactic), and 'Loop on subgoals' (train on proving subgoals separately). 'Loop on subgoals' in naive implementation did not yield improvements.",
+        "guidance": "Try both tactic-conditioned and tactic-independent argument ranking; be aware that naive subgoal-focused loops may not improve performance without additional design adjustments."
+      },
+      {
+        "name": "Empirical evaluation metrics reported",
+        "description": "Report percentage of theorems closed on validation and training corpora (e.g., Table 2 reports proof success percentages for various models and loops; Table 4 reports total count of proofs found per loop and percent of training set proved). Also show per-round performance (percentage proved per RL round) and cumulative proofs over rounds.",
+        "guidance": "Provide detailed empirical breakdowns: baseline methods, supervised imitation results, RL loop outcomes, per-round dynamics, and absolute counts to allow reproducibility and meaningful comparisons."
+      }
+    ]
+  }
+}

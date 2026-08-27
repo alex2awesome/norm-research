@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/abdcee4a23d5.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 6365,
+  "output_tokens": 4068,
+  "elapsed_s": 1108.4878611250315,
+  "extracted": {
+    "orientation": "dataset",
+    "intended_audience": "NLP / ML researchers and leaderboard participants working on humor caption understanding (New Yorker Caption Contest) and developers preparing submission predictions",
+    "subtask_short": "newyorker caption contest benchmark",
+    "subtask_description": "Dataset and benchmark for modeling humor in The New Yorker Caption Contest with three tasks (matching, ranking, explanation). Includes data splits, annotations, evaluation scripts, and submission formats for leaderboard and cross-validation evaluations.",
+    "subtask_keywords": [
+      "humor",
+      "caption_contest",
+      "new_yorker",
+      "nlp_dataset",
+      "matching_ranking_explanation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Matching task submission format",
+        "description": "Your job is to produce a json that maps from instance_id to one of A, B, C, D, or E, depending on which your model predicts as the correct caption, e.g., {\"5dc4f6a5648682c5beabba053e7a112c\": \"A\", ...}. Save that json to matching_predictions.json, upload the file to the server, and follow the directions from there!",
+        "guidance": "Leaderboard: there are 830 leaderboard matching instances. Each instance in the leaderboard has 'choices' (A..E), 'image', and 'instance_id'. The label is the chosen letter. Use the provided instances.json and cartoon jpgs to produce predictions."
+      },
+      {
+        "name": "Ranking task submission format",
+        "description": "Your job is to produce a json that maps from instance_id to one of A or B depending on which your model predicts as the correct caption, e.g., {\"cba6d1ce5711ad56c31e5577f3207ac3\": \"A\", ...}. Save that json to ranking_predictions.json, upload the file to the server, and follow the directions from there!",
+        "guidance": "Leaderboard: there are 664 leaderboard ranking instances. Each instance includes two choices ('A','B'), 'image', and 'instance_id'."
+      },
+      {
+        "name": "Explanation task policy (no automated leaderboard)",
+        "description": "There is no automatic explanation leaderboard. We had initially hoped to support automatic evaluation, but, because difficult cases still pose a challenge for even LLM-backed metrics in terms of human correlation, we decided to not host an explanation generation leaderboard.",
+        "guidance": "The authors have instances and annotations collected for explanation evaluation that are currently unused; contact the authors if interested. Explanation examples in the release include fields 'caption', 'contest_number', 'explanation', 'n_expl_toks'."
+      },
+      {
+        "name": "Cross-validation evaluation protocol",
+        "description": "The results in the paper are reported in the cross-validation setting which is different than the leaderboard setting. The official evaluation script for computing accuracy is eval_crossval.py.",
+        "guidance": "The dataset uses 5-fold cross-validation splits; evaluation metrics reported in the paper are averaged over the 'test' portion of these 5-fold splits. Example scripts (e.g., 5-shot/0-shot GPT-4 scripts) reproduce reported cross-val values. Use eval_crossval.py for reproducible accuracy computation."
+      },
+      {
+        "name": "Leaderboard vs cross-validation distribution caveat",
+        "description": "Note: the leaderboard distribution may differ from the cross-validation distribution because the data is constructed differently. The raw values thus may differ from those reported in the paper.",
+        "guidance": "Do not directly compare leaderboard numbers to the cross-validation reported numbers without accounting for distributional differences."
+      },
+      {
+        "name": "Data settings: 'from pixels' and 'from description' variants",
+        "description": "The corpus supports different settings (e.g., 'matching', 'ranking', 'explanation', and 'ranking_from_pixels', 'explanation_from_pixels_1').",
+        "guidance": "For the 'from description' setting at test time, only one description per cartoon is available. For reproducibility, use the per-split annotations (annotations_per_split) because val/test sets only have a single fixed description per split."
+      },
+      {
+        "name": "Format of examples / instance fields (matching)",
+        "description": "Matching format example: {'choices': [{'clean_caption': ...}, ...], 'contest_number': 332, 'correct_idx': 0, 'split_idx_for_neg_match': 1}. correct_idx gives the index of the correct answer in this list.",
+        "guidance": "Fields to expect include 'choices' (list of candidate captions with 'clean_caption' and 'source'), 'contest_number', and 'correct_idx'. 'source' indicates official_newyorker_finalists or crowd_winner, etc."
+      },
+      {
+        "name": "Format of examples / instance fields (ranking)",
+        "description": "Ranking format example: {'A': \"...\", 'B': \"...\", 'contest_number': 509, 'label': 'B', 'winner_source': 'official_winner'}. A / B are the options to choose between, with label being the correct answer.",
+        "guidance": "'winner_source' gives where the correct answer comes from (the incorrect answer is from a selection of 'okay' captions as determined by crowd voting)."
+      },
+      {
+        "name": "Format of examples / instance fields (explanation)",
+        "description": "Explanation format example: {'caption': 'You know, I can never define irony, but I know it when I see it.', 'contest_number': 607, 'explanation': \"...\", 'n_expl_toks': 28}.",
+        "guidance": "'n_expl_toks' is the number of tokens used in the perplexity calculation. Explanations are distributed in a flattened form for some uses."
+      },
+      {
+        "name": "Contest-level metadata keys",
+        "description": "Raw annotation files map contest numbers to metadata: {'contest_number': 322, 'contest_source': 'bob', 'contest_type': 'bob_okay', 'official_newyorker_finalists': [...], 'mturk_annotations': {'description_hit': [...], 'links_hit': [...]}}.",
+        "guidance": "'contest_source' indicates whether the data was from the earlier dataset (bob) or more recent datasets (nextml_1, nextml_2). Contests with contest_type of bob_small were low resolution and treated with special care."
+      },
+      {
+        "name": "Annotation HIT protocol and fields",
+        "description": "For each contest, description_hit was run three times and links_hit twice. description_hit data looks like: {'hash_worker_id': '...', 'image_description': '...', 'image_uncanny_description': '...', 'question_1': '...', 'question_2': None}. links_hit data looks like: {'hash_worker_id': '...', 'image_location': 'medical testing facility', 'link_1': 'https://...', 'link_2': 'https://...', 'link_3': None}.",
+        "guidance": "question_X may be unused (None). Multiple annotations per contest are provided; use these for tasks that rely on description/link annotations."
+      },
+      {
+        "name": "Flattened joke explanations release",
+        "description": "A flattened version of joke explanations is released, e.g., {'caption': 'Please! I have a wife and two thousand kids!', 'contest_number': 509, 'explanation': 'A play on the common plea...', 'n_expl_toks': 70}.",
+        "guidance": "This flattened file can be used for analyzing explanation text; 'n_expl_toks' is provided for evaluation calculations such as perplexity."
+      },
+      {
+        "name": "Task splits and downloadable split files",
+        "description": "Task splits can be downloaded as JSONs. Because the size of the dataset is relatively small, evaluation metrics are reported averaged over the 'test' portion of 5-fold different cross validation splits. Each json has 3 keys: train, val, test, and each of these keys gives a list of the examples in the corresponding split.",
+        "guidance": "Use provided split files (contest_matching_split=0_cleaned.json, etc.) to reproduce cross-validation experiments and maintain consistent train/val/test partitions."
+      },
+      {
+        "name": "Provided evaluation and training example scripts",
+        "description": "The repository includes eval_crossval.py and example scripts (e.g., CLIP training/prediction scripts and GPT-4 5-shot/0-shot scripts) to reproduce reported results.",
+        "guidance": "Use eval_crossval.py for cross-validation accuracy computation and example scripts for end-to-end training/evaluation and leaderboard submission reproduction."
+      },
+      {
+        "name": "Source label semantics (official vs crowd)",
+        "description": "Fields 'source' (in matching choices) and 'winner_source' (in ranking) indicate whether a caption is an official New Yorker finalist ('official_winner'/'official_newyorker_finalists') or derived from crowd voting ('crowd_winner' or 'okay').",
+        "guidance": "When interpreting or constructing negative examples, note that incorrect options often come from crowd-determined 'okay' captions while correct answers in ranking often come from official_winner lists."
+      }
+    ]
+  }
+}

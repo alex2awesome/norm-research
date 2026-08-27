@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_4154bae042bb.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10756,
+  "output_tokens": 3066,
+  "elapsed_s": 1396.7332159171347,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in automated theorem proving, formal verification, and ML-for-code (LLM-based provers)",
+    "subtask_short": "benchmarking ITP code verification proofs",
+    "subtask_description": "Designing, using, and evaluating a small benchmark (miniCodeProps) of Lean 4 program properties to measure and compare automated theorem provers' ability to generate proofs for code specifications. Covers dataset composition, formats, difficulty labeling, and evaluation modes (full-proof and tactic-by-tactic).",
+    "subtask_keywords": [
+      "interactive_theorem_proving",
+      "lean4",
+      "benchmark",
+      "program_verification",
+      "neural_theorem_proving"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Self-contained, simple program properties",
+        "description": "miniCodeProps contains 201 specifications about lightweight, self-contained programs (e.g., lists, natural numbers, binary trees) with varied proof difficulty.",
+        "guidance": "Benchmark items should be simple, self-contained code blocks and properties (not large, complex repositories) so that models' core proving capabilities can be isolated and evaluated. The authors explicitly filter out primarily mathematical-induction files and translate TIP Haskell programs into Lean 4 focusing on programming-style properties."
+      },
+      {
+        "name": "Minimum level of competency",
+        "description": "Properties are intended to represent a \u201cminimum level of competency\u201d for automated neural theorem provers \u2014 analogous to interview-style self-contained exercises for software engineers.",
+        "guidance": "Include medley properties that test standard induction and 1\u20132 library theorems; benchmark should expose whether a system has basic inductive proof capability in program verification contexts."
+      },
+      {
+        "name": "Property categorization / difficulty splits",
+        "description": "Properties are grouped into Medley (easy), Termination (medium), and Sorting (hard) splits; the benchmark classifies each property by primary subject matter and difficulty.",
+        "guidance": "Use the three-category split to analyze performance by difficulty and subject (lists/nats/trees; lemmas supporting termination; nonstandard sorting algorithms). Table 1 shows counts per category; difficulty indicates expected proof length/effort (medley: few lines; termination/sorting: tens of lines/hours)."
+      },
+      {
+        "name": "Difficulty heuristic (score field)",
+        "description": "Each property carries an integer score in the range [1\u20135] used as a difficulty heuristic.",
+        "guidance": "Use this numeric difficulty label as an auxiliary measure when analyzing model performance; authors use it in dataset records (see Table 2, 'score')."
+      },
+      {
+        "name": "Include termination lemmas",
+        "description": "Benchmark includes 28 lemmas that support termination proofs for recursive functions; termination proofs are required in Lean 4 for recursive definitions.",
+        "guidance": "Because recursive functions must be paired with termination proofs, include termination lemmas (often difficult and time-consuming for humans) to test practical aspects of ITP automation. The benchmark intentionally includes human-produced termination lemmas with proofs removed to measure difficulty."
+      },
+      {
+        "name": "Provide code dependencies (deps)",
+        "description": "The underlying code block (dependencies) for a property is typically necessary to complete proofs, so models are always provided with the code dependencies ('deps' in the dataset).",
+        "guidance": "Dataset items must include all definitions/lemmas required to define the property so model prompts include the necessary context. Table 2 shows the 'deps' text and 'file_locs' indicating exact file lines to append."
+      },
+      {
+        "name": "Dataset format and fields",
+        "description": "The benchmark is formatted as a jsonlines file; each item contains fields such as full_name, prop_defn, prop_loc, score, deps, proof_state, and file_locs.",
+        "guidance": "Include the initial proof state ('proof_state') and file locations ('file_locs') so proof-by-proof and tactic-by-tactic evaluations can reconstruct the environment. See Table 2 for an example record layout."
+      },
+      {
+        "name": "Initial proof state provided",
+        "description": "Each benchmark item includes the initial proof state of the property (the context and goal at the start of the proof).",
+        "guidance": "Providing the initial proof state enables tactic-by-tactic methods where the model is given the current proof state and must propose the next tactic; include variables and goal in the state as text (see example in Table 2)."
+      },
+      {
+        "name": "Evaluation modes: full-proof generation",
+        "description": "Full-proof generation: the model generates entire proof candidates (full proofs) given the deps and the property, and candidates are checked by the Lean 4 kernel.",
+        "guidance": "Measure success using pass@k (authors use pass@32: generate 32 candidates, success if at least one passes the verifier). Authors used GPT-4o and also a refinement variant (many-to-one) that takes previous failed candidates and attempts to generate improved proofs."
+      },
+      {
+        "name": "Evaluation modes: tactic-by-tactic generation",
+        "description": "Tactic-by-tactic generation: model is given the current proof state (and context) and returns suggestions for the next tactic; each suggestion is applied and the resulting proof state is used to prompt for the next tactic.",
+        "guidance": "Follow common best-first search procedures for tactic generation. Input format should include the dependent code, the property being proven, and the history of generated tactics. Use a tactic model trained to accept (context, proof state) inputs (e.g., ntp-ctx-1.3B)."
+      },
+      {
+        "name": "Proof verification by Lean 4 kernel",
+        "description": "Proof candidates (full proofs or tactic sequences) are checked by the Lean 4 kernel; a property is considered proven only if the kernel accepts the proof.",
+        "guidance": "Rely on the ITP's kernel as ground-truth verifier; do not accept syntactic-looking proofs without kernel verification. The evaluation code publicly released runs the Lean 4 verifier."
+      },
+      {
+        "name": "Success metric: pass@k and refinement",
+        "description": "Use pass@k (e.g., pass@32) to report how many properties have at least one successful proof among k generated candidates. Refinement can be used as a technique by feeding failed candidates back to the model and requesting improved proofs.",
+        "guidance": "Authors used k=32 for base generation and a refinement variant that, when initial 32 candidates fail, provides those 32 to the model and samples k=16 new generations per refinement round for T=2 rounds; this outperformed sampling 64 candidates without refinement in their tests."
+      },
+      {
+        "name": "Search algorithm for tactic generation: best-first",
+        "description": "Adopt the de-facto standard algorithm for tactic generation: best-first search over tactic suggestions.",
+        "guidance": "Combine tactic proposals from the model with a search strategy (best-first) that prioritizes promising proof states. Use trained tactic models that accept context+proof state to generate proposals."
+      },
+      {
+        "name": "Benchmark size and tractability tradeoff",
+        "description": "miniCodeProps is intentionally fairly small (201 properties) because evaluating theorem-proving models requires many calls to language models and is time-consuming/expensive for large datasets.",
+        "guidance": "Keep benchmark small enough to permit extensive evaluation (search, many samples, refinement) yet representative of the target distribution; authors argue the set is sufficient to 'break' current methods."
+      },
+      {
+        "name": "Sourcing and translation criteria",
+        "description": "Source properties from a recognized corpus (Tons of Inductive Problems, TIP) and translate programs from Haskell into Lean 4; filter out items primarily about mathematical induction to focus on program verification.",
+        "guidance": "Using an existing corpus provides relevance to the verification community and preserves varied property types; manual translation is used to ensure correct Lean 4 encodings and to include necessary termination lemmas."
+      },
+      {
+        "name": "Qualitative examples and human-readable proofs",
+        "description": "Provide illustrative examples (e.g., zip over concatenation, non-standard insertion) with example proofs (correct and incorrect) to explain what makes items interesting/difficult.",
+        "guidance": "Include example GPT-generated proofs (both successful and incorrect) to reveal typical model behaviors (unnecessary simplifier args, placeholders, invalid induction) and to guide future method development and error analysis."
+      },
+      {
+        "name": "Measure range of proving abilities across splits",
+        "description": "Report per-split performance (Medley / Termination + Sorting / Overall) to characterize where models succeed or fail.",
+        "guidance": "Authors report percentages proven for each split and overall; use these breakdowns to identify which capabilities (basic induction vs. termination reasoning vs. complex algorithm proofs) remain challenging."
+      },
+      {
+        "name": "Provide file-level reconstruction info (file_locs)",
+        "description": "Include file_locs listing the last line in each file needed to define the property so evaluators can reconstruct the environment by appending files up to those lines.",
+        "guidance": "This facilitates deterministic environment reconstruction for the verifier and for tactic-by-tactic interactions where the kernel needs complete definitions."
+      }
+    ]
+  }
+}

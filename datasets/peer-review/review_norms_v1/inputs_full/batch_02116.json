@@ -1,0 +1,162 @@
+[
+{
+"review_id": "icml_pwNSUo7yUb_r2",
+"paper_id": "icml_pwNSUo7yUb",
+"review_text": "# Update\n\nI gave the score of 4. My complaints are minor, and the authors have addressed them in the rebuttal. I'm comformtable with the paper being published in the form close what it is right now. So, I decided to not change my evaluation.\n\n# Old Summary\n\nThis paper presents moment matching self distillation (MMSD), an algorithm for training a generative model from scratch that is based on the stochastic interpolant framework.\n\nGiven a data distribution $q(x)$ and a noise distribution $p(\\epsilon)$, the stochastic framework constructs a stochastic process $\\\\{ q_t(x_t) : 0 \\leq t \\leq 1\\\\}$ such that $q_0(x_0) = q(x_0)$ and $q_1(x_1) = p(x_1)$. The generative model trained by MMSD is of the form $f^{\\theta}\\(x_t, s, t)$ where $\\theta$ denotes the model parameter. The specification is that, for any $0 \\leq s \\leq t \\leq 1$, if $x_t \\sim q_t$, then $f^{\\theta}(x_t, s, t) \\sim q_s$. A well-trained model can thus be used to generate a data sample from a noise sample in 1 evaluation of $f^\\theta$ or any other number of function evaluations.\n\nThe proposed algorithm is as follows. In each training iteration: \n1. We sample two times $s$ and $t$ such that $0 \\leq s < t \\leq 1$. We also compute an intermediate time $r = r(s,t)$ such that $s < r < t$.\n2. We then sample $N$ pairs of data items and noise vectors $(x_1, \\epsilon_1)$, $(x_2, \\epsilon_2)$, $\\dotsc$, $(x_M, \\epsilon_M)$ where $x_i \\sim q$ and $p_i \\sim p$.\n3. For each $1 \\leq i \\leq N$, we compute $x_{t,i} = \\alpha_t x_i + \\sigma_t \\epsilon_i$ and $x_{r,i} = \\alpha_r x_i + \\sigma_r \\epsilon_i$ where $\\alpha_t$ and $\\sigma_t$ are the noise schedule functions used in the formulation of $q_t$.\n4. Compute two sets of samples $\\\\{ y_{s,t,i}: y_{s,t,i} = f^{\\theta}(x_{t,i}, s, t) \\\\}$ and $\\\\{ y_{s,r,i} : y_{s,r,i} = f^{\\theta^-}(x_{r,i}, s, t) \\\\}$ where $\\theta^-$ is the gradient-stop version of $\\theta$.\n5. Compute the loss $\\mathcal{L}$ as the distance between the two sets of samples $\\\\{ y_{s,t,i} \\\\}$ and $\\\\{ y_{s,r,i} \\\\}$ using the minimum mean discrepancy (MMD).\n6. Update $\\theta$ with the gradient of $\\mathcal{L}$.\n\nThe algorithm is strikingly simialr to a previous algorithm, consistency training (CT) [1]. The main difference MMSD uses MMD to compute the loss, but CT simply computes the loss as $\\sum_i \\mathcal{d}(y_{s,t,i}, y_{s,r,i})$ where $d$ is a distance metric. Another difference is that, in CT, the time $s$ is always zero, but it is variable in MMSD.\n\nThe paper provides theoretical basis for the MMSD algorithm and shows that CT is one of its special case. It demonstrates that MMSD is effective by competitive FID scores acheived by MMSD-trained models on the CIFAR-10 and ImageNet 256x256 datasets. It also claims that MMSD training in more stable than some other algorithms, and that MMSD does not require hypertuning.\n\n*Citation*\n* [1] Song et al. \"Consistency Models.\" ICML 2023."
+},
+{
+"review_id": "icml_Aycl60Rhbt_r0",
+"paper_id": "icml_Aycl60Rhbt",
+"review_text": "The paper presents a novel method to imbue large language models with physical awareness through sound by using a physics-based channel simulator that synthesizes realistic acoustic data, simulating phenomena such as the Doppler effect, multipath reflections, and LOS conditions. The authors design an audio encoder that processes both the magnitude and phase (via sine and cosine components) of the audio signal, enabling the model to capture subtle physical characteristics. This encoder is integrated with LLMs and trained on the AQA-PHY dataset\u2014a large-scale collection of one million <Audio, Question, Answer> tuples\u2014using supervised fine-tuning. Extensive evaluations across passive sensing tasks and active sensing tasks demonstrate the method\u2019s effectiveness and model-agnostic improvements."
+},
+{
+"review_id": "icml_Aycl60Rhbt_r1",
+"paper_id": "icml_Aycl60Rhbt",
+"review_text": "The authors train an LLM to have knowledge of the physical world through acoustics. To do this, the authors create a large synthetic dataset of question-answer pairs that include audio from an acoustic simulator. The authors introduce an audio encoder that incorporates phase information, and they show that it improves performance on the acoustic tasks compared to an off-the-shelf encoder, that it works with multiple LLMs, and that it works with real world (non-simulated) data."
+},
+{
+"review_id": "icml_Aycl60Rhbt_r2",
+"paper_id": "icml_Aycl60Rhbt",
+"review_text": "The paper introduces an approach to teach physical awareness to large language models (LLMs) through sound, using a physics-based audio simulator to create the AQA-PHY dataset. The dataset consists of 1 million audio-based question-answer pairs capturing phenomena such as Doppler effects, multipath, and spatial acoustics. It proposes a novel audio encoder that leverages both magnitude and phase information, outperforming baseline methods in tasks including LOS detection, Doppler estimation, and range estimation, with promising results in both simulated and real-world settings.\n\n## Update after rebuttal\n\nThe rebuttal has addressed my major concerns. My rating has been increased."
+},
+{
+"review_id": "icml_Aycl60Rhbt_r3",
+"paper_id": "icml_Aycl60Rhbt",
+"review_text": "The paper proposes teaching Large Language Models (LLMs) to understand the physical world through sound. The authors created a physics-based simulator to generate a large audio dataset, AQA-PHY, annotated with physical phenomena like the Doppler effect and spatial relationships. They also developed a novel audio encoder that captures both the magnitude and phase of sound. By connecting this encoder to existing LLMs, they demonstrated the feasibility of enabling LLMs to achieve physical awareness in tasks such as detecting line-of-sight, estimating Doppler shifts, and localizing sound sources in both simulated and real-world environments."
+},
+{
+"review_id": "icml_Aycl60Rhbt_r4",
+"paper_id": "icml_Aycl60Rhbt",
+"review_text": "This paper proposes a method to incorporate physical awareness into LLMs using audio signals, focusing on fundamental acoustic phenomena such as the Doppler effect, multipath reflections, and direction-of-arrival. The authors introduce a specialized simulator that generates large-scale training data for these phenomena by combining real-world audio clips with artificially controlled channel parameters. They then build an AQA-PHY dataset and design a phase-aware audio encoder to feed signals into two different LLM backbones. Through simulation-based experiments and a limited real-world test in a vehicle cabin, the paper demonstrates that the resulting system can detect line-of-sight, measure Doppler shifts, localize sound sources, analyze reverberation, and even perform active distance measurements.\n\n## Update after rebuttal\nAfter the discussion, I raised my rating since the authors addressed my concerns."
+},
+{
+"review_id": "icml_UKX0k1cWfL_r0",
+"paper_id": "icml_UKX0k1cWfL",
+"review_text": "In this work, the authors investigate the robustness of deep binary neural networks (DBNNs) under environmental noise perturbations in resource-constrained scenarios. Specificity, the authors propose an $L_{1,\\infty}$-norm constraint on objective function for binary weights to derive a tighter robustness upper bound and a low computational overhead training algorithm compared to existing methods. Then, the authors conduct extensive experiments on three benchmark image datasets (i.e., CIFAR-10, 100 & ImageNet) as well as medical datasets (i.e., bio-electrical signals, brain tumor MRI), validating the proposed algorithm by enhancing the robustness of major BNN algorithms.\n\n## Rebuttal summary\n\nThis paper studies an interesting problem about the robustness of deep binary neural networks under environmental noise perturbations in resource-constrained scenarios. My initial concerns have been resolved, so I keep a positive score."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "icml_UKX0k1cWfL_r1",
+"paper_id": "icml_UKX0k1cWfL",
+"review_text": "The paper investigates whether Deep Binary Neural Networks (DBNNs) can be robust to environmental noise, particularly in resource-constrained scenarios such as bio-electrical signal classification and medical imaging. The authors identify that DBNNs' robustness vulnerabilities stem from binary weights and scaling factors. To address this, they propose a L1,\u221e-norm constraint for binary weights and scaling factors, which they claim provides a tighter upper bound on noise perturbations compared to state-of-the-art (SOTA) methods.\n\nTheir approach involves:\n1. Theoretical Analysis: They derive a formal noise perturbation upper bound for DBNNs using L1,\u221e-norm constraints.\n2. Robust Training Framework: The proposed L1,\u221e-norm constraint is incorporated into the training process to enhance DBNN robustness.\n3. Experimental Validation: Their method is tested on five classification datasets, including CIFAR-10, CIFAR-100, Brain Tumor MRI, and bio-electrical signal datasets. Results show improved robustness, with up to 4.8% and 5.4% improvements on CIFAR-100 and Brain Tumor MRI, respectively.\n4. Computational Efficiency: Their method reduces additional training overhead compared to previous methods.\n\nThe study concludes that L1,\u221e-norm constraints effectively mitigate the impact of environmental noise on DBNNs while maintaining efficiency, making it suitable for edge devices in safety-critical tasks."
+},
+{
+"review_id": "icml_UKX0k1cWfL_r2",
+"paper_id": "icml_UKX0k1cWfL",
+"review_text": "This paper addresses the robustness of deep binary neural networks (DBNNs) under environmental noise perturbations in resource-constrained scenarios. The authors propose an $L_{1,\\infty}$-norm constraint on binary weights and scaling factors to derive a tighter robustness upper bound compared to existing methods. Experiments on image classification (CIFAR, ImageNet) and medical tasks (bio-electrical signals, brain tumor MRI) demonstrate improved robustness with minimal computational overhead. While the work is well-motivated and technically sound, several aspects require strengthening for impact."
+},
+{
+"review_id": "icml_UKX0k1cWfL_r3",
+"paper_id": "icml_UKX0k1cWfL",
+"review_text": "This paper investigates the robustness of DBNNs under environmental noise in resource-constrained scenarios. The authors identify that the vulnerability of DBNNs stems from binary weights and scaling factors and propose an L1,\u221e-norm constraint to improve robustness. The proposed method introduces an auxiliary robustness loss function to balance classification and robustness objectives. Experiments on CIFAR-10, CIFAR-100, Brain Tumor MRI, and bio-electrical signal datasets show that the proposed method improves model accuracy and reduces accuracy degradation under noise compared to SOTA methods.\n\n## Update after Rebuttal\nThe authors' rebuttal solved my concerns so I raised my score to 4."
+},
+{
+"review_id": "icml_XWC7JXHXvo_r0",
+"paper_id": "icml_XWC7JXHXvo",
+"review_text": "The authors introduce SUICA, an implicit neural representation-based ST prediction method, which demonstrates another way of gene/spatial imputation for ST. This provides a different take on ST inference frameworks, which predominantly were based on image-based or neighborhood-cell based without relying on nearby coordinates."
+},
+{
+"review_id": "icml_XWC7JXHXvo_r1",
+"paper_id": "icml_XWC7JXHXvo",
+"review_text": "The paper proposes SUICA, a method for continuous modeling of spatial transcriptomics data by combining a graph-augmented autoencoder (GAE) with implicit neural representations (INRs). The key idea involves compressing high-dimensional, sparse gene expression data into a low-dimensional latent space using a GAE, then mapping spatial coordinates to this latent representation via an INR (using either FFN or SIREN), and finally decoding back to the full gene expression space. To address sparsity in spatial transcriptomics, the authors reformulate the reconstruction loss with a quasi-classification approach based on Dice Loss. Experimental evaluations on multiple datasets (including Stereo-seq MOSTA, Slide-seqV2 mouse hippocampus, and Visium-Mouse brain) demonstrate improvements in spatial and gene imputation as well as bio conservation."
+},
+{
+"review_id": "icml_m25ma7O7Ec_r0",
+"paper_id": "icml_m25ma7O7Ec",
+"review_text": "This paper presents Robust-Power-UCT, a variant of Monte Carlo Tree Search (MCTS) designed for Robust Markov Decision Processes (RMDPs). The key assumption is that exact transition and reward models are unknown, but approximate models exist with bounded uncertainty captured in an ambiguity set. This is particularly relevant for sim-to-real policy transfer, where learned policies must perform reliably in real-world settings despite discrepancies in simulated training environments. The paper provides empirical evaluation on two domains: Gambler\u2019s Problem and Frozen Lake, where Robust-Power-UCT outperforms Stochastic-Power-UCT, especially in the Frozen Lake domain."
+},
+{
+"review_id": "icml_m25ma7O7Ec_r1",
+"paper_id": "icml_m25ma7O7Ec",
+"review_text": "Reinforcement learning utilizes Monte Carlo search for planning with use of a\nmodel. However, MC search can fail to perform well in situations where the\nmodel does not accurately represent the transition or reward dynamics. This may\nbe due to inaccuracies in the model used for training an agent, non-stationarity\nof the environment dynamics and several other reasons. This paper focusses on\nthe robustness of agents to deployment in problems where the planning model does\nnot accurately represent the environment dynamics. While robustness has been\nstudied in RL, this paper explicitly introduces a robust version of MCTS for\nplanning. The authors propose a backup update rule and a tree policy for MCTS that\ntakes into account the expected worst-case returns to learn robust policies.\nThey also theoretically show that their approach converges to the optimal at a\nrate commensurate to that of standard MCTS. They also evaluate their proposed\nalgorithm against an MCTS algorithm.\n\n## Update after rebuttal\n\nI raised my score to a weak accept."
+},
+{
+"review_id": "icml_m25ma7O7Ec_r2",
+"paper_id": "icml_m25ma7O7Ec",
+"review_text": "The authors address the problem of model mismatch in Monte Carlo Tree Search (MCTS)-based algorithms. They formulate their approach as a robust optimization problem under the framework of robust Markov decision processes (RMDPs) and provide both an algorithm that solves the online robust reinforcement learning (RL) problem, as well as non-asymptotic convergence guarantees. The algorithm builds upon a robust Bellman backup operator and facilitates safe exploration over prescribed ambiguity transition and reward sets. The authors provide an empirical evaluation of their approach using two well-known RL benchmarks, for different levels of mismatch between the model used for planning in MCTS and the actual application environment."
+},
+{
+"review_id": "icml_m25ma7O7Ec_r3",
+"paper_id": "icml_m25ma7O7Ec",
+"review_text": "The paper presents a robust variant of Monte Carlo Tree Search (MCTS) aimed at addressing the discrepancies between simulated and real-world environments, focusing on ambiguities in transition dynamics and reward distributions. The authors claim that their method offers a robust approach, supported by both theoretical analysis and empirical results. Sorry, I am not well-versed in this specific field so I can't give a reasonable review. My review should be considered as a general overview.\n\n## update after rebuttal\n\nI have raised my score to a weak accept."
+},
+{
+"review_id": "icml_MCqlamfhAy_r0",
+"paper_id": "icml_MCqlamfhAy",
+"review_text": "This paper proposes an  equilibrium model-based planner for decomposing high-level tasks into mid-level action sequences in an iterative manner taking environment and world model feedback. Experiments on VirtualHome-Env benchmark demonstrates that the approach can improve over a few existing approaches."
+},
+{
+"review_id": "icml_MCqlamfhAy_r1",
+"paper_id": "icml_MCqlamfhAy",
+"review_text": "This paper introduces \"Equilibrium Sequence Modeling,\" a novel framework for robotic task planning using Large Language Models (LLMs). The authors propose reformulating plan refinement as a fixed-point problem solvable with deep equilibrium models, enabling a supervised training scheme for improving self-refinement. The fine-tuned model is then used in the proposed framework, iteratively refining the plan while incorporating predicted environmental feedback from a fine-tuned LLM world model. The authors demonstrate improved success rate over several baselines on novel tasks from the VirtualHome dataset."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "icml_MCqlamfhAy_r2",
+"paper_id": "icml_MCqlamfhAy",
+"review_text": "In this paper, a closed-loop long-horizon robot planning method based on equilibrium sequence modeling is proposed. By treating the planning as a self-optimizing fixed-point solution process, the implicit gradient of the deep equilibrium model is leveraged for end-to-end supervised training without the need for additional validators or reinforcement learning. From an analytical point of view, theoretical tools such as the implicit function theorem are used to optimize the training process and avoid complex backpropagation. In addition, the nested equilibrium mechanism is designed to dynamically allocate computing resources to optimize planning efficiency by combining environmental feedback and world model."
+},
+{
+"review_id": "icml_MCqlamfhAy_r3",
+"paper_id": "icml_MCqlamfhAy",
+"review_text": "This paper introduces a novel approach for long-horizon robotic task planning using LLMs with Equilibrium Sequence Modeling. The core idea is to view planning as a self-refinement process converging to a fixed-point (equilibrium) plan that integrates feedback from the environment or a world model. Rather than relying on reinforcement learning or complex prompting strategies, the paper presents an end-to-end supervised training framework grounded in deep equilibrium models. Additionally, it introduces a nested equilibrium modeling loop to efficiently incorporate closed-loop feedback. The proposed method is evaluated on the VirtualHome-Env benchmark and demonstrates state-of-the-art performance compared to Tree-Planner and SELF-REFINE approaches, particularly in success rate (SR) and goal condition recall (GCR)."
+},
+{
+"review_id": "icml_uBMnbCBEtZ_r0",
+"paper_id": "icml_uBMnbCBEtZ",
+"review_text": "The article describes a method based on diffusion model in order to sample from unnormalized densities, such as $p(x) P \\frac{\\tilde{p}(x)}{Z}$. The approach is based on parallel tempering: many diffusion models are trained to match the distribution $p$ at various temperature. The general idea being that at large temperature, it is easy both to produce samples from $p$ and to reproduce faithfully the distribution's density using the samples. Therefore, first models are trained at large temperature: samples are easily generated using MCMC and the diffusion model are trained upon them. Then, lower temperature diffusion model are trained using eq. (11) starting from the weights learned with a previously trained machine (at a slightly higher temperature). The samples are corrected using importance sampling to correct the bias."
+},
+{
+"review_id": "icml_uBMnbCBEtZ_r1",
+"paper_id": "icml_uBMnbCBEtZ",
+"review_text": "This paper focuses on the problem of sampling from the unnormalized densities. The authors recognize the drawbacks of MCMC with Parallel Tempering as well as the ones of recent neural samplers (mostly based on the diffusion process). In particular, they proposes a novel sampling method  \u2014 Progressive Tempering Sampler with Diffusion \u2014 that trains diffusion models sequentially across temperatures. The main idea is to start from training the high-temperature diffusion models, which are used to generate a lower-temperature samples, slightly refined with MCMC approach. Such samples are then used to train the lower-temperature diffusion model. The method is compared against other sampler on standard benchmarks, where the authors focuses on the number of target evaluations during training and sample-based metrics."
+},
+{
+"review_id": "icml_uBMnbCBEtZ_r2",
+"paper_id": "icml_uBMnbCBEtZ",
+"review_text": "The paper introduces a new sampling algorithm\u2014Progressive Tempering Sampler with Diffusion (PTSD)\u2014which aims to efficiently sample from unnormalized densities by combining ideas from traditional parallel tempering (PT) and modern diffusion-based neural samplers. The method is evaluated on several multimodal targets, where it demonstrates significant improvements in sample quality and target density evaluation efficiency over existing neural samplers."
+},
+{
+"review_id": "icml_uBMnbCBEtZ_r3",
+"paper_id": "icml_uBMnbCBEtZ",
+"review_text": "This paper proposes learning diffusion models at various temperatures using MCMC data at high temperatures. These models are then used to sample from unnormalized probability distributions. The authors employ a Taylor expansion of the target distribution over temperature to derive a temperature-dependent drift term, which is sequentially applied to generate samples at lower temperatures. Biases are corrected using importance resampling. The method is evaluated on three different target distributions commonly referenced in the literature."
+},
+{
+"review_id": "icml_5OLRHkzTYk_r0",
+"paper_id": "icml_5OLRHkzTYk",
+"review_text": "This submission addresses the significant performance degradation observed with low-rank pruning techniques. It proposes Pivoting Factorization (PIFA), a novel lossless meta low-rank representation that unsupervisedly learns a compact form of any low-rank\nrepresentation, effectively eliminating redundant information.  To mitigate the performance degradation caused by low-rank pruning, we introduce a novel, retraining-free low-rank reconstruction method that minimizes error accumulation (M). The authors mentions that their framework MPIFA for the first time, achieves performance comparable to semi-structured pruning, while surpassing it in GPU efficiency and compatibility."
+},
+{
+"review_id": "icml_5OLRHkzTYk_r1",
+"paper_id": "icml_5OLRHkzTYk",
+"review_text": "The authors propose a novel factorization method and reconstruction objective for LLM compression. Without requiring retraining, the method achieves perplexity performance comparable to semi-structured pruning at a 50% compression rate. Experimental results further demonstrate that the approach is efficient in both inference speed and memory usage."
+},
+{
+"review_id": "icml_5OLRHkzTYk_r2",
+"paper_id": "icml_5OLRHkzTYk",
+"review_text": "This paper is concerned with sparse inference, which aims to speed-up LLMs via sparsity. It is argued in this paper that previous methods either require specific hardware (e.g., semi-structured pruning) or yield degraded performance (low-rank pruning). This paper aims to propose a low-rank pruning named PIFA method that realizes decent performance yet impose no requirements to hardware. Specifically, PIFA firstly uses a pivot-row discovery to eliminate potential representation redundancy when conducting low-rank decomposition, and then utilizes a minimization-reconstruction estimator to alleviate potential accumulated errors across layers. The experimental results in terms of both effectiveness (perplexity) and efficiency (throughput) demonstrate the usefulness of PIFA. Essential ablation studies show the adequateness of design choices."
+},
+{
+"review_id": "icml_5OLRHkzTYk_r3",
+"paper_id": "icml_5OLRHkzTYk",
+"review_text": "I'm providing my whole review here, rather than giving partial and discontinued comments here and there.\n\nThe paper proposes an extension to SVD-based low-rank approximation of weights. The insight being employed is that a rank r matrix has at most r linearly independent rows. Therefore, a UV decomposition, such as via a truncated SVD, causes the decomposition to be redundant since it employs 2r vectors overall. To bypass this redundancy, a pivoting factorization is used, where one of the matrices is pivoted such as its upper half is an identity matrix, which need not be stored, and the rest constitute the coefficient matrix which multiplies the pivot rows. This is a nice application of basic linear algebra.\n\nIn section 4, the weight decomposition is initialized using SVD-LLM, and then an online algorithm to refine the decomposition is proposed. SVD-LLM is not the SOTA for low-rank decomposition, and therefore, this may explain why significant accuracy loss is reported in the experimental section. I'd like to suggest for the authors to instead use a SOTA technique, such as ESPACE (NeurIPS 2024). At the very least, can we have a comparison with ESPACE which showed much better accuracy vs compression trade-off? E.g., they showed <1PPL increase at 50% compression for Llama2-7B as opposed to PIFA which increases the PPL from ~5 to ~12.\n\nIf the authors accept my suggestion above, then the following comment will not matter. However, if they chose to stick with SVD-LLM, then please address the following. In equations (4) and (5), a nice online algorithm for finding an optimal U matrix minimizing layer output Frobenius norm is shown. But note that this is fixes matrix V, which need not be optimal. This may explain why SVD-LLM performs so poorly anyway. If ESPACE is used instead, we'd find a provably optimal projection matrix which will reduce dimensionality of activations, and weights by multiplication associativity. Then the online accumulation error minimization reconstruction can still be employed to further refine the matrix resulting from weight projection; it would fall into place in lieu of matrix U in the presented setup.\n\nIf the above is rejected (I hope not). Does it then make sense to have an alternating optimization algorithm, such as an EM, rather than just refining V once in equation (8)?\n\nThe reliance on a mix of dense and compressed data-flows in eq. (7) is interesting. But setting Lambda = 0.25 means most of the information comes from the low-rank branch. Once the model becomes more accurate, does it make sense to increase the value of lambda progressively to allow for more fitting to the golden uncompressed baseline?\n\nPerplexity results are interesting (even though the number are not impressive, likely due to what I discussed above). But can we have more evaluations on more downstream tasks such as LM eval harness and MMLU?"
+},
+{
+"review_id": "icml_KG6aBfGi6e_r0",
+"paper_id": "icml_KG6aBfGi6e",
+"review_text": "This paper introduces XAttention, a novel block-sparse attention mechanism leveraging an \"antidiagonal scoring\" method to efficiently approximate standard transformer attention. XAttention aims to accelerate inference in Long-Context Transformer Models (LCTMs) by using an antidiagonal scoring strategy to identify and prune less important blocks within the attention matrix. The authors argue that summing antidiagonal values within blocks effectively captures critical attention regions, allowing for computational savings without substantial accuracy loss. Empirical evaluations on multiple benchmarks (RULER, LongBench, VideoMME, VBench) demonstrate that XAttention achieves competitive accuracy compared to full attention methods while substantially reducing computational overhead, showing speedups up to 13.5\u00d7."
+},
+{
+"review_id": "icml_KG6aBfGi6e_r1",
+"paper_id": "icml_KG6aBfGi6e",
+"review_text": "- This paper proposes an efficient attention model. \n- It finds out that the antidiagonal values in the attention matrix provides a powerful proxy for block importance\n- Unlike existing methods that primarily rely on computationally intensive and lossy solutions\nlike token pooling to identify important blocks, Xattention directly use attention scores which are more efficient.\n- The proposed module is tested on several benchmarks including language process, video understanding and video generation."
+}
+]

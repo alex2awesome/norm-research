@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_7f2266c63cb1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12970,
+  "output_tokens": 3293,
+  "elapsed_s": 1155.4098336671013,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in NLP/ML and computational narrative analysis evaluating LLM story generation",
+    "subtask_short": "llm story evaluation via network analysis",
+    "subtask_description": "A quantitative methodology for evaluating LLM-generated short stories by extracting signed character co-occurrence networks and measuring network connectivity and polarity (density, clustering, average edge weight, assortativity), plus statistical comparison to human-written stories.",
+    "subtask_keywords": [
+      "llm",
+      "story_generation",
+      "character_networks",
+      "network_analysis",
+      "evaluation_metrics",
+      "science_fiction_corpus"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Co-occurrence network construction (narrative unit)",
+        "description": "In co-occurrence networks, characters vi and vj are said to have an interaction eij if they concurrently appear in a unit of a story (narrative unit). The length of a narrative unit is \u230a0.01 \u00d7 N\u230b sentences, where N is the total number of sentences in the story.",
+        "guidance": "This sets the temporal window for co-occurrence (on average ~83 tokens for LLM stories). Changing unit size will affect density and clustering, so report or hold unit-size fixed when comparing writers."
+      },
+      {
+        "name": "Sentiment polarity labeling of narrative units",
+        "description": "Classify the polarity of a narrative unit to be negative/positive using a RoBERTa-based sentiment analysis classifier trained with 15 datasets (average accuracy 0.93). If characters vi and vj appear in narrative units uk, compute mean of logits across units, apply sigmoid, then assign a binary sentiment label \u2208 {0,1} to edge eij (analytically use \u22121 for negative).",
+        "guidance": "Use a high-accuracy, broadly trained sentiment model; aggregate logits across co-occurrence units rather than voting single units. Document classifier accuracy and training data because label quality directly affects signed-edge reliability."
+      },
+      {
+        "name": "Signed network representation (binary weights)",
+        "description": "Represent the network as an undirected graph with binary edge weights in {\u22121, 1}, where \u22121 denotes a negative relationship and 1 denotes a positive relationship.",
+        "guidance": "Binary signed weights are used here for analytical simplicity; the authors note that neutral labels or continuous weights could provide a more natural analysis and are left as future work."
+      },
+      {
+        "name": "Vertex contraction (merging character mentions)",
+        "description": "Merge vertices representing the same characters using Transformer-based NER (SpaCy v3.8.0 reported precision/recall/F-score 0.90), gender estimation via titles and name lists, nickname/alias expansion, and nameparser-based parsed combinations. Contract two vertices if (1) genders do not conflict, (2) name of vi is in vj's referent list and vice versa, and (3) titles do not conflict. If ambiguous, merge into the name that appears more often.",
+        "guidance": "This procedure aims to produce realistic social relationships; document NER performance and referent lists used. Be aware that title/gender heuristics can prevent some merges (e.g., male vs female conflicts) and that contractions remove edges between merged vertices."
+      },
+      {
+        "name": "Exclusion criteria for analyzable networks",
+        "description": "Filter out character networks whose node count is less than 10 or density is less than 0.1 to analyze only non-trivial, meaningfully dense networks.",
+        "guidance": "Apply these thresholds to avoid spurious or trivial networks; report how many stories/networks are excluded and how many remain per writer before statistical analysis."
+      },
+      {
+        "name": "Density",
+        "description": "Density d = 2m / (n(n \u2212 1)) where m is the number of edges and n is the number of vertices (ranges 0 to 1).",
+        "guidance": "Use density to quantify how many character pairs co-occur within narrative units. Higher density in LLM stories was interpreted as more characters co-occurring in the same units (tighter social grouping)."
+      },
+      {
+        "name": "Average edge weight (overall positivity/negativity)",
+        "description": "Average edge weight aew = (1/m) * \u03a3_{i=1..m} w_i where wi \u2208 {\u22121,1}; ranges from \u22121 to 1 and measures overall positivity/negativity of the character network.",
+        "guidance": "A higher average edge weight indicates a positivity bias in relationships. In this study LLM-generated stories showed higher average edge weight than human stories (humans had a negative mean)."
+      },
+      {
+        "name": "Average clustering coefficient",
+        "description": "Average clustering coefficient c = (1/n) \u03a3_{i=1..n} (2 li)/(ki(ki \u2212 1)), where li is number of edges between neighbors of vi and ki is vi's degree. It measures the 'small-world-ness' of a network by quantifying how much neighbors of vertices are tied together.",
+        "guidance": "Higher average clustering in positive subgraphs indicates tightly-knit groups of amiable characters; this was used to argue LLMs produce more intimate, less dramatic group dynamics."
+      },
+      {
+        "name": "Assortativity mixing (modified weighted neighbor-degree)",
+        "description": "Compute a modified weighted average neighbor degree for each vertex: avg_ndi = (1/ki) \u03a3_{j\u2208N(vi)} wij sj, where ki is degree of vi, wij is edge weight, and sj is weighted degree of neighbor vj. Assortativity mixing quantifies how likely vertices of similar numeric values are to be adjacent, ranging from \u22121 to 1.",
+        "guidance": "The modification (divide by ki instead of sj and multiply wij by sj) is intended to avoid positive bias when a vertex has dominantly more negative edges and to ensure \"enemy of my enemy is my friend\" produces positive contribution. Use this metric as an indicator of character homophily in positivity/negativity (heroic vs villainous clustering)."
+      },
+      {
+        "name": "Positive/negative subgraph extraction and comparison",
+        "description": "For each network, extract two subgraphs: one consisting only of positive edges and another only of negative edges. Compute density, average clustering, and other metrics separately on these subgraphs.",
+        "guidance": "Compare positive vs negative subgraph metrics to assess relationship dynamics (e.g., denser and higher-clustering positive subgraphs imply tightly-knit amiable groups). The study found LLM positive subgraphs to have higher density and clustering relative to their negative subgraphs, opposite of the pattern in human-written stories."
+      },
+      {
+        "name": "Distributional and distance-based comparison of metrics",
+        "description": "Analyze distributions of connectivity scores across writer groups (violin plots) and quantify distances between score distributions using Wasserstein distances.",
+        "guidance": "Use distribution visualization and Wasserstein distances to assess how similarly or differently writers (models/humans) populate metric spaces; report mean/std and visualize violin plots for interpretability."
+      },
+      {
+        "name": "Statistical significance testing (Welch's t-test)",
+        "description": "Run Welch\u2019s t-tests for two independently sampled sets of scores (scipy.stats.ttest_ind) with null hypothesis H0: means are equal. Use p-values to judge whether two writers' metric means differ significantly.",
+        "guidance": "Use Welch's t-test when variances may differ; report sample sizes (note possible missing instances for some metrics), p-values, and interpret results jointly with distributional distances. In this work, p-values with human stories were often < 0.01."
+      },
+      {
+        "name": "LLM story generation protocol (prompt and generation settings)",
+        "description": "Generate LLM short stories with a templated pipeline: produce plot of 10 chapters and demography of 19 characters; insert plot and character list into chat log; write 10 chapters of ~800 words each. Configure temperature = 1, top_p = 0.95, top_k = 40 when supported.",
+        "guidance": "Standardize generation settings and prompt templates (system prompt, plot prompt, character prompt, chapter prompt) to ensure comparability across models and runs. Report exact prompts and sampling parameters."
+      },
+      {
+        "name": "Human corpus selection and alignment",
+        "description": "Select human-written short stories to match LLM outputs by genre and length: pick science-fiction stories via genre classifier (Gemini-2.0-flash) and filter word counts between 3,000 and 15,000; further exclusions applied during network extraction to obtain final comparable sample sizes.",
+        "guidance": "Ensure genre and length alignment when comparing LLM and human stories; document classification model and exclusion criteria as they affect comparability."
+      },
+      {
+        "name": "Methodological limitations to disclose",
+        "description": "Report known limitations such as NER inability to detect characters not explicitly named, the possibility that AI-generated stories use explicit names more often (inflating density), the simplicity of binary edge weights versus continuous/neutral labels, and unit-size choices affecting network measures.",
+        "guidance": "Acknowledge these limitations and, where possible, suggest mitigations (apply coreference resolution, use continuous/neutral edge weights, test multiple unit sizes). Do not over-claim from original-network density/clustering alone without subgraph and polarity analysis."
+      }
+    ]
+  }
+}

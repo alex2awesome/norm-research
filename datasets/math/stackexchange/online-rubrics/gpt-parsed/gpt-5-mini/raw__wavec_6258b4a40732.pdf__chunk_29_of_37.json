@@ -1,0 +1,161 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 29,
+  "n_chunks": 37,
+  "chunk_chars": 39099,
+  "model": "gpt-5-mini",
+  "elapsed_s": 322.42629354199744,
+  "input_tokens": 13176,
+  "output_tokens": 6359,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users / macro writers / typesetters (readers of The TeXbook)",
+    "subtask_short": "tex_macro_programming",
+    "subtask_description": "Guidance and low-level rules for writing robust TeX macros: verbatim/listing macros, selective loading, grouping/brace behavior, box manipulations, alignments, tab and paragraph tricks. Targets developers implementing advanced TeX typesetting features.",
+    "subtask_keywords": [
+      "tex",
+      "macros",
+      "verbatim",
+      "listing",
+      "boxes",
+      "alignment"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Spec for a \\listing macro",
+        "description": "A \\listing{file} should reproduce the characters and the spacing exactly as they appear in the file, print line numbers in front of each line, temporarily disable TeX\u2019s automatic features while the listing is produced, set the listing in \\tt type, and then restore TeX\u2019s normal conventions.",
+        "guidance": "Example implementation: \\def\\listing#1{\\par\\begingroup\\setupverbatim\\input#1 \\endgroup}. Note that \\endgroup turns off effects of \\setupverbatim; commands like 'input#1 \\endgroup' are not printed verbatim because they were read before verbatim mode began."
+      },
+      {
+        "name": "What \\setupverbatim must enable",
+        "description": "\\setupverbatim should include \\obeylines, \\uncatcodespecials, and \\obeyspaces to make line ends, special characters, and spaces behave as in the source file.",
+        "guidance": "But each has subtleties: \\obeylines changes ^^M to active and \\let^^M=\\par (so redefine \\par before invoking if needed); \\uncatcodespecials changes space to catcode 12 (watch interactions with the \\tt font's hspace slot); \\obeyspaces makes the hspace character active (catcode 13) and that active space expands to \\space which carries space-factor side-effects \u2014 to avoid undesired space-factor effects either use \\frenchspacing or (preferably) redefine the active space to be a control-space token."
+      },
+      {
+        "name": "Line numbering via \\everypar",
+        "description": "Place a line number in the indentation area by incrementing a counter and using \\everypar with \\llap to print the number.",
+        "guidance": "Example: \\newcount\\lineno ... \\everypar{\\advance\\lineno by1 \\llap{\\sevenrm\\the\\lineno\\ \\ }}. This presumes paragraphs are being started normally and that \\setupverbatim sets up paragraph handling appropriately (see empty-line issue)."
+      },
+      {
+        "name": "Handling empty lines in verbatim listings",
+        "description": "Empty lines in the input file are omitted by a naive verbatim setup because the \\par from an empty line occurs in vertical mode and does not start a new paragraph.",
+        "guidance": "Cure by redefining \\par to force horizontal mode before ending the paragraph, e.g. \\def\\par{\\leavevmode\\endgraf}, and adjust other category-code/boxing machinery so empty lines are preserved."
+      },
+      {
+        "name": "Breaking ligatures and handling missing characters",
+        "description": "Verbatim output must avoid undesired font ligatures and must cope with ASCII characters absent from a font (e.g., Spanish punctuation ligatures ?\u2018 and !\u2018 becoming \u00bf and \u00a1).",
+        "guidance": "Make certain characters active and redefine them to produce the desired raw characters (e.g., make backquote active and \\gdef`{\\relax\\lq}). More characters may need to be made active to break ligatures or compensate for missing glyphs."
+      },
+      {
+        "name": "Catcode changes must occur before scanning an argument",
+        "description": "If you define \\verbatim as \\long\\def\\verbatim#1{...}, the argument #1 is tokenized with the current category codes before the body runs, so later catcode changes won't affect the argument tokens.",
+        "guidance": "To get true verbatim you must change catcodes before the argument is scanned; typical pattern: \\def\\verbatim{\\begingroup\\tt\\uncatcodespecials\\obeyspaces\\doverbatim} and then have \\doverbatim read the raw characters. Caveats: such schemes can be slow and may only handle balanced-brace text."
+      },
+      {
+        "name": "Balanced-brace limitation of some verbatim schemes",
+        "description": "A verbatim implementation that reads until a matching delimiter based on brace balance will only work for text with balanced braces.",
+        "guidance": "Example approach uses a balance counter: scanning constructs that track '{' and '}' and end when balance returns to zero. This is slow and unsuitable for typesetting many examples like those in The TeXbook."
+      },
+      {
+        "name": "Verbatim via \\meaning (almost-verbatim)",
+        "description": "You can produce an almost-verbatim transcript by capturing the meaning of a token list with \\meaning and then stripping the leading 'macro:->' text.",
+        "guidance": "Example: \\long\\def\\verbatim#1{\\def\\next{#1}% {\\tt\\frenchspacing\\expandafter\\strip\\meaning\\next}} with \\def\\strip#1>{}. Downsides: information about exact spacing is lost (e.g., spaces after control words may be inserted even if not present) and some tokenization information is irretrievably lost."
+      },
+      {
+        "name": "Verbatim in macro arguments and classification of safe contexts",
+        "description": "A verbatim macro that changes catcodes may fail when used inside the argument of another macro (e.g., inside \\centerline), because category codes cannot be changed after the outer argument has been scanned.",
+        "guidance": "Design macros like plain TeX's \\footnote (which use \\bgroup/\\egroup) carefully so category-code changes are permitted within footnote text. Alternatively, require verbatim to appear in contexts where catcodes can be altered (e.g., at start of a line or file)."
+      },
+      {
+        "name": "Ways to terminate verbatim mode",
+        "description": "Verbatim mode is hard to stop once category-code changes are in effect; termination strategies include relying on end-of-file to restore state, specifying an exact number of lines, or using delimiters (\\beginverbatim/\\endverbatim or delimiter characters).",
+        "guidance": "The \\beginverbatim/\\endverbatim pair can work if \\beginverbatim appears at end of a line and the entire verbatim block is read into TeX memory (beware memory limits). Delimiter-style macros (use a single delimiter character not present in the content) allow constructions like \\verbatim<delim> ... <delim>."
+      },
+      {
+        "name": "Choose a delimiter not in the verbatim text",
+        "description": "When using delimiter-based verbatim (e.g., \\verbatim with a repeated delimiter), the delimiter character chosen must not occur inside the verbatim text.",
+        "guidance": "Implementation pattern: \\def\\verbatim{\\begingroup\\setupverbatim\\doverbatim} \\def\\doverbatim#1{\\def\\next##1#1{##1\\endgroup}\\next} \u2014 this makes the single character #1 the delimiter."
+      },
+      {
+        "name": "Place an interlock to prevent double input of macro files",
+        "description": "Macro files that set up definitions should include an interlock at the beginning to avoid being read twice (which can cause infinite recursion or repeated \\let chains).",
+        "guidance": "Example: \\ifx\\macsisloaded\\relax\\endinput\\else\\let\\macsisloaded=\\relax\\fi. Use a distinct control sequence per file. This prevents problems like \\let\\italcorr=\\/ then redefining \\/ to include \\italcorr recursively."
+      },
+      {
+        "name": "Understand TeX memory categories & measure usage",
+        "description": "There are four kinds of TeX memory: token memory, name memory, string memory, and character memory. Each macro consumes token cells equal to tokens in its definition (including braces) and also uses name/string/character memory for control sequence names.",
+        "guidance": "Check usage with \\tracingstats=1; example statistics are provided. Short macro names don't buy much because character memory is cheap relative to token memory. Conserve memory by loading only needed macros."
+      },
+      {
+        "name": "Selective option loading via \\load and \\ifoption",
+        "description": "Provide a \\load{file}{options} mechanism that converts the options string into a macro \\options and then conditionally include code inside the file using \\ifoption X ... \\fi blocks.",
+        "guidance": "Example: \\def\\load#1#2{\\let\\options=\\empty \\addoptions#2\\end \\input#1 } with \\addoptions turning characters into elements of \\options, and \\def\\ifoption#1{...} to test presence. Note: this scheme requires well-nested \\if...\\fi constructs inside optional parts and so isn't fully robust."
+      },
+      {
+        "name": "Fast selective loading by category-code swapping",
+        "description": "A faster, more robust selective-loading method uses category-code swapping and a reserved symbol (e.g., ~) set as comment (catcode 14) so that chunks marked by \\beginoption X ... ~endoptionalcode are skipped quickly.",
+        "guidance": "Mechanism: set leftmost nonblank char of each line to '\\' or '{', reserve ~, define \\beginoption#1{\\ifoption#1\\else\\begingroup\\swapcategories\\fi} and \\swapcategories changes catcodes so lines are skipped until ~endoptionalcode (\\endgroup). Works quickly but requires the source to obey the leftmost-character convention and reserve the chosen symbol."
+      },
+      {
+        "name": "Avoid putting undefined control sequences into TeX tables",
+        "description": "If a control sequence is undefined you can prevent TeX from inserting it into internal tables (hash etc.) by testing it with \\ifx before it is encountered normally.",
+        "guidance": "Use constructions like \\ifx\\cs\\undefined ... \\fi or ensure the control sequence appears only while skipping conditional text; useful for selective bibliography loading so only entries with defined control sequences are loaded."
+      },
+      {
+        "name": "Use \\bgroup/\\egroup (implicit braces) when desirable",
+        "description": "\\bgroup and \\egroup are implicit-brace control sequences (\\let\\bgroup={ \\let\\egroup=}) that may be placed in replacement texts; they behave like braces but allow category-code changes inside and avoid storing arguments.",
+        "guidance": "Advantages over \\def\\foo#1\\bar{...}: (1) category codes may change inside; (2) faster (no double scanning); (3) lower memory (no stored argument). Use when you need grouping around material without rescan/storage overhead."
+      },
+      {
+        "name": "Master counter vs balance counter and alignment implications",
+        "description": "TeX has two nesting counters: the master counter (affected by tokens scanned including alphabetic constants) and the balance counter (affected only by explicit { and } contributed to token lists). Alignment processing uses only the master counter to determine entry boundaries.",
+        "guidance": "Consequences: some constructions can hide & or \\cr tokens inside a conditional/braced construct depending on counter values; template parsing and the behavior of macros that affect grouping can produce surprising effects. Detailed examples show when tokens are seen as ending an alignment entry."
+      },
+      {
+        "name": "Poor man\u2019s bold by overprinting",
+        "description": "If a bold glyph is unavailable, fake bold by typesetting the glyph multiple times with slight offsets so the visual appearance is heavier.",
+        "guidance": "Example \\def\\pmb#1{\\setbox0=\\hbox{#1}% \\kern-.025em\\copy0\\kern-\\wd0 \\kern.05em\\copy0\\kern-\\wd0 \\kern-.025em\\raise.0433em\\box0 } \u2014 yields a fuzzy but usable bold effect, e.g., \\pmb{$\\infty$}."
+      },
+      {
+        "name": "Balance two columns by trial/binary search",
+        "description": "To make two columns have nearly equal heights choose trial widths and binary-search them within bounds until the height difference is below a tolerance \\delheight or until a maximum number of trials is reached.",
+        "guidance": "Implementation uses boxed trials: setbox0 with \\hsize=\\trialwidth and setbox2 with the complement width; compute height difference, disable warnings during trials (\\hbadness=10000 \\hfuzz=\\maxdimen), limit to 10 trials. If no solution in 10 trials probably no stable solution exists. Recompute at final width to show relevant warnings."
+      },
+      {
+        "name": "How changing \\wd, \\ht, \\dp of a box affects contents",
+        "description": "Altering the dimensions of a box register changes external metrics but does not change the glue inside; the positional effect on copied material depends on whether the box is an hbox or vbox and whether you changed width, height, or depth.",
+        "guidance": "Enumerated cases (twohboxes/twovboxes examples): e.g., increasing \\wd of an inner box moves following material horizontally in an hbox; changing \\ht of an inner vbox moves its contents vertically; changing \\dp may affect depth but not positions. Use the provided case analyses to predict effects."
+      },
+      {
+        "name": "Place arbitrary-coordinate points using zero-width boxes",
+        "description": "To place labeled points at arbitrary (x,y) coordinates, create boxes of width zero and position them with \\kern and \\raise or with a \\vbox to0pt construction; ensure \\nointerlineskip to avoid interline glue.",
+        "guidance": "Example \\def\\point#1 #2 {\\rlap{\\kern#1\\unit \\raise#2\\unit\\hbox{$\\scriptstyle\\bullet\\;(#1,#2)$}}} or a vertical-mode variant using \\vbox to0pt with \\vss and \\nointerlineskip. Useful for drawings made from typeset pieces."
+      },
+      {
+        "name": "Implement path/maze drawing with special font pieces",
+        "description": "Given a font containing quarter-circle pieces and small rule characters, build macros \\L, \\R, \\S, \\T to move and place these pieces to draw paths; provide toggles \\B and \\W to make segments visible or invisible.",
+        "guidance": "Implementation uses boxes \\NE \\NW \\SE \\SW and rules \\EW \\NS, a direction counter, and macros that copy the appropriate box with raises/kerns. Pay attention to catcode and endlinechar handling while reading the path string."
+      },
+      {
+        "name": "Handle ASCII tab (char 9) in verbatim listings by boxing the line",
+        "description": "To print tab characters verbatim (displaying ^^I rather than expanding to spaces), keep the current line in an hbox so you can measure its width and compute the amount needed to advance to the next tab stop (multiple of 8 spaces or configured tab width).",
+        "guidance": "Set \\w as the tab amount (e.g., \\w=8\\wd0 with \\setbox0=\\hbox{\\tt\\space}), make ^^I active, redefine \\par to close and output the hbox (\\def\\par{\\leavevmode\\egroup\\box0\\endgraf}), use \\startbox=\\setbox0=\\hbox\\bgroup, and have active ^^I compute the next multiple of \\w by dividing/ multiplying dims and outputting the box, then starting a new box. Note: some TeX implementations may not input char 9."
+      },
+      {
+        "name": "Inserting vertical rules in alignments by inspecting bottom row",
+        "description": "You can add vertical rules that span an entire alignment by examining the bottom row (whose items alternate tabskip glue and boxes), bisecting each tabskip glue position, and inserting a rule there.",
+        "guidance": "Macros \\beginvrulealign and \\endvrulealign collect the alignment into \\box0, open the bottom row via \\unvbox0 and \\lastbox, iterate removing \\lastskip and \\lastbox entries to compute rule positions and construct \\box1 containing rules, then superimpose rules and alignment with \\hbox{\\rlap{\\box0}\\box1}. Works for \\halign{...}; for \\halign to<dimen>{...} additional conditions apply (bottom row must contain all columns and final \\box1 must be adjusted to total width)."
+      },
+      {
+        "name": "Paragraph maneuver: mixed ragged-right and ragged-left with leaders",
+        "description": "For index-like entries consisting of a (possibly multi-line) title followed by dot leaders and a (possibly multi-line) list of numbers, set the title ragged-right with hanging indentation after the first line while setting the reference list ragged-left, producing dotted leaders between them depending on column width.",
+        "guidance": "Desired outputs vary with column width (examples shown). The implementation requires careful paragraph-shaping (rightskip/leftskip, leaders, hanging indentation and possibly splitting the paragraph into parts or constructing boxes to place title, leaders, and references correctly)."
+      }
+    ]
+  }
+}

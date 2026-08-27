@@ -1,0 +1,60 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_015748076143.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10881,
+  "output_tokens": 3252,
+  "elapsed_s": 1160.1457858330105,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference program chairs, peer-review researchers, and designers of reviewer-assignment algorithms",
+    "subtask_short": "reviewer_assignment_antimanipulation",
+    "subtask_description": "Designing or evaluating algorithms for assigning reviewers to conference papers that are robust to bid manipulation while preserving the benefits of bidding. Focuses on tradeoffs between assignment quality, incentives, and security against malicious reviewers/collusion.",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "paper_bidding",
+      "bid_manipulation",
+      "conference_program_chairs",
+      "algorithm_design"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Assignment quality",
+        "description": "The algorithm should produce assignments with a high level of expertise, as represented by text similarities, subject areas, and bids.",
+        "guidance": "Motivation and context: bids capture aspects not in text similarities, allow correction of erroneous text similarities, and correlate with higher reviewer confidence. The paper repeatedly evaluates algorithms on how much they preserve or degrade total/average similarity (e.g., Bid Modeling achieves a 16% increase in average text-similarity and 38% increase in average bid value over certain baselines [19, Table 1]; Cycle Prevention at AAAI 2021 lowered total assignment similarity by only 0.01%; Geographic Diversity lowered similarity by 0.85%). Tradeoff note: many defenses reduce manipulability at the cost of some loss in similarity; Probability-Limited Randomized Assignment can be evaluated by the percent of standard-assignment similarity retained (e.g., 90.8% at q=0.5 on ICLR 2018 data)."
+      },
+      {
+        "name": "Preference expressiveness",
+        "description": "The algorithm should allow reviewers to express their true preferences in a flexible manner. In particular, this means that it should produce good assignments for reviewers with idiosyncratic preferences not captured by text similarities and for reviewers with erroneous text similarities.",
+        "guidance": "Preservation vs suppression: minimally intrusive approaches (Bid Limit, Random Display, Cycle Prevention, Geographic Diversity) tend to preserve expressiveness. Approaches that learn/aggregate bids or features (Bid Modeling, Reviewer Clustering) may reduce expressiveness: e.g., Bid Modeling and Reviewer Clustering can produce similar assignments whether a reviewer bids or not (Figure 1 shows Bid Modeling has mean change 1.394 papers vs standard algorithm mean 2.973). Anti-pattern: treating individual bids as noise and overriding them with learned predictions can harm reviewers with idiosyncratic/incorrect text similarities."
+      },
+      {
+        "name": "Incentives to bid",
+        "description": "The algorithm should incentivize reviewers to provide accurate bids by assigning reviewers to papers that match their own bids to some extent.",
+        "guidance": "Empirical support: reviewers report higher confidence on papers they bid on [21]; AAAI 2021 observed that reviewers were assigned to positively-bid papers 77.4% of the time. Algorithm effects: Bid Limit and Random Display tend to encourage bidding; Probability-Limited Randomized Assignment preserves incentives since bids are used unchanged; Bid Modeling may weaken incentives because assignments can be similar with or without a reviewer's bids; Reviewer Clustering may discourage individual bidding if reviewers rely on cluster-averaged bids. Designers should consider how much a method changes the marginal benefit to an honest bidder."
+      },
+      {
+        "name": "Low attack success rate (probability of successful manipulation)",
+        "description": "The algorithm should not allow a malicious reviewer to significantly increase their probability of assignment with a specific target paper through manipulating their bids. This assignment probability is called the 'probability of successful manipulation' and the manipulation of bids an 'attack.'",
+        "guidance": "Quantitative guarantee vs heuristic robustness: Probability-Limited Randomized Assignment enforces an explicit upper bound q on the maximum probability of any reviewer-paper assignment and optimizes expected similarity subject to that bound. Reviewer Clustering gives a worst-case upper bound of 1/m on success for cluster size m. Bid Modeling empirically limits single-reviewer attack success and requires stronger knowledge/resources to craft attacks, but may be vulnerable if features are manipulable. Anti-patterns: Bid Limit and naive Random Display can be trivially exploited by strategic malicious bids; Cycle Prevention and Geographic Diversity do not defend solo attackers and only target forms of collusion."
+      },
+      {
+        "name": "High attack cost",
+        "description": "A malicious reviewer should require extra information (e.g., other reviewers' bids/text similarities) or resources (e.g., additional colluding reviewers) in order to effectively manipulate the paper assignment.",
+        "guidance": "Design implication: algorithms should raise the bar for attackers by making successful manipulation contingent on harder-to-get information or resources. Bid Modeling raises attack cost because effective manipulation often requires knowledge of model features and other bids; Cycle Prevention and Geographic Diversity force attackers to recruit colluders from different regions or avoid simple 2-cycle collusion; Random Display (unless hard-constraint variant used) and Bid Limit offer low attack cost because simple strategies suffice. Note: some defenses (e.g., large colluding groups or cross-conference collusion, falsified locations) can still circumvent geographic/cycle constraints, so 'high cost' is relative and depends on plausible adversary models."
+      },
+      {
+        "name": "Adjustability",
+        "description": "Conference program chairs should be able to easily adjust the algorithm in order to achieve a desired tradeoff between the other desiderata.",
+        "guidance": "Tunability examples: Probability-Limited Randomized Assignment exposes a parameter q that directly controls the maximum assignment probability and thus the tradeoff between similarity and manipulability; Random Display's display fraction controls exposure and can be set to a desired maximum probability in the hard-constraint variant. Reviewer Clustering's cluster size m provides a tunable bound (1/m) on manipulation. Poorly adjustable approaches: Bid Modeling's hyperparameters are not clearly connected to desiderata, and Cycle Prevention's adjustable parameters (e.g., cycle length) are computationally difficult to change in practice. Practical guidance: prefer mechanisms whose tuning parameters map transparently to desiderata of interest."
+      },
+      {
+        "name": "Computational scalability",
+        "description": "The algorithm should be feasible to run at the large scale of modern conferences (with thousands of reviewers and papers), in terms of computational resources such as runtime and memory.",
+        "guidance": "Algorithm-specific notes: simple approaches (Bid Limit, Random Display) require negligible additional computation; Probability-Limited Randomized Assignment can be found with the same computational resources as the standard assignment algorithm and sampling adds little overhead; Bid Modeling requires additional feature computation and model fitting (polynomial time but extra cost at scale); Reviewer Clustering may be computationally expensive to find good fixed-size clusters and heuristic clustering may perform poorly; Cycle Prevention (enforcing k-cycle-free constraints) can require integer programming and be computationally difficult at scale depending on the constraint size. Designers must balance the desired constraints with solver feasibility and runtime for large conferences."
+      }
+    ]
+  }
+}

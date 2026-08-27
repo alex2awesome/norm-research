@@ -1,0 +1,97 @@
+{
+ "cell": "mathlib_verdict (TRAIN-BIG / EVAL-CANONICAL + REGIME-MATCHED secondary)",
+ "date": "2026-08-11",
+ "charge": "user-directed correction 2026-08-08; registry entry 'MATHLIB AND HOMEPAGE TERMINAL VERDICTS RETRACTED'. The canonical-slice dense run was starved (~363 train negatives) while class-weighted TF-IDF scored .6774/.7856 on the identical split, so the cell was re-run with a much larger training fold and the canonical rows held fixed for evaluation.",
+ "verdict": "NO HONEST DENSE BOUND. Do not quote any T for this cell.",
+ "design": {
+  "train_big": "29,324 rows from the full pre-audit population minus the canonical eval/test area groups (2,705 negatives, 7.5x the canonical fold's 363)",
+  "train_regime_matched": "6,651 rows, the same pool restricted to the audit's regime filter (conv_prefix=='feat' AND year>=2025), 780 negatives",
+  "eval": "canonical de-confounded rows, area=Analysis, n=932, pos_rate .9442 (verbatim copies)",
+  "test": "canonical de-confounded rows, areas=CategoryTheory+Control, n=795, pos_rate .9497 (verbatim copies)",
+  "recipe": "Llama-3.1-8B LoRA r16/a32, lr5e-5, batch16, max_len1024, 2 epochs, gradient-checkpointing, --class_weight_auto, select-on-eval, 3 seeds (42,1,2)",
+  "holdout_integrity": "zero area overlap and zero row_id overlap between train and eval/test, asserted in build_dense_bigtrain.py; all 1,727 canonical eval+test rows reproduce byte-identically (text AND area) from the pre-audit source"
+ },
+ "results": {
+  "train_big": {
+   "seed_eval_auc": {"seed42": 0.682, "seed1": 0.6003, "seed2": 0.6286},
+   "seed_test_auc": {"seed42": 0.5346, "seed1": 0.5707, "seed2": 0.5442},
+   "eval_mean": 0.637, "eval_spread": 0.0817,
+   "test_mean": 0.5498, "test_spread": 0.0361
+  },
+  "train_regime_matched": {
+   "seed_eval_auc": {"seed42": 0.621, "seed1": 0.5502, "seed2": 0.5509},
+   "seed_test_auc": {"seed42": 0.5228, "seed1": 0.4896, "seed2": 0.5523},
+   "eval_mean": 0.574, "eval_spread": 0.0708,
+   "test_mean": 0.5216, "test_spread": 0.0627
+  },
+  "train_canonical_prior_run": {
+   "eval_mean": 0.5643, "eval_spread": 0.1262,
+   "test_mean": 0.467, "test_spread": 0.0719,
+   "note": "the starved run this correction was dispatched to fix; retained for the contrast"
+  }
+ },
+ "did_more_data_fix_it": {
+  "answer": "PARTLY ON EVAL, NOT AT ALL ON THE HONEST HALF",
+  "eval_mean_canonical_to_bigtrain": "0.5643 -> 0.6370 (+.073)",
+  "test_mean_canonical_to_bigtrain": "0.4670 -> 0.5498 (+.083, but still ~chance on the only real test area)",
+  "reading": "7.5x the negatives removed the majority-class collapse and lifted the selection-contaminated eval number, but left the honest held-out reading at .52-.55. The cell's problem is not training-set size."
+ },
+ "split_divergence_diagnosis": {
+  "question": "eval >> test replicates across 6 trainings and 2 regimes (9 trainings including the prior run). Structural difference in the test half, or select-on-eval inflation?",
+  "answer": "SELECT-ON-EVAL INFLATION plus seed instability. The test half is not harder; by every non-dense instrument it is EASIER.",
+  "evidence": {
+   "composition_near_identical": "eval and test are both 100% year>=2025, 100% conv_prefix=='feat', pos_rate .9442 vs .9497, changed_files median 2 vs 2. Test PRs are somewhat larger (additions median 100 vs 55, text length median 6,271 vs 4,702) and carry more zero-review-thread rows (.287 vs .212).",
+   "size_alone_scores_HIGHER_on_test": "AUC of -additions alone: eval .6024, test .6909",
+   "tfidf_scores_HIGHER_on_test": "class-weighted TF-IDF on the identical splits: canonical-train .6796 eval / .7883 test; regime-train .6754 / .7913; big-train .6489 / .6415",
+   "conclusion": "if the test half carried less signal, the bag-of-words and the size feature would drop there too. Both rise. The dense-only eval-over-test gap (+.087 big-train, +.052 regime, +.097 canonical) is therefore the checkpoint-selection optimism this cell's own history already flagged (~.035 in the 2026-06 run), enlarged by how unstable these runs are."
+  },
+  "instability": {
+   "seed_to_seed_prediction_correlation": {
+    "train_big": {"eval": [0.668, 0.62, 0.647], "test": [0.639, 0.594, 0.516]},
+    "train_regime_matched": {"eval": [0.404, 0.421, 0.501], "test": [0.413, 0.452, 0.53]},
+    "train_canonical_prior_run": {"eval": [0.434, 0.39, 0.41], "test": [0.349, 0.356, 0.391]}
+   },
+   "reading": "three seeds of the same recipe on the same rows agree with each other only r=.35-.67 in predicted probability. They are not estimating one function; the seed mean is an average over materially different models."
+  },
+  "per_area_test": {
+   "note": "the test fold is 789 CategoryTheory rows (37 negatives) + 6 Control rows (3 negatives). Control is noise; test AUC is effectively CategoryTheory AUC.",
+   "CategoryTheory_dense_train_big": [0.4984, 0.5439, 0.51],
+   "CategoryTheory_dense_regime_matched": [0.4856, 0.4666, 0.5201],
+   "CategoryTheory_dense_canonical": [0.4183, 0.4164, 0.4802],
+   "CategoryTheory_tfidf": {"big_train": 0.6258, "regime_train": 0.7757, "canonical_train": 0.7723},
+   "reading": "on the one test area with enough rows to read, the fine-tuned 8B reader is AT CHANCE (mean .517 big-train, .491 regime) while a linear bag-of-words on the identical rows reaches .63-.78."
+  }
+ },
+ "reference_points_on_the_same_area_grouped_folds": {
+  "tfidf_canonical_train": {"eval": 0.6796, "test": 0.7883},
+  "tfidf_regime_train": {"eval": 0.6754, "test": 0.7913},
+  "tfidf_big_train": {"eval": 0.6489, "test": 0.6415},
+  "size_alone_negated_additions": {"eval": 0.6024, "test": 0.6909},
+  "best_dense_honest_test": 0.5498
+ },
+ "bank_comparison": {
+  "VA_nl": 0.6721,
+  "VA_lin": 0.6827,
+  "SAME_ROWS": false,
+  "caveat": "the Layer-1 bank numbers are computed on the cell's own label-STRATIFIED split of the 7,956-row canonical slice, not on these AREA-GROUPED folds. They are a reference point, NOT an apples-to-apples comparison, and no Delta_beyond should be differenced against them from this run."
+ },
+ "implied_delta_beyond": "NOT COMPUTABLE. Delta_beyond = T - VA_nl requires an honest T; the dense arm does not supply one here. What can be said on the area-grouped folds is that a class-weighted linear TF-IDF reaches .788 test where the dense reader reaches .550 -- the ceiling this cell has is lexical, and the dense instrument does not reach it.",
+ "label_semantics_bound": {
+  "readmitted_strata_in_train_big": {"regime_filter_failures": 22673, "size_outliers": 990, "abandoned_rejects": 1635, "passing_full_canonical_filter": 6229},
+  "note": "the train fold re-admits rows the de-confounding audit removed, including 1,635 'abandoned' rejects where y=0 records the author walking away rather than a reviewer decision. Because every evaluated row is canonical and the areas are disjoint, nothing confounded leaks into the readout; the cost is a train->eval shift. The regime-matched arm was run precisely to bound that shift and came out LOWER than big-train on both halves, so the shift is not what is holding the dense arm down."
+ },
+ "recommended_strict_list_row": "mathlib merge: NO HONEST DENSE T (2026-08-11). Dense fails on honest rows across 3 training regimes / 9 seeds (test .467 canonical / .522 regime-matched / .550 train-big; AT CHANCE .517 on CategoryTheory, the only test area with enough rows). NOT data starvation -- 4.7x rows and 7.5x negatives lifted eval .564->.637 but left test flat. eval>>test is select-on-eval inflation, not test-half difficulty: TF-IDF (.788) and size-alone (.691) both score HIGHER on test. Same-fold reference ceilings: TF-IDF .788 test, size-alone .691. Bank VA_nl .6721 is NOT same-rows (label-stratified split). Quote no T; the cell's readable ceiling is lexical.",
+ "artifacts": {
+  "builds": ["datasets/math/mathlib/build_dense_bigtrain.py",
+             "datasets/math/mathlib/dense_standard_bigtrain/",
+             "datasets/math/mathlib/dense_standard_regimematched/"],
+  "runners": ["methods/dense/run_bigtrain_eval_canonical.py",
+              "methods/dense/run_corrections_mathlib_homepage.sh",
+              "methods/dense/run_mathlib_bigtrain_tail.sh",
+              "methods/dense/run_mathlib_regimematched.sh"],
+  "diagnosis": "datasets/math/mathlib/mathlib_split_divergence_diagnosis.json (sk3)",
+  "tfidf": ["outputs/tfidf_comparators_corrections.json",
+            "outputs/tfidf_ablation_mathlib_bigtrain.json"],
+  "note": "notes/2026-08-08__mathlib_homepage_corrections.md"
+ }
+}

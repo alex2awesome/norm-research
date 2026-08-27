@@ -1,0 +1,1228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Why I publish preprints | Andrew Wheeler</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11" />
+	<link rel="pingback" href="https://andrewpwheeler.com/xmlrpc.php" />
+	<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=1854'
+					+ '&is_singular=1';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9hbmRyZXdwd2hlZWxlci5jb20%3D"
+		+ "&wpcomid=30502426"
+		+ "&time=" + Math.floor( Date.now() / 1000 );
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//widgets.wp.com' />
+<link rel="alternate" type="application/rss+xml" title="Andrew Wheeler &raquo; Feed" href="https://andrewpwheeler.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Andrew Wheeler &raquo; Comments Feed" href="https://andrewpwheeler.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Andrew Wheeler &raquo; Why I publish&nbsp;preprints Comments Feed" href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??-eJxtzN0KQEAQQOEXssaKcCHPsq1Jy+xPZjavL1JKLr86HTiSsjEIBgGfVaK8uMCwoiRjt8fAOYCPcyZk2JGM4KxSZPmotMwF/B/Jbfh+b1355EfdddWg26av1xMpeTR5&cssminify=yes' type='text/css' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/common.min.css */
+</style>
+<style id="wp-block-library-inline-css-extra">
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+<style id="classic-theme-styles-inline-css">
+.wp-block-button__link{background-color:#32373c;border-radius:9999px;box-shadow:none;color:#fff;font-size:1.125em;padding:calc(.667em + 2px) calc(1.333em + 2px);text-decoration:none}.wp-block-file__button{background:#32373c;color:#fff}.wp-block-accordion-heading{margin:0}.wp-block-accordion-heading__toggle{background-color:inherit!important;color:inherit!important}.wp-block-accordion-heading__toggle:not(:focus-visible){outline:none}.wp-block-accordion-heading__toggle:focus,.wp-block-accordion-heading__toggle:hover{background-color:inherit!important;border:none;box-shadow:none;color:inherit;padding:var(--wp--preset--spacing--20,1em) 0;text-decoration:none}.wp-block-accordion-heading__toggle:focus-visible{outline:auto;outline-offset:0}.wp-block-tab:not(.has-text-color){color:inherit!important}.wp-block-tab:not(.has-background){background-color:inherit!important}.wp-block-tab:focus,.wp-block-tab:hover{text-decoration:none}.wp-block-tab:focus-visible{outline:auto;outline-offset:0}
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/classic.min.css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??-eJx9jcEKg0AMRH+oaVhorR7Eb9E16IpZg8min2889FZ6GYbhPQYPgbhlo2zIBWQtU8qKcdvJd5be0AmmMfW0Ejv2jKoP/K0daZzIXNdvB6PzvyJ+A8MgO6mCJ6fCYLN/6e113IZXU9WfUL/DcgHSTkDo&cssminify=yes' type='text/css' media='all' />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.css?m=1777406400i&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='verbum-gutenberg-css-css' href='https://widgets.wp.com/verbum-block-editor/block-editor.css?ver=1771405207' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/wp-content/themes/pub/comet/style.css?m=1741693326i&cssminify=yes' type='text/css' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-14-1' href='/_static/??/wp-content/themes/pub/comet/inc/style-wpcom.css,/wp-content/themes/pub/comet/css/grey.css?m=1375707612j&cssminify=yes' type='text/css' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='print-css-15-1' href='/wp-content/themes/pub/comet/css/print.css?m=1314396823i&cssminify=yes' type='text/css' media='print' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-16-1' href='/_static/??-eJzTLy/QTc7PK0nNK9HPLdUtyClNz8wr1i9KTcrJTwcy0/WTi5G5ekCujj52Temp+bo5+cmJJZn5eSgc3bScxMwikFb7XFtDE1NLExMLc0OTLACohS2q&cssminify=yes' type='text/css' media='all' />
+<style id="jetpack-global-styles-frontend-style-inline-css">
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+/*# sourceURL=jetpack-global-styles-frontend-style-inline-css */
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-18-1' href='/_static/??-eJyNjcsKAjEMRX/IGgaqgwvxU6TTlDZjmhTTIv69D9yIG3f3wOUcuDUXVXqSDnW4xiOTGKyptxAvHwYbAlVxcDKwEq4JA+L9PUnyNppt4G/RmSTCMogRTCMFdqxZ7Qt+lL2k+owXD5l1Cfw6nOpxmme/837aH9YHfvpKpw==&cssminify=yes' type='text/css' media='all' />
+<script id="jetpack_related-posts-js-extra">
+var related_posts_js_options = {"post_heading":"h4"};
+//# sourceURL=jetpack_related-posts-js-extra
+</script>
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"30502426","postID":"1854","siteURL":"https://andrewpwheeler.com","xhrURL":"https://andrewpwheeler.com/wp-admin/admin-ajax.php","nonce":"0d227c72f5","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https://s0.wp.com/wp-content/js/wpcom-proxy-request.js?m=1513050504i&amp;ver=20211021","shortlink":"https://wp.me/p23Z4C-tU","i18n":{"followedText":"New posts from this site will now appear in your \u003Ca href=\"https://wordpress.com/reader\"\u003EReader\u003C/a\u003E","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+//# sourceURL=wpcom-actionbar-placeholder-js-extra
+</script>
+<script id="jetpack-mu-wpcom-settings-js-before">
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https://s0.wp.com/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/"};
+//# sourceURL=jetpack-mu-wpcom-settings-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/mu-plugins/jetpack-plugin/sun/_inc/build/related-posts/related-posts.min.js,/wp-content/js/rlt-proxy.js?m=1755011788j'></script>
+<script id="rlt-proxy-js-after">
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+//# sourceURL=rlt-proxy-js-after
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://andrewpwheeler.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+<link rel="canonical" href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/" />
+<link rel='shortlink' href='https://wp.me/p23Z4C-tU' />
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/?format=json&amp;url=https%3A%2F%2Fandrewpwheeler.com%2F2019%2F05%2F30%2Fwhy-i-publish-preprints%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/?format=xml&amp;url=https%3A%2F%2Fandrewpwheeler.com%2F2019%2F05%2F30%2Fwhy-i-publish-preprints%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Why I publish preprints" />
+<meta property="og:url" content="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/" />
+<meta property="og:description" content="I encourage peers to publish preprint articles &#8212; journal articles before they go through the whole peer review process and are published. It isn&#8217;t normative in our field, and I&#8217;ve…" />
+<meta property="article:published_time" content="2019-05-30T16:43:39+00:00" />
+<meta property="article:modified_time" content="2019-05-31T14:13:39+00:00" />
+<meta property="og:site_name" content="Andrew Wheeler" />
+<meta property="og:image" content="https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=200" />
+<meta property="og:image:width" content="200" />
+<meta property="og:image:height" content="200" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom" />
+<meta name="twitter:text:title" content="Why I publish&nbsp;preprints" />
+<meta name="twitter:image" content="https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=240" />
+<meta name="twitter:card" content="summary" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel='openid.server' href='https://andrewpwheeler.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://andrewpwheeler.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://andrewpwheeler.com/osd.xml" title="Andrew Wheeler" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+		<style id="wpcom-hotfix-masterbar-style">
+			@media screen and (min-width: 783px) {
+				#wpadminbar .quicklinks li#wp-admin-bar-my-account.with-avatar > a img {
+					margin-top: 5px;
+				}
+			}
+		</style>
+				<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="description" content="I encourage peers to publish preprint articles -- journal articles before they go through the whole peer review process and are published. It isn&#039;t normative in our field, and I&#039;ve gotten some pushback from colleagues, so figured I would put on paper why I think it is a good idea. In short, the benefits (increased&hellip;" />
+		<style type="text/css">
+					#site-title,
+			#site-description {
+				position: absolute !important;
+				clip: rect( 1px 1px 1px 1px ); /* IE6, IE7 */
+				clip: rect( 1px, 1px, 1px, 1px );
+			}
+							#header {
+				height: 200px;
+				padding: 0;
+				position: relative;
+			}
+			#header-image {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 2;
+			}
+			#site-title,
+			#site-description {
+				position: relative;
+				z-index: 2;
+				margin-left: 40px;
+				margin-right: 40px;
+			}
+						</style>
+		<link rel="icon" href="https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=32" sizes="32x32" />
+<link rel="icon" href="https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=192" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=180" />
+<meta name="msapplication-TileImage" content="https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=270" />
+			<link rel="stylesheet" id="custom-css-css" type="text/css" href="https://s0.wp.com/?custom-css=1&#038;csblog=23Z4C&#038;cscache=6&#038;csrev=0" />
+			<!-- Jetpack Google Analytics -->
+			<script type='text/javascript'>
+				var _gaq = _gaq || [];
+				_gaq.push(['_setAccount', 'UA-179176055-1']);
+_gaq.push(['_trackPageview']);
+				(function() {
+					var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+					ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				})();
+			</script>
+			<!-- End Jetpack Google Analytics -->
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-2-3' href='/_static/??-eJyNzEEKwkAMheELOY0VS3UhHkXazFBSZzLBJBRv7wjduHP3Pnj8sEnAypbYoHiQ7AuxwppMJnzuBnWGBzHC7JRj46z4IjGq7fujrhB3qHqAv8OlRs9JYaO4JFOwKkGqtqX2zulbu5dbP47Haz+cL6f1A4aIQ7c=&cssminify=yes' type='text/css' media='all' />
+
+</head>
+<body class="wp-singular post-template-default single single-post postid-1854 single-format-standard wp-theme-pubcomet customizer-styles-applied comet-content-sidebar jetpack-reblog-enabled">
+
+<div id="wrap">
+
+	<ul class="menu"><li class="page_item page-item-2"><a href="https://andrewpwheeler.com/about/">About</a></li>
+<li class="page_item page-item-11 page_item_has_children"><a href="https://andrewpwheeler.com/c-v/">C.V.</a>
+<ul class='children'>
+	<li class="page_item page-item-3001"><a href="https://andrewpwheeler.com/c-v/datascience-portfolio/">Datascience Portfolio</a></li>
+	<li class="page_item page-item-3046"><a href="https://andrewpwheeler.com/c-v/dissertation/">Dissertation</a></li>
+</ul>
+</li>
+<li class="page_item page-item-901"><a href="https://andrewpwheeler.com/comment-policy/">Comment Policy</a></li>
+<li class="page_item page-item-1823"><a href="https://andrewpwheeler.com/consulting/">Consulting</a></li>
+<li class="page_item page-item-1074 page_item_has_children"><a href="https://andrewpwheeler.com/courses/">Courses</a>
+<ul class='children'>
+	<li class="page_item page-item-1788"><a href="https://andrewpwheeler.com/courses/advanced-criminology-undergrad-crim-3302/">Advanced Criminology (Undergrad) Crim&nbsp;3302</a></li>
+	<li class="page_item page-item-1414"><a href="https://andrewpwheeler.com/courses/communities-and-crime-undergrad-crim-4323/">Communities and Crime (Undergrad) Crim&nbsp;4323</a></li>
+	<li class="page_item page-item-1284"><a href="https://andrewpwheeler.com/courses/crim-7301-ut-dallas-seminar-in-criminology-research-and-analysis/">Crim 7301 &#8211; UT Dallas &#8211; Seminar in Criminology Research and&nbsp;Analysis</a></li>
+	<li class="page_item page-item-1690"><a href="https://andrewpwheeler.com/courses/crime-science-graduate-crim-7381/">Crime Science (Graduate) Crim&nbsp;7381</a></li>
+	<li class="page_item page-item-1082"><a href="https://andrewpwheeler.com/courses/gis-in-criminal-justice-graduate/">GIS in Criminology/Criminal Justice&nbsp;(Graduate)</a></li>
+	<li class="page_item page-item-2159"><a href="https://andrewpwheeler.com/courses/crime-analysis-special-topics-undergrad/">Crime Analysis (Special Topics) &#8211;&nbsp;Undergrad</a></li>
+</ul>
+</li>
+<li class="page_item page-item-3323"><a href="https://andrewpwheeler.com/job-advice-resources/">Job Advice Resources</a></li>
+<li class="page_item page-item-1321"><a href="https://andrewpwheeler.com/code-snippets-toc/">Code Snippets TOC</a></li>
+</ul>
+	<div id="header">
+		<a id="header-image" href="https://andrewpwheeler.com"><img src="https://andrewpwheeler.com/wp-content/uploads/2017/06/andrewpwheeler.png" alt="" /></a><h1 id="site-title"><a href="https://andrewpwheeler.com">Andrew Wheeler</a></h1><a id="site-description" href="https://andrewpwheeler.com">Crime Analysis and Crime Mapping</a>	</div><!-- /header -->
+
+	
+	<div id="content" class="site-content">
+
+				
+		<div id="c2">
+
+
+	
+	<!-- post -->
+	<div class="post-1854 post type-post status-publish format-standard hentry category-papers category-scholarly tag-open-science tag-preprint" id="post-1854">
+		<h1 class="post-title">Why I publish&nbsp;preprints</h1>		<div class="post-text">
+
+		<p>I encourage peers to publish <em>preprint</em> articles &#8212; journal articles before they go through the whole peer review process and are published. It isn&#8217;t normative in our field, and I&#8217;ve gotten some pushback from colleagues, so figured I would put on paper why I think it is a good idea. In short, the benefits (increased exposure) outweigh the minimal costs of doing so.</p>
+<h2 id="the-good----getting-your-work-out-there">The good &#8212; getting your work out there</h2>
+<p>The main benefit of posting preprints is to get your work more exposure. This occurs in two ways: one is that traditional peer-review work is often behind paywalls. This prevents the majority of <a href="https://www.lhuey.net/single-post/2019/04/08/Research-Hacks-Volume-I">non-academics from accessing your work</a>. This point about paywalls applies just the same to preventing other academics from reading your work in some cases. So while the prior blog post I linked by Laura Huey notes that you can get access to some journals through your local library, it takes several steps. Adding in steps you are basically losing out on some folks who don&#8217;t want to spend the time. Even through my university it is not uncommon for me to not be able to access a journal article. I can technically take the step of getting the article through inter-library loan, but that takes more time. Time I am not going to spend unless I really want to see the contents of the article.</p>
+<p>This I consider a minor benefit. Ultimately if you want your academic work to be more influential in the field you need to write about your work in non-academic outlets (like magazines and newspapers) and present it directly to CJ practitioner audiences. But there are a few CJ folks who read journal articles you are missing, as well as a few academics who are missing your work because of that paywall.</p>
+<p>A bigger benefit is actually that you get your work out much quicker. The <a href="https://andrewpwheeler.wordpress.com/2018/05/09/the-length-it-takes-from-submission-to-publication/">academic publishing cycle</a> makes it impossible to publish your work in a timely fashion. If you are lucky, once your paper is finished, it will be published in six months. More realistically it will be a year before it is published online in our field (my linked article only considers when it is accepted, tack on another month or two to go through copy-editing).</p>
+<p>Honestly, I publish preprints because I get really frustrated with waiting on peer review. No offense to my peers, but I do good work that I want others to read &#8212; I do not need a stamp from three anonymous reviewers to validate my work. I would need to do an experiment to know for sure (having a preprint might displace some views/downloads from the published version) but I believe the earlier and open versions on average doubles the amount of exposure my papers would have had compared to just publishing in traditional journals. It is likely a much different audience than traditional academic crim people, but that is a good thing.</p>
+<p>But even without that extra exposure I would still post preprints, because it makes me happy to self-publish my work when it is at the finish line, in what can be a miserably long and very much delayed gratification process otherwise.</p>
+<h2 id="the-potential-downsides">The potential downsides</h2>
+<p>Besides the actual time cost of posting a preprint (next section I will detail that more precisely, it isn&#8217;t much work), I will go through several common arguments why posting preprints are a bad idea. I don&#8217;t believe they carry much weight, and have not personally experienced any of them.</p>
+<p><em>What if I am wrong</em> &#8212; Typically I only post papers either when I am doing a talk, or when it is ready to go out for peer review. So I don&#8217;t encourage posting really early versions of work. While even at this stage there is never any guarantee you did not make a big mistake (I make mistakes all the time!), the sky will not fall down if you post a preprint that is wrong. Just take it down if you feel it is a net negative to the scholarly literature (which is very hard to do &#8212; the results of hypothesis tests do not make the work a net positive/negative). If you think it is good enough to send out for peer review it is definitely at the stage where you can share the preprint.</p>
+<p><em>What if the content changes after peer review</em> &#8212; My experience with peer review is mostly pedantic stuff &#8212; lit. review/framing complaints, do some robustness checks for analysis, beef up the discussion. I have never had a substantive interpretation change after peer-review. Even if you did, you can just update the preprint with the new results. While this could be bad (an early finding gets picked up that is later invalidated) this is again something very rare and a risk I am willing to take.</p>
+<p>Note peer review is not infallible, and so hedging that peer review will catch your mistakes is mostly a false expectation. Peer review does not spin your work into gold, you have to do that yourself.</p>
+<p><em>My ideas may get scooped</em> &#8212; This I have never personally had happen to me. Posting a preprint can actually prevent this in terms of more direct plagiarism, as you have a time-stamped example of your work. In terms of someone taking your idea and rewriting it, this is a potential risk (same risk if you present at a conference) &#8212; really only applicable for folks working on secondary data analysis. Having the preprint the other person should at least cite your work, but sorry, either presenting some work or posting a preprint does not give you sole ownership of an idea.</p>
+<p><em>Journals will view preprints negatively</em> &#8212; Or journals do not allow preprints. I haven&#8217;t come across a journal in our field that forbids preprints. I&#8217;ve had one reviewer note (out of likely 100+ at this point) that the pre-print was posted as a negative (suggesting I was double publishing or plagiarizing my own work). An editor that actually reads reviews should know that is not a substantive critique. That was likely just a dinosaur reviewer that wasn&#8217;t familiar with the idea of preprints (and they gave an overall positive review in that one case, so did not get the paper axed). If you are concerned about this, just email the editor for feedback, but I&#8217;ve never had a problem from editors.</p>
+<p><em>Peer reviewers will know who I</em> <em>am</em> &#8212; This I admit is a known unknown. So peer review in our crim/cj journals are mostly doubly blind (most geography and statistic journals I have reviewed for are not, I know who the authors are). If you presented the work at a conference you have already given up anonymity, and also the field is small enough a good chunk of work the reviewers can guess who the author is anyway. So your anonymity is often a moot point at the peer review stage anyway.</p>
+<p>So I don&#8217;t know how much reviewers are biased if they know who you are (it can work both ways, if you get a friend they may be more apt to give a nicer review). It likely can make a small difference at the margins, but again I personally don&#8217;t think the minor risk/cost outweighs the benefits.</p>
+<p>These negatives are no doubt real, but again I personally find them minor enough risks to not outweigh the benefits of posting preprints.</p>
+<h2 id="the-not-hard-work-of-actually-posting-pre-prints">The not hard work of actually posting preprints</h2>
+<p>All posting a preprint involves is uploading a PDF file of your work to either your website or a public hosting service. My workflow currently I have my different components of a journal article in several word documents (<a href="https://andrewpwheeler.wordpress.com/2016/09/23/writing-equations-in-microsoft-word/">I don&#8217;t use LaTex very often</a>). (Word doesn&#8217;t work so well when it has one big file, especially with many pictures.) So then I export those components to PDF files, and stitch them together using a freeware tool <a href="https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDFtk</a>. It has a GUI and command line, so I just have a bat file in my paper directory that lists something like:</p>
+<pre><code>pdftk.exe TitlePage.pdf MainPaper.pdf TablesGraphs.pdf Appendix.pdf cat output CombinedPaper.pdf</code></pre>
+<p>So just a double click to update the combined pdf when I edit the different components.</p>
+<p>Public hosting services to post preprints I have used in the past are Academia.edu, SSRN, and SoxArXiv, although again you could just post the PDF on your webpage (and Google Scholar will eventually pick it up). I use SocArXiv now, as SSRN currently makes you sign up for an account to download PDFs (again a hurdle, the same as a going through inter-library loan). Academia.edu also makes you sign up for an account, and <a href="https://academia.stackexchange.com/questions/16050/why-does-academia-edu-reserve-the-right-to-sell-modify-and-exploit-my-papers">has weird terms of service</a>.</p>
+<p>Here is an example paper of mine on <a href="https://osf.io/preprints/socarxiv/m95rh/">SocArXiv</a>. (Note the total downloads, most of my published journal articles have fewer than half that many downloads.) SocArXiv also does not bother my co-authors to create an account when I upload a paper. If we had a more criminal justice focused depository I would use that, but SocArXiv is fine.</p>
+<p>There are other components of open science I should write about &#8212; such as replication materials/sharing data, and open peer reviewed journals, but I will leave those to another blog post. Posting preprints takes very little extra work compared to what academics are currently doing, so I hope more people in our field start doing it.</p>
+<p>&nbsp;</p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-twitter-1854"
+				class="share-twitter sd-button share-icon"
+				href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/?share=twitter"
+				target="_blank"
+				aria-labelledby="sharing-twitter-1854"
+				>
+				<span id="sharing-twitter-1854" hidden>Share on X (Opens in new window)</span>
+				<span>X</span>
+			</a></li><li class="share-facebook"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-facebook-1854"
+				class="share-facebook sd-button share-icon"
+				href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/?share=facebook"
+				target="_blank"
+				aria-labelledby="sharing-facebook-1854"
+				>
+				<span id="sharing-facebook-1854" hidden>Share on Facebook (Opens in new window)</span>
+				<span>Facebook</span>
+			</a></li><li class="share-linkedin"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-linkedin-1854"
+				class="share-linkedin sd-button share-icon"
+				href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/?share=linkedin"
+				target="_blank"
+				aria-labelledby="sharing-linkedin-1854"
+				>
+				<span id="sharing-linkedin-1854" hidden>Share on LinkedIn (Opens in new window)</span>
+				<span>LinkedIn</span>
+			</a></li><li class="share-pinterest"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-pinterest-1854"
+				class="share-pinterest sd-button share-icon"
+				href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/?share=pinterest"
+				target="_blank"
+				aria-labelledby="sharing-pinterest-1854"
+				>
+				<span id="sharing-pinterest-1854" hidden>Share on Pinterest (Opens in new window)</span>
+				<span>Pinterest</span>
+			</a></li><li class="share-end"></li></ul></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-30502426-1854-6a005db7c15d0' data-src='//widgets.wp.com/likes/index.html?ver=20260510#blog_id=30502426&amp;post_id=1854&amp;origin=andrewpwheeler.wordpress.com&amp;obj_id=30502426-1854-6a005db7c15d0&amp;domain=andrewpwheeler.com' data-name='like-post-frame-30502426-1854-6a005db7c15d0' data-title='Like or Reblog'><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class='loading'>Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div></div>		</div>
+		<div class="post-meta">
+			<div class="row">
+									<div class="alignright"><a href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/#comments">4 Comments</a></div>
+				
+				by <a href="https://andrewpwheeler.com/author/apwheele/" title="View all posts by Andy Wheeler">Andy Wheeler</a> on <em>May 30, 2019</em>
+				&nbsp;&bull;&nbsp; <a href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/" rel="bookmark">Permalink</a>
+
+							</div>
+
+						<div class="row">Posted in <a href="https://andrewpwheeler.com/category/papers/" rel="category tag">Papers</a>, <a href="https://andrewpwheeler.com/category/scholarly/" rel="category tag">scholarly</a></div>
+			
+			<div class="row">Tagged <a href="https://andrewpwheeler.com/tag/open-science/" rel="tag">open-science</a>, <a href="https://andrewpwheeler.com/tag/preprint/" rel="tag">preprint</a></div>
+		</div>
+		<div class="print-view">
+			<p><em>Posted by Andy Wheeler on May 30, 2019</em></p>
+			<p>https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/</p>
+		</div>
+	</div>
+	<!--/post -->
+
+	<div class="post post-nav">
+		<div class="alignleft"><i>Previous Post</i><br /><a href="https://andrewpwheeler.com/2019/04/15/plotting-predictive-crime-curves/" rel="prev">Plotting Predictive Crime&nbsp;Curves</a></div>		<div class="alignright"><i>Next Post</i><br /><a href="https://andrewpwheeler.com/2019/06/17/david-bayley/" rel="next">David Bayley</a></div>	</div>
+
+	<div class="sep"></div>
+
+	
+<!-- #comments -->
+<div id="comments">
+
+<a href="#respond" class="alignright leave-one">Leave a comment</a>
+	<h3 class="comment-heading post-title">4 Comments</h3>
+
+	
+	<ol class="commentlist">
+			</ol>
+
+	
+	<ol class="trackbacklist">
+				<li class="pingback even thread-even depth-1" id="comment-10828">
+			<a href="https://andrewpwheeler.com/2020/09/30/crimrxiv-alt-journal-contributions-and-mike-maltzs-retrospective/" class="url" rel="ugc">CrimRxiv, Alt-Journal Contributions, and Mike Maltz&#8217;s Retrospective | Andrew Wheeler</a>	</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1" id="comment-19851">
+			<a href="https://andrewpwheeler.com/2023/02/14/getting-access-to-paywalled-newspaper-and-journal-articles/" class="url" rel="ugc">Getting access to paywalled newspaper and journal articles | Andrew Wheeler</a>	</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1" id="comment-21463">
+			<a href="https://andrewpwheeler.com/2023/11/12/the-sausage-making-behind-peer-review/" class="url" rel="ugc">The sausage making behind peer review | Andrew Wheeler</a>	</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1" id="comment-21478">
+			<a href="https://andrewpwheeler.com/2023/12/12/won-nij-competition-on-surveys/" class="url" rel="ugc">Won NIJ competition on surveys | Andrew Wheeler</a>	</li><!-- #comment-## -->
+	</ol>
+
+	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2019/05/30/why-i-publish-preprints/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://andrewpwheeler.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+
+
+<div class="comment-form__verbum transparent"></div><div class="verbum-form-meta"><input type='hidden' name='comment_post_ID' value='1854' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+
+			<input type="hidden" name="highlander_comment_nonce" id="highlander_comment_nonce" value="29565ae90c" />
+			<input type="hidden" name="verbum_show_subscription_modal" value="" /></div><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="377699d13d" /></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="240"/><script>
+document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+</script>
+</p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+	
+	
+		</div><!-- /c2 -->
+
+							<div id="c3">
+			
+<ul class="widgets">
+
+<li id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://andrewpwheeler.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></li>
+		<li id="recent-posts-2" class="widget widget_recent_entries">
+		<h2 class="widget-title">Recent Posts</h2>
+		<ul>
+											<li>
+					<a href="https://andrewpwheeler.com/2026/05/04/xai-voice-cloning-api/">xAI voice cloning&nbsp;API</a>
+									</li>
+											<li>
+					<a href="https://andrewpwheeler.com/2026/04/30/pangram-is-good/">Pangram is good</a>
+									</li>
+											<li>
+					<a href="https://andrewpwheeler.com/2026/04/27/gathering-interest-in-tech-courses/">Gathering interest in tech&nbsp;courses</a>
+									</li>
+											<li>
+					<a href="https://andrewpwheeler.com/2026/04/25/linkedin-premium-does-not-boost-your-posts/">LinkedIn Premium Does Not Boost your&nbsp;Posts</a>
+									</li>
+											<li>
+					<a href="https://andrewpwheeler.com/2026/04/22/job-advice-resources-page/">Job Advice Resources&nbsp;page</a>
+									</li>
+					</ul>
+
+		</li><li id="categories-2" class="widget widget_categories"><h2 class="widget-title">Categories</h2><form action="https://andrewpwheeler.com" method="get"><label class="screen-reader-text" for="cat">Categories</label><select  name='cat' id='cat' class='postform'>
+	<option value='-1'>Select Category</option>
+	<option class="level-0" value="177">art</option>
+	<option class="level-0" value="537864">ask me anything</option>
+	<option class="level-0" value="6147584">Crime Analysis</option>
+	<option class="level-0" value="704643">Crime Mapping</option>
+	<option class="level-0" value="135851">Criminal Justice</option>
+	<option class="level-0" value="21818323">data science</option>
+	<option class="level-0" value="86765">Data Visualization</option>
+	<option class="level-0" value="25398">excel</option>
+	<option class="level-0" value="171725">geocoding</option>
+	<option class="level-0" value="17710643">ggplot2</option>
+	<option class="level-0" value="1460">healthcare</option>
+	<option class="level-0" value="15253768">interval-censored</option>
+	<option class="level-0" value="457">javascript</option>
+	<option class="level-0" value="24395634">Macro</option>
+	<option class="level-0" value="7249">Mapping</option>
+	<option class="level-0" value="171">Meta</option>
+	<option class="level-0" value="3968">Networks</option>
+	<option class="level-0" value="48111360">NIBRS</option>
+	<option class="level-0" value="5281">Papers</option>
+	<option class="level-0" value="17837">Personal Productivity</option>
+	<option class="level-0" value="832">Python</option>
+	<option class="level-0" value="1678980">R</option>
+	<option class="level-0" value="151187">Regression</option>
+	<option class="level-0" value="114563">scholarly</option>
+	<option class="level-0" value="34932255">social networking</option>
+	<option class="level-0" value="64102">SPSS</option>
+	<option class="level-0" value="66506">Stata</option>
+	<option class="level-0" value="852300">Tableau</option>
+	<option class="level-0" value="1">Uncategorized</option>
+	<option class="level-0" value="995">website</option>
+	<option class="level-0" value="349">writing</option>
+</select>
+</form><script>
+( ( dropdownId ) => {
+	const dropdown = document.getElementById( dropdownId );
+	function onSelectChange() {
+		setTimeout( () => {
+			if ( 'escape' === dropdown.dataset.lastkey ) {
+				return;
+			}
+			if ( dropdown.value && parseInt( dropdown.value ) > 0 && dropdown instanceof HTMLSelectElement ) {
+				dropdown.parentElement.submit();
+			}
+		}, 250 );
+	}
+	function onKeyUp( event ) {
+		if ( 'Escape' === event.key ) {
+			dropdown.dataset.lastkey = 'escape';
+		} else {
+			delete dropdown.dataset.lastkey;
+		}
+	}
+	function onClick() {
+		delete dropdown.dataset.lastkey;
+	}
+	dropdown.addEventListener( 'keyup', onKeyUp );
+	dropdown.addEventListener( 'click', onClick );
+	dropdown.addEventListener( 'change', onSelectChange );
+})( "cat" );
+
+//# sourceURL=WP_Widget_Categories%3A%3Awidget
+</script>
+</li><li id="rss_links-2" class="widget widget_rss_links"><h2 class="widget-title">Site RSS Feeds</h2><ul><li><a href="https://andrewpwheeler.com/feed/" title="Subscribe to Posts">RSS - Posts</a></li><li><a href="https://andrewpwheeler.com/comments/feed/" title="Subscribe to Comments">RSS - Comments</a></li></ul>
+</li><li id="blog_subscription-2" class="widget widget_blog_subscription jetpack_subscription_widget"><h2 class="widget-title"><label for="subscribe-field">Follow Blog via Email</label></h2>
+
+			<div class="wp-block-jetpack-subscriptions__container">
+			<form
+				action="https://subscribe.wordpress.com"
+				method="post"
+				accept-charset="utf-8"
+				data-blog="30502426"
+				data-post_access_level="everybody"
+				id="subscribe-blog"
+			>
+				<p>Enter your email address to follow this blog and receive notifications of new posts by email.</p>
+				<p id="subscribe-email">
+					<label
+						id="subscribe-field-label"
+						for="subscribe-field"
+						class="screen-reader-text"
+					>
+						Email Address:					</label>
+
+					<input
+							type="email"
+							name="email"
+							autocomplete="email"
+							
+							style="width: 95%; padding: 1px 10px"
+							placeholder="Email Address"
+							value=""
+							id="subscribe-field"
+							required
+						/>				</p>
+
+				<p id="subscribe-submit"
+									>
+					<input type="hidden" name="action" value="subscribe"/>
+					<input type="hidden" name="blog_id" value="30502426"/>
+					<input type="hidden" name="source" value="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/"/>
+					<input type="hidden" name="sub-type" value="widget"/>
+					<input type="hidden" name="redirect_fragment" value="subscribe-blog"/>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="f8881908ea" />					<button type="submit"
+													class="wp-block-button__link"
+																	>
+						Follow					</button>
+				</p>
+			</form>
+							<div class="wp-block-jetpack-subscriptions__subscount">
+					Join 392 other subscribers				</div>
+						</div>
+			
+</li><li id="wp_tag_cloud-2" class="widget wp_widget_tag_cloud"><h2 class="widget-title"></h2><a href="https://andrewpwheeler.com/tag/aoristic/" class="tag-cloud-link tag-link-50745154 tag-link-position-1" style="font-size: 10.554744525547pt;" aria-label="aoristic (6 items)">aoristic</a>
+<a href="https://andrewpwheeler.com/tag/big-data/" class="tag-cloud-link tag-link-2075170 tag-link-position-2" style="font-size: 9.021897810219pt;" aria-label="big-data (4 items)">big-data</a>
+<a href="https://andrewpwheeler.com/tag/cartography/" class="tag-cloud-link tag-link-145320 tag-link-position-3" style="font-size: 12.496350364964pt;" aria-label="cartography (10 items)">cartography</a>
+<a href="https://andrewpwheeler.com/tag/census/" class="tag-cloud-link tag-link-35715 tag-link-position-4" style="font-size: 9.8394160583942pt;" aria-label="census (5 items)">census</a>
+<a href="https://andrewpwheeler.com/tag/choropleth/" class="tag-cloud-link tag-link-11126511 tag-link-position-5" style="font-size: 11.065693430657pt;" aria-label="choropleth (7 items)">choropleth</a>
+<a href="https://andrewpwheeler.com/tag/citeulike/" class="tag-cloud-link tag-link-396685 tag-link-position-6" style="font-size: 8pt;" aria-label="citeulike (3 items)">citeulike</a>
+<a href="https://andrewpwheeler.com/tag/consulting/" class="tag-cloud-link tag-link-2253 tag-link-position-7" style="font-size: 9.021897810219pt;" aria-label="consulting (4 items)">consulting</a>
+<a href="https://andrewpwheeler.com/tag/cost-benefit/" class="tag-cloud-link tag-link-2790471 tag-link-position-8" style="font-size: 9.021897810219pt;" aria-label="cost-benefit (4 items)">cost-benefit</a>
+<a href="https://andrewpwheeler.com/tag/courses/" class="tag-cloud-link tag-link-23328 tag-link-position-9" style="font-size: 9.021897810219pt;" aria-label="courses (4 items)">courses</a>
+<a href="https://andrewpwheeler.com/tag/crime-mapping-2/" class="tag-cloud-link tag-link-73646535 tag-link-position-10" style="font-size: 15.357664233577pt;" aria-label="crime-mapping (20 items)">crime-mapping</a>
+<a href="https://andrewpwheeler.com/tag/crime-trends/" class="tag-cloud-link tag-link-26549232 tag-link-position-11" style="font-size: 9.8394160583942pt;" aria-label="crime-trends (5 items)">crime-trends</a>
+<a href="https://andrewpwheeler.com/tag/crime-analysis/" class="tag-cloud-link tag-link-6147584 tag-link-position-12" style="font-size: 15.153284671533pt;" aria-label="Crime Analysis (19 items)">Crime Analysis</a>
+<a href="https://andrewpwheeler.com/tag/criminal-justice/" class="tag-cloud-link tag-link-135851 tag-link-position-13" style="font-size: 11.576642335766pt;" aria-label="Criminal Justice (8 items)">Criminal Justice</a>
+<a href="https://andrewpwheeler.com/tag/data-manipulation/" class="tag-cloud-link tag-link-1345936 tag-link-position-14" style="font-size: 16.481751824818pt;" aria-label="data-manipulation (26 items)">data-manipulation</a>
+<a href="https://andrewpwheeler.com/tag/data-visualization-2/" class="tag-cloud-link tag-link-35184900 tag-link-position-15" style="font-size: 21.591240875912pt;" aria-label="data visualization (85 items)">data visualization</a>
+<a href="https://andrewpwheeler.com/tag/deep-learning/" class="tag-cloud-link tag-link-1131271 tag-link-position-16" style="font-size: 9.8394160583942pt;" aria-label="deep-learning (5 items)">deep-learning</a>
+<a href="https://andrewpwheeler.com/tag/esri/" class="tag-cloud-link tag-link-117504 tag-link-position-17" style="font-size: 9.021897810219pt;" aria-label="ESRI (4 items)">ESRI</a>
+<a href="https://andrewpwheeler.com/tag/excel/" class="tag-cloud-link tag-link-25398 tag-link-position-18" style="font-size: 10.554744525547pt;" aria-label="excel (6 items)">excel</a>
+<a href="https://andrewpwheeler.com/tag/flow-data/" class="tag-cloud-link tag-link-17264650 tag-link-position-19" style="font-size: 9.021897810219pt;" aria-label="flow-data (4 items)">flow-data</a>
+<a href="https://andrewpwheeler.com/tag/folium/" class="tag-cloud-link tag-link-12154930 tag-link-position-20" style="font-size: 9.021897810219pt;" aria-label="folium (4 items)">folium</a>
+<a href="https://andrewpwheeler.com/tag/geocoding/" class="tag-cloud-link tag-link-171725 tag-link-position-21" style="font-size: 10.554744525547pt;" aria-label="geocoding (6 items)">geocoding</a>
+<a href="https://andrewpwheeler.com/tag/github/" class="tag-cloud-link tag-link-5603054 tag-link-position-22" style="font-size: 9.8394160583942pt;" aria-label="github (5 items)">github</a>
+<a href="https://andrewpwheeler.com/tag/google-streetview-api/" class="tag-cloud-link tag-link-434023140 tag-link-position-23" style="font-size: 9.021897810219pt;" aria-label="google-streetview-api (4 items)">google-streetview-api</a>
+<a href="https://andrewpwheeler.com/tag/grammar-of-graphics/" class="tag-cloud-link tag-link-120183802 tag-link-position-24" style="font-size: 13.92700729927pt;" aria-label="grammar of graphics (14 items)">grammar of graphics</a>
+<a href="https://andrewpwheeler.com/tag/group-based-trajectory/" class="tag-cloud-link tag-link-541847345 tag-link-position-25" style="font-size: 10.554744525547pt;" aria-label="group-based-trajectory (6 items)">group-based-trajectory</a>
+<a href="https://andrewpwheeler.com/tag/gun-violence/" class="tag-cloud-link tag-link-984769 tag-link-position-26" style="font-size: 10.554744525547pt;" aria-label="gun-violence (6 items)">gun-violence</a>
+<a href="https://andrewpwheeler.com/tag/healthcare/" class="tag-cloud-link tag-link-1460 tag-link-position-27" style="font-size: 10.554744525547pt;" aria-label="healthcare (6 items)">healthcare</a>
+<a href="https://andrewpwheeler.com/tag/homicide-rates/" class="tag-cloud-link tag-link-1337988 tag-link-position-28" style="font-size: 9.021897810219pt;" aria-label="homicide-rates (4 items)">homicide-rates</a>
+<a href="https://andrewpwheeler.com/tag/hot-spots/" class="tag-cloud-link tag-link-139820 tag-link-position-29" style="font-size: 11.065693430657pt;" aria-label="hot spots (7 items)">hot spots</a>
+<a href="https://andrewpwheeler.com/tag/hypothesis-testing/" class="tag-cloud-link tag-link-1136954 tag-link-position-30" style="font-size: 9.021897810219pt;" aria-label="hypothesis-testing (4 items)">hypothesis-testing</a>
+<a href="https://andrewpwheeler.com/tag/linear-programming/" class="tag-cloud-link tag-link-321935 tag-link-position-31" style="font-size: 13.92700729927pt;" aria-label="linear programming (14 items)">linear programming</a>
+<a href="https://andrewpwheeler.com/tag/llm/" class="tag-cloud-link tag-link-642672 tag-link-position-32" style="font-size: 10.554744525547pt;" aria-label="LLM (6 items)">LLM</a>
+<a href="https://andrewpwheeler.com/tag/logistic-regression/" class="tag-cloud-link tag-link-4383675 tag-link-position-33" style="font-size: 9.8394160583942pt;" aria-label="logistic-regression (5 items)">logistic-regression</a>
+<a href="https://andrewpwheeler.com/tag/machine-learning/" class="tag-cloud-link tag-link-40978 tag-link-position-34" style="font-size: 13.92700729927pt;" aria-label="machine-learning (14 items)">machine-learning</a>
+<a href="https://andrewpwheeler.com/tag/macro/" class="tag-cloud-link tag-link-1625 tag-link-position-35" style="font-size: 14.744525547445pt;" aria-label="MACRO (17 items)">MACRO</a>
+<a href="https://andrewpwheeler.com/tag/mapping-2/" class="tag-cloud-link tag-link-35095296 tag-link-position-36" style="font-size: 16.686131386861pt;" aria-label="mapping (27 items)">mapping</a>
+<a href="https://andrewpwheeler.com/tag/matplotlib/" class="tag-cloud-link tag-link-2988498 tag-link-position-37" style="font-size: 11.065693430657pt;" aria-label="matplotlib (7 items)">matplotlib</a>
+<a href="https://andrewpwheeler.com/tag/meta-2/" class="tag-cloud-link tag-link-11868075 tag-link-position-38" style="font-size: 9.8394160583942pt;" aria-label="meta (5 items)">meta</a>
+<a href="https://andrewpwheeler.com/tag/network/" class="tag-cloud-link tag-link-3385 tag-link-position-39" style="font-size: 12.905109489051pt;" aria-label="network (11 items)">network</a>
+<a href="https://andrewpwheeler.com/tag/networkx/" class="tag-cloud-link tag-link-5086849 tag-link-position-40" style="font-size: 11.065693430657pt;" aria-label="NetworkX (7 items)">NetworkX</a>
+<a href="https://andrewpwheeler.com/tag/officer-involved-shooting/" class="tag-cloud-link tag-link-6822929 tag-link-position-41" style="font-size: 9.021897810219pt;" aria-label="officer-involved-shooting (4 items)">officer-involved-shooting</a>
+<a href="https://andrewpwheeler.com/tag/open-science/" class="tag-cloud-link tag-link-144676 tag-link-position-42" style="font-size: 12.496350364964pt;" aria-label="open-science (10 items)">open-science</a>
+<a href="https://andrewpwheeler.com/tag/paper/" class="tag-cloud-link tag-link-19368 tag-link-position-43" style="font-size: 14.43795620438pt;" aria-label="paper (16 items)">paper</a>
+<a href="https://andrewpwheeler.com/tag/papers/" class="tag-cloud-link tag-link-5281 tag-link-position-44" style="font-size: 13.92700729927pt;" aria-label="Papers (14 items)">Papers</a>
+<a href="https://andrewpwheeler.com/tag/peer-review/" class="tag-cloud-link tag-link-115816 tag-link-position-45" style="font-size: 13.92700729927pt;" aria-label="peer-review (14 items)">peer-review</a>
+<a href="https://andrewpwheeler.com/tag/poisson/" class="tag-cloud-link tag-link-175339 tag-link-position-46" style="font-size: 15.153284671533pt;" aria-label="Poisson (19 items)">Poisson</a>
+<a href="https://andrewpwheeler.com/tag/prediction/" class="tag-cloud-link tag-link-44071 tag-link-position-47" style="font-size: 12.905109489051pt;" aria-label="prediction (11 items)">prediction</a>
+<a href="https://andrewpwheeler.com/tag/predictive-policing/" class="tag-cloud-link tag-link-25752406 tag-link-position-48" style="font-size: 11.065693430657pt;" aria-label="Predictive-Policing (7 items)">Predictive-Policing</a>
+<a href="https://andrewpwheeler.com/tag/preprint/" class="tag-cloud-link tag-link-1011815 tag-link-position-49" style="font-size: 9.021897810219pt;" aria-label="preprint (4 items)">preprint</a>
+<a href="https://andrewpwheeler.com/tag/presentation/" class="tag-cloud-link tag-link-9402 tag-link-position-50" style="font-size: 13.211678832117pt;" aria-label="presentation (12 items)">presentation</a>
+<a href="https://andrewpwheeler.com/tag/python/" class="tag-cloud-link tag-link-832 tag-link-position-51" style="font-size: 17.299270072993pt;" aria-label="Python (31 items)">Python</a>
+<a href="https://andrewpwheeler.com/tag/python-programability/" class="tag-cloud-link tag-link-221672398 tag-link-position-52" style="font-size: 9.021897810219pt;" aria-label="Python-programability (4 items)">Python-programability</a>
+<a href="https://andrewpwheeler.com/tag/pytorch/" class="tag-cloud-link tag-link-556315009 tag-link-position-53" style="font-size: 10.554744525547pt;" aria-label="pytorch (6 items)">pytorch</a>
+<a href="https://andrewpwheeler.com/tag/quasi-experiment/" class="tag-cloud-link tag-link-19616432 tag-link-position-54" style="font-size: 9.8394160583942pt;" aria-label="quasi-experiment (5 items)">quasi-experiment</a>
+<a href="https://andrewpwheeler.com/tag/r/" class="tag-cloud-link tag-link-10189 tag-link-position-55" style="font-size: 15.357664233577pt;" aria-label="r (20 items)">r</a>
+<a href="https://andrewpwheeler.com/tag/recidivism/" class="tag-cloud-link tag-link-349224 tag-link-position-56" style="font-size: 9.021897810219pt;" aria-label="recidivism (4 items)">recidivism</a>
+<a href="https://andrewpwheeler.com/tag/regression-2/" class="tag-cloud-link tag-link-35218153 tag-link-position-57" style="font-size: 12.905109489051pt;" aria-label="regression (11 items)">regression</a>
+<a href="https://andrewpwheeler.com/tag/resources/" class="tag-cloud-link tag-link-1784 tag-link-position-58" style="font-size: 9.021897810219pt;" aria-label="resources (4 items)">resources</a>
+<a href="https://andrewpwheeler.com/tag/scholarly/" class="tag-cloud-link tag-link-114563 tag-link-position-59" style="font-size: 21.080291970803pt;" aria-label="scholarly (74 items)">scholarly</a>
+<a href="https://andrewpwheeler.com/tag/scraping/" class="tag-cloud-link tag-link-323588 tag-link-position-60" style="font-size: 9.021897810219pt;" aria-label="scraping (4 items)">scraping</a>
+<a href="https://andrewpwheeler.com/tag/seaborn/" class="tag-cloud-link tag-link-8516342 tag-link-position-61" style="font-size: 9.021897810219pt;" aria-label="seaborn (4 items)">seaborn</a>
+<a href="https://andrewpwheeler.com/tag/shootings/" class="tag-cloud-link tag-link-358739 tag-link-position-62" style="font-size: 10.554744525547pt;" aria-label="shootings (6 items)">shootings</a>
+<a href="https://andrewpwheeler.com/tag/simulation/" class="tag-cloud-link tag-link-827 tag-link-position-63" style="font-size: 11.576642335766pt;" aria-label="simulation (8 items)">simulation</a>
+<a href="https://andrewpwheeler.com/tag/small-multiples/" class="tag-cloud-link tag-link-28506560 tag-link-position-64" style="font-size: 13.620437956204pt;" aria-label="small-multiples (13 items)">small-multiples</a>
+<a href="https://andrewpwheeler.com/tag/social-media/" class="tag-cloud-link tag-link-49818 tag-link-position-65" style="font-size: 9.021897810219pt;" aria-label="social-media (4 items)">social-media</a>
+<a href="https://andrewpwheeler.com/tag/social-networking/" class="tag-cloud-link tag-link-1652 tag-link-position-66" style="font-size: 10.554744525547pt;" aria-label="social-networking (6 items)">social-networking</a>
+<a href="https://andrewpwheeler.com/tag/spss/" class="tag-cloud-link tag-link-64102 tag-link-position-67" style="font-size: 22pt;" aria-label="SPSS (92 items)">SPSS</a>
+<a href="https://andrewpwheeler.com/tag/stackexchange/" class="tag-cloud-link tag-link-26120096 tag-link-position-68" style="font-size: 13.620437956204pt;" aria-label="stackexchange (13 items)">stackexchange</a>
+<a href="https://andrewpwheeler.com/tag/stata/" class="tag-cloud-link tag-link-66506 tag-link-position-69" style="font-size: 9.021897810219pt;" aria-label="Stata (4 items)">Stata</a>
+<a href="https://andrewpwheeler.com/tag/statistics/" class="tag-cloud-link tag-link-5849 tag-link-position-70" style="font-size: 9.8394160583942pt;" aria-label="statistics (5 items)">statistics</a>
+<a href="https://andrewpwheeler.com/tag/survey/" class="tag-cloud-link tag-link-32774 tag-link-position-71" style="font-size: 12.087591240876pt;" aria-label="survey (9 items)">survey</a>
+<a href="https://andrewpwheeler.com/tag/time-series/" class="tag-cloud-link tag-link-1159441 tag-link-position-72" style="font-size: 12.496350364964pt;" aria-label="time-series (10 items)">time-series</a>
+<a href="https://andrewpwheeler.com/tag/uncertainty/" class="tag-cloud-link tag-link-5101 tag-link-position-73" style="font-size: 9.021897810219pt;" aria-label="uncertainty (4 items)">uncertainty</a>
+<a href="https://andrewpwheeler.com/tag/wdd/" class="tag-cloud-link tag-link-4850867 tag-link-position-74" style="font-size: 11.065693430657pt;" aria-label="wdd (7 items)">wdd</a>
+<a href="https://andrewpwheeler.com/tag/web-scraping/" class="tag-cloud-link tag-link-1311799 tag-link-position-75" style="font-size: 11.576642335766pt;" aria-label="web-scraping (8 items)">web-scraping</a></li><li id="top-posts-2" class="widget widget_top-posts"><h2 class="widget-title">Top Posts &amp; Pages</h2><ul><li><a href="https://andrewpwheeler.com/2023/07/29/downloading-police-employment-trends-from-the-fbi-data-explorer/" class="bump-view" data-bump-view="tp">Downloading Police Employment Trends from the FBI Data Explorer</a></li><li><a href="https://andrewpwheeler.com/2026/03/20/using-claude-code-to-help-me-write/" class="bump-view" data-bump-view="tp">Using Claude Code to help me write</a></li><li><a href="https://andrewpwheeler.com/2016/10/06/group-based-trajectory-models-in-stata-some-graphs-and-fit-statistics/" class="bump-view" data-bump-view="tp">Group based trajectory models in Stata - some graphs and fit statistics</a></li></ul></li><li id="text-2" class="widget widget_text"><h2 class="widget-title">Stack Exchange</h2>			<div class="textwidget"><a href="http://stackexchange.com/users/298433">
+<img src="http://stackexchange.com/users/flair/298433.png" width="208" height="58" alt="profile for Andy W on Stack Exchange, a network of free, community-driven Q&amp;A sites" title="profile for Andy W on Stack Exchange, a network of free, community-driven Q&amp;A sites">
+</a></div>
+		</li>
+</ul><!-- /widgets -->
+			</div><!-- /c3 -->
+			</div><!-- /content -->
+
+	<div id="footer">
+		<a href="https://wordpress.com/?ref=footer_blog" rel="nofollow">Blog at WordPress.com.</a>
+			</div><!-- /footer -->
+
+</div><!-- /wrap -->
+
+<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/files/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/pub/comet/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="grofiles-cards-js" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202619d1133547e8a1f2801609f51cef12522abe7f6647d869e9fbc974fe356a37e613"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+//# sourceURL=wpgroho-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-pub-comet actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-comment" href="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/#comments">
+							<svg class="gridicon gridicons-comment" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M12 16l-5 5v-5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-7z"/></g></svg>							<span>Comment						</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-reblog" href="">
+							<svg class="gridicon gridicons-reblog" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M22.086 9.914L20 7.828V18c0 1.105-.895 2-2 2h-7v-2h7V7.828l-2.086 2.086L14.5 8.5 19 4l4.5 4.5-1.414 1.414zM6 16.172V6h7V4H6c-1.105 0-2 .895-2 2v10.172l-2.086-2.086L.5 15.5 5 20l4.5-4.5-1.414-1.414L6 16.172z"/></g></svg><span>Reblog</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://andrewpwheeler.com">
+				<img loading='lazy' alt='' src='https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=50' srcset='https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=50 1x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=75 1.5x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=100 2x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=150 3x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=200 4x' class='avatar avatar-50' height='50' width='50' />				Andrew Wheeler			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 392 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="30502426" />
+										<input type="hidden" name="source" value="https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="f8881908ea" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fandrewpwheeler.com%252F2019%252F05%252F30%252Fwhy-i-publish-preprints%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="https://andrewpwheeler.com">
+				<img loading='lazy' alt='' src='https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=50' srcset='https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=50 1x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=75 1.5x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=100 2x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=150 3x, https://andrewpwheeler.com/wp-content/uploads/2017/06/apwface.png?w=200 4x' class='avatar avatar-50' height='50' width='50' />				Andrew Wheeler			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fandrewpwheeler.com%252F2019%252F05%252F30%252Fwhy-i-publish-preprints%252F">Log in</a></li>
+																<li class="actnbr-shortlink">
+										<a href="https://wp.me/p23Z4C-tU">
+											<span class="actnbr-shortlink__text">Copy shortlink</span>
+											<span class="actnbr-shortlink__icon"><svg class="gridicon gridicons-checkmark" height="16" width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M9 19.414l-6.707-6.707 1.414-1.414L9 16.586 20.293 5.293l1.414 1.414"/></g></svg></span>
+										</a>
+									</li>
+																<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/blogs/30502426/posts/1854">
+										View post in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+	
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https://andrewpwheeler.com/2019/05/30/why-i-publish-preprints/":1854};
+	</script>
+						
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/likes/queuehandler.js?m=1741961244i'></script>
+<script id="wp-hooks-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/hooks/index.min.js?m=1778170586i&#038;ver=7496969728ca0f95732d"></script>
+<script id="wp-i18n-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/i18n/index.min.js?m=1778170586i&#038;ver=125448662852c5e18937"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="verbum-settings-js-before">
+window.VerbumComments = {"Log in or provide your name and email to leave a reply.":"Log in or provide your name and email to leave a reply.","Log in or provide your name and email to leave a comment.":"Log in or provide your name and email to leave a comment.","Receive web and mobile notifications for posts on this site.":"Receive web and mobile notifications for posts on this site.","Name":"Name","Email (address never made public)":"Email (address never made public)","Website (optional)":"Website (optional)","Leave a reply. (log in optional)":"Leave a reply. (log in optional)","Leave a comment. (log in optional)":"Leave a comment. (log in optional)","Log in to leave a reply.":"Log in to leave a reply.","Log in to leave a comment.":"Log in to leave a comment.","Logged in via %s":"Logged in via %s","Log out":"Log out","Email":"Email","(Address never made public)":"(Address never made public)","Instantly":"Instantly","Daily":"Daily","Reply":"Reply","Comment":"Comment","WordPress":"WordPress","Weekly":"Weekly","Notify me of new posts":"Notify me of new posts","Email me new posts":"Email me new posts","Email me new comments":"Email me new comments","Cancel":"Cancel","Write a comment...":"Write a comment...","Write a reply...":"Write a reply...","Website":"Website","Optional":"Optional","We'll keep you in the loop!":"We'll keep you in the loop!","Loading your comment...":"Loading your comment...","Discover more from":"Discover more from Andrew Wheeler","Subscribe now to keep reading and get access to the full archive.":"Subscribe now to keep reading and get access to the full archive.","Continue reading":"Continue reading","Never miss a beat!":"Never miss a beat!","Interested in getting blog post updates? Simply click the button below to stay in the loop!":"Interested in getting blog post updates? Simply click the button below to stay in the loop!","Enter your email address":"Enter your email address","Subscribe":"Subscribe","Comment sent successfully":"Comment sent successfully","Save my name, email, and website in this browser for the next time I comment.":"Save my name, email, and website in this browser for the next time I comment.","hovercardi18n":{"Edit your profile \u2192":"Edit your profile \u2192","View profile \u2192":"View profile \u2192","Contact":"Contact","Send money":"Send money","Gravatar not found.":"Gravatar not found.","This profile is private.":"This profile is private.","Too Many Requests.":"Too Many Requests.","Internal Server Error.":"Internal Server Error.","Sorry, we are unable to load this Gravatar profile.":"Sorry, we are unable to load this Gravatar profile."},"siteId":30502426,"postId":1854,"mustLogIn":false,"requireNameEmail":true,"commentRegistration":false,"connectURL":"https://andrewpwheeler.wordpress.com/public.api/connect/?action=request\u0026domain=andrewpwheeler.com","logoutURL":"https://andrewpwheeler.wordpress.com/wp-login.php?action=logout\u0026_wpnonce=9959f1b468","homeURL":"https://andrewpwheeler.com/","subscribeToBlog":true,"subscribeToComment":true,"isJetpackCommentsLoggedIn":false,"jetpackUsername":"","jetpackUserId":0,"jetpackSignature":"","jetpackAvatar":"https://0.gravatar.com/avatar/?s=96\u0026amp;d=identicon\u0026amp;r=G","enableBlocks":true,"enableSubscriptionModal":true,"currentLocale":"en","isJetpackComments":false,"allowedBlocks":["core/paragraph","core/list","core/code","core/list-item","core/quote","core/image","core/embed","core/quote","core/code"],"embedNonce":"97b07cb0c6","verbumBundleUrl":"/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/features/verbum-comments/dist/index.js","isRTL":false,"vbeCacheBuster":1771405207,"iframeUniqueId":0,"colorScheme":false}
+//# sourceURL=verbum-settings-js-before
+</script>
+<script data-wp-strategy="defer" defer id="verbum-dynamic-loader-js" src="/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/assets/dynamic-loader.js?m=1772522099i&#038;minify=false&#038;ver=8b5296f9195db92c42e4"></script>
+<script id="sharing-js-js-extra">
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+//# sourceURL=sharing-js-js-extra
+</script>
+<script id="jetpack-script-data-js-before">
+window.JetpackScriptData = {"site":{"host":"wpcom","is_wpcom_platform":true}};
+//# sourceURL=jetpack-script-data-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJyNkNsOgjAMhl/IUYhBvDE+CqnbxMFOWTsJb++CSLwy3jX/of1SmKMwXtqsNMFIIINz2rNIOtqlcsZXIx2ghGTwXAxwWUSbB+NLXHNEOYkizbEUNwMo+4/XP7VXIQFmDg6ZjdxbSKSZ4JaNVbtIMpnIQiHjj8M4GXKaxbGqoS/0u3BPa1j9Af3Fuq54c9ADk1ao1LKOxg/bD67u0nRdezo3bd2ML1Dnc1s='></script>
+<script id="sharing-js-js-after">
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-twitter' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-twitter' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-facebook' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-facebook' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-linkedin' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-linkedin' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomlinkedin', 'menubar=1,resizable=1,width=580,height=450' );
+						return false;
+					}
+				} );
+			} )();
+//# sourceURL=sharing-js-js-after
+</script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/","ext":".png","svgUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?m=1764078722i&ver=7.0-RC2-62280"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
+</script>
+	<iframe src='https://widgets.wp.com/likes/master.html?ver=20260510#ver=20260510' scrolling='no' id='likes-master' name='likes-master' style='display:none;'></iframe>
+	<div id='likes-other-gravatars' role="dialog" aria-hidden="true" tabindex="-1"><div class="likes-text"><span>%d</span></div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+	<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'30502426','blog_tz':'-5','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+		// Prevent sending pageview tracking from WP-Admin pages.
+		_stq.push(['view', {'blog':'30502426','v':'wpcom','tz':'-5','user_id':'0','post':'1854','subd':'andrewpwheeler'}]);
+		_stq.push(['extra', {'crypt':'UE5tW3cvZGQ9cE92bWlUeS9aLVcsTEpBZjhKSFE0ZmtXQXZWND9UUWNVc2Z+UzdzVFFqXz1NRWY5MU4/Nm4rUVBkUnc0aHMsQUwuL2RIU35kZGsxUHZhcjNnWGFaeDFjW2ZReitzMEwmRSVTW2N5LXY3MHomRz1EaDdreWtObFJHMVM3Nl9rZGMsYy96WG5dflc3JnRuczBzMy8mVkldfEk/Sj9HaVZyLzhqL0xnanxXeVRIa05fN3Amay9dZltLLjU2bmZialN+OTgzM3ZNVFIueGxQVFR8NEpyYTBSOHwtbE4uZW1XaEd4NnhpOFQ3LlJVUmhteG52MHouXVczWTNnbm5JNnJERzBGfkdMdT8r'}]);
+_stq.push([ 'clickTrackerInit', '30502426', '1854' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="Etc/GMT+5" data-custom-props="{&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;pub\/comet&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202619"></script> 	
+<script>
+(function() {
+	'use strict';
+
+	const fetches = {};
+	const promises = {};
+	const urls = {
+		'wp-polyfill': '/wp-includes/js/dist/vendor/wp-polyfill.min.js?m=1775575011i&ver=3.15.0',
+		'verbum': '/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.js?m=1777406400i&minify=false&ver=daa565a7d230e522cf9c'
+	};
+	const loaders = {
+		'verbum': () => {
+			fetchExternalScript('wp-polyfill');
+			fetchExternalScript('verbum');
+			promises['wp-polyfill'] = promises['wp-polyfill'] || loadWPScript('wp-polyfill');
+			promises['verbum'] = promises['verbum'] || promises['wp-polyfill'].then( () => loadWPScript('verbum') );
+			return promises['verbum'];
+		},
+		
+	};
+	const scriptExtras = {
+		
+	};
+
+	window.WP_Enqueue_Dynamic_Script = {
+		loadScript: (handle) => {
+			if (!loaders[handle]) {
+				console.error('WP_Enqueue_Dynamic_Script: unregistered script `' + handle + '`.');
+			}
+			return loaders[handle]();
+		}
+	};
+
+	function fetchExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		fetches[handle] = fetches[handle] || fetch(urls[handle], { mode: 'no-cors' });
+		return fetches[handle];
+	}
+
+	function runExtraScript(handle, type, index) {
+		const id = 'wp-enqueue-dynamic-script:' + handle + ':' + type + ':' + (index + 1);
+		const template = document.getElementById(id);
+		if (!template) {
+			return Promise.reject();
+		}
+
+		const script = document.createElement( 'script' );
+		script.innerHTML = template.innerHTML;
+		document.body.appendChild( script );
+		return Promise.resolve();
+	}
+
+	function loadExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		return fetches[handle].then(() => {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement('script');
+				script.onload = () => resolve();
+				script.onerror = (e) => reject(e);
+				script.src = urls[handle];
+				document.body.appendChild(script);
+			});
+		});
+	}
+
+	function loadExtra(handle, pos) {
+		const count = (scriptExtras[handle] && scriptExtras[handle][pos]) || 0;
+		let promise = Promise.resolve();
+
+		for (let i = 0; i < count; i++) {
+			promise = promise.then(() => runExtraScript(handle, pos, i));
+		}
+
+		return promise;
+	}
+
+	function loadWPScript(handle) {
+		// Core loads scripts in this order. See: https://github.com/WordPress/WordPress/blob/a59eb9d39c4fcba834b70c9e8dfd64feeec10ba6/wp-includes/class-wp-scripts.php#L428.
+		return loadExtra(handle, 'translations')
+			.then(() => loadExtra(handle, 'before'))
+			.then(() => loadExternalScript(handle))
+			.then(() => loadExtra(handle, 'after'));
+	}
+} )();
+</script>
+
+</body>
+</html>

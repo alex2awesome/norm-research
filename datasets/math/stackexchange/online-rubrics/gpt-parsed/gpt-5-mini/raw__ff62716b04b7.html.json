@@ -1,0 +1,429 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/ff62716b04b7.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 19508,
+  "output_tokens": 9081,
+  "elapsed_s": 2124.445900166873,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "users and programmers writing GP/PARI scripts (GP interpreter users, PARI developers)",
+    "subtask_short": "programming_in_gp_functions",
+    "subtask_description": "Reference/documentation of GP/PARI specific functions and their semantics, usage notes, caveats, and examples for writing GP scripts and extensions. Focuses on miscellaneous helper functions, I/O, memory, timing, parallel/export behavior, string handling, and installation of C library functions.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "scripting",
+      "reference",
+      "functions"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Strchr (deprecated alias for strchr)",
+        "description": "Deprecated alias for strchr.",
+        "guidance": "Library syntax: GEN pari_strchr(GEN x). Use strchr instead (see strchr entry)."
+      },
+      {
+        "name": "Strexpand (deprecated alias for strexpand)",
+        "description": "Deprecated alias for strexpand.",
+        "guidance": "Library syntax: GEN strexpand(GEN x). Use strexpand instead (see strexpand entry)."
+      },
+      {
+        "name": "Strprintf (deprecated alias for strprintf)",
+        "description": "Deprecated alias for strprintf.",
+        "guidance": "Library syntax: GEN strprintf(const char *fmt, GEN x). Use strprintf instead."
+      },
+      {
+        "name": "Strtex (deprecated alias for strtex)",
+        "description": "Deprecated alias for strtex.",
+        "guidance": "Library syntax: GEN strtex(GEN x). Use strtex instead."
+      },
+      {
+        "name": "addhelp(sym, str)",
+        "description": "Changes the help message for the symbol sym. The string str is expanded on the spot and stored as the online help for sym.",
+        "guidance": "Recommended to document global variables and user functions this way; without addhelp the standard help for user functions consists only of name and definition. Help attached to an alias will never be shown. You can modify built-in help but maintainers would like to know why. Library syntax: void addhelp(const char *sym, const char *str). Example: addhelp(f, \"Square\"); then ?f prints the help text."
+      },
+      {
+        "name": "alarm({s = 0}, {code})",
+        "description": "If code is omitted, trigger an e_ALARM exception after s seconds (wall-clock time), cancelling any previously set alarm; stop a pending alarm if s = 0. If code is present and s>0, evaluate code but abort after s seconds, returning code's value if completed or a t_ERROR object otherwise.",
+        "guidance": "Examples show timing out expensive computations (e.g., factor). Caveats: cannot set a new alarm within another alarm code; in parallel-enabled GP, alarm will prevent launching new tasks but will not interrupt previously launched secondary threads, so alarm may not return immediately. Library syntax: GEN gp_alarm(long s, GEN code = NULL). Use alarm for time-bounded partial operations (example timefact)."
+      },
+      {
+        "name": "alias(newsym, sym)",
+        "description": "Defines the symbol newsym as an alias for the symbol sym. Alias expansion is performed at compilation-time and affects only GP code compiled after the alias command.",
+        "guidance": "Can alias member functions (prefix with '_.'), operators (use their internal name like '_!'). Aliases do not require run-time processing but only affect subsequently compiled code; to get runtime flexibility use variables instead. Sample alias file provided (misc/gpalias). Library syntax: void alias0(const char *newsym, const char *sym)."
+      },
+      {
+        "name": "allocatemem({s = 0})",
+        "description": "Change the stack size after initialization. Argument s must be nonnegative; if s>0 allocate new stack of at least s bytes; if s=0 double current stack size.",
+        "guidance": "Behavior depends on parisizemax/defaults: with parisizemax enabled there are three sizes (parisizemax, parisize, current stack). allocatemem forces temporary stack usage increase up to parisizemax. Deprecated behavior when parisizemax is unset treats allocatemem as synonym for default(parisize,...). Important caveats: allocatemem cannot be used meaningfully inside loops or as part of larger expression sequences \u2014 it causes immediate exit of current sequence and longjmp semantics, silently discarding following instructions. Use cautiously in batch files and interactive sessions. Library syntax: void gp_allocatemem(GEN s = NULL)."
+      },
+      {
+        "name": "apply(f, A)",
+        "description": "Apply closure f to the entries of A. Behavior depends on A's type: scalar -> f(A); polynomial/series -> apply to coefficients; vector/list -> apply to entries and return vector/list; matrix -> apply to entries and return matrix.",
+        "guidance": "Useful to act componentwise when built-ins don't operate on lists; set-notation shortcuts [g(x)|x<-v,f(x)] map to apply/select patterns. Library syntax: genapply(void *E, GEN (*fun)(void*,GEN), GEN a). Examples show applying closures to vectors, matrices, polynomials, lists (lift example)."
+      },
+      {
+        "name": "arity(C)",
+        "description": "Return the arity (number of arguments) of closure C. Variadic arguments are counted as a single argument.",
+        "guidance": "Examples: arity on defined closures including variadic parameter counts. Library syntax: GEN arity0(GEN C)."
+      },
+      {
+        "name": "call(f, A)",
+        "description": "Given vector A = [a1,...,an] and function f, returns evaluation f(a1,...,an). If #A = 1, call(f,A) = apply(f,A)[1]. Variadic arguments are grouped in a vector as the last component of A.",
+        "guidance": "Useful for implementing variadic functions, for passing arguments programmatically, and to call operators by internal names. Example: memoization wrapper using call. Library syntax: GEN call0(GEN f, GEN A)."
+      },
+      {
+        "name": "default({key}, {val})",
+        "description": "Get or set GP defaults. default() lists current defaults and values. If val present, sets default (subject to string expansion). Shortcuts exist for interactive use and display more info.",
+        "guidance": "See sections for list of available defaults and meta shortcuts. Library syntax: GEN default0(const char * key = NULL, const char * val = NULL). Useful to manage session parameters interactively."
+      },
+      {
+        "name": "errname(E)",
+        "description": "Return the type/name of the error message E as a string (e.g., \"e_INV\").",
+        "guidance": "Useful with iferr to inspect error types. Library syntax: GEN errname(GEN E)."
+      },
+      {
+        "name": "error({str}*)",
+        "description": "Output arguments (interpreted as strings) then interrupt the running gp program, returning to input prompt. E.g., error(\"n = \", n, \" is not squarefree!\").",
+        "guidance": "Library syntax: void error0(GEN str). The variadic pari_err(e_USER,...) is usually preferable for user-level errors."
+      },
+      {
+        "name": "export(x{ = ...}, ..., z{ = ...})",
+        "description": "Export variables to the parallel world so they are visible inside parallel sections in place of global variables; exported variables cannot be modified inside a parallel section. export(a) sets variable a; export(a = z) sets exported value without affecting current value.",
+        "guidance": "Use before parallel constructs (e.g., parvector) to avoid mt: please use export(fun) errors. Library syntax: void export(...)."
+      },
+      {
+        "name": "exportall()",
+        "description": "Declare all current dynamic variables as exported variables visible inside parallel sections.",
+        "guidance": "Shortcut to avoid exporting each variable individually. Library syntax: void exportall()."
+      },
+      {
+        "name": "extern(str)",
+        "description": "Run external shell command str immediately and feed its output into gp as if read from a file.",
+        "guidance": "Use to run shell commands and input results directly. Library syntax: GEN gpextern(const char *str)."
+      },
+      {
+        "name": "externstr(str)",
+        "description": "Run external shell command str and return its output as a vector of GP strings, one component per output line.",
+        "guidance": "If secure default is set, function raises an exception. Library syntax: GEN externstr(const char *str)."
+      },
+      {
+        "name": "fileclose(n)",
+        "description": "Close file descriptor n (from fileopen or fileextern). Closing recycles descriptors and avoids running out of descriptors. On files opened for writing, forces write of buffered data.",
+        "guidance": "Quitting gp implicitly calls fileclose on all open descriptors but it is safer to close explicitly to avoid data loss in crashes. Closing a file twice raises an exception. Library syntax: void gp_fileclose(long n)."
+      },
+      {
+        "name": "fileextern(str, {mode = \"r\"})",
+        "description": "Run external command str and return a file descriptor attached to command output (mode \"r\") or input (mode \"w\").",
+        "guidance": "If secure default is set, raises exception. Library syntax: long gp_fileextern(const char *str, const char * mode)."
+      },
+      {
+        "name": "fileflush({n})",
+        "description": "Flush buffered data for file descriptor n to the filesystem; if n omitted, flush all descriptors to output streams.",
+        "guidance": "Useful at synchronization points after large writes and before diagnostics to ensure content is on disk; fileflush invoked implicitly by fileclose. Library syntax: void gp_fileflush0(GEN n = NULL) or gp_fileflush(long n)."
+      },
+      {
+        "name": "fileopen(path, {mode = \"r\"})",
+        "description": "Open file at path and return file descriptor. Modes: \"r\" (read, default), \"w\" (write, discard existing), \"a\" (append).",
+        "guidance": "Must close files to recycle descriptors. In read mode raises exception if file missing or no permission; writing to file not opened for writing raises exception. Library syntax: long gp_fileopen(const char *path, const char * mode)."
+      },
+      {
+        "name": "fileread(n)",
+        "description": "Read a logical line from file descriptor n (as prepared by GP preprocessor); return 0 at EOF.",
+        "guidance": "Logical line may skip blanks/comments and assemble multiline commands. Use filereadstr to read raw lines. Library syntax: GEN gp_fileread(long n)."
+      },
+      {
+        "name": "filereadstr(n)",
+        "description": "Read a raw line from file descriptor n, discarding terminating newline; reads exactly up to next carriage return.",
+        "guidance": "Useful when you need raw input lines rather than gp-preprocessed logical lines. Library syntax: GEN gp_filereadstr(long n)."
+      },
+      {
+        "name": "filewrite(n, s)",
+        "description": "Write string s to file descriptor n, ending with a newline. File must be opened in \"w\" or \"a\" mode. No guarantee data is on disk until fileclose is executed.",
+        "guidance": "write high-level is expensive for many writes due to lack of buffering; low-level fileopen/filewrite/fileclose pattern is more efficient. Use filewrite1 if no trailing newline desired. Closing file later may leave content not yet on disk until fileclose or OS flush. Library syntax: void gp_filewrite(long n, const char *s)."
+      },
+      {
+        "name": "filewrite1(n, s)",
+        "description": "Write string s to file descriptor n without adding a newline; file must be opened in \"w\" or \"a\" mode.",
+        "guidance": "Use Str(s, \"\\n\") or filewrite to add newline if needed. Library syntax: void gp_filewrite1(long n, const char *s)."
+      },
+      {
+        "name": "fingerprint(x, {b = 64})",
+        "description": "Return a b-bit fingerprint of x (b>0; default 64). Not suitable for cryptographic or adversarial use: collisions are easily generated. For objects definable on both 32 and 64-bit architectures, returned value is the same.",
+        "guidance": "Main use is unit tests to check expected outputs. For internal hashtables use ulong hash_GEN(GEN x) which is faster but architecture dependent."
+      },
+      {
+        "name": "fold(f, A)",
+        "description": "Apply closure f of arity 2 fold-wise to entries of A to compute f(...f(f(A[1],A[2]),A[3])...,A[#A]).",
+        "guidance": "Examples include product, nested pairings, function application chains. Library syntax: GEN fold0(GEN f, GEN A)."
+      },
+      {
+        "name": "getabstime()",
+        "description": "Returns CPU time (milliseconds) elapsed since gp startup; reentrant version of gettime.",
+        "guidance": "Useful to measure elapsed times; for wall-clock time use getwalltime. Library syntax: long getabstime()."
+      },
+      {
+        "name": "getcache()",
+        "description": "Returns information about various auto-growing caches: name, size, number of cache misses, largest cache miss and size in bytes.",
+        "guidance": "Lists current caches (Factors, Divisors, H, CorediscF, Dihedral, etc.) and shows growth after computations. Library syntax: GEN getcache()."
+      },
+      {
+        "name": "getenv(s)",
+        "description": "Return value of environment variable s if defined, otherwise 0.",
+        "guidance": "Library syntax: GEN gp_getenv(const char *s)."
+      },
+      {
+        "name": "getheap()",
+        "description": "Returns a two-component row vector: number of objects on heap and amount of memory they occupy (in long words). Useful mainly for debugging.",
+        "guidance": "Library syntax: getheap()."
+      },
+      {
+        "name": "getlocalbitprec()",
+        "description": "Returns the current dynamic bit precision.",
+        "guidance": "Library syntax: long getlocalbitprec(long bitprec)."
+      },
+      {
+        "name": "getlocalprec()",
+        "description": "Returns the current dynamic precision in decimal digits.",
+        "guidance": "Library syntax: long getlocalprec(long prec)."
+      },
+      {
+        "name": "getrand()",
+        "description": "Returns current value of the pseudo-random number generator seed (technical internal state), useful for debugging and reproducing computations. Returned value only usable as argument to setrand.",
+        "guidance": "All gp sessions implicitly start with setrand(1). Use setrand(getwalltime()) or /dev/urandom to vary randomness between sessions. Library syntax: GEN getrand()."
+      },
+      {
+        "name": "getstack()",
+        "description": "Returns current value of top-avma: number of bytes used on the stack. Useful mainly for debugging.",
+        "guidance": "Library syntax: long getstack()."
+      },
+      {
+        "name": "gettime()",
+        "description": "Returns CPU time (milliseconds) used since last call to gettime or start of containing GP instruction, whichever was last.",
+        "guidance": "For reentrant version use getabstime; for wall-clock use getwalltime. Library syntax: long gettime()."
+      },
+      {
+        "name": "getwalltime()",
+        "description": "Returns time in milliseconds since Unix epoch (00:00:00 UTC Thursday 1 January 1970).",
+        "guidance": "Useful for wall-clock measures and seeding randomness (setrand(getwalltime())). Example usage with strtime to print readable durations. Library syntax: GEN getwalltime()."
+      },
+      {
+        "name": "global(list of variables)",
+        "description": "Declare global variables for GP2C; should appear before any use of the variables in a function.",
+        "guidance": "Used when compiling GP to C, to name variables that must be global. Library syntax: global(...)."
+      },
+      {
+        "name": "inline(x, ..., z) (DEPRECATED)",
+        "description": "Declare x,...,z as inline variables which behave like lexically scoped variables but with unlimited scope; scope can be exited with uninline().",
+        "guidance": "Deprecated: use export/unexport instead. When used in GP scripts, recommended to call uninline() before script end to avoid leaking inline variables."
+      },
+      {
+        "name": "input()",
+        "description": "Reads a string interpreted as a GP expression from input (usually keyboard). If sequence of expressions given, returns result of last expression.",
+        "guidance": "Useful with print1 prompt; when using pari.el under Emacs must prompt with same prompt as previous ones. Library syntax: GEN gp_input()."
+      },
+      {
+        "name": "install(name, code, {gpname}, {lib})",
+        "description": "Loads from dynamic library lib the function name and assigns to it gpname in this gp session, with prototype code. If lib omitted, all symbols known to gp (e.g., libpari.so and others) are available. install gives access to nonstatic functions in PARI library and allows adding external functions to gp interpreter.",
+        "guidance": "Prototype format explained: first char indicates return type (i,l,u,v default GEN), letters for argument types (G,&,L,U,s,n), p/b/P to supply precision arguments, and constructs for optional arguments (DG,D&,Dn). Caution: may crash on statically linked systems; test on harmless example first. Re-installing prints warning and updates prototype but will not reload symbol even if library recompiled. Library syntax: void gpinstall(const char *name, const char *code, const char * gpname, const char * lib)."
+      },
+      {
+        "name": "kill(sym)",
+        "description": "Restore symbol sym to undefined status and delete any help messages attached via addhelp. Variable names remain known to interpreter and retain priority ordering; killing does not remove the name from list of variable names.",
+        "guidance": "Killing a user function deletes aliases and installed functions; 'a = 'a' resets variables but does not delete help message and is slower than kill(a). Library syntax: void kill0(const char *sym)."
+      },
+      {
+        "name": "listinsert(~L, x, n)",
+        "description": "Insert object x at position n in list L (t_LIST). Complexity O(#L - n + 1); if n > #L appends x. The ~L denotes in-place modification.",
+        "guidance": "Library syntax: GEN listinsert0(GEN L, GEN x, long n). Examples show listput vs listinsert differences."
+      },
+      {
+        "name": "listpop(~list, {n})",
+        "description": "Remove nth element of list (t_LIST). If n omitted or > length removes last element. If list empty do nothing. Runs in time O(#L - n + 1).",
+        "guidance": "Library syntax: void listpop0(GEN list, long n)."
+      },
+      {
+        "name": "listput(~list, x, {n})",
+        "description": "Set nth element of list to x; if n omitted or greater than length, appends x. Can overwrite existing cell or append. Runs amortized O(1) per insertion across successive insertions.",
+        "guidance": "Prefer list[n] = x for simpler syntax when overwriting. Library syntax: GEN listput0(GEN list, GEN x, long n)."
+      },
+      {
+        "name": "listsort(~L, {flag = 0})",
+        "description": "Sort t_LIST in place according to universal comparison function cmp. If flag nonzero suppress repeated coefficients (remove duplicates).",
+        "guidance": "Sorting in place is faster than vecsort since it avoids copies. setsearch works on sorted list. Library syntax: void listsort(GEN L, long flag)."
+      },
+      {
+        "name": "localbitprec(p)",
+        "description": "Set real precision to p bits in dynamic scope: all computations act as if realbitprecision was p, but the realbitprecision default itself is unaffected and is unmasked when exiting dynamic scope.",
+        "guidance": "Useful to temporarily tighten bit precision; nested scopes work as expected; follows semantics of local not my, so subroutines use local accuracy. Changing realbitprecision in programs is deprecated in favor of localbitprec/localprec. Bit precision rounded to multiples of 64 (32 on 32-bit). Library syntax: void localbitprec(GEN p)."
+      },
+      {
+        "name": "localprec(p)",
+        "description": "Set real precision to p decimal digits in dynamic scope: computations behave as if realprecision was p but default realprecision is unmasked outside scope.",
+        "guidance": "Use localprec instead of changing realprecision inside programs. Nested localprec scopes work; localprec follows semantics of local not my. Library syntax: void localprec(GEN p)."
+      },
+      {
+        "name": "mapapply(~M, x, f, {u})",
+        "description": "Apply closure f to the image y of x by map M and return f(y). Closure f may modify y in place. If M undefined at x and optional u (closure arity 0) present, returns u().",
+        "guidance": "Use to perform computation on a value without copying (fast) or to modify value in place. Example use-case: append to lists stored in a map; maplistput(~M,k,v) example. Library syntax: GEN mapapply(GEN M, GEN x, GEN f, GEN u = NULL)."
+      },
+      {
+        "name": "printf0 / pari_printf",
+        "description": "printf0(fmt, x) prints according to fmt following GP string rules; variadic pari_printf(const char *fmt, ...) is usually preferable.",
+        "guidance": "Formatting follows printf conventions and GP string conversion rules; library syntax void printf0(const char *fmt, GEN x)."
+      },
+      {
+        "name": "printp({str}*)",
+        "description": "Output arguments in prettymatrix format with newline; arguments converted to strings per GP string rules.",
+        "guidance": "Use printp to display matrices in prettier block form. Library syntax: void printp(GEN str)."
+      },
+      {
+        "name": "printsep(sep, {str}*)",
+        "description": "Output arguments in raw format separated by sep, ending with newline. Arguments converted to strings per GP rules.",
+        "guidance": "printsep1 suppresses newline. Library syntax: void printsep(const char *sep, GEN str)."
+      },
+      {
+        "name": "printsep1(sep, {str}*)",
+        "description": "Output arguments in raw format separated by sep without trailing newline.",
+        "guidance": "Useful to combine with further prints on same line. Library syntax: void printsep1(const char *sep, GEN str)."
+      },
+      {
+        "name": "printtex({str}*)",
+        "description": "Outputs arguments in TeX format to standard output; arguments converted to strings per GP string rules. Output intended for TeX manuscripts.",
+        "guidance": "To write TeX to file use writetex or enable log default. Library syntax: void printtex(GEN str)."
+      },
+      {
+        "name": "quit({status = 0})",
+        "description": "Exit gp and return to system with exit status (small integer). System sees status mod 256.",
+        "guidance": "Nonzero status typically indicates abnormal termination. Library syntax: quit(status)."
+      },
+      {
+        "name": "read({filename})",
+        "description": "Read in the file filename (subject to string expansion). If omitted, re-read last file fed into gp. Return value is result of last expression evaluated. If file is GP binary file, file is loaded and last object returned.",
+        "guidance": "If file contains allocatemem statement, read instructions should be alone (allocatemem has side-effects). Variants: readvec reads whole file at once; fileopen/fileread or filereadstr to process line by line. Library syntax: GEN gp_read_file(const char * filename)."
+      },
+      {
+        "name": "readstr({filename})",
+        "description": "Read file filename and return vector of GP strings, each component one line from file. If filename omitted, re-reads last file.",
+        "guidance": "Library syntax: GEN readstr(const char * filename)."
+      },
+      {
+        "name": "readvec({filename})",
+        "description": "Read file filename and return a vector whose components are the evaluation of all sequences of instructions contained in the file. If filename omitted, re-reads last file.",
+        "guidance": "Example: file with lines producing 1 2 3: readvec returns [1,2,3]. Library syntax: GEN gp_readvec_file(const char * filename)."
+      },
+      {
+        "name": "select(f, A, {flag = 0})",
+        "description": "Given vector/list A and closure f, select returns elements x of A such that f(x) is nonzero. If A is matrix, selects columns and returns matrix of selected columns. If flag=1 returns indices of selected elements instead of elements (indirect selection).",
+        "guidance": "Set-notation shortcuts available for common patterns. Use select(x->x, M) to select nonzero entries. Replacing f by negation performs removing. Library syntax: genselect(void *E, long (*fun)(void*,GEN), GEN a) or genindexselect for flag=1."
+      },
+      {
+        "name": "self()",
+        "description": "Return the calling function or closure as a t_CLOSURE object. Useful for anonymous recursive functions.",
+        "guidance": "Examples demonstrate factorial and Fibonacci definitions using self(). Library syntax: GEN pari_self()."
+      },
+      {
+        "name": "setrand(n)",
+        "description": "Reseed random number generator with seed n (0 < n < 2^64). No value returned. Seeds deterministic state array enabling reproducible runs.",
+        "guidance": "All sessions start with setrand(1); setrand(getwalltime()) for varying streams; record state via getrand() to replay exact computations. Library syntax: void setrand(GEN n)."
+      },
+      {
+        "name": "strchr(x)",
+        "description": "Convert integer or vector of integers x to a string translating each integer (1..255) into ASCII characters.",
+        "guidance": "Vecsmall(\"hello world\") returns vector of ASCII codes; strchr(Vecsmall(...)) reconverts to string. Library syntax: GEN pari_strchr(GEN x)."
+      },
+      {
+        "name": "strexpand({x}*)",
+        "description": "Convert its argument list into a single character string (empty string if omitted) and perform environment expansion.",
+        "guidance": "Useful to read environment variables and build filenames; individual arguments read in string context. Library syntax: GEN strexpand(GEN x)."
+      },
+      {
+        "name": "strjoin(v, {p = \"\"})",
+        "description": "Join strings in vector v separating them with delimiter p. Reverse operation is strsplit.",
+        "guidance": "Example: strjoin([\"abc\",\"def\",\"ghi\"], \"/\") -> \"abc/def/ghi\". Library syntax: GEN strjoin(GEN v, GEN p = NULL)."
+      },
+      {
+        "name": "strprintf(fmt, {x}*)",
+        "description": "Return a string built from arguments according to format fmt (like printf), with GP string conversion rules.",
+        "guidance": "See printf for conversion specifications. Use for building formatted filenames, messages. Library syntax: GEN strprintf(const char *fmt, GEN x)."
+      },
+      {
+        "name": "strsplit(s, {p = \"\"})",
+        "description": "Split string s into vector of strings with delimiter p; if p empty or omitted, split into characters. If s starts/ends with pattern, first/last entry is empty string.",
+        "guidance": "Examples demonstrate behavior for patterns and empty separators. Library syntax: GEN strsplit(GEN s, GEN p = NULL)."
+      },
+      {
+        "name": "strtex({x}*)",
+        "description": "Translate arguments to TeX format and concatenate into a single character string. Arguments read in string context.",
+        "guidance": "TeX output was designed for plain TeX; notes on LaTeX compatibility and required style file adjustments provided (e.g., \\\\frac vs \\over). Library syntax: GEN strtex(GEN x)."
+      },
+      {
+        "name": "strtime(t)",
+        "description": "Return string describing time t in milliseconds in GP timer format (e.g., \"3h, 25min, 45,678 ms\").",
+        "guidance": "Useful to present durations from getabstime/gettime. Library syntax: GEN strtime(long t)."
+      },
+      {
+        "name": "system(str)",
+        "description": "Execute system command str; output written to standard output (does not go to logfile); returns shell return value (system-dependent).",
+        "guidance": "Beware UNIX shell convention: true is 0, false non-0 (opposite from GP boolean). Library syntax: long gpsystem(const char *str)."
+      },
+      {
+        "name": "type(x)",
+        "description": "Returns internal type name of PARI object x as a string (e.g., \"t_INT\").",
+        "guidance": "Useful in GP scripts to inspect types; metacommand \\t lists type names. Library syntax: GEN type0(GEN x). Use typ macro for numeric code."
+      },
+      {
+        "name": "unexport(x, ..., z)",
+        "description": "Remove x,...,z from exported variables to the parallel world.",
+        "guidance": "Reverse of export; manage exported variable list for parallel sections. Library syntax: void unexport(...)."
+      },
+      {
+        "name": "unexportall()",
+        "description": "Empty the list of exported variables (remove all exports).",
+        "guidance": "Use to clear export list. Library syntax: void unexportall()."
+      },
+      {
+        "name": "uninline() (DEPRECATED)",
+        "description": "Exit scope of all current inline variables. Deprecated: use export/unexport.",
+        "guidance": "Avoid using; provided for backward compatibility."
+      },
+      {
+        "name": "version()",
+        "description": "Return current version number as t_VEC with three integer components (major, minor, patchlevel); development builds may include additional components (commit counts, git hash).",
+        "guidance": "Useful to compare versions programmatically using lex. Example: [M,m,p] = version(); printf(...) to compose version string. Library syntax: GEN pari_version()."
+      },
+      {
+        "name": "warning({str}*)",
+        "description": "Output message \"user warning\" and the argument list (each interpreted as string). If colors enabled will render differently.",
+        "guidance": "Use to inform user about nonfatal conditions. Library syntax: void warning0(GEN str)."
+      },
+      {
+        "name": "whatnow(key)",
+        "description": "If key names a function present in GP version 1.39.15, outputs new function name and syntax if changed. Functions introduced or modified since then are recognized; if function removed, indicates it no longer exists.",
+        "guidance": "Helps migrate old scripts to new GP function names/syntax. Example outputs include mapping old mu to moebius. Use when updating legacy code."
+      },
+      {
+        "name": "write(filename, {str}*)",
+        "description": "Append arguments to filename and append a newline (same output as print).",
+        "guidance": "High-level write is expensive for many writes (no buffering); prefer low-level fileopen/filewrite/fileclose for performance. Library syntax: void write0(const char *filename, GEN str)."
+      },
+      {
+        "name": "write1(filename, {str}*)",
+        "description": "Append arguments to filename without trailing newline (same output as print1).",
+        "guidance": "Library syntax: void write1(const char *filename, GEN str)."
+      },
+      {
+        "name": "writebin(filename, {x})",
+        "description": "Write object x in binary format to filename (append). Binary format stores exact internal structure, faster to save/load than text. If x omitted saves all user variables with names. Binary file can be recognized by read or \\r.",
+        "guidance": "Binary files are architecture dependent and compatibility with future GP versions is not guaranteed. Avoid for long-term storage. Installed functions and history objects cannot be saved. Can compress with .gz. Library syntax: void gpwritebin(const char *filename, GEN x = NULL)."
+      },
+      {
+        "name": "writetex(filename, {str}*)",
+        "description": "Write remaining arguments to filename in TeX format (like write but TeX); equivalent to calling strtex on arguments and writing them to file.",
+        "guidance": "Use for exporting TeX-formatted GP outputs to files. Library syntax: void writetex(const char *filename, GEN str)."
+      }
+    ]
+  }
+}

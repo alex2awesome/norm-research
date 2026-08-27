@@ -1,0 +1,149 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_faba7c6eaa6c.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18831,
+  "output_tokens": 4210,
+  "elapsed_s": 1417.125425167149,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and engineers building PRMs, dataset creators for LLM reasoning and formal-verification pipelines",
+    "subtask_short": "PRM training data synthesis",
+    "subtask_description": "Creating step-level labeled training data for Process Reward Models (PRMs) by converting LLM-generated formal reasoning traces into binary correct/incorrect labels using formal verification tools, and using those labels to fine-tune PRMs and evaluate them with Best-of-K and step-level metrics.",
+    "subtask_keywords": [
+      "prm",
+      "formal_verification",
+      "dataset_synthesis",
+      "step_level_labels",
+      "llm_fine-tuning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Step-level binary labels (correct/incorrect)",
+        "description": "Assign step-level error labels [ys1, ys2, ..., ysk] \u2208 {0,1}^k which indicate whether each individual reasoning step is correct (1) or incorrect (0).",
+        "guidance": "The paper uses binary labels as the supervision signal for PRM training; labels are balanced in FOVER-40K (50% correct / 50% incorrect). Training uses cross-entropy on these labels and PRMs output the token \u201ccorrect\u201d or \u201cincorrect\u201d per step."
+      },
+      {
+        "name": "Use formal verification tools for accurate label annotation",
+        "description": "Use automated formal verification tools (e.g., Z3 for first-order/SMT, Isabelle/HOL for theorem proving) to assign step-level error labels automatically instead of human annotation or Monte Carlo roll-outs.",
+        "guidance": "FormalVerification(p, [s1...sk]) outputs ysi = 1 if step si is correct, 0 otherwise. Example: unsatisfiable combination of premises \u2227 \u00achypothesis implies entailment confirmed by SAT/SMT solver. Emphasized benefits: accurate annotation, no human annotation, fewer LLM calls."
+      },
+      {
+        "name": "Generate formal solutions in formats compatible with verification tools",
+        "description": "LLM-generated solutions must follow a syntax and format that can be parsed/checked by the chosen formal verification tool (Isabelle or Z3).",
+        "guidance": "Use few-shot demonstrations to guide format; generate multiple solutions until one has valid format; filter out invalid formats (e.g., illegal symbols) before verification. The pipeline includes format verification and conversion steps; invalid-format proofs are discarded or corrected."
+      },
+      {
+        "name": "Step-level formal verification (independent per-step checks)",
+        "description": "Verify correctness of individual reasoning steps independently by checking that each step logically follows from the provided context and preceding (assumed-correct) results.",
+        "guidance": "For logic tasks, check satisfiability of premises \u2227 preceding results \u2227 \u00ac(step conclusion). For theorem-proving with Isabelle, insert 'sorry' in all but the step under test to type-check the step syntactically and semantically, running Isabelle once per step to determine correctness."
+      },
+      {
+        "name": "Handle format parsing with isolated syntactic checking (Isabelle 'sorry' strategy)",
+        "description": "Use Isabelle's 'sorry' placeholder to allow syntactic/step parsing when full proof is incomplete, enabling per-step checking even if other steps are invalid.",
+        "guidance": "Insert 'sorry' in all steps except the one being verified so Isabelle can type-check and parse that step. Also use the 'sorry' trick to filter syntactically invalid outputs during format verification."
+      },
+      {
+        "name": "Filter and discard invalid-format proofs",
+        "description": "Detect and remove proofs that cannot be parsed by the verification tool (e.g., illegal symbols or invalid syntax), rather than attempting to label them.",
+        "guidance": "Format verification returns errors (e.g., Inner syntax error). The pipeline discards or retries generation until a syntactically valid proof is obtained; invalid-format items are not given labels."
+      },
+      {
+        "name": "Combine step-independent verification with solution-level checks for assumption-related errors",
+        "description": "Recognize that step-independent verification may miss errors that depend on incorrect assumptions or discharged assumptions; therefore, combine with solution-level verification to identify final-step errors related to assumptions.",
+        "guidance": "Example limitation: proofs that use an undischarged assumption may pass step-independent checks but fail solution-level verification. The suggested remedy is to combine both verification modes to catch such mistakes."
+      },
+      {
+        "name": "Balanced labels in training data",
+        "description": "Construct training datasets with balanced proportions of 'correct' and 'incorrect' step labels (FOVER-40K has 50% error rate).",
+        "guidance": "During training set construction and fine-tuning, use mechanisms like mask_history: True in LLaMA-Factory to use only the last step if needed and ensure label balance for stable PRM training."
+      },
+      {
+        "name": "Training objective and output convention for PRMs",
+        "description": "Fine-tune LLM-based PRMs on the step-level binary classification task with cross-entropy loss; PRMs are implemented as models that output per-step probabilities for the token 'correct'.",
+        "guidance": "Loss L = sum_i (ysi log rsi + (1-ysi) log(1-rsi)). Implementation detail: fine-tune in text-generation mode to output 'correct'/'incorrect'; extract logits for those tokens and apply softmax to get step-level score rsi."
+      },
+      {
+        "name": "Input / postprocessing format for PRM inference",
+        "description": "Provide each step as a conversation-style input where the expected output is a single token 'correct' or 'incorrect'; during inference extract logits immediately preceding the dummy labels and compute probability for 'correct'.",
+        "guidance": "This format allows extracting per-step logits in causal LLMs. For other PRMs with different token conventions (e.g., '+'/'-'), substitute tokens accordingly. Use softmax over the two target tokens for scoring."
+      },
+      {
+        "name": "Best-of-K selection protocol",
+        "description": "Use Best-of-K to evaluate PRMs by generating K candidate solutions per problem and using the PRM to score each solution; the solution score is the minimum per-step score across all steps, and the highest-scoring solution is selected.",
+        "guidance": "Standard in PRM evaluation: generate K=7 solutions with few-shot prompts and temperature 0.5; for each candidate compute per-step 'correct' probability and choose candidate with maximum min-step probability. Evaluate selected solution accuracy on downstream benchmarks."
+      },
+      {
+        "name": "Best-of-K evaluation settings & sampling",
+        "description": "When reporting Best-of-K results, generate K=7 step-by-step solutions with few-shot demonstrations and temperature 0.5; evaluate on 250 randomly sampled examples per dataset.",
+        "guidance": "Follow prior work (Cobbe et al., 2021; Li et al., 2023) for consistency. Use dataset-specific prompt engineering (line breaks between steps, few-shot examples per task)."
+      },
+      {
+        "name": "Step-level verification evaluation metric (AUROC)",
+        "description": "Measure PRM performance on step-level binary classification (error detection) using AUROC on datasets with human-annotated step labels (e.g., ProcessBench).",
+        "guidance": "ProcessBench includes labels only for the earliest error in each trace; use steps up to the first error for evaluation. Report AUROC per benchmark and averaged metrics."
+      },
+      {
+        "name": "Best-of-K performance metric (accuracy) on reasoning benchmarks",
+        "description": "Report Best-of-K selection accuracy (e.g., percentage of problems where the selected candidate is correct) on reasoning benchmarks such as GSM8K, MATH, AQuA-RAT, AIME, FOLIO, LogicNLI, ANLI, HANS, MMLU, BBH.",
+        "guidance": "Report per-benchmark and average Best-of-K accuracy, and compare to baseline PRMs and prior PRMs. Use consistent example sampling and prompt settings."
+      },
+      {
+        "name": "Statistical significance testing",
+        "description": "Assess whether improvements over baselines are statistically significant using paired bootstrap tests, reporting significance at p < 0.05.",
+        "guidance": "The paper marks statistically significant improvements with an asterisk (p < 0.05, paired bootstrap). Use paired bootstrap to compare Best-of-K or AUROC improvements."
+      },
+      {
+        "name": "Efficiency criterion: minimize number of LLM calls per solution for labeling",
+        "description": "Prefer data-creation methods that require fewer LLM calls per step/solution (FOVER requires 1 LLM call per solution + verification, whereas Monte Carlo roll-outs require multiple continuations e.g., 8 \u00d7 #steps).",
+        "guidance": "Table 4 contrasts methods: MC roll-outs (Math-Shepherd) require multiple LLM calls per step, leading to high compute; FOVER needs a single LLM generation per solution and uses automated verification, reducing computational cost."
+      },
+      {
+        "name": "Avoid reliance on stronger LLMs for annotation",
+        "description": "Prefer annotation pipelines that do not require using stronger models as judges to produce labels (i.e., do not distill stronger-LM judgments).",
+        "guidance": "FOVER's verification-based labels do not require stronger LLMs; alternatives that use stronger LLM annotators risk merely distilling other models rather than producing independently verified labels."
+      },
+      {
+        "name": "No human annotation preference",
+        "description": "Aim to construct PRM training data without human annotation to reduce cost and inter-annotator disagreement.",
+        "guidance": "Human annotation is costly and suffers from low inter-annotator agreement (e.g., discarding 30% of annotated solutions in prior work). FOVER seeks to eliminate human labels by using formal verification."
+      },
+      {
+        "name": "Label accuracy as a desideratum",
+        "description": "Training data labels should be accurate (reflecting true step correctness) to produce effective PRMs.",
+        "guidance": "Formal verification provides accurate deterministic judgments (unsatisfiable/satisfiable checks, proof validity). The paper emphasizes accuracy of formally-verified labels relative to noisy Monte Carlo labels or heuristic perturbations."
+      },
+      {
+        "name": "Dataset selection criteria (diversity, simplicity, generalization)",
+        "description": "Select source problems for formal-data construction based on diversity of reasoning forms, syntactic simplicity for verification, and expected generalization to informal tasks.",
+        "guidance": "FOVER selects FLDx2 for formal logic due to diversity and GSM8K-level math for simplicity and generalization considerations. When designing datasets, balance expressivity (diverse deductive rules) and tractability for verification."
+      },
+      {
+        "name": "Training regime and hyperparameters",
+        "description": "Fine-tune all model parameters (no parameter-efficient adapters used), use AdamW optimizer, linear warmup/decay, epoch and batch settings as chosen by validation.",
+        "guidance": "The authors used 1 epoch, batch size 32, learning rate selection based on validation Best-of-K across candidate LR values (1e-6 to 1e-5). While implementation details, these choices are prescribed as the training setup for PRMs."
+      },
+      {
+        "name": "Evaluation on unseen tasks to measure cross-task generalization",
+        "description": "Evaluate PRMs on tasks substantially different from training tasks (e.g., NLI, BBH, MMLU-Pro-NoMath) to measure cross-task generalization.",
+        "guidance": "FOVER-PRMs are validated on unseen tasks and compared against baseline PRMs and existing PRMs to show formal-to-informal transfer and cross-task generalization."
+      },
+      {
+        "name": "Robustness to backbone model strength",
+        "description": "Verify that PRMs trained on FOVER data constructed from weaker models still improve or are comparable when used with stronger backbone LLMs.",
+        "guidance": "The paper evaluates Qwen 3 4B (stronger model) fine-tuned on FOVER-40K generated by weaker models and reports improved or comparable Best-of-K performance across benchmarks, indicating robustness."
+      },
+      {
+        "name": "Data-efficiency desideratum",
+        "description": "Aim for datasets where relatively small subsets already give competitive performance (e.g., 10K instances comparable to 40K).",
+        "guidance": "Ablation shows PRMs trained on 10K instances of FOVER-40K already achieve performance comparable to full dataset, suggesting data-efficient label construction via formal verification."
+      },
+      {
+        "name": "Computational resource and verification throughput considerations",
+        "description": "Design verification pipelines to be CPU-parallelizable and fast: Z3 verifies formal-logic datasets quickly; Isabelle verification per step should be performant when parallelized.",
+        "guidance": "Reported runtimes: Z3 verifies all datasets in less than 10 minutes (single process); Isabelle verifies each step \u22483 seconds, with annotation using 40 parallel Isabelle processes on multi-core CPUs. Use parallel CPU runs for scalability."
+      }
+    ]
+  }
+}

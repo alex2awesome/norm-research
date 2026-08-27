@@ -1,0 +1,799 @@
+{
+  "bench": "livebench",
+  "arm": "unitrecomb",
+  "task_lm": "openai/Qwen3-8B",
+  "regression_flag": false,
+  "budget_calls": 40000,
+  "n_test": 126,
+  "max_tokens": 8000,
+  "top_k": 20,
+  "prefix_cap": 48,
+  "run_tag": "v5sk2",
+  "robust_answer_extract": false,
+  "seed_test": 0.5635,
+  "best_test": 0.619,
+  "best_candidate": {
+    "predict": "You are tasked with solving mathematical problems and strictly adhering to specific output formats. Read the provided question carefully and determine the required format for your response.\n\n**Task 1: Direct Mathematical Answer**\nIf the question asks for a direct mathematical answer (e.g., completing the square, finding a GCD, calculating a determinant):\n1. Provide clear, step-by-step reasoning.\n2. Put your final answer in LaTeX inside a `$\\boxed{}$` (for example, `$\\boxed{5 \\sqrt[6]{-3} \\sqrt[3]{7} 5^{2/5}}$`).\n\n**Task 2: Matching Missing Formula Tags**\nIf the question provides a text with missing formula tags (e.g., `<missing 1>`) and a list of math expressions in the format `<expression Y> = $<latex code>$`:\n1. Think step by step to deduce which expression correctly fills each missing tag based on the mathematical context and structural equivalence.\n2. Pay close attention to exact wording and partial text matches. Even if a variable like `<missing 1>` appears multiple times, you must map each instance precisely to its unique corresponding expression identifier based on the surrounding context. \n3. Watch out for formatting artifacts or OCR errors in the expressions (e.g., `d<ab=n` likely means `d = ab = n`, or an unclosed math delimiter). Read past these typos to interpret the mathematical meaning accurately.\n4. Your final response MUST strictly follow this format:\n\n<Detailed reasoning>\n\nAnswer: <comma separated list of numbers representing expression identifiers>\n\n**Domain-Specific Factual Knowledge & Generalizable Strategies:**\nWhen evaluating mathematical contexts, use the following principles to guide your deductions:\n- **Cyclotomic Polynomials & Roots of Unity:** \n  - The $p$-th roots of unity can be defined by the polynomial $1 + x + \\ldots + x^{p-1}$. \n  - The product of $(x-s)$ over all $p$-th roots of unity $s$ (excluding $1$) yields the polynomial $1 + x + \\ldots + x^{p-1}$. Both the product form and the summation form are mathematically equivalent and can be interchangeably matched depending on the phrasing of the missing context.\n  - If a polynomial of degree less than $p$ evaluates to zero or shares roots with the complete set of roots of unity, it must either be identically zero or equal to the cyclotomic polynomial $1 + x + \\ldots + x^{p-1}$.\n  - Do not equate a function name with its full functional equation (e.g., if text mentions a factor \"f(x)\", match it to the expression containing \"f(x)\", not the equation defining it).\n- **Modular Arithmetic & Grid Rearrangement:**\n  - In problems involving grids and modular arithmetic over a prime $p$, if a function $f$ is identically zero, common differences $d_i$ might never be divisible by $p$. This ensures all residues are represented uniquely.\n  - Conversely, if a condition like $f(x) = 1 + x + \\ldots + x^{p-1}$ holds, then $p$ might always divide the common difference $d_i$. This forces elements in an arithmetic sequence within the grid to share the same residue $\\pmod{p}$, meaning entire rows or columns may represent a single residue class.\n  - For composites $n = ab$, rearranging grids into valid arithmetic sequences often leads to contradictions (e.g., elements falling into impossible previous rows or columns), proving only primes satisfy certain grid hypotheses.\n- **Divisors of Composite Numbers:**\n  - When evaluating ordered tuples of divisors for a composite number $n$ with at least two prime factors $p$ and $q$ (where $p < q$), the sequence typically begins with powers of the smallest prime: $(1, p, p^2, \\dots, p^a, q, \\dots)$. \n  - Divisibility conditions (like $d_i \\mid d_{i+1} + d_{i+2}$) often force $a=1$, making the first three divisors $(1, p, q)$.\n  - Due to the symmetric property $d_i \\cdot d_{k+1-i} = n$, the last three divisors must then be $(\\frac{n}{q}, \\frac{n}{p}, n)$.\n- **Greens Functions & Boundary Value Problems:**\n  - For differential equations $L[y] = f(x)$ with boundary conditions $y(a) = \\alpha$ and $y(b) = \\beta$, the solution can be represented as $y(x) = \\alpha u(x) + \\beta v(x) + \\int_a^b G(x, t) f(t) dt$, where $u(x)$ and $v(x)$ are solutions to the homogeneous equation ($L[y] = 0$) satisfying $u(a) = 1, u(b) = 0$ and $v(a) = 0, v(b) = 1$.\n  - The Greens function $G(x, t)$ is constructed piecewise, typically as $G(x, t) = c_1 y_1(x) + c_2 y_2(x)$ for $a \\le x < t$ and $G(x, t) = c_3 y_1(x) + c_4 y_2(x)$ for $t < x \\le b$, where $y_1$ and $y_2$ are linearly independent solutions to the homogeneous equation.\n- **Linear Algebra & Matrix Properties:**\n  - For a 2\u00d72 matrix $\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$, the determinant is calculated as $ad - bc$. \n  - For any upper or lower triangular matrix (where all elements below or above the main diagonal are zero), the determinant is simply the product of the diagonal entries.\n- **Greatest Common Divisor (GCD) of Rationals:**\n  - To find the GCD of a set containing fractions or rational numbers, first eliminate the denominators by multiplying all elements by the least common multiple (LCM) of their denominators to convert them into integers.\n  - Next, find the GCD of these scaled integers.\n  - Finally, divide this GCD by the original LCM to obtain the GCD of the original set of rational numbers."
+  },
+  "units": {
+    "n_llm_suggested": 60,
+    "n_pool_used": 128,
+    "select_init": 0.4815,
+    "marginals": [
+      {
+        "module": "predict",
+        "unit": "Explicitly verify that your final output for Task 2 exactly matches the required template: a detailed reasoning section followed by a newline, 'Answer: ', and a strictly comma-separated list of numbers.",
+        "delta": 0.16050000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For Task 2, independently determine the worst-case scenario for assigning a specific expression to a missing tag, calculating the 'damage' (number of subsequent mismatched variables) if that choice were incorrect, and select the tag with the lowest catastrophic potential.",
+        "delta": 0.16050000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the question asks for an exact mathematical calculation (such as variance), compute the exact fractional or symbolic result without converting it to a decimal approximation.",
+        "delta": 0.16050000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Always provide clear, step-by-step reasoning prior to your final formatted answer to demonstrate the logical progression of your mathematical deductions.",
+        "delta": 0.16050000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When evaluating ordered tuples of divisors for a composite number $n$ with at least two prime factors $p$ and $q$ (where $p < q$), the sequence typically begins with powers of the smallest prime: $(1, p, p^2, \\dots, p^a, q, \\dots)$.",
+        "delta": 0.16050000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Greens Functions & Boundary Value Problems:",
+        "delta": 0.16050000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "# Domain Knowledge & Niche Facts (Use if relevant):",
+        "delta": 0.16050000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "For example, $36 \\sqrt[5]{665500}$ is mathematically equivalent to $36 \\sqrt[5]{2} \\cdot 5^{4/5} \\cdot 11^{3/5}$.",
+        "delta": 0.16050000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "When encountering algebraic fractions, always verify that you are not dividing by zero and state any necessary domain restrictions explicitly to ensure the mathematical validity of your steps.",
+        "delta": 0.14810000000000006,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When evaluating limits or derivatives, explicitly write out the limit laws or differentiation rules (e.g., quotient rule, chain rule) you are applying before computing the final value.",
+        "delta": 0.14810000000000006,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When parsing expression lists for Task 2, mentally auto-correct OCR artifacts or formatting typos (such as 'd<ab=n' to 'd = ab = n' or ',-' to a missing prime exponent) before matching them to the missing tags.",
+        "delta": 0.14810000000000006,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Never output unformatted lists for Task 2; the final line of your response must strictly begin with 'Answer: ' followed immediately by the comma-separated list of identifier numbers, with no trailing punctuation or extra words.",
+        "delta": 0.14810000000000006,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "In Task 2, rank potential expression matches by comparing exact vocabulary and structural phrasing in the surrounding text, prioritizing exact variable name matches over loose mathematical equivalences.",
+        "delta": 0.14810000000000006,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the question provides multiple-choice options, you must output only the letter of the correct option (e.g., 'A', 'B', 'C', 'D', or 'E').",
+        "delta": 0.14810000000000006,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Put your final answer in LaTeX inside a `$\\boxed{}$` (for example, `$\\boxed{5 \\sqrt[6]{-3} \\sqrt[3]{7} 5^{2/5}}$`).",
+        "delta": 0.14810000000000006,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "This ensures all residues are represented uniquely.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "For a 2\u00d72 matrix $\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}$, the determinant is calculated as $ad - bc$.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "To find the GCD of a set containing fractions or rational numbers, first eliminate the denominators by multiplying all elements by the least common multiple (LCM) of their denominators to convert them into integers.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Next, find the GCD of these scaled integers.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Placing the final answer in a `\\boxed{}`.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Format the Output**: Your output must strictly contain exactly two sections: `### reasoning` and `### answer`.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Three-Legged Race Record**: The world record for completing a 5000m three-legged race is 19 minutes and 6 seconds, set by Damian Thacker and Luke Symonds in Sheffield in 2016.",
+        "delta": 0.14810000000000006,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "After deriving your initial answer, take a moment to double-check all arithmetic operations, such as carrying over numbers, negative signs, and factorization, for simple computational errors.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Pay extremely close attention to whether the problem asks for a positive integer solution, a non-negative integer, or a complex number, and restrict your problem-solving space accordingly.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before attempting to solve a problem, explicitly categorize it as either Task 1 (Direct Answer) or Task 2 (Missing Formula Tags); if the prompt contains '<missing>' or '<expression>', you must use the exact Task 2 output format, otherwise default to Task 1.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If solving a composite number divisor sequence (Task 1) or matching one (Task 2), explicitly apply the symmetric property $d_i \\cdot d_{k+1-i} = n$ to verify that the last three divisors correctly mirror the first three as $(n/q, n/p, n)$.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For any grid modular arithmetic problem, explicitly check whether the function evaluates to identically zero or to the cyclotomic polynomial $1 + x + ... + x^{p-1}$, as this strictly dictates whether differences are non-divisible by $p$ or force rows into single residues.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before outputting a response for Task 1, re-evaluate the mathematical steps using an alternative method or substituting the final value back into the original problem conditions to ensure absolute correctness.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For Task 2, cross-reference every assigned expression identifier against the original text to ensure no `<missing X>` tags were skipped, duplicated, or mismatched due to similar wording.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before generating your final response, explicitly invert the problem constraints to identify what an invalid answer would look like, and dedicate one sentence to explaining why your proposed solution avoids this invalid state.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When matching masked formulae, use the mathematical context of the provided solution text to logically deduce which expression identifier fits each missing tag.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When determining missing divisors of a composite number $n$ with prime factors $p$ and $q$, use the symmetric property $d_i \\cdot d_{k+1-i} = n$ to map corresponding expressions.",
+        "delta": 0.13579999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Task 1: Direct Mathematical Answer",
+        "delta": 0.13579999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Answer: <comma separated list of numbers representing expression identifiers>",
+        "delta": 0.13579999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Both the product form and the summation form are mathematically equivalent and can be interchangeably matched depending on the phrasing of the missing context.",
+        "delta": 0.13579999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "The Greens function $G(x, t)$ is constructed piecewise, typically as $G(x, t) = c_1 y_1(x) + c_2 y_2(x)$ for $a \\le x < t$ and $G(x, t) = c_3 y_1(x) + c_4 y_2(x)$ for $t < x \\le b$, where $y_1$ and $y_2$ are linearly independent solutions to the homogeneous equation.",
+        "delta": 0.13579999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Any other explicit formatting requests.",
+        "delta": 0.13579999999999998,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Under `### reasoning`, provide your step-by-step logical deductions and calculations.",
+        "delta": 0.13579999999999998,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "When a question involves prime factorizations and roots, it is highly recommended to leave your final answer in terms of the prime factors raised to fractional exponents (e.g., $36 \\cdot 2^{1/5} \\cdot 5^{4/5} \\cdot 11^{3/5}$) rather than multiplying them under a single radical.",
+        "delta": 0.13579999999999998,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Always cross-reference the final derived mathematical answer with the original constraints of the problem to ensure no extraneous solutions were introduced during operations like squaring both sides.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When dealing with polynomials, explicitly state the multiplicities of the roots and consider Vieta's formulas as a strategic shortcut if the sum or product of roots is required.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "After finding a candidate set of divisors that satisfy a condition, verify the condition against the symmetric property of the divisors to guarantee the entire set is completely valid.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For differential equations, explicitly state the characteristic equation and clearly identify whether the roots are real and distinct, real and repeated, or complex conjugates before writing the general solution.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For Task 1, ensure that the mathematical expression inside the `$\\boxed{}` environment exactly matches the requested variable, sign, and format (e.g., do not provide a positive decimal if the exact simplified negative fraction is required).",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the mathematical problem involves an equation with a restricted domain or explicit boundary conditions, explicitly verify that your derived solution does not violate these initial constraints.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the question asks you to 'take your best guess' because you cannot determine the answer, strictly follow this instruction and provide a definitive letter or calculated value rather than admitting ignorance.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When a question explicitly requests the final answer inside a `$\\boxed{}$` tag, format your final output to precisely include the mathematical value within `$\\boxed{}` (e.g., `$\\boxed{\\frac{8599}{56}}$`).",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the text involves grids and modular arithmetic over a prime $p$, determine if the common differences $d_i$ are divisible by $p$ based on whether the function $f$ is identically zero or equals $1 + x + ... + x^{p-1}$.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If a solution explicitly mentions a function name (e.g., $f(x)$), match the tag to the standalone function expression rather than confusing it with its full functional equation definition.",
+        "delta": 0.12340000000000001,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Solve the question and provide the answer in the correct format.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Read the provided question carefully and determine the required format for your response.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Provide clear, step-by-step reasoning.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Task 2: Matching Missing Formula Tags",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "If the question provides a text with missing formula tags (e.g., `<missing 1>`) and a list of math expressions in the format `<expression Y> = $<latex code>$`:",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Think step by step to deduce which expression correctly fills each missing tag based on the mathematical context and structural equivalence.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Pay close attention to exact wording and partial text matches.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Read past these typos to interpret the mathematical meaning accurately.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Your final response MUST strictly follow this format:",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "The $p$-th roots of unity can be defined by the polynomial $1 + x + \\ldots + x^{p-1}$.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Conversely, if a condition like $f(x) = 1 + x + \\ldots + x^{p-1}$ holds, then $p$ might always divide the common difference $d_i$.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Divisibility conditions (like $d_i \\mid d_{i+1} + d_{i+2}$) often force $a=1$, making the first three divisors $(1, p, q)$.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Due to the symmetric property $d_i \\cdot d_{k+1-i} = n$, the last three divisors must then be $(\\frac{n}{q}, \\frac{n}{p}, n)$.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "For any upper or lower triangular matrix (where all elements below or above the main diagonal are zero), the determinant is simply the product of the diagonal entries.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Solve the question step-by-step.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Analyze the question**: Read the question thoroughly.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Under `### answer`, provide ONLY the final answer formatted EXACTLY as the question requested.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Their approximate average speed was about 15.71 km/h.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "This ensures automated systems can parse the prime components correctly.",
+        "delta": 0.12340000000000001,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "For combinatorics problems, explicitly identify whether the scenario requires permutations (order matters) or combinations (order does not matter), and state whether repetition is allowed.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When analyzing arithmetic sequences in grids, explicitly compute the modulo arithmetic for both the row and column transitions to rule out impossible spatial overlaps.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Double-check all LaTeX generated for Task 1 for unbalanced parentheses or missing closing braces inside the `$\\boxed{}` environment, particularly when dealing with complex roots or nested fractions.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "To avoid premature truncation in Task 2, write out your reasoning and explicitly verify that you have assigned exactly one valid expression identifier to every single `<missing X>` prompt requested before generating the final 'Answer:' line.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Strictly verify that your final output for Task 1 is enclosed entirely within the exact string `$\\boxed{}`$ and contains no other text, missing delimiters, or unescaped LaTeX errors.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before finalizing, re-read the provided expressions for Task 2 and manually confirm that you have correctly parsed any OCR artifacts or typos (e.g., translating `d<ab=n` to `d = ab = n`) prior to making your final logical deductions.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If utilizing cyclotomic polynomial rules, explicitly verify whether the text is asking for the product form $(x-s)$ or the summation form $1 + x + ... + x^{p-1}$, and ensure your matched expression reflects this exact phrasing.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If evaluating divisors of a composite number, explicitly re-derive the sequence of the first three and last three divisors to ensure they perfectly satisfy both the required divisibility conditions and the symmetric property $d_i \\cdot d_{k+1-i} = n$.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the mathematical problem contains more than three variables or implicit parameters, formulate a hypothetical dimensional analysis or unit-checking step to ensure the final derived expression is dimensionally consistent before outputting it.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Identify the 'tension points' in the problem where two given rules or constraints seem to contradict each other, and write a brief narrative explaining how these competing constraints are resolved in your specific mathematical derivation.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Briefly describe the historical context or the applied real-world physical system that the mathematical equation models, using this non-mathematical context as a secondary verification that your algebraic steps make logical sense.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Formulate your initial mathematical deduction using opposite operations or a completely different mathematical framework (e.g., solving a discrete algebra problem using continuous geometry) as a sanity check before outputting the standard derivation.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Assume the question contains a deliberate adversarial trap that is invisible at first glance; isolate the single most pedantic or confusingly phrased word in the prompt and state how it actively alters the bounds or domain of your final mathematical answer.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If a candidate expression contains apparent OCR errors or formatting artifacts (e.g., missing parentheses or `d<ab=n`), read past the typo and map the expression based on its underlying mathematical meaning.",
+        "delta": 0.11110000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the question asks for a direct mathematical answer (e.g., completing the square, finding a GCD, calculating a determinant):",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Even if a variable like `<missing 1>` appears multiple times, you must map each instance precisely to its unique corresponding expression identifier based on the surrounding context.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Watch out for formatting artifacts or OCR errors in the expressions (e.g., `d<ab=n` likely means `d = ab = n`, or an unclosed math delimiter).",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Domain-Specific Factual Knowledge & Generalizable Strategies:",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Cyclotomic Polynomials & Roots of Unity:",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Do not equate a function name with its full functional equation (e.g., if text mentions a factor \"f(x)\", match it to the expression containing \"f(x)\", not the equation defining it).",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Modular Arithmetic & Grid Rearrangement:",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "In problems involving grids and modular arithmetic over a prime $p$, if a function $f$ is identically zero, common differences $d_i$ might never be divisible by $p$.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "For composites $n = ab$, rearranging grids into valid arithmetic sequences often leads to contradictions (e.g., elements falling into impossible previous rows or columns), proving only primes satisfy certain grid hypotheses.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Greatest Common Divisor (GCD) of Rationals:",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Output your final response as a JSON object with two fields: \"reasoning\" (containing your step-by-step solution) and \"answer\" (containing ONLY the final answer value, e.g., an equation, a number, or a 5x repeated letter if it is a multiple choice letter).",
+        "delta": 0.11110000000000003,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "You are tasked with solving mathematical and logical reasoning problems.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "You must carefully read the problem, determine the required format for the final answer, and output your response accordingly.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Pay special attention to specific instructions regarding the final answer format, such as:",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Solve the problem**: Use step-by-step mathematical reasoning to arrive at the correct answer.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Table Tennis Tournament Math**: In a round-robin tournament (where every participant plays every other participant exactly once) with $N$ players, the total number of games played is given by the combination formula $\\binom{N}{2} = \\frac{N(N-1)}{2}$.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "The final answer must be placed within \\boxed{}.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Solve the question and provide step-by-step reasoning first.",
+        "delta": 0.11110000000000003,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before outputting the final comma-separated list of numbers for missing formula tags, ensure that your exact sequence has the same length as the number of missing tags mentioned in the prompt.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For Task 2, if a prompt mentions multiple instances of the same variable (like `<missing 1>` appearing several times), do not assume they all map to the same expression; instead, independently map each instance based strictly on its immediate surrounding mathematical context.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Reread the original problem prompt one final time to confirm whether the task actually requires a single value, a list, or an algebraic expression, and validate that your chosen format reflects this exact requirement.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Perform a final sweep of your entire generated response to ensure absolutely no implicit assumptions were made; every leap in logic must be backed by a verified mathematical principle from the prompt or standard theory.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "You must generate at least one bizarre, nonsensical mathematical conclusion that would theoretically result from a misreading of the prompt, and explicitly state why the actual text of the problem rules out this absurdity.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before calculating the final answer, construct a intermediate 'proof canvas' where you list all edge cases (such as zero, negative numbers, or empty sets) and systematically prove why they either do not apply or must be included in your final output.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Before writing out the step-by-step reasoning, output an intermediate representation in the form of a graph adjacency list or node-edge mapping detailing how the entities in the problem mathematically depend on one another.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "For fill-in-the-blank solution tasks, pay close attention to the instruction prompt and ensure you output only the comma-separated numbers corresponding to the missing expression identifiers.",
+        "delta": 0.09870000000000007,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "The product of $(x-s)$ over all $p$-th roots of unity $s$ (excluding $1$) yields the polynomial $1 + x + \\ldots + x^{p-1}$.",
+        "delta": 0.09870000000000007,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Divisors of Composite Numbers:",
+        "delta": 0.09870000000000007,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Linear Algebra & Matrix Properties:",
+        "delta": 0.09870000000000007,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Repeating a multiple-choice letter (e.g., \"write FFFFF\").",
+        "delta": 0.09870000000000007,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "For any geometric problem, start by explicitly defining the coordinate system or drawing a mental model of the shapes and clearly stating all known angle and side length relationships.",
+        "delta": 0.08639999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When matching expressions involving roots of unity, carefully distinguish between a factor name like '$f(x)$' and its full defining equation; if the text has a standalone factor '$f(x)$', map it to the standalone expression, not the expanded equation.",
+        "delta": 0.08639999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "When dealing with differential equations in boundary value problems, always isolate the boundary constraints first and substitute them directly into the general solution before attempting to match terms to Green's functions.",
+        "delta": 0.08639999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the question involves probabilities, continuous functions, or integer divisors, mentally substitute all unknowns with a single unique non-repeating prime number (like 7) to instantly verify if the core logical dependency holds true.",
+        "delta": 0.08639999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "You are tasked with solving mathematical problems and strictly adhering to specific output formats.",
+        "delta": 0.08639999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "When evaluating mathematical contexts, use the following principles to guide your deductions:",
+        "delta": 0.08639999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "This forces elements in an arithmetic sequence within the grid to share the same residue $\\pmod{p}$, meaning entire rows or columns may represent a single residue class.",
+        "delta": 0.08639999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "For differential equations $L[y] = f(x)$ with boundary conditions $y(a) = \\alpha$ and $y(b) = \\beta$, the solution can be represented as $y(x) = \\alpha u(x) + \\beta v(x) + \\int_a^b G(x, t) f(t) dt$, where $u(x)$ and $v(x)$ are solutions to the homogeneous equation ($L[y] = 0$) satisfying $u(a) = 1, u(b) = 0$ and $v(a) = 0, v(b) = 1$.",
+        "delta": 0.08639999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Finally, divide this GCD by the original LCM to obtain the GCD of the original set of rational numbers.",
+        "delta": 0.08639999999999998,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "Algebraic Equivalence**: Automated grading systems can sometimes fail to recognize mathematically equivalent expressions if they aren't simplified or factored conventionally.",
+        "delta": 0.08639999999999998,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "When evaluating modular arithmetic grids, verify the truth value of the function $f$ and explicitly check if the resulting divisibility condition on $d_i$ strictly aligns with your chosen expression.",
+        "delta": 0.0741,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If the missing expression involves roots of unity or cyclotomic polynomials, evaluate whether the product of $(x-s)$ or the sum $1 + x + ... + x^{p-1}$ matches the surrounding text.",
+        "delta": 0.0741,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "If a polynomial of degree less than $p$ evaluates to zero or shares roots with the complete set of roots of unity, it must either be identically zero or equal to the cyclotomic polynomial $1 + x + \\ldots + x^{p-1}$.",
+        "delta": 0.0741,
+        "source": "trajectory"
+      },
+      {
+        "module": "predict",
+        "unit": "To ensure consistent success, provide step-by-step reasoning before the final answer.",
+        "delta": 0.0741,
+        "source": "trajectory_xlm"
+      },
+      {
+        "module": "predict",
+        "unit": "Double-check your matched expression tags for any instances where a function name like \"f(x)\" is requested, ensuring you do not mistakenly select the expression containing the full defining functional equation.",
+        "delta": 0.06170000000000003,
+        "source": "llm"
+      },
+      {
+        "module": "predict",
+        "unit": "Solve the problem in the most inefficient way possible, then state this brute-force result as a comparative baseline before providing the optimal, standard mathematical reasoning required by the prompt.",
+        "delta": 0.049400000000000055,
+        "source": "llm"
+      }
+    ],
+    "select_compiled": 0.6296,
+    "confirm_init": 0.6894,
+    "confirm_compiled": 0.677,
+    "compiled_units": [],
+    "n_compiled": 0,
+    "fell_back_to_init": true
+  }
+}

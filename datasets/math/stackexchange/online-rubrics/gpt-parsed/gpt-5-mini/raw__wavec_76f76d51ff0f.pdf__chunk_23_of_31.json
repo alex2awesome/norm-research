@@ -1,0 +1,210 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 23,
+  "n_chunks": 31,
+  "chunk_chars": 39930,
+  "model": "gpt-5-mini",
+  "elapsed_s": 292.5140674170034,
+  "input_tokens": 14657,
+  "output_tokens": 6683,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "Users of the PARI/GP system (mathematicians, numerical analysts and programmers doing symbolic/numeric computations)",
+    "subtask_short": "pari/gp numerical routines",
+    "subtask_description": "Reference/manual guidance for using PARI/GP vector, sorting, summation and numerical-integration routines, including parameter conventions, accuracy/robustness advice, and performance tips.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "numerical_integration",
+      "vectors_and_sorts",
+      "summation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "vecsort stability and default comparator",
+        "description": "vecsort uses a stable mergesort; if cmpf is omitted the standard comparator lex is used, restricting the usable element types (integers, fractions/reals, vectors of those).",
+        "guidance": "Stability preserves initial ordering of equal elements. Omitting cmpf restricts element types; provide cmpf when sorting other types."
+      },
+      {
+        "name": "vecsort cmpf forms",
+        "description": "The cmpf argument can be: an integer k (sort by k-th subcomponent), a vector (lexicographic order according to listed components), or a comparison function (x,y)->int with sign indicating ordering.",
+        "guidance": "Use integer or vector when sorting by simple component(s). Use a comparison closure for custom ordering (return negative/zero/positive)."
+      },
+      {
+        "name": "vecsort performance: precompute keys for expensive comparisons",
+        "description": "When the sorting key is expensive to compute (e.g., discriminant of polynomials), precompute the key for each element, sort indices by those keys, then extract elements in that permutation.",
+        "guidance": "Example: compute DISC = vector(#v,i, key(v[i])); perm = vecsort(vector(#v,i,i),(x,y)->sign(DISC[x]-DISC[y])); vecextract(v,perm). This avoids recomputing the key O(n log n) times."
+      },
+      {
+        "name": "vecsort flag bits",
+        "description": "The flag parameter is a bitmask with meanings: bit 1 = indirect sorting (return permutation), bit 4 = use descending order, bit 8 = remove duplicates (keep first occurrence).",
+        "guidance": "Combine bits as needed (e.g., 1|4 to get descending permutation). Example duplicate removal: vecsort([Pi,Mod(1,2),z],(x,y)->0,8) yields only the first occurrence."
+      },
+      {
+        "name": "vecsum behavior on empty vectors",
+        "description": "vecsum(v) returns the sum of components; on an empty vector it returns 0.",
+        "guidance": "Use vecsum for straightforward component summation; no error on empty input."
+      },
+      {
+        "name": "vector(...) lexical scoping of index variable",
+        "description": "vector(n, X, expr) evaluates expr for X = 1..n with X lexically scoped per-element; changes to X inside expr do not affect subsequent evaluations.",
+        "guidance": "This differs from for-loops where a single external variable can be mutated across iterations. Use per-element lexical scope to create different per-element indexing safely."
+      },
+      {
+        "name": "vectorsmall and vectorv return types",
+        "description": "vectorsmall(n,...) creates a row vector of small integers (t_VECSMALL). vectorv(...) behaves like vector but returns a column vector (t_COL).",
+        "guidance": "Pick constructors to get desired storage/representation for performance or API expectations."
+      },
+      {
+        "name": "intnum method and applicability",
+        "description": "intnum implements a double-exponential univariate integration method (O(D log D) evaluations for precision D). It is appropriate when the integrand is regular on the interior of subintervals and can handle endpoint singularities and some endpoint irregularities if coded correctly.",
+        "guidance": "Split integrals into subintegrals so the integrand has no singularities except possibly at endpoints. Polynomials in logarithms are not treated as singular. For multivariate integrals, expect longer runtimes and prefer precomputation (intnuminit)."
+      },
+      {
+        "name": "intnum: split integrals around singularities",
+        "description": "To use intnum, split the integration domain into subintegrals where the integrand has no singularities except possibly at endpoints.",
+        "guidance": "Polynomials in logs are not considered singular. If the integrand has interior singularities or poor local behavior, split the domain and treat each piece separately (possibly with different endpoint descriptors)."
+      },
+      {
+        "name": "intnum tab argument semantics",
+        "description": "The optional tab argument controls sampling resolution: if tab is a non-negative integer m, the number of sampling points is multiplied by 2^m; if tab is an intnuminit-produced table, precomputed xi and wi are used.",
+        "guidance": "Use increasing m to refine accuracy (runtime ~ 2^m). Use intnuminit and pass the table when performing multiple similar integrals to avoid O(D log D) precomputation per integral."
+      },
+      {
+        "name": "intnum finite endpoint coding [a,alpha]",
+        "description": "A finite endpoint can be given as [a, \u03b1], meaning the integrand near a behaves like (x \u2212 a)^\u03b1 (up to logarithms). If \u03b1 \u2265 0, default regularity is assumed.",
+        "guidance": "Specifying the correct \u03b1 is important: a wrong exponent can cause catastrophic loss of decimals. Use explicit endpoint descriptors when integrand has algebraic singularities."
+      },
+      {
+        "name": "intnum infinite endpoint coding [\u00b1oo,alpha]",
+        "description": "For infinite endpoints, [\u00b1oo, \u03b1] encodes behavior at infinity: \u03b1 = 0 (or omitted) assumes moderate decay (\u2265 O(x^\u22122)) but not exponential; \u03b1 > 0 indicates exponential decay ~ exp(\u2212\u03b1 x); \u03b1 < \u22121 indicates slow decay like x^\u03b1 and is less robust.",
+        "guidance": "Choose the correct coding at infinity to avoid overflow/underflow and to guide the quadrature. If \u03b1 \u2264 \u22122, default algorithms may be used. Wrong \u03b1 can produce large errors or overflow."
+      },
+      {
+        "name": "intnum oscillating endpoint types (alpha = k*I or -k*I)",
+        "description": "Alpha can be purely imaginary: \u03b1 = k*I encodes cos(kx)g(x) behavior, \u03b1 = \u2212k*I encodes sin(kx)g(x) behavior at infinity (g decaying slowly).",
+        "guidance": "Exact value of k is critical. If the oscillatory factor is not a pure sine/cosine, expand it into a Fourier series and sum contributions. Rule of thumb: if oscillations are weaker than exponential decay prefer exponential coding [\u00b1oo, \u03b1]; otherwise use oscillating coding [\u00b1oo, k*I]."
+      },
+      {
+        "name": "apparent vs true singularities handling",
+        "description": "Apparent singularities (cancellations causing large intermediate values) can sometimes be tolerated by the integrator's weights but may cause huge intermediate loss of accuracy; true singularities require explicit endpoint coding.",
+        "guidance": "For apparent singularities, rewrite the integrand near the point (e.g., use Taylor expansion) to avoid catastrophic intermediate values. For true algebraic singularities, use endpoint descriptors like [a,\u03b1]."
+      },
+      {
+        "name": "intnum warnings about divergent integrals",
+        "description": "intnum (and similar numerical routines) may assign finite values to divergent integrals; such results are heuristic and should be used with caution.",
+        "guidance": "Do not blindly trust assigned values for divergent integrals; verify analytically where possible."
+      },
+      {
+        "name": "multivariate integration: precompute tables",
+        "description": "When doing multivariate integration via nested intnum calls, precompute integration tables with intnuminit for internal integrations to drastically improve performance.",
+        "guidance": "Example: for double integrals, calling intnuminit(-1,1) and passing that table to inner and/or outer intnum calls reduced runtime significantly in examples."
+      },
+      {
+        "name": "intnuminit returned structure and purpose",
+        "description": "intnuminit(a,b,{m}) returns integration parameters [h,x0,w0,xp,wp,xm,wm] describing the chosen change of variable \u03c6(t), step h, central point x0, forward/backward sample abscissas xp/xm and weights wp/wm. m multiplies sampling points by 2^m.",
+        "guidance": "Use intnuminit to precompute sampling abscissas/weights for repeated integrations or multivariate problems. The arrays may be empty in symmetric/odd cases; up to 3 arrays can be returned for split integrals."
+      },
+      {
+        "name": "intnumgauss: Gauss-Legendre quadrature and tab usage",
+        "description": "intnumgauss integrates on a compact interval [a,b] using Gauss-Legendre quadrature; tab may be omitted, a precomputed table from intnumgaussinit, or an integer n (which will call intnumgaussinit(n)).",
+        "guidance": "Prefer splitting the integral and change variables rather than increasing n excessively, since doubling interval length often requires roughly doubling n. For analytic functions on [-1,1] choose n \u2248 realprecision."
+      },
+      {
+        "name": "intnumgaussinit error bound and n choice",
+        "description": "intnumgaussinit(n) precomputes nodes/weights for n-point quadrature. The error is bounded by an expression involving (b-a), factorials and a high derivative of f; for analytic functions a choice n \u2248 realprecision is recommended.",
+        "guidance": "If the interval length increases, increase n accordingly; for many cases splitting and change-of-variable is preferable to increasing n."
+      },
+      {
+        "name": "intnumromb usage and flags",
+        "description": "intnumromb is Romberg integration suitable for low accuracy. Flags: 0 default (smooth, not too large intervals), 1 general driver (no particular assumption), 2 tailored for infinite endpoints with change t=1/x (requires ab>0), 3 allows function undefined at an endpoint (but right/left continuous).",
+        "guidance": "Do not expect very high precision with intnumromb; perform analytical cleanup (remove singularities via change of variables) and use moderate precision (\u224830 decimal digits) for good results."
+      },
+      {
+        "name": "asympnum heuristic asymptotic expansion",
+        "description": "asympnum(expr,{k=20},{alpha=1}) attempts a heuristic asymptotic expansion for a sequence u(n) of the form sum ai n^{-i \u03b1}. It calls limitnum repeatedly; algorithm is heuristic.",
+        "guidance": "Normalize sequences (e.g., divide by limits computed to high accuracy) to get more terms. If \u03b1 is not an integer, precompute it to high precision before calling asympnum to avoid loss of accuracy."
+      },
+      {
+        "name": "contfracinit restrictions",
+        "description": "contfracinit(M,{lim}) transforms a power series/sequence into a continued fraction representation but fails if any coefficient of M vanishes or if certain partial denominators vanish.",
+        "guidance": "Do not use contfracinit on series with vanishing coefficients or on series where partial denominators vanish; contfraceval evaluates the continued fraction terms up to a limit."
+      },
+      {
+        "name": "derivnum numeric differentiation and library variant",
+        "description": "derivnum(X=a, expr) computes numerical derivative of expr at X=a; library variants derivfun permit power series a.",
+        "guidance": "Use the library API form for embedding into compiled code and to support power-series evaluation of the point 'a'."
+      },
+      {
+        "name": "intcirc contour integration around circle",
+        "description": "intcirc(X=a,R,expr,{tab}) computes (2i\u03c0)^{-1} integral of expr over circle |X-a|=R (sum of residues for meromorphic functions); tab behaves as in intnum.",
+        "guidance": "Split integrals to avoid interior singularities; use high precision when residues are tiny."
+      },
+      {
+        "name": "intfuncinit for integral transforms and limitations",
+        "description": "intfuncinit(t=a,b,f,{m=0}) initializes tables for computing integral transforms F(z)=\u222b_a^b f(t) k(t,z) dt. Endpoints a and b are coded as in intnum. Limitation: endpoints must be at infinity with same asymptotic behavior; oscillating types are not supported in precomputation.",
+        "guidance": "Use intfuncinit when f is expensive to compute and the z-set is known beforehand. Increase sampling (m) to improve accuracy. For oscillatory integrals consider integrating vectors of functions or avoid precomputation."
+      },
+      {
+        "name": "limitnum Lagrange\u2013Zagier extrapolation heuristics",
+        "description": "limitnum(expr,{k=20},{alpha=1}) performs numerical extrapolation assuming an asymptotic expansion in n^{-\u03b1}. It is heuristic, requires sufficient input data or closure evaluations.",
+        "guidance": "If providing a vector, it must be long enough relative to the desired precision (\u2248 k * realprecision). Using closure (a function) is preferred if u(n) can be computed efficiently; otherwise pass sufficiently long precomputed vectors or interpolate u(kn) for k>1 to improve accuracy."
+      },
+      {
+        "name": "prod and initialization to control arithmetic type",
+        "description": "prod(X=a,b,expr,{x=1}) computes product with initial value x used to force the numeric/series type of the computation (integer exact, real, or power series).",
+        "guidance": "Set x appropriately for efficiency and correctness: integer 1 for exact arithmetic, 1. for floating point at current precision, or 1 + O(X^k) for power series precision-limited products."
+      },
+      {
+        "name": "prodeuler product over primes",
+        "description": "prodeuler(X=a,b,expr) computes product over primes between a and b; initialized at 1 in current realprecision.",
+        "guidance": "Use the library API prodeuler for embedding and for control of precision."
+      },
+      {
+        "name": "prodinf termination and non-convergence risk",
+        "description": "prodinf(X=a,expr,{flag=0}) computes an infinite product, stopping when relative error is less than default precision. Non-convergent products can lead to infinite loops. If flag=1, compute product of (1+expr) terms instead.",
+        "guidance": "Beware of divergent products; ensure convergence or provide external stopping checks when using programmatically."
+      },
+      {
+        "name": "solve bracketing requirement and method",
+        "description": "solve(X=a,b,expr) finds a real root in [a,b] under the condition expr(a)*expr(b) \u2264 0; the routine uses Brent's method and may fail if expr is undefined on the interval.",
+        "guidance": "Ensure the function is defined everywhere on [a,b] and that roots are bracketed; otherwise pre-clean or choose a different method."
+      },
+      {
+        "name": "solvestep heuristic zero finding and flags",
+        "description": "solvestep(X=a,b,step,expr,{flag=0}) heuristically finds zeros by interval splitting. Flag bits: 1 = return after first zero found (else return all), 2 = refine until at least one zero found (may loop), 4 = multiplicative search (require a>0 and step>1), 8 = refine until zero close to integer.",
+        "guidance": "Use solvestep for rough/heuristic searches; combine flags to change behavior. For guaranteed roots use bracketing methods."
+      },
+      {
+        "name": "sum initialization semantics",
+        "description": "sum(X=a,b,expr,{x=0}) sums expressions with optional initial value x used to force arithmetic/series type similarly to prod.",
+        "guidance": "Set x to an appropriate type to control exactness and performance (integer, real, or series)."
+      },
+      {
+        "name": "sumalt algorithm, assumptions and complexity",
+        "description": "sumalt(X=a,expr,{flag=0}) performs numerical summation of (ideally) alternating series using the Cohen\u2013Villegas\u2013Zagier algorithm. For flag=0 assume ak are moments of a positive measure on [0,1]; flag=1 uses a variant with more complicated polynomials.",
+        "guidance": "Complexity/choice rules: for flag=0 set n \u2248 1.3*p to achieve precision p (time O(p^2) dominated by ak computation); flag=1 (polzagier) gives n \u2248 0.86*p but overhead time O(p^3) and memory O(p^2)\u2014only worth when ak are expensive to compute. Use sumalt heuristically; suminf or sumpos may be better for other convergence types."
+      },
+      {
+        "name": "suminf stopping rule and precision advice",
+        "description": "suminf(X=a,expr) computes infinite sums and stops when the relative error is less than default precision for 3 consecutive evaluations. For slowly convergent series, use lower realprecision; use sumalt for alternating series or sumpos for positive-term series.",
+        "guidance": "Slow convergence may cause extremely long runs; choose the method tailored to convergence type and set precision appropriately."
+      },
+      {
+        "name": "sumnum and precomputation with sumnuminit",
+        "description": "sumnum(n=a,f,{tab}) does high-accuracy numerical summation from n=a to +\u221e using Euler\u2013Maclaurin; f must be positive and C^\u221e. sumnuminit precomputes abscissas/weights and can specify behaviour at infinity, speeding repeated computations.",
+        "guidance": "Use sumnum when Euler\u2013Maclaurin hypotheses are met and when high precision is required; otherwise prefer sumpos/suminf depending on series type."
+      },
+      {
+        "name": "sumdiv and sumdivmult semantics",
+        "description": "sumdiv(n,X,expr) sums expr over positive divisors of n (X is lexically scoped). sumdivmult is a wrapper for multiplicative functions; sumdivmult(n,d,expr) should be used when expr yields multiplicative f(d).",
+        "guidance": "Prefer sumdivmult for multiplicative functions for clarity and possible optimizations."
+      }
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/77bb0c472b1f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16241,
+  "output_tokens": 3899,
+  "elapsed_s": 1933.3850386249833,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and dataset/benchmark users working on mathematical problem solving",
+    "subtask_short": "math_problem-solving_benchmark",
+    "subtask_description": "Designing, formatting, and evaluating a benchmark dataset (MATH) for mathematical problem solving by ML models, plus an auxiliary pretraining corpus (AMPS). Covers dataset construction, formatting, automatic evaluation, and evaluation protocols.",
+    "subtask_keywords": [
+      "math_benchmark",
+      "dataset",
+      "mathematical_reasoning",
+      "latex",
+      "asymptote",
+      "ml_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset size and splits",
+        "description": "The MATH dataset has 12,500 problems total, with 7,500 training and 5,000 test problems.",
+        "guidance": "Use these splits for training and evaluation to enable comparable benchmarking across models."
+      },
+      {
+        "name": "Problem sources (competition provenance)",
+        "description": "Problems are drawn from mathematics competitions including the AMC 10, AMC 12, AIME, and more (collected from AoPS).",
+        "guidance": "Use competition problems to target genuine mathematical problem-solving heuristics rather than plug-and-chug; cite AoPS sources as appropriate."
+      },
+      {
+        "name": "Subjects / topical coverage",
+        "description": "Problems are tagged by subject: Prealgebra, Algebra, Number Theory, Counting and Probability, Geometry, Intermediate Algebra, and Precalculus.",
+        "guidance": "Assess and report performance broken down by these subject categories for fine-grained analysis."
+      },
+      {
+        "name": "Difficulty levels (1\u20135)",
+        "description": "Each problem is assigned a difficulty from '1' to '5', following AoPS: a subject\u2019s easiest problems are level 1 and hardest are level 5 (e.g., early AMC problems are level 1, AIME are level 5).",
+        "guidance": "Report accuracy by difficulty level to analyze model behavior across problem hardness."
+      },
+      {
+        "name": "Step-by-step solutions included",
+        "description": "Each problem has a full step-by-step solution written in LaTeX and natural language, plus a final boxed answer.",
+        "guidance": "Solutions enable training on derivations, provide 'scratch space' supervision, and allow experiments with partial-solution hints and training-on-solutions ablations."
+      },
+      {
+        "name": "Formatting language: LaTeX and Asymptote",
+        "description": "Problems and solutions are consistently formatted using LaTeX; figures/diagrams are encoded in the Asymptote vector graphics language rather than raster images.",
+        "guidance": "This enables text-only processing of diagrams (models can generate Asymptote) and consistent parseability for automatic evaluation."
+      },
+      {
+        "name": "Final answer delimitation (boxed answers)",
+        "description": "Final answers are wrapped and delimited with the \\boxed{} command.",
+        "guidance": "Automatic assessment parses the contents of \\boxed{} to determine the model's final answer location unambiguously."
+      },
+      {
+        "name": "Primary evaluation metric: exact-match accuracy",
+        "description": "Because answers are unique after normalization, MATH is scored with exact match rather than heuristic metrics like BLEU.",
+        "guidance": "Use exact-match on the normalized boxed answer as the primary metric for model performance."
+      },
+      {
+        "name": "Answer normalization and equivalence rules",
+        "description": "To allow automatic exact-match evaluation, the dataset applies normalization rules: probabilities expressed as simplified fractions; matrix entry fractions encoded as x/y while other fractions use \\frac{x}{y}; coefficients encoded without a multiplication symbol (e.g. 5x not 5*x); expressions with multiple variables in alphabetical order; polynomials in decreasing degree order.",
+        "guidance": "When evaluating, apply these normalization rules to both ground truth and model output so equivalent expressions are treated identically."
+      },
+      {
+        "name": "Permitted encoding equivalences",
+        "description": "Different fraction encodings equivalent, such as \\frac{x}{y} and \\dfrac{x}{y} and x/y; different parenthesis encodings (\\left( vs () ) are treated as equivalent; 0.5 and 1/2 (or .1 and 0.1) are treated the same; when answer is factorized polynomial, different orderings of factors are permitted.",
+        "guidance": "Normalization must canonicalize these variants (ignore parentheses style, accept equivalent numeric and factor orderings)."
+      },
+      {
+        "name": "Spaces and units handling",
+        "description": "Spaces are ignored and units may be included or omitted from an answer (both accepted).",
+        "guidance": "Evaluation should strip whitespace and accept answers with or without unit annotations."
+      },
+      {
+        "name": "Automatic assessment procedure",
+        "description": "Automatic assessment locates the contents of the \\boxed{} command and compares that (after applying the formatting/normalization rules) to the ground truth answer to determine exact equivalence.",
+        "guidance": "Implement a parser to find \\boxed{...} robustly even when models generate full solutions before the final answer."
+      },
+      {
+        "name": "Use of step-by-step solutions at training and inference",
+        "description": "Two evaluation/training modes: train/evaluate on 'Final Answer' sequences or on 'Full Solution' sequences. Providing partial ground-truth solutions as hints at inference can improve accuracy; training on solutions increases accuracy relative to training on Q/A only.",
+        "guidance": "Experiment with (1) predicting final answer directly, (2) predicting full solutions then answer, and (3) supplying partial ground-truth steps as hints. Note: generating full solutions before the answer currently degrades accuracy in experiments (hypothesized snowballing effect)."
+      },
+      {
+        "name": "Pretraining corpus (AMPS) composition",
+        "description": "AMPS contains over 100,000 Khan Academy problems with solutions and ~5 million Mathematica-generated problems (23 GB total); 100 hand-designed Mathematica scripts produced ~50k exercises each, 37 of which include step-by-step LaTeX solutions.",
+        "guidance": "AMPS is intended for pretraining models on mathematics fundamentals; pretraining on AMPS substantially improves downstream MATH accuracy."
+      },
+      {
+        "name": "AMPS pretraining sampling strategy and hyperparameters (guidance)",
+        "description": "During pretraining the authors upsample Khan Academy data by factor 5 and downsample Mathematica by factor 2; pretraining used 1 epoch with AdamW, batch size 128, weight decay 0.05, autoregressive LM objective.",
+        "guidance": "Follow similar sampling and optimization settings when reproducing reported pretraining results; these choices affected experimental outcomes."
+      },
+      {
+        "name": "Model generation and evaluation hyperparameters",
+        "description": "Default generation: prompting with 'Problem... Final Answer:' to generate final answer; beam search used with beam size 20 when generating final answers and beam size 10 when generating full solutions; GPT-2 tokenization digit-wise for numbers; evaluate few-shot GPT-3 with temperature 0 and up to 20 tokens for answers.",
+        "guidance": "When comparing models replicate prompt format and generation/search settings (beam sizes, token limits, temperature) used in the paper for fair comparisons."
+      },
+      {
+        "name": "Human baseline measurement protocol",
+        "description": "Human evaluation: randomly sample 20 MATH test problems, give participants 1 hour to work by hand, require manual calculations; participants were university students with varied math backgrounds.",
+        "guidance": "Use similar constraints (time, hand calculations) for human baselines to make comparisons consistent; report participant backgrounds and scores."
+      },
+      {
+        "name": "Confidence and error-detection metric",
+        "description": "Define confidence as the average prediction probability of tokens in the generated answer. Measure the ability to detect correct vs incorrect answers via AUROC (e.g., GPT-2 1.5B AUROC reported 68.8%).",
+        "guidance": "Report confidence distributions and AUROC to evaluate calibration and error-detection; note models can be highly overconfident."
+      },
+      {
+        "name": "Performance reporting by subject and difficulty",
+        "description": "Report accuracy broken down across subjects and difficulty levels (e.g., level-1 ~15% accuracy for GPT-2 1.5B, level-5 ~4%).",
+        "guidance": "Include per-subject and per-difficulty tables/plots to demonstrate where models succeed/fail."
+      },
+      {
+        "name": "Pretraining vs model size interpretation (analysis guidance)",
+        "description": "Assess gains from pretraining (AMPS) relative to parameter scaling; authors report AMPS pretraining can yield similar improvements to a large parameter increase (e.g., 0.1B pretrained on AMPS vs 13B fine-tuned).",
+        "guidance": "Compare pretraining ablations and scaling trends (log-linear fits) to determine whether scaling or algorithmic advances are needed."
+      },
+      {
+        "name": "Intended uses and licensing",
+        "description": "Authors state they do not intend the dataset to train models that help students cheat on exams; the MATH and AMPS data and code are released under an MIT license; authors assert coverage under Fair Use \u00a7107.",
+        "guidance": "Follow the declared intended uses and license when using or redistributing the datasets; document and justify downstream usage consistent with Fair Use and MIT license terms."
+      }
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 42,
+  "chunk_chars": 40000,
+  "model": "gpt-5-mini",
+  "elapsed_s": 89.14022233300057,
+  "input_tokens": 15071,
+  "output_tokens": 5126,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, format designers, and programmers learning TeX internals",
+    "subtask_short": "TeX input tokenization and character rules",
+    "subtask_description": "Rules and conventions for how TeX reads characters and converts them to tokens: reserved characters and escaping, category codes, line-reading states, \ncatcode changes, control-sequence formation, character-code notations, and related primitives (\token-producing ops, \number, \romannumeral, \toupper/\tolower, \number, \token ops). Intended for people implementing or using TeX formats and macros.",
+    "subtask_keywords": [
+      "tex",
+      "tokens",
+      "category_codes",
+      "catcode",
+      "format_design"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Reserved special characters in plain TeX",
+        "description": "Each TeX format reserves certain characters for its own special purposes (plain TeX reserves ten characters: \\ { } $ & # _ ^ % ~ etc.), so they cannot be used in the ordinary way when typing.",
+        "guidance": "If you need those symbols in your manuscript, plain TeX provides escaped forms: \\$ for $, \\% for %, \\& for &, \\# for #, \\_ for _. In math formulas use \\{ and \\} for braces; \\backslash produces a reverse slash. Use the accent primitives (\\^, \\~) for circumflex/tilde accents. The manual gives the Procter & Gamble example (Procter & Gamble's stock climbed to $2, a 10% gain) to illustrate common mistakes."
+      },
+      {
+        "name": "Definition of a token",
+        "description": "A token is either (a) a single character with an attached category code, or (b) a control sequence.",
+        "guidance": "TeX converts input lines into lists of tokens. Example: the text '{\\hskip 36 pt}' converts into eight tokens (characters with category subscripts and the control sequence token \\hskip). Spaces following a control word do not enter the token list (the ignore-space rule during tokenization). Understanding token lists is essential because TeX's typesetting processes operate on tokens (the input is treated like one long stream of tokens)."
+      },
+      {
+        "name": "Control sequences are single objects and their spaces/meanings",
+        "description": "A control sequence is considered a single object no longer composed of a sequence of symbols; long names are just as easy for TeX as short ones once tokenized.",
+        "guidance": "Spaces are not ignored after control sequences inside a token list; the ignore-space rule applies only during input tokenization. When digestive (processing) stages encounter a control sequence token they must look up the current definition to know what it means (control sequence meaning can change over time)."
+      },
+      {
+        "name": "Permanence of category codes for character tokens",
+        "description": "Once a category code has been attached to a character token the attachment is permanent for that token.",
+        "guidance": "If a character c is read when its category is 11 and later declared category 12, characters already inside token lists remain with their original category. This makes timing important: characters receive a fixed interpretation as soon as they are read from a file. By contrast, control sequences can change interpretation later (since they are looked up at processing time)."
+      },
+      {
+        "name": "INITEX initial categories and role",
+        "description": "INITEX is like TeX but used to build formats; when INITEX begins all 256 characters are initially category 12 except return=5, space=10, null=9, delete=15, letters A..Z and a..z category 11, % and \\ have categories 14 and 0 respectively.",
+        "guidance": "Because of these defaults INITEX cannot execute primitives that depend on grouping (e.g. \\def or \\hbox) until characters of categories 1 and 2 exist. INITEX can compress hyphenation patterns and produce format files (e.g. plain.fmt from plain.tex); format files set up necessary category codes via \\catcode commands.\n(Example: format begins with \\catcode'\\{=1 to assign category 1 to '{'.) "
+      },
+      {
+        "name": "\\catcode can change category codes and is local to groups",
+        "description": "The \\catcode operation modifies internal category assignments (e.g. \\catcode'\\{=1 assigns category 1 to '{'). Category-code changes obey TeX's rules of locality: changes revert when the group ends.",
+        "guidance": "By modifying category codes you can adapt TeX to diverse applications (e.g. treating < and > as group delimiters within a group by \\catcode'\\<=1 \\catcode'\\>=2). But remember categories attached to tokens already read remain unchanged; use catcode changes judiciously and sparingly. The author intentionally uses numeric category codes to discourage frequent changes except in unusual circumstances."
+      },
+      {
+        "name": "\\string produces character token lists (and \\escapechar)",
+        "description": "Writing \\string\\cs yields the list of characters for the control sequence's name; each character in that token list automatically gets category code 12 ('other'), including the backslash inserted by \\string to represent an escape character.",
+        "guidance": "There is a parameter \\escapechar that specifies what character should be used when control sequences are output as text (normally backslash). If a space sneaks into the control-sequence name, that space will get category 10. Use \\string to examine names; exercises illustrate behavior with active characters."
+      },
+      {
+        "name": "\\csname ... \\endcsname builds control sequences from token lists",
+        "description": "The construction \\csname(tokens)\\endcsname converts a list of character tokens to a control sequence; tokens between \\csname and \\endcsname may include control sequences so long as they expand to characters rather than primitives.",
+        "guidance": "Final characters can be of any category (not necessarily letters). Example: \\csname TeX\\endcsname is essentially \\TeX, but \\csname\\TeX\\endcsname is illegal if \\TeX expands into tokens containing primitives (like \\kern). Using \\csname\\string\\TeX\\endcsname can produce unusual control-sequence names (e.g. a control sequence whose name begins with a backslash character token). When a control sequence is first defined via \\csname it is equivalent to \\relax until redefined; this fact is used in exercises to create \\ifundefined macros."
+      },
+      {
+        "name": "Token-producing operations: \\number, \\romannumeral, \\uppercase, \\lowercase",
+        "description": "\\number{number} yields the decimal equivalent of number (suppresses leading zeros; works with registers/parameters). \\romannumeral{number} yields the number in lowercase roman numerals. \\uppercase{token list} and \\lowercase{token list} convert character tokens according to their \\uccode and \\lccode values (which are changeable).",
+        "guidance": "For \\uppercase a character is replaced by its \\uccode unless that value is zero. \\uppercase and \\lowercase are performed 'in the stomach' (during token processing), while \\string, \\number, \\romannumeral, and \\csname are carried out en route to the stomach (during expansion/macro processing). Examples: \\romannumeral24 -> xxiv; \\number-0015 -> -15. INITEX initializes \\uccode and \\lccode values to zero except letters."
+      },
+      {
+        "name": "\\char(number) to access arbitrary font character",
+        "description": "\\char(number) where number is 0..255 (optionally followed by a space) returns the character with that code from the current font; Appendix B implements \\% as \\char37 (or via \\chardef \\%= '37).",
+        "guidance": "\\char is primarily intended for format designers; ordinary authors seldom need it. You cannot use \\char in the middle of a control sequence name (e.g. \\\\char98 is read as \\\\ control sequence followed by 'c', not as \\b). More efficient alternative is \\chardef{control sequence}=(number) for 0..255. Example: the dangerous-bend sign is \\char127 in font manfnt, used as {\\manual \\char127} in macros."
+      },
+      {
+        "name": "TeX's internal ASCII mapping and use of octal/hex numeric notations",
+        "description": "TeX uses an internal ASCII-based character code (Appendix C) regardless of external encoding; device-independent (dvi) output uses TeX's internal codes. Octal notation (radix 8) and hexadecimal notation are supported for character numbers: \\char'142 or \\char\\'142 or \\char\"62 etc are equivalent to \\char98.",
+        "guidance": "A {number} in TeX's language can begin with ' (octal) or \" (hex) to change base. The legitimate octal codes run from '0 to '377 and hex from \"0 to \"FF. TeX always works with 256 internal character codes (0..255)."
+      },
+      {
+        "name": "' (apostrophe) short form for character codes and \\chardef idiom",
+        "description": "The token ' (left quote) when followed by any character token (or by a single-character control sequence) stands for TeX's internal code for that character: e.g. \\char'b and \\char'\\b are equivalent to \\char98. Appendix B defines \\% via \\def\\%{\\char'\\%} but the true/efficient definition is \\chardef\\%='\\%.",
+        "guidance": "Using \\chardef is the preferred/efficient way for format designers to associate a special character with a control-sequence name. Exercises point out pitfalls (e.g. why \\def\\%{\\char'%} would be wrong)."
+      },
+      {
+        "name": "Superscript (^^) and hexadecimal notation for arbitrary characters",
+        "description": "If TeX sees a superscript character (category 7) followed by another identical char and then a character with code c<128, they are deleted and 64 is added or subtracted to produce a single character; if the two superscripts are followed by two lowercase hexadecimal digits 0\u20139a\u2013f the four-character sequence is replaced by the single character having the specified hex code.",
+        "guidance": "This replacement occurs even when encountered during control-sequence-name scanning; after replacement TeX resumes as if the new character had been present all along. This gives a way to insert arbitrary character codes using ^^ notation including hexadecimal ^^1f etc. The manual provides details and examples."
+      },
+      {
+        "name": "Three input states (N, M, S) and their effects",
+        "description": "When TeX is reading a line it is in one of three states: State N (beginning of a new line), State M (middle of a line), or State S (skipping/shipping blanks). The state affects how spaces and end-of-line characters are handled.",
+        "guidance": "At the beginning of every line TeX is in state N; most of the time it's in state M; after a control word or a space it's in state S. If an end-of-line (category 5) is seen while in state N it becomes control-sequence token \\par; in state M it becomes a space token (character 32, category 10); in state S it's dropped. If TeX sees a space (category 10): in state N or S it's passed by and state unchanged; in state M it's converted to a space token (char code 32) and TeX enters state S. The space token's character code is always 32."
+      },
+      {
+        "name": "Rules for scanning control-sequence names after an escape character",
+        "description": "If TeX sees an escape character (category 0) it scans the entire control-sequence name as follows: (a) if there are no more characters on the line the name is empty; (b) if the next character is not a letter the name is that single symbol; (c) otherwise the name is all letters beginning with the current one and ending just before the first nonletter or the end of line. This name becomes a control-sequence token.",
+        "guidance": "TeX goes into state S in case (c) or in case (b) with respect to a space character (category 10); otherwise it goes into state M. Note that superscript/^^ replacements may happen during the scanning steps (b) or (c). This dictates when spaces after control words are ignored and when control words terminate."
+      },
+      {
+        "name": "Comment characters, ignored characters, and invalid characters handling",
+        "description": "If TeX sees a comment character (category 14) it throws away that character and the remainder of the current line. If TeX sees an ignored character (category 9) it simply bypasses that character and remains in the same state. If TeX sees an invalid character (category 15) it bypasses that character, prints an error message, and remains in the same state.",
+        "guidance": "Plain TeX defines % as category 14 (comment); end-of-line handling and comment-termination interact. Changing \\endlinechar can change whether an end-of-line is appended to input lines; if \\endlinechar is negative or >255 no character is appended and effect is as if every line ends with a comment character (i.e. remainder dropped). Exercises explore these differences."
+      },
+      {
+        "name": "\\endinput and input-file return behavior",
+        "description": "If \\endinput has been specified for a file being \\input, or if an \\input file has ended, TeX returns to whatever it was reading when the \\input command was originally given.",
+        "guidance": "This is part of nested input/file handling; further details of \\input and \\endinput are discussed in Chapter 20 according to the manual. It's how TeX handles the end of files and conditional stopping of further reading from an input file."
+      },
+      {
+        "name": "Caveat: do not change catcodes often; macro-argument timing implications",
+        "description": "Because you can change category codes, TeX might use different categories for the same character on a single line; however characters never change categories once they have become tokens. When arguments to a macro are first scanned they are placed into a token list so their categories are fixed once and for all at that time.",
+        "guidance": "Appendices show ways to coerce TeX to process text 'verbatim' requiring temporary catcode switches. Some care is needed to get timing right; the manual recommends not to play with category codes very often and intentionally keeps numeric codes to discourage frequent changes. Use catcode changes only in unusual circumstances."
+      },
+      {
+        "name": "Font/ligature tricks to accommodate nonstandard keyboards/languages",
+        "description": "People installing TeX for non-North-American alphabets can set up TeX to conform to desired standards: map keyboard codes to character numbers, set \\catcode for those codes to 11 (letters), and arrange fonts so TeX's character numbers print the language characters; ligatures or font metric tricks can emulate missing keys.",
+        "guidance": "Example: for Norwegian alphabets one may map a key with code 241 to a character and set \\catcode'\\..=11 so control sequences like \\s\\..rtrykk work. Hyphenation is not confused by ligatures; fine printing is obtained by fine tuning fonts, hyphenation algorithm, and formats for the target language. The manual warns typists about occasional cases where ligatures should not be formed and about control-word vs control-symbol differences."
+      },
+      {
+        "name": "Ligature and punctuation behavior in roman font",
+        "description": "Plain TeX's roman font (\\rm / \\tenrm) provides standard characters and recognizes certain combinations as ligatures and punctuation substitutions (e.g. 'ff', 'fi', 'fl', 'ffi', 'ffl'; -- -> en-dash, --- -> em-dash; `` and '' for quotes yield proper curly quotes; ! ( -> \u00a1 etc.).",
+        "guidance": "Most of the ordinary visible ASCII characters are available; math-related characters such as + and = should be used in math mode to get proper spacing. Non-mathematical hyphen and slash should be typed as '-' and '/' outside math mode; subtraction/division in math mode as - and /. The chapter lists which ASCII symbols are preempted by plain TeX and that $, #, %, & are special (preempted by plain TeX)."
+      }
+    ]
+  }
+}

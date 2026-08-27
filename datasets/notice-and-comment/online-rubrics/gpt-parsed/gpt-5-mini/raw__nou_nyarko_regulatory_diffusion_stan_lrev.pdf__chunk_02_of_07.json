@@ -1,0 +1,95 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 7,
+  "chunk_chars": 39961,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.45883345801849,
+  "input_tokens": 12978,
+  "output_tokens": 2992,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "legal scholars and empirical researchers studying regulatory text reuse/interagency diffusion (administrative law, regulatory studies, computational text analysis)",
+    "subtask_short": "measuring regulatory text reuse",
+    "subtask_description": "Methods and analytic choices for detecting, defining, and quantifying instances of regulatory text reuse (interagency diffusion) in Federal Register/CFR paragraphs, plus network- and agency-level measures of influence.",
+    "subtask_keywords": [
+      "regulatory_diffusion",
+      "text_reuse",
+      "jaccard_similarity",
+      "empirical_law",
+      "federal_register"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Similarity measure (5-word sequences + Jaccard similarity)",
+        "description": "Split text into five-word sequences and compute the Jaccard similarity: the number of shared five-word sequences between two paragraphs divided by the number of unique five-word sequences in those paragraphs.",
+        "guidance": "Example: 'The quick brown fox jumps over the lazy dog' yields five-word shingles such as 'the quick brown fox jumps', 'quick brown fox jumps over', etc. The approach assigns a high similarity score when two paragraphs use the same words in the same order; lower scores arise when the consecutive number of similar words is smaller. See Appendix A for computational details."
+      },
+      {
+        "name": "Template vs. model distinction (interpretation of similarity scores)",
+        "description": "Similarity score of 1.0 represents exact copying/pasting between two agencies and indicates use as an exact 'template'; scores below 1.0 but sufficiently high indicate use as a 'model'.",
+        "guidance": "At 1.0 the two paragraphs are indistinguishable (verbatim copy). Below this threshold are instances where the drafter used a previous rule as a model\u2014minor word changes but a virtually unmistakable relationship. Normative concerns are matters of degree: stronger the more text diffuses."
+      },
+      {
+        "name": "Threshold for defining text reuse (similarity >= 0.5)",
+        "description": "Define text reuse when the Jaccard similarity between two paragraphs is 0.5 or greater.",
+        "guidance": "Manual inspection indicated that a similarity score of 0.5 and greater makes it almost impossible to assume the agency did not model its paragraph after existing text. Scores below 0.5 make such an assumption increasingly difficult. The exact threshold has little practical consequence; robustness tested across thresholds between 0.5 and 1.0. Figure 1 and accompanying discussion illustrate distribution and robustness."
+      },
+      {
+        "name": "Probabilistic sampling for computational feasibility",
+        "description": "Do not compute Jaccard similarity for every pair (computationally infeasible); instead employ big-data techniques to compute similarity only for pairs likely to be similar via a probabilistic procedure.",
+        "guidance": "Computing all pairwise Jaccard similarities (~212 billion comparisons) is infeasible, so techniques (described in Appendix A) ensure pairs with similarity >= 0.5 are captured with probability 1, while lower-similarity pairs are captured with lower probability (e.g., at 0.45 the inclusion probability is 0.98). This affects which scores appear in plotted distributions (Figure 1)."
+      },
+      {
+        "name": "Unit of observation: interagency paragraph-pair (different agencies)",
+        "description": "Each observation in the core dataset is a pair of two texts (paragraphs) published in the Federal Register by different agencies.",
+        "guidance": "Only paragraphs that appear in full text in the Federal Register are included. After exclusions, the core dataset contains 36,146 observations."
+      },
+      {
+        "name": "Exclude intra-agency borrowing and republished paragraphs",
+        "description": "Exclude all instances of intra-agency borrowing (borrowing between bureaus/offices within the same agency) and exclude republished paragraphs when an agency republishes predecessor-agency rules (e.g., creation of DHS).",
+        "guidance": "Rationale: intra-agency dynamics (central coordinating offices, templates on file) are easier to explain and often reflect an agency copying from itself; many entries lack subagency identity. When republication clearly indicated, those rules were dropped. If republication was not specified, exclusion was not always possible."
+      },
+      {
+        "name": "One-borrowing-per-agency-pair rule",
+        "description": "Assume each paragraph can be borrowed only once per agency pair; if agency A2 borrows from A1 twice (e.g., 2010 and 2015), only the first instance (A1,A2,2010) is included.",
+        "guidance": "Rationale: after the first borrowing, subsequent borrowings are plausibly A2 reusing its own language rather than copying A1 again. This avoids overcounting repeat borrowings between the same agency pair."
+      },
+      {
+        "name": "Handling of joint/common rulemakings (counting when multiple agencies publish same text simultaneously)",
+        "description": "If a pair includes at least one text published by multiple agencies at the same time (a joint rule), include one observation for each agency that participated in the joint rulemaking for that pair; do not count pairs between agencies that were both part of the same joint rulemaking.",
+        "guidance": "Example: if A1 borrows from a joint rule enacted by A2, A3, A4, the dataset includes (A1,A2), (A1,A3), and (A1,A4), but not (A2,A3), (A2,A4), (A3,A4). This avoids conflating interagency borrowing with consensus drafting or top-down unified texts."
+      },
+      {
+        "name": "Five-year window sensitivity restriction",
+        "description": "As a robustness check, assess reuse patterns while omitting any pair where more than five years lie between the publication dates of the two paragraphs.",
+        "guidance": "Rationale: discounts borrowing from 'old' text and mitigates concerns that trends are driven mechanically by an increasing stock of regulatory text. The five-year restriction lowers the measured reuse but still shows relatively high reuse (e.g., 8% by 2020); it helps distinguish mechanical from behavioral explanations (noting that the 2017 spike remains prominent)."
+      },
+      {
+        "name": "Definition of borrowing vs. lending agencies",
+        "description": "Denote agencies that reuse regulatory paragraphs as 'borrowing' agencies and agencies from whom paragraphs are reused as 'lending' agencies.",
+        "guidance": "Used to compute counts and trends over time (e.g., numbers of borrowing and lending agencies increased, with lending agencies increasing more steeply). Borrowing defined via similarity threshold >= 0.5."
+      },
+      {
+        "name": "Network-analytic framing (agencies as nodes, reuse as edges)",
+        "description": "Conceive drafting agencies as nodes and instances of text reuse as edges connecting them, enabling system-level observations about structure, clusters, center/periphery, and influential actors.",
+        "guidance": "Used to visualize changes over time (Figure 2 comparing 2005 and 2020: edges increased from 145 to 734) and to motivate leadership/follower metrics and subsequent network-based analyses."
+      },
+      {
+        "name": "Leadership scores: two measures (depth and breadth)",
+        "description": "Measure leadership in two ways: (1) depth of influence \u2014 a weighted count of the number of times an agency\u2019s original regulatory paragraph has appeared in the CFR (weights split attribution among earlier reusers); (2) breadth of influence \u2014 the number of other agencies that copy from it.",
+        "guidance": "Appendix B explains the weighting approach in detail (weights necessary when multiple agencies reuse the same text over time). Table 2 ranks agencies by absolute (weighted) leadership score. These two measures capture different notions of 'leader' (overall influence vs. number of followers)."
+      },
+      {
+        "name": "Decision not to normalize leadership scores by drafting activity",
+        "description": "Do not normalize leadership scores by an agency's overall drafting activity when presenting primary leadership results.",
+        "guidance": "Argument: normalization is misleading because specialized agencies may have low relevance to others (low copying not reflective of poor drafting) and agencies with little rulemaking can have inflated relative scores; adjusted/normalized scores are provided in Appendix C for completeness but are difficult to interpret and driven by exogenous factors."
+      }
+    ]
+  }
+}

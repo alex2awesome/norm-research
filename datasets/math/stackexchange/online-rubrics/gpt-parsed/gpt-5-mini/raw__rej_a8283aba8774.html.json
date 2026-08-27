@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_a8283aba8774.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17192,
+  "output_tokens": 4713,
+  "elapsed_s": 2070.514836709015,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in formal methods, theorem proving, and mathematicians interested in computer-checked/formalized proofs (users of HOL Light, Isabelle, and related tools)",
+    "subtask_short": "formal proof of Kepler conjecture",
+    "subtask_description": "A research-article level account of the formalization (Flyspeck) of the Kepler conjecture using HOL Light and Isabelle, describing the decomposition of the proof, the verification of nonlinear inequalities and linear programs, the tame graph classification, tooling, and auditing procedures.",
+    "subtask_keywords": [
+      "formal_verification",
+      "hol_light",
+      "isabelle",
+      "nonlinear_inequalities",
+      "linear_programming",
+      "tame_plane_graphs"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition fidelity / did the right theorem get formalized",
+        "description": "The definitions must be examined to see that the meaning of the final theorem (the Kepler conjecture) agrees with the common understanding of the theorem. In other words, did the right theorem get formalized? Were any unapproved axioms added to the system?",
+        "guidance": "Auditors should check formal definitions and any added axioms. The formalized statement (e.g., the_kepler_conjecture) must capture density as a limit via finite spherical containers and the appropriate error-term formulation (existence of c depending on V, restriction r >= 1, etc.)."
+      },
+      {
+        "name": "All numerical/computational steps formalized inside proof assistant",
+        "description": "All formal numerical computations are done with special finite precision floating-point numbers formalized in HOL Light. The native floating point operations of the computer are not used in any formal proof.",
+        "guidance": "Perform computations using HOL Light formal arithmetic so that results of arithmetic operations are HOL Light theorems; avoid reliance on untrusted native floating-point arithmetic."
+      },
+      {
+        "name": "Interval arithmetic and Taylor interval approximations for nonlinear inequalities",
+        "description": "The formal verification of inequalities is based on interval arithmetic. Taylor interval approximations (second-order and multivariate Taylor) are used to produce tighter interval bounds and reduce subdivisions.",
+        "guidance": "Construct interval extensions, use Taylor approximations about midpoints to minimize remainder w, subdivide where necessary; use Taylor-interval-based monotonicity checks (derivative intervals not containing 0) to reduce dimension; examples and numeric parameter guidance given (e.g., choosing y near midpoint)."
+      },
+      {
+        "name": "Domain partitioning and subdivision for inequality verification",
+        "description": "Nonlinear inequalities' domains are partitioned to create many (23,000+) sub-inequalities so each can be verified on a small rectangle, with n <= 6 variables for each inequality.",
+        "guidance": "Use automated informal search to find useful subdivisions and monotonicity arguments, then feed those to the formal verification routine; parallelize verification across cores and sessions."
+      },
+      {
+        "name": "Two-part inequality verification procedure (informal search + formal verifier)",
+        "description": "The verification procedure consists of an informal search procedure which finds an appropriate subdivision and other helpful info (e.g., monotonicity, which disjunct to verify), and a formal verification procedure which takes that result and produces a final HOL Light theorem.",
+        "guidance": "Keep the separation explicit: search heuristics may use efficient, informal computation, but the final verification must be done formally inside HOL Light using the produced plan."
+      },
+      {
+        "name": "Use of formalized finite-precision representations and dynamic precision choice",
+        "description": "It is possible to change the precision of all computations dynamically, and the informal search procedure tries to find minimal precision necessary for the formal verification.",
+        "guidance": "Represent floats as formal finite-precision constructs in the proof assistant; provide natural number arithmetic foundations (numerals over arbitrary base) so all low-level calculations reduce to natural number theorems."
+      },
+      {
+        "name": "Sharp inequality handling (corner cases)",
+        "description": "Some inequalities are sharp with f(x0)=0 at some corner x0 of the domain. Prove these by (1) exact computation f(x0)=0 by exact arithmetic; (2) show f<0 outside a small neighborhood U of x0; (3) show every partial derivative on U has sign so the maximum occurs at x0.",
+        "guidance": "Use Taylor intervals and derivative sign checks for step (3); perform exact arithmetic checks at corner points inside the formal system."
+      },
+      {
+        "name": "Recording and replaying proofs (exportable proof objects)",
+        "description": "Adapted HOL Light can record and export formal proof steps generated by proof scripts; exported proof objects can be imported and replayed in a separate HOL Light session and in other HOL-family systems (e.g., HOL Zero).",
+        "guidance": "Recording/replay speeds verification, provides additional cross-system checks, and improves trust (import into HOL Zero effectively eliminates risk of kernel bugs if replay succeeds). Make proof objects publicly available for independent replay."
+      },
+      {
+        "name": "Combine parallel sessions securely (canonicalization + MD5 of history)",
+        "description": "To combine results from parallel HOL Light sessions, convert each theorem to a canonical form including the entire history of constants, types, and axioms; export as a string and store an MD5 hash. The modified HOL Light imports a theorem only if the MD5 matches.",
+        "guidance": "Ensure that histories (constants/types/axioms) are exactly identical across sessions before allowing import; limit the import mechanism's use via language scoping rules to prevent misuse."
+      },
+      {
+        "name": "Trustworthy kernel / LCF approach",
+        "description": "Use an LCF-style architecture where the implementation language's type system ensures that valid theorems can only be produced by the small kernel's primitive inference rules; keep the kernel small and scrutinized.",
+        "guidance": "Prefer systems with small, formally-verified kernels where possible; if kernel is verified (e.g., efforts cited), that increases trustworthiness."
+      },
+      {
+        "name": "Linear-program verification via modified dual solutions",
+        "description": "Formal verification of linear programs uses dual solutions: obtain a dual (possibly imprecise) from an external solver, modify it to have sufficient numerical precision and convert to integer by scaling; then sum constraints weighted by these coefficients to show infeasibility.",
+        "guidance": "Use an external LP solver (e.g., GLPK) to find a candidate dual, then refine to a 'modified dual solution' whose coefficients give exact zero coefficients on variables where needed; multiply to integers and formalize the final arithmetic in the proof assistant. Store these dual certificates for later formal checking."
+      },
+      {
+        "name": "Automatic case splitting to tighten linear relaxations",
+        "description": "Case splitting (e.g., splitting x <= a or x >= a when variable takes form x <= a or x >= a with constant a) leads to more precise linear relaxations and is automated.",
+        "guidance": "Generate all required cases informally, then apply the formal LP verification procedure to each case; keep case generation automatic and record case lists for formal verification."
+      },
+      {
+        "name": "Use external code generation/execution cautiously (e.g., TameEnum via ML)",
+        "description": "Some large enumerations (like TameEnum) are generated by executing HOL formulas translated to ML rather than by fully formal proof generation, because formal generation would be impractical.",
+        "guidance": "When relying on execution, prove separately that the executing program correctly implements the specification (e.g., prove every tame plane graph is in TameEnum via interactive proof), and then prove that TameEnum is isomorphic to the archive list; keep the archive and generated list identical by checks and make the master file available."
+      },
+      {
+        "name": "Completeness of enumeration (tame classification)",
+        "description": "Formalize the completeness theorem: every tame plane graph is isomorphic to a graph appearing in the archive (two-step: prove every tame plane graph is in TameEnum; prove every graph in TameEnum is isomorphic to some graph in archive).",
+        "guidance": "Use Isabelle/HOL to recast original enumeration code and use the code generation/execution facility carefully; ensure that archive content matches used lists and provide formal isomorphism proofs."
+      },
+      {
+        "name": "Reconcile differing definitions across libraries",
+        "description": "Different libraries (e.g., graph planarity in tame graph classification vs hypermap planarity) may use distinct notions; the project must reconcile these notions and relate them formally.",
+        "guidance": "Provide formal translations/bridges between definitions (e.g., Euler characteristic-based planarity vs recursive planarity) and record the reconciliation in appendix or supporting material."
+      },
+      {
+        "name": "Maintain small, modular concepts and explicit hypotheses (blueprint proof best practices)",
+        "description": "Organize the blueprint proof around a small number of major concepts; make statements more precise, make all hypotheses explicit, break long proofs into series of shorter lemmas, and make chapters as independent as possible to support large collaboration.",
+        "guidance": "Adopt definitions (Marchal cells, fans, hypermaps, etc.) suited to formalization, restructure arguments to minimize interdependencies, and explicitly state all assumptions so formalization can proceed modularly."
+      },
+      {
+        "name": "Embrace automation and computational methods in the blueprint",
+        "description": "In the blueprint, the use of computers is fully embraced (rather than being a last resort), allowing many laborious lemmas of the original proof to be automated or eliminated.",
+        "guidance": "Design proofs and partitions to maximize automation opportunities: keep computations expressed in precise mathematical terms so they can be specified formally in proof assistants."
+      },
+      {
+        "name": "Extensive standard library and automated procedures are necessary",
+        "description": "The Flyspeck proof rests on a significant body of mathematical prerequisites (measure, topology, geometry, convexity, integration) and automated procedures (e.g., 'without loss of generality' transformations database) that make formal proofs tractable.",
+        "guidance": "Grow the standard library with commonly used theorems (Brouwer, Krein-Milman, etc.) and tooling that exploits invariance under transformations; library investment is important for large formalization projects."
+      },
+      {
+        "name": "Parallel verification plus reassembly and independent rechecks",
+        "description": "Run verification (e.g., nonlinear inequalities) in parallel sessions across many cores/machines; then reassemble results (using secure import) and recheck independently on different hardware to reproduce results.",
+        "guidance": "Record MD5s/histories to enable safe import, rerun verification on independent clusters for assurance (examples: runs on Azure and at Radboud University yielded identical results)."
+      },
+      {
+        "name": "Audit checklist for distributed formal proofs",
+        "description": "Auditors should: execute proof scripts to ensure they produce claimed theorems; check definitions to ensure the right theorem was formalized; check that no unapproved axioms were added; audit the formal proof system internals; assume malicious intent in review.",
+        "guidance": "\u91cd\u70b9: check hand translations between systems (e.g., Isabelle\u2192HOL Light), verify archive lists are identical across systems, and examine special modifications (e.g., to HOL Light) used to combine sessions."
+      },
+      {
+        "name": "Openness, reproducibility, and archival of code and data",
+        "description": "Code and documentation for the project should be made available (e.g., a public repository and Archive of Formal Proofs entries) to allow independent verification and reuse.",
+        "guidance": "Make master files, exported proof objects, dual certificates, and archives available; encourage independent replays and audits."
+      },
+      {
+        "name": "Use of external solvers allowed but require formal certificate verification",
+        "description": "External tools (e.g., GLPK for LP solving, C++ enumeration code) can be used to find candidates (dual solutions, enumerations) but the results must be converted to formal certificates and checked within the proof assistant.",
+        "guidance": "Compute candidates externally for efficiency, then convert/refine them into exact (integer-scaled) certificates and verify formally in HOL/Isabelle; store these formal certificates for replay."
+      },
+      {
+        "name": "Ensure the formal proof system and extensions are themselves audited",
+        "description": "Special modifications (e.g., modified HOL Light that accepts imported theorems by MD5) and any proof-import mechanisms must be reviewed to ensure they do not introduce unsound shortcuts.",
+        "guidance": "Restriction of import mechanisms via language scoping, independent review of code implementing modified behavior, and minimization of use of such modifications outside of narrowly scoped assembly tasks."
+      }
+    ]
+  }
+}

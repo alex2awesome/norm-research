@@ -1,0 +1,76 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/ml_openness_peer_review.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "ml_openness_peer_review.html",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39774,
+  "model": "gpt-5-mini",
+  "elapsed_s": 36.25695850000193,
+  "input_tokens": 11094,
+  "output_tokens": 4019,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference organizers studying peer-review quality (ML/AI venues), annotators and developers building LLM-based review-evaluation tools",
+    "subtask_short": "peer-review quality evaluation",
+    "subtask_description": "Automatically (LLM-based) evaluate the quality of scientific peer reviews using three metrics\u2014substantiation, correctness, and completeness\u2014by identifying and labeling review segments and comparing them to the paper and author replies.",
+    "subtask_keywords": [
+      "peer_review",
+      "review_quality",
+      "llm_evaluation",
+      "substantiation",
+      "correctness",
+      "completeness"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Substantiation",
+        "description": "Identify the substantiated and unsubstantiated negative evaluative segments in a review.",
+        "guidance": "Follow the Substantiation Prompt. Steps: (1) Identify evaluative segments (subjective judgments of aspects of the paper). (2) From those, identify negative evaluative segments (evaluative segments that do not support acceptance). (3) If segments continue the same criticism and the second segment provides examples/explanations (e.g., connected by 'In particular,' 'For instance,' etc.), treat the second as a substantiation or merge into a single segment. (4) For each negative evaluative segment, determine whether it has been well-substantiated using evidence from the review itself: a substantiation should elaborate on the negative evaluative segment and may appear far from the segment; substantiation can be self-substantiation (the substantiation is a substring of the segment) \u2014 if so, mark it as self-substantiated. Notes and anti-patterns: prescriptive segments (suggestions for improvements, terminology, grammar, conceptual suggestions) are generally self-substantiated because they don't require external evidence; segments that are questions/requests/clarifications about a specific aspect are normally self-substantiated unless extremely vague. If a negative evaluative segment is not substantiated, provide the text and mark 'Not substantiated'. The substantiation provided MUST be directly taken from the review (do not add explanations). Output format required by the prompt: step-wise response followed by a list in the format [(\u2018<negative evaluative segment 1>\u2019, \u2018<substantiation, if any>\u2019), ...]; if no substantiation leave the substantiation as an empty string (''), and if self-substantiated add the negative evaluative segment again as the substantiation."
+      },
+      {
+        "name": "Correctness",
+        "description": "Determine whether objective segments in the review correctly reflect the paper's content (accounting for author replies/updated manuscripts).",
+        "guidance": "Follow the Correctness Prompt. Steps: (1) Identify objective segments: segments that are objective in nature and speak about the contents of the paper (these indicate the reviewer's understanding/interpretation). (2) For each objective segment, check the paper to determine whether the segment is correct: facts should be verifiable from the paper itself; if the author is ambiguous, the reviewer's interpretation can be considered correct. (3) Consider author replies and updated manuscript versions: if replies state that an experiment/analysis was added or baselines updated, then a segment asserting the absence of that experiment in the original manuscript should be considered correct (because it referred to the original state). (4) If a segment is incorrect, provide excerpts/reasoning from the paper showing it is incorrect; if correct, provide an empty string as the reasoning. Output format required by the prompt: the response must include the text 'final_answer:' followed by a list of tuples of the form (\"<evaluative segment>\", \"<reasoning if incorrect>\"), (\"<evaluative segment>\", \"\"). Important operational note: pass author replies and the paper together with the review to the LLM when evaluating correctness to account for updates."
+      },
+      {
+        "name": "Completeness",
+        "description": "Assess whether the review covers the claims (contributions) made in the paper.",
+        "guidance": "Follow the Completeness Prompt. Steps: (1) Make a list of all the claims made in the paper; these claims must be part of the contributions. (2) For each claim, search the review to see if it has been covered (it need not be detailed; it counts if it's clear the reviewer noticed the claim and its implications). (3) Mark covered claims as 1 and uncovered claims as 0. Output format required by the prompt: the response must include the text 'final_answer:' followed by [(<claim>, 0 or 1), (<claim>, 0 or 1), ...]. Practical processing note from the paper: when passing the review to the LLM, exclude the reviewer score section of the review (the score does not represent review completeness and is excluded from LLM input)."
+      },
+      {
+        "name": "Definitions: evaluative / negative evaluative / objective segments",
+        "description": "Precise segment definitions used across metrics.",
+        "guidance": "Evaluative segment: a subjective judgement of an aspect of the paper (may be a sentence, multiple sentences, or part of a sentence; can also be a question). Negative evaluative segment: an evaluative segment that does not support the acceptance of the paper. Objective segment: a segment that speaks about the contents of the paper and indicates the reviewer's understanding or interpretation; these are used for the correctness metric."
+      },
+      {
+        "name": "Number of claims (metric-specific counting)",
+        "description": "Operational definition of 'number of claims' used in analyses.",
+        "guidance": "The 'number of claims' is an umbrella term that refers to: (a) for substantiation \u2014 the number of negative evaluative segments in the review; (b) for correctness \u2014 the number of objective segments in the review; (c) for completeness \u2014 the number of claims in the paper. The mean number of claims per review is used in aggregate analyses and to interpret metric differences between venues."
+      },
+      {
+        "name": "Segment tagging / highlighting scheme (for examples and annotations)",
+        "description": "Color-coded labeling used to illustrate segment categories in sample reviews.",
+        "guidance": "In the sample review: orange highlights = negative evaluative segments; blue highlights = substantiation for negative evaluative segments (if present); green highlights = correct objective segments; yellow highlights = incorrect objective segments. The paper uses this scheme to demonstrate how segments are identified and categorized for the three metrics."
+      },
+      {
+        "name": "Processing rule: merging and locating distant substantiations",
+        "description": "Rules for handling multi-part criticisms and dispersed substantiation within a review.",
+        "guidance": "If multiple segments continue the same line of criticism and a later segment provides examples/explanations, treat the later segment as the substantiation or merge them into a single segment before substantiation analysis. When searching for substantiation, check the entire review because the substantiation may be far away from the evaluative segment."
+      },
+      {
+        "name": "Substantiation evidence requirements",
+        "description": "What counts as valid substantiation in a review.",
+        "guidance": "Valid substantiation must be appropriate evidence using examples from the paper to elaborate on the negative evaluative segment. If substantiation is self-contained, it must be a substring of the evaluative segment (self-substantiated). Prescriptive suggestions and targeted questions about the paper are normally considered self-substantiated. If no substantiation exists, label the evaluative segment 'Not substantiated'. The substantiation extracted must be reproduced verbatim from the review when returned."
+      },
+      {
+        "name": "Statistical testing for venue comparisons (permutation test + Holm-Bonferroni)",
+        "description": "Procedure for testing whether metric means differ between venues.",
+        "guidance": "Use a two-sided Fisher permutation test on the observed absolute mean difference T_obs = |\u00afB \u2212 \u00afA| with 10,000 permutations. Compute the permutation p-value as (#{T_perm \u2265 T_obs} + 1) / ((# permutations) + 1) to avoid zero p-values. Because three metrics are tested, correct for multiple comparisons using the Holm-Bonferroni procedure: sort the three permutation p-values and test at thresholds {0.05/3, 0.05/2, 0.05} (\u03b1 = 0.05). Report step-down Holm-Bonferroni results and 95% confidence intervals for mean differences."
+      }
+    ]
+  }
+}

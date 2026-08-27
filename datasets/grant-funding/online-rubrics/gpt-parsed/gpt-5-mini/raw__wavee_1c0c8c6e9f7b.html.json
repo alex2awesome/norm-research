@@ -1,0 +1,149 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/wavee_1c0c8c6e9f7b.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15654,
+  "output_tokens": 5369,
+  "elapsed_s": 1516.1207782079,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "LLM researchers, model builders, and social-science & humanities scholars interested in domain-specific language models and responsible interfaces",
+    "subtask_short": "ssh_domain_llm_development",
+    "subtask_description": "Designing, training, evaluating, and deploying causal language models and a non-generative interface specialized for Social Sciences and Humanities (SSH) texts (the SHARE models and MIRROR interface).",
+    "subtask_keywords": [
+      "llm",
+      "ssh",
+      "model_development",
+      "mirror_interface",
+      "evaluation_benchmarks"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "SSH-curated corpus composition",
+        "description": "The SHARE dataset is constructed from three corpora: Wikipedia articles, Project Gutenberg books, and academic publications (PeS2o and CORE), with a smaller subset obtained via dialogue/agreements (e.g., Open Humanities Press). Data is primarily English and Dutch.",
+        "guidance": "Select SSH-relevant subsets from these sources (see Table 1/2/3 for topics and LOCC classes). Acknowledge limitations (over-reliance on English) and document provenance and publisher agreements. Use PetScan and WikiExtractor for Wikipedia extraction and LOCC metadata for Gutenberg. Aim for broad SSH topical coverage (Business, Culture, History, Law, Philosophy, etc.)."
+      },
+      {
+        "name": "SSH-subset identification method",
+        "description": "Identify the Social Sciences and Humanities subset using a hybrid approach: metadata-based heuristics when available and a Field of Science (FoS) classifier (AllenAI) when metadata is missing.",
+        "guidance": "Apply heuristic filters to categories/metadata; when unavailable, apply the AllenAI FoS classifier to titles/abstracts/venues. Record and report selection criteria and fields retained (Art, Business, Economics, Geography, Education, History, Law, Linguistics, Philosophy, Political Science, Psychology, Sociology)."
+      },
+      {
+        "name": "Tokenizer design appropriate for SSH data",
+        "description": "Train a custom byte-pair encoding (BPE) tokenizer on the full training corpus; SHARE-4B used a reduced vocabulary size (50,000 tokens) vs Phi-4's ~100k.",
+        "guidance": "Rationale: SSH data (mainly English/Dutch) requires smaller vocabularies; inspect tokenization quality for academic texts (avoid breaking frequent words unnecessarily). Report tokenizer vocabulary size and qualitative inspection results."
+      },
+      {
+        "name": "Model architecture and sizes",
+        "description": "Decode-only transformer architectures based on Phi-4; two sizes trained: ~3.9B parameters (SHARE-4B) and ~14B parameters (SHARE-14B).",
+        "guidance": "Document architecture choices (e.g., Phi-4-like), baseline context length (4096 tokens) and any expansions (to 8192 tokens). Justify size choices in relation to dataset scale and target use cases (e.g., deployable quantized 4B for low-resource devices)."
+      },
+      {
+        "name": "Context window and context expansion",
+        "description": "Baseline context length was 4096 tokens, expanded to 8192 tokens after initial pretraining; context expansion applied with 5000 English academic documents extracted from PeS2o.",
+        "guidance": "Report context window used in pretraining and downstream tools; validate behavior on long documents typical of SSH outputs and ensure tokenization/packing strategies for long-context training."
+      },
+      {
+        "name": "Training compute and token budget (compute-optimal planning)",
+        "description": "Aim to complete 2 epochs of the training data for the final model, reaching a compute-optimal 630 billion tokens for the 14B model; current report: 15% of training (~96B tokens) for SHARE-14B.",
+        "guidance": "Use Chinchilla scaling laws to choose compute/token budget to avoid diminishing returns. Report number of tokens seen, epochs planned, and rationale for stopping criteria. Be explicit about migration of earlier-stage pretraining data when moving compute environments."
+      },
+      {
+        "name": "Training recipe and hyperparameters",
+        "description": "Replicate successful open pretraining recipes (e.g. OLMO 2) with adaptations. Examples given: SHARE-4B used global batch size 64, weight decay .01, learning rate 2e-4 with 3000 warmup steps and cosine scheduler; SHARE-14B used different warmup and manual LR adjustments and weight decay .1.",
+        "guidance": "Report batch size, weight decay, learning-rate schedule, number of warmup steps, optimizer choices, use of FSDP/data-parallelism, hardware used, and any manual adjustments. Monitor training/evaluation loss and grad norm for smooth runs and report evaluation perplexity during training."
+      },
+      {
+        "name": "Efficiency and compute-optimization measures",
+        "description": "Apply state-of-the-art efficiency techniques (mixed precision, torch.compile, FlashAttention-2, Liger Kernel, packing, gradient checkpointing) to reduce runtime and energy usage.",
+        "guidance": "List and justify efficiency measures applied, and consider providing a quantized smaller model (4B) that can run on CPU (student laptops) to lower carbon footprint. Report rough emissions estimates where possible."
+      },
+      {
+        "name": "Avoidance of SFT/RLHF alignment for SSH base models",
+        "description": "No supervised fine-tuning (SFT) or alignment (DPO/RLHF) was applied to the base SHARE models because existing SFT/DPO/RLHF datasets are not SSH-specific and alignment could 'alienate' SSH research topics; experiments showed SFT degraded generation performance.",
+        "guidance": "Prefer releasing base pretrained models for transparency; if alignment is attempted, document domain-specific datasets and the trade-offs. Consider alternative interfaces (non-generative) instead of alignment to avoid anthropomorphisation and preserve domain fidelity."
+      },
+      {
+        "name": "Use domain-appropriate evaluation metrics (SSH validation)",
+        "description": "Standard benchmarks (e.g., MMLU) are not valid for SSH-focused models as they assume STEM/high-school content and multiple-choice formats; instead evaluate on SSH-specific tests and out-of-distribution SSH abstracts.",
+        "guidance": "Choose evaluation data and metrics that match SSH content/format. Report per-field perplexity and comparisons against architecturally similar general models (e.g., Phi-4) to validate specialization."
+      },
+      {
+        "name": "Perplexity-based specialization analysis",
+        "description": "Compute perplexity on out-of-distribution SSH abstracts and compare average log perplexity per scientific domain between SHARE and Phi-4; lower log perplexity gap indicates better fit to that domain.",
+        "guidance": "Report domain/faculty-level perplexities with confidence intervals. Note possible endogeneity when using the same FoS classifier for data selection and validation and provide additional checks (e.g., faculty affiliation)."
+      },
+      {
+        "name": "SSH Cloze benchmark (domain-specific Cloze evaluation)",
+        "description": "Custom Cloze benchmark sampling 275 out-of-distribution SSH abstracts (25 examples per selected Web of Science field) to test prediction of tokens where SSH familiarity is required (e.g., choosing 'negative' vs 'positive').",
+        "guidance": "Design Cloze items so one must use domain knowledge rather than general English patterns. Use recency to avoid data contamination. Report raw and prior-corrected accuracy and compare to other models (Phi-4, Pythia, OLMO, SSciBERT). Plan to expand number of examples/discipline coverage over time."
+      },
+      {
+        "name": "Prior-corrected accuracy for Cloze tasks",
+        "description": "Report prior-corrected accuracy to account for token frequency bias (models might guess the correct word by picking the most frequent choice).",
+        "guidance": "Compute and report both raw accuracy and prior-corrected accuracy; explain calculation and show rankings by prior-corrected accuracy for fair model comparison."
+      },
+      {
+        "name": "Surprisal / Entropy / Z-score as unexpectedness metric",
+        "description": "Measure token unexpectedness using surprisal S_t = -log p(x_t | x_<t), token entropy H_t, standard deviation sigma_t of surprisal, and z-score Z_t = (S_t - H_t) / sigma_t to signal unexpected tokens.",
+        "guidance": "Use surprisal and entropy to produce z-scores per token; visualize these (heatmap) so users can assess whether unexpectedness is negative (typo, misuse) or positive (innovation). Provide formulas and explain interpretation of high/low Z_t values."
+      },
+      {
+        "name": "MIRROR interface design principles",
+        "description": "Three core principles: (1) Allow interaction with a model in its pretrained state; (2) Make explicit the expectations associated with texts from the SSH (outputs should not be prescriptive or normative); (3) Respect publishers/authors and minimize copyright/plagiarism issues.",
+        "guidance": "Design interfaces and licensing to follow these principles (e.g., non-generative interfaces, restricted outputs, forbidding distillation). Make the model's assumptions transparent and avoid prescriptive text generation that could misrepresent SSH norms."
+      },
+      {
+        "name": "Non-generative interface (no text generation)",
+        "description": "MIRROR is a 'Generative AI interface that does not generate any text' \u2014 it outputs surprisal/z-scores for each token rather than producing model-generated text.",
+        "guidance": "Use token-probability visualizations rather than provided replacements. This reduces copyright risks and discourages using the model to replace student or researcher writing; explicitly recommend MIRROR for reflection rather than automation."
+      },
+      {
+        "name": "MIRROR visualization and interaction features",
+        "description": "Visualize surprisal via a heatmap (z-score per token), hover to show a 'thesaurus-like view' with tokens most likely predicted by the model, and support alternative visualizations: (2) list most unexpected tokens, (3) rank tokens not appearing in the text, (4) group unexpectedness per sentence, (5) group per paragraph.",
+        "guidance": "Provide token-level and higher-level (sentence/paragraph) overviews; ensure interactive hover UI shows model-predicted tokens conditioned on preceding text; reverse usual plagiarism highlighting (make high-surprisal tokens salient)."
+      },
+      {
+        "name": "Use-case coverage for unexpectedness signalling",
+        "description": "MIRROR should be capable of signalling: (1) Typos and style mistakes (negative); (2) Content/factual mistakes (negative); (3) Innovation (positive); (4) Countering dominant narratives (positive).",
+        "guidance": "Provide examples and qualitative analysis. Note that larger models (14B) detect more nuanced deviations. Emphasize human judgement: the interface signals unexpectedness but users must decide whether deviation is desirable or an error."
+      },
+      {
+        "name": "Causal-nature editing caution",
+        "description": "Because autoregressive models predict tokens based on previous tokens, an optimal use of SHARE-MIRROR for text reviewing requires accounting for the model's causal nature; revisions should start at the beginning of texts.",
+        "guidance": "Warn users that mistakes earlier in a text can affect subsequent token expectations; recommend iterative re-evaluation from the start after edits rather than patch edits mid-document without re-scoring."
+      },
+      {
+        "name": "Transparency about bias inheritance and limitations",
+        "description": "SHARE inherits systemic biases present in the SSH scholarship used to train it. MIRROR can make these biases explicit but does not resolve them.",
+        "guidance": "Report and visualize bias analyses (e.g., over-/under-representation of countries, epistemologies). Warn downstream users (e.g., reviewers) not to use MIRROR as a shortcut to determine novelty without broader evaluation. Document limitations and planned mitigation steps."
+      },
+      {
+        "name": "Licensing and usage restrictions to protect authors and prevent distillation",
+        "description": "Restrict model usage and forbid model distillation to prevent circumvention by commercial entities extracting model outputs and to minimize academic fraud/misattribution.",
+        "guidance": "State licensing terms that forbid distillation and commercial exploitation of outputs that would enable bypassing copyright restrictions. Pair licensing with non-generative MIRROR usage recommendations."
+      },
+      {
+        "name": "Data provenance, privacy, and processing safeguards",
+        "description": "Preprocess raw data only on EU servers where feasible; delete US-based Saturn Cloud tokenized data 30 days after training; process personal data (author names) under GDPR public interest lawful basis.",
+        "guidance": "Document data flows, retention/deletion policies, and legal bases for processing personal data. Maintain provenance records for CORE and other aggregators and note any publisher agreements."
+      },
+      {
+        "name": "Memorization and safety testing",
+        "description": "Test for memorization by probing deterministic generation with excerpts from training data; early tests showed models fail to replicate copyrighted content, with memorization mainly of headers/disclaimers.",
+        "guidance": "Report memorization checks and examples (token-level highlights). Use these tests to justify licensing/output restrictions and to assess risks of data leakage. Also report that filtered SSH pretraining reduces presence of safety-sensitive domains (e.g., CSAM, weapons) but continue to monitor."
+      },
+      {
+        "name": "Quantitative comparative evaluation vs comparable models",
+        "description": "Compare SHARE models to Phi-4, OLMO, Pythia, SSciBERT on domain-appropriate metrics (SSH Cloze prior-corrected accuracy, perplexity per field) and plot performance vs estimated flops to show efficiency.",
+        "guidance": "Present tables and figures (e.g., prior-corrected accuracy ranking, log perplexity gaps per field) and discuss compute-efficiency tradeoffs (top-left quadrant = better performance with lower compute)."
+      },
+      {
+        "name": "Robust dataset processing and deduplication",
+        "description": "Use robust ingest/pipeline for CORE (deduplication, parsing, enrichment with DOIs and identifiers) and standard interoperability protocols (OAI-PMH) for harvesting to ensure research-grade dataset quality.",
+        "guidance": "Report deduplication methods, parsing steps, metadata enrichment, and any heuristics used. Document selection biases introduced by repository coverage and metadata completeness."
+      }
+    ]
+  }
+}

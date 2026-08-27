@@ -1,0 +1,170 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 23,
+  "n_chunks": 42,
+  "chunk_chars": 39554,
+  "model": "gpt-5-mini",
+  "elapsed_s": 134.13088016599795,
+  "input_tokens": 14736,
+  "output_tokens": 6381,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users and macro programmers (advanced), people implementing or writing macros for TeX",
+    "subtask_short": "tex vertical mode reference",
+    "subtask_description": "Concise reference/survey of TeX's vertical (and continuing into horizontal) mode behavior: parameter types and counts, assignment and definition syntax, mode-independent commands, and the mode-dependent actions (page builder, interline glue, box handling, insertions, errors). Useful for TeX implementers and advanced macro writers.",
+    "subtask_keywords": [
+      "tex",
+      "typesetting",
+      "vertical_mode",
+      "horizontal_mode",
+      "macro_programming"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Parameter inventory",
+        "description": "TeX has a fixed inventory of internal parameters across five kinds; the chapter counts a total of 103 parameters of all five kinds.",
+        "guidance": "The page lists many named parameters (e.g. \\baselineskip, \\parskip, \\skip registers, \\muskip registers, \\toks registers, etc.) and indicates that details for each quantity appear elsewhere in the book (see Appendix I). Use this inventory as the authoritative set of parameter names and kinds when manipulating internal state."
+      },
+      {
+        "name": "Token-list parameters (examples and roles)",
+        "description": "Token-list parameters are parameters whose values are token lists; examples include \\output, \\everypar, \\everymath, \\everydisplay, \\everyhbox, \\everyvbox, \\everyjob, \\everycr, and \\errhelp.",
+        "guidance": "The page explains these token-list parameters and their roles (e.g. \\everypar tokens are inserted at paragraph start, \\output is the user output routine, \\everyjob is executed when a job begins). Consult their detailed semantics elsewhere in the book when using them."
+      },
+      {
+        "name": "Assignment syntax and prefixes",
+        "description": "Assignments may include an optional '=' sign and every assignment can be prefixed by \\global; only macro-definition assignments may be prefixed by \\long or \\outer. If \\globaldefs is positive a \\global prefix is automatically implied; if negative a \\global prefix is ignored.",
+        "guidance": "Example assignments: \\def\\a{a}, \\parshape=1 5pt 100pt, \\advance\\count20 by -1. The optional equals sign means implementations must accept both forms (with or without '='). Global vs. local scope follows grouping unless made global. The precise prefix rules determine whether definitions are global/local and whether \\long/\\outer are permitted."
+      },
+      {
+        "name": "Definition syntax (macro assignments)",
+        "description": "Macro definitions use \\def, \\gdef, \\edef, \\xdef. The syntax is (def) -> \\def | \\gdef | \\edef | \\xdef and (definition text) -> (parameter text)(left brace)(balanced text)(right brace).\",\"guidance\":\"(control sequence) may be a control sequence or an active character; parameter text contains no left or right brace tokens; balanced text must have properly nested braces. \\gdef == \\global\\def, \\xdef == \\global\\edef; \\edef and \\xdef expand the balanced text when reading the definition while \\def and \\gdef do not.",
+        "guidance": "See Chapter 20 for what can follow \\the and for full parameter-text rules."
+      },
+      {
+        "name": "Filler/general text syntax",
+        "description": "A (general text) form may be (filler){(balanced text)(right brace)} where (filler) is (optional spaces) or (filler)\\relax(optional spaces).",
+        "guidance": "Used for commands whose parameter is arbitrary text rather than a formal parameter text; main purpose is to specify the balanced text inside. Implementation must permit implicit left-brace when appropriate (i.e. begin-group token may be implicit)."
+      },
+      {
+        "name": "Classification of simple assignments",
+        "description": "Simple assignments fall into several patterns: (variable assignment), (arithmetic), (code assignment), (let assignment), (shorthand definition), (fontdef token), (family assignment), (shape assignment), \\read number to (control sequence), \\setbox<number>= (box), \\font<control sequence>=<file name> at <size>, and (global assignment).",
+        "guidance": "The page enumerates these forms to guide parsing and to show what is legal as a 'simple assignment'. Implementations and macro writers should recognize these categories and their respective argument patterns."
+      },
+      {
+        "name": "Arithmetic assignment forms",
+        "description": "Arithmetic assignments include \\advance{integer variable}(optional by){number}, \\advance{dimen variable}(optional by){dimen}, \\advance(glue variable)(optional by)(glue), \\advance{muglue variable}(optional by)(muglue), \\multiply{numeric variable}(optional by)(number), \\divide{numeric variable}(optional by)(number).",
+        "guidance": "The token 'by' is optional (can be present or omitted with optional spaces). This defines the syntactic shapes for arithmetic modifications of registers and must be supported by parsers."
+      },
+      {
+        "name": "Variable/register categories and forms",
+        "description": "Integer variables, dimen variables, glue variables, mu-glue variables, token variables and numeric variables are distinct categories. Concrete forms include \\count<number>, \\dimen<number>, \\skip<number>, \\muskip<number>, \\toks<number>.",
+        "guidance": "Variable categories determine what values they accept and what arithmetic operations apply. Numeric variables may be implemented as aliases to one of the fundamental register types."
+      },
+      {
+        "name": "Code assignment numeric limits",
+        "description": "The numeric at the end of a (code assignment) must not be negative except for \\delcode; specific recommended upper limits: at most 15 for \\catcode, 32768 for \\mathcode, 255 for \\lccode or \\uccode, 32767 for \\sfcode, and 2^24-1 (text shows '224 - 1') for \\delcode.",
+        "guidance": "Implementations must enforce these bounds (and the \\delcode negative exception) when scanning code assignments; the page highlights that illegal ranges should be rejected or handled as errors."
+      },
+      {
+        "name": "\\setbox / box construction and grouping",
+        "description": "A \\setbox<number>=\\hbox to{dimen}{(horizontal mode material)} causes TeX to evaluate the number and dimen, push them on a stack, read the begin-group, start a new level of grouping, enter restricted horizontal mode, execute commands to build the box, and when the matching } appears restore group-local changes, package the hbox using the saved size, and complete the \\setbox returning to the prior mode.",
+        "guidance": "Building a box may execute arbitrarily many commands and change modes; parsers/implementations must support nesting and restoring of group-local assignments and must preserve the saved size until packaging occurs."
+      },
+      {
+        "name": "\\lastbox restrictions",
+        "description": "The \\lastbox operation is not permitted in math modes, nor in vertical mode when the main vertical list has been entirely contributed to the current page. It is allowed in horizontal modes and internal vertical mode where it refers to (and removes) the last item if that item is an hbox or vbox.",
+        "guidance": "Macro writers must avoid \\lastbox in contexts where it's forbidden; implementations must detect these contexts and signal errors if attempted."
+      },
+      {
+        "name": "Global assignments that bypass grouping",
+        "description": "Certain assignments inherently affect global tables or intimate control variables; in these cases the presence or absence of \\global as a prefix has no effect. These include font assignments, hyphenation assignments, box-size assignments, interaction-mode assignments, and 'intimate' assignments (special integer/dimen).",
+        "guidance": "Examples: \\fontdimen<number>(font)=<dimen>, \\hyphenchar(font)=<number>, \\patterns{...}. Because grouping doesn't confine these changes, macro authors must be careful when changing such tables."
+      },
+      {
+        "name": "File name principles and portability",
+        "description": "The syntax for a (file name) is nonstandard across operating systems; universally a file name should be optional spaces followed by explicit character tokens (after expansion). A sequence of six or fewer ordinary letters and/or digits followed by a space should work portably on essentially all TeX installations. File names are case-sensitive (uppercase not equivalent to lowercase).",
+        "guidance": "When writing macros that open files, prefer short alphanumeric names for portability and do not rely on case-insensitive file systems."
+      },
+      {
+        "name": "Mode-independent commands and their effects (overview)",
+        "description": "A class of commands behave the same regardless of current mode (vertical/horizontal/math): \\relax, group begin/end, \\begingroup/\\endgroup, \\showthe, \\showbox, \\show, \\showlists, \\shipout, \\ignorespaces, \\afterassignment, \\aftergroup, \\uppercase/\\lowercase, \\message/\\errmessage, \\openin/\\closein, \\immediate\\openout/\\closeout, \\immediate\\write.",
+        "guidance": "Each such command has specific documented behavior: e.g. \\relax does nothing; \\shipout sends a box to the dvi file; \\ignorespaces discards spaces; \\uppercase/\\lowercase convert balanced text using \\uccode/\\lccode without expansion; \\message writes to terminal; \\errmessage uses error format and may display \\errhelp on request. Use these consistently without depending on mode."
+      },
+      {
+        "name": "\\afterassignment semantics",
+        "description": "\\afterassignment(token) saves (token) in a special place; it will be inserted back into the input just after the next assignment command has been performed. A subsequent \\afterassignment before the next assignment overrides the previous one. If the next assignment is a \\setbox and the assigned box is an \\hbox or \\vbox or \\vtop, the token will be inserted just after the { in the box construction (not after the }) and will come before tokens inserted by \\everyhbox or \\everyvbox.",
+        "guidance": "Macro authors can use \\afterassignment to arrange tokens to follow the mechanical completion of an assignment; be aware of the special-case behavior for box assignments and the overriding semantics."
+      },
+      {
+        "name": "\\aftergroup semantics",
+        "description": "\\aftergroup(token) saves the token on TeX's stack; it will be inserted back into the input just after the current group has been completed and its local assignments undone. Several \\aftergroup commands in the same group are scanned in the same order they were issued (e.g. {\\aftergroup\\a\\aftergroup\\b} yields \\a\\b).",
+        "guidance": "Useful for transferring tokens out of a group; ordering is preserved. Implementations must queue these tokens and restore them when group ends."
+      },
+      {
+        "name": "Whatsit items: \\openout, \\write, \\special",
+        "description": "\\openout, \\closeout, \\write commands are recorded into a 'whatsit' item appended to the current list; such whatsits are performed later during any \\shipout that applies to that list (unless the list is part of a box inside leaders). \\special(general text) expands its text and puts it into a whatsit which eventually appears in the dvi as an instruction to downstream software.",
+        "guidance": "Macros that generate file I/O or specials should expect delayed execution (at shipout time). Be careful with leaders/boxes since those inhibit whatsit execution."
+      },
+      {
+        "name": "Penalty/kern/glue and unpenalty/unskip/unkern behavior",
+        "description": "\\penalty(number) appends a penalty item to the current list; \\kern{dimen} and \\mkern append kern items. \\unpenalty, \\unkern, \\unskip remove the last item on the current list if it is of the corresponding type (penalty, kern, or glue). However, \\unpenalty/\\unkern/\\unskip are not permitted in vertical mode if the main vertical list so far has been entirely contributed to the current page, since TeX never removes items from the current page.",
+        "guidance": "Macro writers should not expect to remove items already shipped to the page; removals are only allowed while the items are still on the current list."
+      },
+      {
+        "name": "Marks and migration to top/first/bot marks",
+        "description": "\\mark{general text} expands the balanced text and puts a mark item appended to the current list. Mark items can appear in horizontal and math lists but have no effect until they migrate out of their list into a vertical list; marks may eventually supply replacement text for \\topmark, \\firstmark, \\botmark, \\splitfirstmark and/or \\splitbotmark.",
+        "guidance": "Because marks only take effect after migration into vertical lists, macros that rely on marks should be aware of the migration and page-building timing."
+      },
+      {
+        "name": "\\insert and insertion-item behavior",
+        "description": "\\insert<number>{filler}{(vertical mode material)} causes TeX to enter internal vertical mode and a new level of grouping; when the matching } is seen the vertical list is put into an insertion item appended to the current list using the values of \\splittopskip, \\splitmaxdepth, and \\floatingpenalty that were current in the group just ended. The insertion item leads to a page insertion only if it appears in TeX's main vertical list (it must migrate there). TeX exercises the page builder after appending an \\insert in vertical mode.",
+        "guidance": "Insertions are the primitive mechanism for footnotes/top-insertions; their final effect depends on migration and page building; authors must manage split parameters to control resulting page behavior."
+      },
+      {
+        "name": "\\vadjust and adjustment-item behavior",
+        "description": "\\vadjust{filler}{(vertical mode material)} is similar to \\insert but produces an adjustment item appended to the current list; \\vadjust is not allowed in vertical modes. When an adjustment item migrates from a horizontal list to a vertical list the vertical list inside the adjustment item is 'unwrapped' and put directly into the enclosing list.",
+        "guidance": "\\vadjust is used to attach vertical material to a horizontal box (e.g. footnote material attached to a line). Because \\vadjust is disallowed directly in vertical mode it is intended for use inside horizontal lists."
+      },
+      {
+        "name": "Page builder and contribution list concept",
+        "description": "In vertical mode TeX periodically takes material from the main vertical list (contribution list) and moves it to the current page; when it tries to empty the contribution list it 'exercises the page builder' and may invoke the output routine. The contribution list concept exists only in the outermost vertical mode; exercising the page builder in internal vertical mode does nothing.",
+        "guidance": "Macros that append material to the main vertical list may trigger output routines via the page builder; internal vertical lists (e.g. inside boxes or alignments) do not trigger the output routine."
+      },
+      {
+        "name": "Interline glue and \\prevdepth conventions",
+        "description": "Vertical modes insert interline glue before boxes based on \\prevdepth, \\baselineskip, \\lineskip and \\lineskiplimit (see Chapter 12). \\prevdepth is initially -1000pt (special value that inhibits interline glue) when TeX begins to form a vertical list, except in \\halign and \\noalign where outer-list conventions continue. If a command changes \\prevdepth that fact is specifically noted.",
+        "guidance": "Implementations must compute interline glue using these parameters and honor the -1000pt sentinel. Authors changing \\prevdepth should understand the effects on interline spacing."
+      },
+      {
+        "name": "Vertical-mode box handling and \\prevdepth update",
+        "description": "When a (box) is constructed and appended to the current vertical list, TeX first inserts interline glue, then the new box, then any vertical material that migrates out of the new box (if box was an \\hbox). Then \\prevdepth is set to the new box's depth and TeX exercises the page builder.",
+        "guidance": "This sequence ensures proper spacing and triggers page building; macros that create boxes in vertical mode must anticipate the interline glue and page-builder invocation."
+      },
+      {
+        "name": "Commands incompatible with vertical mode (they start a paragraph)",
+        "description": "Certain intrinsically horizontal commands appearing in vertical modes cause TeX to perform an \\indent and begin a new paragraph: these include letters, otherchar, \\char, \\chardef token, \\noboundary, \\unhbox, \\unhcopy, \\valign, \\vrule, \\hskip, \\hfil, \\hfill, \\hss, \\hfilneg, \\accent, \\discretionary, \\\\-, \\u, and $. If any of these tokens occur in vertical mode TeX automatically performs an \\indent, inserts \\everypar tokens, enters horizontal mode, and then processes the token again.",
+        "guidance": "Macro writers should be aware that simply emitting such tokens in vertical mode will start paragraphs; this is the mechanism by which vertical \u2192 horizontal transition occurs."
+      },
+      {
+        "name": "Behavior of \\end and \\dump in vertical and internal vertical modes",
+        "description": "\\end is not allowed in internal vertical mode. In regular vertical mode \\end terminates TeX if the main vertical list is empty and \\deadcycles=0. Otherwise TeX backs up the \\end so it can be read again, exercises the page builder after appending a box/glue/penalty combination that forces the output routine to act. \\dump (allowed only in INITEX) acts like \\end but must not appear inside a group and writes a format file.",
+        "guidance": "Use \\end only when appropriate; \\dump is only for format creation (INITEX) and must be used outside groups."
+      },
+      {
+        "name": "Error recovery for misplaced primitives in vertical mode",
+        "description": "If any other primitive occurs in vertical mode (not allowed in the preceding lists) TeX gives an error and tries to recover. For example, if a superscript/subscript or other math command appears, TeX will try to insert a $ to start a paragraph and enter math mode; if a totally misplaced token like \\endcsname, \\omit, \\eqno or # appears, TeX will simply ignore it after reporting the error. \\tracingall can be used to get maximum diagnostic information.",
+        "guidance": "Macro authors should not rely on ad-hoc recovery; write input so that primitives appear in appropriate modes. When diagnosing errors, enable tracing as suggested."
+      },
+      {
+        "name": "Horizontal-mode space-factor and related behaviors",
+        "description": "When TeX builds a horizontal list the space factor governs the width of spaces. The space factor is initially set to 1000 when TeX begins a horizontal list (except inside \\valign/\\noalign where outer factor persists). Commands that change \\spacefactor are noted. Spaces append glue whose amount depends on \\spacefactor, the current font, and \\spaceskip/\\xspaceskip. \\u appends glue equal to what a space inserts when \\spacefactor is 1000. When a box is appended to a horizontal list, the space factor is set to 1000; likewise appending a vertical rule sets \\spacefactor to 1000.",
+        "guidance": "Macros that influence spacing should adjust \\spacefactor, \\spaceskip, or \\xspaceskip carefully and be aware of automatic resets to 1000 when boxes or rules are appended."
+      }
+    ]
+  }
+}

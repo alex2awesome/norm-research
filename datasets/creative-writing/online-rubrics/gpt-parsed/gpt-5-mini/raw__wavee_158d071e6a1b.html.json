@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_158d071e6a1b.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16365,
+  "output_tokens": 4133,
+  "elapsed_s": 1082.7016377500258,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML/NLP researchers and practitioners working on long-form story generation, LLM reasoning, and RL-based training",
+    "subtask_short": "long-form story generation evaluation",
+    "subtask_description": "Designing, training, and evaluating models for next-chapter prediction in long-form (book-length) story generation, including dataset curation, reasoning-trace learning (VR-CLI), RL training (GRPO), and human/automated evaluation.",
+    "subtask_keywords": [
+      "story_generation",
+      "long_form",
+      "next_chapter_prediction",
+      "rl",
+      "evaluation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Plot",
+        "description": "Does it exhibit events and turns that move the plot forward logically?",
+        "guidance": "Used as one of the human-evaluation dimensions in pairwise comparisons; annotators see story information and two continuations and judge which better moves the plot forward. Bradley-Terry model used to convert pairwise preferences into relative strengths. Prior work cited for choice of dimensions (Huot et al., 2025; Chakrabarty et al., 2024; Chhun et al., 2022)."
+      },
+      {
+        "name": "Creativity",
+        "description": "Does the continuation have engaging characters, themes, and imagery, and avoid overly cliched characters and storylines?",
+        "guidance": "Human-evaluation dimension collected via pairwise judgments. Reported as a key axis where RL-trained models often show largest gains. Annotator recruitment and instruction details in Appendix C."
+      },
+      {
+        "name": "Development",
+        "description": "Does it introduce characters and settings with appropriate levels of detail and complexity?",
+        "guidance": "Human-evaluation dimension; intended to capture adequacy and richness of introduced material. Used in pairwise comparisons and aggregated with Bradley-Terry and Fleiss' kappa reported for agreement."
+      },
+      {
+        "name": "Language Use",
+        "description": "Is the language varied and rich, exhibiting rhetorical, linguistic, and literary devices?",
+        "guidance": "Human-evaluation dimension. Annotators judge language quality in relative comparisons. Reported alongside other dimensions to evaluate stylistic quality beyond surface metrics like length or lexical diversity."
+      },
+      {
+        "name": "Characters",
+        "description": "Does it feature believable and conceptually consistent characters, including reasonable character arcs and development?",
+        "guidance": "Human-evaluation dimension intended to capture consistency and plausibility of character behavior and arcs. Reported as one of the axes where improvements may be smaller relative to others."
+      },
+      {
+        "name": "Overall Preference",
+        "description": "Which of the two continuations did you prefer?",
+        "guidance": "Top-level human-evaluation judgment aggregated from pairwise comparisons; used to compute Bradley-Terry win-probabilities and relative strengths. Considered more reliable when collected as relative judgments rather than absolute scores."
+      },
+      {
+        "name": "Next-Chapter Prediction (NCP) task definition",
+        "description": "Given Story-Information SI_i (global sketch, previous-summary, character sheets, previous chapter, next-chapter synopsis), predict the next chapter \u0002c_{i+1} (or produce a reasoning trace p then generate from generator conditioned on SI_i and p).",
+        "guidance": "Formalized as either \u02c6c_{i+1} \u0016 \u0002G_\u0010(SI_i) or \u02c6p \u0016 \u0002R_\u0010(SI_i) then \u02c6c_{i+1} \u0016 \u0002G_\u0010(SI_i, \u02c6p). Evaluation measures the quality of next chapter both on its own merit and its fit into broader story context."
+      },
+      {
+        "name": "Story-Information elements (SI_i)",
+        "description": "The Story-Information SI_i includes: a global sketch of the entire story; a summary of the previously written chapters; character sheets based on previous chapters; previous story text (approximated by the previous chapter); and a synopsis of the next chapter.",
+        "guidance": "Each element has different style/verbosity (Table 1 examples). Synopses average ~7.4% of next chapter size (tokens). These elements are used as the input prompt/context for NCP and for producing reasoning traces and plans."
+      },
+      {
+        "name": "Dataset book-selection criterion",
+        "description": "Books selected for dataset must be published in or after 2024 (to mitigate information leakage).",
+        "guidance": "The collected dataset contains 30 books (range 67k-214k tokens, mean 139k). Because books are copyrighted and purchased individually, the dataset itself is not publicly released; code is released and book list is provided in paper Table 5/Appendix."
+      },
+      {
+        "name": "Chapter filtering and selection for dataset",
+        "description": "Filter chapters for length and location: only chapters with 200 \u0006 # words \u0006 5,000 and chapter index satisfying 2 < i < |S| - 2 are included.",
+        "guidance": "Split dataset by book (to test generalization across books/authors) into 22/4/4 train/val/test. Final datapoints: 1,004 train, 162 val, 181 test. These heuristics avoid extremely short/long chapters and edge chapters."
+      },
+      {
+        "name": "Character-sheet construction standard",
+        "description": "Character sheets are adapted from CHIRON for longer stories, containing four broad categories of character information; individual sheets created for the three main characters at each chapter index based on previous chapters \u0006 i.",
+        "guidance": "Sheets are automatically generated from story text then filtered for accuracy using an entailment module; consolidated via summarization. Llama 3.3 70B used for generation and entailment modules. Prior work supports usefulness of character information for downstream tasks."
+      },
+      {
+        "name": "Next-chapter synopsis size guideline",
+        "description": "The next-chapter synopsis contains a rough idea of what should happen; on average it is 7.4% of the size of the next chapter (in tokens).",
+        "guidance": "Synopses inform story generator path; hypothesis is that adding detail to synopsis via reasoning/planning will better guide chapter generation."
+      },
+      {
+        "name": "VR-CLI Improvement metric (I)",
+        "description": "Improvement I_{\u0002G}(x,y,a) is the percent improvement in per-token perplexity when generating y from generator \u0002G conditioned on (x,a) compared to conditioned only on x: I = [1 - PPL(y|x,a)/PPL(y|x)] * 100.",
+        "guidance": "Positive values indicate reasoning/plan improved likelihood of the gold next chapter; negative values indicate worsening. Perplexity is calculated from token-level probabilities. Average log-likelihood could be used similarly; PPL(y|x) can be precomputed. I is the core verifiable reward signal in VR-CLI."
+      },
+      {
+        "name": "VR-CLI reward formulations and shaping",
+        "description": "Rewards can be defined from Improvement I via piecewise thresholded functions (e.g., Equation (5) with thresholds {\u03c90, \u03c91,...}) or as raw bounded values (e.g., R = max[0,I]).",
+        "guidance": "In experiments they used a mild thresholded reward: R=0 if I<0.05; R=0.5 if 0.05 \u2264 I < 1; R=0.9 if 1 \u2264 I < 2; R=1 if I \u2265 2 \u2014 chosen to encourage both large perplexity improvements and promising early samples and to avoid reinforcing damaging traces. Different reward choices are considered variants of VR-CLI."
+      },
+      {
+        "name": "Use of a reference (frozen) model as generator and for KL computation",
+        "description": "The reference model is a copy of the policy model frozen at the start of training; it is used as the story-generator \u03c0_G and for computing KL-divergence during RL.",
+        "guidance": "Rationale: assume skills needed for story-reasoning and engaging story-writing differ; using a frozen generator reduces training complexity. For other tasks where reasoning and answering skills align it may make sense to use the policy as the generator."
+      },
+      {
+        "name": "GRPO training protocol",
+        "description": "Use GRPO for RL training: generate multiple responses per prompt, normalize each reward by its group, then calculate advantages and update policy parameters; GRPO removes the value model to reduce overhead.",
+        "guidance": "Group-normalization of rewards stabilizes training; online training preferred because reasoning styles change during training. Advantage estimation properties noted: when using GRPO\u2019s advantage estimation and R = I, advantages are equivalent with and without baseline."
+      },
+      {
+        "name": "Model-variant evaluation definitions",
+        "description": "Define and compare specific variants: Base (no reasoning; \u02c6c \u0016 \u03c0_G(SI)), Base-Reasoning (generate reasoning traces but do not train models; both models same frozen), SFT (fine-tune generator on NCP with supervised objective), RL-Trained (train policy model with VR-CLI and GRPO to produce useful plans; generator frozen).",
+        "guidance": "These variants are compared with pairwise human judgments and automated metrics to determine effect of reasoning and RL training. SFT can overfit on small datasets and suffer repetition/mode-collapse."
+      },
+      {
+        "name": "Human evaluation methodology (pairwise judgments)",
+        "description": "Evaluate continuations via pairwise preferences along specified dimensions (Plot, Creativity, Development, Language Use, Characters, Overall). Annotators see story information and two continuations and choose preferences.",
+        "guidance": "One judgment per datapoint; randomly sample 5 chapter indices per story in test set; 20 datapoints per variant-comparison. Convert preferences to relative strengths using Bradley-Terry model. Annotators recruited via Prolific: primary language English and employment role in creative writing. Fleiss' kappa computed for agreement; reported fair agreement with highest in Creativity and Overall."
+      },
+      {
+        "name": "Automated surface metrics to supplement evaluation",
+        "description": "Measure generated chapters with automated surface metrics such as average # words per chapter, % unique words within a chapter, % unseen trigrams (not present in SI), and Rouge-L (F1 and Precision) against gold reference chapters.",
+        "guidance": "Used to check whether human preferences are explained by simple surface differences (length/diversity) versus substantive storytelling quality; paper finds broadly similar surface metrics across models indicating preferences stem from content quality."
+      },
+      {
+        "name": "Assumption: generator-likelihood improvement correlates with human judgment",
+        "description": "Key assumption of VR-CLI: increasing the generator\u2019s likelihood of predicting the next chapter (measured via per-token PPL improvement) will, in turn, improve the quality of its generations.",
+        "guidance": "Validated empirically: Spearman rank correlation \u03c1 = 0.33 (p = 0.01, N = 60) between Improvement and pairwise human judgments. Note: Improvement requires a gold continuation and so cannot be computed at true test time, but can be used as a proxy on unlabeled datasets for evaluation/ablation."
+      },
+      {
+        "name": "Annotation and sampling constraints for evaluation reliability",
+        "description": "Annotators must have English as primary language and have an employment role in creative writing; sample 5 chapter indices per story and collect one judgment per datapoint; use relative judgments (pairwise) to improve reliability.",
+        "guidance": "Fleiss' kappa used to validate annotation procedure. The paper notes initial experiments showed gold-continuations almost always preferred to model outputs, so inter-variant comparisons (model vs model) were collected instead of model vs gold."
+      },
+      {
+        "name": "Ethical / IP constraints on dataset release",
+        "description": "Because the dataset is created from copyrighted books that were individually purchased, the dataset and trained models cannot be publicly released.",
+        "guidance": "Authors release reproduction and training code and list the books used in the paper (Table 5) but do not release the copyrighted text. Ethics statement also flags risk of perpetuating biases and harmful content present in source books; future work should measure and mitigate biases."
+      }
+    ]
+  }
+}

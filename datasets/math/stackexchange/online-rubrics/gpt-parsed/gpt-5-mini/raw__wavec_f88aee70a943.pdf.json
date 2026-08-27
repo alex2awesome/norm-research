@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 22129,
+  "output_tokens": 4651,
+  "elapsed_s": 1438.1473057500552,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "mathematicians, number-theorists and computational users of the PARI/GP system (PARI/GP users and developers)",
+    "subtask_short": "using PARI/GP",
+    "subtask_description": "User\u2019s Guide for the PARI/GP computer-algebra system: how to run gp, program in GP, choose kernels, understand PARI data types, precision/zero semantics, and performance trade-offs. It covers interactive usage, scripting, compilation (gp2c), and library mode.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "computer_algebra",
+      "number_theory",
+      "software_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Modes of use",
+        "description": "PARI is used in three different ways: (1) as a library libpari called from C/C++; (2) as the gp programmable calculator (GP language); (3) via gp2c which translates GP code to C.",
+        "guidance": "Choose libpari for embedding in other programs, use gp as an interactive programmable calculator, and use gp2c to compile GP scripts (typical gp2c-compiled scripts run 3 to 10 times faster). Generated C can be hand-edited and optimized; gp2c is distributed separately and has its own manual."
+      },
+      {
+        "name": "Multiprecision kernel choice and portability",
+        "description": "The PARI multiprecision kernel comes in three non-exclusive flavors: a pure ANSI C kernel, inlined-assembler microkernels for several architectures, and a GMP-backed kernel.",
+        "guidance": "The ANSI C kernel is highly portable; assembler kernels give speed on supported architectures; the GMP kernel should be enabled if GMP is present as it improves performance for large operands (\u2248100+ decimal digits). See Appendix A for setup and compiler recommendations (gcc is favored)."
+      },
+      {
+        "name": "Design philosophy: exactness first, permissiveness second",
+        "description": "Operations and functions should first give as exact a result as possible, and secondly be permitted if they make any kind of sense.",
+        "guidance": "PARI distinguishes exact vs inexact objects; exact operations on exact objects yield exact results. PARI is permissive (e.g., applying scalar functions to vectors does componentwise application) to match typical user intent."
+      },
+      {
+        "name": "Exact vs inexact types and precision propagation",
+        "description": "Types t_REAL, t_PADIC, and t_SER are inexact; any object containing these anywhere is inexact. Exact operations between exact objects are exact; operations on inexact objects yield results as precise as possible.",
+        "guidance": "Result precision depends on input precisions, values, and sizes (e.g., addition of two reals depends on x, y and x+y). Be aware that combining objects of different accuracies may discard digits; use localbitprec to adapt precision locally rather than changing global realprecision. Remember 1/3 yields (1/3) (an exact rational) unless forced to real arithmetic as 1./3 or 0.+1/3."
+      },
+      {
+        "name": "Representation and semantics of zeros for imprecise types",
+        "description": "Imprecise objects (p-adics, power series, reals) have exponents; zeros are O(p^e) or O(X^e) (p-adic/X-adic) or printed as 0.Exx (reals) and their exponent affects comparisons/ordering.",
+        "guidance": "A real zero with any exponent is smaller than any positive number; two real zeros are equal despite exponent. For p-adics and series zeros, exponent encodes precision (O(pe), O(X^e)). Use 0.E<n> to create a real zero of exponent n."
+      },
+      {
+        "name": "Automatic mapping between types when combining objects",
+        "description": "When objects of different types are combined, PARI automatically maps them to a suitable ring where the computation makes sense.",
+        "guidance": "Examples: (1/3) + Mod(1,5) maps (1/3) to Z/5Z when 3 is invertible mod 5; I + O(5^9) yields a 5-adic approximation of sqrt(-1); Mod(1,15)+Mod(1,10) maps to Mod(2,5) via natural maps. Relying on these automatic mappings is convenient but be aware of the resulting target ring."
+      },
+      {
+        "name": "Componentwise application of scalar/transcendental functions",
+        "description": "PARI allows scalar functions (including many transcendental functions) to act componentwise on vectors and matrices by default.",
+        "guidance": "This is intentional to match user expectations (applying exp to a vector applies exp to each element). Exception: square matrices are treated specially\u2014PARI assumes componentwise evaluation for square matrices too, so to get matrix exponential you must implement a different function."
+      },
+      {
+        "name": "PARI types are dynamically typed and recursive; mixing components allowed but potentially dangerous",
+        "description": "GP variables have no declared type; in library mode all PARI objects are GEN. Many PARI types are recursive (components can themselves be PARI types) and components may have different but compatible types.",
+        "guidance": "While recursion provides flexibility (e.g., polynomials with polynomial coefficients represent multivariate polynomials), avoid pathological constructs (e.g., complex numbers of complex numbers in library mode) as they may produce nonsense. Be mindful of compatibility constraints (e.g., if real part is t_REAL, imaginary part cannot be an integer modulo n)."
+      },
+      {
+        "name": "Restrictions on component types for specific algebraic types",
+        "description": "Certain composite types have explicit restrictions on allowed component types (e.g., quadratic numbers, complex numbers, p-adics).",
+        "guidance": "Complex components may be t_INT, t_REAL, t_INTMOD, t_FRAC, or t_PADIC and can be mixed subject to limitations; quadratic numbers disallow t_REAL; p-adic complex types have further restrictions depending on p (e.g., Qp[i] equals Qp when p \u2261 1 mod 4), so exclude those p when using explicit complex p-adic types."
+      },
+      {
+        "name": "Efficiency caveats for some convenience types",
+        "description": "Types provided for convenience\u2014not speed\u2014include t_INTMOD, t_FRAC, t_PADIC, t_QUAD, t_POLMOD, t_RFRAC: each elementary operation performs reductions (gcds, modular reductions).",
+        "guidance": "For heavy computations prefer working in integer form or using libpari for performance. For modular computations, prefer t_INTMOD rather than manipulating t_FRACs if only modular info is needed. Consider homomorphic imaging and modular schemes for large-scale polynomial/integer computations."
+      },
+      {
+        "name": "Input and syntax rules (printing, suppression, multiline input)",
+        "description": "GP input: end expressions with <Return> to evaluate; end with ';' to suppress printing (result still stored in history). Multi-line input can be created using backslash '\\' for continuation, using '=' which allows newline after it, or braces '{' '}' which concatenate lines until matching '}' (braces do not nest and newlines inside braces are suppressed unless after semicolon/comma/operator).",
+        "guidance": "Never split an identifier across a newline inside braces. Use semicolons to separate expressions and to ensure newlines are preserved correctly. Beware that using braces without semicolons can concatenate tokens unintentionally (example a = b\\n b = c becomes a=bb=c)."
+      },
+      {
+        "name": "History, result access and timing",
+        "description": "GP maintains a history array of results %1, %2, ... (latest also available as % and prior ones as %' etc). Suppressing printing with ';' still stores the result in history. History size defaults to 5000 entries (histsize).",
+        "guidance": "Use %# operator to retrieve computation time for a history entry (e.g., %#1). Because history is a queue limited by histsize, assign important results to variables rather than relying on stable %n indices."
+      },
+      {
+        "name": "Help system and metacommands",
+        "description": "Typing '?' at the gp prompt shows help; '?n' shows section n (corresponds to Chapter 3.n). '?functionname' gives short explanation. Double/triple '?' (if extended help available) gives complete descriptions or lists of relevant functions. Metacommands begin with '\\' or '?' and manage gp state; '.': list member functions, '?\\' lists metacommands.",
+        "guidance": "Investigate availability of extended help and line editing in the gp banner; use the reference card (refcard) and tutorial before reading the manual in depth."
+      },
+      {
+        "name": "Interrupt and quit behavior",
+        "description": "Typing 'quit' exits gp. Ctrl-C interrupts the current computation and returns control to the prompt, printing which GP function was aborted and elapsed time.",
+        "guidance": "Interrupt provides a diagnostic message with the function name and time since the command was typed; it does not imply that the same amount of CPU was spent in that function."
+      },
+      {
+        "name": "Startup defaults and preferences",
+        "description": "gp can be started with command-line defaults gp [-D key=val ] [files]; a preferences file (gprc) is read if present and executed. The startup banner shows version info and availability of extended help/GMP.",
+        "guidance": "Use -D key=val to set defaults at startup, edit gprc to customize interactive sessions, and pass GP script files to be loaded on startup. Check the banner for installation diagnostics (readline, GMP kernel)."
+      },
+      {
+        "name": "Real number internal representation and precision controls",
+        "description": "t_REAL objects have a sign, a multiprecision integer mantissa (base 10^B), and an exponent; they carry an internal accuracy 'prec'. 0.E<n> returns a real zero of exponent n; 0. returns a real zero with default precision (exponent \u2212realprecision).",
+        "guidance": "Use realprecision (decimal digits) or realbitprecision for global control; prefer localbitprec in programs to adjust precision locally. Be careful: printed format may switch to e-format when integer part isn't known exactly."
+      },
+      {
+        "name": "Division semantics and arithmetic operations",
+        "description": "Division is exact when possible: e.g., 4 divided by 3 gives the rational (4/3) rather than a floating approximation. Integer/polynomial Euclidean division and remainders use operators '\\' and '%'; '\\/' computes quotient minimizing remainder absolute value for integers.",
+        "guidance": "If floating division is intended use 1./3 or add 0.0 to force real arithmetic. Use integer/polynomial division operators for exact quotient/remainder semantics."
+      },
+      {
+        "name": "Transcendental and special function applicability",
+        "description": "Transcendental functions (exp/log/trig, modular functions, Bessel, polylog, etc.) usually operate on complex numbers, power series, and some on p-adics. By extension, they apply componentwise on vectors and matrices.",
+        "guidance": "Expect a broad and growing list of transcendental functions; verify p-adic support for specific functions. For matrix-level algebraic versions (e.g., true matrix exponential) implement or call specialized routines rather than relying on default componentwise behavior."
+      },
+      {
+        "name": "Arithmetic/factoring engine capabilities",
+        "description": "PARI includes arithmetic functions using prime factor decomposition and a sophisticated factoring engine using methods like Shanks SQUFOF, Pollard rho, Lenstra ECM, MPQS; it can output strong pseudoprimes certifiable by APRCL.",
+        "guidance": "Use built-in factoring routines for integer factorization tasks; for certification use APRCL where needed. For large-scale integer work consider using GMP kernel and appropriate algorithms."
+      },
+      {
+        "name": "gp2c compilation guidance and performance",
+        "description": "gp2c translates GP code to C and loads it into gp; typical compiled scripts run 3\u201310\u00d7 faster than interpreted GP code. Generated C may be further hand-optimized or used as a libpari programming tutorial.",
+        "guidance": "Use gp2c for performance-critical GP programs; maintain/read the generated C if further optimization or embedding is desired. Note gp2c distribution and manual are separate."
+      },
+      {
+        "name": "Advice to consult tutorial and refcard first",
+        "description": "A tutorial (tutorial.dvi) is provided in the distribution and should be read first; the refcard (refcard.dvi or refcard.ps) gives a quick overview of available functionality.",
+        "guidance": "Start with the tutorial for hands-on learning, then refer to chapter 3 for complete function descriptions. Use mailing lists and bug tracker for support and bug reporting."
+      },
+      {
+        "name": "Limits on integer and real magnitudes (practical machine-dependent limits)",
+        "description": "On 32-bit machines integers must have absolute value less than about 2^536870815 (\u2248 161,614,219 decimal digits); real precision and exponent have analogous machine-dependent bounds (exponent absolute value < 2^29 on 32-bit, 2^61 on 64-bit).",
+        "guidance": "These limits are extremely large for practical use but exist; be aware of potential platform differences in absolute bounds when writing portable code."
+      }
+    ]
+  }
+}

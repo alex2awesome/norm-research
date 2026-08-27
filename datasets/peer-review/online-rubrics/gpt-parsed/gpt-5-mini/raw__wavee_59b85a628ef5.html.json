@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_59b85a628ef5.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17596,
+  "output_tokens": 4926,
+  "elapsed_s": 1210.3268787080888,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on automated peer-review, summarization, and dataset/annotation for review generation",
+    "subtask_short": "automatic_scientific_review_generation",
+    "subtask_description": "Generate aspect-aware peer reviews for scientific papers (here: ML papers) using NLP models, and evaluate them with metrics that capture decisiveness, comprehensiveness, justification, accuracy, and other desiderata. Includes dataset construction, annotation, model design (extract-then-generate, aspect-aware), and evaluation protocols.",
+    "subtask_keywords": [
+      "peer_review",
+      "automatic_review",
+      "aspect-based_summarization",
+      "nlp",
+      "dataset"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Decisiveness (desideratum)",
+        "description": "A good review should take a clear stance, selecting high-quality submissions for publication and suggesting others not be accepted.",
+        "guidance": "Typically expressed as an acceptance/reject recommendation (REC). Decisiveness is operationalized in evaluation as Recommendation Accuracy (RAcc), which measures whether the review's implied acceptance aligns with the paper's final DEC(D)."
+      },
+      {
+        "name": "Comprehensiveness (desideratum)",
+        "description": "A good review should be well-organized, typically starting with a brief summary of the paper\u2019s contributions, then following with opinions gauging the quality of a paper from different aspects.",
+        "guidance": "Many review forms explicitly require evaluation of different aspects to encourage comprehensiveness. Measured via Aspect Coverage (ACOV) \u2014 fraction of pre-defined aspects mentioned \u2014 and Aspect Recall (AREC) \u2014 agreement with meta-review aspects."
+      },
+      {
+        "name": "Justification (desideratum)",
+        "description": "A good review should provide specific reasons for its assessment, particularly whenever it states that the paper is lacking in some aspect; these justifications make the review constructive.",
+        "guidance": "Operationalized via Informativeness (INFO): fraction of negative-aspect mentions that are accompanied by supporting evidence. INFO = nnae(R) / nna(R) (set to 1 when there are no negative aspects). Judgement of evidence is performed (in annotation) by humans (details in Appendix A.3)."
+      },
+      {
+        "name": "Accuracy (desideratum)",
+        "description": "A review should be factually correct; statements in the review should not be demonstrably false.",
+        "guidance": "Measured by Summary Accuracy (SACC) for the summary portion (0 = incorrect/absent, 0.5 = partially correct, 1 = correct) and by manual judgement of factuality of evidence supporting negative aspects. Important caution: generated systems can produce non-factual statements, a critical flaw in high-stakes reviewing."
+      },
+      {
+        "name": "Kindness (desideratum)",
+        "description": "A good review should be kind and polite in language use.",
+        "guidance": "Authors note that accurately measuring kindness computationally is non-trivial; capturing kindness is left to future work (no automated metric provided)."
+      },
+      {
+        "name": "Recommendation Accuracy (RAcc) metric",
+        "description": "Quantifies decisiveness and accuracy of a review\u2019s recommendation by comparing the review recommendation REC(R) with the paper's final decision DEC(D). Defined as RAcc(R) = DEC(D) \u00d7 REC(R).",
+        "guidance": "DEC(D) \u2208 {1, -1} (accept/reject). REC(R) \u2208 {1, 0, -1} (accept/neutral/reject). Range is [-1, 1]; higher indicates the review made a decisive and accurate acceptance recommendation. (Table 1 lists RAcc range [-1,1].)"
+      },
+      {
+        "name": "Aspect Coverage (ACOV)",
+        "description": "Measures how many aspects (from a predefined typology) in a review R have been covered (i.e., mentioned) by R.",
+        "guidance": "Range [0,1]. Automated metric. Encourages touching on multiple quality aspects (e.g., clarity, originality, soundness)."
+      },
+      {
+        "name": "Aspect Recall (AREC)",
+        "description": "Counts how many aspects in the meta-review Rm are covered by an individual review R (agreement with authoritative meta-review).",
+        "guidance": "Range [0,1]. Automated metric but may bias toward reviews that informed the meta-review; should be interpreted with other metrics."
+      },
+      {
+        "name": "Informativeness (INFO)",
+        "description": "Quantifies how many negative comments in a review are accompanied by corresponding evidence. Let nna(R) be number of negative-aspect mentions and nnae(R) be number of those with supporting evidence; INFO(R) = nnae(R) / nna(R) (set to 1 when no negative aspects).",
+        "guidance": "Range [0,1]. Intended to capture whether negative opinions are justified with evidence; in practice the judgement of 'supporting evidence' is conducted manually (Appendix A.3)."
+      },
+      {
+        "name": "Aspect-level Constructiveness (ACON)",
+        "description": "Percentage of supporting statements (nnae(R)) that are judged as valid factual support by human annotators.",
+        "guidance": "Range [0,1]. If nnae(R) = 0, ACON is set to 1. ACON evaluates the factual validity of evidence provided for negative aspects and is judged by humans (not automated)."
+      },
+      {
+        "name": "Summary Accuracy (SACC)",
+        "description": "Measures how well a review summarizes the contributions of a paper, scored as 0 (incorrect/absent), 0.5 (partially correct), or 1 (correct).",
+        "guidance": "Judgement is performed manually (details in Appendix A.3). SACC is used alongside aspect-based metrics to evaluate overall review accuracy."
+      },
+      {
+        "name": "Semantic Equivalence / Similarity to Human Reviews",
+        "description": "Measures similarity between generated reviews and reference human reviews using ROUGE (surface n-gram overlap) and BERTScore (embedding similarity).",
+        "guidance": "For inputs with multiple reference reviews, aggregate similarity by taking the maximum score across references (rather than average), since generated review need not be close to all references. Use ROUGE for surface match and BERTScore for embedding-level semantic match. Table 1 indicates these metrics and their ranges (ROUGE and BERTScore)."
+      },
+      {
+        "name": "Aspect Typology (evaluation dimensions for reviews)",
+        "description": "The dataset and evaluation use an 8-aspect typology (based on ACL review guidelines): Summary (SUM), Motivation/Impact (MOT), Originality (ORI), Soundness/Correctness (SOU), Substance (SUB), Replicability (REP), Meaningful Comparison (CMP), and Clarity (CLA).",
+        "guidance": "Each aspect (except Summary) is annotated with polarity (positive/negative). Detailed elaborations for each aspect are in supplemental material (B.1). Aspect-aware evaluation and annotation enable fine-grained metrics such as ACOV, AREC, INFO, and ACON."
+      },
+      {
+        "name": "Aspect Annotation Protocol and Quality",
+        "description": "Manual annotation pipeline: tag text spans that indicate specific aspects and polarity; each review annotated by two annotators; Cohen's kappa lowest pairwise = 0.653. 1,000 human-annotated reviews created; remaining reviews labeled by a trained aspect tagger.",
+        "guidance": "Annotation platform: Doccano; annotators from ML/NLP backgrounds. Post-processing heuristics applied to automatic tags (seven heuristic rules). Human evaluation on a random 300-sample subset with 3 annotators estimated overall aspect precision 92.75% and recall 85.19% (strict criteria). Fine-grained precision/recall per aspect reported in Table 3."
+      },
+      {
+        "name": "Aspect Score calculation (per-aspect aggregation)",
+        "description": "How to compute an aspect score for a review: if an aspect does not appear, score = 0.5 (neutral). If an aspect appears n times with pn positive occurrences, Aspect Score = pn / n.",
+        "guidance": "Used to compute aggregate aspect-level statistics across accepted/rejected papers and for bias/disparity analysis."
+      },
+      {
+        "name": "Dataset inclusion & metadata requirements (ASAP-Review)",
+        "description": "Constructed dataset consists of ICLR (2017-2020) and NeurIPS (2016-2019) papers/reviews. For each paper keep reference reviews, meta-review, final decision, URL, title, authors, and parsed full text (via AllenAI Science-parse).",
+        "guidance": "Filtering rules: exclude papers with full text <100 words; for training use reviews of length 100\u20131024 BART subword tokens (covers 92.57% of reviews). For extraction, truncate papers with >250 sentences (take first 250). NeurIPS only provides reviews for accepted papers publicly \u2014 note dataset bias."
+      },
+      {
+        "name": "Review length and generation constraints (modeling/production)",
+        "description": "Training and generation constraints for BART-based systems: use reviews of 100\u20131024 subword tokens for training; during generation set minimum length 100, maximum 1024, beam size 4, length penalty 2.0, and trigram blocking.",
+        "guidance": "Models initialized from 'bart-large-cnn' checkpoint; finetune 5 epochs with Adam and linear warmup. These constraints aim to produce human-scale reviews and stabilize generation."
+      },
+      {
+        "name": "Content Selection / Extraction methods for long documents",
+        "description": "Three extraction strategies for long papers before generation: (i) Section-based Extraction (use introduction only), (ii) Cross-entropy (CE) Method Extraction (keyword filter + diversity selection via cross-entropy method), (iii) Hybrid Extraction (abstract + CE). Also Oracle extraction used for upper-bound comparisons.",
+        "guidance": "CE extraction: first select sentences containing a pre-defined keyword list (48 keywords), then select subset maximizing unigram entropy subject to length constraint. CE parameters: N=1000, \u03c1=0.05, \u03b1(smoothed update)=0.7; samples with >30 sentences dropped; chosen to fit BART input (~1024). Oracle extraction greedily maximizes ROUGE w.r.t references."
+      },
+      {
+        "name": "Extract-then-generate-and-predict architecture (aspect-aware summarization)",
+        "description": "Two-stage pipeline: (1) extract salient text pieces from the source (paper), (2) generate reviews conditioned on extraction and jointly predict aspect labels for generated tokens via an auxiliary sequence-labeling task.",
+        "guidance": "Loss: L = Lseq2seq + \u03b1 Lseqlab, with \u03b1 = 0.1 tuned to maximize aspect coverage. Implementation: BART encoder-decoder plus MLP on top of decoder for sequence labeling. Joint aspect prediction encourages generation that covers multiple aspects and provides interpretability."
+      },
+      {
+        "name": "Aggregation rule for multiple references (similarity metrics)",
+        "description": "When computing ROUGE/BERTScore against multiple reference reviews for the same paper, aggregate the score by taking the maximum over references rather than the average.",
+        "guidance": "Rationale: a generated review need not be close to all human references; max better captures closeness to any one expert reference."
+      },
+      {
+        "name": "Annotation post-processing heuristics (to refine automatic aspect tags)",
+        "description": "Apply seven sequential heuristic rules to refine model-predicted aspect spans, addressing common problems like interleaved aspects and inappropriate boundaries (examples in Appendix A.5 / Table 9).",
+        "guidance": "Examples: merge adjacent spans of same aspect, adjust boundaries, ensure 'summary' span ends with a period (truncate/extend up to 5 words), etc. Heuristics substantially improve quality of automatic annotations before human evaluation."
+      },
+      {
+        "name": "Human evaluation protocol for automatic annotations",
+        "description": "To evaluate automatic aspect annotations, randomly sample 300 automatically-annotated reviews and assign each to three ML/NLP annotators to judge annotation quality (aspect precision and recall computed via formulas in Appendix A.7).",
+        "guidance": "Precision: annotators remove incorrect predicted spans; Recall: annotators add missed spans. Use intersection heuristics to compute counts (formulas provided). Reported overall aspect precision 92.75% and recall 85.19% under strict criteria."
+      },
+      {
+        "name": "Bias analysis methodology (nativeness and anonymity)",
+        "description": "Assess potential bias in reviews by computing disparity differences in aspect scores between groups (e.g., native vs non-native English authors; anonymous vs non-anonymous submissions) across reference and generated reviews.",
+        "guidance": "Compute per-aspect disparity differences and aggregate (sum of absolute values) as a total disparity metric. Use these statistics to identify where systems amplify or reduce human biases (results shown in Figures/Tables in Appendix)."
+      },
+      {
+        "name": "Evaluation reporting conventions and statistical testing",
+        "description": "Report automated metric scores (ACOV, AREC, RAcc, INFO, ACON, SACC, ROUGE, BERTScore) for systems and human reviews. Use paired bootstrap resampling (10,000 samples, 0.8 sample ratio) to test statistical significance between system-generated and human reviews.",
+        "guidance": "Denote significant differences with p-value < 0.05. Provide tabular breakdowns of metrics across extraction/generation variants (e.g., INTRO, CE, ABSTRACT+CE, with/without aspect model)."
+      }
+    ]
+  }
+}

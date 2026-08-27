@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_d2b9e2308e9d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_d2b9e2308e9d.pdf",
+  "chunk_idx": 4,
+  "n_chunks": 13,
+  "chunk_chars": 39829,
+  "model": "gpt-5-mini",
+  "elapsed_s": 50.12099691700132,
+  "input_tokens": 12947,
+  "output_tokens": 3607,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Sage developers, maintainers, and release managers who run and manage doctests for the Sage library and related scripts",
+    "subtask_short": "running and managing Sage doctests",
+    "subtask_description": "Procedures, flags, and best practices for running, debugging, and managing Sage doctests (single files, directories, parallel runs, optional tests, long tests, reproducing failures, and release-scale testing).",
+    "subtask_keywords": [
+      "sage",
+      "doctest",
+      "testing",
+      "parallel_testing",
+      "release_management"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use local Sage installation when running tests",
+        "description": "When running doctests for a Sage installation, cd to the top level directory of that Sage installation (SAGE_ROOT) and run tests with ./sage (note the leading ./) so you explicitly use that Sage installation.",
+        "guidance": "This avoids confusion when multiple Sage installations exist. Example: $ ./sage -t src/sage/games/sudoku.py; running without ./ (i.e., using a system-wide sage) can run an older/different version and cause import errors and doctest failures."
+      },
+      {
+        "name": "Doctest modules and files with ./sage -t",
+        "description": "Run doctests on modules, Python scripts, and .sage scripts using the sage -t command (or ./sage -t from SAGE_ROOT).",
+        "guidance": "Examples: $ ./sage -t src/sage/games/sudoku.py; $ ./sage -t my_python_script.py; $ ./sage -t my_sage_script.sage. You can also preparse .sage files to .py and doctest the generated Python."
+      },
+      {
+        "name": "Mark long-running doctests with '# long time'",
+        "description": "If a doctest takes noticeably long, mark it in the source with the comment '# long time' so it is skipped by default.",
+        "guidance": "Long-running doctests should still ideally complete in 5 seconds or less. Avoid marking tests as long unless necessary because long tests harm the overall test-suite runtime."
+      },
+      {
+        "name": "Use --long to include tests marked '# long time'",
+        "description": "Pass the --long flag to sage -t to run doctests that have been marked with the comment '# long time'.",
+        "guidance": "Example: $ ./sage -t --long src/sage/rings/tests.py. Many modules have tests flagged with '# long time' and these will be skipped unless --long is provided."
+      },
+      {
+        "name": "Warn about slow tests with --warn-long",
+        "description": "Use the --warn-long flag to cause a warning if any tests take longer than a specified CPU-time threshold (default 1 second).",
+        "guidance": "You can pass an explicit amount, e.g. --warn-long 2.0, or disable warnings with --warn-long 0. Example output shows 'Test ran for X cpu seconds' for examples exceeding the threshold."
+      },
+      {
+        "name": "Doctests start from a random seed; make failures reproducible with --random-seed",
+        "description": "Doctests use a random seed; to reproduce failures set the seed with --random-seed or the environment variable SAGE_DOCTEST_RANDOM_SEED.",
+        "guidance": "Example: $ ./sage -t --random-seed=1129866... src/sage/doctest/tests/random_seed.rst. Reproducing the same seed helps debug nondeterministic test failures."
+      },
+      {
+        "name": "Run tests requiring optional packages with --optional",
+        "description": "Use the --optional flag to run doctests that require optional packages; you must have those packages installed for the tests to succeed.",
+        "guidance": "Examples: --optional=sagemath_doc_html,sage or --optional=magma. Use --optional=external to auto-detect external software (magma, latex, maple, etc.), or --optional=all to run all optional tests."
+      },
+      {
+        "name": "Parallel doctesting with --nthreads / -p",
+        "description": "Run doctests in parallel by passing --nthreads (or -p) with the desired number of threads to speed up testing of many files.",
+        "guidance": "Sage sorts sources by runtime so slower doctests run first. Example: $ ./sage -tp 4 src/sage/crypto/. Parallel runs can significantly reduce wall time; further flags like --long can be combined."
+      },
+      {
+        "name": "Use make ptestlong / make ptest / make test* for integrated workflows",
+        "description": "Make targets (make test, make check, make testlong, make ptest, make ptestlong) run doctests and documentation tests; use ptestlong for parallel long tests used by release managers.",
+        "guidance": "make ptestlong builds Sage and docs (if necessary) then runs parallel doctests. The number of threads is determined by MAKE environment (e.g., make -j12) or defaults to CPU count with min 2 and max 8. Under the GNU make jobserver Sage will request at most that number of job slots."
+      },
+      {
+        "name": "Use --all / -a to doctest the entire Sage library and documentation",
+        "description": "Pass --all (or -a) to sage -t to include the main library, documentation, and Sage notebook tests in the doctest run.",
+        "guidance": "Example: $ ./sage -t -a will doctest entire Sage and may report thousands of files; combined with -p and --long this is how release-scale tests are run."
+      },
+      {
+        "name": "Run doctests from within Sage with run_doctests(module_or_string)",
+        "description": "You can run doctests interactively from within a Sage session using run_doctests and passing either a module or a string.",
+        "guidance": "Example: sage: run_doctests(sage.combinat.affine_permutation) \u2014 useful to avoid waiting for Sage startup when iterating on tests."
+      },
+      {
+        "name": "Use --debug to drop into pdb on Python exceptions",
+        "description": "If a doctest raises a Python exception, pass --debug (or -d) to drop into an interactive Python debugger (pdb) at the point of the exception.",
+        "guidance": "This lets you inspect variables, traceback and state. Example usage shown with a doctest that raises ArithmeticError causing pdb to open where you can inspect 'ainvs' and quit/retry."
+      },
+      {
+        "name": "Use --gdb to run doctests under gdb for severe crashes",
+        "description": "If tests cause segfaults or hangs, run doctests under gdb by using the --gdb flag so you can get a core-level backtrace.",
+        "guidance": "Example: $ ./sage -t --gdb src/sage/schemes/elliptic_curves/constructor.py; Sage will exec gdb with appropriate arguments to run the test command under gdb."
+      },
+      {
+        "name": "Use valgrind-related flags for memory debugging",
+        "description": "Sage supports running doctests under valgrind tools using flags like --valgrind (or --memcheck), --massif, --cachegrind and --omega to track memory issues.",
+        "guidance": "See http://wiki.sagemath.org/ValgrindingSage for details. These are useful when doctests reveal memory corruption or leaks."
+      },
+      {
+        "name": "Rerun only previously failed files with --failed / -f",
+        "description": "After fixing failures, use the --failed flag (or -f) to rerun only those files that failed in the most recent test run.",
+        "guidance": "Example: $ ./sage -t -fa will run doctests only for files that failed previously. Useful to speed up iterative debugging."
+      },
+      {
+        "name": "Sort sources by runtime so slow tests are run first in parallel runs",
+        "description": "When running doctests in parallel, Sage sorts sources by estimated runtime so that slower doctests are scheduled earlier, improving load balancing.",
+        "guidance": "The doctest output shows 'Sorting sources by runtime so that slower doctests are run first....' This behavior applies when using -p/--nthreads."
+      },
+      {
+        "name": "Prefer fast doctests; avoid long-running examples",
+        "description": "Doctests should ideally not take noticeable time; long-running doctests should be rare and kept as short as possible \u2014 ideally under 5 seconds even if marked '# long time'.",
+        "guidance": "The guide emphasizes keeping doctests fast to avoid harming the overall ability to run the test-suite. If a test genuinely needs more time, mark it '# long time' and use --long to include it."
+      },
+      {
+        "name": "Use --warn-long X to find tests exceeding X cpu-seconds",
+        "description": "Pass an explicit numeric threshold to --warn-long to report tests that exceed that CPU-time amount; useful for identifying unexpectedly slow tests.",
+        "guidance": "Examples in the guide show failures flagged with 'Test ran for N cpu seconds' when N exceeds the threshold. You can disable warnings with --warn-long 0."
+      },
+      {
+        "name": "Use --optional=external to auto-detect external software for optional tests",
+        "description": "The special optional tag 'external' tells Sage to detect installed external software (cplex, gurobi, internet, latex, magma, maple, mathematica, matlab, etc.) and run relevant optional doctests accordingly.",
+        "guidance": "Example: $ ./sage -t --optional=external src/sage/rings/real_mpfr.pyx; output lists detected external software and runs tests that require them."
+      },
+      {
+        "name": "Doctest non-library Python and Sage scripts equivalently",
+        "description": "Doctest works for scripts outside the Sage library \u2014 regular Python files importing sage.all_cmdline, Sage scripts (.sage), and pre-parsed .sage.py files can all be doctested the same way.",
+        "guidance": "Examples: a Python script my_python_script.py using 'from sage.all_cmdline import *' and a Sage script my_sage_script.sage both produce passing doctest runs shown in the guide."
+      },
+      {
+        "name": "Use --verbose to get real-time output for long-running tests",
+        "description": "If you want to see doctest output as it is produced (in real time) enable --verbose when running doctests.",
+        "guidance": "Real-time output helps identify which test caused a hang or a crash; suggested when debugging severe failures (e.g., segfaults) combined with other debugging flags."
+      }
+    ]
+  }
+}

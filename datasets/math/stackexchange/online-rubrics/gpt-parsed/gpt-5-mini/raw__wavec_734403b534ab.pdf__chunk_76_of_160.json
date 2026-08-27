@@ -1,0 +1,116 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 76,
+  "n_chunks": 160,
+  "chunk_chars": 39627,
+  "model": "gpt-5-mini",
+  "elapsed_s": 403.97633883300296,
+  "input_tokens": 19036,
+  "output_tokens": 4158,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of the SINGULAR computer algebra system (developers/researchers implementing algebraic-geometry codes and decoding algorithms; readers of the brnoeth.lib and decodegb.lib library documentation).",
+    "subtask_short": "SINGULAR brnoeth/decodegb usage",
+    "subtask_description": "Reference documentation for procedures in the SINGULAR libraries brnoeth.lib and decodegb.lib, describing usage, return values, notes, warnings and examples for constructing/working with places, divisors, AG codes and Groebner-basis-based decoding systems.",
+    "subtask_keywords": [
+      "singular",
+      "brnoeth_lib",
+      "decodegb_lib",
+      "algebraic_geometry_codes",
+      "groebner_bases",
+      "coding_theory"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "NSplaces",
+        "description": "Usage: NSplaces(h, CURVE), where h is an intvec and CURVE is a list. Returns list L with updated data of CURVE after computing all non-singular affine closed places whose degrees are in the intvec h: in L[1][1]: (affine ring) lists Aff_Points(d) with affine non-singular (closed) points of degree d (if non-empty); the newly computed closed places are added, local rings created/updated to store (repres. of) new places.",
+        "guidance": "The list expression should be the output of Adj_div. Raising printlevel shows additional comments (default printlevel=0). Warning: the parameter of needed field extensions is called 'a' \u2014 avoid a global object named 'a' when executing NSplaces. See Adj_div entry for description of entries in L. Examples show creating places up to degree 4, inspecting L[1][1], and using the basepoint (L[5][4][1]) and Aff_Points."
+      },
+      {
+        "name": "BrillNoether",
+        "description": "Usage: BrillNoether(G,CURVE); G an intvec, CURVE a list. Returns a list of ideals (each with two homogeneous generators representing numerator and denominator of a rational function). The corresponding rational functions form a vector space basis of the linear system L(G), where G is a rational divisor over a non-singular curve.",
+        "guidance": "Must be called from the ring CURVE[1][2], where CURVE is the output of NSplaces. The intvec G represents a rational divisor supported on closed places of CURVE[3] (e.g. G=2,0,-1 means 2 times closed place 1 minus 1 times closed place 3). Examples show computing the vector basis of L(G) and printed generators. See Adj_div, NSplaces, Weierstrass for related procedures."
+      },
+      {
+        "name": "Weierstrass",
+        "description": "Usage: Weierstrass(i, m, CURVE); i,m integers and CURVE a list. Returns list WS of two lists: WS[1] list of integers (Weierstrass semigroup of the curve at place i up to m), WS[2] list of ideals (the associated rational functions).",
+        "guidance": "Must be called from the ring CURVE[1][2], where CURVE is output of NSplaces. i represents the place CURVE[3][i]. Rational functions are represented by numerator/denominator as ideals with two homogeneous generators. Warning: the place must be rational (CURVE[3][i][1]=1). Examples show computing WS[1] semigroup entries up to 7 and the corresponding functions. See Adj_div, BrillNoether, NSplaces references."
+      },
+      {
+        "name": "extcurve",
+        "description": "Usage: extcurve(d, CURVE); d an integer, CURVE a list. Returns list L which updates CURVE with additional entries for rings over a field extension of degree d (L[1][3]: ring (p,a),(x,y),lp (affine), L[1][4]: ring (p,a),(x,y,z),lp (projective), L[1][5]: ring (p,a),(x,y,t),ls (local), L[2][3]: int (number of rational places)).",
+        "guidance": "If d<2, extcurve(d,CURVE) creates rings over base field (L[1][5] ring p,(x,y,t),ls) and sets L[2][3] to number of computed places over base field. In both cases lists POINTS, LOC_EQS, BRANCHES, PARAMETRIZATIONS for computed rational places are created. CURVE should be the output of NSplaces and must contain at least one place of degree d (you need all places with degree dividing d otherwise not all places are computed). Must be executed before constructing AG codes \u2014 ring L[1][4] must be active when constructing codes over the field extension. Examples show extending to F_16 and inspecting POINTS[32]. See AGcode_L, AGcode_Omega, Adj_div, NSplaces, closed_points."
+      },
+      {
+        "name": "AGcode_L (AGcode L)",
+        "description": "Usage: AGcode_L(G, D, EC); G,D intvec, EC a list. Returns a generator matrix for the evaluation AG code defined by divisors G and D.",
+        "guidance": "Must be called within ring EC[1][4] (or EC[1][2] if d=1), where EC is output of extcurve(d). Entry i in intvec D refers to the i-th rational place in EC[1][5] (POINTS[i]). Intvec G represents a rational divisor (see BrillNoether). The code evaluates vector space basis of L(G) at rational places given by D. Warnings: G should satisfy 2*genus - 2 < deg(G) < size(D) (not checked by algorithm). G and D should have disjoint supports (checked). Example constructs evaluation code and prints matrix; shows resulting [n,k,d] type. See AGcode_Omega, Adj_div, BrillNoether, extcurve."
+      },
+      {
+        "name": "AGcode_Omega (AGcode Omega)",
+        "description": "Usage: AGcode_Omega(G, D, EC); G,D intvec, EC a list. Returns a generator matrix for the residual AG code defined by divisors G and D.",
+        "guidance": "Must be called within ring EC[1][4] (or EC[1][2] if d=1). Entry i in D refers to i-th rational place in EC[1][5]. Intvec G represents a rational divisor; code computes residues of a vector space basis of Omega(G - D) at rational places given by D. Warnings: G should satisfy 2*genus - 2 < deg(G) < size(D) (not checked). G and D should have disjoint supports (checked). Example shows constructing residual AG code and printed matrix and code parameters. See AGcode_L, Adj_div, BrillNoether, extcurve."
+      },
+      {
+        "name": "prepSV",
+        "description": "Usage: prepSV(G, D, F, EC); G,D,F intvecs and EC a list. Returns list E of size n+3 (n=size(D)); all entries but E[n+3] are matrices: E[1] parity check matrix for the current AG code, E[2]...E[n+2] matrices used in decodeSV, E[n+3] an intvec with E[n+3][1] correction capacity epsilon and E[n+3][2] designed Goppa distance delta of current AG code.",
+        "guidance": "Computes preprocessing for the basic Skorobogatov-Vladut decoding algorithm. Must be called within ring EC[1][4] (or EC[1][2] if d=1). G and F represent rational divisors; D refers to rational places. The current AG code is AGcode_Omega(G,D,EC). If you know exact minimum distance d and want to use it in decodeSV instead of delta, change E[n+3][2] to d before decodeSV. If you have systematic encoding and want to keep it during decoding, permute D using permute_L(D,P) according to permutation L[3] from sys_code. Warnings: F must have support disjoint from D and degree epsilon + genus where epsilon := floor((deg(G) - 3*genus + 1)/2). G should satisfy 2*genus - 2 < deg(G) < size(D) (unchecked). G and D should have disjoint supports (checked). Example shows computing SV and printing parity check matrix and epsilon. See AGcode_Omega, decodeSV, extcurve, permute_L, sys_code."
+      },
+      {
+        "name": "decodeSV",
+        "description": "Usage: decodeSV(y, K); y a row-matrix and K a list (K should be output of prepSV). Returns the decoded codeword (row-matrix) if possible, or the 0-matrix if decoding is impossible. Uses the basic Skorobogatov-Vladut decoding algorithm.",
+        "guidance": "Input matrix y should be 1 x n where n = ncols(K[1]). Decoding may fail if number of errors > correction capacity of algorithm. Example demonstrates producing one error and decoding to the zero-codeword. See prepSV, AGcode_Omega, extcurve."
+      },
+      {
+        "name": "closed_points",
+        "description": "Usage: closed_points(I); I an ideal. Returns list of prime ideals (each a Groebner basis) corresponding to the distinct affine closed points of V(I).",
+        "guidance": "Ideal must have dimension 0, base ring must have 2 variables, ordering must be lp, base field finite and prime. It may be convenient to set option(redSB) in advance. Example computes closed points of ideal x^4+x, y^4+y over F_4 and prints a list of linear/quadratic factor Groebner bases corresponding to affine points. See triang lib reference."
+      },
+      {
+        "name": "dual_code",
+        "description": "Usage: dual_code(G); G a matrix of numbers. Returns a generator matrix of the dual code generated by G.",
+        "guidance": "Input should be a matrix G of numbers. Output is also a parity check matrix for code defined by G. Example: Hamming code generator given and dual_code returns parity-check matrix. No additional warnings."
+      },
+      {
+        "name": "sys_code",
+        "description": "Usage: sys_code(C); C is a matrix of constants. Returns list L with L[1] generator matrix in standard form of an equivalent code, L[2] parity check matrix in standard form, L[3] intvec representing needed permutation.",
+        "guidance": "Computes a systematic code equivalent to given one. Input should be matrix of numbers. If input was generator matrix of an AG code, apply permutation L[3] to divisor D of rational points by permute_L(D,L[3]) before continuing (e.g., to use systematic encoding with decoding). Examples show obtaining L[1], L[2], and L[3] and checking duality. See AGcode_Omega, permute_L, prepSV."
+      },
+      {
+        "name": "permute_L",
+        "description": "Usage: permute_L(L, P); L,P either intvecs or lists. Returns list obtained from L by applying the permutation given by P.",
+        "guidance": "If P is a list, all entries must be integers. Example shows permuting list L according to P. See AGcode_Omega, prepSV, sys_code for contexts where permuting divisors/point order is needed."
+      },
+      {
+        "name": "decodegb.lib overview",
+        "description": "Purpose: decodegb.lib \u2014 Decoding and minimum distance of linear codes with Groebner bases. Overview: generates systems used for decoding cyclic codes and finding minimum distance; works with Cooper's philosophy, generalized Newton identities, quadratic equations method, Fitzgerald-Lax, and auxiliary functions. Implements Farr and Gao vanishing ideal computation. For overview of methods see Section C.8.",
+        "guidance": "Lists procedures sysCRHT, sysCRHTMindist, sysNewton, sysBin, and describes their high-level purpose: building ideals/systems to solve decoding and minimum-distance problems via Groebner bases. Author and contact given. Use referenced sections for theoretical background."
+      },
+      {
+        "name": "sysCRHT",
+        "description": "Usage: sysCRHT(n,defset,e,q,m,[k]); n,e,q,m,k ints, defset list of ints. Constructs the Cooper-Reed-Heleseth-Truong ideal 'crht' (with Sala's additions optionally) for a cyclic code defined by defset, used to solve the decoding problem.",
+        "guidance": "Parameters: n length of cyclic code, defset the defining set, e error-correcting capacity, q field size, m degree extension of splitting field, optional k>0 adds additional equations forcing any two error positions to be different or one zero. The returned object is a ring containing ideal named 'crht'. Examples show printing crht and computing reduced Groebner basis red_crht. References: Cooper philosophy (Section C.8.2) and sysNewton/sysBin comparisons."
+      },
+      {
+        "name": "sysCRHTMindist",
+        "description": "Usage: sysCRHTMindist(n,defset,w); n,w ints, defset list of ints. Constructs Sala's ideal 'crht_md' for minimum distance testing of cyclic codes (binary case) based on defset and candidate distance w.",
+        "guidance": "Parameters: n length, defset defining set, w candidate minimum distance. Returns ring with ideal named 'crht_md'. Examples show printed crht_md and computing reduced Groebner basis red_crht_md to analyze feasibility; intended for binary cases. See Cooper philosophy (C.8.2)."
+      },
+      {
+        "name": "sysNewton",
+        "description": "Usage: sysNewton(n,defset,t,q,m,[tr]); n,t,q,m,tr ints, defset list of ints. Constructs ideal 'newton' with generalized Newton identities (triangular form if tr>0) for a cyclic code, used to solve decoding problem.",
+        "guidance": "Parameters: n length, defset defining set, t number of errors, q base field size, m degree extension of splitting field, tr>0 indicates triangular Newton identities. Returns ring containing 'newton' ideal. Examples show printed generalized Newton identities (many S(i) relations) and triangular form when tr=1. See Section C.8.3 for theory. Also cross-reference sysBin and sysCRHT."
+      },
+      {
+        "name": "sysBin",
+        "description": "Usage: sysBin(v,Q,n,[odd]); v,n,odd ints, Q list of ints. Constructs ideal 'bin' (using Waring function) for decoding via binary/quadratic-residue/Waring-based systems.",
+        "guidance": "Parameters: v number of errors, Q defining set of code, n length, odd optional: if set to 1, enlarge def.set by odd elements (2^k * element in def.set mod n). Returns ring with system named 'bin'. Example: [31,16,7] quadratic residue code construction and printed bin equations. Related to generalized Newton identities (Section C.8.3)."
+      }
+    ]
+  }
+}

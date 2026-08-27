@@ -1,0 +1,5138 @@
+<!-- URL: https://blog.google/press/ -->
+<!-- HTTP: 200 SIZE:   450111 -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html class="no-js glue-flexbox glue-app-ready keyword-blog" lang="en-us" data-locale="en-us" data-version="pr20260507-1819">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Press Corner | The Keyword</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0" />
+        <meta name="optimize_experiments" content="[]">
+
+        
+            
+        
+
+        
+  <meta name="page" content="774" />
+  <meta name="locale" content="en-us" />
+  <meta name="published_time" content="2018-05-08T20:55:48.503000+00:00" />
+  <meta name="content_type" content="blogv2.presspage" />
+  <meta name="tags" content="" />
+  <meta name="authors" content="" />
+
+
+
+        
+        
+
+        
+        
+  
+  
+  <style>@keyframes showAndTranslateLeft{0%{left:0;opacity:0}to{left:36px;opacity:1}}@keyframes showAndTranslateRight{0%{opacity:0;right:0}to{opacity:1;right:36px}}@keyframes dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}@keyframes loader-ring{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@keyframes slideInFromRight{0%{opacity:0;transform:translateX(2%)}to{opacity:1;transform:translateX(0)}}html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;--google-font-family:"Google Sans",roboto,arial,helvetica;--roboto-font-family:"Google Sans",roboto,arial,helvetica;--roboto-mono-font-family:"Roboto mono",monospace,arial,helvetica;--noto-color-emoji:"Noto Color Emoji",sans-serif;--uni-waze-boing-regular:"WazeBoingRegular";font-family:sans-serif;font-size:18px}body{word-wrap:break-word;background:#fff;color:#5f6368;cursor:auto;display:flex;flex-direction:column;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);font-size:1em;font-style:normal;font-weight:300;line-height:1.444;margin:0;min-height:100vh;overflow-x:hidden;padding:0}article,aside,figcaption,figure,footer,header,main,nav,section{display:block}audio,video{display:inline-block;vertical-align:initial}audio:not([controls]){display:none;height:0}[hidden]{display:none}a{background:0 0;color:#1a73e8;-webkit-text-decoration:none;text-decoration:none}a:hover,main{outline:0}b{font-weight:700}a img,img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{border:solid #dadce0;border-width:1px 0 0;box-sizing:initial;clear:both;height:0;margin-bottom:19px;margin-top:20px}button,input,select{color:inherit;font:inherit;margin:0}button{-webkit-appearance:button;cursor:pointer;overflow:visible}button,select{text-transform:none}button[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{-webkit-hyphens:none;hyphens:none;line-height:normal}input[type=search]{-webkit-appearance:textfield;box-sizing:initial}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}table{border-collapse:collapse;border-spacing:0}*,:after,:before{box-sizing:border-box}div,form,h1,h3,li,p,td{margin:0;padding:0}h2,ol,ul{padding:0}body:after{content:"x-small";display:none}@media(min-width:600px){body:after{content:"small"}}@media(min-width:1024px){body:after{content:"medium"}}@media(min-width:1440px){body:after{content:"large"}}.h-c-copy,.rich-text,li,p{font-size:14px;letter-spacing:.25px;line-height:1.7142857143}p.h-has-bottom-margin{margin-bottom:12px}.rich-text+p,p+.rich-text,p+p{margin-top:12px}@media(min-width:600px){.h-c-copy,.rich-text,p{font-size:14px;letter-spacing:.25px;line-height:1.7142857143}}@media(min-width:1024px){.h-c-copy,.rich-text,p{font-size:16px;letter-spacing:0;line-height:1.625}p.h-has-bottom-margin{margin-bottom:16px}.rich-text+p,p+.rich-text,p+p{margin-top:16px}}a:visited{color:#7b1fa2}a:focus,a:hover{-webkit-text-decoration:none;text-decoration:none}a:focus{background:#f1f3f4;outline:4px solid rgba(32,33,36,.06)}a:active{outline:2px auto Highlight;outline:5px auto -webkit-focus-ring-color}ol,ul{list-style-position:outside;margin:0 0 20px 20px}ul.h-no-bullet{list-style:none;margin-left:0}ul li ul{margin-bottom:0;margin-left:20px}@media(min-width:600px){li{font-size:14px;letter-spacing:.25px;line-height:1.7142857143}}@media(min-width:1024px){li{font-size:16px;letter-spacing:0;line-height:1.625}}img{-ms-interpolation-mode:bicubic;display:inline-block;height:auto;max-width:100%;vertical-align:middle}select{width:100%}.glue-flexbox .h-c-grid{display:flex;flex-wrap:wrap;margin:0 -2.6515151515%}@media(min-width:600px){.glue-flexbox .h-c-grid{margin:0 -1.0379945163%}}.glue-flexbox .h-c-grid__col{flex:0 1 auto;margin:0 2.6515151515%;width:100%}@media(min-width:600px){.glue-flexbox .h-c-grid__col{margin:0 1.0379945163%}.glue-flexbox .h-c-grid__col--5{flex-basis:39.5906776342%;margin:0 1.0379945163%;width:39.5906776342%}.glue-flexbox .h-c-grid__col--6{flex-basis:47.9240109675%;margin:0 1.0379945163%;width:47.9240109675%}.glue-flexbox .h-c-grid__col--7{flex-basis:56.2573443008%;margin:0 1.0379945163%;width:56.2573443008%}.glue-flexbox .h-c-grid__col--8{flex-basis:64.5906776342%;margin:0 1.0379945163%;width:64.5906776342%}.glue-flexbox .h-c-grid__col--12{flex-basis:97.9240109675%;margin:0 1.0379945163%;width:97.9240109675%}}@media(min-width:1024px){.glue-flexbox .h-c-grid__col-l--1{flex-basis:6.2573443008%;margin:0 1.0379945163%;width:6.2573443008%}.glue-flexbox .h-c-grid__col-l--3{flex-basis:22.9240109675%;margin:0 1.0379945163%;width:22.9240109675%}.glue-flexbox .h-c-grid__col-l--4{flex-basis:31.2573443008%;margin:0 1.0379945163%;width:31.2573443008%}.glue-flexbox .h-c-grid__col-l--5{flex-basis:39.5906776342%;margin:0 1.0379945163%;width:39.5906776342%}.glue-flexbox .h-c-grid__col-l--7{flex-basis:56.2573443008%;margin:0 1.0379945163%;width:56.2573443008%}.glue-flexbox .h-c-grid__col-l--9{flex-basis:72.9240109675%;margin:0 1.0379945163%;width:72.9240109675%}}.h-c-grid__col--align-middle{-ms-align-self:center;align-self:center}.h-c-eyebrow,.h-c-headline,h1,h2,h3{color:#202124;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family)}.h-c-headline,h1,h2,h3{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;word-wrap:normal;font-weight:400;text-rendering:optimizeLegibility}.h-c-headline.h-c-headline--one,h1,h2{font-size:32px;letter-spacing:0;line-height:1.25}@media(min-width:600px){.h-c-headline.h-c-headline--one,h1{font-size:38px;letter-spacing:0;line-height:1.1578947368}}@media(min-width:1024px){.h-c-headline.h-c-headline--one,h1{font-size:56px;letter-spacing:-.5px;line-height:1.1785714286}}h2{font-size:24px;line-height:1.3333333333}@media(min-width:600px){h2{font-size:32px;letter-spacing:0;line-height:1.25}}@media(min-width:1024px){h2{font-size:44px;letter-spacing:-.5px;line-height:1.1818181818}}.h-c-headline.h-c-headline--three,h3{font-size:20px;letter-spacing:0;line-height:1.4}@media(min-width:600px){.h-c-headline.h-c-headline--three,h3{font-size:24px;letter-spacing:0;line-height:1.3333333333}}@media(min-width:1024px){.h-c-headline.h-c-headline--three,h3{font-size:32px;letter-spacing:0;line-height:1.25}}.h-c-headline.h-c-headline--four{font-size:16px;letter-spacing:0;line-height:1.625}.h-c-headline.h-c-headline--four.h-has-bottom-margin{margin-bottom:6px}@media(min-width:600px){.h-c-headline.h-c-headline--four{font-size:16px;letter-spacing:0;line-height:1.625}.h-c-headline.h-c-headline--four.h-has-bottom-margin{margin-bottom:6px}}@media(min-width:1024px){.h-c-headline.h-c-headline--four{font-size:22px;letter-spacing:0;line-height:1.3636363636}.h-c-headline.h-c-headline--four.h-has-bottom-margin{margin-bottom:12px}}.h-c-headline.h-c-headline--subhead{font-size:16px;letter-spacing:0;line-height:1.625}@media(min-width:600px){.h-c-headline.h-c-headline--subhead{font-size:16px;letter-spacing:0;line-height:1.625}}@media(min-width:1024px){.h-c-headline.h-c-headline--subhead{font-size:18px;letter-spacing:0;line-height:1.6666666667}}.h-c-eyebrow{font-size:12px;font-weight:500;letter-spacing:1.25px;line-height:1.5;text-transform:uppercase}.h-c-eyebrow.h-has-bottom-margin{margin-bottom:5px}@media(min-width:1024px){.h-c-eyebrow{font-size:14px;letter-spacing:1.5px;line-height:1.5714285714}.h-c-eyebrow.h-has-bottom-margin{margin-bottom:5px}}.article-module:after,.module--text:after,.module:after{clear:both;content:"";display:block}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all svg{fill:currentColor;margin-left:8px;width:9px}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all:hover svg{fill:currentColor}.kw-button--medium-emphasis:focus,.uni-header__hamburguer-button,.uni-newsletter-toast__cta--sub:focus{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.module{margin-bottom:50px!important}@media(min-width:1024px){.module{margin-bottom:60px!important}}.article-module{margin-bottom:30px!important}@media(min-width:1024px){.article-module{margin-bottom:36px!important}}.module--text{margin-bottom:12px!important}@media(min-width:1024px){.module--text{margin-bottom:16px!important}}.events-off{pointer-events:none}a:focus .focusable{outline:1px dotted #212121;outline:5px auto -webkit-focus-ring-color}.nowrap{white-space:nowrap}.rich-text>p{font-size:inherit;line-height:inherit}.h-u-visually-hidden{clip:rect(1px,1px,1px,1px);height:1px;overflow:hidden;position:absolute;width:1px}.uni-progressive-image--blur{filter:blur(4px)}.uni-progressive-image--no-blur{filter:blur(0);transition:all .3s cubic-bezier(.6,-.28,.74,.05)!important}h2{margin:0 0 20px}@media(min-width:1024px){h2{margin-bottom:40px}}.h-c-headline,.no-hyphens,figcaption,h1,h2,h3{-webkit-hyphens:manual;hyphens:manual}.h-c-eyebrow{display:block}.uni-header .h-c-header__jump-to-content:focus{font-size:16px;font-style:normal;font-weight:500;line-height:24px}.uni-header .h-c-header__jump-to-content:focus,.uni-header__kebab-menu-item,.uni-navigation--desktop .uni-main-menu__submenu-item-label,.uni-navigation--desktop .uni-main-menu__submenu-item-see-all[title^="See all"],.uni-navigation--desktop .uni-main-menu__submenu-link>a{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family)}.uni-header__kebab-menu-item,.uni-navigation--desktop .uni-main-menu__submenu-item-see-all[title^="See all"],.uni-navigation--desktop .uni-main-menu__submenu-link>a{font-size:.7777777778rem;font-weight:400;letter-spacing:.0138888889rem}.uni-navigation--desktop .uni-main-menu__submenu-item-label{font-size:.6666666667rem;font-weight:500;letter-spacing:.0555555556rem}.audio-player__content p,.audio-player__content span,.uni-header__site-title>a>div{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family)}.uni-header__site-title>a>div{-webkit-font-smoothing:antialiased;color:#5f6368;font-size:.8888888889rem;font-style:normal;font-weight:400;line-height:1.4444444444rem;text-rendering:optimizeLegibility}@media(min-width:600px){.uni-header__site-title>a>div{font-size:1.2222222222rem}}.audio-player__content p{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);font-size:14px;font-weight:300;letter-spacing:.25px;line-height:24px}.audio-player__content span{color:#25272b;font-size:16px;font-weight:500;line-height:26px}@media(min-width:1024px){.audio-player__content span{font-size:18px}}.ui-carousel-slide__disclaimer p,[tooltip]:before{font-weight:400}.breadcrumb__button,.breadcrumb__current-page,.featured-article-hero__collection-badge,.ui-carousel-slide__disclaimer p,.uni-eyebrow,[tooltip]:before{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-style:normal}.uni-button,.uni-cta-text,.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item,.uni-navigation--mobile .uni-main-menu__item,.uni-navigation--mobile .uni-main-menu__item-label,.uni-navigation--mobile .uni-main-menu__subnav-item-name,.uni-navigation--mobile .uni-main-menu__subnav-title{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-style:normal;letter-spacing:normal}.uni-author-info,.uni-author-name{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-style:normal}.ui-carousel-slide__description p,.ui-carousel-slide__read-more,.uni-body--small{font-weight:400}.ui-carousel-slide__description p,.ui-carousel-slide__headline,.ui-carousel-slide__read-more,.uni-body--small{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-style:normal;letter-spacing:normal}.uni-body--large,body p{font-weight:400}.ui-carousel-slide__component .audio-player__content--title,.uni-body--large,.uni-headline-5,.uni-title-1,.uni-title-2,body p{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-style:normal;letter-spacing:normal}.uni-headline-3,.uni-headline-4{font-weight:400}.uni-display-1,.uni-headline-1,.uni-headline-2,.uni-headline-3,.uni-headline-4,.uni-pull-quote__text{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-style:normal;letter-spacing:normal}.uni-display-1,.uni-headline-1,.uni-pull-quote__text{font-weight:400}.ui-carousel-slide__component .audio-player__content--title,.uni-author-name,.uni-display-1,.uni-eyebrow,.uni-headline-1,.uni-headline-2,.uni-headline-3,.uni-headline-4,.uni-headline-5,.uni-pull-quote__text,.uni-title-1,.uni-title-2{color:#202124}.uni-display-1{font-size:32px;line-height:40px}@media(min-width:600px){.uni-display-1{font-size:38px;line-height:44px}}@media(min-width:1024px){.uni-display-1{font-size:56px;letter-spacing:-.5px;line-height:64px}}.uni-headline-1,.uni-pull-quote__text{font-size:24px;line-height:32px}@media(min-width:600px){.uni-headline-1,.uni-pull-quote__text{font-size:32px;line-height:40px}}@media(min-width:1024px){.uni-headline-1,.uni-pull-quote__text{font-size:36px;line-height:44px}}.uni-headline-2{font-size:24px;font-weight:700;line-height:32px}@media(min-width:600px){.uni-headline-2{font-size:28px;line-height:36px}}.uni-headline-3{font-size:22px;line-height:30px}@media(min-width:600px){.uni-headline-3{font-size:28px;line-height:36px}}.uni-headline-4{font-size:20px;line-height:28px}@media(min-width:600px){.uni-headline-4{font-size:22px;line-height:30px}}.uni-headline-5{font-weight:700}.uni-headline-5,.uni-title-1{font-size:16px;line-height:28px}@media(min-width:600px){.uni-headline-5,.uni-title-1{font-size:20px;line-height:28px}}.uni-title-1{font-weight:400}.ui-carousel-slide__component .audio-player__content--title,.uni-title-2{font-size:14px;font-weight:500;line-height:24px}@media(min-width:600px){.ui-carousel-slide__component .audio-player__content--title,.uni-title-2{font-size:16px;line-height:28px}}body p{font-size:16px;line-height:28px}.uni-body--large{font-size:18px;line-height:30px}.ui-carousel-slide__description p,.ui-carousel-slide__headline,.ui-carousel-slide__read-more,.uni-body--small{font-size:14px;line-height:24px}.uni-author-info,.uni-author-name{font-size:14px;font-weight:700;letter-spacing:.25px;line-height:20px}.uni-author-info{font-weight:500}.uni-author-info--ellipsize{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uni-button,.uni-cta-text,.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item,.uni-navigation--mobile .uni-main-menu__item,.uni-navigation--mobile .uni-main-menu__item-label,.uni-navigation--mobile .uni-main-menu__subnav-item-name,.uni-navigation--mobile .uni-main-menu__subnav-title{font-size:16px;font-weight:500;line-height:24px}.breadcrumb__button,.breadcrumb__current-page,.featured-article-hero__collection-badge,.uni-eyebrow{font-size:14px;font-weight:500;letter-spacing:.25px;line-height:48px;max-width:100%;min-width:48px;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;white-space:nowrap}a.breadcrumb__button:not(.breadcrumb__button),a.breadcrumb__button:not(.breadcrumb__button):visited,a.featured-article-hero__collection-badge:not(.breadcrumb__button),a.featured-article-hero__collection-badge:not(.breadcrumb__button):visited,a.uni-eyebrow:not(.breadcrumb__button),a.uni-eyebrow:not(.breadcrumb__button):visited{color:#1a73e8}a.breadcrumb__button:not(.breadcrumb__button):hover,a.featured-article-hero__collection-badge:not(.breadcrumb__button):hover,a.uni-eyebrow:not(.breadcrumb__button):hover{color:#174ea6}a.breadcrumb__button:not(.breadcrumb__button).focus-visible,a.breadcrumb__button:not(.breadcrumb__button):active,a.breadcrumb__button:not(.breadcrumb__button):focus,a.featured-article-hero__collection-badge:not(.breadcrumb__button).focus-visible,a.featured-article-hero__collection-badge:not(.breadcrumb__button):active,a.featured-article-hero__collection-badge:not(.breadcrumb__button):focus,a.uni-eyebrow:not(.breadcrumb__button).focus-visible,a.uni-eyebrow:not(.breadcrumb__button):active,a.uni-eyebrow:not(.breadcrumb__button):focus{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}a.breadcrumb__button:not(.breadcrumb__button)[aria-disabled=true],a.featured-article-hero__collection-badge:not(.breadcrumb__button)[aria-disabled=true],a.uni-eyebrow:not(.breadcrumb__button)[aria-disabled=true]{color:#202124;pointer-events:none}a.breadcrumb__button:not(.breadcrumb__button).uni-eyebrow--contrast,a.breadcrumb__button:not(.breadcrumb__button).uni-eyebrow--contrast:visited,a.featured-article-hero__collection-badge:not(.breadcrumb__button).uni-eyebrow--contrast,a.featured-article-hero__collection-badge:not(.breadcrumb__button).uni-eyebrow--contrast:visited,a.uni-eyebrow:not(.breadcrumb__button).uni-eyebrow--contrast,a.uni-eyebrow:not(.breadcrumb__button).uni-eyebrow--contrast:visited{color:#1967d2}a.breadcrumb__button:not(.breadcrumb__button).uni-eyebrow--contrast:hover,a.featured-article-hero__collection-badge:not(.breadcrumb__button).uni-eyebrow--contrast:hover,a.uni-eyebrow:not(.breadcrumb__button).uni-eyebrow--contrast:hover{color:#174ea6}.ui-carousel-slide__disclaimer p,[tooltip]:before{font-size:12px;letter-spacing:.25px;line-height:18px}[data-loading]{filter:blur(6px);transition:all .4s ease-in}.lazy-image--no-blur{filter:none!important}.smooth-scroll{scroll-behavior:smooth}.site-content{flex:1 0 0}a:hover{cursor:pointer}a:focus,a:hover,a:visited{color:#174ea6}a:focus{background:0 0;border-radius:2px;outline:2px solid #174ea6;outline-offset:0}[slot]{display:none}.uni-header__logo-google,.uni-navigation--desktop,.uni-navigation--desktop .uni-main-menu,.uni-navigation--desktop .uni-main-menu__item,.uni-navigation--desktop .uni-main-menu__item-label,.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__logo-google{align-items:center;display:flex;flex-flow:row nowrap;justify-content:center}.uni-header{align-items:center;display:flex;flex-flow:row nowrap}.uni-header__hamburguer-wrapper,.uni-navigation--mobile .uni-main-menu__subnav-title,.uni-navigation--mobile .uni-navigation__brand-mobile{align-items:center;display:flex;flex-flow:row nowrap;justify-content:left}.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item a,.uni-navigation--mobile .uni-main-menu__item-label,.uni-navigation--mobile .uni-main-menu__subnav-item-name{align-items:center;display:flex;flex-flow:row nowrap;justify-content:space-between}.uni-article-progress-bar{align-items:center}.perspective-featured-authors{box-sizing:initial;width:auto}.article-video-special{margin-left:auto;margin-right:auto}.article-video-special,.uni-blog-landing-hero{box-sizing:initial;padding:0 16px;width:auto}.article-meta__author-container,.featured-article-cat-subcat-hero__grid,.featured-article-hero-large-title,.featured-article-hero__container,.featured-article-hero__grid{box-sizing:initial;margin-left:auto;margin-right:auto;padding:0 16px;width:auto}.article-container,.article-hero,.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame{box-sizing:initial;margin-left:auto;margin-right:auto;width:auto}.article-container{padding:0 16px}@media(min-width:600px){.article-container,.article-hero,.article-meta__author-container,.article-video-special,.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame,.featured-article-cat-subcat-hero__grid,.featured-article-hero-large-title,.featured-article-hero__container,.featured-article-hero__grid,.perspective-featured-authors,.uni-blog-landing-hero{max-width:1260px;padding:0 32px}}@media(min-width:1440px){.article-container,.article-hero,.article-meta__author-container,.article-video-special,.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame,.featured-article-cat-subcat-hero__grid,.featured-article-hero-large-title,.featured-article-hero__container,.featured-article-hero__grid,.perspective-featured-authors,.uni-blog-landing-hero{padding:0}}.uni-spacer-2-bottom{margin-bottom:16px}.uni-component-spacing{margin-block-end:60px}@media(min-width:1024px){.uni-component-spacing{margin-block-end:80px}}.uni-layout-page{margin-inline:16px}@media(min-width:768px){.uni-layout-page{margin-inline:32px}}@media(min-width:1024px){.uni-layout-page{box-sizing:initial;margin-inline:auto;max-width:1260px;padding-inline:32px}}@media(min-width:1440px){.uni-layout-page{padding-inline:0}}.h-c-header__hamburger-img{height:24px;margin:0 auto;width:24px}.h-c-header__hamburger-img.h-c-header__hamburger-img--standard{fill:#5f6368;display:block}.h-c-header__jump-to-content{clip:rect(1px,1px,1px,1px);background:#f1f3f4;border-radius:2px;display:none;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;height:1px;left:100%;letter-spacing:.25px;margin-left:48px;overflow:hidden;padding:10px;position:absolute;top:9px;white-space:nowrap;width:1px;z-index:103}.h-c-header__jump-to-content:focus{clip:auto;color:#174ea6;height:auto;outline:0;overflow:visible;width:auto}@media(min-width:900px){.h-c-header__jump-to-content{display:table}}.h-c-header__jump-to-content-text{display:table-cell}.h-c-page{box-sizing:initial;margin:0 auto;max-width:568px;padding:0 16px;width:auto}@media(min-width:600px){.h-c-page{max-width:1280px;padding:0 32px}}.h-c-icon{fill:currentColor;display:inline-block}.h-c-icon--20px{height:20px;width:20px}.h-c-icon--24px{height:24px;width:24px}.h-c-icon--footer{color:#202124;margin:0 5px 0 0;vertical-align:middle}.h-c-icon--social{fill:#202124;padding:2px;vertical-align:top}.h-c-icon--no-padding{padding:0}.h-c-icon--color-text{fill:#202124}.h-c-social{max-width:100%}@media(min-width:600px){.h-c-social{display:flex;flex:1 0 auto;flex-wrap:wrap}}.h-c-footer .h-c-social{margin:0 0 30px}.h-c-social__group{display:flex;flex:0 0 100%;flex-wrap:wrap;margin:0}@media(min-width:600px){.h-c-social__group{flex-wrap:nowrap;padding-right:50px}}@media(min-width:1024px){.h-c-social__group{flex:0 0 auto}}.h-c-social__title{color:#202124;flex:0 0 100%;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;font-weight:400;letter-spacing:.75px}@media(min-width:1024px){.h-c-social__title{font-size:16px;letter-spacing:.5px}}.h-c-social__title.h-c-social__title--inline{flex:0 0 auto;line-height:1.7142857143;margin-right:32px}@media(min-width:1024px){.h-c-social__title.h-c-social__title--inline{line-height:1.5}}.h-c-social__list{display:flex;flex:0 0 auto;flex-wrap:wrap;margin:0;max-width:100%}.h-c-social__list:after{clear:both;content:" ";display:block;font-size:0;height:0;visibility:hidden}@media(min-width:600px){.h-c-social__list{flex-wrap:nowrap}}.h-c-social__item{flex:0 0 auto;float:left;height:24px;margin-left:0;margin-right:32px;width:24px}.h-c-social__item:last-child{margin-right:0}.h-c-social__item .h-c-social__link{border-radius:50%;display:block;height:24px;padding:0;width:24px}.h-c-social__item .h-c-social__link:focus{background:#f1f3f4;box-shadow:0 0 0 10px #f1f3f4;outline:0}.h-c-footer .h-c-social__item .h-c-social__link:focus{background:#e8eaed;box-shadow:0 0 0 10px #e8eaed}.h-c-footer{background:#f8f9fa;margin:0}.h-c-footer.h-c-footer--topmargin{margin-top:40px}.h-c-footer__link{color:#5f6368;display:inline-block;font-size:14px;font-weight:400;letter-spacing:.25px;line-height:1.5714285714}.h-c-footer__link:visited{color:#5f6368}.h-c-footer__link:focus,.h-c-footer__link:hover{color:#202124}.h-c-footer__link:focus,.h-c-footer__logo a:focus{background:#e8eaed;outline:10px solid #e8eaed}.h-c-footer__global{margin:0 auto;padding:40px 16px 20px}@media(min-width:600px){.h-c-footer__global{display:flex;flex-wrap:wrap;max-width:1344px;padding:40px 32px 20px}.h-c-footer__global:after{clear:both;content:" ";display:block;font-size:0;height:0;visibility:hidden}}.h-c-footer__logo{height:28px;margin:0 0 30px;width:86px}@media(min-width:600px){.h-c-footer__logo{flex:0 0 90%;margin-right:55px}}@media(min-width:1024px){.h-c-footer__logo{flex:0 0 86px}}.h-c-footer__logo a{display:inline-block;height:28px}.h-c-footer__logo-img{fill:#5f6368;height:28px;width:86px}.h-c-footer__global-links{margin:0 0 15px}.h-c-footer__global-links:after{clear:both;content:" ";display:block;font-size:0;height:0;visibility:hidden}@media(min-width:600px){.h-c-footer__global-links{display:flex;flex:2 0 auto;flex-wrap:wrap;max-width:100%}.h-c-footer__global-links--extra{flex:0 0 auto}}.h-c-footer__global-links-list-item{float:left;padding:0 30px 15px 0}.h-c-footer__global-links-list-item--extra:last-child{padding-left:0;padding-right:0}.h-c-footer__upper{margin:0 auto;padding:30px 16px 0}@media(min-width:600px){.h-c-footer__upper{display:flex;flex-wrap:wrap;max-width:1344px;padding:30px 32px 0}.h-c-footer__upper:after{clear:both;content:" ";display:block;font-size:0;height:0;visibility:hidden}}.h-c-video{font-size:19px;position:relative}.h-c-video:focus{outline:0}.h-c-video:focus:after{background-color:transparent;border:4px solid #174ea6;content:"";display:block;height:100%;left:0;position:absolute;top:0;width:100%;z-index:5}.h-c-video.h-c-video--marquee{cursor:pointer;display:block}.h-c-video img{width:100%;z-index:10}.kw-button{border:0;border-radius:4px;cursor:pointer;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px}.kw-button--high-emphasis,a:visited.kw-button--high-emphasis{background-color:#1a73e8;color:#fff;display:block;padding:13px 24px 11px;text-align:center}.kw-button--high-emphasis:hover,a:visited.kw-button--high-emphasis:hover{background-color:#185abc;color:#fff}@media(forced-colors:active){.kw-button--high-emphasis:hover,a:visited.kw-button--high-emphasis:hover{border:2px solid #1a73e8}}@media(prefers-contrast:forced){.kw-button--high-emphasis:hover,a:visited.kw-button--high-emphasis:hover{border:2px solid #1a73e8}}.kw-button--high-emphasis:focus,a:visited.kw-button--high-emphasis:focus{background:0 0;background-color:#185abc;border-radius:4px;color:#fff;outline:2px solid #174ea6;outline-color:#aecbfa;outline-offset:0}.kw-button--high-emphasis:active,a:visited.kw-button--high-emphasis:active{background-color:#185abc}.kw-button--medium-emphasis{background-color:#fff;border:1px solid #dadce0;color:#1a73e8;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;padding:13px 24px 11px;transition:background-color .2s}.kw-button--medium-emphasis:hover{background-color:#f2f7fe;border:1px solid #1a73e8}.kw-button--medium-emphasis:focus{background-color:#f4f8fe;border:2px solid #1a73e8;outline:0}.kw-button--medium-emphasis:active{background-color:#e8f0fe}.cta{color:#3367d6;display:table;font-weight:500;letter-spacing:.0277777778em;margin-top:20px;text-transform:uppercase}.cta:first-child{margin-top:0}.cta--down{margin-top:10px}.cta--down:active,.cta--down:focus-within{background:0 0;outline:0}.cta--down:focus-visible{background:#f1f3f4;outline:4px solid rgba(32,33,36,.06)}@media(min-width:1024px){.cta--down{margin-top:2px}}.cta.muted{color:#202124}.cta .icon{fill:currentColor;height:22px;margin-left:5px;position:relative;top:7px;transition:transform .1s;width:22px;will-change:transform}.cta .icon--down{height:16px;margin-left:8px;top:4px;width:16px}.cta:hover,a:hover .cta{color:#4285f4}.cta:hover .icon,a:hover .cta .icon{fill:currentColor;transform:translateX(5px)}.cta:hover .icon--down,a:hover .cta .icon--down{transform:translateX(0)}.uni-button{align-items:center;border:1px solid transparent;border-radius:48px;display:inline-flex;gap:8px;justify-content:center;max-width:380px;min-height:48px;padding-bottom:11px;padding-inline-end:24px;padding-inline-start:24px;padding-top:11px;text-align:center;transition:background-color .2s,box-shadow .2s,color .2s;vertical-align:middle}.uni-button[disabled],.uni-button[disabled]:hover{background-color:#f8f9fa;box-shadow:none;color:#9aa0a6;cursor:not-allowed;pointer-events:none}.uni-button[disabled]:hover svg{fill:#9aa0a6}.uni-button:focus{border-radius:48px;outline:2px solid #1a73e8}.uni-button svg{flex-shrink:0;height:18px;width:18px}.uni-button--medium-emphasis{background-color:#fff;border:1px solid #5f6368;color:#1a73e8}.uni-button--medium-emphasis svg{fill:#1a73e8}.uni-button--medium-emphasis[disabled]{border-color:#dadce0}.uni-button--medium-emphasis:visited{color:#1a73e8}.uni-button--medium-emphasis:focus svg,.uni-button--medium-emphasis:hover svg{fill:#174ea6}.uni-button--medium-emphasis:hover{background-color:#f6f9fe;border-color:#1a73e8;color:#174ea6}.uni-button--medium-emphasis:focus{background-color:#e8f0fe;border-color:transparent;color:#174ea6}.uni-button--medium-emphasis:active{background-color:#e8f0fe;border-color:#174ea6;color:#174ea6;outline:0}.uni-button--icon-right{padding-inline-end:12px}.kw-form-input{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-appearance:none;-moz-appearance:none;appearance:none;position:relative}@media screen and (device-aspect-ratio:2/3){.kw-form-input input[type=text]{font-size:16px}}@media screen and (device-aspect-ratio:40/71){.kw-form-input input[type=text]{font-size:16px}}@media screen and (device-aspect-ratio:375/667){.kw-form-input input[type=text]{font-size:16px}}@media screen and (device-aspect-ratio:9/16){.kw-form-input input[type=text]{font-size:16px}}@media only screen and (device-width:414px)and (device-height:896px)and (device-pixel-ratio:2){.kw-form-input input[type=text]{font-size:16px}}@media only screen and (device-width:375px)and (device-height:812px)and (device-pixel-ratio:3){.kw-form-input input[type=text]{font-size:16px}}@media only screen and (device-width:414px)and (device-height:896px)and (device-pixel-ratio:3){.kw-form-input input[type=text]{font-size:16px}}@media only screen and (device-width:390px)and (device-height:844px)and (device-pixel-ratio:3){.kw-form-input .kw-form-input__field{font-size:16px}}@media only screen and (device-width:428px)and (device-height:926px)and (device-pixel-ratio:3){.kw-form-input .kw-form-input__field{font-size:16px}}.kw-form-input:active,.kw-form-input:focus,.kw-form-input:focus-within{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-appearance:none;-moz-appearance:none;appearance:none;background:0 0}.kw-form-input__label{color:#5f6368;display:block;left:16px;letter-spacing:.15px;line-height:24px;overflow:hidden;pointer-events:none;position:absolute;text-overflow:ellipsis;top:12px;transition:.1s ease;white-space:nowrap;width:90%}.kw-form-input__label:not(output):-moz-ui-invalid{box-shadow:none}.kw-form-input__label:active,.kw-form-input__label:focus{background-color:transparent}.kw-form-input__error{color:#c5221f;display:none;font-size:11px;left:16px;letter-spacing:.2px;line-height:18px;max-width:92%;position:relative}@media(min-width:1024px){.kw-form-input__error{bottom:10px;line-height:24px;max-width:95%;position:absolute}}.kw-form-input__field{background-color:#fff;border:1px solid #dadce0;border-radius:8px;color:#3c4043;height:48px;line-height:24px;outline:0;padding:8px 16px;width:100%}.kw-form-input__field,.kw-form-input__field:active,.kw-form-input__field:focus{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-appearance:none;-moz-appearance:none;appearance:none}.kw-form-input__field:active,.kw-form-input__field:focus{border-color:#1a73e8}.kw-form-input__field:active+label,.kw-form-input__field:focus+label{background:#fff;color:#1a73e8;display:block;font-size:12px;left:5px;padding:0 5px;position:absolute;top:-12px;white-space:nowrap;width:auto}.kw-form-input__field:not(:focus):not(:-moz-placeholder-shown):valid+label{background:#fff;color:#5f6368;display:block;font-size:12px;left:5px;padding:0 5px;position:absolute;top:-12px;white-space:nowrap;width:auto}.kw-form-input__field:not(:focus):not(:-moz-placeholder-shown):valid+label,.kw-form-input__field:not(:focus):not(:placeholder-shown):valid+label{background:#fff;color:#5f6368;display:block;font-size:12px;left:5px;padding:0 5px;position:absolute;top:-12px;white-space:nowrap;width:auto}.uni-picker{border-bottom:1px solid #dadce0;display:flex;margin-bottom:24px;position:relative}.uni-picker:focus>.uni-picker-order-menu{color:#202124}.uni-header__site-title>a:focus:not(:focus-visible),.uni-picker:focus:not(:focus-visible){outline:0}.uni-picker:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.uni-blog-lit-select select,.uni-picker__order-menu{-webkit-appearance:none;-moz-appearance:none;appearance:none;border:0;font-size:16px;font-weight:500;height:48px}.uni-picker__order-menu{background-color:transparent;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iIzU0NTQ1NCI+PHBhdGggZD0ibTcgMTAgNSA1IDUtNXoiLz48L3N2Zz4=);background-position:100%;background-repeat:no-repeat;color:#5f6368;cursor:pointer;font-style:normal;letter-spacing:.25px;line-height:22px;min-width:220px;padding-inline-end:24px;width:-moz-fit-content;width:fit-content}.uni-picker__order-menu:hover{color:#202124}.uni-picker__item{color:#5f6368}.uni-blog-lit-select{align-items:center;border:0;display:flex;gap:16px;justify-content:flex-end;padding-inline:0;position:relative;width:100%}@media(min-width:1024px){.uni-blog-lit-select{border:0}}.uni-blog-lit-select select{background:0 0;border-bottom:1px solid #202124;color:#202124;line-height:24px;padding-inline:0}.uni-blog-lit-select select:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:0}.uni-blog-lit-select select:disabled{border-bottom:1px solid #9aa0a6;color:#9aa0a6;cursor:not-allowed}.uni-blog-lit-select select:disabled+.uni-blog-lit-select__icon-wrapper{color:#9aa0a6}.uni-blog-lit-select__icon-wrapper{inset-inline-end:0;pointer-events:none;position:absolute;top:50%;transform:translateY(-50%)}.about-hero{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:1260px;padding:60px 16px 24px}@media(min-width:600px){.about-hero{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.about-hero{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:600px){.about-hero{padding:60px 32px 32px}}@media(min-width:1024px){.about-hero{margin:0 auto 24px;padding:60px 32px 0}}@media(min-width:1440px){.about-hero{padding:60px 0 0}}.about-hero__container{display:flex;flex-wrap:wrap;grid-column:1/-1}@media(min-width:600px){.about-hero__container{grid-column:2/-2}}@media(min-width:1024px){.about-hero__container{align-items:center;border-bottom:1px solid #dadce0;justify-content:space-between;padding-bottom:18px}}.about-hero__title{width:100%}@media(min-width:1024px){.about-hero__title{width:auto}}.about-hero__title .title{font-size:32px;font-weight:700;letter-spacing:-.25px;line-height:40px}@media(min-width:600px){.about-hero__title .title{font-size:38px;letter-spacing:-.5px;line-height:44px}}@media(min-width:1024px){.about-hero__title .title{font-size:60px;line-height:72px;margin-bottom:0}}.about-hero .follow-us{align-items:center;display:flex;flex-wrap:nowrap;gap:16px;height:32px;margin-top:32px}@media(min-width:1024px){.about-hero .follow-us{margin-top:0}}.about-hero .follow-us__title{flex:0 0 auto;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;font-weight:500;letter-spacing:1.5px;line-height:18px;text-transform:uppercase}.about-hero .follow-us__list{align-items:center;display:flex;flex-wrap:nowrap;gap:12px;list-style:none;margin:0}.about-hero .follow-us .follow-us__list .item--no-width{width:auto}.about-hero .article-meta__author-container{padding:0 0 0 12px}.about-hero .article-meta__author-container .uni-social-share__trigger{height:auto}.about-hero .article-meta__author-container .uni-social-share__button{display:block;line-height:16px}.featured-article-hero__additional-articles{align-content:flex-start;display:grid;grid-column:1/-1;list-style:none;margin-inline:0;opacity:1;transition:opacity allow-discrete 1s}.featured-article-hero__additional-articles.is-loading{display:none;opacity:0}@media(min-width:1024px){.featured-article-hero__additional-articles{margin-inline:0;margin-top:36px}}.featured-article-hero__additional-articles.four-articles,.featured-article-hero__additional-articles.three-articles,.featured-article-hero__additional-articles.two-articles{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.featured-article-hero__additional-articles.four-articles,.featured-article-hero__additional-articles.three-articles,.featured-article-hero__additional-articles.two-articles{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-hero__additional-articles.four-articles,.featured-article-hero__additional-articles.three-articles,.featured-article-hero__additional-articles.two-articles{grid-column-gap:24px;grid-template-columns:repeat(4,minmax(0,1fr))}}.featured-article-hero__additional-articles.four-articles .article,.featured-article-hero__additional-articles.three-articles .article,.featured-article-hero__additional-articles.two-articles .article{grid-column:1/-1;position:relative}.featured-article-hero__additional-articles.four-articles .article .no-image .article__link,.featured-article-hero__additional-articles.three-articles .article .no-image .article__link,.featured-article-hero__additional-articles.two-articles .article .no-image .article__link{grid-column:1/-1}.featured-article-hero__additional-articles.four-articles .article .no-image .article__cta,.featured-article-hero__additional-articles.three-articles .article .no-image .article__cta,.featured-article-hero__additional-articles.two-articles .article .no-image .article__cta{display:none}.featured-article-hero__additional-articles.four-articles .article.article--secondary,.featured-article-hero__additional-articles.three-articles .article.article--secondary,.featured-article-hero__additional-articles.two-articles .article.article--secondary{padding-top:16px}@media(min-width:768px){.featured-article-hero__additional-articles.four-articles .article.article--secondary,.featured-article-hero__additional-articles.three-articles .article.article--secondary,.featured-article-hero__additional-articles.two-articles .article.article--secondary{padding-top:0}}@media(min-width:1024px){.featured-article-hero__additional-articles.four-articles .article.article--secondary,.featured-article-hero__additional-articles.three-articles .article.article--secondary,.featured-article-hero__additional-articles.two-articles .article.article--secondary{padding-top:16px}}.featured-article-hero__additional-articles.four-articles .article.article--secondary:before,.featured-article-hero__additional-articles.three-articles .article.article--secondary:before,.featured-article-hero__additional-articles.two-articles .article.article--secondary:before{background-color:#e8eaed;content:"";height:1px;position:absolute;top:0;width:100%}.featured-article-hero__additional-articles.four-articles .article__summary,.featured-article-hero__additional-articles.three-articles .article__summary,.featured-article-hero__additional-articles.two-articles .article__summary{color:#5f6368;flex:1 1 auto;margin-top:8px}@media(min-width:768px){.featured-article-hero__additional-articles.four-articles,.featured-article-hero__additional-articles.three-articles,.featured-article-hero__additional-articles.two-articles{grid-column:1/-1}.featured-article-hero__additional-articles.four-articles .article--main,.featured-article-hero__additional-articles.three-articles .article--main,.featured-article-hero__additional-articles.two-articles .article--main{grid-column:1/7;grid-row:1/3}}@media(min-width:768px)and (min-width:1024px){.featured-article-hero__additional-articles.four-articles .article--main,.featured-article-hero__additional-articles.three-articles .article--main,.featured-article-hero__additional-articles.two-articles .article--main{grid-column:1/-1}}@media(min-width:768px){.featured-article-hero__additional-articles.four-articles .article--secondary,.featured-article-hero__additional-articles.three-articles .article--secondary,.featured-article-hero__additional-articles.two-articles .article--secondary{grid-column:7/13}}@media(min-width:768px)and (min-width:1024px){.featured-article-hero__additional-articles.four-articles .article--secondary,.featured-article-hero__additional-articles.three-articles .article--secondary,.featured-article-hero__additional-articles.two-articles .article--secondary{grid-column:1/-1}}@media(min-width:1024px){.featured-article-hero__additional-articles.four-articles,.featured-article-hero__additional-articles.three-articles,.featured-article-hero__additional-articles.two-articles{grid-column:10/14;grid-row:1/4}}@media(min-width:768px){.featured-article-hero__additional-articles.two-articles .article{grid-column:span 6}}@media(min-width:1024px){.featured-article-hero__additional-articles.two-articles .article:first-child{grid-row:1/2}.featured-article-hero__additional-articles.two-articles .article:nth-child(2){grid-row:2/3}}@media(min-width:768px){.featured-article-hero__additional-articles.three-articles .article:nth-child(2):before{content:none}}@media(min-width:1024px){.featured-article-hero__additional-articles.three-articles .article:nth-child(2):before{content:""}}@media(min-width:768px){.featured-article-hero__additional-articles.four-articles .article{grid-column:span 6}.featured-article-hero__additional-articles.four-articles .article:first-child:before,.featured-article-hero__additional-articles.four-articles .article:nth-child(2):before{content:none}}@media(min-width:1024px){.featured-article-hero__additional-articles.four-articles .article:first-child:before,.featured-article-hero__additional-articles.four-articles .article:nth-child(2):before{content:""}}.featured-article-hero__additional-articles .article--main .article__container,.featured-article-hero__additional-articles .article--secondary .article__container{background-color:#fff;display:block;padding-bottom:24px}.featured-article-hero__additional-articles .article--main .article__container:hover .article__image-img,.featured-article-hero__additional-articles .article--secondary .article__container:hover .article__image-img{transform:scale(1.03)}.featured-article-hero__additional-articles .article--main .article__container:hover .article__title,.featured-article-hero__additional-articles .article--secondary .article__container:hover .article__title{-webkit-text-decoration:underline;text-decoration:underline}.featured-article-hero__additional-articles .article--main .article__container:hover .icon,.featured-article-hero__additional-articles .article--secondary .article__container:hover .icon{fill:#1a73e8;transform:translateX(4px)}.featured-article-hero__additional-articles .article--main .article__image,.featured-article-hero__additional-articles .article--secondary .article__image{aspect-ratio:16/9;border-radius:8px;display:block;margin-bottom:16px;overflow:hidden}.featured-article-hero__additional-articles .article--main .article__image img,.featured-article-hero__additional-articles .article--secondary .article__image img{height:100%;object-fit:cover;transition:transform .2s;width:100%}.featured-article-hero__additional-articles .article--main .article__eyebrow,.featured-article-hero__additional-articles .article--secondary .article__eyebrow{height:48px;margin-bottom:8px}.featured-article-hero__additional-articles .article--main .article__eyebrow-link,.featured-article-hero__additional-articles .article--secondary .article__eyebrow-link{display:inline-block}.featured-article-hero__additional-articles .article--secondary .article__container{grid-column-gap:16px;grid-row-gap:8px;-moz-column-gap:16px;column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:8px}@media(min-width:600px){.featured-article-hero__additional-articles .article--secondary .article__container{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-hero__additional-articles .article--secondary .article__container{grid-template-columns:repeat(4,minmax(0,1fr))}}.featured-article-hero__additional-articles .article--secondary .article__container:not(:last-child){margin-bottom:16px}@media(min-width:1024px){.featured-article-hero__additional-articles .article--secondary .article__container{grid-template-columns:1fr minmax(50px,160px)}}.featured-article-hero__additional-articles .article--secondary .article__eyebrow{grid-column:1/-1;grid-row:1/2}.featured-article-hero__additional-articles .article--secondary .article__link{grid-column:1/3;grid-row:2/3}@media(min-width:1024px){.featured-article-hero__additional-articles .article--secondary .article__link{grid-column:1/2}}.featured-article-hero__additional-articles .article--secondary .article__image{grid-column:3/-1;grid-row:2/3}@media(min-width:1024px){.featured-article-hero__additional-articles .article--secondary .article__image{grid-column:2/3}}.featured-article-hero__additional-articles .article__link{display:block;min-height:48px}.featured-article-hero__additional-articles .article__link:focus,.featured-article-hero__additional-articles .article__link:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.featured-article-hero__additional-articles .article__link .article__title{margin-block:0}.featured-article-hero__additional-articles.special{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:24px}@media(min-width:1024px){.featured-article-hero__additional-articles.special{margin-top:60px;margin-inline:0}}@media(min-width:1024px)and (min-width:1024px){.featured-article-hero__additional-articles.special{margin-top:80px}}@media(min-width:600px){.featured-article-hero__additional-articles.special{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-hero__additional-articles.special{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.featured-article-hero__additional-articles.special .article{grid-column:1/-1}.featured-article-hero__additional-articles.special .article:not(:last-child){margin-bottom:24px}@media(min-width:1024px){.featured-article-hero__additional-articles.special .article:not(:last-child){margin-bottom:0}}@media(min-width:768px){.featured-article-hero__additional-articles.special .article{padding-top:16px}}.featured-article-hero__additional-articles.special .article.article--secondary{padding-top:0}.featured-article-hero__additional-articles.special .article.article--secondary:before{content:none}.featured-article-hero__additional-articles.special .article__container{grid-column-gap:16px;grid-row-gap:8px;border:1px solid #dadce0;border-radius:8px;-moz-column-gap:16px;column-gap:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(50px,128px);height:100%;padding-top:8px;padding-inline:16px;row-gap:8px;transition:box-shadow .3s}@media(min-width:768px){.featured-article-hero__additional-articles.special .article__container{-moz-column-gap:24px;column-gap:24px}}.featured-article-hero__additional-articles.special .article__container.no-image .article__link{display:flex;flex-direction:column;grid-column:1/-1;justify-content:space-between}.featured-article-hero__additional-articles.special .article__container.no-image .article__cta{display:none}.featured-article-hero__additional-articles.special .article__container.no-image .article__title{margin-bottom:0}@media(min-width:1024px){.featured-article-hero__additional-articles.special .article__container.no-image.no-image{padding-bottom:36px}.featured-article-hero__additional-articles.special .article__container.no-image .article__cta{align-items:center;align-self:flex-end;color:#202124;display:flex;height:24px;justify-content:center;width:24px}.featured-article-hero__additional-articles.special .article__container.no-image .article__cta svg{height:16px;transition:transform .2s;width:16px}}.featured-article-hero__additional-articles.special .article__container:hover{box-shadow:0 6px 10px 4px rgba(60,64,67,.15),0 2px 3px 0 rgba(60,64,67,.3)}.featured-article-hero__additional-articles.special .article__eyebrow{grid-column:1/-1;grid-row:1/2;margin:0}.featured-article-hero__additional-articles.special .article__image{grid-column:2/3;grid-row:2/3}.featured-article-hero__additional-articles.special .article__link{grid-column:1/2}@media(min-width:1024px){.featured-article-hero__additional-articles.special .article__link .article__title{margin-bottom:36px}}@media(min-width:768px){.featured-article-hero__additional-articles.special.two-articles .article{grid-row:auto}}@media(min-width:1024px){.featured-article-hero__additional-articles.special.four-articles .article,.featured-article-hero__additional-articles.special.three-articles .article{height:100%;padding:0}.featured-article-hero__additional-articles.special.four-articles .article__container,.featured-article-hero__additional-articles.special.three-articles .article__container{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;height:100%;padding-bottom:0;padding-top:24px;padding-inline:0;row-gap:0}.featured-article-hero__additional-articles.special.four-articles .article__image,.featured-article-hero__additional-articles.special.three-articles .article__image{border-radius:0 0 8px 8px;grid-column:1/-1;grid-row:3/4;margin-bottom:0}.featured-article-hero__additional-articles.special.four-articles .article__eyebrow,.featured-article-hero__additional-articles.special.three-articles .article__eyebrow{margin-bottom:8px;padding-inline:36px}.featured-article-hero__additional-articles.special.four-articles .article__link,.featured-article-hero__additional-articles.special.three-articles .article__link{grid-row:2/3;padding-inline:36px}.featured-article-hero__additional-articles.special.four-articles .article{grid-column:span 3;grid-row:1}.featured-article-hero__additional-articles.special.three-articles .article{grid-column:span 4;grid-row:1}.featured-article-hero__additional-articles.special.two-articles .article{grid-column:span 6;grid-row:1}}.author{grid-gap:16px;align-items:center;display:grid;grid-template-columns:minmax(40px,auto) 1fr;margin-inline-end:16px}.author__image .image-container{position:relative}.author__image .image-container:first-child{z-index:2}.author__image .image-container:nth-child(2){margin-inline-start:16px;margin-top:-40px;z-index:1}.author__image .image-container:nth-child(2):last-child{margin-inline-start:16px}.author__image .image-container:last-child:not(:nth-child(2)):not(:first-child){margin-inline-start:32px;margin-top:-40px;z-index:0}.author__image--image{border:1px solid #fff;border-radius:50%;height:40px;margin:0;object-fit:cover;overflow:hidden;width:40px}.author__image--image img{height:100%;object-fit:cover;width:100%}.author__info{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;letter-spacing:0;line-height:24px}.author__info .name{color:#202124;font-weight:700;line-height:18px}.author__info .title{color:#5f6368;font-size:14px;font-weight:500;line-height:18px;margin-top:0}.author__icon{fill:#323232;height:16px;transition:all .35s ease-in-out;width:16px}.author--link .name{color:#1967d2}.author--link:hover .name{color:#1a73e8}.author--link:focus{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:8px}.article-container__wrapper{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.article-container__wrapper{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.article-container__wrapper{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:auto 1fr}}.article-container__content{grid-column:1/-1;margin-top:36px}@media(min-width:768px){.article-container__content{grid-column:3/span 8}}@media(min-width:1024px){.article-container__content{padding:0}.article-container__content.article-container__content--align-end{grid-column:5/span 7;grid-row:1/3}}.article-container .article-module:not(.article-image--full-aspect),.article-paragraph,.newsletter-form__container{margin:0 auto;max-width:726px;position:relative}.article-paragraph__media-spacer{display:none;float:right}@media(min-width:1024px){.article-paragraph__media-spacer{display:block}}.keyword-blog .article-module+div{clear:both}.article-cta-and-jumplinks__wrapper{grid-column:1/-1;margin-inline-start:-16px;width:clamp(140px,-1.72rem + 16.7vw,190px);z-index:3}@media(min-width:600px){.article-cta-and-jumplinks__wrapper{margin-inline-start:-32px}}@media(min-width:1024px){.article-cta-and-jumplinks__wrapper{grid-column:2/4;grid-row:1/2;margin-inline-start:0;margin-top:36px}}.article-hero{padding:25px 16px 36px}@media(min-width:600px){.article-hero{padding:25px 32px 36px}}@media(min-width:1024px){.article-hero{padding:37px 32px 48px}}.article-jumplink{height:1px}.article-jumplinks{background-color:#fff;border-bottom:1px solid #dadce0;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);grid-column:1/-1;max-height:100vh;position:relative;width:100vw}@media(min-width:1024px){.article-jumplinks{border:0;margin-bottom:60px;width:auto}}.article-jumplinks__list{display:none;list-style:none;margin:24px 0;padding:0 16px;position:relative}@media(min-width:768px){.article-jumplinks__list{padding:0 32px}}@media(min-width:1024px){.article-jumplinks__list{display:block;margin:0;padding:0}}.article-jumplinks__list-wrapper{position:relative}.article-jumplinks__list-wrapper:before{background-color:#dadce0;content:"";height:calc(100% - 16px);inset-inline-start:16px;position:absolute;top:8px;width:2px}@media(min-width:768px){.article-jumplinks__list-wrapper:before{inset-inline-start:32px}}@media(min-width:1024px){.article-jumplinks__list-wrapper:before{inset-inline-start:0}}.article-jumplinks__item{padding-inline-start:16px;position:relative}.article-jumplinks__link{color:#5f6368;display:block;font-size:16px;line-height:24px;padding:8px 4px;position:relative}.article-jumplinks__link:visited{color:#5f6368;font-weight:400}.article-jumplinks__link:active{outline:0}.article-jumplinks__link:hover{color:#1a73e8}.article-jumplinks__link:focus{background:0 0;border-radius:8px;color:#174ea6;inset-inline-start:-4px;outline:2px solid #174ea6;outline-offset:-4px;padding:8px;position:relative}.article-jumplinks__link:focus:before{inset-inline-start:-12px}.article-jumplinks__description{background-color:#fff;border:0;color:#202124;font-size:18px;font-weight:700;line-height:28px;padding:10px 16px;text-align:start;width:100%}@media(min-width:768px){.article-jumplinks__description{padding:10px 32px}}@media(min-width:1024px){.article-jumplinks__description{margin-bottom:24px;padding:0}}.article-jumplinks__description--mobile{align-items:center;display:flex;justify-content:space-between;overflow:hidden}@media(min-width:1024px){.article-jumplinks__description--mobile{display:none}}.article-jumplinks__description--desktop{display:none}@media(min-width:1024px){.article-jumplinks__description--desktop{display:block}}.article-jumplinks__dropdown{height:24px;width:24px}.article-jumplinks__dropdown-icon{display:block;height:100%;margin:0;transition:transform .35s cubic-bezier(.24,1,.32,1);width:100%}.article-jumplinks__dropdown-icon svg{fill:#1a73e8;height:100%;width:100%}@media(min-width:1024px){.article-jumplinks__dropdown-icon{display:none}}.article-jumplinks__dropdown-separator{display:none;margin:0}@media(min-width:1024px){.article-jumplinks__dropdown-separator{display:none}}.article-jumplinks__dropdown-overlay{display:none}.article-list__feed{grid-gap:16px;display:grid;grid-template-columns:minmax(0,1fr);list-style:none;margin:0}@media(min-width:1024px){.article-list__feed{grid-gap:24px;-moz-column-gap:24px;column-gap:24px;grid-template-columns:repeat(auto-fit,minmax(calc(33.33333% - 24px),1fr))}}.uni-article-feed .article-list__title{font-size:24px;font-weight:700;line-height:32px;margin-bottom:24px}@media(min-width:600px){.uni-article-feed .article-list__title{font-size:28px;line-height:36px;margin-bottom:36px}}.uni-article-feed .feed-article .feed-article__title{font-size:16px;font-weight:400;line-height:28px}.article-list__load-more-btn{display:block;margin-top:36px;margin-inline:auto;min-height:48px;min-width:250px}.article-post{background-color:#f8f9fa;border-radius:8px;padding-block-end:24px;padding-block-start:8px;padding-inline:24px}@media(min-width:768px){.article-post{padding-block-end:36px;padding-inline:36px}}.article-post__top{align-items:center;display:flex;flex-direction:row;justify-content:flex-end;margin-block-end:24px}.article-post__bottom{display:flex;flex-direction:row;justify-content:space-between;margin-block-start:24px}.article-post__date{margin-inline-end:16px}.article-post__img-container{aspect-ratio:16/9;border-radius:8px;display:block;margin-block-end:24px;outline:1px solid #f1f3f4;overflow:hidden}.article-post__img-container img{height:100%;object-fit:cover;transition:transform .2s;width:100%}.article-post__headline{margin-bottom:0}.article-post__summary{color:#5f6368;margin-block-start:16px}.article-post__authors{flex:1;margin-inline-end:16px}.article-post__anchor{display:block}.article-post__anchor:focus{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.article-post__arrow-link{align-items:flex-end;color:#202124;display:block;display:flex;height:48px;justify-content:flex-end;width:48px}.article-post__arrow-link:visited{color:#202124}.article-post__arrow-link svg{fill:currentColor;display:inline-block;height:16px;transition:transform,.3s;width:16px}@media(min-width:1024px){.article-post:has(.article-post__anchor:hover) .article-post__anchor .article-post__img-container img,.article-post:has(.article-post__arrow-link:hover) .article-post__anchor .article-post__img-container img{transform:scale(1.03)}.article-post:has(.article-post__anchor:hover) .article-post__anchor .article-post__headline,.article-post:has(.article-post__arrow-link:hover) .article-post__anchor .article-post__headline{-webkit-text-decoration:underline;text-decoration:underline}.article-post:has(.article-post__anchor:hover) .article-post__arrow-link,.article-post:has(.article-post__arrow-link:hover) .article-post__arrow-link{color:#1a73e8}.article-post:has(.article-post__anchor:hover) .article-post__arrow-link svg,.article-post:has(.article-post__arrow-link:hover) .article-post__arrow-link svg{transform:translateX(4px)}}.uni-article-progress-bar{background:#fff;display:flex;flex-flow:row;flex-grow:1;flex-wrap:wrap;height:64px;justify-content:flex-end;left:0;opacity:1;padding-right:15px;position:static;top:0;transition:all .15s ease-out;z-index:8}@media (min-width:1024px){.uni-article-progress-bar{align-self:center;height:64px;justify-content:space-between}}.uni-article-progress-bar__title{color:#5f6368;display:none;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;font-weight:400;line-height:16px;position:relative}@media (min-width:600px){.uni-article-progress-bar__title{max-width:700px}}@media (min-width:1024px){.uni-article-progress-bar__title{display:inline-block;margin-left:60px}}.uni-article-progress-bar__ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uni-article-progress-bar__indicator{background-color:#3b78e7;bottom:0;forced-color-adjust:none;height:4px;left:0;position:absolute;width:0}.uni-article-progress-bar__social{position:fixed;right:10px;width:auto}@media (min-width:600px){.uni-article-progress-bar__social{position:static}}.uni-article-progress-bar__social .uni-social-share__trigger{margin-top:0}.uni-article-progress-bar__social:active,.uni-article-progress-bar__social:focus{outline:0}.slide-up{opacity:0;visibility:hidden}.hide-progress-bar,.slide-up{display:none}@media(min-width:1024px){.article-share__page{border:0;height:0;overflow:visible}}.article-share{border-bottom:1px solid #d7d7d7;display:none;margin-bottom:20px!important;padding-bottom:16px}@media(min-width:1024px){.article-share{border:0;display:block;height:0;margin-bottom:0!important;padding:0}}.mobile .article-share{display:flex}@media(min-width:1024px){.mobile .article-share{display:none}}.article-share .copy-link{height:48px;width:48px}.article-share__title{color:#5f6368;display:inline-block;font-size:14px;font-weight:400;letter-spacing:0;margin-left:10px;text-align:start;vertical-align:text-bottom}.article-share__link{align-items:center;display:block;display:flex;height:48px;justify-content:center;margin-inline-end:4px;width:48px}@media(min-width:1024px){.article-share__link:last-child{margin-bottom:0}}.article-share__link svg{width:25px}@media(forced-colors:active){.article-share__link svg{fill:currentColor}}@media(min-width:1024px){.article-share__link{margin-block-end:21px;width:48px}}.article-share__link-text{align-items:center;display:block;display:flex;height:48px;margin-inline-end:20px;margin-bottom:6px;width:96px}@media(min-width:1024px){.article-share__link-text:last-child{margin-bottom:0}}.article-share__link-text:hover svg,.uni-social-share__trigger:hover svg{fill:#1a73e8}.article-share__link-text:hover .article-share__title{color:#1a73e8}.article-share__link-text.uni-click-tracker:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.article-share__link-text.uni-click-tracker:focus .article-share__title{color:#174ea6}.article-share__link-text.uni-click-tracker:focus .h-c-icon{fill:#174ea6}.uni-social-share{cursor:pointer;display:inline-flex;height:-moz-max-content;height:max-content;position:relative}@media (min-width:600px){.uni-social-share{position:relative;top:0}}@media (min-width:1024px){.uni-social-share{position:relative}}.uni-social-share:active,.uni-social-share:focus,.uni-social-share__button:focus{outline:0}.uni-social-share__button{color:#202124;display:none;font-size:16px;font-weight:400;margin-inline-start:10px;margin-top:2px}@media (min-width:600px){.uni-social-share__button{display:inline-block}}.uni-social-share__trigger{align-items:center;display:flex;height:44px;justify-content:center;min-width:44px}.uni-social-share__trigger svg{height:18px;width:19px}@media(forced-colors:active){.uni-social-share__trigger svg{fill:#1a73e8}}@media(prefers-contrast:forced){.uni-social-share__trigger svg{fill:#1a73e8}}@media (min-width:600px){.uni-social-share__trigger{padding:0 4px}.uni-social-share__trigger svg{margin:0}}@media(min-width:1024px){.uni-social-share__trigger{margin-top:-9px}}.uni-social-share__trigger:hover .uni-social-share__button{color:#1a73e8}.uni-social-share__trigger:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:0}.uni-social-share__dialog{background-color:#fff;border:0;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.2);display:none;padding:17px 24px;position:absolute;top:40px;z-index:5}@media (min-width:1024px){.uni-social-share__dialog{left:auto;right:0;top:35px}}.uni-social-share__content{left:-120px;width:144px}.uni-social-share__content svg{flex-shrink:0;height:25px;width:25px}@media(forced-colors:active){.uni-social-share__content svg{fill:#1a73e8}}@media(prefers-contrast:forced){.uni-social-share__content svg{fill:#1a73e8}}@media (min-width:600px){.uni-social-share__content{left:0;margin:0}}@media (min-width:1024px){.uni-social-share__content{left:-10px}}.author-byline{align-items:center;display:flex;min-height:48px;min-width:200px}.author-byline__link{align-items:center;border-radius:4px;display:flex;flex-grow:1;gap:16px;-webkit-text-decoration:none;text-decoration:none}.author-byline__link--disabled{pointer-events:none}.author-byline__link--disabled .author-byline__info-name{color:#202124}.author-byline__link:hover .author-byline__info-name{color:#174ea6}.author-byline__link:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.author-byline__link:active{background-color:#e8f0fe;outline:4px solid #e8f0fe;outline-offset:0}.author-byline:nth-child(n+2){display:none}@container (min-width: 416px){.author-byline:nth-child(2){display:flex}}@container (min-width: 632px){.author-byline:nth-child(3){display:flex}}@container (min-width: 848px){.author-byline:nth-child(4){display:flex}}.author-byline__image-container{aspect-ratio:1/1;border:1px solid #dadce0;border-radius:50%;flex-shrink:0;height:40px;margin:0;min-width:40px;overflow:hidden}.author-byline__image-container img{height:40px;object-fit:cover;position:relative;width:40px}.author-byline__no-image{background-color:#757575;border:1px solid #e8eaed;border-radius:50%;color:#fff;flex-shrink:0;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:24px;font-style:normal;height:40px;line-height:40px;max-width:40px;text-align:center;width:40px}.author-byline__info-name,.author-byline__info-title{-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.author-byline__info-name{-webkit-line-clamp:2;color:#1967d2;transition:color .1s ease-in}.author-byline__info-title{-webkit-line-clamp:1;color:#5f6368;margin-top:4px}.authors-byline-container{align-items:center;-moz-column-gap:16px;column-gap:16px;container-type:inline-size;display:flex;justify-content:flex-start}.button-copy-link{align-items:center;background-color:transparent;border:2px solid transparent;border-radius:50%;display:flex;height:48px;justify-content:center;padding:10px;position:relative;transition:background-color .1s linear,border .1s linear,color .1s linear;width:48px}.button-copy-link svg{height:100%;width:100%}@media(forced-colors:active){.button-copy-link svg{fill:#fff}}@media(prefers-contrast:forced){.button-copy-link svg{fill:#fff}}.button-copy-link:hover{background-color:#e8f0fe;border:2px solid #e8f0fe;color:#1a73e8}.button-copy-link:active{background-color:#e8f0fe;border:2px solid #174ea6;color:#174ea6}.button-copy-link:focus{outline:0}.button-copy-link:focus-visible{background:0 0;background-color:transparent;border-radius:50%;color:#174ea6;outline:2px solid #174ea6;outline-color:#174ea6;outline-offset:0}.breadcrumb__container{margin-inline-end:-14px;margin-inline-start:-14px;overflow:auto;position:relative}.breadcrumb__container .hide{display:none}.breadcrumb__label{clip:rect(1px,1px,1px,1px);height:1px;overflow:hidden;position:absolute;white-space:nowrap;width:1px;z-index:-1000}@media(min-width:768px){.breadcrumb__label{display:none}}.breadcrumb__next-btn,.breadcrumb__prev-btn{align-items:center;background:#fff;border:0;cursor:pointer;display:inline-flex;height:48px;justify-content:center;margin:2px;outline:2px solid #fff;padding:0;position:absolute;top:0;width:48px;z-index:1}.breadcrumb__next-btn>svg,.breadcrumb__prev-btn>svg{fill:#202124;height:24px;width:24px}.breadcrumb__next-btn:hover>svg,.breadcrumb__prev-btn:hover>svg{fill:#174ea6}.breadcrumb__next-btn:before,.breadcrumb__prev-btn:before{content:"";height:100%;pointer-events:none;position:absolute;top:0;width:22px}@media(forced-colors:active){.breadcrumb__next-btn,.breadcrumb__prev-btn{border-radius:48px}.breadcrumb__next-btn>svg,.breadcrumb__prev-btn>svg{fill:#fff}.breadcrumb__next-btn:after,.breadcrumb__prev-btn:after{background-color:#000;content:"";height:100%;inset-inline-start:-2px;position:absolute;width:10px;z-index:-1}}@media(prefers-contrast:forced){.breadcrumb__next-btn,.breadcrumb__prev-btn{border-radius:48px}.breadcrumb__next-btn>svg,.breadcrumb__prev-btn>svg{fill:#fff}.breadcrumb__next-btn:after,.breadcrumb__prev-btn:after{background-color:#000;content:"";height:100%;inset-inline-start:-2px;position:absolute;width:10px;z-index:-1}}.breadcrumb__prev-btn{inset-inline-start:0}.breadcrumb__prev-btn>svg{transform:scaleX(-1)}.breadcrumb__prev-btn:before{background:linear-gradient(90deg,#fff,hsla(0,0%,100%,0));inset-inline-start:46px}.breadcrumb__next-btn{inset-inline-end:0}.breadcrumb__next-btn:before{background:linear-gradient(90deg,hsla(0,0%,100%,0),#fff);inset-inline-end:46px}@media(forced-colors:active){.breadcrumb__next-btn:after{inset-inline-end:-2px;inset-inline-start:auto}}@media(prefers-contrast:forced){.breadcrumb__next-btn:after{inset-inline-end:-2px;inset-inline-start:auto}}.breadcrumb__focusable{height:100%;inset-inline-start:0;position:absolute;top:0;width:5px}.breadcrumb__focusable:focus-visible{outline:0}.breadcrumb__focusable--end{inset-inline-end:0;inset-inline-start:auto}.breadcrumb__scrollable{overflow-x:auto;overflow-y:hidden;padding:2px;white-space:nowrap}.breadcrumb__scrollable::-webkit-scrollbar{height:0;width:0}.breadcrumb__scrollable ol{list-style:none;margin:0;padding-left:0}.breadcrumb__scrollable li{display:inline}.breadcrumb__button,.breadcrumb__current-page{color:#5f6368;display:inline-block;padding:0 12px;vertical-align:middle}.breadcrumb__button,.breadcrumb__button:visited{color:#1a73e8}.breadcrumb__button:hover{color:#174ea6}.breadcrumb__button:focus{outline:2px solid #174ea6}.breadcrumb__button:active,.breadcrumb__button:focus{background-color:#e8f0fe;border-radius:48px;color:#174ea6}.breadcrumb__button:active{outline:0}.breadcrumb__button--homepage{align-items:center;display:inline-flex;height:48px;justify-content:center;padding:0;width:48px}.breadcrumb__button--homepage>svg{fill:#1a73e8;height:16px;width:16px}.breadcrumb__button--homepage:visited>svg{fill:#1a73e8}.breadcrumb__button--homepage:active>svg,.breadcrumb__button--homepage:focus>svg,.breadcrumb__button--homepage:hover>svg{fill:#174ea6}.breadcrumb__chevron{fill:#5f6368;display:inline-block;height:16px;vertical-align:middle;width:16px}.uni-blog-article-tags{display:flex;flex-direction:column;font-size:.7777777778em;font-weight:500;margin:0 auto 48px;max-width:726px;padding-block-start:36px;text-transform:uppercase}@media(min-width:1024px){.uni-blog-article-tags{margin-bottom:60px}}.uni-blog-article-tags--shortpost-layout{margin-bottom:0;margin-top:60px;padding:0}@media(min-width:1024px){.uni-blog-article-tags--shortpost-layout{margin-top:80px}}@media(min-width:768px){.uni-blog-article-tags{flex-direction:row}}.uni-blog-article-tags__label{color:#202124;display:block}@media(min-width:768px){.uni-blog-article-tags__label{margin-inline-end:24px;min-width:92px}}.uni-blog-article-tags__container{align-content:flex-end;display:inline-block}.uni-blog-article-tags__tags-list{display:inline-block;list-style:none;margin:0 -4px;padding:0}.uni-blog-article-tags__tags-list>li{display:inline-block;margin:0 4px 16px}.uni-blog-article-tags__tags-list>li .uni-blog-article-tags-value{background:#e8f0fe;border-radius:30px;color:#174ea6;display:inline-block;padding:12px 20px;text-align:center;text-transform:none}.uni-blog-article-tags__tags-list>li .uni-blog-article-tags-value:focus{outline:2px solid #174ea6}.uni-blog-article-tags__tags-list>li .uni-link-active{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family)}.uni-blog-article-tags__tags-list>li .uni-link-active:hover{background:#1a73e8;color:#fff}.uni-blog-article-tags__wrapper{max-width:100%}@media(min-width:768px){.uni-blog-article-tags__wrapper{display:flex;justify-content:flex-start}}.uni-paragraph h2,.uni-paragraph h3{word-wrap:break-word;-webkit-hyphens:none;hyphens:none;margin-bottom:16px}.article-container .article-module:not(.article-image--full-aspect) h2,.article-paragraph h2,.newsletter-form__container h2{font-size:24px;font-weight:400;letter-spacing:0;line-height:32px;margin:initial;padding:16px 0}@media(min-width:1024px){.article-container .article-module:not(.article-image--full-aspect) h2,.article-paragraph h2,.newsletter-form__container h2{font-size:36px;letter-spacing:-.25px;line-height:44px;padding:24px 0}}.article-container .article-module:not(.article-image--full-aspect) h3,.article-paragraph h3{font-size:18px;font-weight:400;letter-spacing:0;line-height:28px;margin:initial;padding:16px 0}@media(min-width:1024px){.article-container .article-module:not(.article-image--full-aspect) h3,.article-paragraph h3{font-size:28px;letter-spacing:0;line-height:36px}}.article-container .article-module:not(.article-image--full-aspect) p+h2,.article-container .article-module:not(.article-image--full-aspect) p+h3{margin-bottom:0}.article-container .article-module:not(.article-image--full-aspect) p+h2:not(:first-child),.article-container .article-module:not(.article-image--full-aspect) p+h3:not(:first-child){margin-top:0}.module--text.module--text__article{margin-bottom:0!important;padding-bottom:36px}.audio-player{margin:36px auto;max-width:617px;width:100%}.audio-player__container{background-color:#fff;border:1px solid #dadce0;border-radius:8px;padding:24px}.audio-player__container:focus{outline:0}.audio-player__container:focus-visible{border:1px solid #dadce0;margin:0;outline:3px solid #174ea6}@media(min-width:600px){.audio-player__container{padding:36px 24px}}.audio-player__text-content{display:flex;flex-direction:column;justify-content:flex-end}@media(min-width:600px){.audio-player__text-content{grid-gap:8px 24px;display:grid;grid-template-columns:43px 1fr;grid-template-rows:43px 1fr;justify-content:flex-start}}.audio-player__content{padding-bottom:24px;width:100%}@media(min-width:600px){.audio-player__content{grid-column:2/3;grid-row:1/3;padding:0}}.audio-player__preview-play{align-items:center;background-color:#fff;border:1px solid #e8eaed;border-radius:44px;display:flex;height:43px;outline:0;overflow:hidden;padding:0 0 0 24px;transition:all .4s;width:102px}@media(min-width:600px){.audio-player__preview-play{grid-column:1/2;grid-row:1;justify-content:center;padding:0;position:sticky;width:44px}.audio-player__preview-play:focus-visible{border:1px solid #e8eaed;outline:3px solid #174ea6}.audio-player__preview-play:hover{background:#f8f9fa;filter:drop-shadow(0 0 7px rgba(0,0,0,.15))}.audio-player__preview-play:hover .icon{fill:#1a73e8}}.audio-player__duration--large-viewport{display:none;font-size:12px;letter-spacing:.35px;line-height:18px;text-align:center}@media(min-width:600px){.audio-player__duration--large-viewport{display:block}}.audio-player__console{display:flex;flex-direction:column}@media(min-width:600px){.audio-player__console{align-items:center;flex-direction:row}}.audio-player__start{align-items:center;height:0;justify-content:center;padding:0 24px;transition:all .4s;visibility:hidden}@media(min-width:600px){.audio-player__start{grid-gap:32px;margin-right:28px;padding:0}}.audio-player__forward,.audio-player__replay,.audio-player__volume{background:#fff;border:0;height:24px}.audio-player__replay{animation:showAndTranslateRight .6s .6s forwards;opacity:0;padding:0;position:relative}@media(min-width:600px){.audio-player__replay{animation:none;opacity:1}}.audio-player__forward{animation:showAndTranslateLeft .6s .6s forwards;opacity:0;padding:0;position:relative}@media(min-width:600px){.audio-player__forward{animation:none;opacity:1}}.audio-player__pause{background:#fff;border:1px solid #e8eaed;border-radius:44px;box-sizing:border-box;display:none;height:43px;opacity:0;outline:0;overflow:hidden;padding:0;position:sticky;transition:all .4s;visibility:hidden;width:43px}.audio-player__pause:focus-visible{border:1px solid #e8eaed;outline:3px solid #174ea6}@media(min-width:600px){.audio-player__pause{grid-column:1/2;grid-row:1}.audio-player__pause:hover{background:#f8f9fa;filter:drop-shadow(0 0 7px rgba(0,0,0,.15))}.audio-player__pause:hover .icon{fill:#1a73e8}}.audio-player__icon-play{display:none}.audio-player__icon-pause{display:inline;display:initial}.audio-player__icon-pause--hidden{display:none}.audio-player__time-bar{align-items:center;display:none;height:0;position:relative;transition:all .3s;visibility:hidden}.audio-player__time-bar .timeline__slider{width:100%}@media(min-width:600px){.audio-player__time-bar{align-items:center;width:100%}}.audio-player__duration{letter-spacing:.35px;line-height:18px;padding:0 16px 0 9px}@media(min-width:600px){.audio-player__duration{padding:0;position:absolute;top:46px}}.audio-player__current-time,.audio-player__duration-time{bottom:-5px;letter-spacing:.25px;line-height:24px;position:absolute}@media(min-width:600px){.audio-player__current-time,.audio-player__duration-time{position:static}}.audio-player__current-time,.audio-player__duration,.audio-player__duration-time{color:#5f6368;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);font-size:12px}@media(min-width:600px){.audio-player__current-time{padding-left:0}}.audio-player__duration-time{right:0}.audio-player .timeline__slider,.audio-player .volume__slider{border-radius:13px;outline:0}.audio-player__timeline-slider-container{margin:30px 0;width:100%}@media(min-width:600px){.audio-player__timeline-slider-container{margin:0 8px}}.audio-player__volume-content{display:none}@media(min-width:600px){.audio-player__volume-content{grid-gap:10px;align-items:center;background:#fff;display:flex;height:33px;justify-content:flex-end;margin-left:24px;overflow:hidden;width:30px;z-index:2}}.audio-player__volume-content:focus-within,.audio-player__volume-content:hover{background:#f8f9fa;border:1px solid #f1f3f4;border-radius:35px;margin-left:24px;padding-right:8px;position:absolute;right:0;width:116px}.audio-player__volume-content:focus-within .audio-player__volume-slider,.audio-player__volume-content:hover .audio-player__volume-slider{width:60px}.audio-player__volume-slider-container{order:1;transition:.25s;width:60px}.audio-player__volume{order:2}.audio-player__volume:focus-within,.audio-player__volume:hover{padding:0;position:relative}.audio-player__volume:focus-within svg,.audio-player__volume:hover svg{background:#f8f9fa}@media(min-width:600px){.audio-player__volume{padding:0}}.audio-player__mute-icon{display:none}.audio-player .icon{height:inherit;transition:all .6s;width:24px}.audio-player input[type=range]{--slider-before-width:0%;-webkit-appearance:none;-moz-appearance:none;appearance:none;background:0 0;float:left;height:11px;margin:0;outline:0;padding:0;position:relative;width:100%}.audio-player input[type=range]::-webkit-slider-runnable-track{background-color:#d2e3fc;border-radius:3px;cursor:pointer;height:3px;width:100%}.audio-player input[type=range]::-ms-track{background:0 0;border-color:transparent;border-radius:3px;color:transparent;cursor:pointer;height:3px;width:100%}.audio-player input[type=range]:before{background-color:#1a73e8;border-radius:3px;content:"";cursor:pointer;height:3px;left:0;position:absolute;top:4px;width:var(--slider-before-width)}.audio-player input[type=range]::-moz-range-progress{background-color:#1a73e8;border-radius:3px;content:"";cursor:pointer;height:3px;left:0;position:absolute;top:4px;width:100%;width:var(--slider-before-width)}.audio-player input[type=range]::-ms-progress{background-color:#1a73e8;border-radius:3px;content:"";cursor:pointer;height:3px;left:0;position:absolute;top:4px;width:var(--slider-before-width)}.audio-player input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;background-color:#1a73e8;border-radius:50%;box-sizing:initial;cursor:pointer;height:0;margin:-5px 0 0;position:relative;width:0}.audio-player input[type=range]::-moz-range-thumb{background-color:#1a73e8;border:0;border-radius:50%;box-sizing:initial;cursor:pointer;height:0;margin:-5px 0 0;position:relative;width:0}.audio-player input[type=range]::-ms-thumb{background-color:#1a73e8;border-radius:50%;box-sizing:initial;cursor:pointer;height:0;margin:-5px 0 0;position:relative;width:0}.audio-player input[type=range]:hover::-webkit-slider-thumb{height:12px;width:12px}.audio-player input[type=range]:hover::-moz-range-thumb{height:12px;width:12px}.audio-player input[type=range]:hover::-ms-thumb{height:12px;width:12px}.audio-player input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.35)}.audio-player input[type=range]::-moz-range-thumb:hover{transform:scale(1.35)}.audio-player input[type=range]::-ms-thumb:hover{transform:scale(1.35)}.audio-player input[type=range]::-moz-range-track{background-color:#d2e3fc;border-radius:3px;cursor:pointer;height:3px;width:100%}.collection-component__card{background-color:#fff;border:1px solid #e8eaed;border-radius:8px;display:flex;flex:1 1 0;flex-direction:column;justify-content:flex-start;min-height:370px;overflow:hidden;transition:all .3s ease}@media(min-width:768px){.collection-component__card{grid-column:span 6}}@container (min-width: 1024px){.collection-component__card{margin-block:-36px}}.collection-component__card-image{aspect-ratio:16/9;margin-bottom:16px;overflow:hidden}.collection-component__card-image figure{aspect-ratio:inherit;margin:0}.collection-component__card-image img{height:100%;object-fit:cover;transition:transform .3s ease;width:100%}.collection-component__card-arrow{align-items:center;align-self:stretch;display:flex;height:24px;justify-content:flex-end;margin-inline-start:auto;padding:4px;transition:transform .1s ease-in;width:24px}.collection-component__card-arrow svg{height:16px;width:16px}.column-list__title{margin-bottom:26px}@media(min-width:1024px){.column-list__title{margin-bottom:55px}}.column-list__item{color:#202124;display:block;list-style:none;min-height:48px}@media(min-width:1024px){.column-list__item-text{margin-bottom:33px}}.column-list__item-link{color:#202124;display:block;min-height:48px}.column-list__item-link:hover,.column-list__item-link:visited{color:#202124}.copy-link{cursor:pointer;display:block;height:auto;position:relative;text-align:left}.copy-link *,.press-page__filter-selects uni-icon-component{pointer-events:none}.copy-link svg{height:28px;width:28px}@media(forced-colors:active){.copy-link svg{fill:currentColor!important}}@media(min-width:1024px){.copy-link svg{height:26px;margin:0;width:30px}}.copy-link:hover svg,.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero--card__author-frame svg,.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__cta.muted svg{fill:#1a73e8}.copy-link:hover .copy-link__title{color:#1a73e8}.copy-link__trigger{align-items:center;background:0 0;border:0;display:flex;height:100%;justify-content:center;padding:0;width:100%}.copy-link__trigger-text{align-items:center;display:flex;height:48px;justify-content:flex-start}.copy-link__trigger-text svg{flex-shrink:0;height:25px;width:25px}.copy-link__trigger-text .copy-link__title{font-size:14px;letter-spacing:0;text-align:start;word-break:break-word}.copy-link__trigger-text:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.copy-link__trigger-text:focus .copy-link__title{color:#174ea6}.copy-link__trigger-text:focus .h-c-icon{fill:#174ea6}.copy-link__dialog{background-color:#fff;border:0;box-shadow:0 2px 8px rgba(0,0,0,.5);display:none;padding:10px 10px 10px 40px;position:absolute;top:-14px;z-index:1}@media(min-width:1024px){.copy-link__dialog{left:auto;padding:10px 40px 10px 10px;right:0;top:-10px}}.copy-link__content{left:-150px;width:200px}@media(min-width:1024px){.copy-link__content{left:-210px;width:240px}}.copy-link__url{border:0;border-right:1px solid #d7d7d7;width:100%}.copy-link__title{color:#5f6368;display:inline-block;font-size:16px;font-weight:400;margin-inline-start:10px;vertical-align:text-bottom}.demo-section__phone-content{max-height:100%;transform:scale(.8245033113);transform-origin:top left;width:302px}.demo-section__phone-content a{cursor:default;pointer-events:none}@media screen and (min-width:480px){.demo-section__phone-content{transform:scale(.415);width:600px}}@media(min-width:768px){.demo-section__phone-content{transform:scale(.4183333333)}}.demo-section__phone-content div,.demo-section__phone-content span,.demo-section__phone-content table,.demo-section__phone-content td{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.demo-section__phone-content .st-email-body{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%;background-color:#fff;margin:0 auto!important;padding:0;width:100%!important}.demo-section__phone-content a,.demo-section__phone-content a:hover,.demo-section__phone-content a:link,.demo-section__phone-content a:visited{outline:0;-webkit-text-decoration:none!important;text-decoration:none!important}.demo-section__phone-content p{margin:0;padding:0}.demo-section__phone-content .st-gmail-fix{display:none!important}@media screen and (max-width:480px){.demo-section__phone-content .st-mobile-full-width,.demo-section__phone-content .st-module-wrapper-table,.demo-section__phone-content .st-wrapper{width:100%!important}.demo-section__phone-content .st-mobile-width-constraint{display:block!important;height:auto!important;max-width:100%!important}.demo-section__phone-content .st-equal-height{height:auto!important}.demo-section__phone-content .st-dynamic-1308-3{max-width:180px!important;width:100%!important}.demo-section__phone-content .st-dynamic-1308-5{max-width:11px!important;width:100%!important}.demo-section__phone-content .st-dynamic-1308-7{background-image:none!important}.demo-section__phone-content .st-dynamic-1394-17{max-width:44px!important;width:100%!important}.demo-section__phone-content .st-dynamic-1433-21{max-width:284px!important;width:100%!important}.demo-section__phone-content .st-dynamic-1663-66{max-width:486px!important;width:100%!important}.demo-section__phone-content .st-wrapper-table{margin:0 auto;max-width:380px!important;width:100%!important}}@media(max-width:599px)and (min-width:481px){.demo-section__phone-content .st-module-wrapper-table{margin-top:-1px!important}}.demo-section__phone-content .cta-width{min-width:170px}.demo-section__phone-content .spotlight .bgi-padding-top p{height:109px!important;line-height:109px!important}.demo-section__phone-content .rightpad{padding-right:40px!important}@media (max-width:480px){.demo-section__phone-content .spotlight .bgi-padding-top p{height:0!important;line-height:0!important}.demo-section__phone-content .mob-size280 img{height:280px!important;width:280px!important}.demo-section__phone-content .mobsizecol{padding-left:20px!important;padding-right:10px!important}.demo-section__phone-content .mobsize32{height:32px!important;max-height:32px!important;max-width:32px!important;min-height:32px!important;min-width:32px!important;width:32px!important}.demo-section__phone-content .reset-mobpad{padding-left:0!important;padding-right:0!important}.demo-section__phone-content .mobtoppad40{padding-top:40px!important}.demo-section__phone-content .mobsidepad25{padding-left:25px!important;padding-right:25px!important}.demo-section__phone-content .mobsidepad40{padding-left:40px!important;padding-right:40px!important}.demo-section__phone-content .mobsidepad50{padding-left:50px!important;padding-right:50px!important}.demo-section__phone-content .mobpadtop32{padding-top:32px!important}.demo-section__phone-content .mobbotpad28{padding-bottom:28px!important}.demo-section__phone-content .mobfsize24 span{font-size:24px!important;line-height:32px!important}.demo-section__phone-content .mobfsize12 span{font-size:12px!important;line-height:12px!important}}@media(prefers-color-scheme:dark){.demo-section__phone-content .light-background{background:#fff!important;background-color:#fff!important}}.st-dynamic-1308-td{padding-top:4px}@media(min-width:1024px){.st-dynamic-1308-td{padding-top:13px}}.demo-section__section{background-color:#f8f9fa;display:flex;flex-direction:column;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);justify-content:center}@media(min-width:768px){.demo-section__section{display:flex;flex-direction:row-reverse;padding-top:100px}}@media(min-width:1024px){.demo-section__section{padding-top:0}}.demo-section__title{color:#202124;font-size:24px;line-height:36px;margin-bottom:36px;text-align:center}.demo-section__title span,.google-experts__title span,.newsletter-form-section__title span{color:#1e8e3e}@media(min-width:768px){.demo-section__title{text-align:left}}@media(min-width:1024px){.demo-section__title{font-size:32px;margin-bottom:0;padding:120px 0 36px}}.demo-section__list{font-size:16px;line-height:24px;list-style-type:none;margin-bottom:0;padding-bottom:0}.demo-section__item{color:#5f6368;font-size:16px;line-height:24px;padding-bottom:16px;padding-left:5px}.demo-section__item:before{color:#1e8e3e;content:"•";font-size:25px;margin-left:-53px;padding:44px 16px 57px 24px;position:relative;top:3px}@media(min-width:768px){.demo-section__item{font-size:18px;line-height:30px;padding-left:18px}}.demo-section__phone-image{padding-left:20px;position:relative}@media(min-width:1024px){.demo-section__phone-image{margin-top:-30px}}.demo-section__phone-image img{width:314px}.demo-section__mobile-wrapper{height:calc(100% - 47px);left:31px;overflow-x:hidden;overflow-y:scroll;position:absolute;top:47px;width:249px}@media(min-width:768px){.demo-section__mobile-wrapper{width:251px}}.demo-section__demo-mobile{position:relative}@media(min-width:1024px){.demo-section__demo-mobile{padding-right:121px}}.demo-section__container{padding:60px 39px 36px 22px}@media(min-width:768px){.demo-section__container{max-width:434px;padding:0 30px 0 15px}}@media(min-width:1024px){.demo-section__container{padding:2px 0 42px 15px}}.newsletter-page .h-c-footer{margin-top:0}.uni-descriptive-dynamic-up-article:after,.uni-descriptive-dynamic-up__container:after,.uni-descriptive-dynamic-up__content:after{border-bottom:1px solid #d7d7d7;content:"";display:block;margin:0 auto;padding-bottom:24px}@media(min-width:1024px){.uni-descriptive-dynamic-up-article:after,.uni-descriptive-dynamic-up__container:after,.uni-descriptive-dynamic-up__content:after{padding-bottom:36px}}.uni-descriptive-dynamic-up a{display:block}.uni-descriptive-dynamic-up a:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.uni-descriptive-dynamic-up:last-child{padding-top:60px}.uni-descriptive-dynamic-up__container{padding-bottom:60px}@media(min-width:1024px){.uni-descriptive-dynamic-up__container{padding-bottom:80px}}.uni-descriptive-dynamic-up__container:after{grid-column:1/5;width:100%}@media(min-width:600px){.uni-descriptive-dynamic-up__container:after{grid-column:1/13;padding-bottom:54px;width:98%}}.uni-descriptive-dynamic-up__title{font-size:32px;letter-spacing:-.5px;line-height:40px;margin-bottom:24px}@media(min-width:600px){.uni-descriptive-dynamic-up__title{font-size:36px;line-height:44px}}@media(min-width:1024px){.uni-descriptive-dynamic-up__title{font-size:50px;line-height:64px;margin-bottom:40px}}.uni-descriptive-dynamic-up-heading{grid-column:1/5}@media(min-width:600px){.uni-descriptive-dynamic-up-heading{grid-column:1/13}}@media(min-width:1024px){.uni-descriptive-dynamic-up-heading{grid-column:1/4}}.uni-descriptive-dynamic-up-heading__title{font-size:24px;line-height:32px;margin-bottom:8px}@media(min-width:600px){.uni-descriptive-dynamic-up-heading__title{font-size:32px;line-height:40px}}@media(min-width:1024px){.uni-descriptive-dynamic-up-heading__title{font-size:44px;line-height:52px}}.uni-descriptive-dynamic-up-subheading__subtitle{color:#666;line-height:24px;margin-bottom:8px}.uni-descriptive-dynamic-up-subheading__link{cursor:pointer;font-size:14px;letter-spacing:.4375px;margin-bottom:8px}@media(min-width:600px){.uni-descriptive-dynamic-up-subheading__link{font-size:12px}}@media(min-width:1024px){.uni-descriptive-dynamic-up-subheading__link{font-size:14px}}.uni-descriptive-dynamic-up-subheading__link.cta{align-content:center;line-height:48px;margin-top:0}.uni-descriptive-dynamic-up-subheading__link.cta .icon{fill:currentColor;height:17px;margin-left:8px;top:3px}.uni-descriptive-dynamic-up-subheading__link.cta .icon:focus{color:#4285f4;transform:translateX(5px)}@media(min-width:600px){.uni-descriptive-dynamic-up-subheading{display:flex;justify-content:space-between;margin-bottom:36px}}@media(min-width:1024px){.uni-descriptive-dynamic-up-subheading{display:block}}@media(min-width:600px){.uni-descriptive-dynamic-up__content{grid-column:1/7}.uni-descriptive-dynamic-up__content:after{display:none}}@media(min-width:1024px){.uni-descriptive-dynamic-up__content{grid-column:4/9}}.uni-descriptive-dynamic-up__subcontent{grid-column:1/5}@media(min-width:600px){.uni-descriptive-dynamic-up__subcontent{grid-column:7/13}}@media(min-width:1024px){.uni-descriptive-dynamic-up__subcontent{grid-column:9/13}}.uni-descriptive-dynamic-up-article:after,.uni-descriptive-dynamic-up__content:after{height:0;width:165px}@media(min-width:600px){.uni-descriptive-dynamic-up-article:after,.uni-descriptive-dynamic-up__content:after{width:auto}}.uni-descriptive-dynamic-up-article:last-child:after,.uni-descriptive-dynamic-up__content:last-child:after{display:none}.uni-descriptive-dynamic-up-article,.uni-descriptive-dynamic-up-hero{display:block}.uni-descriptive-dynamic-up-article__title,.uni-descriptive-dynamic-up-hero__title{font-weight:500}.uni-descriptive-dynamic-up-hero .h-c-eyebrow{line-height:18px;margin-bottom:5px}@media(min-width:1024px){.uni-descriptive-dynamic-up-hero .h-c-eyebrow{margin-bottom:12px}}.uni-descriptive-dynamic-up-hero .h-c-eyebrow .cta{align-content:center;font-weight:500;letter-spacing:1.5px;line-height:48px}.uni-descriptive-dynamic-up-hero-image{margin-bottom:18px}.uni-descriptive-dynamic-up-hero__title{font-size:20px;line-height:28px;margin-bottom:16px}@media(min-width:600px){.uni-descriptive-dynamic-up-hero__title{font-size:24px;line-height:32px;margin-bottom:8px}}@media(min-width:1024px){.uni-descriptive-dynamic-up-hero__title{font-size:32px;line-height:40px}}.uni-descriptive-dynamic-up-hero__subtitle{margin-bottom:0}@media(min-width:600px){.uni-descriptive-dynamic-up-hero__subtitle{margin-bottom:6px}}@media(min-width:1024px){.uni-descriptive-dynamic-up-hero__subtitle{margin-bottom:26px}}.uni-descriptive-dynamic-up-article{margin-bottom:16px}@media(min-width:600px){.uni-descriptive-dynamic-up-article{margin-bottom:24px}}@media(min-width:1024px){.uni-descriptive-dynamic-up-article{margin-bottom:36px}}.uni-descriptive-dynamic-up-article:last-of-type{margin-bottom:0}.uni-descriptive-dynamic-up-article__title{font-size:16px;line-height:26px;margin-bottom:0}@media(min-width:1024px){.uni-descriptive-dynamic-up-article__title{font-size:22px;line-height:30px}}.uni-descriptive-dynamic-up-article__tag{line-height:18px;margin:16px 0 5px}.uni-descriptive-dynamic-up-article__tag .cta,.uni-descriptive-dynamic-up-article__tag.h-c-eyebrow{align-content:center;font-weight:500;letter-spacing:1.5px;line-height:48px}@media(min-width:600px){.uni-descriptive-dynamic-up-article__tag{margin-top:0}}@media(min-width:1024px){.uni-descriptive-dynamic-up-article__tag{margin-bottom:8px}}.uni-descriptive-dynamic-up-hero-image__special{padding-bottom:45%;position:relative}.uni-descriptive-dynamic-up-hero-image__img{height:100%;left:0;object-fit:cover;position:absolute;top:0;width:100%}.uni-nup__headline{margin-block-end:36px}.uni-nup__header{-webkit-box-orient:vertical;-webkit-line-clamp:3;display:-webkit-box;flex:1 1;margin-block-end:0;overflow:hidden;text-overflow:ellipsis}@media(min-width:1024px){.uni-nup__header{flex:1 0 auto}}.uni-nup__cards{grid-gap:24px;display:grid;gap:24px;grid-auto-columns:minmax(0,1fr);grid-auto-flow:row;grid-auto-rows:auto}@media(min-width:1024px){.uni-nup__cards{grid-auto-flow:column}}.uni-nup__cards--three .uni-nup__image{height:100%;object-fit:cover;transition:transform .2s;width:100%}.uni-nup__cards--three .uni-nup__image-container{aspect-ratio:16/9;border:1px solid #f1f3f4;border-radius:8px;display:block;overflow:hidden}.uni-nup__card{display:flex;flex-direction:column;gap:8px}.uni-nup__article{grid-gap:16px;display:grid;gap:16px;grid-template-columns:auto minmax(50px,128px)}@media(min-width:1024px){.uni-nup__article{display:flex;flex:1 0 auto;flex-direction:column}}.uni-nup__article:focus{background:0 0;border-radius:8px;outline:3px solid #174ea6;outline-offset:8px}.uni-nup__article--no-image{display:flex;flex:1 0 auto;flex-direction:column}@media(min-width:1024px){.uni-nup__article--no-image{border-block-end:1px solid #f1f3f4}}.uni-nup__article--no-image .uni-nup__header{flex:0 1 auto}.uni-nup__body{color:#5f6368;flex:1 1}.uni-nup__arrow-icon{display:none;height:24px;margin-block-end:24px;margin-block-start:0;margin-inline-end:24px;margin-inline-start:auto;padding:4px;width:24px}@media(min-width:1024px){.uni-nup__arrow-icon{display:block}}.uni-nup__cta-container{display:flex;justify-content:center;margin-block-start:36px}.featured-article__image{background-position:50%;background-size:cover;border-radius:8px;height:100%;margin:0;min-height:0;overflow:hidden;position:relative}@media(min-width:768px){.featured-article__image{min-height:396px}}@media(min-width:1024px){.featured-article__image{min-height:461px}}.featured-article__image:focus{background-position:50%;background-size:cover}.featured-article-cat-subcat-hero__primary-link{align-content:center;display:inline-block;font-weight:500;letter-spacing:.5px;min-height:48px}.featured-article-cat-subcat-hero__primary-link:active,.featured-article-cat-subcat-hero__primary-link:focus,.featured-article-cat-subcat-hero__primary-link:link,.featured-article-cat-subcat-hero__primary-link:visited{color:#174ea6}.featured-article-cat-subcat-hero__primary-link:hover{color:#1a73e8}.featured-article-cat-subcat-hero__image{background-position:50%;background-size:cover}.featured-article-cat-subcat-hero__image,.featured-article-cat-subcat-hero__image--full-width{border-radius:16px;margin:0;min-height:0;overflow:hidden;padding-top:56.25%;position:relative}.featured-article-cat-subcat-hero__image--full-width:focus,.featured-article-cat-subcat-hero__image:focus{background-position:50%;background-size:cover}.featured-article-cat-subcat-hero__image img,.featured-article-cat-subcat-hero__image--full-width img{display:block;height:min(100%,505px);left:0;object-fit:cover;object-position:center;position:absolute;top:0;width:100%}@media(min-width:768px){.featured-article-cat-subcat-hero__image--default{background-position:0;background-size:cover;border-radius:8px;margin:0;min-height:440px;padding-top:62.5%}}@media(min-width:1024px){.featured-article-cat-subcat-hero__image--default{margin:36px 16px 24px}}.featured-article-cat-subcat-hero__image--default{margin:24px 16px 0}@media(min-width:768px){.featured-article-cat-subcat-hero__image--default{margin:0 32px 16px}.featured-article-cat-subcat-hero__image{display:block;min-height:432px;padding-top:0}}.featured-article-cat-subcat-hero__image--full-width{background-position:50%;background-size:cover;display:block}@media(min-width:1024px){.featured-article-cat-subcat-hero__image--full-width{display:none}}.featured-article-cat-subcat-hero__image--full-height{height:100%}.featured-article-cat-subcat-hero__wrapper{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.featured-article-cat-subcat-hero__wrapper{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-cat-subcat-hero__wrapper{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.featured-article-cat-subcat-hero__wrapper>.featured-article-cat-subcat-hero__link{display:none}@media(min-width:1024px){.featured-article-cat-subcat-hero__wrapper>.featured-article-cat-subcat-hero__link{display:block}}.featured-article-cat-subcat-hero__wrapper .featured-article-cat-subcat-hero__content>.featured-article-cat-subcat-hero__link .featured-article-cat-subcat-hero__title{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:max(24px,min(2.4vw,36px));font-weight:400;letter-spacing:-.25px;line-height:max(36px,min(3.06vw,44px));margin-bottom:max(24px,min(2.09vw,30px))}@media(min-width:768px){.featured-article-cat-subcat-hero__wrapper .featured-article-cat-subcat-hero__content>.featured-article-cat-subcat-hero__link .featured-article-cat-subcat-hero__title{font-size:32px}}@media(min-width:1024px){.featured-article-cat-subcat-hero__wrapper .featured-article-cat-subcat-hero__content>.featured-article-cat-subcat-hero__link .featured-article-cat-subcat-hero__title{font-size:36px}}.featured-article-cat-subcat-hero__wrapper .featured-article-cat-subcat-hero__content.featured-article-cat-subcat-hero__content--hero{padding:0}.featured-article-cat-subcat-hero__wrapper .featured-article-cat-subcat-hero__content.featured-article-cat-subcat-hero__content--hero>.featured-article-cat-subcat-hero__link.featured-article-cat-subcat-hero__link .featured-article-cat-subcat-hero__title{-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}.featured-article-cat-subcat-hero__wrapper .featured-article-cat-subcat-hero__content.featured-article-cat-subcat-hero__content--hero>.featured-article-cat-subcat-hero__link.featured-article-cat-subcat-hero__link .featured-article-cat-subcat-hero--card__author-frame{margin-top:36px}.featured-article-cat-subcat-hero:after{border-bottom:1px solid #d7d7d7;content:"";height:0;margin:0 auto;padding-top:28px;width:90vw}@media(min-width:768px){.featured-article-cat-subcat-hero:after{padding-top:36px}}@media(min-width:1024px){.featured-article-cat-subcat-hero{padding-bottom:0}.featured-article-cat-subcat-hero:after{display:none}}.featured-article-cat-subcat-hero__content{grid-column:1/5;padding-top:24px}.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__eyebrow--default{margin:32px 0 16px}@media(min-width:768px){.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__eyebrow--default{margin:16px 0}}@media(min-width:1024px){.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__eyebrow--default{margin-top:16px}}.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__title{margin-bottom:36px}@media(min-width:1024px){.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__title{margin-bottom:24px}}.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__summary{margin-bottom:24px}@media(min-width:1024px){.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__summary{margin-bottom:36px}}@media(min-width:768px){.featured-article-cat-subcat-hero__content{grid-column:1/13;margin-right:0}.featured-article-cat-subcat-hero__content h2{display:block;margin-bottom:12px}.featured-article-cat-subcat-hero--break-grid .featured-article-cat-subcat-hero__content{border-top:0}}@media(min-width:1024px){.featured-article-cat-subcat-hero__content{grid-column:10/14;padding:36px 0}.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__link:hover h2,.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__link:hover h2>p,.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__link:hover h3,.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__link:hover h3>p{text-decoration-color:#202124;transition:.3s}.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__link:hover svg{fill:colors(text-tab-grey);transform:translateX(4px)}}.featured-article-cat-subcat-hero__content .h-has-bottom-margin{margin-bottom:8px}.featured-article-cat-subcat-hero__content--image{position:relative}@media(min-width:1024px){.featured-article-cat-subcat-hero__content--image{grid-column:9/13}}.featured-article-cat-subcat-hero__content .featured-article-cat-subcat-hero__eyebrow--default{color:#174ea6;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;letter-spacing:.5px;line-height:20px;text-transform:uppercase}.featured-article-cat-subcat-hero__title{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:24px;line-height:32px;-webkit-text-decoration:underline;text-decoration:underline;text-decoration-color:transparent}@media(min-width:600px){.featured-article-cat-subcat-hero__title{font-size:32px;line-height:40px}}@media(min-width:1024px){.featured-article-cat-subcat-hero__title{font-size:44px;line-height:52px}}.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:24px;padding:0}@media(min-width:600px){.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame{grid-template-columns:repeat(12,minmax(0,1fr))}}.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame .featured-article-cat-subcat-hero__cta{align-self:center;grid-column:12/12;margin-top:0;padding-right:8px;text-align:right}.featured-article-cat-subcat-hero .featured-article-cat-subcat-hero--card__author-frame .featured-article-cat-subcat-hero__cta .icon{height:16px;top:0;width:16px}.featured-article-cat-subcat-hero__summary{font-size:16px;margin:0}@media(min-width:768px){.featured-article-cat-subcat-hero__summary{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);line-height:28px}}.featured-article-cat-subcat-hero__summary:hover,a .featured-article-cat-subcat-hero__summary,a:hover .featured-article-cat-subcat-hero__summary,a:visited .featured-article-cat-subcat-hero__summary{color:#5f6368}.featured-article-cat-subcat-hero__link{display:block;grid-column:1/5;height:-moz-fit-content;height:fit-content;width:100%}@media(min-width:1024px){.featured-article-cat-subcat-hero__link{grid-column:1/9}}.featured-article-cat-subcat-hero__link:hover img{transform:scale(1.03);transition:all .2s}.featured-article-cat-subcat-hero__link:hover .featured-article-cat-subcat-hero__title{text-decoration-color:#000}.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content h2,.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content h2>p,.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content h3,.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content h3>p{text-decoration-color:#000;transition:.3s}.featured-article-cat-subcat-hero__link:hover+.featured-article-cat-subcat-hero__content svg{transform:translateX(4px)}.featured-article-cat-subcat-hero__link img{transform:scale(1);transition:all .2s}.featured-article-cat-subcat-hero.module{margin-bottom:60px!important}.featured-article-cat-subcat-hero--break-grid .featured-article-cat-subcat-hero__image{height:0;margin-left:0;overflow:hidden;transform:translateZ(0)}.featured-article-cat-subcat-hero__summary,.featured-article-cat-subcat-hero__title{transition:all .3s ease-in-out}.featured-article-cat-subcat-hero__image--full-width .featured-article-cat-subcat-hero__image-tag{height:100%;width:100%}.featured-article-hero__main-eyebrow{padding-bottom:24px;padding-top:24px;padding-inline:16px}@media(min-width:768px){.featured-article-hero__main-eyebrow{padding-inline:32px}}@media(min-width:1024px){.featured-article-hero__main-eyebrow{padding-inline:60px}}.featured-article-hero__colored-background{background-color:#f8f9fa;bottom:0;position:absolute;top:-24px;transition:height .5s ease;width:100vw;z-index:-1}.featured-article-hero__grid>.featured-article-hero__main-title{display:none;grid-column:1/13}@media(min-width:1024px){.featured-article-hero__grid>.featured-article-hero__main-title{display:inherit}}.featured-article-hero__eyebrow{margin:0}.featured-article-hero__title{margin-bottom:16px}.featured-article-hero__title>p{font-size:inherit;letter-spacing:inherit;line-height:inherit}.featured-article-hero__title--priority{grid-column:1/-1}.featured-article-hero__summary{color:#5f6368}.featured-article-hero__collection-badge{align-items:center;background-color:hsla(0,0%,100%,.9);border-radius:100px;bottom:28px;color:#1967d2;display:flex;gap:8px;justify-content:center;left:16px;opacity:1;padding-inline:16px;position:absolute;transition:opacity .1s linear;width:-moz-fit-content;width:fit-content;z-index:2}@media(min-width:768px){.featured-article-hero__collection-badge{bottom:48px;left:32px}}@media(min-width:1024px){.featured-article-hero__collection-badge{bottom:72px;left:60px}}.featured-article-hero__collection-badge--special-hero{inset-block-end:24px;inset-inline-start:12px}@media(min-width:1024px){.featured-article-hero__collection-badge--special-hero{display:flex}}.featured-article-hero__collection-badge.no-additional-articles{inset-block-end:24px;inset-inline-start:16px}@media(min-width:768px){.featured-article-hero__collection-badge.no-additional-articles{inset-block-end:48px;inset-inline-start:32px}}@media(min-width:1024px){.featured-article-hero__collection-badge.no-additional-articles{inset-block-end:24px;inset-inline-start:12px}}.featured-article-hero__link{display:block;grid-column:1/5;height:-moz-fit-content;height:fit-content;width:100%}.featured-article-hero__link--info-box{margin-bottom:24px}@media(min-width:1024px){.featured-article-hero__link{grid-column:1/9}}.featured-article-hero__link:focus,.featured-article-hero__link:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.featured-article-hero__link.home{display:none}@media(min-width:1024px){.featured-article-hero__link.home{display:block;grid-column:1/10}}.featured-article-hero__link:hover .featured-article-hero__title,.featured-article-hero__link:hover .featured-article-hero__title>p{-webkit-text-decoration:underline;text-decoration:underline}.featured-article-hero__link:hover+.featured-article-hero__content .featured-article-hero__title{-webkit-text-decoration:underline;text-decoration:underline;transition:.3s}.featured-article-hero__link:hover+.featured-article-hero__content .featured-article-hero__cta svg.icon{fill:#1a73e8;transform:translate(4px)}.featured-article-hero__link:hover+.featured-article-hero__content .featured-article-hero__cta--special{border-color:#1a73e8;color:#174ea6}.featured-article-hero__link:hover+.featured-article-hero__content .featured-article-hero__cta--special svg.icon{fill:#174ea6}.featured-article-hero__link.special{display:none;width:calc(66% - 24px)}@media(min-width:1024px){.featured-article-hero__link.special{display:inherit;position:relative;transition:all .6s;z-index:1}}.featured-article-hero__link--img img{transition:transform .2s}@media(min-width:1024px){.featured-article-hero__link--img img.homepage,.featured-article-hero__link--img img:hover{transform:scale(1.03)}}.featured-article-hero__link--img:has(+.featured-article-hero__content .featured-article-hero__cta:hover) img,.featured-article-hero__link--img:has(+.featured-article-hero__content .featured-article-hero__link:hover) img{transform:scale(1.03)}.featured-article-hero__primary-link{display:inline-block;margin-bottom:8px}.featured-article-hero__home{margin:0 auto;max-width:1440px}.featured-article-hero__container{grid-column:4/12}@media(min-width:768px){.featured-article-hero__container{padding:0 32px}}.featured-article-hero__image{background-position:50%;background-size:cover}.featured-article-hero__image,.featured-article-hero__image--full-width{margin:0;min-height:0;overflow:hidden;padding-top:56.25%;position:relative}.featured-article-hero__image--full-width:focus,.featured-article-hero__image:focus{background-position:50%;background-size:cover}.featured-article-hero__image img,.featured-article-hero__image--full-width img{display:block;height:100%;left:0;object-fit:cover;object-position:center;position:absolute;top:0;width:100%}.featured-article-hero__image--home,.featured-article-hero__top-section img{border-radius:0}@media(min-width:768px){.featured-article-hero__image--default,.featured-article-hero__image--hero{background-position:0;background-size:cover;margin:0;min-height:440px;padding-top:62.5%}}@media(min-width:1024px){.featured-article-hero__image--default,.featured-article-hero__image--hero{margin:36px 16px 24px}}.featured-article-hero__image--hero{margin-bottom:24px}.featured-article-hero__image--default{margin:24px 16px 0}@media(min-width:768px){.featured-article-hero__image--default{margin:0 32px 16px}.featured-article-hero__image{display:block;min-height:432px;padding-top:0}}.featured-article-hero__image--full-width{background-position:50%;background-size:cover;display:block}@media(min-width:1024px){.featured-article-hero__image--full-width{display:none}}.featured-article-hero__image--full-height{height:100%}.featured-article-hero__authors-box{align-items:flex-end;display:flex;gap:16px;justify-content:space-between;width:100%}.featured-article-hero__authors-box--no-authors{justify-content:flex-end}.featured-article-hero__authors-box .authors-byline-container{flex:1 1 auto}.featured-article-hero__cta{align-items:flex-end;display:flex;justify-content:flex-end;min-height:48px;min-width:48px;width:-moz-fit-content;width:fit-content}.featured-article-hero__cta svg.icon{fill:#202124;box-sizing:initial;height:16px;margin:0;padding:8px;width:16px}.featured-article-hero__cta:hover svg.icon{transform:translate(4px)}.featured-article-hero__cta--special:hover{border-color:#1a73e8;color:#174ea6}.featured-article-hero__cta--special:hover svg.icon{fill:#174ea6;transform:translate(4px)}.featured-article-hero__wrapper{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.featured-article-hero__wrapper{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-hero__wrapper{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.featured-article-hero__wrapper.home{margin-inline:16px}@media(min-width:768px){.featured-article-hero__wrapper.home{grid-template-columns:66px repeat(12,minmax(0,1fr)) 66px;margin-inline:32px}}@media(min-width:1024px){.featured-article-hero__wrapper.home{margin-inline:0}}.featured-article-hero__wrapper>.featured-article-hero__link{display:none}@media(min-width:1024px){.featured-article-hero__wrapper>.featured-article-hero__link{display:block}}.featured-article-hero__wrapper.hero{display:flex;flex-wrap:wrap;position:relative}.featured-article-hero__wrapper.hero>*{flex-direction:column}.featured-article-hero__wrapper.hero .featured-article-hero__content{opacity:1;overflow:hidden;padding:0;position:relative;transition:0s;transition-delay:0s;width:100%}.featured-article-hero__wrapper.hero .featured-article-hero__content .featured-article-hero{width:100%}.featured-article-hero__wrapper.hero .featured-article-hero__content.special{overflow:visible;overflow:initial}.featured-article-hero__wrapper.hero .featured-article-hero__content.special .featured-article-hero__cta{align-items:center;background-color:#fff;margin-top:36px;width:-moz-fit-content;width:fit-content}.featured-article-hero__wrapper.hero .featured-article-hero__content.special .featured-article-hero__cta svg.icon{fill:#1a73e8;height:18px;padding:0;transition:transform .1s;width:18px}@media(min-width:1024px){.featured-article-hero__wrapper.hero .featured-article-hero__content{display:flex;height:-moz-fit-content;height:fit-content;inset-inline-end:0;position:absolute;transition:all .3s;transition-delay:.5s;width:calc(33% - 24px)}.featured-article-hero__wrapper.hero .featured-article-hero__content.special{box-sizing:border-box}}.featured-article-hero__wrapper.hero .featured-article-hero__content .featured-article-hero--card__author-frame .author__info .name{display:inline-block}.featured-article-hero__wrapper.hero .featured-article-hero__content .featured-article-hero--card__author-frame .author__info .title{display:block}@media(min-width:1024px){.featured-article-hero__wrapper.hero.large{justify-content:flex-start;transition:all .6s}.featured-article-hero__wrapper.hero.large>.featured-article-hero__link{top:0;transition:all .4s;width:100%}.featured-article-hero__wrapper.hero.large>.featured-article-hero__link .featured-article-hero__image{top:0}.featured-article-hero__wrapper.hero.large>.featured-article-hero__content{opacity:0;padding:0;position:absolute;transition:all .4s}.featured-article-hero__wrapper.hero.large .featured-article-hero__collection-badge--special-hero{opacity:0}}.featured-article-hero__wrapper .featured-article-hero__content.featured-article-hero__content--hero{padding:0}@media(min-width:1024px){.featured-article-hero{padding-bottom:0}.featured-article-hero:after{display:none}}.featured-article-hero__content{grid-column:1/-1;padding-top:24px}@media(min-width:1024px){.featured-article-hero__content{grid-column:1/13;margin-right:0}.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover) h1,.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover) h1>p,.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover) h2,.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover) h2>p,.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover) h3,.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover) h3>p,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover) h1,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover) h1>p,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover) h2,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover) h2>p,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover) h3,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover) h3>p,.featured-article-hero__content .featured-article-hero__link:hover h1,.featured-article-hero__content .featured-article-hero__link:hover h1>p,.featured-article-hero__content .featured-article-hero__link:hover h2,.featured-article-hero__content .featured-article-hero__link:hover h2>p,.featured-article-hero__content .featured-article-hero__link:hover h3,.featured-article-hero__content .featured-article-hero__link:hover h3>p{-webkit-text-decoration:underline #202124;text-decoration:underline;text-decoration:underline #202124;transition:.3s}.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover)+.featured-article-hero__authors-box svg,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover)+.featured-article-hero__authors-box svg,.featured-article-hero__content .featured-article-hero__link:hover+.featured-article-hero__authors-box svg{fill:#4285f4;transform:translateX(4px)}.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover)+.featured-article-hero__authors-box+.featured-article-hero__cta,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover)+.featured-article-hero__authors-box+.featured-article-hero__cta,.featured-article-hero__content .featured-article-hero__link:hover+.featured-article-hero__authors-box+.featured-article-hero__cta{border-color:#1a73e8;color:#174ea6}.featured-article-hero__content .featured-article-hero__link:has(+.featured-article-hero__authors-box svg:hover)+.featured-article-hero__authors-box+.featured-article-hero__cta svg.icon,.featured-article-hero__content .featured-article-hero__link:has(~.featured-article-hero__cta:hover)+.featured-article-hero__authors-box+.featured-article-hero__cta svg.icon,.featured-article-hero__content .featured-article-hero__link:hover+.featured-article-hero__authors-box+.featured-article-hero__cta svg.icon{fill:#174ea6;transform:translateX(4px)}}.featured-article-hero__content--image{position:relative}@media(min-width:1024px){.featured-article-hero__content--image{grid-column:9/13}.featured-article-hero__content--image.homepage{grid-column:10/14}}.featured-article-hero__content.homepage{padding-top:0}@media(min-width:1024px){.featured-article-hero__content.homepage{align-items:center;display:flex;justify-content:flex-end}.featured-article-hero__content.homepage.special{align-items:flex-start}.featured-article-hero__content.homepage.additional-articles{grid-column:2/10;grid-row:2/3;margin-top:0}}.featured-article-hero__card{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(54,64,67,.3),0 4px 8px 3px rgba(54,64,67,.15);margin-bottom:36px;margin-top:-16px;padding-bottom:36px;padding-top:24px;padding-inline:24px}@media(min-width:768px){.featured-article-hero__card{margin-top:-32px;padding-inline:36px}}@media(min-width:1024px){.featured-article-hero__card{margin-block:0;margin-inline-start:-72px;width:calc(100% + 72px)}}.featured-article-hero__card.additional-articles{margin-top:-16px}@media(min-width:768px){.featured-article-hero__card.additional-articles{margin-top:-32px;padding-inline:36px}}@media(min-width:1024px){.featured-article-hero__card.additional-articles{border-radius:16px;border-start-end-radius:0;margin-inline-start:-30px;margin-top:-60px;width:calc(100% + 30px)}}.featured-article-hero__card>a:focus,.featured-article-hero__card>a:focus-visible{background:0 0;outline:0}.featured-article-hero__card.focus{border-radius:16px;outline:2px solid #174ea6;outline-offset:0}.featured-article-hero__card.focus.additional-articles{border-top-right-radius:0}.featured-article-hero__card .featured-article-hero__content{grid-column:1/14;padding:0}@media(min-width:1024px){.featured-article-hero__card .featured-article-hero__content{grid-column:10/14}}.featured-article-hero-large-title__wrapper{grid-column-gap:16px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr))}@media(min-width:600px){.featured-article-hero-large-title__wrapper{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-hero-large-title__wrapper{grid-column-gap:24px;display:none;grid-template-columns:repeat(12,minmax(0,1fr))}}.featured-article-hero__large-info{display:none}@media(min-width:1024px){.featured-article-hero__large-info{grid-column-gap:16px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));padding-top:36px;text-align:center}}@media(min-width:1024px)and (min-width:600px){.featured-article-hero__large-info{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px)and (min-width:1024px){.featured-article-hero__large-info{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.featured-article-hero__large-info>*{grid-column:3/11}.featured-article-hero__large-info .featured-article-hero__link{grid-column:3/11;margin-bottom:36px}.featured-article-hero__large-info h1{margin:0}.featured-article-hero__large-info h1>p{font-size:inherit;letter-spacing:inherit;line-height:inherit}.featured-article-hero__large-info p{grid-column:3/11;padding-bottom:8px}.featured-article-hero__large-info p .featured-article-hero__primary-link{display:inline-block}}.featured-article-hero__info-section{margin-bottom:60px;position:relative}@media(min-width:1024px){.featured-article-hero__info-section{margin-bottom:0;padding-bottom:0}}.featured-article-hero__top-section{padding:0}.featured-article-hero--break-grid .featured-article-hero__image{height:0;margin-left:0;overflow:hidden;transform:translateZ(0)}@media(min-width:768px){.featured-article-hero--break-grid .featured-article-hero__image.homepage{border-radius:0 0 8px 8px}}.featured-article-hero--break-grid .featured-article-hero__image.special{flex-basis:auto}@media(min-width:768px){.featured-article-hero--break-grid .featured-article-hero__image.special{border-radius:8px}.featured-article-hero--break-grid .featured-article-hero__image.homepage{padding-top:55.063%}.featured-article-hero--break-grid .featured-article-hero__image.special{flex-basis:auto;padding-top:0}}@media(min-width:1024px){.featured-article-hero--break-grid .featured-article-hero__image.special{height:max(347px,min(35.07vw,505px));min-height:0;min-height:auto}}@media(min-width:768px){.featured-article-hero--break-grid .featured-article-hero__wrapper.large .featured-article-hero__image.special{border-radius:16px}.featured-article-hero--main-eyebrow .featured-article-hero__image.homepage{border-radius:8px}}.featured-article-hero__summary,.featured-article-hero__title{transition:all .3s ease-in-out}.featured-article-hero__image--full-width .featured-article-hero__image-tag,.newsletter-form__envelope .envelope-back img,.newsletter-form__envelope .envelope-front img,.newsletter-form__envelope .envelope-letter-approved img,.newsletter-form__envelope .envelope-letter-google img{height:100%;width:100%}.feed-article{border-top:1px solid #d7d7d7;display:flex;height:100%;padding:30px 0}.feed-article__eyebrow,.feed-article__title{align-items:center;color:#414141;min-height:48px}.feed-article__title{margin-bottom:0}.feed-article__title:focus{border-radius:8px;outline:0}.article-list__feed .article-list__item,.image-full-width__media-asset video{width:100%}.article-list__feed .article-list__item:only-child{max-width:calc(50% - 12px)}.article-list__feed .feed-article{grid-gap:8px 24px;border:1px solid #dadce0;border-radius:8px;display:grid;flex-wrap:wrap;grid-template-columns:1fr;grid-template-rows:auto 1fr;min-height:132px;padding-bottom:16px;padding-inline-end:16px;padding-top:16px;padding-inline-start:24px;transition:all .15s}.article-list__feed .feed-article a:last-child.feed-article__title{font-size:16px;line-height:28px;padding-right:24px}.article-list__feed .feed-article:focus-visible{outline:3px solid #174ea6}.article-list__feed .feed-article:hover{box-shadow:0 1px 3px rgba(54,64,67,.3),0 4px 8px 3px rgba(54,64,67,.15)}.article-list__feed .feed-article:hover .feed-article__title,.article-list__feed .feed-article__overlay:hover~p,.article-list__feed .feed-article__title:hover{text-decoration-line:underline}.article-list__feed .feed-article__title{color:#25272b;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;font-weight:500;grid-column:1/2;grid-row:auto;line-height:24px}@media(min-width:1024px){.article-list__feed .feed-article__title{grid-row:2/3}}.article-list__feed .feed-article__eyebrow{-moz-column-gap:6px;column-gap:6px;display:flex;font-size:14px;font-weight:500;letter-spacing:.5px;line-height:20px;text-transform:uppercase}@media(min-width:320px){.article-list__feed .feed-article__eyebrow{grid-column:1/3;grid-row:1/2}}@media(min-width:600px){.article-list__feed .feed-article__eyebrow{margin-top:0}}.article-list__feed .eyebrow__date{color:#5f6368;flex-shrink:0;letter-spacing:.5px}.article-list__feed .feed-article__overlay{grid-column-gap:24px;background:0 0;-moz-column-gap:24px;column-gap:24px;display:grid;grid-column:1/3;grid-row:2/3;min-height:78px;z-index:1}@media(min-width:600px){.article-list__feed .feed-article__overlay{min-height:100px}}@media(min-width:1024px){.article-list__feed .feed-article__overlay{grid-column:1/3;min-height:78px}}.article-list__feed .feed-article__overlay:focus{outline:0}.article-list__feed .feed-article__overlay:focus~h3{background:#f1f3f4;border-radius:4px}.article-list__feed .feed-article__overlay:hover .feed-article__image-container .feed-article__image--cards{transform:scale(1.03)}.article-list__feed .feed-article__overlay:focus-visible{border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.article-list__feed .feed-article__image--cards{transition:transform .15s}.article-list__feed .feed-article__image-container{align-self:flex-end;border-radius:8px;display:grid;grid-column:2/3;grid-row:auto;height:78px;justify-self:right;margin-block-start:-20px;overflow:hidden}@media(min-width:600px){.article-list__feed .feed-article__image-container{align-self:center}}@media(min-width:1024px){.article-list__feed .feed-article__image-container{align-self:flex-end;grid-row:2/3;margin-top:8px}}.article-list__feed .feed-article__image-container .feed-article__image--cards{border-radius:8px;height:78px;margin:0;object-fit:cover;overflow:hidden;width:120px}@media(min-width:600px){.article-list__feed .feed-article__image-container .feed-article__image--cards{height:100px;width:154px}}@media(min-width:1024px){.article-list__feed .feed-article__image-container .feed-article__image--cards{height:78px;width:120px}}.h-c-footer__upper:after{border-bottom:1px solid #dadce0;content:"";display:block;visibility:visible;width:100%}.uni-footer-language{min-width:220px}.h-c-footer__upper{padding-bottom:0;padding-top:36px;padding-inline:24px}@media(min-width:768px){.h-c-footer__upper{padding-inline-end:32px;padding-inline-start:32px}}.h-c-footer__upper .h-c-social{margin-block-start:-8px;margin-inline-end:0;margin-inline-start:0;margin-bottom:24px}@media(min-width:768px){.h-c-footer__upper .h-c-social{margin-block-start:0}}.h-c-footer__upper .h-c-social__group .h-c-social__title{align-content:center;font-size:16px;font-weight:500;line-height:24px;margin-top:8px}@media(min-width:768px){.h-c-footer__upper .h-c-social__group .h-c-social__title{margin-block-start:0}}.h-c-footer__upper .h-c-social__group .h-c-social__list{margin-top:8px}@media(min-width:768px){.h-c-footer__upper .h-c-social__group .h-c-social__list{margin-block-start:0}}.h-c-footer__upper .h-c-social__group .h-c-social__list .h-c-social__item{height:48px;margin-inline-end:8px;width:48px}.h-c-footer__upper .h-c-social__group .h-c-social__list .h-c-social__item .h-c-social__link{align-content:center;height:48px;text-align:center;width:48px}.h-c-footer__upper .h-c-social__group .h-c-social__list .h-c-social__item .h-c-social__link:focus-visible{background:0 0;border-radius:8px;box-shadow:none;outline:2px solid #174ea6;outline-offset:0}.h-c-footer__global .h-c-footer__global-links .h-c-footer__global-links-list-item .h-c-footer__link:focus,.h-c-footer__global .h-c-footer__logo .uni-click-tracker:focus,.h-c-footer__upper .h-c-social__group .h-c-social__list .h-c-social__item .h-c-social__link:focus{background:0 0;background:#e8eaed;border-radius:8px;outline:2px solid #174ea6;outline-offset:0}@media(forced-colors:active){.h-c-footer__upper .h-c-social__group .h-c-social__list .h-c-social__item .h-c-social__link .h-c-icon{fill:currentColor}}.h-c-footer__global{padding-bottom:36px;padding-top:24px;padding-inline:24px}@media(min-width:768px){.h-c-footer__global{padding-inline-end:32px;padding-inline-start:32px}}.h-c-footer__global .h-c-footer__logo{height:48px;margin-inline-end:0;margin-inline-start:0;margin-bottom:16px;margin-top:0}@media(min-width:768px){.h-c-footer__global .h-c-footer__logo{margin-bottom:16px}}@media(min-width:1024px){.h-c-footer__global .h-c-footer__logo{margin-bottom:15px;margin-inline-end:36px;margin-top:10px}}.h-c-footer__global .h-c-footer__logo .uni-click-tracker{align-content:center;height:48px}.h-c-footer__global .h-c-footer__logo .uni-click-tracker .h-c-footer__logo-img{display:block}@media(forced-colors:active){.h-c-footer__global .h-c-footer__logo .uni-click-tracker .h-c-footer__logo-img{fill:currentColor}}.h-c-footer__global .h-c-footer__global-links{margin-inline-end:0;margin-inline-start:0;margin-bottom:8px;margin-top:0}@media(min-width:768px){.h-c-footer__global .h-c-footer__global-links{margin-bottom:18px}}@media(min-width:1024px){.h-c-footer__global .h-c-footer__global-links{margin-bottom:15px;margin-top:10px}}.h-c-footer__global .h-c-footer__global-links .h-c-footer__global-links-list-item{height:48px;margin-bottom:8px;padding:0 24px 8px 0}.h-c-footer__global .h-c-footer__global-links .h-c-footer__global-links-list-item:last-child{padding-inline-end:0}@media(min-width:768px){.h-c-footer__global .h-c-footer__global-links .h-c-footer__global-links-list-item{margin-bottom:0;padding:0 24px 0 0}}.h-c-footer__global .h-c-footer__global-links .h-c-footer__global-links-list-item .h-c-footer__link{align-content:center;font-size:16px;font-weight:500;height:48px}.h-c-footer__global .h-c-footer__global-links--extra{margin-bottom:0}@media(min-width:768px){.h-c-footer__global .h-c-footer__global-links--extra{margin-top:0}}@media(min-width:1024px){.h-c-footer__global .h-c-footer__global-links--extra{margin-bottom:15px;margin-top:10px}}@media(forced-colors:active){.h-c-footer__global .h-c-footer__global-links--extra .h-c-footer__global-links-list-item .h-c-footer__link .h-c-icon{fill:currentColor;color:currentColor}}.h-c-footer__global .h-c-footer__global-links--extra .h-c-footer__global-links-list-item{font-size:16px;height:48px;padding:0 24px 0 0}.h-c-footer__global .uni-footer-language{align-content:center;height:48px;padding:0}.google-experts__section{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);padding:154px 37px;text-align:center}@media(min-width:768px){.google-experts__section{padding:146px 0}}@media(min-width:1024px){.google-experts__section{padding:220px 0 159px}}.article-container .article-module.uni-article-video figure,.google-experts__container,.uni-article-video figure{margin:0 auto}@media(min-width:768px){.google-experts__container{max-width:574px;padding:30px 37px 29px}}@media(min-width:1024px){.google-experts__container{max-width:572px;padding:0 36px}}.google-experts__title{color:#202124;font-size:24px;line-height:32px}@media(min-width:1024px){.google-experts__title{font-size:32px;line-height:40px;margin-bottom:24px}}.google-experts__content{color:#5f6368;font-size:16px;line-height:24px;margin-top:16px;text-align:center}@media(min-width:768px){.google-experts__content{margin:0 auto}}.google-experts__leader-image{margin-bottom:15px;margin-left:-13px;width:20%}.google-experts__leader-image:first-child{margin-left:0}@media(min-width:768px){.google-experts__leader-image{margin-bottom:14px;margin-left:-24px}}@media(min-width:1024px){.google-experts__leader-image{margin-bottom:34px;max-width:498px}}.uni-header-content-pusher{height:64px}@media(min-width:1024px){.uni-header-content-pusher{height:64px}}.uni-header{--header-inline-padding:12px;background:#fff;box-shadow:0 2px 5px 0 rgba(0,0,0,.16),0 2px 5px 0 rgba(0,0,0,.23);height:64px;justify-content:flex-start;left:0;padding-inline:12px;padding-inline:var(--header-inline-padding);position:fixed;right:0;top:0;transform:translateY(0);transition:transform .15s ease-out;z-index:10}@media(min-width:1024px){.uni-header{height:64px;padding-inline:0}}.uni-header__logo-google{margin:3px 16px 0 0}.uni-header__logo-google:focus{outline:0}@media(min-width:600px){.uni-header__logo-google{margin:3px 24px 0 0}}@media(min-width:1024px){.uni-header__logo-google{margin:0 24px}}.uni-header__logo-google>svg,.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__logo-google>svg{height:17px;pointer-events:none;width:53px}@media(min-width:600px){.uni-header__logo-google>svg{height:24px;width:75px}}.uni-header .h-c-header__jump-to-content:focus{background:#fff;border:1px solid #dadce0;border-radius:4px;color:#1a73e8;display:flex;height:48px;justify-content:center;left:50%;letter-spacing:.25px;margin-left:0;margin-top:8px;overflow:hidden;padding:12px 24px;position:relative;top:0;transform:translate(-50%);white-space:nowrap;width:-moz-fit-content;width:fit-content;z-index:103}.uni-header__site-title>a{align-content:center;color:#5f6368;display:block;height:48px;width:100%}.uni-header__site-title-link:focus-visible,.uni-header__site-title>a:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.uni-header__site-title-link>div,.uni-header__site-title>a>div{align-items:center;display:flex;min-height:48px}.uni-header__site-title-link{align-items:center;display:flex;height:48px}.uni-header__site-title-link:focus:not(:focus-visible),.uni-navigation--desktop .uni-main-menu__item .uni-main-menu__item-label:focus:not(:focus-visible){outline:0}@media(min-width:768px){.uni-header__hamburguer-wrapper{margin-inline-end:16px}}@media(min-width:1024px){.uni-header__hamburguer-wrapper{display:none}}.uni-header__hamburguer-button{background:0 0;border:0;height:40px;margin:0;padding:0;width:40px}.uni-header__hamburguer-button:focus{background-color:#f5f5f5;border-radius:20px}.uni-header__hamburguer-button:hover{cursor:pointer}.uni-navigation--desktop{display:none;height:100%;margin:0 32px}@media(min-width:1024px){.uni-navigation--desktop{display:block;margin:0 48px}}.uni-navigation--desktop ul{list-style:none;margin:0}.uni-navigation--desktop .uni-main-menu{height:100%;opacity:1;transition:opacity .35s}.uni-navigation--desktop .uni-main-menu__item{font-size:.75rem;height:100%;line-height:1rem}.uni-navigation--desktop .uni-main-menu__item-label{background:0 0;border:0;color:#5f6368;cursor:pointer;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);height:100%;letter-spacing:.02rem;padding:0 8px;position:relative;-webkit-user-select:none;-moz-user-select:none;user-select:none}@media(min-width:900px){.uni-navigation--desktop .uni-main-menu__item-label{padding:0 12px}}.uni-navigation--desktop .uni-main-menu__item .uni-main-menu__item-label:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:-2px}.uni-navigation--desktop .uni-main-menu__item.active .uni-main-menu__item-label,.uni-navigation--desktop .uni-main-menu__item:hover .uni-main-menu__item-label{color:#000;cursor:pointer}.uni-navigation--desktop .uni-main-menu__item.active .uni-main-menu__item-label:first-child:after,.uni-navigation--desktop .uni-main-menu__item.active>a:first-child:after,.uni-navigation--desktop .uni-main-menu__item.active>div:first-child:after{background:#3367d6;bottom:0;content:"";height:2px;left:8px;position:absolute;right:8px}.uni-navigation--desktop .uni-main-menu__item figure{height:24px;margin:0;pointer-events:none;transform:translateX(6px);transition:transform .35s cubic-bezier(.24,1,.32,1);width:24px}.uni-navigation--desktop .uni-main-menu__item figure svg{fill:#5f6368;height:24px;pointer-events:none;width:24px}.uni-navigation--desktop .uni-main-menu__item:hover figure svg{fill:#000}.uni-navigation--desktop .uni-main-menu__item:not(.open) .uni-main-menu__submenu-wrapper{display:none}.uni-navigation--desktop .uni-main-menu__submenu-wrapper{left:0;position:absolute;right:0;top:100%}.uni-navigation--desktop .uni-main-menu__submenu-wrapper:before{background:#fff;box-shadow:0 2px 5px 0 rgba(0,0,0,.16),0 2px 5px 0 rgba(0,0,0,.23);content:"";height:100%;left:50%;position:absolute;top:0;transform:translateX(-50%);width:100vw;z-index:-1}.uni-navigation--desktop .uni-main-menu__submenu-close{background:#fff;border:0;height:32px;margin-bottom:10px;opacity:1;padding:5px;position:absolute;text-align:center;top:15px;width:32px}@media screen and (min-width:600px){.uni-navigation--desktop .uni-main-menu__submenu-close{position:fixed;right:25px;top:80px}}.uni-navigation--desktop .uni-main-menu__submenu-close--icon{left:8px;position:absolute;top:8px}.uni-navigation--desktop .uni-main-menu__submenu-close:focus:not(:focus-visible),.uni-navigation--desktop .uni-main-menu__submenu-item-see-all[title^="See all"]:focus:not(:focus-visible),.uni-navigation--desktop .uni-main-menu__submenu-link>a:focus:not(:focus-visible){outline:0}.uni-navigation--desktop .uni-main-menu__submenu-close:focus-visible{background:0 0;border-radius:48px;outline:2px solid #174ea6;outline-offset:0}.uni-navigation--desktop .uni-main-menu__submenu{grid-column-gap:72px;grid-row-gap:36px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;margin:27px auto 0;padding:32px 0;transition:opacity .45s cubic-bezier(.24,1,.32,1);transition-delay:35ms}@media only screen and (min-width:1024px){.uni-navigation--desktop .uni-main-menu__submenu{grid-template-columns:1fr 1fr 1fr 1fr 1fr;grid-template-rows:1fr}}.uni-navigation--desktop .uni-main-menu__submenu.has-view-all{box-shadow:inset 0 -1px 0 0 #dadce0}.uni-navigation--desktop .uni-main-menu__submenu-item{transition:transform .35s cubic-bezier(.24,1,.32,1),opacity .35s cubic-bezier(.24,1,.32,1)}.uni-navigation--desktop .uni-main-menu__submenu-item:first-of-type{transition-delay:35ms}.uni-navigation--desktop .uni-main-menu__submenu-item:nth-of-type(2){transition-delay:70ms}.uni-navigation--desktop .uni-main-menu__submenu-item:nth-of-type(3){transition-delay:105ms}.uni-navigation--desktop .uni-main-menu__submenu-item:nth-of-type(4){transition-delay:.14s}.uni-navigation--desktop .uni-main-menu__submenu-item:nth-of-type(5){transition-delay:175ms}.uni-navigation--desktop .uni-main-menu__submenu-item-label{box-shadow:inset 0 -1px 0 0 #dadce0;color:#5f6368;display:block;margin-bottom:16px;padding-bottom:16px;text-transform:uppercase}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all{display:inline-block;margin-top:1rem}.ui-carousel-slide__component uni-youtube-player,.uni-navigation--desktop .uni-main-menu__submenu-anchor,uni-video-player{display:block;height:100%}@media only screen and (min-width:1024px){.uni-navigation--desktop .uni-main-menu__submenu-anchor{padding-right:10px}}@media only screen and (min-width:1100px){.uni-navigation--desktop .uni-main-menu__submenu-anchor{padding-right:15px}}@media only screen and (min-width:1190px){.uni-navigation--desktop .uni-main-menu__submenu-anchor{padding-right:25px}}@media only screen and (min-width:1223px){.uni-navigation--desktop .uni-main-menu__submenu-anchor{padding-right:0}}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all,.uni-navigation--desktop .uni-main-menu__submenu-link{line-height:1rem;max-width:200px;padding:8px 0}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all[title^="See all"],.uni-navigation--desktop .uni-main-menu__submenu-link>a{color:#5f6368}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all[title^="See all"]:hover,.uni-navigation--desktop .uni-main-menu__submenu-link>a:hover{color:#000}.uni-navigation--desktop .uni-main-menu__submenu-item-see-all[title^="See all"]:focus-visible,.uni-navigation--desktop .uni-main-menu__submenu-link>a:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.uni-navigation--desktop .uni-main-menu__learn-more{align-items:center;display:flex;flex:1 1 auto;gap:8px;justify-content:flex-start;min-width:0}.uni-navigation--desktop .uni-main-menu__learn-more-title{color:#5f6368;flex:0 0 auto;margin:0;white-space:nowrap}.uni-navigation--desktop .uni-main-menu__learn-more-link{align-items:center;color:#1a73e8;display:flex;flex:0 1 auto;gap:8px;padding:12px;width:-moz-fit-content;width:fit-content}.uni-navigation--desktop .uni-main-menu__learn-more-link:hover,.uni-navigation--desktop .uni-main-menu__submenu-view-all>a:hover{color:#174ea6}.uni-navigation--desktop .uni-main-menu__learn-more-link:focus:not(:focus-visible),.uni-navigation--desktop .uni-main-menu__submenu-view-all>a:focus:not(:focus-visible),.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__close:focus:not(:focus-visible){outline:0}.uni-navigation--desktop .uni-main-menu__learn-more-link:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:0}.uni-navigation--desktop .uni-main-menu__learn-more-link--text{display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uni-navigation--desktop .uni-main-menu__learn-more:has(:only-child) .uni-main-menu__learn-more-link{max-width:100%}.uni-navigation--desktop .uni-main-menu__learn-more:has(:nth-child(2):last-child) .uni-main-menu__learn-more-link{max-width:50%}.uni-navigation--desktop .uni-main-menu__learn-more:has(:nth-child(3):last-child) .uni-main-menu__learn-more-link{max-width:33.3333%}.uni-navigation--desktop .uni-main-menu__learn-more:has(:nth-child(4):last-child) .uni-main-menu__learn-more-link{max-width:25%}.uni-navigation--desktop .uni-main-menu__learn-more-link-icon{align-items:center;display:flex;flex-shrink:0;height:18px;justify-content:center;width:18px}.uni-navigation--desktop .uni-main-menu__learn-more-link-icon svg{color:currentColor;height:12px;transform:rotate(-45deg);width:12px}.uni-navigation--desktop .uni-main-menu__learn-more-link-icon--see-all svg{transform:rotate(0)}.uni-navigation--desktop .uni-main-menu__submenu-view-all-link{align-items:center;color:#1a73e8;display:flex;flex:0 0 auto;gap:8px;justify-content:center;padding:8px;white-space:nowrap}.uni-navigation--desktop .uni-main-menu__submenu-view-all{align-items:center;display:flex;gap:12px;justify-content:flex-end;padding-block:12px;text-align:center;transition-delay:.2s;transition-duration:.35s;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.24,1,.32,1)}.uni-navigation--desktop .uni-main-menu__submenu-view-all>a:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.uni-main-menu__subnav--desktop{display:none}.uni-navigation__list-desktop{height:100%}.uni-navigation__list-mobile{display:none;flex:1;margin:0;overflow:scroll;transition:margin .8s cubic-bezier(.24,1,.32,1)}@media screen and (min-width:1024px){.uni-navigation__list-mobile{overflow:hidden}}.uni-navigation--mobile{background-color:#fff;display:flex;flex-direction:column;height:100%;left:-100%;overflow:hidden;position:fixed;top:0;transition:all .35s cubic-bezier(.24,1,.32,1);width:85%;z-index:1001}@media(min-width:1024px){.uni-navigation--mobile{display:none}}.uni-navigation--mobile .uni-navigation__brand-mobile{display:none;height:64px;margin:0 0 15px}.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__close{background:#fff;border:0;height:50px;margin-bottom:10px;margin-left:4px;margin-top:22px;opacity:1;padding:5px 0 5px 5px;text-align:center;width:32px}@media screen and (min-width:330px){.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__close{margin-left:13px;padding:7px 0 5px 3px}}.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__close:hover{cursor:pointer}.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__close:focus-visible{background:0 0;border-radius:48px;outline:2px solid #174ea6;outline-offset:0}.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__logo-google{margin:3px 0 0 6px;padding:0}@media screen and (min-width:330px){.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__logo-google{margin:3px 0 0 20px}}@media(min-width:600px){.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__logo-google>svg{height:24px;width:75px}}.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__site-title{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:.8888888889rem;font-weight:400;line-height:28px;margin:0 0 0 16px}@media(min-width:600px){.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__site-title{font-size:1.2222222222rem;margin:0 0 0 24px}}.uni-navigation--mobile .uni-navigation__brand-mobile .uni-navigation__site-title>a{color:#5f6368}.uni-navigation--mobile .uni-main-menu{list-style:none;margin:0;padding-block:24px;padding-inline-end:16px}.uni-navigation--mobile .uni-main-menu:after{content:""}.uni-navigation--mobile .uni-main-menu__learn-more-title{color:#5f6368;margin-bottom:24px;padding-inline:48px}.uni-navigation--mobile .uni-main-menu__learn-more-list{margin:0}.uni-navigation--mobile .uni-main-menu__learn-more-item{list-style:none;margin:0;padding:0;padding-inline:48px;-webkit-text-decoration:none;text-decoration:none}.uni-navigation--mobile .uni-main-menu__learn-more-link{align-items:center;color:#1a73e8;display:flex;flex:0 1 auto;gap:8px;height:48px;min-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uni-navigation--mobile .uni-main-menu__learn-more-link:hover{color:#174ea6}.uni-navigation--mobile .uni-main-menu__learn-more-link:focus:not(:focus-visible){outline:0}.uni-navigation--mobile .uni-main-menu__learn-more-link:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:0}.uni-navigation--mobile .uni-main-menu__learn-more-link--text{display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.uni-navigation--mobile .uni-main-menu__learn-more-link-icon{align-items:center;display:flex;flex-shrink:0;height:18px;justify-content:center;width:18px}.uni-navigation--mobile .uni-main-menu__learn-more-link-icon svg{color:currentColor;height:12px;transform:rotate(-45deg);width:12px}.uni-navigation--mobile .uni-main-menu__learn-more-link-icon--see-all svg{transform:rotate(0)}.uni-navigation--mobile .uni-main-menu__item{color:#80868b;padding-inline:24px}.uni-navigation--mobile .uni-main-menu__item.active{border-radius:0 20px 20px 0}.uni-navigation--mobile .uni-main-menu__item.active:not(:active){background-color:#f5f5f5}.uni-navigation--mobile .uni-main-menu__item.active .uni-main-menu__item-label,.uni-search-bar__suggested-searches-container p{color:#202124}.uni-navigation--mobile .uni-main-menu__item.active>a{color:#212121}.uni-navigation--mobile .uni-main-menu__item:active{background-color:#f1f1f1}.uni-navigation--mobile .uni-main-menu__item-label{-webkit-tap-highlight-color:rgba(0,0,0,0);background:0 0;border:0;color:#5f6368;height:52px;padding-inline:0;width:100%}.uni-navigation--mobile .uni-main-menu__item-label:focus:not(:focus-visible),.uni-navigation--mobile .uni-main-menu__subnav-item-name:focus:not(:focus-visible),.uni-navigation--mobile .uni-main-menu__subnav-sublist-link:focus:not(:focus-visible),.uni-navigation--mobile .uni-main-menu__subnav-title:focus:not(:focus-visible){outline:0}.uni-navigation--mobile .uni-main-menu__item-label:focus-visible{background:0 0;border-radius:8px;color:#212121;outline:2px solid #174ea6;outline-offset:-4px}.uni-navigation--mobile .uni-main-menu__item-label .expand-caret{height:18px;margin:0;pointer-events:none;width:24px}.uni-navigation--mobile .uni-main-menu__item-label .expand-caret>svg{fill:#202124;height:100%;pointer-events:none;transform:rotate(270deg);transition:transform .35s cubic-bezier(.24,1,.32,1);width:100%}.uni-navigation--mobile .uni-main-menu__subnav--mobile{background-color:#fff;height:calc(100% - 64px);overflow-x:hidden;overflow-y:scroll;position:absolute;right:-100%;top:64px;transition:all .5s cubic-bezier(.24,1,.32,1);visibility:hidden;width:100%;z-index:999}.uni-navigation--mobile .uni-main-menu__subnav-title{background:0 0;border:0;color:#5f6368;height:52px;margin:0;padding-block:0;padding-inline-start:24px;position:relative;width:100%}.uni-navigation--mobile .uni-main-menu__subnav-title:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:-1px}.uni-navigation--mobile .uni-main-menu__subnav-title .expand-caret{height:20px;margin:0 6px 0 0;padding:0;pointer-events:none;width:25px}.uni-navigation--mobile .uni-main-menu__subnav-title .expand-caret>svg{fill:#202124;height:100%;pointer-events:none;transform:rotate(90deg);width:100%}.uni-navigation--mobile .uni-main-menu__subnav-list{border-top:1px solid #dadce0;list-style:none;margin:0;padding-block:24px;padding-inline-end:16px}.uni-navigation--mobile .uni-main-menu__subnav-item-name{background:0 0;border:0;color:#5f6368;height:52px;padding-inline:48px 24px;text-align:start;width:100%}.uni-navigation--mobile .uni-main-menu__subnav-item-name:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:-4px}.uni-navigation--mobile .uni-main-menu__subnav-item-name .expand-caret{height:24px;margin:0;pointer-events:none;width:24px}.uni-navigation--mobile .uni-main-menu__subnav-item-name .expand-caret>svg{fill:#202124;height:24px;pointer-events:none;transform:rotate(0);transition:transform .35s cubic-bezier(.24,1,.32,1);width:24px}.uni-navigation--mobile .uni-main-menu__subnav-sublist{list-style:none;margin:0;max-height:0;overflow:hidden;transition:max-height .9s cubic-bezier(.24,1,.32,1);visibility:hidden}.uni-navigation--mobile .uni-main-menu__subnav-sublist-link{color:#757575;display:block;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:.8888888889rem;line-height:1.2rem;max-width:280px;padding:14px 20px 14px 54px}.uni-navigation--mobile .uni-main-menu__subnav-sublist-link--all{color:#3367d6}.uni-navigation--mobile .uni-main-menu__subnav-sublist-link:focus-visible{-webkit-tap-highlight-color:rgba(0,0,0,0);background:0 0;background-color:#f5f5f5;border-radius:8px;color:#000;outline:2px solid #174ea6;outline-offset:-4px}.overlay-body-menu--mobile{background-color:rgba(0,0,0,.5);content:"";height:120%;left:0;opacity:0;position:fixed;top:0;transition:opacity .5s ease;visibility:hidden;width:100%;z-index:1000}@media(min-width:1024px){.overlay-body-menu--mobile{display:none}}uni-icon-component{align-items:center;display:inline-flex}.image-full-width__link{display:block;margin-inline:auto}.image-full-width__link:focus{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.image-full-width__media-asset{border-radius:8px;height:auto;margin-inline:auto;overflow:hidden;position:relative;width:100%}.image-full-width__media-asset--mp4{aspect-ratio:auto;overflow:visible}.image-full-width__media-asset [slot]{height:100%;position:relative;width:100%}.image-full-width__media-asset img{height:100%;object-fit:cover;width:100%}.image-full-width__figure{margin:0}.image-full-width__caption{margin-block-start:8px;text-align:center}.image-full-width--full .image-full-width__media-asset{max-width:100%}.image-full-width--wrap-small{margin-block-end:36px}@media(min-width:1024px){.image-full-width--wrap-small{clear:both;float:right;margin-block-start:0;margin-inline:24px 0;position:absolute;right:0;top:0;width:297px}}.uni-blog-landing-hero{margin:36px auto}@media(min-width:1024px){.uni-blog-landing-hero{margin-bottom:60px;margin-top:48px}}.uni-blog-landing-hero:after{border-bottom:1px solid #d7d7d7;content:"";display:block;margin:0 auto;min-height:1px;padding-top:24px;width:90vw}@media(min-width:600px){.uni-blog-landing-hero:after{display:none}}.uni-blog-landing-hero__breadcrumb{margin-bottom:8px}@media(min-width:768px){.uni-blog-landing-hero .uni-blog-landing-hero__title{width:100%}}.uni-blog-landing-hero .uni-blog-landing-hero__title .uni-spacer-2-bottom{margin-bottom:16px}.uni-blog-landing-hero-no-line:after{display:none}.uni-blog-landing-hero__subheading{align-items:baseline;display:flex;flex-direction:column;justify-content:space-between}@media(min-width:1024px){.uni-blog-landing-hero__subheading{flex-direction:row}.uni-blog-landing-hero__subheading .cta{margin:0}}.uni-blog-landing-hero__subheading-link{display:none;line-height:48px}.uni-blog-landing-hero__subheading-link:active,.uni-blog-landing-hero__subheading-link:focus{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.loader-mask{background:rgba(0,0,0,.4);display:none;height:100%;left:0;position:fixed;top:0;width:100%;z-index:0}.loader-mask__loader{background:#c6dafc;display:block;height:6px;left:0;overflow:hidden;position:absolute;top:64px;transition:top .35s cubic-bezier(.24,1,.32,1);width:100%}.loader-mask__loader:after{background:#4285f4;content:"";display:block;height:100%;left:0;position:absolute;top:0;width:20}@media(min-width:900px){.loader-mask__loader{top:64px}}.loader-path{stroke:#1a73e8;stroke-dasharray:187;stroke-dashoffset:0;animation:dash 1.7s ease-in-out infinite,6.8s ease-in-out infinite;transform-origin:center}.uni-header__kebab-menu{background:#fff;border-top:2px solid #dadce0;list-style:none;margin:0;padding-block:24px;padding-inline-end:16px;position:relative;right:0;text-align:left;top:100%}@media screen and (min-width:1024px){.uni-header__kebab-menu{box-shadow:0 2px 5px 0 rgba(0,0,0,.16),0 2px 5px 0 rgba(0,0,0,.23);padding:15px 0;position:absolute;width:132px}}.uni-header__kebab-menu:not(.menu-is-open){display:none}@media screen and (min-width:1024px){.uni-header__kebab-menu-item{line-height:1.7777777778rem;margin-left:15px}}.uni-header__kebab-menu--mobile{bottom:-9px;right:inherit;top:inherit}.uni-header__kebab-menu--mobile:not(.menu-is-open){display:block}.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item{padding-inline:24px}@media screen and (min-width:1024px){.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item{margin-left:20px}}.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item a{height:52px}.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item a:not(:hover):not(:active){color:#757575}.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item a:focus:not(:focus-visible){outline:0}.uni-header__kebab-menu--mobile .uni-header__kebab-menu-item a:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.newsletter-form{margin:36px auto 0;position:relative;width:284px}@media(min-width:768px){.newsletter-form:not(.sticky){background-color:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(54,64,67,.3),0 4px 8px 3px rgba(54,64,67,.15);grid-area:center;margin:0;min-height:426px;padding:69px max(26px,min(2.5vw,36px)) 72px;width:100%}}@media(min-width:1024px){.newsletter-form:not(.sticky){align-self:center;grid-area:unset;grid-column:2/3;grid-row:1/3}}.newsletter-form__close,.newsletter-form__envelope,.newsletter-form__error,.newsletter-form__loading,.newsletter-form__success{display:none}@media(min-width:768px){.newsletter-form__form-container{margin:auto;width:338px}}@media(min-width:1024px){.newsletter-form__form-container{width:100%}}.newsletter-form__envelope{height:43px;margin:auto;position:relative;width:37px}.newsletter-form__envelope .envelope-back,.newsletter-form__envelope .envelope-front,.newsletter-form__envelope .envelope-letter-approved,.newsletter-form__envelope .envelope-letter-google{position:absolute}.newsletter-form__envelope .envelope-back,.newsletter-form__envelope .envelope-front{bottom:0;height:28px;width:100%}.newsletter-form__envelope .envelope-letter-approved,.newsletter-form__envelope .envelope-letter-google{height:29px;left:0;margin:auto;right:0;top:0;width:28px}.newsletter-form__envelope:not(.sticky) .envelope-letter-approved{bottom:0;display:none;top:auto}@media(min-width:768px){.newsletter-form__envelope:not(.sticky){display:block;height:83px;left:0;position:absolute;right:0;top:-58px;width:70px}.newsletter-form__envelope:not(.sticky) .envelope-back,.newsletter-form__envelope:not(.sticky) .envelope-front{height:55px}.newsletter-form__envelope:not(.sticky) .envelope-letter-approved,.newsletter-form__envelope:not(.sticky) .envelope-letter-google{height:55px;width:55px}}.newsletter-form__title{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);font-size:16px;line-height:26px;margin:0 auto 21px;text-align:center;width:248px}@media(min-width:768px){.newsletter-form__title{margin-bottom:29px}}.kw-form-input__error{bottom:-4px}@media(min-width:1024px){.kw-form-input__error{bottom:-28px}}.newsletter-form__info-paragraph{color:#5f6368;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);font-size:14px;letter-spacing:.25px;line-height:24px;margin:32px auto 16px;text-align:center}.newsletter-form__info-paragraph a,.newsletter-form__info-paragraph a:visited{color:#5f6368;-webkit-text-decoration:underline;text-decoration:underline}.newsletter-form__info-paragraph a:hover,.newsletter-form__info-paragraph a:visited:hover{-webkit-text-decoration:none;text-decoration:none}@media(min-width:768px){.newsletter-form__info-paragraph{margin-bottom:36px}}@media(min-width:1024px){.newsletter-form__info-paragraph{margin-bottom:max(12px,min(.83vw,36px))}}@media(min-width:1280px){.newsletter-form__info-paragraph{margin-bottom:max(12px,min(2.5vw,36px))}}.kw-form-input__field,.kw-form-input__label{font-size:16px}.newsletter-form__submit{border:2px solid #fff;display:block;margin:auto;padding:13px 26px 11px;width:auto}.newsletter-form__success{margin:8px auto 0;width:272px}@media(min-width:768px){.newsletter-form__success{margin-top:24px;width:318px}}.newsletter-form__success-logo{margin:0 auto 24px;width:26px}.newsletter-form__success-logo svg{height:20px;width:26px}@media(min-width:768px){.newsletter-form__success-logo{display:none}}.newsletter-form__success-text{text-align:center}.newsletter-form__success-text--intro{font-size:16px;line-height:24px;margin-bottom:24px}.newsletter-form__success-text--confirmation{display:block}@media(min-width:768px){.newsletter-form__success-text--intro{display:block;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:22px;line-height:30px;margin-bottom:36px;margin-top:8px}}.newsletter-form__success-cta{display:block;margin:auto;width:272px}.newsletter-form__success-final-text{margin:24px auto 0;text-align:center;width:237px}@media(min-width:768px){.newsletter-form__success-final-text{margin-top:36px}}.newsletter-form__different-email{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:transparent;border:0;color:#1a73e8;padding:0}.newsletter-form__error{background-color:#fef7e0;border-radius:8px;font-size:12px;margin-bottom:8px;padding:16px;text-align:center}@media(min-width:768px){.newsletter-form__error{margin-bottom:16px}}.newsletter-form__loading{align-items:center;justify-content:center;min-height:280px}.newsletter-form__loader{display:inline-block;height:60px;position:relative;width:60px}.newsletter-form__loader div{animation:loader-ring 1.2s cubic-bezier(.5,0,.5,1) infinite;border:5px solid transparent;border-radius:50%;border-top-color:#f7cb4d;box-sizing:border-box;display:block;height:44px;margin:8px;position:absolute;width:44px}.newsletter-form__loader div:first-child{animation-delay:-.45s}.newsletter-form__loader div:nth-child(2){animation-delay:-.3s}.newsletter-form__loader div:nth-child(3){animation-delay:-.15s}@media(min-width:768px){.kw-form-input{margin:auto;width:332px}}@media(min-width:1024px){.kw-form-input{width:100%}}.article-newsletter-form.newsletter-form{border-radius:8px;box-shadow:none;margin:23px 0 80px;min-height:auto;padding:57px 0 0;width:100%}.article-newsletter-form.newsletter-form:focus,.article-newsletter-form.newsletter-form:focus-visible{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:0}.article-newsletter-form .newsletter-form__container{border:1px solid #dadce0;border-radius:8px;padding:48px 24px;position:relative;width:100%}@media(min-width:768px){.article-newsletter-form .newsletter-form__container{padding:48px 36px}}@media(min-width:1024px){.article-newsletter-form .newsletter-form__container{padding:48px 78px}}.article-newsletter-form .newsletter-form__title{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;letter-spacing:0;line-height:24px;margin:0;padding:0 30px 21px;position:relative;width:100%}@media(min-width:768px){.article-newsletter-form .newsletter-form__title{font-size:22px;line-height:30px;padding:0 12px 37px}}@media(min-width:1024px){.article-newsletter-form .newsletter-form__title{font-size:22px;line-height:30px;padding:0 43px 29px}}.article-newsletter-form .newsletter-form__title--highlight{color:#188038}.article-newsletter-form .newsletter-form__title--sr-visible{opacity:0;position:absolute}.article-newsletter-form .newsletter-form__envelope{background:#fff;display:block;height:84px;left:0;padding:0 25px;position:absolute;right:0;top:-58px;width:120px}.article-newsletter-form .envelope-letter-approved,.article-newsletter-form .envelope-letter-google{height:55px;width:55px}.article-newsletter-form .envelope-back,.article-newsletter-form .envelope-front{height:55px;width:70px}.article-newsletter-form .newsletter-form__info-paragraph{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:12px;line-height:18px;margin:36px 0 24px}@media(min-width:768px){.article-newsletter-form .newsletter-form__info-paragraph{margin-bottom:0;order:3}}@media(min-width:1024px){.article-newsletter-form .newsletter-form__info-paragraph{margin-top:44px;width:100%}}.article-newsletter-form .newsletter-form__info-paragraph a:hover,.article-newsletter-form .newsletter-form__info-paragraph a:visited:hover{color:#202124;-webkit-text-decoration:underline;text-decoration:underline}@media(min-width:768px){.article-newsletter-form .newsletter-form__controls-container{align-items:center;display:flex;flex-wrap:wrap;justify-content:center}}.article-newsletter-form .newsletter-form__form-container{width:auto}.article-newsletter-form .newsletter-form__input-container{height:48px}@media(min-width:768px){.article-newsletter-form .newsletter-form__input-container{flex-basis:160px;flex-grow:2;margin-inline-end:16px}}.article-newsletter-form .kw-form-input,.article-newsletter-form .newsletter-form__success,.article-newsletter-form .newsletter-form__success-final-text,.newsletter-form-section,.ui-carousel-slide__component uni-audio-player-lit,.uni-newsletter-toast__img img,ui-carousel-slide{width:100%}.article-newsletter-form .newsletter-form__link-google-privacy:focus,.article-newsletter-form .newsletter-form__link-google-privacy:focus-visible{background:0 0;border-radius:4px;color:#202124;outline:2px solid #174ea6;outline-offset:1px}.article-newsletter-form .newsletter-form__link-google-privacy:hover{color:#202124;-webkit-text-decoration:underline;text-decoration:underline}.article-newsletter-form .newsletter-form__different-email:focus,.article-newsletter-form .newsletter-form__different-email:focus-visible{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:1px}.article-newsletter-form .newsletter-form__submit:focus,.article-newsletter-form .newsletter-form__submit:focus-visible{background:0 0;background:#174ea6;border-radius:4px;outline:2px solid #174ea6;outline-offset:1px}.article-newsletter-form .newsletter-form__success-text{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family)}.article-newsletter-form .newsletter-form__success-text--intro{color:#5f6368;font-size:16px;line-height:28px;margin-bottom:8px}@media(min-width:1024px){.article-newsletter-form .newsletter-form__success-text--intro{font-size:20px}}.article-newsletter-form .newsletter-form__success-text--confirmation:focus-visible{outline:medium none invert;outline:initial}.article-newsletter-form .newsletter-form__success-text--subscribed{display:none}.article-newsletter-form .newsletter-form__different-email:hover{-webkit-text-decoration:underline;text-decoration:underline}.article-newsletter-form .newsletter-form__loading{min-height:200px}@media(min-width:1024px){.newsletter-form-section{background-color:#f8f9fa}}.newsletter-form-section__container{margin:auto;max-width:1440px;padding:16px 16px 0;position:relative}@media(min-width:768px){.newsletter-form-section__container{display:grid;grid-template-areas:"share share share" "title title title" "left center right";grid-template-columns:1fr 404px 1fr;padding:28px 0 0}}@media(min-width:1024px){.newsletter-form-section__container{grid-template-areas:unset;grid-template-columns:minmax(527px,839px) minmax(298px,404px) minmax(115px,197px);grid-template-rows:61px auto;height:clamp(620px,100vh - 64px,840px);padding:0}}.newsletter-form-section__bg{background-color:#f8f9fa;height:205px;left:0;position:absolute;top:0;width:100vw;z-index:-1}@media(min-width:768px){.newsletter-form-section__bg{height:524px}}@media(min-width:1024px){.newsletter-form-section__bg{display:none}}.newsletter-form-section__share{height:19px}.newsletter-form-section__share .uni-social-share__content{left:0}.newsletter-form-section__share .copy-link__content{left:100px}@media(min-width:768px){.newsletter-form-section__share{grid-area:share;height:auto;padding-left:24px}}@media(min-width:1024px){.newsletter-form-section__share{grid-column:1/2;grid-row:1/2;left:100px;padding-left:90px;padding-top:36px}}.newsletter-form-section__title{color:#5f6368;font-size:24px;line-height:32px;margin:16px auto;text-align:center;width:75vw}@media(min-width:768px){.newsletter-form-section__title{font-size:48px;grid-area:title;letter-spacing:-.5px;line-height:max(56px,min(5vw,72px));margin:20px auto 114px}}@media(min-width:1024px){.newsletter-form-section__title{font-size:max(48px,min(4.167vw,60px));grid-column:1/2;grid-row:2/3;line-height:max(56px,min(5vw,72px));margin:max(135px,min(15.347vw,221px)) 0 0 max(146px,min(13.89vw,200px));text-align:left;width:max(327px,min(35.28vw,508px))}}.newsletter-form-section__icon-wrapper.clock-icon,.newsletter-form-section__icon-wrapper.paper-plane-icon,.newsletter-form-section__icon-wrapper.shelf-icon,.newsletter-form-section__icon-wrapper.woman-icon .desktop{display:none}.newsletter-form-section__icon-wrapper.woman-icon{margin:auto;width:102px}@media(min-width:768px){.newsletter-form-section__icon-wrapper.woman-icon{grid-area:left;margin:68px 0 0 -25px;width:150px}.newsletter-form-section__icon-wrapper.woman-icon img{width:100%}}@media(min-width:1024px){.newsletter-form-section__icon-wrapper.woman-icon{align-self:flex-end;grid-column:1/2;grid-row:2/3;height:290px;margin-bottom:-60px;margin-left:max(11px,min(1.041vw,15px));margin-top:0;width:398px}.newsletter-form-section__icon-wrapper.woman-icon .mobile{display:none}.newsletter-form-section__icon-wrapper.woman-icon .desktop{display:block}}@media(min-width:768px){.newsletter-form-section__icon-wrapper.clock-icon{display:block;grid-area:left;height:29px;margin:-4px 0 0 22px;width:29px}}@media(min-width:1024px){.newsletter-form-section__icon-wrapper.clock-icon{grid-column:1/2;grid-row:2/3;height:61px;margin-left:max(84px,min(8.125vw,117px));margin-top:max(30px,min(2.99vw,43px));width:61px}}@media(min-width:768px){.newsletter-form-section__icon-wrapper.shelf-icon{display:block;grid-area:right;height:58px;justify-self:flex-end;margin:88px -24px 0 0;width:121px}.newsletter-form-section__icon-wrapper.shelf-icon img{height:100%;width:100%}}@media(min-width:1024px){.newsletter-form-section__icon-wrapper.shelf-icon{align-self:flex-end;grid-column:2/4;grid-row:2/3;height:102px;margin:0 max(39px,min(3.75vw,54px)) 90px 0;width:max(152px,min(14.86vw,214px))}.newsletter-form-section__icon-wrapper.paper-plane-icon{align-self:flex-end;display:none;grid-column:1/3;grid-row:2/3;height:396px;margin-bottom:-120px;margin-left:max(190px,min(17.67vw,389px));width:466px}.newsletter-form-section__icon-wrapper.paper-plane-icon svg{height:100%;width:100%}}@media(min-width:1280px){.newsletter-form-section__icon-wrapper.paper-plane-icon{margin-left:max(192px,min(27.01vw,389px))}}.uni-header__newsletter{box-shadow:0 1px 3px 0 rgba(54,64,67,.3),0 4px 8px 3px rgba(54,64,67,.15);flex:0;padding:8px;z-index:10}@media screen and (min-width:1024px){.uni-header__newsletter{box-shadow:none;padding:0}}.uni-header__newsletter--desktop{display:none}@media screen and (min-width:1024px){.uni-header__newsletter--desktop{display:inline}}.uni-header__newsletter--mobile{display:block}@media screen and (min-width:1024px){.uni-header__newsletter--mobile{display:none}}.uni-header__newsletter--cta{box-sizing:border-box;width:100%}@media screen and (min-width:1024px){.uni-header__newsletter--cta{margin-right:24px;padding:13px 26px 11px;width:auto}}@media(forced-colors:active){.uni-header__newsletter--cta.kw-button--high-emphasis{border:2px solid #1a73e8}.uni-header__newsletter--cta.kw-button--high-emphasis.kw-button:hover{border:2px solid CanvasText}}@media(prefers-contrast:forced){.uni-header__newsletter--cta.kw-button--high-emphasis{border:2px solid #1a73e8}.uni-header__newsletter--cta.kw-button--high-emphasis.kw-button:hover{border:2px solid CanvasText}}.uni-newsletter-toast{background-color:#fff;bottom:-100%;box-shadow:0 1px 3px 0 rgba(54,64,67,.3),0 4px 8px 3px rgba(54,64,67,.15);left:0;padding:16px 0;position:fixed;transition:all .5s ease .5s;visibility:hidden;width:100%;z-index:3}@media screen and (min-width:1024px){.uni-newsletter-toast{padding:8px 0}}.uni-newsletter-toast--container{align-items:center;justify-content:space-between}@media screen and (min-width:600px){.uni-newsletter-toast--container{flex-wrap:nowrap!important}}.uni-newsletter-toast__info{align-self:center;display:flex}.uni-newsletter-toast__buttons{display:flex;justify-content:flex-start}@media screen and (min-width:600px){.uni-newsletter-toast__buttons{justify-content:flex-end}}.uni-newsletter-toast__cta{border:0;border-radius:4px;cursor:pointer;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;margin-top:16px}@media screen and (min-width:600px){.uni-newsletter-toast__cta{margin-top:0}}.uni-newsletter-toast__cta--sub{background-color:#1a73e8;color:#fff;margin-right:16px;padding:13px 24px 11px}@media screen and (min-width:1024px){.uni-newsletter-toast__cta--sub{margin-right:8px}}@media screen and (min-width:1100px){.uni-newsletter-toast__cta--sub{margin-right:16px}}.uni-newsletter-toast__cta--sub:hover{background-color:#185abc}.uni-newsletter-toast__cta--sub:focus{background-color:#185abc;box-shadow:0 0 0 2px #aecbfa;color:#fff;outline:0}.uni-newsletter-toast__cta--sub:active{background-color:#185abc}.uni-newsletter-toast__cta--no{background-color:#fff;box-sizing:border-box;color:#1a73e8;padding:13px 12px 11px;width:105px}.uni-newsletter-toast__cta--no:hover{background-color:#f4f8ff}.uni-newsletter-toast__cta--no:focus{background-color:#f4f8fe;outline:0}.uni-newsletter-toast__cta--no:active{background-color:#e8f0fe}.uni-newsletter-toast__img{display:none;height:32px;margin-right:20px;width:32px}@media screen and (min-width:1024px){.uni-newsletter-toast__img{align-self:baseline;display:flex}}.uni-newsletter-toast__text{align-self:flex-end;color:#202124;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:18px;line-height:28px}@media screen and (min-width:1024px){.uni-newsletter-toast__text{align-self:center;font-size:18px}}@media screen and (min-width:1100px){.uni-newsletter-toast__text{font-size:24px}}a:visited.uni-newsletter-toast__cta--sub{color:#fff}.article-container .article-module.uni-article-video,.uni-article-video{margin-inline:auto;width:100%}.article-video-special{container-type:inline-size}.article-video-special--short-post{padding:0}.article-video-special--short-post .article-video-special__container .uni-article-video{grid-column:1/-1}.article-video-special--short-post .article-video-special__container .uni-article-video__embed-container{margin-bottom:0}.article-video-special__container{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.article-video-special__container{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.article-video-special__container{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.article-container .article-module.uni-article-video,.uni-article-video{overflow:visible;position:relative}.article-container .article-module.uni-article-video .h-c-video__play,.uni-article-video .h-c-video__play{z-index:0}.article-container .article-module.uni-article-video--hero,.uni-article-video--hero{grid-column:1/-1;margin-top:0;max-width:100%}.article-container .article-module.uni-article-video--hero figure,.uni-article-video--hero figure{margin:0 auto;max-width:1062px;width:100%}@media(min-width:1024px){.article-container .article-module.uni-article-video--hero,.uni-article-video--hero{grid-column:2/span 10}}.article-container .article-module.uni-article-video--body,.uni-article-video--body{grid-column:1/-1;margin-bottom:48px!important;margin-top:16px!important}@media(min-width:600px){.article-container .article-module.uni-article-video--body,.uni-article-video--body{margin-top:24px!important}}@media(min-width:1024px){.article-container .article-module.uni-article-video--body,.uni-article-video--body{margin-bottom:60px!important;margin-top:36px!important}}.article-container .article-module.uni-article-video--body .article-container .article-module.uni-article-video__aspect-image,.article-container .article-module.uni-article-video--body .uni-article-video,.uni-article-video--body .article-container .article-module.uni-article-video__aspect-image,.uni-article-video--body .uni-article-video{margin:0 auto 60px;max-width:1060px}.article-container .article-module.uni-article-video__embed-container>iframe,.uni-article-video__embed-container>iframe{border-radius:8px}.article-container .article-module.uni-article-video.article-module,.uni-article-video.article-module{overflow:visible}.uni-article-video__aspect-image{padding-top:56.25%;position:relative}.uni-article-video__aspect-image img{border-radius:8px;display:block;object-fit:cover;object-position:center;z-index:1}.uni-article-video__aspect-image .uni-article-video__dimmer{background:rgba(0,0,0,.3);border-radius:8px;height:100%;left:0;opacity:0;position:absolute;top:0;transition:opacity .25s ease-in-out;width:100%;z-index:2}.uni-article-video__aspect-image .uni-article-video__icon-wrapper{display:flex}.uni-article-video__aspect-image .uni-article-video__shorts-play-button{display:none}.uni-article-video__aspect-image .uni-article-video__play-button,.uni-article-video__aspect-image .uni-article-video__play-button--active{display:block;height:45px;left:50%;margin:-31px -32px 0;position:absolute;top:50%;transition:opacity .25s ease-in-out;width:64px;z-index:2}.uni-article-video__aspect-image .uni-article-video__play-button{fill:#fff;opacity:0}.uni-article-video__aspect-image .uni-article-video__play-button--active{fill:red}@media(min-width:1024px){.h-c-video .uni-article-video__aspect-image .uni-article-video__dimmer,.h-c-video .uni-article-video__aspect-image .uni-article-video__play-button{opacity:1}.h-c-video .uni-article-video__aspect-image .uni-article-video__play-button--active,.h-c-video:hover .uni-article-video__aspect-image .uni-article-video__dimmer,.h-c-video:hover .uni-article-video__aspect-image .uni-article-video__play-button{opacity:0}.h-c-video:hover .uni-article-video__aspect-image .uni-article-video__play-button--active{opacity:1}}.uni-article-video__duration{align-items:center;background:rgba(32,33,36,.8);border-radius:12px;display:flex;flex-flow:row nowrap;height:24px;justify-content:flex-start;left:50%;margin-top:52px;padding:2px 8px;position:absolute;top:50%;transform:translateX(-50%);z-index:2}.uni-article-video__duration-icon{fill:#fff;height:14px;margin-right:8px;width:14px}.uni-article-video__duration-time{color:#fff;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;font-weight:500;letter-spacing:.5px;line-height:20px}.perspective-landing__author:after,.uni-article-video__duration.loading{display:none}.uni-article-video__caption{margin-top:36px}.uni-article-video__caption--subtitle,.uni-article-video__caption--title{margin-bottom:24px}.uni-article-video__caption-hero{font-size:14px;line-height:24px;margin-top:8px;text-align:right}.uni-article-video__embed-container{height:0;max-width:100%;padding-bottom:56.25%;position:relative}.uni-article-video__embed-container.hidden{opacity:0;pointer-events:none;visibility:hidden}.uni-article-video__aspect-image img,.uni-article-video__embed-container embed,.uni-article-video__embed-container iframe,.uni-article-video__embed-container object{height:100%;left:0;position:absolute;top:0;width:100%}.uni-article-video__video:focus,.uni-article-video__video:focus-visible,.uni-article-video__video:focus-within{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.uni-article-video__custom-wrapper{all:unset;cursor:pointer;left:0;position:absolute;right:0;top:0}.uni-article-video__custom-wrapper.h-c-video:focus:after{border:0}.uni-article-video__custom-wrapper.hidden{pointer-events:none;visibility:hidden}.uni-article-video__custom-wrapper.hidden .uni-article-video__aspect-image{opacity:0}.uni-article-video__custom-wrapper.focus-visible,.uni-article-video__custom-wrapper:focus{background:0 0;border-radius:2px;outline:2px solid #174ea6;outline-offset:4px}.author-heading{align-items:center;display:flex;flex-direction:column}@media(min-width:600px){.author-heading{align-items:flex-start;flex-direction:row}}@media(min-width:1024px){.author-heading{display:block;position:sticky;top:6rem}}.author-heading__animation-reference{display:none;overflow:hidden;width:1px}@media(min-width:1024px){.author-heading__animation-reference{display:block}}.author-heading__image{aspect-ratio:1/1;border:3px solid #dadce0;border-radius:50%;box-sizing:initial;height:100px;object-fit:cover;width:100px}@media(min-width:600px){.author-heading__image{border-width:4px;height:120px;margin-inline-end:36px;width:120px}}@media(min-width:1024px){.author-heading__image{height:160px;transition:height .2s ease-in-out,width .2s ease-in-out;width:160px;will-change:height,width}}.author-heading__body-group{align-items:center;display:flex;flex-direction:column;margin-top:16px}@media(min-width:600px){.author-heading__body-group{align-items:flex-start;margin-top:0}}@media(min-width:1024px){.author-heading__body-group{margin-top:24px}}.author-heading__name{color:#202124;font-size:32px;font-weight:400;line-height:40px;margin-bottom:8px;text-align:center}@media(min-width:600px){.author-heading__name{font-size:38px;line-height:44px;text-align:start}}@media(min-width:1024px){.author-heading__name{font-size:44px;letter-spacing:-.5px;line-height:52px;transition:font-size .2s ease-in-out,line-height .2s ease-in-out;will-change:font-size,line-height}}.author-heading__job-title{color:#5f6368;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;font-weight:400;line-height:26px;text-align:center}@media(min-width:600px){.author-heading__job-title{text-align:start}}@media(min-width:1024px){.author-heading__job-title{font-size:18px;line-height:30px;transition:font-size .2s ease-in-out,line-height .2s ease-in-out;will-change:font-size,line-height}}.author-heading__bio{color:#202124;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;font-weight:400;line-height:26px;margin-top:30px}@media(min-width:600px){.author-heading__bio{margin-top:14px}}@media(min-width:1024px){.author-heading__bio{font-size:18px;line-height:30px;margin-top:26px;transition:opacity .2s ease-in-out;will-change:opacity}}.perspective-landing__author{margin-bottom:20px}@media(min-width:1024px){.perspective-landing__author{margin-bottom:12px}}@media(min-width:600px){.perspective-landing__author .h-c-page{padding:0}}.perspective-landing__author .uni-blog-landing-hero__title{margin-bottom:40px}@media(min-width:1024px){.perspective-landing__author .uni-blog-landing-hero__title{align-items:flex-start;display:flex;margin-bottom:48px}}.perspective-landing__author .uni-article-video__aspect-image img,.perspective-landing__author .uni-article-video__dimmer{border-radius:15px}@media(min-width:1024px){.perspective-landing__author .article-list__feed{grid-gap:24px;grid-template-columns:repeat(auto-fit,minmax(calc(50% - 24px),1fr))}}.perspective-landing__breadcrumb{margin-bottom:16px}.perspective-landing__author.h-c-page .h-c-page{padding:0}.perspective-featured-authors{--v-margin-l:80px;--v-margin:60px;margin:60px 0;margin:var(--v-margin) 0;padding:0}@media(min-width:1024px){.perspective-featured-authors{margin:var(--v-margin-l) 0}}.perspective-featured-authors__wrapper{margin-top:32px;overflow:hidden;transition:max-height 1s}@media(min-width:600px){.perspective-featured-authors__wrapper{margin-top:48px}}@media(min-width:1024px){.perspective-featured-authors__wrapper{margin-top:70px}}.perspective-featured-authors__wrapper--has-load-more{position:relative}.perspective-featured-authors__wrapper--has-load-more:before{background:linear-gradient(180deg,hsla(0,0%,100%,0),hsla(0,0%,100%,.9));bottom:0;content:"";height:40%;pointer-events:none;position:absolute;width:100%;z-index:1}.perspective-featured-authors__list{grid-column-gap:16px;grid-row-gap:42px;-moz-column-gap:16px;column-gap:16px;display:grid;grid-template-columns:repeat(2,1fr);list-style:none;margin-left:0;row-gap:42px}@media(min-width:600px){.perspective-featured-authors__list{-moz-column-gap:24px;column-gap:24px;grid-template-columns:repeat(4,1fr)}}@media(min-width:1024px){.perspective-featured-authors__list{-moz-column-gap:24px;column-gap:24px;grid-template-columns:repeat(5,1fr)}}.perspective-featured-authors__list-item{text-align:center}.perspective-featured-authors__list-item>a{display:block;padding-bottom:6px;padding-top:6px}.perspective-featured-authors__list-item>a:focus,.perspective-featured-authors__list-item>a:focus-visible{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:-2px}.perspective-featured-authors__list-item>a:active{outline:0}.perspective-featured-authors__list-item>a:hover .perspective-featured-authors__name{-webkit-text-decoration:underline;text-decoration:underline}.perspective-featured-authors__list-item>a:hover .perspective-featured-authors__image,.perspective-featured-authors__list-item>a:hover img{transform:scale(1.03)}.perspective-featured-authors__image{aspect-ratio:1/1;border:1px solid #dadce0;border-radius:50%;color:#fff;display:inline-block;overflow:hidden;position:relative;width:100px}.perspective-featured-authors__image img{display:block;height:100%;margin:auto;object-fit:cover;width:100%}@media(min-width:1024px){.perspective-featured-authors__image{width:140px}}.perspective-featured-authors__headline{font-size:24px;font-weight:700;line-height:32px;margin-bottom:4px}@media(min-width:600px){.perspective-featured-authors__headline{margin-bottom:6px}}@media(min-width:1024px){.perspective-featured-authors__headline{font-size:36px;letter-spacing:-.25px;line-height:44px;margin-bottom:16px}}.perspective-featured-authors__name{color:#202124;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;font-weight:500;line-height:26px;margin-top:16px}@media(min-width:1024px){.perspective-featured-authors__name{font-size:18px;line-height:30px}}.perspective-featured-authors__job{color:#5f6368;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:14px;font-weight:400;letter-spacing:.25px;line-height:24px;margin-top:0}@media(min-width:1024px){.perspective-featured-authors__job{font-size:16px;line-height:26px}}.perspective-featured-authors__load-more{display:none;margin:0 auto}.perspective-featured-authors__load-more .icon{fill:#1a73e8;height:12px;margin-left:5px;transform:rotate(90deg);transition:transform .5s linear;width:12px}.perspective-highlight .card{grid-gap:24px;background-color:#f8f9fa;border-radius:8px;box-shadow:0 4px 8px 3px rgba(60,64,67,.15),0 1px 3px 0 rgba(60,64,67,.3);display:grid;padding-block:24px;padding-inline:16px;transition:box-shadow .2s}.perspective-highlight .card:hover{box-shadow:0 6px 10px 4px rgba(60,64,67,.15),0 2px 3px 0 rgba(60,64,67,.3)}.perspective-highlight .card:hover .card__arrow .author__icon{fill:#1a73e8}.perspective-highlight .card__hero-image{aspect-ratio:16/9;border-radius:8px;margin:auto;overflow:hidden;width:100%}.perspective-highlight .card__hero-image img{height:100%;object-fit:cover;width:100%}.perspective-highlight .card__article-content-link:focus,.perspective-highlight .card__article-content-link:focus-within{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:4px}.perspective-highlight .card__title{margin-block:0;margin-inline:8px}.perspective-highlight .card__summary{color:#5f6368;display:none;margin-block-start:16px}.perspective-highlight .card__author-frame{align-items:center;display:flex;gap:16px;justify-content:space-between;margin-inline-start:8px}.perspective-highlight .card__author-frame .authors-byline-container{flex:1 1 auto}.perspective-highlight .card__arrow{align-self:flex-end;line-height:0;margin:0 -12px -12px 0;padding:16px}@media(min-width:768px){.perspective-highlight .card{gap:36px;grid-template-columns:auto 320px;grid-template-rows:1fr auto;padding-block:36px;padding-inline:36px}.perspective-highlight .card__author-frame,.perspective-highlight .card__title{margin-inline:0}.perspective-highlight .card__hero-image{grid-column:2/3;grid-row:1/3;height:190px;width:100%}.perspective-highlight .card__article-content-link{grid-column:1/2;grid-row:1/2}}@media(min-width:1024px){.perspective-highlight .card{grid-template-columns:auto 440px}.perspective-highlight .card__hero-image{height:262px}.perspective-highlight .card__summary{display:block}}.perspectives-author-hero{display:grid;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);grid-template-areas:"title" "image" "eyebrow" "link";margin-bottom:52px}@media(min-width:600px){.perspectives-author-hero{border-bottom:1px solid #e8eaed;margin-bottom:60px;padding-bottom:52px}}@media(min-width:1024px){.perspectives-author-hero{margin:0 0 60px;padding-bottom:33px}}.perspectives-author-hero__title{color:#202124;font-size:24px;font-weight:700;grid-area:title;line-height:32px;margin-bottom:24px}@media(min-width:600px){.perspectives-author-hero__title{letter-spacing:-.25px;line-height:44px;margin-bottom:28px}}@media(min-width:1024px){.perspectives-author-hero__title{font-size:36px;margin-bottom:28px}}.perspectives-author-hero__image-container{border:1px solid #f1f3f4;border-radius:14px;grid-area:image;height:202px;margin:0 0 16px;overflow:hidden;width:100%}@media(min-width:600px){.perspectives-author-hero__image-container{border-radius:16px;height:431px}}@media(min-width:1024px){.perspectives-author-hero__image-container{height:528px;margin:0 0 20px}}.perspectives-author-hero__image{height:100%;object-fit:cover;transition:all .2s;width:100%}.perspectives-author-hero__eyebrow{font-size:14px;font-weight:500;grid-area:eyebrow;letter-spacing:1.5px;line-height:18px;text-transform:uppercase}@media(min-width:600px){.perspectives-author-hero__eyebrow{margin:0}}@media(min-width:1024px){.perspectives-author-hero__eyebrow{margin-bottom:8px}}.perspectives-author-hero__eyebrow .eyebrow__link{color:#174ea6;display:inline-block;padding:8px 0}.perspectives-author-hero__eyebrow .eyebrow__link:hover,.perspectives-navigation-hero a.cta:hover{color:#1a73e8}.perspectives-author-hero__eyebrow .eyebrow__link:focus,.perspectives-author-hero__link:focus .perspectives-author-hero__article-title{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.perspectives-author-hero__link{display:block;grid-area:link}.perspectives-author-hero__link:focus{outline:0}@media(min-width:600px){.perspectives-author-hero__link{margin:0}}.perspectives-author-hero__link:hover .perspectives-author-hero__article-title,.perspectives-navigation-hero__link:hover .perspectives-navigation-hero__article-title{-webkit-text-decoration:underline;text-decoration:underline}.perspectives-author-hero__article-title{color:#202124;font-size:24px;font-weight:700;line-height:32px;margin-bottom:8px}@media(min-width:1024px){.perspectives-author-hero__article-title{font-size:36px;letter-spacing:-.25px;line-height:44px}}.perspectives-author-hero__article-summary{color:#202124;font-size:16px;line-height:26px;margin-bottom:28px}@media(min-width:1024px){.perspectives-author-hero__article-summary{font-size:18px;line-height:30px;margin-bottom:10px}}.perspectives-author-hero__cta{background-color:transparent;border:0;color:#202124;display:inline-flex;font-size:14px;font-weight:500;gap:8px;letter-spacing:1.5px;line-height:18px;margin-top:0;padding:8px 0}.perspectives-author-hero__cta:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.perspectives-author-hero__cta .cta__icon,.perspectives-navigation-hero a.cta .cta__icon{height:16px;margin-left:0;position:static;top:0;width:16px}.perspectives-navigation-hero{border-bottom:1px solid #e8eaed;display:grid;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);grid-template-areas:"title" "image" "content";margin:0 0 60px;max-width:1324px;padding-bottom:28px}@media(min-width:600px){.perspectives-navigation-hero{padding-bottom:36px}}@media(min-width:1024px){.perspectives-navigation-hero{grid-column-gap:24px;border-bottom:none;grid-template-areas:"title title" "image content";grid-template-columns:minmax(646px,832px) auto;margin:0 auto 80px;padding:0}}.perspectives-navigation-hero__image-container{border-radius:14px;grid-area:image;height:202px;margin:0 0 24px;overflow:hidden;width:100%}@media(min-width:600px){.perspectives-navigation-hero__image-container{border-radius:16px;height:455px}}@media(min-width:1024px){.perspectives-navigation-hero__image-container{height:467px;margin:0}}.perspectives-navigation-hero__image{height:100%;object-fit:cover;transition:all .2s;width:100%}.perspectives-navigation-hero__content{display:grid;grid-area:content;grid-template-areas:"eyebrow" "title" "author" "summary" "cta"}@media(min-width:600px){.perspectives-navigation-hero__content{align-items:center;grid-template-areas:"eyebrow eyebrow" "title title" "summary summary" "author cta";grid-template-columns:repeat(2,1fr)}}@media(min-width:1024px){.perspectives-navigation-hero__content{align-content:start;border-bottom:1px solid #e8eaed;border-top:1px solid #e8eaed;grid-template-areas:"eyebrow" "title" "author" "summary" "cta";grid-template-columns:1fr;padding-top:28px}}.perspectives-navigation-hero__eyebrow{grid-area:eyebrow;margin-bottom:8px}.perspectives-navigation-hero__link{display:block;grid-area:title;margin-bottom:8px}.perspectives-navigation-hero a.cta:focus,.perspectives-navigation-hero__link:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}@media(min-width:1024px){.perspectives-navigation-hero__link{margin-bottom:16px}}.perspectives-navigation-hero__article-title{color:#202124;font-size:24px;font-weight:700;line-height:32px;margin-bottom:0}@media(min-width:1024px){.perspectives-navigation-hero__article-title{font-size:clamp(24px,-1.6rem + 5.15vw,36px);letter-spacing:-.5px;line-height:clamp(32px,-1.25rem + 5.15vw,44px)}}.perspectives-navigation-hero__article-summary{color:#202124;font-size:16px;grid-area:summary;letter-spacing:0;line-height:26px;margin:0 0 24px}@media(min-width:1024px){.perspectives-navigation-hero__article-summary{margin:0 0 28px}}.perspectives-navigation-hero a.cta{background-color:transparent;border:0;color:#202124;display:inline-flex;font-size:14px;font-weight:500;gap:8px;grid-area:cta;letter-spacing:1.5px;line-height:18px;margin-top:0;padding:13px 0}@media(min-width:600px){.perspectives-navigation-hero a.cta{justify-self:end}}@media(min-width:1024px){.perspectives-navigation-hero a.cta{justify-self:start}}.perspectives-navigation-hero__author{grid-area:author;margin-bottom:32px}@media(min-width:600px){.perspectives-navigation-hero__author{margin-bottom:0}}@media(min-width:1024px){.perspectives-navigation-hero__author{margin-bottom:24px}}.press-item{grid-column:1/5}@media(min-width:600px){.press-item{grid-column:span 6}}@media(min-width:1024px){.press-item{grid-column:span 3}}.press-item__thumbnail-mask{border:1px solid #dadce0;border-radius:8px;overflow:hidden}.press-item__thumbnail{aspect-ratio:1;background-color:#fff;display:block;margin:0;object-fit:contain;transition:transform .2s ease-in-out;width:100%}.press-item__thumbnail:hover{transform:scale(1.02)}.press-item__footer{align-items:center;display:flex;gap:24px;justify-content:space-between}.press-item__download-button{align-items:center;color:#202124;display:flex;flex-shrink:0;height:48px;justify-content:center;padding:8px;transition:transform .2s ease-in-out;width:48px}@media(min-width:1024px){.press-item__download-button{padding:4px}}.press-item__download-button:hover{transform:translateY(4px)}.press-item__download-button svg{height:24px;width:24px}.press-item__img-button{background:0 0;border:0;margin-bottom:24px;overflow:hidden;padding:0;width:100%}.press-item__img-button:focus{outline:0}.press-item__img-button:focus-visible{background:0 0;border-radius:8px;outline:2px solid #174ea6;outline-offset:0}.uni-pull-quote{margin-block-end:60px;margin-inline:auto;max-width:726px}@media(min-width:1024px){.uni-pull-quote{margin-block-end:80px}}.uni-pull-quote--slot-view{margin-block-end:0}.uni-pull-quote__wrapper{margin-inline:36px}.uni-pull-quote__author{margin-top:36px}.uni-pull-quote__author:before{display:none}.uni-pull-quote--pull-style{border-block:1px solid #e8eaed;padding-block:36px}.uni-pull-quote--block-style{border-inline-start:4px solid #1a73e8;padding-block:24px}.image-full-width__media-asset--mp4:has(video[data-is-playing=true])~.reduce-motion-helper-video .reduce-motion-helper-video__button .playIcon,a:has(video[data-is-playing=true])~.reduce-motion-helper-video .reduce-motion-helper-video__button .playIcon{display:none}.image-full-width__media-asset--mp4:has(video[data-is-playing=true])~.reduce-motion-helper-video .reduce-motion-helper-video__button .pauseIcon,a:has(video[data-is-playing=true])~.reduce-motion-helper-video .reduce-motion-helper-video__button .pauseIcon{display:flex}.image-full-width.image-full-width--wrap-small:has(.reduce-motion-helper-video),.image-full-width:has(.reduce-motion-helper-video){position:relative}@media(min-width:1024px){.image-full-width.image-full-width--wrap-small:has(.reduce-motion-helper-video){position:absolute}}.press-page__search-button svg,.uni-search-bar__icon svg{fill:#5f6368}@media(prefers-color-scheme:dark)and (forced-colors:active){.press-page__search-button svg,.uni-search-bar__icon svg{fill:ButtonText}}@media(prefers-color-scheme:dark)and (prefers-contrast:forced){.press-page__search-button svg,.uni-search-bar__icon svg{fill:ButtonText}}.press-page__search-button:before,.uni-search-bar__icon:before{background:0 0;border-radius:50%;content:"";height:0;inset-inline-start:50%;position:absolute;top:50%;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;width:0;z-index:-1}.press-page__search-button:focus,.press-page__search-button:hover,.uni-search-bar__icon:focus,.uni-search-bar__icon:hover{outline:0}.press-page__search-button:focus:before,.press-page__search-button:hover:before,.uni-search-bar__icon:focus:before,.uni-search-bar__icon:hover:before{background:#e0e0e0;height:40px;width:40px}.press-page__search-button:focus svg,.press-page__search-button:hover svg,.uni-search-bar__icon:focus svg,.uni-search-bar__icon:hover svg{fill:#000}@media(prefers-color-scheme:dark)and (forced-colors:active){.press-page__search-button:focus,.press-page__search-button:hover,.uni-search-bar__icon:focus,.uni-search-bar__icon:hover{border:2px solid Highlight;border-radius:4px}}@media(prefers-color-scheme:dark)and (prefers-contrast:forced){.press-page__search-button:focus,.press-page__search-button:hover,.uni-search-bar__icon:focus,.uni-search-bar__icon:hover{border:2px solid Highlight;border-radius:4px}}@media(prefers-color-scheme:dark)and (forced-colors:active){.press-page__search-button:focus svg,.press-page__search-button:hover svg,.uni-search-bar__icon:focus svg,.uni-search-bar__icon:hover svg{fill:ButtonText}}@media(prefers-color-scheme:dark)and (prefers-contrast:forced){.press-page__search-button:focus svg,.press-page__search-button:hover svg,.uni-search-bar__icon:focus svg,.uni-search-bar__icon:hover svg{fill:ButtonText}}.uni-search-bar{--search-box-inline-margin:12px;align-items:center;display:flex;flex:1 1 auto;height:100%;justify-content:flex-end}.uni-search-bar__container[hidden],.uni-search-bar__kebab{display:none}@media(min-width:1024px){.uni-search-bar__kebab{display:block}.uni-search-bar{gap:8px;margin-inline-end:16px}}.uni-search-bar__language-picker-icon{align-items:center;display:flex;height:100%;justify-content:center;position:absolute;width:100%}.uni-search-bar__language-picker-select-slot{height:100%;opacity:0;overflow:hidden;position:absolute;width:100%}.uni-search-bar__focus-trap{border:0;height:0;overflow:hidden;padding:0;position:absolute;width:0}.uni-search-bar__container{height:100%;left:0;padding-block:8px;position:absolute;width:100%;z-index:10}@media(min-width:1024px){.uni-search-bar__container{position:relative}}.uni-search-bar__box{background-color:#f8f9fa;border-radius:8px;box-shadow:0 1px 4px 0 rgba(60,64,67,.25),0 1px 2px 0 rgba(60,64,67,.3);display:block;padding-inline:16px}@media(min-width:768px){.uni-search-bar__box{padding-inline:24px}}.uni-search-bar__form{align-items:flex-start;border-bottom:1px solid #dadce0;display:flex;height:56px;width:100%}.uni-search-bar__cta--search{order:-1}.uni-search-bar__input{background-color:transparent;border:0;height:48px;padding:10px;padding-block:0;padding-inline:8px;width:100%}.uni-search-bar__input[type=search]{box-sizing:border-box}.uni-search-bar__input:focus{background-color:#f8f9fa;border:0;outline:0}.ui-carousel__arrow:focus:not(:focus-visible):not(:active),.ui-carousel__navigation-button:focus:not(:focus-visible):not(:active),.uni-search-bar__icon:focus:not(:focus-visible),.uni-search-bar__input:focus:not(.focus-visible){outline:0}.uni-search-bar__suggested-searches{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}.uni-search-bar__suggested-searches-container{padding-block:24px}.uni-search-bar__suggested-searches-title{align-items:center;display:flex;gap:8px;justify-content:flex-start;margin-bottom:16px;margin-top:24px}.uni-search-bar__icon{align-items:center;background:0 0;border:0;display:flex;flex-shrink:0;height:48px;justify-content:center;padding-inline:10px;position:relative;width:48px}.uni-search-bar__icon:has(select:focus-visible){background:0 0;border-radius:48px;outline:2px solid #174ea6;outline-offset:-4px}.uni-search-bar__icon:has(select:focus-visible):before{background:#e0e0e0;height:40px;width:40px}.uni-search-bar__icon--kebab{display:none}@media(min-width:1024px){.uni-search-bar__icon--kebab{display:flex}}.uni-search-bar__icon svg{position:relative}@media(min-width:1024px){.uni-search-bar__icon svg{height:24px;width:24px}}.uni-search-bar__icon:focus-visible{background:0 0;border-radius:48px;outline:2px solid #174ea6;outline-offset:-4px}.uni-search-bar .uni-picker{opacity:0}.slide-in-from-right{animation:slideInFromRight .35s}div:has(iframe[title*=recaptcha]){box-shadow:0 4px 8px 3px rgba(60,64,67,.15),0 1px 3px 0 rgba(60,64,67,.3);top:16px!important}.short-post__title{margin-bottom:8px}.short-post__title-link{display:inline-block;min-height:48px;min-width:48px}.short-post__title-link:focus{outline:0}.short-post__title-link:active,.short-post__title-link:focus-visible{background:0 0;border-radius:2px;outline:2px solid #174ea6;outline-offset:0}.short-post__title-link:hover{-webkit-text-decoration:underline #202124;text-decoration:underline;text-decoration:underline #202124}.short-post__header{align-items:center;display:flex;gap:16px;justify-content:flex-start;margin-bottom:16px}.short-post__author{display:inline-block;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.short-post__date{flex-shrink:0}.short-post__copy-link{align-items:center;background-color:transparent;border:2px solid transparent;border-radius:50%;display:flex;flex-shrink:0;height:48px;justify-content:center;padding:10px;position:relative;transition:background-color .1s linear,border .1s linear,color .1s linear;width:48px}.short-post__copy-link svg{height:100%;width:100%}@media(forced-colors:active){.short-post__copy-link svg{fill:#fff}}@media(prefers-contrast:forced){.short-post__copy-link svg{fill:#fff}}.short-post__copy-link:hover{background-color:#e8f0fe;border:2px solid #e8f0fe;color:#1a73e8}.short-post__copy-link:active{background-color:#e8f0fe;border:2px solid #174ea6;color:#174ea6}.short-post__copy-link:focus{outline:0}.short-post__copy-link:focus-visible{background:0 0;background-color:transparent;border-radius:50%;color:#174ea6;outline:2px solid #174ea6;outline-color:#174ea6;outline-offset:0}.short-post__child-component{margin-top:36px}.short-post__footnotes:has(*){margin-top:60px}@media(min-width:1024px){.short-post__footnotes:has(*){margin-top:80px}}.short-post__footnotes:has(*) .uni-footnotes{margin:0}.newsletter-form__close-button{background-color:#fff;border:0}.uni-tag a{align-items:center;background-color:#e8f0fe;border:0;border-radius:48px;color:#174ea6;display:flex;height:48px;justify-content:center;min-width:48px;padding-inline:16px;transition:background-color .2s ease-in-out,color .2s ease-in-out}.uni-tag a span{-webkit-box-orient:vertical;-webkit-line-clamp:1;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}.uni-tag a:hover{background-color:#1a73e8;color:#fff}.uni-tag a:focus{background:0 0;background-color:#e8f0fe;border-radius:48px;color:#174ea6;outline:2px solid #174ea6;outline-offset:0}.uni-tag a:disabled{background-color:#f8f9fa;border:0;color:#3c4043;pointer-events:none}[tooltip]:after,[tooltip]:before{opacity:0;pointer-events:none;position:absolute;transform:translateX(-50%)}[tooltip]:before{background-color:#3c4043;border-radius:4px;color:#f8f9fa;content:attr(tooltip);inset-inline-start:50%;padding-block:4px;padding-inline:12px;text-transform:uppercase;top:-34px;transition:opacity .1s linear,content .1s linear;width:-moz-max-content;width:max-content}[tooltip]:after{border:4px solid transparent;border-bottom:0;border-top:6px solid #3c4043;content:"";left:50%;top:-8px;transition:opacity .1s linear;width:0}.ui-carousel{--slide-gap:24px;--carousel-offset:7px;--arrow-width:48px;--arrow-margin:24px;display:block;margin-inline:auto;max-width:726px;position:relative;width:100%}.ui-carousel__slider{box-sizing:border-box;cursor:grab;display:flex;gap:var(--slide-gap);margin:calc(var(--carousel-offset)*-1);overflow-x:auto;padding:var(--carousel-offset);position:relative;scroll-behavior:smooth;scroll-snap-type:x mandatory;scrollbar-width:none;width:calc(100% + var(--carousel-offset)*2);z-index:1}.ui-carousel__slider::-webkit-scrollbar{display:none}.ui-carousel__slider:focus,.ui-carousel__slider:focus-visible{outline:0}.ui-carousel__slide{display:flex;flex:0 0 calc(100% + var(--carousel-offset)*2);flex:0 0 calc((100% - var(--slide-gap, 24px)*(var(--slides-per-view, 1) - 1))/var(--slides-per-view, 1) + var(--carousel-offset)*2);justify-content:center;max-width:calc(100% + var(--carousel-offset)*2);min-width:0;padding-inline:0;padding-inline:var(--carousel-offset,0);scroll-snap-align:start}.ui-carousel__arrow{align-items:center;-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:#fff;border:0;border-radius:50%;box-shadow:0 1px 2px 0 rgba(60,64,67,.3),0 2px 6px 2px rgba(60,64,67,.15);color:#202124;cursor:pointer;display:none;height:48px;inset-inline-end:auto;inset-inline-start:auto;justify-content:center;outline:0;padding:0;position:absolute;top:var(--arrow-top-position);transform:translateY(-50%);width:48px;z-index:2}.short-post .ui-carousel__arrow{display:none}@media(min-width:1024px){.ui-carousel__arrow{display:flex}}.ui-carousel__arrow--next{inset-inline-end:calc((var(--arrow-width) + var(--arrow-margin))*-1)}.ui-carousel__arrow--previous{inset-inline-start:calc((var(--arrow-width) + var(--arrow-margin))*-1)}.ui-carousel__arrow--previous svg{transform:scale(-1)}.ui-carousel__arrow:disabled{display:none}.ui-carousel__arrow:focus-visible{background:0 0;border-radius:50%;outline:2px solid #174ea6;outline-offset:0}.ui-carousel__arrow:hover:not(:disabled){box-shadow:0 6px 10px 4px rgba(60,64,67,.15),0 2px 3px 0 rgba(60,64,67,.3)}.ui-carousel__arrow:active{background:0 0;background-color:#fff;border-radius:50%;outline:1px solid #174ea6;outline-offset:0}.ui-carousel__arrow svg{height:24px;margin:0 auto;position:relative;width:24px}.ui-carousel__navigation{display:flex;flex-flow:wrap;justify-content:center;margin-top:8px;position:relative}.ui-carousel__navigation-button{background:0 0;border:0;border-radius:50%;cursor:pointer;display:block;flex-shrink:0;font:inherit;height:48px;outline:0;padding:0;position:relative;text-indent:-9999px;transition:all .2s ease-in-out;width:48px}.ui-carousel__navigation-button:focus-visible{background:0 0;background:#f8f9fa;border-radius:50%;outline:2px solid #174ea6;outline-offset:0}.ui-carousel__navigation-button:hover{background:#fff;box-shadow:0 4px 8px 3px rgba(60,64,67,.15),0 1px 3px 0 rgba(60,64,67,.3)}.ui-carousel__navigation-button:active{background:0 0;border-radius:50%;outline:2px solid #174ea6;outline-offset:0}.ui-carousel__navigation-button:before{border:1px solid #202124;border-radius:50%;content:"";display:block;height:12px;left:50%;position:absolute;top:50%;transform:translate3d(-50%,-50%,0);width:12px}.ui-carousel__navigation-button--active:before{background:#202124}.ui-carousel-slide{display:flex;flex-flow:column;gap:8px}.ui-carousel-slide--background .ui-carousel-slide__component-background{background-color:#f6f9fe;border-radius:8px}.ui-carousel-slide__body{direction:ltr;text-align:center}.ui-carousel-slide__headline{font-weight:700}.ui-carousel-slide__description [data-description-slot]{display:none}.ui-carousel-slide__description:focus-visible{outline:0}.ui-carousel-slide__read-more{background:0 0;border:0;color:#1a73e8;display:inline;margin:0;padding:0}.ui-carousel-slide__read-more-wrapper{display:none}.ui-carousel-slide__disclaimer{margin-top:8px}.ui-carousel-slide__component{aspect-ratio:4/3}.ui-carousel-slide__component [slot=content-block],.ui-carousel-slide__component uni-image-full-width .image-full-width__media-asset picture{height:100%;width:100%}.ui-carousel-slide__component img{-webkit-user-drag:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.ui-carousel-slide__component uni-image-full-width{display:block;height:100%;width:100%}.ui-carousel-slide__component uni-image-full-width .image-full-width{height:100%;margin:0;width:100%}.ui-carousel-slide__component uni-image-full-width .image-full-width__media-asset{align-items:center;border-radius:0;display:flex;height:100%;justify-content:center;width:100%}.ui-carousel-slide__component uni-image-full-width .image-full-width__media-asset img{object-fit:contain}.ui-carousel-slide__component uni-video-player:not([autoplay]){height:auto;width:100%}.ui-carousel-slide__component uni-video-player .uni-video-player{display:flex}.ui-carousel-slide__component uni-youtube-player .article-video-special{height:100%}.ui-carousel-slide__component uni-youtube-player .article-video-special__container{align-items:center;display:flex;height:100%}.ui-carousel-slide__component uni-youtube-player .article-module.uni-article-video--body{margin:0!important}.ui-carousel-slide__component uni-youtube-player .uni-article-video__aspect-image{aspect-ratio:16/9;padding:0}.ui-carousel-slide__component uni-youtube-player .uni-article-video__aspect-image img{height:100%;position:relative;width:100%}.ui-carousel-slide__component .audio-player{margin:0;max-width:none}.ui-carousel-slide__component .audio-player__slide-wrapper{align-items:center;display:flex;height:100%;justify-content:center;padding-inline:16px}@media(min-width:1024px){.ui-carousel-slide__component .audio-player__slide-wrapper{padding-inline:80px}}.ui-carousel-slide__component .audio-player__container{padding-bottom:24px;padding-top:24px}.ui-carousel-slide__component .audio-player__pause,.ui-carousel-slide__component .audio-player__preview-play{height:48px;width:102px}@media(min-width:600px){.ui-carousel-slide__component .audio-player__pause,.ui-carousel-slide__component .audio-player__preview-play{width:48px}}.ui-carousel-slide__component .audio-player__text-content{grid-template-columns:48px 1fr;grid-template-rows:48px 1fr}.ui-carousel-slide__component .audio-player__content{display:flex;flex-direction:column;row-gap:8px}.ui-carousel-slide__component .audio-player__content--title,.ui-carousel-slide__component .audio-player__content-description,.ui-carousel-slide__component .uni-pull-quote__author .uni-author-name{-webkit-box-orient:vertical;-webkit-line-clamp:2;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}@media(min-width:768px){.ui-carousel-slide__component .audio-player__content-description{-webkit-line-clamp:unset;display:block;overflow:visible}}.ui-carousel-slide__component .audio-player__volume-content{flex-shrink:0}.ui-carousel-slide__component .uni-pull-quote{margin:0}.ui-carousel-slide__component .uni-pull-quote__slide-wrapper{align-items:center;display:flex;height:100%;justify-content:center;padding-block:16px;padding-inline:16px}@media(min-width:1024px){.ui-carousel-slide__component .uni-pull-quote__slide-wrapper{padding-inline:80px}}@media screen and (max-width:767px){.ui-carousel-slide__component .uni-pull-quote__wrapper{margin-inline:16px}.ui-carousel-slide__component .uni-pull-quote__text{-webkit-box-orient:vertical;-webkit-line-clamp:4;display:-webkit-box;overflow:hidden;text-overflow:ellipsis}}.ui-carousel-slide__component .uni-pull-quote--block-style,.ui-carousel-slide__component .uni-pull-quote--pull-style{padding-block:16px}@media(min-width:768px){.ui-carousel-slide__component .uni-pull-quote--block-style,.ui-carousel-slide__component .uni-pull-quote--pull-style{padding-block:24px}}@media(min-width:1024px){.ui-carousel-slide__component .uni-pull-quote--block-style,.ui-carousel-slide__component .uni-pull-quote--pull-style{padding-block:36px}}.ui-carousel-slide__component .uni-pull-quote__author{margin-top:16px}@media(min-width:1024px){.ui-carousel-slide__component .uni-pull-quote__author{margin-top:36px}}.ui-carousel-slide__component .uni-pull-quote__author .uni-author-name{-webkit-line-clamp:1}@media(min-width:1024px){.ui-carousel-slide__component .uni-pull-quote__author .uni-author-name{-webkit-line-clamp:unset;display:block;overflow:visible}}.ui-carousel-slide__component:not(.ui-carousel-slide__component--aspect-ratio-vertical) .audio-player:has(.audio-player__time-bar--visible) .audio-player__content p{display:none}@media(min-width:768px){.ui-carousel-slide__component:not(.ui-carousel-slide__component--aspect-ratio-vertical) .audio-player:has(.audio-player__time-bar--visible) .audio-player__content p{display:block}}.ui-carousel-slide__component:not(.ui-carousel-slide__component--aspect-ratio-vertical) .reduce-motion-helper-video__controls{inset-block-end:8vw}@media(min-width:1024px){.ui-carousel-slide__component:not(.ui-carousel-slide__component--aspect-ratio-vertical) .reduce-motion-helper-video__controls{inset-block-end:8px}}.uni-video-player{direction:ltr;height:100%;overflow:hidden;position:relative}.uni-video-player__loading-spinner{height:100%;left:0;position:absolute;top:0;width:100%}.uni-video-player__loading-spinner,.uni-video-player__loading-spinner span{align-items:center;display:flex;justify-content:center}.uni-video-player:hover .uni-video-player__button--main{opacity:1}.article-subtitle>.rich-text{font-family:inherit;font-size:inherit;letter-spacing:inherit;line-height:inherit}.collection-detail{margin-top:36px;position:relative}@media(min-width:600px){.collection-detail{margin-top:0}.collection-detail:before{background:#fff;border-radius:24px 24px 0 0;box-shadow:-4px -3px 5px 0 rgba(54,64,67,.15);content:" ";height:22px;left:50%;position:absolute;top:-22px;transform:translate(-50%);width:calc(100% - 64px)}}@media(min-width:600px)and (min-width:1024px){.collection-detail:before{height:50px;top:-50px}}.collection-detail__hero-image{height:113px;margin:0 auto;max-width:1440px;padding:0;width:100%}@media(min-width:600px){.collection-detail__hero-image{height:240px}}@media(min-width:1024px){.collection-detail__hero-image{height:450px}}.collection-detail__hero-image img{height:100%;object-fit:cover;width:100%}.collection-detail__not-hero-image{background-color:#e8f0fe;height:80px}@media(min-width:600px){.collection-detail__not-hero-image{height:133px}}@media(min-width:1024px){.collection-detail__not-hero-image{height:166px}}.collection-detail__header{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:5px}@media(min-width:600px){.collection-detail__header{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.collection-detail__header{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:600px){.collection-detail__header{padding-top:6px}}.collection-detail__breadcrumb{width:100%}.collection-detail__breacrumb-column{grid-column:1/4;margin-bottom:24px}@media(min-width:600px){.collection-detail__breacrumb-column{grid-column:2/10}}.collection-detail__share-column{align-items:center;display:flex;grid-column:4;justify-content:flex-end;margin-bottom:24px}@media(min-width:600px){.collection-detail__share-column{grid-column:10/12}}.collection-detail__eyebrow{width:-moz-fit-content;width:fit-content}.collection-detail__share-button{align-items:center;display:flex;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);padding:0}.collection-detail__share-button .uni-social-share__trigger{height:auto;line-height:44px;margin:0 auto;min-height:auto;padding:0}.collection-detail__share-button .uni-social-share__trigger:focus{outline-offset:4px}.collection-detail__share-button .uni-social-share__button{margin-top:0}.collection-detail__headline{grid-column:1/5;margin-bottom:36px}@media(min-width:600px){.collection-detail__headline{grid-column:2/12;margin-bottom:36px}}@media(min-width:1024px){.collection-detail__headline{margin-bottom:48px}}.collection-detail__info{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.collection-detail__info{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.collection-detail__info{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.collection-detail__date{color:#5f6368;font-size:14px;font-weight:400;grid-column:1/5;letter-spacing:.25px;line-height:24px;margin-bottom:40px;min-width:88px}@media(min-width:600px){.collection-detail__date{grid-column:2/12;margin-bottom:36px}}@media(min-width:1024px){.collection-detail__date{grid-column:2/3}.collection-detail__date--mobile{display:none}}.collection-detail__date--desktop{display:none}@media(min-width:1024px){.collection-detail__date--desktop{display:block}}.collection-detail__date--rtl{display:none}.collection-detail__description{grid-column:1/5}@media(min-width:600px){.collection-detail__description{grid-column:2/12}}@media(min-width:1024px){.collection-detail__description{grid-column:3/11;margin-inline-start:24px;position:relative}.collection-detail__description:before{background-color:#dadce0;content:" ";height:50px;left:-24px;position:absolute;width:1px}}.collection-detail__copy{color:#5f6368;margin-bottom:36px}.collection-detail__copy .rich-text{margin:0}.collection-detail__copy p{font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:16px;font-style:normal;font-weight:400;line-height:26px;max-width:100%}@media(min-width:1024px){.collection-detail__copy p{font-size:18px;line-height:30px}}.collection-detail__articles{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:36px 0 60px}@media(min-width:600px){.collection-detail__articles{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.collection-detail__articles{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:600px){.collection-detail__articles{margin:36px 0 80px}}@media(min-width:1024px){.collection-detail__articles{margin:60px 0 120px}}.collection-detail__articles-wrapper{grid-column:1/5;margin:0}@media(min-width:600px){.collection-detail__articles-wrapper{grid-column-gap:16px;grid-gap:24px;grid-row-gap:24px;display:grid;gap:24px;grid-auto-rows:1fr;grid-column:2/12;grid-template-columns:repeat(0,minmax(0,1fr));row-gap:24px}}@media(min-width:600px)and (min-width:600px){.collection-detail__articles-wrapper{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(min-width:600px)and (min-width:1024px){.collection-detail__articles-wrapper{grid-column-gap:24px;grid-template-columns:repeat(3,minmax(0,1fr))}}.collection-detail__article{border:1px solid #dadce0;border-radius:16px;display:flex;flex-direction:column;gap:24px;overflow:hidden;padding-bottom:36px;transition:all .5s ease}.collection-detail__article:not(:last-child){margin-bottom:24px}@media(min-width:600px){.collection-detail__article:not(:last-child){margin-bottom:0}.collection-detail__article{grid-column:span 1;min-height:425px}}.collection-detail__article-image{aspect-ratio:16/9;border:1px solid #e8eaed;border-radius:15px 15px 0 0;margin:0;overflow:hidden}.collection-detail__article-image figure{aspect-ratio:inherit;margin:0}.collection-detail__article-image img{height:100%;object-fit:cover;transition:transform .1s ease-in;width:100%}.collection-detail__article-link{display:flex;flex:1;flex-direction:column;gap:24px;justify-content:space-between}.collection-detail__article-link:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:4px}.collection-detail__article-info{display:flex;flex-direction:column;flex-grow:1;gap:16px;justify-content:flex-start;padding:0 24px;width:100%}.collection-detail__article-info--no-image{justify-content:center;padding-top:36px}.collection-detail__article-description,.collection-detail__article-title{color:#202124;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--google-font-family);font-size:20px;font-style:normal;font-weight:400;line-height:28px}.collection-detail__article-description{color:#5f6368;font-size:14px;letter-spacing:.25px;line-height:24px}.collection-detail__article-footer{align-items:center;color:#5f6368;display:flex;flex-grow:0;gap:16px;padding:0}@media(min-width:1024px){.collection-detail__article-footer{font-weight:500}}.collection-detail__article-footer span{color:#202124;font-weight:500}@media(min-width:1024px){.collection-detail__article-footer span{color:#5f6368}}.collection-detail__article-footer div{-moz-column-gap:3px;column-gap:3px;display:flex;flex:1 1 auto;overflow:hidden}.collection-detail__article-date{display:none;min-width:-moz-fit-content;min-width:fit-content}@media(min-width:1024px){.collection-detail__article-date{display:inline}}.collection-detail__article-arrow{align-self:auto;flex:1 1 auto;height:24px;max-width:24px;min-width:24px;transition:transform .1s ease-in}.collection-detail__article-arrow svg{fill:#202124;color:#202124}.perspective-navigation__hero .title{font-size:36px;font-weight:700;letter-spacing:-.5px;line-height:40px;margin-bottom:16px}@media(min-width:600px){.perspective-navigation__hero .title{font-size:48px;line-height:56px}}@media(min-width:1024px){.perspective-navigation__hero .title{font-size:60px;line-height:64px}}.perspective-navigation__hero .article-subtitle{border-bottom:1px solid #e8eaed;line-height:24px;padding-bottom:24px}@media(min-width:1024px){.perspective-navigation__hero .article-subtitle{border-bottom:0;line-height:30px;padding-bottom:0}}.perspective-navigation__content{margin:0 auto;max-width:1324px;padding:0 16px}@media(min-width:600px){.perspective-navigation__content{padding:0 32px}}.perspective-navigation__content .uni-layout-page{margin-inline:0;padding-inline:0}.press-page{color:#202124}.press-page__header{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}@media(min-width:600px){.press-page__header{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.press-page__header{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:768px){.press-page__header{grid-template-rows:min-content 1fr;row-gap:0}}.press-page__header-wrapper{margin-bottom:48px;margin-top:48px}@media(min-width:1024px){.press-page__header-wrapper{margin-bottom:60px;margin-top:60px}}.press-page__header--hero-image .press-page__header-title{margin-bottom:36px}@media(min-width:768px){.press-page__header--hero-image .press-page__header-title{grid-column:7/-1;margin-bottom:16px;padding-inline:24px}}@media(min-width:1024px){.press-page__header--hero-image .press-page__header-title{grid-column:8/-1;padding-inline:48px}}.press-page__header-image{grid-column:1/-1;margin-bottom:48px}@media(min-width:1024px){.press-page__header-image{margin-bottom:60px}}@media(min-width:768px){.press-page__header-image{grid-column:1/7;grid-row:1/3;margin-bottom:0}}@media(min-width:1024px){.press-page__header-image{grid-column:1/8}}.press-page__header-image img{aspect-ratio:16/9;border-radius:8px;object-fit:cover;width:100%}.press-page__header-body{color:#202124;display:flex;flex-direction:column;gap:16px;grid-column:1/-1}@media(min-width:768px){.press-page__header-body{grid-column:7/-1;padding-inline:24px}}@media(min-width:1024px){.press-page__header-body{grid-column:8/-1;padding-inline:48px}}.press-page__header-title{grid-column:1/-1}@media(min-width:768px){.press-page__header-title{grid-column:1/7}}@media(min-width:1024px){.press-page__header-title{grid-column:1/8}}.press-page__header-divider{border-bottom:1px solid #dadce0;margin-top:48px}@media(min-width:1024px){.press-page__header-divider{margin-top:60px}}.press-page__assets-count{margin-bottom:24px;margin-top:36px}@media(min-width:1024px){.press-page__assets-count{margin-top:24px}}.press-page__image-list{background:0 0}.press-page__title{margin-bottom:48px}@media(min-width:1024px){.press-page__title{margin-bottom:60px}}.press-page__image-grid{grid-column-gap:16px;grid-row-gap:24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:24px;padding-top:16px;row-gap:24px}@media(min-width:600px){.press-page__image-grid{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.press-page__image-grid{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:768px){.press-page__image-grid{margin-bottom:16px}}@media(min-width:1024px){.press-page__image-grid{margin-bottom:24px;padding-top:24px}}.press-page uni-search-asset{flex:1 1 auto;width:100%}.press-page__filter{display:block;position:relative}@media(min-width:1024px){.press-page__filter{align-items:center;-moz-column-gap:36px;column-gap:36px;display:flex;flex-wrap:wrap;position:relative}}.press-page__filter-arrow{align-items:center;background-color:#fff;border:0;display:flex;height:48px;justify-content:center;position:absolute;top:54px;width:48px;z-index:1}@media(min-width:768px){.press-page__filter-arrow{display:none}}.press-page__filter-arrow:focus{background:0 0;background-color:#fff;border-radius:2px;outline:2px solid #174ea6;outline-offset:0}.press-page__filter-arrow svg{fill:#202124}.press-page__filter-arrow--previous{inset-inline-start:-6px}.press-page__filter-arrow--previous:after{background:linear-gradient(90deg,#fff,hsla(0,0%,100%,0));content:" ";height:48px;inset-inline-end:-20px;position:absolute;width:20px;z-index:-1}.press-page__filter-arrow--previous svg{scale:-1 1}.press-page__filter-arrow--next{inset-inline-end:-6px}.press-page__filter-arrow--next:after{background:linear-gradient(90deg,hsla(0,0%,100%,0),#fff);content:" ";height:48px;inset-inline-start:-20px;position:absolute;width:20px;z-index:-1}.press-page__filter-arrow.hidden{display:none}.press-page__filter-title--mobile{margin-bottom:24px}@media(min-width:768px){.press-page__filter-title--mobile{display:none}}.press-page__filter-title--large{display:none}@media(min-width:768px){.press-page__filter-title--large{align-items:center;display:flex}}.press-page__filter-selects{-ms-overflow-style:none;display:flex;gap:16px;margin:-6px;overflow:auto;padding:6px;position:relative;scrollbar-width:none}.press-page__filter-selects ::-webkit-scrollbar{display:none}.press-page__filter-selects>*{flex-shrink:0}@media(min-width:768px){.press-page__filter-selects>*{flex-shrink:1}}@media(min-width:1024px){.press-page__filter-selects>*{flex-shrink:0}}.press-page__filter-selects-container{align-content:center;display:flex;flex-wrap:wrap;gap:16px;justify-content:flex-start}@media(min-width:1024px){.press-page__filter-selects{margin:0;overflow:visible;padding:0}}.press-page__select uni-icon-component{inset-inline-end:16px}.press-page__select.press-page__select{background-color:#e8f0fe;border:0;border-radius:30px;color:#174ea6;display:block;font-size:16px;font-weight:500;height:48px;letter-spacing:0;line-height:24px;position:relative;width:-moz-fit-content;width:fit-content}.press-page__select.press-page__select select{cursor:pointer;font-family:Google Sans,roboto,arial,helvetica;font-family:var(--roboto-font-family);font-size:16px;line-height:24px;padding-inline:24px 48px;width:-moz-fit-content;width:fit-content}.press-page__select.press-page__select select:focus{background:0 0;border-radius:30px;outline:2px solid #174ea6;outline-offset:0}.press-page__filter-clear{flex-shrink:0}.press-page__search-box{align-items:flex-start;display:flex;flex-direction:column;gap:16px;justify-content:flex-start;margin-top:36px}@media(min-width:768px){.press-page__search-box{margin-top:16px}}@media(min-width:1024px){.press-page__search-box{align-items:center;flex:1 1 300px;flex-direction:row;gap:36px;min-width:400px}}.press-page__search{background-color:#f8f9fa;border:0;border-radius:0 8px 8px 0;color:#202124;font-size:14px;height:100%;line-height:24px;order:2;outline:0;padding:0;transition:width .2s ease-in;width:100%}.press-page__search-button{align-items:center;background-color:#f8f9fa;border-radius:8px 0 0 8px;cursor:pointer;display:flex;height:100%;justify-content:center;order:1;padding-block:8px;padding-inline:16px;position:relative;transition:all .2s ease-in;z-index:1}.press-page__search-button:focus:not(:focus-visible){outline:0}.press-page__search-button:focus-visible{background:0 0;border-radius:48px;outline:2px solid #174ea6;outline-offset:-4px}.press-page__search-button svg{display:block;flex-shrink:0;height:32px;width:32px}.press-page__search-container{display:flex;height:48px;min-width:68px;position:relative}.press-page__load-more{display:block;margin-inline:auto}.press-page .uni-blog-lit-select select{border-bottom:none}.uni-blog-series-page__breadcrumb{margin-bottom:8px}.uni-blog-series-page .article-list__title{margin-top:35px}@media(min-width:1024px){.uni-blog-series-page .article-subtitle{padding-inline-end:50px}.uni-blog-series-page .article-subtitle-container{border-inline-end:1px solid #e0e0e0}}.uni-blog-series-page .mobile .article-share{flex-basis:100%;margin:0 auto;width:100%}.uni-blog-series-page .article-share{height:auto}.uni-blog-series-page .copy-link.mobile{align-items:center;display:flex;height:48px;justify-content:center;margin-inline-end:0;width:48px}.uni-blog-series-page .copy-link.mobile svg{height:25px;width:25px}@media(min-width:768px){.uni-blog-series-page .featured-article>.h-c-grid{margin-inline:0}}@media(min-width:1024px){.uni-blog-series-page .featured-article>.h-c-grid{margin-inline:-1.0379945%}}.uni-blog-series-page .featured-article__image--full-width{border-radius:0;margin-bottom:24px;padding-top:0;width:100%}@media(min-width:768px){.uni-blog-series-page .featured-article__image--full-width{display:none}}.uni-blog-series-page .featured-article__image--desktop{display:none}@media(min-width:768px){.uni-blog-series-page .featured-article__image--desktop{display:block;flex-grow:1;margin-bottom:24px;margin-inline:0}}@media(min-width:1024px){.uni-blog-series-page .featured-article__image--desktop{display:block;flex-grow:0;margin-bottom:0;margin-inline:1.0379945%}}@media(min-width:768px){.uni-blog-series-page .featured-article__image--desktop+.article-subtitle-container{flex-grow:1;margin-inline:0}}@media(min-width:1024px){.uni-blog-series-page .featured-article__image--desktop+.article-subtitle-container{flex-grow:0;margin-inline:1.0379945%}}.short-post-page{margin-top:48px}@media(min-width:1024px){.short-post-page{margin-top:60px}}.short-post-page__grid{grid-column-gap:16px;grid-row-gap:24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:24px}@media(min-width:600px){.short-post-page__grid{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.short-post-page__grid{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.short-post-page__breadcrumb{grid-column:1/-1}@media(min-width:1024px){.short-post-page__breadcrumb{grid-column:2/-2}}.short-post-page__post,.short-post-page__related-articles{grid-column:1/-1}@media(min-width:768px){.short-post-page__post,.short-post-page__related-articles{grid-column:1/8;margin-bottom:0}}@media(min-width:1024px){.short-post-page__post,.short-post-page__related-articles{grid-column:2/9;margin-bottom:0}}.short-post-page__related-articles{padding-top:36px}@media(min-width:768px){.short-post-page__related-articles{grid-column:8/-1;padding-top:0}}@media(min-width:1024px){.short-post-page__related-articles{grid-column:9/-2;margin-inline-start:24px}}.short-post-page__related-articles-title{margin-block:0}.not-found-404__subheading p,.short-post-page__related-articles-list{margin:0}.short-post-page__related-articles li{list-style:none;margin-inline:0}.short-post-page__related-article{padding-bottom:24px;padding-top:16px}.short-post-page__related-article-body{color:#5f6368;margin-top:8px}.short-post-page__related-article-link{display:block;min-height:48px}.short-post-page__related-article-link:hover .short-post-page__related-article-title{-webkit-text-decoration:underline;text-decoration:underline}.short-post-page__related-article-link:focus{background:0 0;border-radius:4px;outline:2px solid #174ea6;outline-offset:2px}.short-post-page__related-article--underline{border-bottom:1px solid #dadce0}.feed-page{grid-column-gap:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:48px}@media(min-width:1024px){.feed-page{margin-top:60px}}@media(min-width:600px){.feed-page{grid-template-columns:repeat(12,minmax(0,1fr))}}@media(min-width:1024px){.feed-page{grid-column-gap:24px;grid-template-columns:repeat(12,minmax(0,1fr))}}.feed-page__aside{align-self:self-start;grid-column:1/-1;margin-bottom:48px}@media(min-width:1024px){.feed-page__aside{grid-column:2/5;margin-bottom:0}}.feed-page__body{grid-column:1/-1}@media(min-width:1024px){.feed-page__body{grid-column:5/-2}}.feed-page__eyebrow{display:block;margin-bottom:16px}.feed-page__title{margin-bottom:24px}.feed-page__post{border-bottom:1px solid #dadce0;padding-block:36px}.feed-page__post:first-child{padding-top:0}.feed-page__load-more{display:block;margin-top:36px;margin-inline:auto}.not-found-404__header{display:flex;flex-direction:column;gap:24px;margin-inline:auto;padding-bottom:92px;padding-top:136px;text-align:center}@media(min-width:1024px){.not-found-404__header{max-width:1046px;padding-bottom:120px;padding-top:180px}}.not-found-404__subheading a:link,.not-found-404__subheading a:visited{color:#1a73e8}.not-found-404__subheading a:hover{color:#174ea6}.not-found-404__subheading a:active{color:#1a73e8}.not-found-404__search{margin-inline:0;padding-bottom:60px}@media(min-width:1024px){.not-found-404__search{padding-bottom:80px}}@media(min-width:768px){.not-found-404__search{margin-inline:60px}}@media(min-width:1024px){.not-found-404__search{margin-inline:auto;max-width:1046px}}</style>
+
+
+
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+
+
+        
+        
+        <link class="deferred-stylesheet" rel="preload" type="text/css" href="/static/keyword/css/blog/index.min.css?version=pr20260507-1819" as="style">
+<noscript>
+  <link rel="stylesheet" href="/static/keyword/css/blog/index.min.css?version=pr20260507-1819">
+</noscript>
+
+        <link class="deferred-stylesheet" rel="preload" type="text/css" href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Product+Sans:400&amp;display=swap&amp;lang=en" as="style">
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Product+Sans:400&amp;display=swap&amp;lang=en">
+</noscript>
+
+        <link class="deferred-stylesheet" rel="preload" type="text/css" href="https://www.gstatic.com/glue/cookienotificationbar/cookienotificationbar.min.css" as="style">
+<noscript>
+  <link rel="stylesheet" href="https://www.gstatic.com/glue/cookienotificationbar/cookienotificationbar.min.css">
+</noscript>
+
+
+        
+        
+        
+
+	
+        <script>
+          document.querySelectorAll('.deferred-stylesheet').forEach(function(link) {
+            function enableStylesheet() {
+              if (link.rel !== 'stylesheet') {
+                link.rel = 'stylesheet';
+              }
+            }
+
+            // Attach the normal load-listener
+            link.addEventListener('load', enableStylesheet);
+
+            // Safely check if Performance API is supported
+            if (window.performance && typeof performance.getEntriesByType === 'function') {
+              // Check the Performance entries buffer for a matching URL
+              const url = link.href;
+              const alreadyFetched = performance
+                .getEntriesByType('resource')
+                .some(entry => entry.name === url);
+
+              if (alreadyFetched) {
+                // Preload was fulfilled (from cache or just fast), so activate now
+                enableStylesheet();
+              }
+            }
+          });
+        </script>
+
+        
+            
+        
+
+        
+
+<link rel="canonical" href="https://blog.google/image-library/"/>
+
+<link href="/favicon.ico" rel="icon">
+<link href="/static/blogv2/images/apple-touch-icon.png?version=pr20260507-1819" rel="apple-touch-icon">
+
+
+  <link rel="alternate" hreflang="x-default" href="https://blog.google/image-library/">
+
+  <link rel="alternate" hreflang="en-us" href="https://blog.google/image-library/">
+
+  <link rel="alternate" hreflang="de-de" href="https://blog.google/intl/de-de/presse/">
+
+  <link rel="alternate" hreflang="en-au" href="https://blog.google/intl/en-au/press/">
+
+  <link rel="alternate" hreflang="en-in" href="https://blog.google/intl/en-in/press/">
+
+  <link rel="alternate" hreflang="en-ca" href="https://blog.google/intl/en-ca/press/">
+
+  <link rel="alternate" hreflang="fr-ca" href="https://blog.google/intl/fr-ca/salle-de-presse/">
+
+  <link rel="alternate" hreflang="es" href="https://blog.google/intl/es-419/prensa-latam/">
+
+  <link rel="alternate" hreflang="it-it" href="https://blog.google/intl/it-it/contattimedia/">
+
+  <link rel="alternate" hreflang="fr-fr" href="https://blog.google/intl/fr-fr/presse/">
+
+  <link rel="alternate" hreflang="ar" href="https://blog.google/intl/ar-mena/press/">
+
+  <link rel="alternate" hreflang="en-eg" href="https://blog.google/intl/en-mena/press/">
+
+  <link rel="alternate" hreflang="en-ng" href="https://blog.google/intl/en-africa/press/">
+
+  <link rel="alternate" hreflang="pl-pl" href="https://blog.google/intl/pl-pl/prasa/">
+
+  <link rel="alternate" hreflang="ko-kr" href="https://blog.google/intl/ko-kr/press/">
+
+  <link rel="alternate" hreflang="ja-jp" href="https://blog.google/intl/ja-jp/press/">
+
+  <link rel="alternate" hreflang="es-es" href="https://blog.google/intl/es-es/prensa/">
+
+  <link rel="alternate" hreflang="nl-nl" href="https://blog.google/intl/nl-nl/pers/">
+
+  <link rel="alternate" hreflang="id-id" href="https://blog.google/intl/id-id/press/">
+
+  <link rel="alternate" hreflang="cs-cz" href="https://blog.google/intl/cs-cz/kontakty-pro-media/">
+
+  <link rel="alternate" hreflang="tr-tr" href="https://blog.google/intl/tr-tr/medya/">
+
+  <link rel="alternate" hreflang="zh-hant" href="https://blog.google/intl/zh-tw/press-corner/">
+
+  <link rel="alternate" hreflang="th-th" href="https://blog.google/intl/th-th/press/">
+
+  <link rel="alternate" hreflang="pt-pt" href="https://blog.google/intl/pt-pt/imprensa/">
+
+  <link rel="alternate" hreflang="en-nz" href="https://blog.google/intl/en-nz/press-page/">
+
+  <link rel="alternate" hreflang="sv-se" href="https://blog.google/intl/sv-se/press/">
+
+  <link rel="alternate" hreflang="el-gr" href="https://blog.google/intl/el-gr/press/">
+
+
+        <meta property="gtm-tag" content="GTM-TRV24V">
+
+
+
+        <!-- https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API -->
+<script>
+  let trustedTypePolicy = {
+      createHTML: (str) => str,
+      createScript: (str) => str,
+      createScriptURL: (url) => url
+  };
+  if (window.trustedTypes && window.trustedTypes.createPolicy) {
+      const safeScriptDomains = [
+          'blob:',
+          '/static/blogv2/',
+          '/static/keyword/',
+          '/static/youtube/',
+          '/static/blog_youtube/',
+          '//cdn.ampproject.org/',
+          '//googleads.g.doubleclick.net',
+          '//survey.g.doubleclick.net',
+          '//www.google-analytics.com/',
+          '//www.google.com',
+          '//www.googletagmanager.com',
+          '//www.gstatic.com',
+          '//www.youtube.com',
+          '//youtube.googleapis.com',
+          '//ssl.gstatic.com/trends_nrtr/'
+      ];
+      const safeScripts = [
+          'google_tag_manager[""]',
+          '(function anonymous('
+      ];
+      trustedTypePolicy = window.trustedTypes.createPolicy('default', {
+          /* Enable create HTML */
+          createHTML: (str) => {
+              return str
+          },
+          /* Enable script creation */
+          createScript: (str) => {
+              const safeScriptString = safeScripts.find(
+                  (safeScript) => str.includes(safeScript)
+              );
+              if (!safeScriptString) {
+                  console.warn(
+                      `unsafe createScript: "${str}"`
+                  );
+              }
+
+              return str;
+          },
+          /* Allow for safe domains only */
+          createScriptURL: (url) => {
+              const safeDomainsUrl = safeScriptDomains.find(
+                  (safeDomain) => url.includes(safeDomain)
+              );
+              if (!safeDomainsUrl && !url.startsWith(window.location.origin)) {
+                  console.warn(
+                      `Unsafe createScriptURL: "${url}"`
+                  );
+              }
+
+              return url;
+          },
+      });
+  }
+
+  window.trustedTypePolicy = trustedTypePolicy;
+</script>
+
+      </head>
+
+    <body class=" keyword-blog">
+        
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TRV24V" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+
+        
+
+
+<div class="data-layer-init-data" data-ga4-analytics='
+  {
+    "event": "dataLayer_initialized",
+    
+      "page_name": "Press Corner | The Keyword",
+    
+    "experiments": "undefined",
+    "locale": "en-us",
+    "page_type": "blogv2 | press page",
+    "primary_tag": "undefined",
+    "secondary_tags": "undefined",
+    
+      "landing_page_tags": "undefined",
+    
+    
+      "article_name": "undefined",
+      "author_name": "undefined",
+    
+    "publish_date": "2018-05-08|20:55",
+    "hero_media": "undefined",
+    
+      "special_hero": "undefined",
+    
+    "days_since_published": "2923",
+    
+      "content_category": "Press",
+    
+    "word_count": "short 0-299",
+    "has_audio": "undefined",
+    "has_video": "undefined"
+  }'>
+</div>
+
+        <script type="text/javascript">
+  (function() {
+    var dataLayerInitElement = document.querySelector('.data-layer-init-data');
+    var dataLayerObject = JSON.parse(
+      dataLayerInitElement.getAttribute('data-ga4-analytics')
+    );
+
+    // Change undefined strings to primitive value undefined.
+    Object.entries(dataLayerObject).forEach(([key, value]) => {
+      dataLayerObject[key] = value === 'undefined' ? undefined : value;
+    });
+
+    if (!window['dataLayer']) {
+      window['dataLayer'] = [];
+    }
+    window['dataLayer'].push(dataLayerObject);
+  }());
+</script>
+
+
+        
+
+
+
+        
+          
+
+
+<div class="uni-header-content-pusher"></div>
+<header class="uni-header h-u-box-shadow-2" data-component="uni-header">
+  <div class="uni-header__hamburguer-wrapper">
+    <button class="uni-header__hamburguer-button" aria-expanded="false" tabindex="0" aria-label="Navigation menu">
+      <svg
+  
+  class="h-c-header__hamburger-img h-c-header__hamburger-img--standard events-off"
+  
+  
+  
+  
+  role="presentation"
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#h-burger"></use>
+</svg>
+
+    </button>
+  </div>
+
+  
+  <figure class="uni-header__logo-google" tabindex="-1">
+    
+    <svg
+  aria-label="The Google logo"
+  
+  
+  
+  
+  
+  role="img"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#h-color-google-logo"></use>
+</svg>
+
+  </figure>
+
+  
+  <div>
+    <a href="#jump-content" class="h-c-header__jump-to-content">
+      <span class="h-c-header__jump-to-content-text">Skip to main content</span>
+    </a>
+  </div>
+
+
+  
+  <div class="uni-header__site-title"
+       data-analytics-module='{
+         "module_name": "main nav",
+         "section_header": "The Keyword"
+       }'>
+    <a href="/" class="uni-header__site-title-link">
+      <div>
+        The Keyword
+      </div>
+    </a>
+  </div>
+
+  
+  
+
+
+<div class="uni-article-progress-bar slide-up" data-component="uni-progress-bar" role="none">
+  <div class="uni-article-progress-bar__title uni-article-progress-bar__ellipsis">Image Library</div>
+  <div class="uni-article-progress-bar__social"
+    data-analytics-module='{
+      "module_name": "Progress Bar",
+      "section_header": "Image Library"
+    }'
+  >
+    
+
+
+<div class ="uni-social-share " data-component="uni-social-share-dropdown">
+  <a class="uni-social-share__trigger" role="button" tabindex="0" aria-label="Share" aria-expanded="false">
+    
+    <svg
+  
+  class="h-c-icon h-c-icon--color-text"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  title="Share"
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-share"></use>
+</svg>
+
+    <div class="uni-social-share__button">Share</div>
+  </a>
+  <div class="uni-social-share__dialog uni-social-share__content " aria-labelledby="social-share-icon">
+    
+
+
+<a aria-label="Share on X"
+    class="article-share__link-text uni-click-tracker"
+    href="https://twitter.com/intent/tweet?text=Image%20Library%20%40google&url=https://blog.google/image-library/"
+    target="_blank"
+    data-ga4-method="twitter">
+  <svg
+  
+  class="h-c-icon h-c-icon--social h-c-icon--30px"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 30 30"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-x"></use>
+</svg>
+
+  <div class="article-share__title">x.com</div>
+</a>
+
+<a aria-label="Share on Facebook"
+    class="article-share__link-text uni-click-tracker"
+    href="https://www.facebook.com/sharer/sharer.php?caption=Image%20Library&u=https://blog.google/image-library/"
+    target="_blank"
+    data-ga4-method="facebook">
+  <svg
+  
+  class="h-c-icon h-c-icon--social h-c-icon--30px"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 30 30"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-facebook"></use>
+</svg>
+
+  <div class="article-share__title">Facebook</div>
+</a>
+
+<a aria-label="Share on LinkedIn"
+    class="article-share__link-text uni-click-tracker"
+    href="https://www.linkedin.com/shareArticle?mini=true&url=https://blog.google/image-library/&title=Image%20Library"
+    target="_blank"
+    data-ga4-method="linkedin">
+  <svg
+  
+  class="h-c-icon h-c-icon--social h-c-icon--30px"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 30 30"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-linkedin"></use>
+</svg>
+
+  <div class="article-share__title">LinkedIn</div>
+</a>
+
+<a aria-label="Share with Email"
+    class="article-share__link-text uni-click-tracker article-share__email"
+    
+      href="mailto:?subject=Image%20Library&body=Check out this article on the Keyword:%0A%0AImage%20Library%0A%0Ahttps://blog.google/image-library/"
+    
+    target="_blank"
+    data-ga4-method="email">
+  <svg
+  
+  class="h-c-icon h-c-icon--social h-c-icon--30px"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 30 30"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-mail"></use>
+</svg>
+
+  <div class="article-share__title">Mail</div>
+</a>
+
+    
+
+
+<div class="copy-link uni-copy-share uni-click-tracker"
+  data-component="uni-copy-popup-component"
+  data-ga4-analytics-share-copy-link
+  data-ga4-method="Copy link">
+  
+  <button class="copy-link__trigger copy-link__trigger-text"
+    data-ga4-method="Copy link"
+    title="Copy link">
+    <svg
+  
+  class="h-c-icon h-c-icon--color-text"
+  
+  
+  
+  
+  role="presentation"
+  
+  title="Copy link"
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-link"></use>
+</svg>
+
+    <div class="copy-link__title">Copy link</div>
+  </button>
+  <div class="copy-link__dialog copy-link__content" uni-options='{"copyTextButton": "COPIED TO CLIPBOARD"}' aria-hidden="true" tabindex="-1">
+    <input class="h-c-copy copy-link__url" value="https://blog.google/image-library/" id="copy-link" readonly="readonly" type="text"/>
+    <div class="copy-link__copy-message" role="status"></div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+  </div>
+  <div class="uni-article-progress-bar__indicator hide-progress-bar"></div>
+</div>
+
+
+  
+  
+
+<nav class="uni-navigation uni-navigation--desktop"
+     role="navigation"
+     aria-label="Main"
+     
+     data-analytics-module='{
+        "module_name": "main nav",
+        "section_header": "Desktop menu"
+     }'>
+  
+
+  <div class="uni-navigation__list-desktop">
+    <ul id="uni-main-menu"
+        class="uni-main-menu"
+        data-component="uni-navigation">
+      
+        <li data-has-subnav=""
+            class="uni-main-menu__item uni-main-menu__item--desktop  inactive  ">
+          
+            <a href="/"
+               class="uni-main-menu__item-label "
+               role="button"
+                tabindex="0" >
+               Home
+            </a>
+          
+          
+        </li>
+      
+        <li data-has-subnav="yes"
+            class="uni-main-menu__item uni-main-menu__item--desktop  inactive   has-submenu">
+          
+            <button class="uni-main-menu__item-label  has-submenu"
+                    tabindex="0">
+              Innovation &amp; AI
+              <figure class="expand-caret">
+                <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+              </figure>
+            </button>
+            
+
+<div class="uni-main-menu__subnav uni-main-menu__subnav--desktop">
+  <button class="uni-main-menu__subnav-title uni-main-menu__subnav-title--desktop">
+    <figure class="expand-caret">
+      <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+    </figure>
+    Innovation &amp; AI
+  </button>
+  <ul class="uni-main-menu__subnav-list">
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Models &amp; Research
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/google-deepmind/"
+                   data-navigation=innovation-ai>
+                  Google DeepMind
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/google-research/"
+                   data-navigation=innovation-ai>
+                  Google Research
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/google-labs/"
+                   data-navigation=innovation-ai>
+                  Google Labs
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/gemini-models/"
+                   data-navigation=innovation-ai>
+                  Gemini models
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/quantum-computing/"
+                   data-navigation=innovation-ai>
+                  Quantum computing
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/innovation-and-ai/models-and-research/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Models &amp; Research">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Products
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/technology/developers-tools/"
+                   data-navigation=innovation-ai>
+                  Developer tools
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/products/gemini-app/"
+                   data-navigation=innovation-ai>
+                  Gemini app
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/products/notebooklm/"
+                   data-navigation=innovation-ai>
+                  NotebookLM
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/innovation-and-ai/products/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Products">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Infrastructure &amp; cloud
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/infrastructure-and-cloud/global-network/"
+                   data-navigation=innovation-ai>
+                  Global network
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/infrastructure-and-cloud/google-cloud/"
+                   data-navigation=innovation-ai>
+                  Google Cloud
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/innovation-and-ai/infrastructure-and-cloud/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Infrastructure &amp; cloud">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+  </ul>
+  
+    <div class="uni-main-menu__subnav-list">
+      <p class="uni-cta-text uni-main-menu__learn-more-title">Learn more:</p>
+      <ul class="uni-main-menu__learn-more-list">
+
+
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://deepmind.google/blog/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google DeepMind blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://research.google/blog/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Research blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://developers.googleblog.com/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Developers blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://cloud.google.com/blog" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Cloud blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+      </ul>
+    </div>
+  
+  
+    <div class="uni-main-menu__subnav-list">
+      <a href="/innovation-and-ai/" class="uni-cta-text uni-main-menu__learn-more-item uni-main-menu__learn-more-link">
+        <span>See all AI updates</span>
+        <span class="uni-main-menu__learn-more-link-icon uni-main-menu__learn-more-link-icon--see-all">
+          <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+        </span>
+      </a>
+    </div>
+  
+</div>
+
+          
+          
+            
+
+<div class="h-c-page uni-main-menu__submenu-wrapper"
+     id="uni-navigation__item-1-2"
+     aria-expanded="false"
+     aria-hidden="true"
+     role="menu">
+  <ul class="uni-main-menu__submenu has-view-all">
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-innovation-ai-1">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-innovation-ai-1">
+            Models &amp; Research
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/models-and-research/google-deepmind/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Google DeepMind
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/models-and-research/google-research/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Google Research
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/models-and-research/google-labs/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Google Labs
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/models-and-research/gemini-models/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Gemini models
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/models-and-research/quantum-computing/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Quantum computing
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/innovation-and-ai/models-and-research/"
+             data-navigation="Models &amp; Research"
+             role="menuitem"
+             title="See all Models &amp; Research articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-innovation-ai-2">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-innovation-ai-2">
+            Products
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/technology/developers-tools/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Developer tools
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/products/gemini-app/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Gemini app
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/products/notebooklm/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    NotebookLM
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/innovation-and-ai/products/"
+             data-navigation="Products"
+             role="menuitem"
+             title="See all Products articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-innovation-ai-3">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-innovation-ai-3">
+            Infrastructure &amp; cloud
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/infrastructure-and-cloud/global-network/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Global network
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/infrastructure-and-cloud/google-cloud/"
+                     role="menuitem"
+                     data-navigation=innovation-ai
+                     class="uni-main-menu__submenu-anchor">
+                    Google Cloud
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/innovation-and-ai/infrastructure-and-cloud/"
+             data-navigation="Infrastructure &amp; cloud"
+             role="menuitem"
+             title="See all Infrastructure &amp; cloud articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+  </ul>
+  
+  <div class="uni-main-menu__submenu-view-all">
+    
+      <p class="uni-cta-text uni-main-menu__learn-more-title">Learn more:</p>
+      <div class="uni-main-menu__learn-more">
+        
+          <a href="https://deepmind.google/blog/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google DeepMind blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        
+          <a href="https://research.google/blog/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Research blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        
+          <a href="https://developers.googleblog.com/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Developers blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        
+          <a href="https://cloud.google.com/blog" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Cloud blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        
+      </div>
+    
+    
+      <a href="/innovation-and-ai/" class="uni-cta-text uni-main-menu__submenu-view-all-link">
+        See all AI updates
+        <span class="uni-main-menu__learn-more-link-icon uni-main-menu__learn-more-link-icon--see-all">
+          <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+        </span>
+      </a>
+    
+  </div>
+  
+  <button class="uni-main-menu__submenu-close" aria-label="Close Menu">
+    <svg
+  
+  class="h-c-icon h-c-icon--24px uni-main-menu__submenu-close--icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#close_icon"></use>
+</svg>
+
+  </button>
+</div>
+
+          
+        </li>
+      
+        <li data-has-subnav="yes"
+            class="uni-main-menu__item uni-main-menu__item--desktop  inactive   has-submenu">
+          
+            <button class="uni-main-menu__item-label  has-submenu"
+                    tabindex="0">
+              Products &amp; platforms
+              <figure class="expand-caret">
+                <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+              </figure>
+            </button>
+            
+
+<div class="uni-main-menu__subnav uni-main-menu__subnav--desktop">
+  <button class="uni-main-menu__subnav-title uni-main-menu__subnav-title--desktop">
+    <figure class="expand-caret">
+      <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+    </figure>
+    Products &amp; platforms
+  </button>
+  <ul class="uni-main-menu__subnav-list">
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Products
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/search/"
+                   data-navigation=products-platforms>
+                  Search
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/maps/"
+                   data-navigation=products-platforms>
+                  Maps
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/chrome/"
+                   data-navigation=products-platforms>
+                  Chrome
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/google-health/"
+                   data-navigation=products-platforms>
+                  Google Health
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/workspace/"
+                   data-navigation=products-platforms>
+                  Google Workspace
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/education/"
+                   data-navigation=products-platforms>
+                  Learning &amp; Education
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/shopping/"
+                   data-navigation=products-platforms>
+                  Shopping
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/products-and-platforms/products/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Products">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Platforms
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/platforms/android/"
+                   data-navigation=products-platforms>
+                  Android
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/platforms/google-play/"
+                   data-navigation=products-platforms>
+                  Google Play
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/platforms/wear-os/"
+                   data-navigation=products-platforms>
+                  Wear OS
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/products-and-platforms/platforms/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Platforms">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Devices
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/pixel/"
+                   data-navigation=products-platforms>
+                  Pixel
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/google-nest/"
+                   data-navigation=products-platforms>
+                  Google Nest
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/fitbit/"
+                   data-navigation=products-platforms>
+                  Fitbit
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/chromebooks/"
+                   data-navigation=products-platforms>
+                  Chromebooks
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/products-and-platforms/devices/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Devices">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+  </ul>
+  
+    <div class="uni-main-menu__subnav-list">
+      <p class="uni-cta-text uni-main-menu__learn-more-title">Learn more:</p>
+      <ul class="uni-main-menu__learn-more-list">
+
+
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://blog.google/products/ads-commerce/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Ads &amp; Commerce blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://blog.google/waze/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Waze blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+      </ul>
+    </div>
+  
+  
+    <div class="uni-main-menu__subnav-list">
+      <a href="/products-and-platforms/" class="uni-cta-text uni-main-menu__learn-more-item uni-main-menu__learn-more-link">
+        <span>See all product updates</span>
+        <span class="uni-main-menu__learn-more-link-icon uni-main-menu__learn-more-link-icon--see-all">
+          <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+        </span>
+      </a>
+    </div>
+  
+</div>
+
+          
+          
+            
+
+<div class="h-c-page uni-main-menu__submenu-wrapper"
+     id="uni-navigation__item-1-3"
+     aria-expanded="false"
+     aria-hidden="true"
+     role="menu">
+  <ul class="uni-main-menu__submenu has-view-all">
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-products-platforms-1">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-products-platforms-1">
+            Products
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/search/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Search
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/maps/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Maps
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/chrome/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Chrome
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/google-health/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Google Health
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/workspace/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Google Workspace
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/education/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Learning &amp; Education
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/products/shopping/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Shopping
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/products-and-platforms/products/"
+             data-navigation="Products"
+             role="menuitem"
+             title="See all Products articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-products-platforms-2">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-products-platforms-2">
+            Platforms
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/platforms/android/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Android
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/platforms/google-play/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Google Play
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/platforms/wear-os/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Wear OS
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/products-and-platforms/platforms/"
+             data-navigation="Platforms"
+             role="menuitem"
+             title="See all Platforms articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-products-platforms-3">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-products-platforms-3">
+            Devices
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/devices/pixel/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Pixel
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/devices/google-nest/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Google Nest
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/devices/fitbit/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Fitbit
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/products-and-platforms/devices/chromebooks/"
+                     role="menuitem"
+                     data-navigation=products-platforms
+                     class="uni-main-menu__submenu-anchor">
+                    Chromebooks
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/products-and-platforms/devices/"
+             data-navigation="Devices"
+             role="menuitem"
+             title="See all Devices articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+  </ul>
+  
+  <div class="uni-main-menu__submenu-view-all">
+    
+      <p class="uni-cta-text uni-main-menu__learn-more-title">Learn more:</p>
+      <div class="uni-main-menu__learn-more">
+        
+          <a href="https://blog.google/products/ads-commerce/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Ads &amp; Commerce blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        
+          <a href="https://blog.google/waze/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Waze blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        
+      </div>
+    
+    
+      <a href="/products-and-platforms/" class="uni-cta-text uni-main-menu__submenu-view-all-link">
+        See all product updates
+        <span class="uni-main-menu__learn-more-link-icon uni-main-menu__learn-more-link-icon--see-all">
+          <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+        </span>
+      </a>
+    
+  </div>
+  
+  <button class="uni-main-menu__submenu-close" aria-label="Close Menu">
+    <svg
+  
+  class="h-c-icon h-c-icon--24px uni-main-menu__submenu-close--icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#close_icon"></use>
+</svg>
+
+  </button>
+</div>
+
+          
+        </li>
+      
+        <li data-has-subnav="yes"
+            class="uni-main-menu__item uni-main-menu__item--desktop  inactive   has-submenu">
+          
+            <button class="uni-main-menu__item-label  has-submenu"
+                    tabindex="0">
+              Company news
+              <figure class="expand-caret">
+                <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+              </figure>
+            </button>
+            
+
+<div class="uni-main-menu__subnav uni-main-menu__subnav--desktop">
+  <button class="uni-main-menu__subnav-title uni-main-menu__subnav-title--desktop">
+    <figure class="expand-caret">
+      <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+    </figure>
+    Company news
+  </button>
+  <ul class="uni-main-menu__subnav-list">
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Outreach &amp; initiatives
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/creating-opportunity/"
+                   data-navigation=company-news>
+                  Creating opportunity
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/technology/safety-security/"
+                   data-navigation=company-news>
+                  Safety &amp; security
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/google-org/"
+                   data-navigation=company-news>
+                  Google.org
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/public-policy/"
+                   data-navigation=company-news>
+                  Public policy
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/sustainability/"
+                   data-navigation=company-news>
+                  Sustainability
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/technology/health/"
+                   data-navigation=company-news>
+                  Health
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/company-news/outreach-and-initiatives/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Outreach &amp; initiatives">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Leadership
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/authors/sundar-pichai/"
+                   data-navigation=company-news>
+                  Sundar Pichai, CEO
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/authors/"
+                   data-navigation=company-news>
+                  More authors
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/authors/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Leadership">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--desktop has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--desktop">
+            Inside Google
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--desktop">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/inside-google/around-the-globe/"
+                   data-navigation=company-news>
+                  Around the globe
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/inside-google/life-at-google/"
+                   data-navigation=company-news>
+                  Life at Google
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/company-news/inside-google/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Inside Google">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+  </ul>
+  
+  
+</div>
+
+          
+          
+            
+
+<div class="h-c-page uni-main-menu__submenu-wrapper"
+     id="uni-navigation__item-1-4"
+     aria-expanded="false"
+     aria-hidden="true"
+     role="menu">
+  <ul class="uni-main-menu__submenu has-view-all">
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-company-news-1">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-company-news-1">
+            Outreach &amp; initiatives
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/company-news/outreach-and-initiatives/creating-opportunity/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Creating opportunity
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/technology/safety-security/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Safety &amp; security
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/company-news/outreach-and-initiatives/google-org/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Google.org
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/company-news/outreach-and-initiatives/public-policy/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Public policy
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/company-news/outreach-and-initiatives/sustainability/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Sustainability
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/innovation-and-ai/technology/health/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Health
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/company-news/outreach-and-initiatives/"
+             data-navigation="Outreach &amp; initiatives"
+             role="menuitem"
+             title="See all Outreach &amp; initiatives articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-company-news-2">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-company-news-2">
+            Leadership
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/authors/sundar-pichai/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Sundar Pichai, CEO
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/authors/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    More authors
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/authors/"
+             data-navigation="Leadership"
+             role="menuitem"
+             title="See all Leadership articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+      <li class="uni-main-menu__submenu-item"
+          role="group"
+          aria-labelledby="uni-main-menu__submenu-item-label-company-news-3">
+          <span class="uni-main-menu__submenu-item-label"
+                id="uni-main-menu__submenu-item-label-company-news-3">
+            Inside Google
+          </span>
+
+        
+          <ul class="uni-main-menu__submenu-links">
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/company-news/inside-google/around-the-globe/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Around the globe
+
+                    
+                  </a>
+                
+              </li>
+            
+              <li class="uni-main-menu__submenu-link">
+                
+                  
+
+                  <a href="/company-news/inside-google/life-at-google/"
+                     role="menuitem"
+                     data-navigation=company-news
+                     class="uni-main-menu__submenu-anchor">
+                    Life at Google
+
+                    
+                  </a>
+                
+              </li>
+            
+          </ul>
+        
+
+        
+          <a href="/company-news/inside-google/"
+             data-navigation="Inside Google"
+             role="menuitem"
+             title="See all Inside Google articles"
+             class="uni-main-menu__submenu-item-see-all">
+            See all
+            <svg id="mi-arrow-forward-no-bg" viewBox="0 0 32 32">
+              <polygon points="16,0 13.2,2.8 24.3,14 0,14 0,18 24.3,18 13.2,29.2 16,32 32,16"></polygon>
+            </svg>
+          </a>
+        
+      </li>
+    
+  </ul>
+  
+  <button class="uni-main-menu__submenu-close" aria-label="Close Menu">
+    <svg
+  
+  class="h-c-icon h-c-icon--24px uni-main-menu__submenu-close--icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#close_icon"></use>
+</svg>
+
+  </button>
+</div>
+
+          
+        </li>
+      
+        <li data-has-subnav=""
+            class="uni-main-menu__item uni-main-menu__item--desktop  inactive  ">
+          
+            <a href="/feed"
+               class="uni-main-menu__item-label "
+               role="button"
+                tabindex="0" >
+               Feed
+            </a>
+          
+          
+        </li>
+      
+    </ul>
+
+    
+  </div>
+
+  
+    
+      
+      
+<div class="uni-header__newsletter uni-header__newsletter--mobile">
+  <a class="uni-header__newsletter--cta uni-header__newsletter--cta--mobile kw-button
+          kw-button--high-emphasis"
+          href="/newsletter-subscribe/"
+          aria-label="Newsletter subscribe"
+          data-content-type="blogv2 | press page"
+           tabindex="-1" >
+    Subscribe</a>
+</div>
+
+    
+  
+</nav>
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/json" data-catalog-id="search-bar">
+  {
+    "find_an_article": "Find an article...",
+    "rss_link": "/rss/",
+    "rss_feed": "RSS feed",
+    "press_corner": "Press corner",
+    "press_corner_slug": "press/",
+    "secondary_menu": "Secondary menu",
+    "search": "Search",
+    "submit": "Submit",
+    "close": "Close",
+    "execute_search": "Execute search",
+    "dismiss_search": "Dismiss search",
+    "suggested_results_for": "[[number]] suggested results for [[query_term]]",
+    "by_string": "By",
+    "conjunction_symbol": "\u0026",
+    "suggested_searches": "Suggested searches",
+    "images": "Images",
+    "image_library_slug": "image\u002Dlibrary/"
+  }
+</script>
+
+<uni-search-bar
+  class="uni-search-bar"
+  search-placeholder="Ask a question or enter a keyword"
+  page-locale="en-us"
+  onboarding-text="Search freely using keywords, or by asking a question"
+  site-id="2"
+  
+  >
+  
+    <div slot="select-slot">
+      
+
+
+<div class="uni-picker" data-component="uni-lang-picker">
+  <select name="language"
+          class="uni-picker__order-menu"
+          aria-label="Change Region">
+    
+      <option label="Global (English)"
+              value="https://blog.google/image-library/"
+              class="uni-picker__item"
+              
+                selected="selected"
+                data-selected-index="0"
+              >
+        Global (English)
+      </option>
+    
+      <option label="Africa (English)"
+              value="https://blog.google/intl/en-africa/press/"
+              class="uni-picker__item"
+              >
+        Africa (English)
+      </option>
+    
+      <option label="Australia (English)"
+              value="https://blog.google/intl/en-au/press/"
+              class="uni-picker__item"
+              >
+        Australia (English)
+      </option>
+    
+      <option label="Brasil (Português)"
+              value="https://blog.google/intl/pt-br/"
+              class="uni-picker__item"
+              >
+        Brasil (Português)
+      </option>
+    
+      <option label="Canada (English)"
+              value="https://blog.google/intl/en-ca/press/"
+              class="uni-picker__item"
+              >
+        Canada (English)
+      </option>
+    
+      <option label="Canada (Français)"
+              value="https://blog.google/intl/fr-ca/salle-de-presse/"
+              class="uni-picker__item"
+              >
+        Canada (Français)
+      </option>
+    
+      <option label="Česko (Čeština)"
+              value="https://blog.google/intl/cs-cz/kontakty-pro-media/"
+              class="uni-picker__item"
+              >
+        Česko (Čeština)
+      </option>
+    
+      <option label="Deutschland (Deutsch)"
+              value="https://blog.google/intl/de-de/presse/"
+              class="uni-picker__item"
+              >
+        Deutschland (Deutsch)
+      </option>
+    
+      <option label="España (Español)"
+              value="https://blog.google/intl/es-es/prensa/"
+              class="uni-picker__item"
+              >
+        España (Español)
+      </option>
+    
+      <option label="France (Français)"
+              value="https://blog.google/intl/fr-fr/presse/"
+              class="uni-picker__item"
+              >
+        France (Français)
+      </option>
+    
+      <option label="Greece (Ελληνικά)"
+              value="https://blog.google/intl/el-gr/press/"
+              class="uni-picker__item"
+              >
+        Greece (Ελληνικά)
+      </option>
+    
+      <option label="India (English)"
+              value="https://blog.google/intl/en-in/press/"
+              class="uni-picker__item"
+              >
+        India (English)
+      </option>
+    
+      <option label="Indonesia (Bahasa Indonesia)"
+              value="https://blog.google/intl/id-id/press/"
+              class="uni-picker__item"
+              >
+        Indonesia (Bahasa Indonesia)
+      </option>
+    
+      <option label="Italia (Italiano)"
+              value="https://blog.google/intl/it-it/contattimedia/"
+              class="uni-picker__item"
+              >
+        Italia (Italiano)
+      </option>
+    
+      <option label="日本 (日本語)"
+              value="https://blog.google/intl/ja-jp/press/"
+              class="uni-picker__item"
+              >
+        日本 (日本語)
+      </option>
+    
+      <option label="대한민국 (한국어)"
+              value="https://blog.google/intl/ko-kr/press/"
+              class="uni-picker__item"
+              >
+        대한민국 (한국어)
+      </option>
+    
+      <option label="Latinoamérica (Español)"
+              value="https://blog.google/intl/es-419/prensa-latam/"
+              class="uni-picker__item"
+              >
+        Latinoamérica (Español)
+      </option>
+    
+      <option label="الشرق الأوسط وشمال أفريقيا (اللغة العربية)"
+              value="https://blog.google/intl/ar-mena/press/"
+              class="uni-picker__item"
+              >
+        الشرق الأوسط وشمال أفريقيا (اللغة العربية)
+      </option>
+    
+      <option label="MENA (English)"
+              value="https://blog.google/intl/en-mena/press/"
+              class="uni-picker__item"
+              >
+        MENA (English)
+      </option>
+    
+      <option label="Nederlands (Nederland)"
+              value="https://blog.google/intl/nl-nl/pers/"
+              class="uni-picker__item"
+              >
+        Nederlands (Nederland)
+      </option>
+    
+      <option label="New Zealand (English)"
+              value="https://blog.google/intl/en-nz/press-page/"
+              class="uni-picker__item"
+              >
+        New Zealand (English)
+      </option>
+    
+      <option label="Polska (Polski)"
+              value="https://blog.google/intl/pl-pl/prasa/"
+              class="uni-picker__item"
+              >
+        Polska (Polski)
+      </option>
+    
+      <option label="Portugal (Português)"
+              value="https://blog.google/intl/pt-pt/imprensa/"
+              class="uni-picker__item"
+              >
+        Portugal (Português)
+      </option>
+    
+      <option label="Sverige (Svenska)"
+              value="https://blog.google/intl/sv-se/press/"
+              class="uni-picker__item"
+              >
+        Sverige (Svenska)
+      </option>
+    
+      <option label="ประเทศไทย (ไทย)"
+              value="https://blog.google/intl/th-th/press/"
+              class="uni-picker__item"
+              >
+        ประเทศไทย (ไทย)
+      </option>
+    
+      <option label="Türkiye (Türkçe)"
+              value="https://blog.google/intl/tr-tr/medya/"
+              class="uni-picker__item"
+              >
+        Türkiye (Türkçe)
+      </option>
+    
+      <option label="台灣 (中文)"
+              value="https://blog.google/intl/zh-tw/press-corner/"
+              class="uni-picker__item"
+              >
+        台灣 (中文)
+      </option>
+    
+  </select>
+</div>
+
+    </div>
+  
+  <div slot="suggested-searches-slot">
+    [&quot;How can teachers and students use AI?&quot;, &quot;What are the newest features in Chrome?&quot;, &quot;How can I learn new AI skills?&quot;]
+  </div>
+</uni-search-bar>
+
+
+  
+  
+    
+      
+      
+<div class="uni-header__newsletter uni-header__newsletter--desktop">
+  <a class="uni-header__newsletter--cta uni-header__newsletter--cta--desktop kw-button
+          kw-button--high-emphasis"
+          href="/newsletter-subscribe/"
+          aria-label="Newsletter subscribe"
+          data-content-type="blogv2 | press page"
+          >
+    Subscribe</a>
+</div>
+
+    
+  
+</header>
+
+
+
+<nav class="uni-navigation uni-navigation--mobile"
+     role="navigation"
+     aria-label="Main"
+     data-component="uni-navigation-mobile" aria-hidden='true'
+     data-analytics-module='{
+        "module_name": "mobile nav",
+        "section_header": "Mobile menu"
+     }'>
+  
+    <div class="uni-navigation__brand-mobile" tabindex="-1">
+      <button class="uni-navigation__close" aria-label="Close Menu"
+              aria-hidden="true">
+        
+        <svg
+  aria-label="Close Menu"
+  class="h-c-icon h-c-icon--24px uni-main-menu__submenu-close--icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#close_icon"></use>
+</svg>
+
+      </button>
+
+      <figure class="uni-navigation__logo-google" title="Google">
+        <svg
+  aria-label="Google"
+  
+  
+  
+  
+  
+  role="img"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#h-color-google-logo"></use>
+</svg>
+
+      </figure>
+
+      <span class="uni-navigation__site-title">
+        <a class="uni-header__site-title-link" href="/">
+          The Keyword
+        </a>
+      </span>
+    </div>
+  
+
+  <div class="uni-navigation__list-mobile">
+    <ul id="uni-main-menu"
+        class="uni-main-menu"
+        >
+      
+        <li data-has-subnav=""
+            class="uni-main-menu__item uni-main-menu__item--mobile  inactive  ">
+          
+            <a href="/"
+               class="uni-main-menu__item-label "
+               role="button"
+                tabindex="-1">
+               Home
+            </a>
+          
+          
+        </li>
+      
+        <li data-has-subnav="yes"
+            class="uni-main-menu__item uni-main-menu__item--mobile  inactive   has-submenu">
+          
+            <button class="uni-main-menu__item-label  has-submenu"
+                    tabindex="0">
+              Innovation &amp; AI
+              <figure class="expand-caret">
+                <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+              </figure>
+            </button>
+            
+
+<div class="uni-main-menu__subnav uni-main-menu__subnav--mobile">
+  <button class="uni-main-menu__subnav-title uni-main-menu__subnav-title--mobile">
+    <figure class="expand-caret">
+      <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+    </figure>
+    Innovation &amp; AI
+  </button>
+  <ul class="uni-main-menu__subnav-list">
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Models &amp; Research
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/google-deepmind/"
+                   data-navigation=innovation-ai>
+                  Google DeepMind
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/google-research/"
+                   data-navigation=innovation-ai>
+                  Google Research
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/google-labs/"
+                   data-navigation=innovation-ai>
+                  Google Labs
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/gemini-models/"
+                   data-navigation=innovation-ai>
+                  Gemini models
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/models-and-research/quantum-computing/"
+                   data-navigation=innovation-ai>
+                  Quantum computing
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/innovation-and-ai/models-and-research/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Models &amp; Research">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Products
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/technology/developers-tools/"
+                   data-navigation=innovation-ai>
+                  Developer tools
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/products/gemini-app/"
+                   data-navigation=innovation-ai>
+                  Gemini app
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/products/notebooklm/"
+                   data-navigation=innovation-ai>
+                  NotebookLM
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/innovation-and-ai/products/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Products">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Infrastructure &amp; cloud
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/infrastructure-and-cloud/global-network/"
+                   data-navigation=innovation-ai>
+                  Global network
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/infrastructure-and-cloud/google-cloud/"
+                   data-navigation=innovation-ai>
+                  Google Cloud
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/innovation-and-ai/infrastructure-and-cloud/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Infrastructure &amp; cloud">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+  </ul>
+  
+    <div class="uni-main-menu__subnav-list">
+      <p class="uni-cta-text uni-main-menu__learn-more-title">Learn more:</p>
+      <ul class="uni-main-menu__learn-more-list">
+
+
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://deepmind.google/blog/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google DeepMind blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://research.google/blog/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Research blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://developers.googleblog.com/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Developers blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://cloud.google.com/blog" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Cloud blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+      </ul>
+    </div>
+  
+  
+    <div class="uni-main-menu__subnav-list">
+      <a href="/innovation-and-ai/" class="uni-cta-text uni-main-menu__learn-more-item uni-main-menu__learn-more-link">
+        <span>See all AI updates</span>
+        <span class="uni-main-menu__learn-more-link-icon uni-main-menu__learn-more-link-icon--see-all">
+          <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+        </span>
+      </a>
+    </div>
+  
+</div>
+
+          
+          
+        </li>
+      
+        <li data-has-subnav="yes"
+            class="uni-main-menu__item uni-main-menu__item--mobile  inactive   has-submenu">
+          
+            <button class="uni-main-menu__item-label  has-submenu"
+                    tabindex="0">
+              Products &amp; platforms
+              <figure class="expand-caret">
+                <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+              </figure>
+            </button>
+            
+
+<div class="uni-main-menu__subnav uni-main-menu__subnav--mobile">
+  <button class="uni-main-menu__subnav-title uni-main-menu__subnav-title--mobile">
+    <figure class="expand-caret">
+      <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+    </figure>
+    Products &amp; platforms
+  </button>
+  <ul class="uni-main-menu__subnav-list">
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Products
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/search/"
+                   data-navigation=products-platforms>
+                  Search
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/maps/"
+                   data-navigation=products-platforms>
+                  Maps
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/chrome/"
+                   data-navigation=products-platforms>
+                  Chrome
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/google-health/"
+                   data-navigation=products-platforms>
+                  Google Health
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/workspace/"
+                   data-navigation=products-platforms>
+                  Google Workspace
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/education/"
+                   data-navigation=products-platforms>
+                  Learning &amp; Education
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/products/shopping/"
+                   data-navigation=products-platforms>
+                  Shopping
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/products-and-platforms/products/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Products">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Platforms
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/platforms/android/"
+                   data-navigation=products-platforms>
+                  Android
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/platforms/google-play/"
+                   data-navigation=products-platforms>
+                  Google Play
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/platforms/wear-os/"
+                   data-navigation=products-platforms>
+                  Wear OS
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/products-and-platforms/platforms/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Platforms">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Devices
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/pixel/"
+                   data-navigation=products-platforms>
+                  Pixel
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/google-nest/"
+                   data-navigation=products-platforms>
+                  Google Nest
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/fitbit/"
+                   data-navigation=products-platforms>
+                  Fitbit
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/products-and-platforms/devices/chromebooks/"
+                   data-navigation=products-platforms>
+                  Chromebooks
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/products-and-platforms/devices/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Devices">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+  </ul>
+  
+    <div class="uni-main-menu__subnav-list">
+      <p class="uni-cta-text uni-main-menu__learn-more-title">Learn more:</p>
+      <ul class="uni-main-menu__learn-more-list">
+
+
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://blog.google/products/ads-commerce/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Google Ads &amp; Commerce blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+        <li class="uni-main-menu__learn-more-item">
+          <a href="https://blog.google/waze/" class="uni-cta-text uni-main-menu__learn-more-link">
+            <span class="uni-cta-text uni-main-menu__learn-more-link--text">Waze blog</span>
+            <span class="uni-main-menu__learn-more-link-icon">
+              <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+            </span>
+          </a>
+        </li>
+      
+      </ul>
+    </div>
+  
+  
+    <div class="uni-main-menu__subnav-list">
+      <a href="/products-and-platforms/" class="uni-cta-text uni-main-menu__learn-more-item uni-main-menu__learn-more-link">
+        <span>See all product updates</span>
+        <span class="uni-main-menu__learn-more-link-icon uni-main-menu__learn-more-link-icon--see-all">
+          <svg
+  
+  class="h-c-icon"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-arrow-forward-no-bg"></use>
+</svg>
+
+        </span>
+      </a>
+    </div>
+  
+</div>
+
+          
+          
+        </li>
+      
+        <li data-has-subnav="yes"
+            class="uni-main-menu__item uni-main-menu__item--mobile  inactive   has-submenu">
+          
+            <button class="uni-main-menu__item-label  has-submenu"
+                    tabindex="0">
+              Company news
+              <figure class="expand-caret">
+                <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+              </figure>
+            </button>
+            
+
+<div class="uni-main-menu__subnav uni-main-menu__subnav--mobile">
+  <button class="uni-main-menu__subnav-title uni-main-menu__subnav-title--mobile">
+    <figure class="expand-caret">
+      <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+    </figure>
+    Company news
+  </button>
+  <ul class="uni-main-menu__subnav-list">
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Outreach &amp; initiatives
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/creating-opportunity/"
+                   data-navigation=company-news>
+                  Creating opportunity
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/technology/safety-security/"
+                   data-navigation=company-news>
+                  Safety &amp; security
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/google-org/"
+                   data-navigation=company-news>
+                  Google.org
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/public-policy/"
+                   data-navigation=company-news>
+                  Public policy
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/outreach-and-initiatives/sustainability/"
+                   data-navigation=company-news>
+                  Sustainability
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/innovation-and-ai/technology/health/"
+                   data-navigation=company-news>
+                  Health
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/company-news/outreach-and-initiatives/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Outreach &amp; initiatives">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Leadership
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/authors/sundar-pichai/"
+                   data-navigation=company-news>
+                  Sundar Pichai, CEO
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/authors/"
+                   data-navigation=company-news>
+                  More authors
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/authors/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Leadership">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+      <li class="uni-main-menu__subnav-item uni-main-menu__subnav-item--mobile has-submenu">
+        
+          <button class="uni-main-menu__subnav-item-name uni-main-menu__subnav-item-name--mobile">
+            Inside Google
+            <figure class="expand-caret">
+              <svg
+  
+  class="icon"
+  
+  
+  
+  
+  role="presentation"
+  
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-expand"></use>
+</svg>
+
+            </figure>
+          </button>
+
+          <ul class="uni-main-menu__subnav-sublist uni-main-menu__subnav-sublist--mobile">
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/inside-google/around-the-globe/"
+                   data-navigation=company-news>
+                  Around the globe
+                  
+                </a>
+              </li>
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                
+                <a class="uni-main-menu__subnav-sublist-link"
+                   href="/company-news/inside-google/life-at-google/"
+                   data-navigation=company-news>
+                  Life at Google
+                  
+                </a>
+              </li>
+            
+            
+              <li class="uni-main-menu__subnav-sublist-item">
+                <a href="/company-news/inside-google/"
+                   class="uni-main-menu__subnav-sublist-link uni-main-menu__subnav-sublist-link--all"
+                   data-navigation="Inside Google">
+                   See all
+                </a>
+              </li>
+          
+          </ul>
+        
+      </li>
+    
+  </ul>
+  
+  
+</div>
+
+          
+          
+        </li>
+      
+        <li data-has-subnav=""
+            class="uni-main-menu__item uni-main-menu__item--mobile  inactive  ">
+          
+            <a href="/feed"
+               class="uni-main-menu__item-label "
+               role="button"
+                tabindex="-1">
+               Feed
+            </a>
+          
+          
+        </li>
+      
+    </ul>
+
+    
+      <ul class="uni-header__kebab-menu uni-header__kebab-menu--mobile">
+        <li class="uni-header__kebab-menu-item">
+          
+            <a href="/image-library/"
+              title="Images">Images</a>
+          
+          </li>
+        <li class="uni-header__kebab-menu-item">
+          <a href="/rss/" title="RSS feed"
+             tabindex="-1" >
+            RSS feed
+          </a>
+        </li>
+      </ul>
+    
+  </div>
+
+  
+    
+      
+      
+<div class="uni-header__newsletter uni-header__newsletter--mobile">
+  <a class="uni-header__newsletter--cta uni-header__newsletter--cta--mobile kw-button
+          kw-button--high-emphasis"
+          href="/newsletter-subscribe/"
+          aria-label="Newsletter subscribe"
+          data-content-type="blogv2 | press page"
+           tabindex="-1" >
+    Subscribe</a>
+</div>
+
+    
+  
+</nav>
+
+
+  <div class="overlay-body-menu--mobile"></div>
+
+
+
+<div class="loader-mask">
+  <div class="loader-mask__loader"></div>
+</div>
+
+        
+
+        <main id="jump-content" class="site-content" tabindex="-1">
+            
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="application/json" data-catalog-id="press-feed">
+  {
+    "link_text": "Load more images",
+    "clear_all": "Clear all",
+    "counter_singular": "[[count]] result",
+    "counter_plural": "[[count]] results",
+    "aria_download_press": "Download press asset",
+    "filter_by": "Filter by:",
+    "filter_by_products": "Filter by products",
+    "filter_by_types": "Filter by types",
+    "filter_by_topics": "Filter by topics",
+    "find_a_press_kit": "Find a press kit…",
+    "clear_all_filters": "Clear all filters",
+    "search_image": "Search for an image",
+    "clear": "Clear",
+    "download": "Download",
+    "related_images": "Related images",
+    "close_modal": "Close modal",
+    "show_more_filters": "Show more filter items",
+    "show_previous_filters": "Show previous filter items",
+    "all": "All",
+    "see_more": "See more",
+    "next_press_kit": "next press kit",
+    "previous_press_kit": "previous press kit",
+    "jump_to_position": "Jump to position [[count]]",
+    "press_kit_position": "press kit [[count]] of [[total]]"
+  }
+</script>
+
+
+  <div class="press-page" style="min-height: 100vh;">
+    
+    
+    
+    
+    <uni-press-header
+      page-contact=""
+
+      page-title="Image Library"
+      >
+        <div slot="hero-subtitle-slot"><div class="rich-text"></div></div>
+        <div slot="hero-description-slot"><div class="rich-text"><p data-block-key="jfc08">Images on this page may be used for publication with credit: "Source: Google."<br/><br/> For press inquiries, email <a href="mailto:press@google.com">press@google.com</a>. Only members of the press will receive a response.<br/><br/> For all other inquiries please visit Google's <a href="http://www.google.com/support/?hl=en">Help Center</a>.</p></div></div>
+      
+        <div slot="hero-image-slot">
+          <img
+            alt=""
+            fetchpriority="high"
+            sizes="(min-width: 1420px) 727px, (min-width: 1040px) calc(45.83vw + 85px), (min-width: 780px) calc(50vw - 39px), calc(100vw - 30px)"
+            src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thekeyword_presscorner.width-100.format-webp.webp"
+            srcset="
+              https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thekeyword_presscorner.width-100.format-webp.webp 100w,
+              https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thekeyword_presscorner.width-400.format-webp.webp 400w,
+              https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thekeyword_presscorner.width-800.format-webp.webp 800w,
+              https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Thekeyword_presscorner.width-1500.format-webp.webp 1500w
+            ">
+        </div>
+      
+    </uni-press-header>
+
+    
+
+    <uni-press-assets
+      assets-per-view="12"
+      section-title="Press Asset"
+    >
+      <script id="filters" type="application/json">{"type": [["", "All Types"], ["Headshots", "Headshots"], ["Life At Google", "Life At Google"], ["Logos", "Logos"], ["Product Imagery", "Product Imagery"]], "productTags": [["", "All Products"], ["admob", "AdMob"], ["adsense", "AdSense"], ["android", "Android"], ["android-enterprise", "Android Enterprise"], ["products-arts-culture", "Arts \u0026 Culture"], ["calendar", "Calendar"], ["chat", "Chat"], ["chrome", "Chrome"], ["chromebooks", "Chromebooks"], ["products-developer-tools", "Developer tools"], ["devices-services", "Devices \u0026 Services"], ["products-fitbit", "Fitbit"], ["forms", "Forms"], ["products-bard", "Gemini"], ["products-gemini-app", "Gemini App"], ["gmail", "Gmail"], ["google-ad-manager", "Google Ad Manager"], ["google-ads", "Google Ads"], ["google-cloud", "Google Cloud"], ["docs", "Google Docs"], ["drive", "Google Drive"], ["google-earth", "Google Earth"], ["google-fi", "Google Fi Wireless"], ["google-fit", "Google Fit"], ["keep", "Google Keep"], ["products-google-labs", "Google Labs"], ["meet", "Google Meet"], ["google-nest", "Google Nest"], ["products-google-news", "Google News"], ["google-pay", "Google Pay"], ["google-play", "Google Play"], ["sheets", "Google Sheets"], ["slides", "Google Slides"], ["google-tv", "Google TV"], ["google-voice", "Google Voice"], ["google-workspace", "Google Workspace"], ["products-learning-education", "Learning \u0026 Education"], ["maps", "Maps"], ["photos", "Photos"], ["pixel", "Pixel"], ["pixel-buds", "Pixel Buds"], ["search", "Search"], ["google-shopping", "Shopping"], ["sites", "Sites"], ["translate", "Translate"], ["travel", "Travel"], ["wear-os-by-google", "Wear OS"], ["youtube", "YouTube"]], "topicTags": [["", "All Topics"], ["accessibility", "Accessibility"], ["ai", "AI"], ["alphabet", "Alphabet"], ["topics-gemini-models", "Gemini models"], ["topics-global-network", "Global Network"], ["topics-google-deepmind", "Google DeepMind"], ["google-in-asia", "Google in Asia"], ["google-news-initiative", "Google News Initiative"], ["topics-google-research", "Google Research"], ["life-at-google", "Life at Google"], ["sustainability", "Sustainability"], ["uk", "UK"]]}</script>
+      <script id="press_assets" type="application/json">[{"title": "Google", "subtitle": null, "type": "Logos", "tags": [], "slug": "google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_FullColor_3x_830x271px.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_FullColor_3x_830x27.max-600x600.format-webp.webp", "image_width": 3000, "image_height": 3000, "image_size": 99597}, {"title": "Googleplex Campus", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googleplex-campus", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Wide-view-of-Google-campus.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Wide-view-of-Google-campus.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 210397}, {"title": "Sundar Pichai", "subtitle": "CEO of Google and Alphabet", "type": "Headshots", "tags": [], "slug": "sundar-pichai", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hi_Res_1x1s_0015_Sundar.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hi_Res_1x1s_0015_Sundar.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 411275}, {"title": "Accessibility", "subtitle": null, "type": "Logos", "tags": ["accessibility"], "slug": "accessibility", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-600x600.format-webp.webp", "image_width": 768, "image_height": 768, "image_size": 69877}, {"title": "Ad Manager", "subtitle": null, "type": "Logos", "tags": ["google-ad-manager", "google-ads"], "slug": "ad-manager", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Ad_Manager_TV_300x300.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Ad_Manager_TV_300x300.max-600x600.format-webp.webp", "image_width": 300, "image_height": 300, "image_size": 57069}, {"title": "AdMob", "subtitle": null, "type": "Logos", "tags": ["admob", "google-ads"], "slug": "admob", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_admob_192px_WhiteBG.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_admob_192px_WhiteBG.max-600x600.format-webp.webp", "image_width": 734, "image_height": 734, "image_size": 18663}, {"title": "AdSense", "subtitle": null, "type": "Logos", "tags": ["adsense", "google-ads"], "slug": "adsense", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_adsense_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_adsense_color_2x_we.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 29301}, {"title": "Amin Vahdat", "subtitle": null, "type": "Headshots", "tags": ["google-cloud", "topics-global-network"], "slug": "amin-vahdat", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AminVahdatPortrait_May_24_v1.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AminVahdatPortrait_May_24_v1.max-600x600.format-webp.webp", "image_width": 3600, "image_height": 2400, "image_size": 3967284}, {"title": "Anat Ashkenazi", "subtitle": "Senior Vice President and Chief Financial Officer, Alphabet and Google", "type": "Headshots", "tags": [], "slug": "anat-ashkenazi", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AA-headshot.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/AA-headshot.max-600x600.format-webp.webp", "image_width": 4406, "image_height": 6277, "image_size": 6837816}, {"title": "Android", "subtitle": null, "type": "Logos", "tags": ["android", "android-enterprise"], "slug": "android", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/StaticBugdroidcore.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/StaticBugdroidcore.max-600x600.format-webp.webp", "image_width": 3840, "image_height": 2160, "image_size": 6599781}, {"title": "Android Auto", "subtitle": null, "type": "Logos", "tags": ["android", "android-enterprise"], "slug": "android-auto", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 74947}, {"title": "Android logo", "subtitle": null, "type": "Logos", "tags": ["android"], "slug": "android-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/horizontallockup_primary_bTFjL2T_1.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/horizontallockup_primary_bTFjL2.max-600x600.format-webp.webp", "image_width": 3062, "image_height": 925, "image_size": 312635}, {"title": "Ben Gomes", "subtitle": "Senior Vice President, Learning \u0026 Sustainability", "type": "Headshots", "tags": ["products-learning-education", "sustainability"], "slug": "ben-gomes", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/BenGomes132.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/BenGomes132.max-600x600.format-webp.webp", "image_width": 2832, "image_height": 4256, "image_size": null}, {"title": "Biking on the Google campus", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "biking-on-the-google-campus", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D3-PATIO-2-08023_1.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D3-PATIO-2-08023_1.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 7191289}, {"title": "Cafe at Google", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "cafe-at-google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 175928}, {"title": "Calendar", "subtitle": null, "type": "Logos", "tags": ["calendar", "google-workspace", "google-cloud"], "slug": "calendar", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Calendar_Icon.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Calendar_Icon.max-600x600.format-webp.webp", "image_width": 192, "image_height": 192, "image_size": 5726}, {"title": "Chessboard at Google", "subtitle": null, "type": "Life At Google", "tags": ["life-at-google"], "slug": "chessboard-at-google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00489.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00489.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 2137306}, {"title": "Chrome", "subtitle": null, "type": "Logos", "tags": ["chrome"], "slug": "chrome", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Chrome_Logo_302lWQv.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Chrome_Logo_302lWQv.max-600x600.format-webp.webp", "image_width": 2096, "image_height": 1182, "image_size": 71222}, {"title": "Chromebook", "subtitle": null, "type": "Logos", "tags": ["chrome", "chromebooks"], "slug": "chromebook", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Chromebook_Logo.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Chromebook_Logo.max-600x600.format-webp.webp", "image_width": 2096, "image_height": 1182, "image_size": 53027}, {"title": "Debbie Weinstein", "subtitle": "Managing Director, Google United Kingdom \u0026 Ireland", "type": "Headshots", "tags": ["uk"], "slug": "debbie-weinstein", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/debbie_weinstein_headshot.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/debbie_weinstein_headshot.max-600x600.format-webp.webp", "image_width": 1543, "image_height": 1280, "image_size": 212207}, {"title": "Demis Hassabis", "subtitle": "CEO, Google DeepMind", "type": "Headshots", "tags": ["topics-google-deepmind", "ai"], "slug": "demis-hassabis", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Demis_Hassabis_Headshot_2023_Please_credit_Ange.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Demis_Hassabis_Headshot_2023_Pl.max-600x600.format-webp.webp", "image_width": 8984, "image_height": 6732, "image_size": 16588785}, {"title": "Dinosaur (\"Stan\") at the Googleplex", "subtitle": null, "type": "Life At Google", "tags": ["life-at-google"], "slug": "dinosaur-stan-at-the-googleplex", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Dinosaur-skeleton-at-Google.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Dinosaur-skeleton-at-Google.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 220001}, {"title": "Docs", "subtitle": null, "type": "Logos", "tags": ["docs", "google-workspace", "google-cloud"], "slug": "docs", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_docs_2020q4_color_1x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_docs_2020q4_color_1x_web_5.max-600x600.format-webp.webp", "image_width": 512, "image_height": 512, "image_size": 1728}, {"title": "Dogs at Google", "subtitle": null, "type": "Life At Google", "tags": ["life-at-google"], "slug": "dogs-at-google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-GCE-1-01398.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-GCE-1-01398.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 4906866}, {"title": "Donald Harrison", "subtitle": "President, Global Partnerships and Corporate Development", "type": "Headshots", "tags": ["google-ads"], "slug": "donald-harrison", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Don_Harrison_Headshot_2018.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Don_Harrison_Headshot_2018.max-600x600.format-webp.webp", "image_width": 1800, "image_height": 1200, "image_size": null}, {"title": "Drive", "subtitle": null, "type": "Logos", "tags": ["drive", "google-workspace", "google-cloud"], "slug": "drive", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Drive_Icon.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Drive_Icon.max-600x600.format-webp.webp", "image_width": 192, "image_height": 192, "image_size": 9688}, {"title": "Earth", "subtitle": null, "type": "Logos", "tags": ["google-earth"], "slug": "earth", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_earth_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_earth_color_2x_web_512dp.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 62629}, {"title": "Fiona Cicconi", "subtitle": "Chief People Officer", "type": "Headshots", "tags": ["life-at-google"], "slug": "fiona-cicconi", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fiona_Cicconi.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fiona_Cicconi.max-600x600.format-webp.webp", "image_width": 800, "image_height": 1200, "image_size": 121374}, {"title": "Fitbit", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services"], "slug": "fitbit", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Product_Family_Fall_2022_Full_Lineup_Q32.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Product_Family_Fall_2022.max-600x600.format-webp.webp", "image_width": 1935, "image_height": 883, "image_size": 1031676}, {"title": "Fitbit Ace 3", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit"], "slug": "fitbit-ace-3", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Ace_3_kids_tracker_Render_3QTR_SE_Minion.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Ace_3_kids_tracker_Rende.max-600x600.format-webp.webp", "image_width": 2000, "image_height": 2000, "image_size": 1248735}, {"title": "Fitbit Aria Air", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit"], "slug": "fitbit-aria-air", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Aria_Air_smart_scale_Retail_Front_White_.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Aria_Air_smart_scale_Ret.max-600x600.format-webp.webp", "image_width": 10000, "image_height": 10000, "image_size": 3531557}, {"title": "Fitbit Charge 5", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit"], "slug": "fitbit-charge-5", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Charge_5_tracker_Render_3QTR_Core_Lunar_.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Charge_5_tracker_Render_.max-600x600.format-webp.webp", "image_width": 2000, "image_height": 2000, "image_size": 614240}, {"title": "Fitbit Inspire 3", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit"], "slug": "fitbit-inspire-3", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Inspire_3_tracker_Laydown_Photography_Al.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Inspire_3_tracker_Laydow.max-600x600.format-webp.webp", "image_width": 2096, "image_height": 1182, "image_size": 3333631}, {"title": "Fitbit Luxe", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit", "devices-services"], "slug": "fitbit-luxe", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Luxe_tracker_Render_3QTR_SE_gorjana_Soft.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Luxe_tracker_Render_3QTR.max-600x600.format-webp.webp", "image_width": 2000, "image_height": 2000, "image_size": 1437937}, {"title": "Fitbit Premium", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit", "devices-services"], "slug": "fitbit-premium", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_app_Premium_2022Q2_P6_Sleep_Profile_anim.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_app_Premium_2022Q2_P6_Sl.max-600x600.format-webp.webp", "image_width": 10000, "image_height": 10000, "image_size": 5582012}, {"title": "Fitbit Sense 2", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit", "devices-services"], "slug": "fitbit-sense-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Sense_2_smartwatch_3Qtr_Core_Graphite_To.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Sense_2_smartwatch_3Qtr_.max-600x600.format-webp.webp", "image_width": 2400, "image_height": 2400, "image_size": 1661664}, {"title": "Fitbit Versa 4", "subtitle": null, "type": "Product Imagery", "tags": ["products-fitbit", "devices-services"], "slug": "fitbit-versa-4", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Versa_4_smartwatch_3Qtr_Core_Rosewater_T.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Fitbit_Versa_4_smartwatch_3Qtr_.max-600x600.format-webp.webp", "image_width": 2400, "image_height": 2400, "image_size": 1555055}, {"title": "Forms", "subtitle": null, "type": "Logos", "tags": ["docs", "forms", "google-workspace", "google-cloud"], "slug": "forms", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Forms.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Forms.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 12432}, {"title": "Gboard", "subtitle": null, "type": "Logos", "tags": [], "slug": "gboard", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_gboard_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_gboard_color_2x_web_512dp.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 77967}, {"title": "Gemini logo", "subtitle": null, "type": "Logos", "tags": ["products-bard", "products-gemini-app"], "slug": "gemini-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_PrimaryLogo_FullColor_1.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_PrimaryLogo_FullColor_1.max-600x600.format-webp.webp", "image_width": 1510, "image_height": 340, "image_size": 180712}, {"title": "Gemini Spark logo", "subtitle": null, "type": "Logos", "tags": ["topics-gemini-models", "products-bard", "products-gemini-app"], "slug": "gemini-spark-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_SparkIcon_4C.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gemini_SparkIcon_4C.max-600x600.format-webp.webp", "image_width": 560, "image_height": 560, "image_size": 97886}, {"title": "Gmail", "subtitle": null, "type": "Logos", "tags": ["gmail", "google-workspace", "google-cloud"], "slug": "gmail", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_Icon.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Gmail_Icon.max-600x600.format-webp.webp", "image_width": 192, "image_height": 192, "image_size": 6251}, {"title": "Google", "subtitle": null, "type": "Logos", "tags": [], "slug": "google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_FullColor_3x_830x271px.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_FullColor_3x_830x27.max-600x600.format-webp.webp", "image_width": 3000, "image_height": 3000, "image_size": 99597}, {"title": "Google Ads", "subtitle": null, "type": "Logos", "tags": ["google-ads"], "slug": "google-ads", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_Ads_192px_6FhG7FO.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_Ads_192px_6FhG7FO.max-600x600.format-webp.webp", "image_width": 192, "image_height": 192, "image_size": 4131}, {"title": "Google app logo", "subtitle": null, "type": "Logos", "tags": ["search"], "slug": "google-app-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleG_FullColor_White_RGB.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleG_FullColor_White_RGB.max-600x600.format-webp.webp", "image_width": 4304, "image_height": 4335, "image_size": 478026}, {"title": "Google Arts \u0026 Culture icon", "subtitle": null, "type": "Logos", "tags": ["products-arts-culture"], "slug": "google-arts-culture-icon", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/google_arts_and_culture_1x_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/google_arts_and_culture_1x_512d.max-600x600.format-webp.webp", "image_width": 512, "image_height": 512, "image_size": 36352}, {"title": "Google Arts \u0026 Culture text logo", "subtitle": null, "type": "Logos", "tags": ["products-arts-culture"], "slug": "google-arts-culture-text-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Arts_and_Culture_Lockup.max-2800x2800.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Arts_and_Culture_Lockup..max-600x600.format-webp.webp", "image_width": 3000, "image_height": 3000, "image_size": 195418}, {"title": "Google Bay View building", "subtitle": "Credit: Iwan Baan", "type": "Life At Google", "tags": ["life-at-google"], "slug": "google-bay-view-building", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Bay_View_3-Iwan_Baan.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Bay_View_3-Iwan_Baan.max-600x600.format-webp.webp", "image_width": 8192, "image_height": 5464, "image_size": 15911332}, {"title": "Google Bay View campus", "subtitle": "Credit: Iwan Baan", "type": "Life At Google", "tags": ["life-at-google"], "slug": "google-bay-view-campus", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Bay_View_1-Iwan_Baan.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Bay_View_1-Iwan_Baan.max-600x600.format-webp.webp", "image_width": 8192, "image_height": 5464, "image_size": 11461217}, {"title": "Google Bay View interior", "subtitle": "Credit: Iwan Baan", "type": "Life At Google", "tags": ["life-at-google"], "slug": "google-bay-view-interior", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Bay_View_22-Iwan_Baan.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Bay_View_22-Iwan_Baan.max-600x600.format-webp.webp", "image_width": 8192, "image_height": 5464, "image_size": 14979270}, {"title": "Google bicycles on campus", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "google-bicycles-on-campus", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00277.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00277.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 2404416}, {"title": "Google cafe booths", "subtitle": null, "type": "Life At Google", "tags": ["life-at-google"], "slug": "google-cafe-booths", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00585.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00585.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 1539406}, {"title": "Google Chat", "subtitle": null, "type": "Logos", "tags": ["google-workspace", "google-cloud", "chat"], "slug": "google-chat", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Chat_Logo.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Chat_Logo.max-600x600.format-webp.webp", "image_width": 2096, "image_height": 1182, "image_size": 15513}, {"title": "Google Cloud logo", "subtitle": null, "type": "Logos", "tags": ["google-cloud"], "slug": "google-cloud-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_googleCloud_2.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_googleCloud_2.max-600x600.format-webp.webp", "image_width": 1920, "image_height": 340, "image_size": 27958}, {"title": "Google Cloud logo", "subtitle": null, "type": "Logos", "tags": ["google-cloud"], "slug": "google-cloud-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_cloud_color_1x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_cloud_color_1x_web_.max-600x600.format-webp.webp", "image_width": 512, "image_height": 512, "image_size": 13264}, {"title": "Google Developers", "subtitle": null, "type": "Logos", "tags": ["products-developer-tools"], "slug": "google-developers", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_developers_color_1x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_developers_color_1x.max-600x600.format-webp.webp", "image_width": 512, "image_height": 512, "image_size": 12139}, {"title": "Google Fi", "subtitle": null, "type": "Logos", "tags": ["google-fi"], "slug": "google-fi", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_fi_2023q2_color_1x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_fi_2023q2_color_1x_web_512.max-600x600.format-webp.webp", "image_width": 512, "image_height": 512, "image_size": 10080}, {"title": "Google Fit", "subtitle": null, "type": "Logos", "tags": ["google-fit"], "slug": "google-fit", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_gfit_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_gfit_color_2x_web_512dp.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 28282}, {"title": "Google Home App", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest"], "slug": "google-home-app", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hero6up_kgaU4PR.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hero6up_kgaU4PR.max-600x600.format-webp.webp", "image_width": 7680, "image_height": 4320, "image_size": 5101796}, {"title": "Google Marketing Platform", "subtitle": null, "type": "Logos", "tags": ["google-ads"], "slug": "google-marketing-platform", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_MarketingPlatform_192px.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_Google_MarketingPlatform_1.max-600x600.format-webp.webp", "image_width": 192, "image_height": 192, "image_size": 5934}, {"title": "Google Meet", "subtitle": null, "type": "Product Imagery", "tags": ["google-cloud", "meet"], "slug": "google-meet", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Commercial_Desktop_x_9_UI_only.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Commercial_Desktop_x_9_UI_only.max-600x600.format-webp.webp", "image_width": 1280, "image_height": 800, "image_size": 782163}, {"title": "Google Meet", "subtitle": null, "type": "Logos", "tags": ["meet", "google-workspace", "google-cloud"], "slug": "google-meet", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Meet_Icon.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Meet_Icon.max-600x600.format-webp.webp", "image_width": 192, "image_height": 192, "image_size": 5622}, {"title": "Google Nest Wifi Pro", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "google-nest"], "slug": "google-nest-wifi-pro", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/social_enUS_Wifi3R_2022Q3_FoundationalPlan_Anno.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/social_enUS_Wifi3R_2022Q3_Found.max-600x600.format-webp_KfktkHI.webp", "image_width": 2160, "image_height": 2160, "image_size": 4672676}, {"title": "Google News", "subtitle": null, "type": "Logos", "tags": ["products-google-news", "google-news-initiative"], "slug": "google-news", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/ic_google_news_icon__192px_ic_material_product_.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/ic_google_news_icon__192px_ic_m.max-600x600.format-webp.webp", "image_width": 801, "image_height": 800, "image_size": 35105}, {"title": "Google News Initiative", "subtitle": null, "type": "Logos", "tags": ["products-google-news", "google-news-initiative"], "slug": "google-news-initiative", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_NewsInitiative_Lockup_FullColor_Sta.max-.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_NewsInitiative_Lockup_Fu.max-600x600.format-webp.webp", "image_width": 2800, "image_height": 1612, "image_size": 558901}, {"title": "Google office lawn", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "google-office-lawn", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00557.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00557.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 8585582}, {"title": "Google One", "subtitle": null, "type": "Logos", "tags": ["google-cloud"], "slug": "google-one", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/1_icon.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/1_icon.max-600x600.format-webp.webp", "image_width": 478, "image_height": 961, "image_size": 17031}, {"title": "Google Pay", "subtitle": null, "type": "Logos", "tags": ["google-pay"], "slug": "google-pay", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GooglePay_01b_Horizontal_2020_yWgFJDY.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GooglePay_01b_Horizontal_2020_y.max-600x600.format-webp.webp", "image_width": 1600, "image_height": 290, "image_size": 40977}, {"title": "Google Photos", "subtitle": null, "type": "Logos", "tags": ["photos"], "slug": "google-photos", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/unnamed_Xn0phqq.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/unnamed_Xn0phqq.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 30868}, {"title": "Google Pixel Watch", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "pixel"], "slug": "google-pixel-watch", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Pixel_Watch.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Pixel_Watch.max-600x600.format-webp.webp", "image_width": 1600, "image_height": 900, "image_size": 332209}, {"title": "Google Play icon", "subtitle": null, "type": "Logos", "tags": ["google-play"], "slug": "google-play-icon", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Logo_Play_512px_clr.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Logo_Play_512px_clr.max-600x600.format-webp.webp", "image_width": 512, "image_height": 512, "image_size": 6825}, {"title": "Google Shopping logo", "subtitle": null, "type": "Logos", "tags": ["google-shopping"], "slug": "google-shopping-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleShopping1000px.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GoogleShopping1000px.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 150, "image_size": 20342}, {"title": "Google skateboard", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "google-skateboard", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00723.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00723.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 1782635}, {"title": "Google Store", "subtitle": null, "type": "Logos", "tags": [], "slug": "google-store", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Logo_GoogleStore_Horz_PMS_Coated_Large_900-01.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Logo_GoogleStore_Horz_PMS_Coate.max-600x600.format-webp.webp", "image_width": 2952, "image_height": 544, "image_size": 52191}, {"title": "Google TV", "subtitle": null, "type": "Logos", "tags": ["google-tv"], "slug": "google-tv", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_TV_Primary_Brandmark_RGB.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_TV_Primary_Brandmark_RGB.max-600x600.format-webp.webp", "image_width": 6255, "image_height": 2098, "image_size": 117731}, {"title": "Google Visitor Experience Cafe", "subtitle": "Credit: Mark Wickens", "type": "Life At Google", "tags": [], "slug": "google-visitor-experience-cafe", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Cafe_booths_and_mural_credit__Mark_Wickens_2QmQ.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Cafe_booths_and_mural_credit__M.max-600x600.format-webp_e2VgZlm.webp", "image_width": 5000, "image_height": 3335, "image_size": 10893205}, {"title": "Google Visitor Experience Cafe Counter", "subtitle": "Credit: Mark Wickens", "type": "Life At Google", "tags": [], "slug": "google-visitor-experience-cafe-counter", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Cafe_counter_credit__Mark_Wickens_T1l26qC.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Cafe_counter_credit__Mark_Wicke.max-600x600.format-webp_I25K88y.webp", "image_width": 5000, "image_height": 3335, "image_size": 10612535}, {"title": "Google Visitor Experience Cafe Patio", "subtitle": "Credit: Mark Wickens", "type": "Life At Google", "tags": [], "slug": "google-visitor-experience-cafe-patio", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Cafe_patio_credit__Mark_Wickens_vaXXz0A.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Cafe_patio_credit__Mark_Wickens.max-600x600.format-webp_C5dEgK4.webp", "image_width": 5000, "image_height": 3335, "image_size": 9141128}, {"title": "Google Visitor Experience Huddle", "subtitle": "Credit: Mark Wickens", "type": "Life At Google", "tags": [], "slug": "google-visitor-experience-huddle", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Huddle_1_credit__Mark_Wickens.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Huddle_1_credit__Mark_Wickens.max-600x600.format-webp.webp", "image_width": 5000, "image_height": 3335, "image_size": 8122693}, {"title": "Google Visitor Experience Huddle 2", "subtitle": "Credit: Mark Wickens", "type": "Life At Google", "tags": [], "slug": "google-visitor-experience-huddle-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Huddle_2_credit__Mark_Wickens_oXcfrFu.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Huddle_2_credit__Mark_Wickens_o.max-600x600.format-webp.webp", "image_width": 5000, "image_height": 3335, "image_size": 10575679}, {"title": "Google Visitor Experience Store", "subtitle": "Credit: Mark Wickens", "type": "Life At Google", "tags": [], "slug": "google-visitor-experience-store", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/G_Store_cabinet_of_curiosities_3_credit__Mark_W.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/G_Store_cabinet_of_curiosities_.max-600x600.format-webp_1QK1VvH.webp", "image_width": 5000, "image_height": 3335, "image_size": 12407097}, {"title": "Google Voice", "subtitle": null, "type": "Logos", "tags": ["google-voice", "google-workspace"], "slug": "google-voice", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Voice_8Ytgydy.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Voice_8Ytgydy.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 20735}, {"title": "Google Wallet", "subtitle": null, "type": "Logos", "tags": [], "slug": "google-wallet", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_wallet_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_wallet_color_2x_web_512dp.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 20802}, {"title": "Google workspace", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "google-workspace", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D6-GPLUS-1-12860.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D6-GPLUS-1-12860.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 6018240}, {"title": "Google Workspace flagship icons", "subtitle": null, "type": "Logos", "tags": ["google-workspace", "google-cloud", "calendar", "drive", "gmail", "meet", "docs"], "slug": "google-workspace-flagship-icons", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_workspace_products.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_google_workspace_products.max-600x600.format-webp.webp", "image_width": 601, "image_height": 88, "image_size": 15560}, {"title": "Google Workspace logo", "subtitle": null, "type": "Logos", "tags": ["google-workspace"], "slug": "google-workspace-logo", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Logo_google_workspace.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Logo_google_workspace.max-600x600.format-webp.webp", "image_width": 750, "image_height": 97, "image_size": 36021}, {"title": "Googleplex 1", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "googleplex-1", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D3-PATIO-1-07658.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D3-PATIO-1-07658.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 576012}, {"title": "Googleplex 2", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "googleplex-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D3-PATIO-1-07787.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D3-PATIO-1-07787.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 5298705}, {"title": "Googler in a workspace", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googler-in-a-workspace", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-SMB-2-01353.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-SMB-2-01353.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 506360}, {"title": "Googler working in 3D", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "googler-working-in-3d", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Googler-working-in-3d.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Googler-working-in-3d.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 112955}, {"title": "Googlers at work 1", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "googlers-at-work-1", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-GCE-3-02083.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-GCE-3-02083.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 591902}, {"title": "Googlers at work 2", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googlers-at-work-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D6-GYM-1-12510.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D6-GYM-1-12510.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 935424}, {"title": "Googlers at work 3", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googlers-at-work-3", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Googlers-discussing.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Googlers-discussing.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 411002}, {"title": "Googlers at work 4", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googlers-at-work-4", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-UXD-1-11119.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-UXD-1-11119.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 4094553}, {"title": "Googlers at work 5", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googlers-at-work-5", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Collaborating-over-Hangouts-at-Google.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Collaborating-over-Hangouts-at-.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 449167}, {"title": "Googlers in microkitchen", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "googlers-in-microkitchen", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-SMB-1-00996.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D1-SMB-1-00996.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 526336}, {"title": "Googlers playing chess", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "googlers-playing-chess", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00512.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00512.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 1817528}, {"title": "Hiroshi Lockheimer", "subtitle": "Chief Product Officer, Other Bets", "type": "Headshots", "tags": ["alphabet", "google-in-asia"], "slug": "hiroshi-lockheimer", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hiroshi-Lockheimer.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hiroshi-Lockheimer.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 311808}, {"title": "James Manyika", "subtitle": "SVP, Research, Labs, Technology \u0026 Society", "type": "Headshots", "tags": ["ai", "topics-google-research", "products-google-labs"], "slug": "james-manyika", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/James_Manyika_headshot.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/James_Manyika_headshot.max-600x600.format-webp.webp", "image_width": 9568, "image_height": 7620, "image_size": 32661236}, {"title": "Jeff Dean", "subtitle": "Chief Scientist, Google DeepMind and Google Research", "type": "Headshots", "tags": [], "slug": "jeff-dean", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Jeff-Dean.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Jeff-Dean.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 411297}, {"title": "Jen Fitzpatrick", "subtitle": "Senior Vice President, Core", "type": "Headshots", "tags": [], "slug": "jen-fitzpatrick", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Jen-Fitzpatrick.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Jen-Fitzpatrick.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 290137}, {"title": "Josh Woodward", "subtitle": "VP, Google Labs \u0026 Gemini", "type": "Headshots", "tags": ["products-bard", "products-gemini-app", "products-google-labs"], "slug": "josh-woodward", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image1_xA12fbk.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image1_xA12fbk.max-600x600.format-webp.webp", "image_width": 1999, "image_height": 1333, "image_size": 190911}, {"title": "Keep", "subtitle": null, "type": "Logos", "tags": ["docs", "keep", "google-workspace"], "slug": "keep", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Keep.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Keep.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 11631}, {"title": "Kent Walker", "subtitle": "President, Global Affairs \u0026 Chief Legal Officer", "type": "Headshots", "tags": [], "slug": "kent-walker", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Copy_of_Copy_of_JM_Final_Full_Res_Kent_Walker_S.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Copy_of_Copy_of_JM_Final_Full_R.max-600x600.format-webp.webp", "image_width": 5632, "image_height": 3755, "image_size": 8394272}, {"title": "Koray Kavukcuoglu", "subtitle": "CTO, Google DeepMind and Chief AI Architect, Google", "type": "Headshots", "tags": ["topics-google-deepmind", "ai"], "slug": "koray-kavukcuoglu", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/koray.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/koray.max-600x600.format-webp.webp", "image_width": 600, "image_height": 600, "image_size": 81739}, {"title": "Kuala Lumpur Google office", "subtitle": "", "type": "Life At Google", "tags": ["google-in-asia"], "slug": "kuala-lumpur-google-office", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Malaysia_office.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Malaysia_office.max-600x600.format-webp.webp", "image_width": 4928, "image_height": 3264, "image_size": 4123576}, {"title": "Lego wall space", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "lego-wall-space", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00814.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00814.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 9059990}, {"title": "Liz Reid", "subtitle": "VP, Search", "type": "Headshots", "tags": ["search"], "slug": "liz-reid", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Liz_Reid_Headshot.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Liz_Reid_Headshot.max-600x600.format-webp.webp", "image_width": 966, "image_height": 994, "image_size": 1056795}, {"title": "Lorraine Twohill", "subtitle": "Chief Marketing Officer", "type": "Headshots", "tags": [], "slug": "lorraine-twohill", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Lorraine_Twohill2_22440_cv2.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Lorraine_Twohill2_22440_cv2.max-600x600.format-webp.webp", "image_width": 1814, "image_height": 1813, "image_size": 443939}, {"title": "Maps", "subtitle": null, "type": "Logos", "tags": ["maps"], "slug": "maps", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Maps_Pin_FullColor_H1rPKw6.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Maps_Pin_FullColor_H1rPKw6.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 1000, "image_size": 26014}, {"title": "Mary Ellen Coe", "subtitle": "Chief Business Officer, YouTube", "type": "Headshots", "tags": ["youtube"], "slug": "mary-ellen-coe", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Mary_Ellen_Coe_01_preferred_JnLePSW.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Mary_Ellen_Coe_01_preferred_JnL.max-600x600.format-webp.webp", "image_width": 4480, "image_height": 6720, "image_size": 15373200}, {"title": "Meeting at Google", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "meeting-at-google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Meeting-at-Google.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Meeting-at-Google.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 170690}, {"title": "Neal Mohan", "subtitle": "Head of YouTube", "type": "Headshots", "tags": ["youtube"], "slug": "neal-mohan", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Neal.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Neal.max-600x600.format-webp.webp", "image_width": 4528, "image_height": 3016, "image_size": 3730116}, {"title": "Nest Audio", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-audio", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_Audio_ProductChalk_Q322.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_Audio_ProductChalk_Q322.max-600x600.format-webp.webp", "image_width": 4261, "image_height": 3196, "image_size": 5173611}, {"title": "Nest Cam (indoor, wired)", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-cam-indoor-wired", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_CamWiredColors_Q322.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_CamWiredColors_Q322.max-600x600.format-webp.webp", "image_width": 3572, "image_height": 2857, "image_size": 5256694}, {"title": "Nest Cam (outdoor or indoor, battery)", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-cam-outdoor-or-indoor-battery", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_CamBatteryWhite.Q322_jpg.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_CamBatteryWhite.Q322_jpg.max-600x600.format-webp.webp", "image_width": 2400, "image_height": 1800, "image_size": 1101922}, {"title": "Nest Cam with floodlight", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-cam-with-floodlight", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_CamFloodlightNightUS_Q322.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_CamFloodlightNightUS_Q322.max-600x600.format-webp.webp", "image_width": 8555, "image_height": 4812, "image_size": 13620834}, {"title": "Nest Doorbell", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-doorbell", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_DoorbellBatteryColors_Q322.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_DoorbellBatteryColors_Q322.max-600x600.format-webp.webp", "image_width": 5000, "image_height": 2857, "image_size": 6975704}, {"title": "Nest Doorbell (Wired, 2nd gen)", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "google-nest"], "slug": "nest-doorbell-wired-2nd-gen", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_Doorbell_Wired_colors_snow-linen-ash-ivy_G.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_Doorbell_Wired_colors_snow.max-600x600.format-webp_h2XMryS.webp", "image_width": 2700, "image_height": 2160, "image_size": 3313746}, {"title": "Nest Hub 2nd Gen", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "google-nest"], "slug": "nest-hub-2nd-gen", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_USNH2G_Chalk_Q121_jpg.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_USNH2G_Chalk_Q121_jpg.max-600x600.format-webp.webp", "image_width": 2500, "image_height": 2500, "image_size": 584871}, {"title": "Nest Hub Max", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-hub-max", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_HubMax_ProductCHALK_Q322_ADOss02.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_HubMax_ProductCHALK_Q322_A.max-600x600.format-webp.webp", "image_width": 4000, "image_height": 4000, "image_size": 11748636}, {"title": "Nest Learning Thermostat", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest", "devices-services"], "slug": "nest-learning-thermostat", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_NLT_Product_Q322_v45m4Wr.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_NLT_Product_Q322_v45m4Wr.max-600x600.format-webp.webp", "image_width": 3078, "image_height": 2509, "image_size": 3202127}, {"title": "Nest Mini", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "google-nest"], "slug": "nest-mini", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_Mini_Colors_Q322.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Nest_Mini_Colors_Q322.max-600x600.format-webp.webp", "image_width": 1100, "image_height": 731, "image_size": 340993}, {"title": "Nest Thermostat", "subtitle": null, "type": "Product Imagery", "tags": ["google-nest"], "slug": "nest-thermostat", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image_enUS_GNT_F_Snow_20_0405_0392_01_Heating_R.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image_enUS_GNT_F_Snow_20_0405_0.max-600x600.format-webp.webp", "image_width": 4261, "image_height": 3196, "image_size": 1966960}, {"title": "Nick Fox", "subtitle": "SVP, Knowledge \u0026 Information", "type": "Headshots", "tags": ["search", "google-ads", "maps"], "slug": "nick-fox", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/NickFox_headshot_final_1.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/NickFox_headshot_final_1.max-600x600.format-webp.webp", "image_width": 4256, "image_height": 2832, "image_size": 4162648}, {"title": "Philipp Schindler", "subtitle": "Senior Vice President, Global Sales \u0026 Operations", "type": "Headshots", "tags": [], "slug": "philipp-schindler", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Philipp-Schindler.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Philipp-Schindler.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 308603}, {"title": "Pixel 7 and Pixel 7 Pro", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "pixel"], "slug": "pixel-7-and-pixel-7-pro", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_7_and_Pixel_7_Pro.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_7_and_Pixel_7_Pro.max-600x600.format-webp.webp", "image_width": 1600, "image_height": 1200, "image_size": 60042}, {"title": "Pixel 8", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "pixel"], "slug": "pixel-8", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8__Obsidian_2.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8__Obsidian_2.max-600x600.format-webp.webp", "image_width": 1200, "image_height": 1200, "image_size": 546578}, {"title": "Pixel 8 Pro", "subtitle": null, "type": "Product Imagery", "tags": ["devices-services", "pixel"], "slug": "pixel-8-pro", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8_Pro_Obsidian_2.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8_Pro_Obsidian_2.max-600x600.format-webp.webp", "image_width": 1200, "image_height": 1200, "image_size": 426575}, {"title": "Pixel 8a", "subtitle": null, "type": "Product Imagery", "tags": ["pixel"], "slug": "pixel-8a", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8a_Obsidian_2.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_8a_Obsidian_2.max-600x600.format-webp.webp", "image_width": 1200, "image_height": 1200, "image_size": 356089}, {"title": "Pixel Buds A Series", "subtitle": null, "type": "Product Imagery", "tags": ["pixel-buds", "devices-services"], "slug": "pixel-buds-a-series", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_BudsASeries_GroupImage_Q221.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_BudsASeries_GroupImage_Q2.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 563, "image_size": 183517}, {"title": "Pixel Buds Pro", "subtitle": null, "type": "Product Imagery", "tags": ["pixel-buds", "devices-services"], "slug": "pixel-buds-pro", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_BudsPro_Charcoal_Q322_ikSlgXa.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Pixel_BudsPro_Charcoal_Q322_ikS.max-600x600.format-webp.webp", "image_width": 10000, "image_height": 10000, "image_size": 7788091}, {"title": "Pixel Fold", "subtitle": null, "type": "Product Imagery", "tags": [], "slug": "pixel-fold", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image_enUS_PF_2023Q1_RTQ_Ajar_Obsidian_23H010x0.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image_enUS_PF_2023Q1_RTQ_Ajar_O.max-600x600.format-webp.webp", "image_width": 2400, "image_height": 2400, "image_size": 1472430}, {"title": "Rick Osterloh", "subtitle": "Senior Vice President, Platforms \u0026 Devices", "type": "Headshots", "tags": [], "slug": "rick-osterloh", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Rick-Osterloh.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Rick-Osterloh.max-600x600.format-webp.webp", "image_width": 2832, "image_height": 2832, "image_size": 1709633}, {"title": "Robby Stein", "subtitle": "VP of Product, Google Search", "type": "Headshots", "tags": ["search"], "slug": "robby-stein", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Robby_headshot.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Robby_headshot.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 69928}, {"title": "Robby Stein", "subtitle": null, "type": "Headshots", "tags": ["search"], "slug": "robby-stein", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Robby_headshot.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Robby_headshot.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 69928}, {"title": "Ruth Porat", "subtitle": "President \u0026 Chief Investment Officer, Alphabet and Google", "type": "Headshots", "tags": [], "slug": "ruth-porat", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Ruth_Porat_1.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Ruth_Porat_1.max-600x600.format-webp.webp", "image_width": 3300, "image_height": 4400, "image_size": 11625928}, {"title": "Sameer Samat", "subtitle": "President, Android Ecosystem", "type": "Headshots", "tags": ["android", "android-enterprise", "google-play"], "slug": "sameer-samat", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/sameer-samat-headshot.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/sameer-samat-headshot.max-600x600.format-webp.webp", "image_width": 3347, "image_height": 3347, "image_size": 7907405}, {"title": "Sanjay Gupta", "subtitle": "Country Head \u0026 Vice President, Google India", "type": "Headshots", "tags": ["google-in-asia"], "slug": "sanjay-gupta", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/SJ1.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/SJ1.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 524855}, {"title": "Sheets", "subtitle": null, "type": "Logos", "tags": ["docs", "sheets", "google-workspace", "google-cloud"], "slug": "sheets", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Sheets.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Sheets.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 9066}, {"title": "Singapore Google office 1", "subtitle": null, "type": "Life At Google", "tags": ["google-in-asia"], "slug": "singapore-google-office-1", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Copy_of_GOO_0258_Final_XuTC4pk.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Copy_of_GOO_0258_Final_XuTC4pk.max-600x600.format-webp.webp", "image_width": 5400, "image_height": 3600, "image_size": 11308973}, {"title": "Singapore Google office 2", "subtitle": "", "type": "Life At Google", "tags": ["google-in-asia"], "slug": "singapore-google-office-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GOO_0769_Final.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/GOO_0769_Final.max-600x600.format-webp.webp", "image_width": 5400, "image_height": 3600, "image_size": 11580587}, {"title": "Sites", "subtitle": null, "type": "Logos", "tags": ["docs", "sites", "google-workspace"], "slug": "sites", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Sites.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Sites.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 9125}, {"title": "Slides", "subtitle": null, "type": "Logos", "tags": ["slides", "google-workspace", "google-cloud"], "slug": "slides", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Slides.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Slides.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 8701}, {"title": "Sundar Pichai", "subtitle": "CEO of Google and Alphabet", "type": "Headshots", "tags": [], "slug": "sundar-pichai", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hi_Res_1x1s_0015_Sundar.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Hi_Res_1x1s_0015_Sundar.max-600x600.format-webp.webp", "image_width": 800, "image_height": 800, "image_size": 411275}, {"title": "Sydney Google office 1", "subtitle": null, "type": "Life At Google", "tags": ["google-in-asia"], "slug": "sydney-google-office-1", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Sydney_Google_Office.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Sydney_Google_Office.max-600x600.format-webp.webp", "image_width": 670, "image_height": 445, "image_size": 580014}, {"title": "Sydney Google office 2", "subtitle": "", "type": "Life At Google", "tags": ["google-in-asia"], "slug": "sydney-google-office-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Sydney_Google_Office_2.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Sydney_Google_Office_2.max-600x600.format-webp.webp", "image_width": 678, "image_height": 456, "image_size": 614559}, {"title": "Thomas Kurian", "subtitle": "Chief Executive Officer, Google Cloud", "type": "Headshots", "tags": ["google-cloud"], "slug": "thomas-kurian", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/thomas-kurian_1.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/thomas-kurian_1.max-600x600.format-webp.webp", "image_width": 3540, "image_height": 2832, "image_size": 2023037}, {"title": "Tokyo Google office 1", "subtitle": null, "type": "Life At Google", "tags": ["google-in-asia"], "slug": "tokyo-google-office-1", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Japan_with_Tokyo_Tower.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Japan_with_Tokyo_Tower.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 418733}, {"title": "Tokyo Google office 2", "subtitle": "", "type": "Life At Google", "tags": ["google-in-asia"], "slug": "tokyo-google-office-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Japan_office.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Japan_office.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 638578}, {"title": "Tools display at workshop", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "tools-display-at-workshop", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D7-GARAGE-1-15770.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D7-GARAGE-1-15770.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 648545}, {"title": "Translate", "subtitle": null, "type": "Logos", "tags": ["translate"], "slug": "translate", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_translate_color_2x_web_512dp.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_translate_color_2x_web_512.max-600x600.format-webp.webp", "image_width": 1024, "image_height": 1024, "image_size": 70548}, {"title": "Travel", "subtitle": null, "type": "Logos", "tags": ["travel"], "slug": "travel", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image_2_8cv2wKk.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/image_2_8cv2wKk.max-600x600.format-webp.webp", "image_width": 2500, "image_height": 2500, "image_size": 204304}, {"title": "Vidhya Srinivasan", "subtitle": "Vice President and General Manager, Google Ads", "type": "Headshots", "tags": [], "slug": "vidhya-srinivasan", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Vid_Portrait.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Vid_Portrait.max-600x600.format-webp.webp", "image_width": 3187, "image_height": 3840, "image_size": 5568508}, {"title": "Wear OS", "subtitle": null, "type": "Logos", "tags": ["wear-os-by-google"], "slug": "wear-os", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/WearOS_Primary_Lockup_MultiColor_RGB.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/WearOS_Primary_Lockup_MultiColo.max-600x600.format-webp.webp", "image_width": 1253, "image_height": 525, "image_size": 29806}, {"title": "Whiteboarding at Google", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "whiteboarding-at-google", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Whiteboarding-at-Google.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Whiteboarding-at-Google.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 122047}, {"title": "YouTube", "subtitle": null, "type": "Logos", "tags": ["youtube"], "slug": "youtube", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/yt_logo_rgb_light.original.png", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/yt_logo_rgb_light.max-600x600.format-webp.webp", "image_width": 794, "image_height": 178, "image_size": 20462}, {"title": "YouTube cafe", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "youtube-cafe", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-YTF-1-11901.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-YTF-1-11901.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 644345}, {"title": "YouTube workspace", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "youtube-workspace", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00916.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00916.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 1586145}, {"title": "YouTubers at work 1", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "youtubers-at-work-1", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00920.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gle-careers-scout-00920.max-600x600.format-webp.webp", "image_width": 1500, "image_height": 1000, "image_size": 1474066}, {"title": "YouTubers at work 2", "subtitle": "", "type": "Life At Google", "tags": [], "slug": "youtubers-at-work-2", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-UXD-1-11208.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-UXD-1-11208.max-600x600.format-webp.webp", "image_width": 1000, "image_height": 667, "image_size": 571758}, {"title": "YouTubers at work 3", "subtitle": null, "type": "Life At Google", "tags": [], "slug": "youtubers-at-work-3", "download_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-UXD-1-11154.original.jpg", "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/D4-UXD-1-11154.max-600x600.format-webp.webp", "image_width": 5760, "image_height": 3840, "image_size": 4800434}]</script>
+    </uni-press-assets>
+  </div>
+
+        </main>
+
+        
+
+          
+            
+              
+
+
+<div class="uni-newsletter-toast"
+    data-component="uni-newsletter-toast">
+  <div class="h-c-page">
+    <div class="uni-newsletter-toast--container h-c-grid">
+      <div class="uni-newsletter-toast__info h-c-grid__col h-c-grid__col--12  h-c-grid__col-l--9 h-c-grid__col--align-middle">
+        <div class="uni-newsletter-toast__img">
+          <img src="/static/blogv2/images/newsletter_toast.svg?version=pr20260507-1819" alt="">
+        </div>
+        <p class="uni-newsletter-toast__text">Let’s stay in touch. Get the latest news from Google in your inbox.</p>
+      </div>
+      <div class="uni-newsletter-toast__buttons h-c-grid__col h-c-grid__col--8 h-c-grid__col-l--3">
+        <a class="uni-newsletter-toast__cta uni-newsletter-toast__cta--sub"
+                href="/newsletter-subscribe/"
+                tabindex="0"
+                aria-label="Newsletter subscribe"
+                data-content-type="blogv2 | press page"
+                >Subscribe</a>
+        <button class="uni-newsletter-toast__cta uni-newsletter-toast__cta--no"
+                tabindex="0"
+                data-content-type="blogv2 | press page">No thanks</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+            
+
+          
+        
+        
+
+<footer class="h-c-footer h-c-footer--topmargin h-c-footer--standard h-has-social"
+        id="footer-standard"
+        data-component="uni-footer-component"
+        data-analytics-module='{
+          "module_name": "footer",
+          "section_header": "Image Library"
+        }'>
+  
+    <section class="h-c-footer__upper">
+        <section class="h-c-social">
+          <div class="h-c-social__group">
+            <p class="h-c-social__title h-c-social__title--inline">
+              Follow Us
+            </p>
+            <ul class="h-c-social__list h-no-bullet">
+              
+              
+              <li class="h-c-social__item">
+                <a class="h-c-social__link uni-click-tracker"
+                  aria-label="Instagram"
+                  href="https://www.instagram.com/google/">
+                  <svg
+  
+  class="h-c-icon h-c-icon--24px h-c-icon--social"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 18 18"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-instagram"></use>
+</svg>
+
+                </a>
+              </li>
+              
+
+              
+                
+                
+                <li class="h-c-social__item">
+                  <a class="h-c-social__link uni-click-tracker"
+                    aria-label="x.com"
+                    href="https://twitter.com/google">
+                    <svg
+  
+  class="h-c-icon h-c-icon--24px h-c-icon--social"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 18 18"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-x"></use>
+</svg>
+
+                  </a>
+                </li>
+                
+              
+
+              
+              
+              <li class="h-c-social__item">
+                <a class="h-c-social__link uni-click-tracker"
+                  aria-label="YouTube"
+                  href="https://www.youtube.com/google">
+                  <svg
+  
+  class="h-c-icon h-c-icon--24px h-c-icon--social"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 18 18"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-youtube"></use>
+</svg>
+
+                </a>
+              </li>
+              
+
+              
+                
+                
+                <li class="h-c-social__item">
+                  <a class="h-c-social__link uni-click-tracker"
+                    aria-label="Facebook"
+                    href="https://www.facebook.com/Google">
+                    <svg
+  
+  class="h-c-icon h-c-icon--24px h-c-icon--social"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 18 18"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-facebook"></use>
+</svg>
+
+                  </a>
+                </li>
+                
+              
+
+              
+              
+              <li class="h-c-social__item">
+                <a class="h-c-social__link uni-click-tracker"
+                  aria-label="LinkedIn"
+                  href="https://www.linkedin.com/company/google">
+                  <svg
+  
+  class="h-c-icon h-c-icon--24px h-c-icon--social"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 18 18"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#social-linkedin"></use>
+</svg>
+
+                </a>
+              </li>
+              
+
+              
+            </ul>
+          </div>
+        </section>
+    </section>
+    
+    <section class="h-c-footer__global">
+        <div class="h-c-footer__logo">
+          <a class="uni-click-tracker" href="https://www.google.com" aria-label="The Google logo">
+            <svg
+  
+  class="h-c-footer__logo-img"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  viewBox="0 0 396 130"
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#google-logo"></use>
+</svg>
+
+          </a>
+        </div>
+        <ul class="h-c-footer__global-links h-no-bullet">
+          <li class="h-c-footer__global-links-list-item">
+            
+            <a class="h-c-footer__link uni-click-tracker" href="https://policies.google.com/privacy">Privacy
+            </a>
+          </li>
+          <li class="h-c-footer__global-links-list-item">
+            
+            <a class="h-c-footer__link uni-click-tracker" href="https://policies.google.com/terms">Terms
+            </a>
+          </li>
+          <li class="h-c-footer__global-links-list-item">
+            
+            <a class="h-c-footer__link uni-click-tracker" href="https://about.google/">About Google
+            </a>
+          </li>
+          <li class="h-c-footer__global-links-list-item">
+            
+            <a class="h-c-footer__link uni-click-tracker" href="https://about.google/products/">Google Products
+            </a>
+          </li>
+          
+          
+            <li class="h-c-footer__global-links-list-item">
+              <a class="h-c-footer__link uni-click-tracker" href="/about/">About the Keyword
+              </a>
+            </li>
+          
+        </ul>
+        <ul class="h-c-footer__global-links h-c-footer__global-links--extra h-no-bullet">
+          <li class="h-c-footer__global-links-list-item h-c-footer__global-links-list-item--extra">
+            
+            <a class="h-c-footer__link uni-click-tracker" href="https://support.google.com">
+              <svg
+  
+  class="h-c-icon h-c-icon--24px h-c-icon--footer"
+  
+  
+  
+  
+  
+  aria-hidden="true"
+  
+  
+  
+  
+>
+  <use
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    href="/static/blogv2/images/icons.svg?version=pr20260507-1819#mi-help"></use>
+</svg>
+
+              Help
+            </a>
+          </li>
+          <li class="h-c-footer__global-links-list-item h-c-footer__global-links-list-item--extra uni-footer-language">
+            
+
+
+<div class="uni-picker" data-component="uni-lang-picker">
+  <select name="language"
+          class="uni-picker__order-menu"
+          aria-label="Change Region">
+    
+      <option label="Global (English)"
+              value="https://blog.google/image-library/"
+              class="uni-picker__item"
+              
+                selected="selected"
+                data-selected-index="0"
+              >
+        Global (English)
+      </option>
+    
+      <option label="Africa (English)"
+              value="https://blog.google/intl/en-africa/press/"
+              class="uni-picker__item"
+              >
+        Africa (English)
+      </option>
+    
+      <option label="Australia (English)"
+              value="https://blog.google/intl/en-au/press/"
+              class="uni-picker__item"
+              >
+        Australia (English)
+      </option>
+    
+      <option label="Brasil (Português)"
+              value="https://blog.google/intl/pt-br/"
+              class="uni-picker__item"
+              >
+        Brasil (Português)
+      </option>
+    
+      <option label="Canada (English)"
+              value="https://blog.google/intl/en-ca/press/"
+              class="uni-picker__item"
+              >
+        Canada (English)
+      </option>
+    
+      <option label="Canada (Français)"
+              value="https://blog.google/intl/fr-ca/salle-de-presse/"
+              class="uni-picker__item"
+              >
+        Canada (Français)
+      </option>
+    
+      <option label="Česko (Čeština)"
+              value="https://blog.google/intl/cs-cz/kontakty-pro-media/"
+              class="uni-picker__item"
+              >
+        Česko (Čeština)
+      </option>
+    
+      <option label="Deutschland (Deutsch)"
+              value="https://blog.google/intl/de-de/presse/"
+              class="uni-picker__item"
+              >
+        Deutschland (Deutsch)
+      </option>
+    
+      <option label="España (Español)"
+              value="https://blog.google/intl/es-es/prensa/"
+              class="uni-picker__item"
+              >
+        España (Español)
+      </option>
+    
+      <option label="France (Français)"
+              value="https://blog.google/intl/fr-fr/presse/"
+              class="uni-picker__item"
+              >
+        France (Français)
+      </option>
+    
+      <option label="Greece (Ελληνικά)"
+              value="https://blog.google/intl/el-gr/press/"
+              class="uni-picker__item"
+              >
+        Greece (Ελληνικά)
+      </option>
+    
+      <option label="India (English)"
+              value="https://blog.google/intl/en-in/press/"
+              class="uni-picker__item"
+              >
+        India (English)
+      </option>
+    
+      <option label="Indonesia (Bahasa Indonesia)"
+              value="https://blog.google/intl/id-id/press/"
+              class="uni-picker__item"
+              >
+        Indonesia (Bahasa Indonesia)
+      </option>
+    
+      <option label="Italia (Italiano)"
+              value="https://blog.google/intl/it-it/contattimedia/"
+              class="uni-picker__item"
+              >
+        Italia (Italiano)
+      </option>
+    
+      <option label="日本 (日本語)"
+              value="https://blog.google/intl/ja-jp/press/"
+              class="uni-picker__item"
+              >
+        日本 (日本語)
+      </option>
+    
+      <option label="대한민국 (한국어)"
+              value="https://blog.google/intl/ko-kr/press/"
+              class="uni-picker__item"
+              >
+        대한민국 (한국어)
+      </option>
+    
+      <option label="Latinoamérica (Español)"
+              value="https://blog.google/intl/es-419/prensa-latam/"
+              class="uni-picker__item"
+              >
+        Latinoamérica (Español)
+      </option>
+    
+      <option label="الشرق الأوسط وشمال أفريقيا (اللغة العربية)"
+              value="https://blog.google/intl/ar-mena/press/"
+              class="uni-picker__item"
+              >
+        الشرق الأوسط وشمال أفريقيا (اللغة العربية)
+      </option>
+    
+      <option label="MENA (English)"
+              value="https://blog.google/intl/en-mena/press/"
+              class="uni-picker__item"
+              >
+        MENA (English)
+      </option>
+    
+      <option label="Nederlands (Nederland)"
+              value="https://blog.google/intl/nl-nl/pers/"
+              class="uni-picker__item"
+              >
+        Nederlands (Nederland)
+      </option>
+    
+      <option label="New Zealand (English)"
+              value="https://blog.google/intl/en-nz/press-page/"
+              class="uni-picker__item"
+              >
+        New Zealand (English)
+      </option>
+    
+      <option label="Polska (Polski)"
+              value="https://blog.google/intl/pl-pl/prasa/"
+              class="uni-picker__item"
+              >
+        Polska (Polski)
+      </option>
+    
+      <option label="Portugal (Português)"
+              value="https://blog.google/intl/pt-pt/imprensa/"
+              class="uni-picker__item"
+              >
+        Portugal (Português)
+      </option>
+    
+      <option label="Sverige (Svenska)"
+              value="https://blog.google/intl/sv-se/press/"
+              class="uni-picker__item"
+              >
+        Sverige (Svenska)
+      </option>
+    
+      <option label="ประเทศไทย (ไทย)"
+              value="https://blog.google/intl/th-th/press/"
+              class="uni-picker__item"
+              >
+        ประเทศไทย (ไทย)
+      </option>
+    
+      <option label="Türkiye (Türkçe)"
+              value="https://blog.google/intl/tr-tr/medya/"
+              class="uni-picker__item"
+              >
+        Türkiye (Türkçe)
+      </option>
+    
+      <option label="台灣 (中文)"
+              value="https://blog.google/intl/zh-tw/press-corner/"
+              class="uni-picker__item"
+              >
+        台灣 (中文)
+      </option>
+    
+  </select>
+</div>
+
+          </li>
+        </ul>
+    </section>
+</footer>
+
+        
+        <script>
+          document.querySelectorAll('[data-js-preload]').forEach(el => {
+            var data = el.getAttribute('data-js-preload');
+            if (data) {
+              const data = JSON.parse(el.getAttribute('data-js-preload'));
+              const link = document.createElement('link');
+              link.rel = 'preload';
+              link.href = data.href,
+              link.as = 'script';
+              document.head.appendChild(link);
+            }
+          });
+        </script>
+
+        
+        <div id="base-scripts" data-scripts='[
+              { "url": "/static/blogv2/js/csp/gtm.js?version=pr20260507-1819",
+                "options": {
+                  "async": false,
+                  "defer": true
+                }
+              },
+              { "url": "/static/keyword/js/all/index.js?version=pr20260507-1819",
+                "options": {
+                  "async": false,
+                  "defer": false
+                }
+              },
+              {
+                "url": "https://www.gstatic.com/glue/cookienotificationbar/cookienotificationbar.min.js",
+                "options": {
+                  "async": false,
+                  "defer": true
+                },
+                "attributes": {
+                  "data-glue-cookie-notification-bar-category": "2B",
+                  "data-glue-cookie-notification-bar-site-id": "blog.google"
+                }
+              }
+            ]'></div>
+        <div class="extra-scripts">
+          
+        </div>
+
+        <script>
+  const baseScripts = JSON.parse(document.querySelector("#base-scripts")?.getAttribute("data-scripts") || "[]");
+  
+  const userbar = typeof userbarScripts !== "undefined" && userbarScripts ? userbarScripts : [];
+
+  const extraScripts = Array.from(document.querySelectorAll(".extra-scripts div[data-src]")).map(el => {
+    const attrs = {};
+    Array.from(el.attributes).forEach(attr => {
+      attrs[attr.name === "data-src" ? "src" : attr.name] = attr.value;
+    });
+    return {
+      url: attrs.src,
+      options: {},
+      attributes: Object.fromEntries(Object.entries(attrs).filter(([k]) => k !== "src"))
+    };
+  });
+
+  [...baseScripts, ...userbar, ...extraScripts].forEach(({ url, options = {}, attributes = {} }) => {
+    const script = Object.assign(document.createElement("script"), {
+      async: options.async,
+      defer: options.defer,
+      src: url,
+    });
+
+    Object.entries(attributes).forEach(([k, v]) => script.setAttribute(k, v));
+    document.head.appendChild(script);
+  });
+</script>
+
+    </body>
+</html>

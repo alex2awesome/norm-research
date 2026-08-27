@@ -1,0 +1,171 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 83,
+  "n_chunks": 92,
+  "chunk_chars": 39987,
+  "model": "gpt-5-mini",
+  "elapsed_s": 498.04517262500303,
+  "input_tokens": 11275,
+  "output_tokens": 5176,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and package authors implementing new methods, operations, attributes, representations, categories, and arithmetic objects (advanced GAP programmers)",
+    "subtask_short": "extending_gap_system",
+    "subtask_description": "Practical reference guidance for extending the GAP system: installing methods, declaring operations/attributes/representations/categories, enforcing property tests, and creating new arithmetic object types integrated into GAP's library and method selection.",
+    "subtask_keywords": [
+      "gap",
+      "package_development",
+      "methods",
+      "attributes",
+      "representations",
+      "categories"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Locate existing operation declarations before adding methods",
+        "description": "The first task is to find which operation is used by GAP and how it is declared (e.g., Exponent is declared by DeclareAttribute(\"Exponent\",IsGroup)). The easiest way is to consult the Reference Manual and grep over .gd and .g library files.",
+        "guidance": "Search the Reference Manual (section numbers given) and the library files (lib/*.gd, *.g). Use grep to find declarations and ensure you install the method for the right operation name and expected filters."
+      },
+      {
+        "name": "Install a method with matching filters and arguments",
+        "description": "Write a function that implements the algorithm with the right set of arguments and install it as a method using InstallMethod(operation, description, filters, function).",
+        "guidance": "Ensure filters match the intended input types (e.g., [IsGroup and IsNilpotent]). Omit the optional rank unless you need specific ranking behavior. Example: InstallMethod(Exponent,\"for nilpotent groups\",[IsGroup and IsNilpotent], function(G) ... end);"
+      },
+      {
+        "name": "Use rank argument carefully to control method precedence",
+        "description": "InstallMethod has an optional rank argument; GAP uses an internal ranking based on filters that can be offset by the given rank so that more specific methods are preferred.",
+        "guidance": "Leaving rank out is usually wise; if provided it should reflect how this method compares to existing ones (e.g., be better than methods for 'mere groups' but lower than 'abelian' methods). You can compute ranks with RankFilter to match the implicit ranking of compound filters."
+      },
+      {
+        "name": "Method selection only considers known properties",
+        "description": "When testing, remember that the method selection will not check for properties that are not known \u2014 the property tester is checked first internally.",
+        "guidance": "If the desired property is not known for an object, your method may not be used. Either force the property test earlier (see 'Enforcing Property Tests') or ensure the object has the property known (e.g., call the tester to enforce knowledge)."
+      },
+      {
+        "name": "Family predicate in InstallMethod to avoid invalid inputs",
+        "description": "InstallMethod accepts a family predicate argument; use it to restrict a method to cases where the family relation is appropriate (e.g., require IsIdenticalObj so both groups are in the same family).",
+        "guidance": "Providing a non-default family predicate prevents your method being called on inconsistent inputs (e.g., matrix groups in different characteristics) and allows the method selection to fall through when appropriate."
+      },
+      {
+        "name": "Use InstallOtherMethod to extend operation arity or range",
+        "description": "If an operation has been defined only for a too-restrictive set of objects or with a different number of arguments, InstallMethod may error; use InstallOtherMethod instead or re-declare the operation with different arity/filters.",
+        "guidance": "InstallOtherMethod (78.3.2) bypasses the declaration's restrictions; re-declare with DeclareOperation if you want a persistent change in the operation's signature."
+      },
+      {
+        "name": "Enforcing property tests inside a method with high rank",
+        "description": "To force evaluation of a property (when its value is worthwhile to compute), install a method without the property filter and at a high rank; the method should check the property and call TryNextMethod() if false.",
+        "guidance": "Example pattern: InstallMethod(Exponent,\"test abelianity\",[IsGroup],50,function(G) if not IsAbelian(G) then TryNextMethod(); fi; ... end); Better: compute rank relative to the rank of the property using RankFilter(IsGroup and IsAbelian) - RankFilter(IsGroup) so your rank mirrors the property's implicit rank."
+      },
+      {
+        "name": "Use RankFilter to compute relative ranks for enforced tests",
+        "description": "When enforcing a property via a high-rank method, compute the extra rank as RankFilter(IsGroup and IsAbelian) - RankFilter(IsGroup) to mimic the rank of having the property filter directly.",
+        "guidance": "This avoids double-counting elementary filters and ensures your enforced-test method is ordered equivalently to a method declared with the property filter."
+      },
+      {
+        "name": "RedispatchOnCondition for late/conditional tests (e.g., finiteness)",
+        "description": "If a test should be deferred until the last moment (so other methods for alternate situations can exist), use RedispatchOnCondition to redispatch with an added precondition (e.g., test finiteness before giving a 'no method found' error).",
+        "guidance": "Example: RedispatchOnCondition(NormalizerOp, IsIdenticalObj, [IsMatrixGroup,IsMatrixGroup],[IsFinite,IsFinite],0); this enforces a final finiteness check without preventing future infinite-group methods from being added earlier."
+      },
+      {
+        "name": "Declare vs NewOperation and NewOperation vs DeclareOperation",
+        "description": "DeclareOperation (library-style) saves typing and protects variables against overwriting; NewOperation is useful while testing because it does not protect variables (less restrictive for interactive development).",
+        "guidance": "Use DeclareOperation in stable packages; use NewOperation when iterating/testing interactively. Similarly NewOperation vs DeclareOperation semantics apply to operations/attributes/representations."
+      },
+      {
+        "name": "Choose attribute vs operation for single-argument reproducible computations",
+        "description": "If the operation only takes one argument and has reproducible results without side effects, it might be worth declaring it as an attribute instead of an operation.",
+        "guidance": "Attributes give automatic storage and tester/setter creation and can assist method selection (HasAttr), while operations are more general. Consider attribute immutability and automatic caching."
+      },
+      {
+        "name": "Declaring an attribute and its tester/setter",
+        "description": "NewAttribute('Name', Filter) implicitly declares attribute, tester and setter; DeclareAttribute executes all three and protects variables against overwriting. It is convenient to assign Tester(attribute) and Setter(attribute) to variables as well.",
+        "guidance": "Example: PrimesDividingSize := NewAttribute('PrimesDividingSize', IsGroup); HasPrimesDividingSize := Tester(PrimesDividingSize); SetPrimesDividingSize := Setter(PrimesDividingSize); Or use DeclareAttribute to do all at once."
+      },
+      {
+        "name": "Attribute methods must return a value; storage is automatic for attribute-storing reps",
+        "description": "Methods installed for attributes must always return a value (or call TryNextMethod). If the object is in representation IsAttributeStoringRep, the return value will automatically be stored and retrieved on subsequent calls.",
+        "guidance": "You don't have to call setter or tester yourself when attribute storage applies; GAP installs a high-ranking retrieval method under HasAttr when declaring the attribute."
+      },
+      {
+        "name": "Designing a new representation: choose parent reps and components",
+        "description": "When implementing a new representation for existing objects, decide which subrepresentations to inherit (e.g., IsComponentObjectRep and IsAttributeStoringRep) and which components to store (e.g., degree, relations).",
+        "guidance": "DeclareRepresentation('Name', RepFilter, [component_names]) and ensure you implement the structural aspects required by any parent representation (e.g., attribute storage behavior). Consider whether to be a subrepresentation of an existing one and provide parent structure then."
+      },
+      {
+        "name": "Provide PrintObj/ViewObj methods to aid testing",
+        "description": "Install a PrintObj and possibly ViewObj method for new representations; otherwise testing becomes hard because printed output is generic/unhelpful.",
+        "guidance": "Example: InstallMethod(PrintObj,'for perm grps. given by relations',[IsPermutationGroupByRelations], function(G) Print('PermutationGroupByRelations(', G!.degree, ',', G!.relations, ')'); end);"
+      },
+      {
+        "name": "Implement methods for existing operations to reuse library algorithms",
+        "description": "To reuse existing algorithms, implement methods for all operations for which the library/kernel provides methods for the existing representations (e.g., you must provide GeneratorsOfGroup for a new permutation-group representation to use existing group machinery).",
+        "guidance": "Examine existing representations and implement corresponding operations so existing code can operate on new objects; otherwise you will not be able to use library functionality without reimplementing higher-level algorithms."
+      },
+      {
+        "name": "Components vs attributes: choose based on visibility and resource tradeoffs",
+        "description": "Attributes express part of the functionality and can be computed later and used by method selection (HasAttr); components are internal data and may be preferred for technical data. Attributes require more memory and an extra kernel call; components may be slightly faster.",
+        "guidance": "Use attributes for data of general interest and when you want user access and method selection support; use components to hide technical internal data and where performance/memory are priorities."
+      },
+      {
+        "name": "Declare concept as property vs category depending on mutability",
+        "description": "Properties can be unknown and computed later (two filters reserved: known/unknown and boolean value); categories are decided at object creation and cannot change later. Both are filters and affect method selection similarly.",
+        "guidance": "If the concept can be determined later and you want methods to compute it, use a property. If membership is an intrinsic aspect at creation time or you want to enable operations only for objects created with that concept, use a category. You can simulate a category with a property + a default ReturnFalse method if needed."
+      },
+      {
+        "name": "Implement logical implications between properties via InstallTrueMethod",
+        "description": "To assert logical implications (e.g., 'IsSolvableGroup implies IsMGroup' or 'IsMGroup implies IsSupersolvableGroup'), install true methods: InstallTrueMethod(SourceFilter, TargetProperty).",
+        "guidance": "Use InstallTrueMethod to encode known mathematical implications so method selection and assumptions are consistent; e.g., InstallTrueMethod(IsSolvableGroup,IsMGroup); InstallTrueMethod(IsMGroup,IsSupersolvableGroup)."
+      },
+      {
+        "name": "Install methods to test properties explicitly for intended domains",
+        "description": "To test for a new property in particular contexts, install methods targeted at appropriate filters (e.g., InstallMethod(IsMGroup,'for solvable groups',[IsSolvableGroup],function(G) ... end)).",
+        "guidance": "The method function must return true/false. Keep domain filters narrow to avoid incorrect applicability; use InstallOtherMethod if you must broaden applicability beyond declared base filters."
+      },
+      {
+        "name": "Use tester filters (HasX) to install methods that require computed structural data",
+        "description": "If you store decomposition or other computed structural data in an attribute, install methods for the tester filter HasAttr so algorithms can rely on presence of that decomposition (e.g., SemidirectProductDecomposition and HasSemidirectProductDecomposition).",
+        "guidance": "Declare an attribute (DeclareAttribute) for the decomposition; methods that rely on it should specify the tester filter so they are only selected when decomposition is available."
+      },
+      {
+        "name": "Design arithmetic object types by wrapping 'defining data' and using ArithmeticElementCreator",
+        "description": "Represent new arithmetic elements via built-in types (lists/records) as 'defining data', provide functions implementing arithmetic on that data, and call ArithmeticElementCreator(spec) to create category, representation, and family and obtain a constructor that wraps defining data into GAP objects.",
+        "guidance": "ArithmeticElementCreator returns a function mkX(defining_data) that produces new GAP objects with the specified arithmetic. This provides integration with infix operators and library functions when spec includes appropriate MathInfo/RepInfo filters and operation definitions."
+      },
+      {
+        "name": "ArithmeticElementCreator spec components and defaults",
+        "description": "spec is a record with optional components: ElementName, Equality, LessThan, One, Zero, Multiplication, Inverse, Addition, AdditiveInverse, Print, MathInfo, RepInfo. Defaults exist for Equality/LessThan and Print; all components are optional but missing ones limit functionality.",
+        "guidance": "Ensure defined operations are consistent (e.g., LessThan and Equality must be compatible). MathInfo should be a filter (e.g., IsMultiplicativeElementWithInverse) and RepInfo typically includes IsAttributeStoringRep. Provide Print to get readable output; otherwise default printing uses defining data."
+      },
+      {
+        "name": "UnderlyingElement access and not equating objects to defining data",
+        "description": "Resulting arithmetic objects are not equal to their defining data; the operation UnderlyingElement is provided to retrieve the defining data of an arithmetic element.",
+        "guidance": "Be aware of this distinction when comparing and printing: default printing may look like defining data but identity/equality are different. Use UnderlyingElement(obj) to access the wrapped representation."
+      },
+      {
+        "name": "Design family distribution to enforce argument compatibility (e.g., residue rings)",
+        "description": "For domain-like objects (e.g., elements of Z/nZ) put elements of each modulus into their own family so binary arithmetic is admissible only for elements of the same family; this removes explicit modulus checks from each function.",
+        "guidance": "Choose families so that the only interesting relation between families is equality. This lets GAP's method selection and argument filters ensure valid operations and reduces repetitive runtime checks inside functions."
+      },
+      {
+        "name": "Create appropriate category (subclass of a suitable supercategory) to inherit desired operations",
+        "description": "Declare a category for your new elements as a subcategory of an appropriate existing category (e.g., DeclareCategory('IsMyZmodnZObj', IsScalar)) so existing arithmetic semantics (add, multiply, divide) are inherited for same-family objects.",
+        "guidance": "Using an existing supercategory automatically gives you behavior/expectations (e.g., IsScalar gives +,*,/ semantics). Create collection categories ahead of time (CategoryCollections) if you will need collection-level categories."
+      },
+      {
+        "name": "Representation choice: positional vs component and where to store modulus",
+        "description": "Decide whether new objects are positional (list-like) or component (record-like). Example: store the modulus in the family and encode residue as a positional object with residue at position 1 via DeclareRepresentation('IsMyModulusRep', IsPositionalObjectRep, [1]).",
+        "guidance": "Store common, invariant per-family data (like modulus) in the family when appropriate, and keep per-object data minimal; pick representation to best match expected kernel/library interactions and performance/space tradeoffs."
+      },
+      {
+        "name": "Be cautious integrating naive standalone implementations with GAP's operator semantics",
+        "description": "Naive implementations that use built-in types (e.g., lists [k,n]) will conflict with GAP's predefined meanings of infix operators (e.g., * for list multiplication) making them incompatible with higher-level GAP constructs.",
+        "guidance": "To integrate with the GAP library (matrices, groups, domains), create proper GAP objects (categories/representations/families) so infix operators behave as expected and existing library functions (Group, Matrix operations) can be used without reimplementing their logic."
+      }
+    ]
+  }
+}

@@ -8,8 +8,8 @@ set -euo pipefail
 ROOT=${ROOT:-/lfs/skampere3/0/alexspan/norm-research}
 PY=${PY:-/lfs/skampere3/0/alexspan/miniconda3/bin/python}
 DATA=notebooks/data/two_faces_20260702
-CONF=$DATA/concluding_policy_confirmation_v1
-MANIFEST=methods/codability/experiments/concluding_policy_execution_manifest_v1.json
+CONF=$DATA/concluding_policy_confirmation_v2
+MANIFEST=methods/codability/experiments/concluding_policy_execution_manifest_v2.json
 SELECTION=methods/codability/experiments/concluding_policy_selection_v1.json
 BANK=$DATA/concluding_policy_arm_bank_v1.json
 PACKET_ROOT=$DATA/tacit_breadth_item_partitions_v2

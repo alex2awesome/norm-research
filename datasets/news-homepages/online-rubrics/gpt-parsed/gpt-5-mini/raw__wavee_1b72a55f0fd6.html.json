@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_1b72a55f0fd6.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12431,
+  "output_tokens": 3566,
+  "elapsed_s": 1508.756405458087,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and computational social scientists studying media selection bias and large-scale news analysis",
+    "subtask_short": "discovering selection biases in news",
+    "subtask_description": "Represent and discover media selection biases at corpus scale by comparing how news sources mention entities; learn unsupervised, entity-centric representations of topic-specific content selection preferences and use distributional divergence to characterize ideological polarity among sources.",
+    "subtask_keywords": [
+      "news",
+      "media_bias",
+      "entity-centric",
+      "unsupervised_nlp",
+      "corpus-scale"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Topic representation via named entities (entity pairs)",
+        "description": "Represent the topic of a text segment by the named entities it mentions, using pairs of entities (two per sentence) to provide focused and finer-grained topic guidance.",
+        "guidance": "Use entity pairs to align statements across sources; two entities per sentence are preferred over one for finer-grained topical alignment and context (paper: \"We use two instead one, as we observe two entities in a sentence would provide focused and much finer-grained topic guidance\")."
+      },
+      {
+        "name": "Entity extraction and linking to form topic set",
+        "description": "Use NER (spaCy en_core_web_sm) to detect mentions, then disambiguate via a simple Wikipedia-based linking method (take title with highest P(t|m)); compute entity frequencies in the corpus and select the top entities as topics (paper uses top 1,000).",
+        "guidance": "The paper uses a small spaCy NER model and the Ratinov et al. (2011) conditional-probability linking heuristic; for a large corpus, selecting the most frequent entities (e.g., 1,000) provides the topic vocabulary for downstream analysis."
+      },
+      {
+        "name": "Context sentence definition",
+        "description": "Define context sentences Cs_e1,e2 as all sentences from a given source that contain mentions of both target entities e1 and e2 within the sample time frame.",
+        "guidance": "Only sentences mentioning both entities are considered to represent the source's statements about that entity pair; per-source sets of such sentences are the basis for representing selection preferences."
+      },
+      {
+        "name": "Entity-agnostic masking and representation tokens",
+        "description": "Mask entity mentions with a special token '[ENT]' and insert special relation tokens '[R1]' and '[R2]' after the masks; use the token embeddings of '[R1]' and '[R2]' to jointly represent the context.",
+        "guidance": "This design aims to capture topical context while being agnostic to the entity surface forms. The last hidden layers hR1 and hR2 are concatenated and linearly projected to obtain r(c): r(c) = W^T [hR1, hR2]."
+      },
+      {
+        "name": "Context sentence encoder architecture (RoBERTa-based)",
+        "description": "Initialize encoder with pretrained RoBERTa-base and fine-tune an encoder that maps masked context sentences to embeddings representing topical context of entity pairs.",
+        "guidance": "Paper implements encoder using Huggingface transformers, initializes from roberta-base, and constructs embeddings from the special relation token hidden states followed by a linear projection."
+      },
+      {
+        "name": "Unsupervised training objective: triplet margin loss",
+        "description": "Train the encoder with a triplet margin loss: for an anchor context sentence c (for entity pair e1,e2), sample a positive sentence c+ from the same entity-pair set and a negative sentence c- that mentions at least one other entity; objective: maximize similarity of anchor-positive relative to anchor-negative.",
+        "guidance": "Use L2 distance and margin (paper: L = max[d(c,c+) - d(c,c-) + 1, 0]). Training data sampled from Wikipedia sentences with two+ mentions of the topic entities (\u22483M sentences)."
+      },
+      {
+        "name": "Training data source for encoder",
+        "description": "Use Wikipedia sentences that contain two or more mentions of the entities of interest to build large-scale unsupervised training data for the triplet objective (paper used ~3M sentences).",
+        "guidance": "Sampling from Wikipedia provides coverages of entity co-mentions needed to train an entity-agnostic contextual encoder; ensure sufficient variety of contexts per entity pair."
+      },
+      {
+        "name": "Per-source, per-entity-pair embedding aggregation",
+        "description": "Obtain a source's representation for an entity pair g(Cs_ei,ej) by running each context sentence c \u2208 Cs_ei,ej through the encoder and mean-pooling (averaging) the sentence embeddings.",
+        "guidance": "Mean-pooling across all context sentence embeddings from a source for that entity pair yields the collective content selection preference representation for that source-topic pair."
+      },
+      {
+        "name": "Constructing full source representation via concatenation",
+        "description": "Form a per-source feature vector by concatenating the source's embeddings for a chosen set of k entity pairs (paper uses k = 20 most frequent entity pairs).",
+        "guidance": "Concatenated embeddings across multiple entity pairs are used as input features for downstream classifiers that predict source-level attributes (e.g., political bias). Choice of k trades off coverage vs sparsity."
+      },
+      {
+        "name": "Archetypical entity-pair identification via distributional divergence",
+        "description": "Identify Archetypical Entity Pairs (AEPs) that best indicate ideological divide by computing distributional divergence between left- and right-leaning sources' embeddings for each entity pair.",
+        "guidance": "Fit multivariate Gaussians N_L(\u00b5L,\u03a3L) and N_R(\u00b5R,\u03a3R) to left- and right-leaning source embeddings for each entity pair and compute two-way KL divergence: D(NL||NR) = 1/2 (tr(\u03a3_R^{-1} \u03a3_L) + ln(|\u03a3_R|/|\u03a3_L|) + (\u00b5R-\u00b5L)^T \u03a3_R^{-1} (\u00b5R-\u00b5L) - d). Rank entity pairs by D to select AEPs."
+      },
+      {
+        "name": "Using distributional divergence as indicator of ideological polarity",
+        "description": "Use the distributional divergence (KL between fitted Gaussians) of per-source embeddings for an entity pair as a measure of how indicative that pair is of left-vs-right ideological differences among sources.",
+        "guidance": "Entity pairs with higher D(NL||NR) are better indicators; compute divergence for many frequent pairs (paper computed for 100 most frequent) and select top-N as archetypical pairs."
+      },
+      {
+        "name": "Polarity prediction setup and evaluation labels",
+        "description": "Formulate ideologic polarity prediction as a three-way {left, center, right} classification by aggregating five-way bias labels (AllSides and MBFC) into three classes; train on AllSides and evaluate on MBFC-held-out sources.",
+        "guidance": "Remove overlap between training and test label sets; verify label agreement between label sources (paper reports 81.99 weighted macro F1 between AllSides and MBFC on overlap)."
+      },
+      {
+        "name": "Classifier choices and hyperparameter tuning",
+        "description": "Use small-capacity classifiers (Lasso, Ridge, Linear SVM, RBF-kernel SVM) on frozen embeddings; select hyperparameters by 5-fold cross-validation on the training set.",
+        "guidance": "Paper reports specific hyperparameters: Lasso C=1; Ridge \u03b1=1.0; Linear SVM C=0.1 L2 hinge; RBF SVM C=2 \u03b3=0.01 degree=3. Use cross-validation to avoid overfitting and freeze embeddings during classifier training."
+      },
+      {
+        "name": "Baseline comparison with unfine-tuned pretrained encoder",
+        "description": "Compare proposed encoder (trained with the triplet objective) against RoBERTa-base embeddings without fine-tuning to evaluate the benefit of the task-specific representation learning.",
+        "guidance": "Use same downstream classifiers and features selection (k entity pairs) for fair comparison; paper reports consistent improvements over RoBERTa except for one baseline."
+      },
+      {
+        "name": "Evaluation metrics for polarity prediction",
+        "description": "Report weighted macro-averaged precision, recall, and F1 (F_{\u03b2=1}) for the three-way polarity classification task.",
+        "guidance": "Use held-out test set (MBFC sources not in AllSides) and 5-fold CV on AllSides for hyperparameter selection; report P, R, F as in Table 1."
+      },
+      {
+        "name": "Visualization and qualitative analysis",
+        "description": "Use PCA visualization of per-source embeddings for representative entity pairs to inspect topic variance and left-vs-right divergence; interpret PCA plots for qualitative insights.",
+        "guidance": "PCA of source representations per-entity-pair can reveal scatteredness (topic variance) and clustering/divergence aligned with ideological labels; use illustrative examples (e.g., U.S. House & Senate vs Russia & United States)."
+      },
+      {
+        "name": "Probing contextual embeddings with subjective predicates",
+        "description": "Project context sentence embeddings onto subjective verb predicate embeddings (from MPQA lexicon) to infer sentiment/polarity expressed in contexts per source and entity pair.",
+        "guidance": "Construct 400 verb predicate prompts (200 most frequent positive and negative), encode them with the same encoder, compute cosine similarity to a context embedding, take top-10 predicates and weighted mean of their polarity labels (positive=1, negative=-1) via softmax over similarities to yield a sentiment score."
+      },
+      {
+        "name": "Temporal and coverage constraint for detecting selection bias",
+        "description": "Compare statements made by different sources on the same topics within a relatively small time frame to reduce confounding due to time-varying coverage; focus only on topics both/all sources cover.",
+        "guidance": "The methodology adopts the 'same-topic-same-timeframe' comparison strategy (as opposed to presence/absence observations) because it better reflects diverging framing choices; the study intentionally leaves partial-coverage cases (where sources don't both cover a topic) for future work."
+      },
+      {
+        "name": "Data sufficiency and limitation considerations",
+        "description": "Method requires large amounts of unlabeled data and sufficient counts of context sentences per entity pair; sparse entity-pair coverage can limit analysis.",
+        "guidance": "Explicitly acknowledge limitations: need enough presence of context sentences per entity pair, focus on shared topics across sources, and results are exploratory/speculative rather than definitive evidence of bias."
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_0e82dba77af5.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 19036,
+  "output_tokens": 4298,
+  "elapsed_s": 1410.364714083029,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "operations research specialists, computer scientists, mathematicians, statisticians and engineers",
+    "subtask_short": "cross_entropy_method_algorithms",
+    "subtask_description": "Designing, implementing and tuning Cross-Entropy (CE) algorithms for rare-event simulation, combinatorial and continuous multi-extremal optimization, and related policy-search problems. Includes sampling scheme selection, parameter updating, stopping rules, and practical guidance (sample sizes, smoothing, elite fraction).",
+    "subtask_keywords": [
+      "cross_entropy",
+      "importance_sampling",
+      "combinatorial_optimization",
+      "rare_event",
+      "simulation",
+      "algorithm_design"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Two-phase iterative CE procedure",
+        "description": "Each CE iteration consists of two phases: (1) generate a random data sample (trajectories, vectors, etc.) according to a specified mechanism; (2) update the parameters of the random mechanism based on the data to produce a 'better' sample in the next iteration.",
+        "guidance": "This high-level two-phase structure is the basis of all CE algorithms presented (both rare-event estimation and optimization). The sample generation and the parameter family must be specified for the particular problem; the updating is performed by solving a CE (Kullback-Leibler) minimization or its stochastic counterpart."
+      },
+      {
+        "name": "Importance sampling and likelihood-ratio (LR) estimator for rare events",
+        "description": "For estimating rare-event probability Pu(S(X) \u2265 \u03b3) use importance sampling: draw Xi from an IS density g and use LR estimator 1/N sum I{S(Xi)\u2265\u03b3} f(Xi;u)/g(Xi). The LR W(x) := f(x;u)/g(x) is central.",
+        "guidance": "The ideal zero-variance change of measure is g*(x)=I{S(x)\u2265\u03b3} f(x;u)/(Pu(S(X)\u2265\u03b3)), but it depends on the unknown probability; CE provides an adaptive way to approximate a close IS density within a parametric family {f(\u00b7;v)}."
+      },
+      {
+        "name": "Choose IS/reference density by Kullback\u2013Leibler (cross-entropy) minimization",
+        "description": "Select parameter v to make f(\u00b7;v) as 'close' to the optimal g* as possible by minimizing the Kullback\u2013Leibler distance D(g*, f(\u00b7;v)), equivalently maximizing Eu[I{S(X)\u2265\u03b3} ln f(X;v)] or its importance-sampled stochastic counterpart.",
+        "guidance": "This yields the CE program and its stochastic estimator (equations (11)\u2013(16)). In practice solve the stochastic maximization max_v 1/N sum I{S(Xi)\u2265\u03b3} W(Xi;u,w) ln f(Xi;v) with Xi drawn from f(\u00b7;w). When f(\u00b7;v) belongs to a natural exponential family analytic updates often result."
+      },
+      {
+        "name": "Multi-level adaptive algorithm (levels \u03b3t and parameters vt)",
+        "description": "Use a sequence of intermediate levels \u03b3t and reference parameters vt: at iteration t draw samples from f(\u00b7;vt\u22121), set \u03b3t as a (1\u2212\u03c1)-quantile of sample performances (or \u03b3 if exceeded), then estimate vt by solving the CE stochastic program for level \u03b3t; iterate until \u03b3t\u2265\u03b3.",
+        "guidance": "This multi-level strategy overcomes rareness of the target event by making the target temporarily less rare. Algorithm 2.1 (rare-event) and Algorithm 2.3 (optimization) implement this idea. Need to choose \u03c1, N and stopping criteria in advance."
+      },
+      {
+        "name": "Set intermediate level via sample (1\u2212\u03c1)-quantile",
+        "description": "At each iteration compute \u02c6\u03b3t as the (1\u2212\u03c1) sample quantile of the performance S(Xi) under the current sampling density, provided this is less than the target \u03b3; otherwise set \u02c6\u03b3t := \u03b3.",
+        "guidance": "Choosing \u02c6\u03b3t this way ensures the event {S(X) \u2265 \u02c6\u03b3t} has probability around \u03c1 under the current density, so the elite-sample updates are based on a non-rare event. Typical \u03c1 is between 0.01 and 0.1 (guidance below). Formula: \u02c6\u03b3t = S((1\u2212\u03c1)N)."
+      },
+      {
+        "name": "Include likelihood-ratio W in rare-event updates, omit W in optimization updates",
+        "description": "In rare-event CE (estimating probabilities) the stochastic program and updates include the LR term W(X;u,vt\u22121) = f(X;u)/f(X;vt\u22121). In combinatorial optimization CE (Algorithm 2.3) the likelihood ratio is not used (W = 1).",
+        "guidance": "This is a key difference: in Algorithm 2.1 the W-term is essential to estimate probabilities; in Algorithm 2.3 the ASP is redefined each iteration (based on the current sampling density) and W would be meaningless, so it is omitted."
+      },
+      {
+        "name": "Parameter updating by solving CE stochastic program (often closed-form for NEF)",
+        "description": "Given elite-weighted samples, estimate the new parameter v by maximizing the objective 1/N sum I{S(Xi)\u2265\u02c6\u03b3t} W(Xi;u,\u02c6vt\u22121) ln f(Xi;v) (or without W for optimization). Often setting the gradient to zero yields analytic updating formulas when f(\u00b7;v) belongs to a natural exponential family (NEF).",
+        "guidance": "Examples: for independent exponentials this gives the weighted sample-mean update (equation (24)); for Bernoulli vectors the update reduces to p_j = sum_{i: S(Xi)\u2265\u02c6\u03b3t} Xi_j / (# elite samples) (equation (36)). Interpreting the update as an MLE on elite samples is helpful."
+      },
+      {
+        "name": "Smoothed updating to prevent premature degeneracy",
+        "description": "Instead of replacing \u02c6vt\u22121 by \u02c6wt (the direct solution) use smoothed update \u02c6vt = \u03b1 \u02c6wt + (1\u2212\u03b1) \u02c6vt\u22121 to avoid entries becoming 0 or 1 permanently.",
+        "guidance": "Smoothing is especially relevant for discrete-variable optimization where entries can become degenerate; empirical best \u03b1 values lie in 0.4 \u2264 \u03b1 \u2264 0.9. For \u03b1 = 1 one recovers the original (unsmoothed) update."
+      },
+      {
+        "name": "Stopping criteria",
+        "description": "For rare-event estimation stop when \u02c6\u03b3t = \u03b3 (the target level is reached). For optimization stop when \u02c6\u03b3t remains unchanged for d consecutive iterations (suggested d = 5), or when \u02c6vt becomes degenerate (converges to a binary/Dirac measure).",
+        "guidance": "These heuristic rules indicate lack of improvement; the authors note stopping may occur before a local optimum and suggest further research on alternative stopping rules."
+      },
+      {
+        "name": "Sample size recommendations tied to number of parameters",
+        "description": "Choose sample size N proportional to the number of parameters to estimate: for stochastic-node-network (SNN) problems N = c\u00b7n (n = number of nodes); for stochastic-edge-network (SEN) problems N = c\u00b7n^2 (n^2 = number of edges). Constant c > 1 (suggested 5 \u2264 c \u2264 10).",
+        "guidance": "Rationale: to reliably estimate k parameters take N = c\u00b7k. These are engineering recommendations; adaptive methods (e.g., Homem-de-Mello & Rubinstein) can adjust N automatically. Also choose N1 (final IS estimation sample) in advance."
+      },
+      {
+        "name": "Choice of elite fraction \u03c1",
+        "description": "The elite fraction \u03c1 determines the (1\u2212\u03c1) quantile used to define elite samples; suggested values: typically between 0.01 and 0.1. For large problems (n \u2265 100) take \u03c1 around 0.01; for small problems (n < 100) take larger \u03c1, e.g., \u03c1 \u2248 ln(n)/n.",
+        "guidance": "\u03c1 trades off having enough elite samples for reliable parameter updates against focusing on best-performing samples. Values in the suggested range generally perform robustly."
+      },
+      {
+        "name": "Use of natural exponential family (NEF) for analytic updates",
+        "description": "When the sampling family f(\u00b7;v) belongs to a natural exponential family, the CE maximization often reduces to simple analytic updating formulas (closed-form solutions).",
+        "guidance": "This simplifies implementation and explains many example updates (exponential and Bernoulli distributions). If not NEF, numerical optimization may be required to solve the stochastic program."
+      },
+      {
+        "name": "Alternative objective: variance minimization of IS estimator",
+        "description": "An alternative criterion for selecting reference parameter v is to minimize the second moment (or variance) of the IS estimator: v* = argmin_v Ev[I{S(X)\u2265\u03b3} W(X;u,v)^2].",
+        "guidance": "This variance-minimization approach can be framed as a stochastic program (equation (29)), but it typically involves more complicated numerical optimization; CE (KL minimization) is often preferred because it yields closed-form updates."
+      },
+      {
+        "name": "Specify sampling family and what to randomize (SNN vs SEN)",
+        "description": "For combinatorial problems, determine whether to introduce randomness in nodes (stochastic node networks, SNN) or in edges (stochastic edge networks, SEN). The family {f(\u00b7;v)} and the sampling mechanism must be specified to generate candidate solutions.",
+        "guidance": "Examples: randomizing nodes is natural for max-cut, buffer allocation; randomizing edges suits TSP, QAP. The choice affects number of parameters (hence N) and update formulas."
+      },
+      {
+        "name": "Interpret updates as MLE on elite samples",
+        "description": "The CE update \u02c6vt can be seen as the maximum-likelihood estimate based only on the elite subset of the sample (those Xi with S(Xi) \u2265 \u02c6\u03b3t).",
+        "guidance": "This viewpoint clarifies updates: e.g., empirical average over elite samples gives Bernoulli parameter updates (equation (36)). It explains why CE selects parameters that concentrate mass on good solutions."
+      },
+      {
+        "name": "Adaptive and auxiliary algorithms for parameter/sample control",
+        "description": "Adaptive schemes can adjust N automatically (Homem-de-Mello and Rubinstein); alternative CE variants such as FACE exist to determine parameters adaptively.",
+        "guidance": "When problem size or difficulty is unknown, adaptive algorithms can be used to change N, \u03c1 or other tuning parameters on the fly to improve robustness."
+      },
+      {
+        "name": "Per-state (Markovian) CE updates for policy/search problems",
+        "description": "For Markov decision problems and policy search, exploit Markovian structure: for each visited state z in a trajectory compute the performance from that state onward and perform CE updates per-state using state-specific thresholds \u02c6\u03b3t,z and elite sets; update state-action probabilities p_{z,a} separately.",
+        "guidance": "This accelerates convergence by tailoring updates to where good actions occurred; updating formula (65) shows per-state normalized counts among elite trajectories starting at that state. Empirically much faster than global updates."
+      },
+      {
+        "name": "Final estimation step after obtaining final parameter \u02c6vT",
+        "description": "Once the CE iterations finish with final parameter \u02c6vT, generate N1 samples from f(\u00b7;\u02c6vT) and estimate the target probability via the LR estimator 1/N1 sum I{S(Xi)\u2265\u03b3} W(Xi;u,\u02c6vT).",
+        "guidance": "Supply N1 in advance; this uses the estimated optimal IS parameter for actual probability estimation. Example shows dramatic CPU savings vs crude Monte Carlo."
+      },
+      {
+        "name": "Role and choice of initial parameter u (nominal)",
+        "description": "For rare-event estimation u is the unique nominal parameter under which the target probability Pu(S(X)\u2265\u03b3) is defined and the CE algorithm is initialized with \u02c6v0 := u. For optimization the initial u is arbitrary and only defines the initial ASP.",
+        "guidance": "In rare-event CE the choice of u is fixed by the problem; in optimization one can choose a neutral initial vector (e.g., uniform) \u2014 the behavior and interpretation of updates differ accordingly (and explain presence/absence of W)."
+      },
+      {
+        "name": "Practical computational guidance and robustness notes",
+        "description": "CE is reported to be simple, versatile, and robust to its tuning parameters N, \u03c1, \u03b1, and sample-size choices; sensible ranges produce reliable results in many problems. Implementation examples show fast convergence (few iterations) and large CPU savings relative to crude Monte Carlo.",
+        "guidance": "Authors caution that choosing parameterization and sampling scheme can be more art than science. Empirical parameters: N around c\u00b7k (k = #parameters), \u03c1 in recommended range, \u03b1 between 0.4\u20130.9. Also be aware that asymptotic convergence results exist but non-asymptotic behavior and convergence rates are open research areas."
+      }
+    ]
+  }
+}

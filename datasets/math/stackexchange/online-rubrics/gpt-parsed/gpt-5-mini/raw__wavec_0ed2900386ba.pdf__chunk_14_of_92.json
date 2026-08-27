@@ -1,0 +1,181 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 14,
+  "n_chunks": 92,
+  "chunk_chars": 39883,
+  "model": "gpt-5-mini",
+  "elapsed_s": 96.12554070799524,
+  "input_tokens": 14364,
+  "output_tokens": 5488,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Users and developers of the GAP computer algebra system (mathematicians and programmers writing GAP code or GAP packages)",
+    "subtask_short": "GAP_number_theory_api",
+    "subtask_description": "Reference-manual specifications for GAP operations in random sources, bitfields, number theory, and combinatorics: what each function does, input constraints, return semantics, and implementation/usage notes and examples.",
+    "subtask_keywords": [
+      "gap",
+      "reference_manual",
+      "random_sources",
+      "number_theory",
+      "combinatorics",
+      "bitfields"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Random operation semantics",
+        "description": "Random(rs, list) / Random(rs, coll) / Random(rs, low, high) returns a random element from the dense, nonempty list list or the nonempty collection coll, or an integer in the range from low to high (inclusive).",
+        "guidance": "The choice should only depend on the random source rs and have no effect on other random sources. It is not defined what happens if list or coll is empty, list is not dense, or low is larger than high. Example usage shown with RandomSource(IsMersenneTwister,42)."
+      },
+      {
+        "name": "State(rs) semantics for random sources",
+        "description": "State(rs) returns a data structure which admits recovering the state of the random source such that a sequence of random calls using this random source can be reproduced.",
+        "guidance": "If a random source cannot be reset then State returns fail. The returned object must be an independent copy: calling Random for rs must not change the object that was returned by State; otherwise ReturnFail should be installed (see implementing new random sources)."
+      },
+      {
+        "name": "Reset(rs[, seed]) semantics for random sources",
+        "description": "Reset(rs, seed) resets the random source rs to a state described by seed, if the random source can be reset; otherwise it does nothing.",
+        "guidance": "seed can be an output of State; historically integer seeds are accepted but new code should not rely on integer seeds\u2014always use State output or omit seed. Without seed a fixed default seed is used. Reset returns the state of rs before the call. Example: use Reset(GlobalMersenneTwister) to capture seed and later Reset(..., seed) to reproduce sequences."
+      },
+      {
+        "name": "Kinds of random sources and recommendations",
+        "description": "GAP provides categories IsMersenneTwister, IsGAPRandomSource, IsGlobalRandomSource, GlobalMersenneTwister, GlobalRandomSource to distinguish random-source implementations.",
+        "guidance": "Use the Mersenne twister when possible (fast generator, 32-bit numbers, period 2^19937-1) in particular for generating many large random integers. Most library methods that do not take a random source use GlobalMersenneTwister as default. Do not construct multiple IsGlobalRandomSource instances\u2014use GlobalRandomSource for the classical global generator."
+      },
+      {
+        "name": "RandomSource(cat[, seed]) creation",
+        "description": "RandomSource(cat[, seed]) creates a new random source of category cat (one of the categories from 14.7.4). An optional seed specifies the initial state.",
+        "guidance": "See State/Reset for seeding details. Examples show reproducible sequences by capturing and reusing State outputs."
+      },
+      {
+        "name": "Implementing new random-source API requirements",
+        "description": "To implement a new kind of random source declare a new category C implying IsRandomSource and install methods: Init(C,IsObject), Random(C,IsInt,IsInt), State(C), Reset(C,IsObject) with precise semantics.",
+        "guidance": "Init(prers, seed) initializes the object prers from integer or State seed (default seed integer 1). Random(rs, low, high) returns integer in [low,high] (behavior undefined when low>high). State(rs) must return an independent copy (or ReturnFail). Reset(rs, seed) must reinitialize rs to seed and return previous state (or ReturnNothing if resetting unsupported). Examples (IsMersenneTwister, IsRealRandomSource) given."
+      },
+      {
+        "name": "MakeBitfields overall constraints",
+        "description": "MakeBitfields(width....) sets up bitfields of given widths; all bitfield values are treated unsigned.",
+        "guidance": "Total of widths must not exceed 60 bits on 64-bit architecture or 28 bits on 32-bit architecture. For performance reasons some checks are omitted: builder and setter functions do not check if passed values are negative or too large (unless GAP compiled for debugging). Behaviour for such invalid arguments is undefined. Determine architecture via GAPInfo.BytesPerVariable (8 on 64-bit, 4 on 32-bit)."
+      },
+      {
+        "name": "MakeBitfields return record semantics",
+        "description": "MakeBitfields returns a record with fields widths, getters (list of functions extracting fields), setters (list of functions returning new packed value with ith field replaced), and optionally booleanGetters/booleanSetters for width-1 fields.",
+        "guidance": "Getter functions take one argument (the packed integer) and return the corresponding field value. Setter functions take (packed_value, new_field_value) and return a new packed value without modifying the original. BooleanGetters return true/false for width-1 fields; BooleanSetters take (data, true/false) and set field to 1/0. Behaviour for other values is undefined."
+      },
+      {
+        "name": "BuildBitfields semantics",
+        "description": "BuildBitfields(widths, vals...) takes a list of field widths and unsigned integer values (one per field) and returns a small integer packing those values into bitfields; first entry occupies the least significant bits.",
+        "guidance": "Number of vals must equal number of widths. DeclareGlobalFunction(\"BuildBitfields\"). Example usage and getters/setters interaction demonstrated."
+      },
+      {
+        "name": "PrimeResidues input-size constraint",
+        "description": "PrimeResidues(m) returns integers in [0..Abs(m)-1] coprime to m.",
+        "guidance": "Abs(m) must be less than 2^28 otherwise the set would probably be too large. Examples: PrimeResidues(0), PrimeResidues(1), PrimeResidues(20)."
+      },
+      {
+        "name": "Phi (Euler's totient) definition and computation",
+        "description": "Phi(m) returns \u03c6(m), the number of positive integers less than m coprime to m; if m = \u220f p_i^{e_i} then \u03c6(m) = \u220f p_i^{e_i-1}(p_i - 1).",
+        "guidance": "Example outputs shown; computing Phi typically involves factoring m."
+      },
+      {
+        "name": "Lambda (Carmichael function) definition and computation",
+        "description": "Lambda(m) returns the exponent \u03bb(m) of the group of prime residues modulo m: minimal l with a^l \u2261 1 (mod m) for all a coprime to m.",
+        "guidance": "Carmichael's theorem: \u03bb(2)=1, \u03bb(4)=2, \u03bb(2^e)=2^{e-2} for e\u22653, \u03bb(p^e)=(p\u22121)p^{e-1} for odd p, and \u03bb(mn)=lcm(\u03bb(m),\u03bb(n)) for coprime m,n. Example: Lambda(10)=4, Lambda(561)=80. Note relation \u03bb(m) | \u03c6(m)."
+      },
+      {
+        "name": "GeneratorsPrimeResidues return structure",
+        "description": "GeneratorsPrimeResidues(n) returns a record describing generators of the group of prime residues modulo n with fields primes (prime factors), exponents (their exponents), and generators (primitive roots or generator lists).",
+        "guidance": "For prime factor 2 either a primitive root or a list of two generators is stored; for other primes a primitive root is stored. Examples given for composite inputs."
+      },
+      {
+        "name": "OrderMod behavior and warnings",
+        "description": "OrderMod(n, m[, bound]) returns multiplicative order of n modulo m; if n and m are not coprime returns 0.",
+        "guidance": "If no prior known multiple bound is given, OrderMod usually spends most time factoring m to compute \u03bb(m) as default bound, and then factoring bound. If an incorrect bound is given then the result will be wrong. Example: OrderMod(5, m, 166) where providing correct bound avoids expensive factoring."
+      },
+      {
+        "name": "LogMod and LogModShanks semantics",
+        "description": "LogMod(n, r, m) computes discrete r-logarithm l with r^l \u2261 n (mod m) if exists, otherwise returns fail. LogModShanks implements Shanks' baby-step giant-step method.",
+        "guidance": "LogModShanks generally requires more memory than LogMod. Example: LogMod(2,5,7)=4."
+      },
+      {
+        "name": "DLog behavior and algorithmic notes",
+        "description": "DLog(base, x[, m]) returns integer e with base^e = x in the cyclic group generated by base; m must be order of base or its factorization (computed if not given).",
+        "guidance": "If m is prime Shanks' algorithm is used (O(\u221am) space/time). DLog is also used in internal methods like LogFFE. Examples demonstrate large-field use."
+      },
+      {
+        "name": "PrimitiveRootMod semantics",
+        "description": "PrimitiveRootMod(m[, start]) returns the smallest primitive root modulo m, or the smallest primitive root strictly larger than start; returns fail if no primitive root exists.",
+        "guidance": "Primitive roots exist only for m = 2,4,p^n,2p^n (odd prime power). Examples show using start argument and fail results."
+      },
+      {
+        "name": "IsPrimitiveRootMod normalization",
+        "description": "IsPrimitiveRootMod(r, m) returns true iff integer r is a primitive root modulo m; if r is outside 0..m-1 it is replaced by its remainder.",
+        "guidance": "Examples: negative r values normalized; ForAny test to show nonexistence for certain m like 30."
+      },
+      {
+        "name": "Jacobi symbol definition and computation properties",
+        "description": "Jacobi(n, m) returns Kronecker-Jacobi symbol J(n,m). If n and m are not coprime then J(n,m)=0; J(n,1)=1; J(n,-1)=\u22121 if m<0 else +1; for odd n, J(n,2) = (\u22121)^k with k=(n^2\u22121)/8. For composite m with factorization m=\u220fp_i (including \u22121), J(n,m)=\u220fJ(n,p_i).",
+        "guidance": "Jacobi coincides with Legendre for odd prime modulus. Jacobi is efficient (about as fast as gcd). Examples given where Jacobi returns 1 or \u22121 and implications for square roots."
+      },
+      {
+        "name": "Legendre symbol definition and relation",
+        "description": "Legendre(n, m) returns Legendre symbol L(n/m): 1 if n is quadratic residue mod prime m, \u22121 otherwise. Extended to composite moduli in GAP.",
+        "guidance": "Legendre relates to Jacobi and RootMod: a root exists only if Legendre(n,m)=1. Jacobi is cheaper to compute for composite m because it avoids factoring."
+      },
+      {
+        "name": "RootMod semantics (kth roots modulo m)",
+        "description": "RootMod(n[, k], m) computes a k-th root r with r^k \u2261 n (mod m) if one exists; default k=2. Returns fail if none.",
+        "guidance": "A square root exists only if Legendre(n,m)=1. If m has r different prime factors, there are 2^r different roots; which one RootMod returns is unspecified\u2014use RootsMod to compute full set. RootMod is efficient; most time spent factoring m."
+      },
+      {
+        "name": "RootsMod and RootsUnityMod semantics and constraints",
+        "description": "RootsMod(n[, k], m) returns list of all k-th roots of n modulo m (default k=2). RootsUnityMod([k,] m) returns k-th roots of unity modulo m.",
+        "guidance": "RootsUnityMod: in current implementation k must be prime. Number of roots depends on prime factors p \u2261 1 (mod k) and divisibility by k^2; special counts given for k=2 and 8|m. Examples provided."
+      },
+      {
+        "name": "Multiplicative arithmetic functions factoring note (Sigma, Tau, MoebiusMu)",
+        "description": "Sigma(n) returns sum of positive divisors \u03c3(n); Tau(n) returns number \u03c4(n) of positive divisors; MoebiusMu(n) returns \u00b5(n): 0 for non-squarefree, otherwise (\u22121)^{#prime_factors}.",
+        "guidance": "All these typically spend most or all of their time factoring n (see FactorsInt). Sigma and Tau are multiplicative and formulae for prime powers given; MoebiusMu used in inversion formula examples. Examples and known facts (perfect numbers, Mersenne primes) included."
+      },
+      {
+        "name": "ContinuedFractionExpansionOfRoot and ContinuedFractionApproximationOfRoot requirements",
+        "description": "ContinuedFractionExpansionOfRoot(f, n) returns first n terms of continued fraction expansion of the only positive real root of polynomial f with integer coefficients; leading coefficient must be positive and f(0) negative. ContinuedFractionApproximationOfRoot(f,n) returns nth continued fraction approximation.",
+        "guidance": "If degree of f is 2 and n=0 the function computes one period. If f has three or more positive real roots 'anything may happen'. Examples demonstrate outputs and approximations."
+      },
+      {
+        "name": "PValuation semantics",
+        "description": "PValuation(n, p) returns exponent e such that p^e is largest power of prime p dividing n; valuation of zero is infinity.",
+        "guidance": "Examples: PValuation(100,2)=2, PValuation(100,3)=0."
+      },
+      {
+        "name": "TwoSquares output and algorithmic properties",
+        "description": "TwoSquares(n) returns [x,y] with x \u2264 y and x^2 + y^2 = n, or fail if no representation exists. Returns representation with gcd(x,y) as small as possible; unspecified which representation returned if multiple.",
+        "guidance": "Existence criterion: let a be product of maximal powers of primes \u22613 (mod 4) dividing n; representation exists iff a is a perfect square. Minimal gcd c = sqrt(a\u00b7b) where b is maximal power of 2 dividing n or n/2 to make a perfect square. Algorithm: find square root r of \u22121 modulo n/(a\u00b7b), apply Euclidean algorithm and pick residues < (n/(a\u00b7b))*c. References [Wag90], [Zag90]. Examples provided including large primes."
+      },
+      {
+        "name": "Combinations (and memory-efficient iteration) semantics",
+        "description": "Combinations(mset[, k]) returns set of all combinations (unordered selections without repetitions) of the multiset mset with k elements (or all combinations if k omitted).",
+        "guidance": "Combinations of a large multiset can be iterated memory-efficiently with IteratorOfCombinations (produces combinations one by one) or EnumeratorOfCombinations (enumerator representation). The ordering from these iterators/enumerators can differ from Combinations result. Example shows use and counts (NrCombinations)."
+      },
+      {
+        "name": "IteratorOfCombinations and EnumeratorOfCombinations behavior",
+        "description": "IteratorOfCombinations(mset[, k]) returns an Iterator for combinations; EnumeratorOfCombinations(mset) returns an Enumerator.",
+        "guidance": "Iterator can save memory for large sets; EnumeratorOfCombinations currently only has variant without k. Ordering of produced combinations may differ from list returned by Combinations."
+      },
+      {
+        "name": "NrCombinations and counting functions",
+        "description": "NrCombinations(mset[, k]) returns number of combinations (Combinations(mset,k)).",
+        "guidance": "Examples: NrCombinations([1..52],5) = 2598960 (poker hands). Related functions: Arrangements (ordered without repetitions), UnorderedTuples, Tuples (ordered with repetitions)."
+      },
+      {
+        "name": "Arrangements semantics and counts",
+        "description": "Arrangements(mset[, k]) returns set of arrangements (ordered selections without repetitions) of mset containing k elements (or all arrangements if k omitted).",
+        "guidance": "If mset is a proper set, number of arrangements with k elements is |mset|!/(|mset|-k)!. Example: Arrangements([\"s\",\"e\",\"t\",\"t\",\"l\",\"e\"],4) demonstrates arrangements from a multiset (Scrabble example). NrArrangements returns the count."
+      }
+    ]
+  }
+}

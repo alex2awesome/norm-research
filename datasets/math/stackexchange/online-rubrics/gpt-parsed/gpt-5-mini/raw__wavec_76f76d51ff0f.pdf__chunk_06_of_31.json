@@ -1,0 +1,215 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 31,
+  "chunk_chars": 39543,
+  "model": "gpt-5-mini",
+  "elapsed_s": 138.45833624999796,
+  "input_tokens": 14429,
+  "output_tokens": 6767,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "Developers and advanced users of PARI/GP (mathematicians and numerical/number-theory programmers)",
+    "subtask_short": "pari_gp_function_documentation",
+    "subtask_description": "Reference guidance for using PARI/GP library and gp transcendental/arithmetic functions: their argument typing, precision rules, special-case behavior, and recommended usage patterns. Covers varlower, transcendental functions, p-adic/intmod behavior, series handling, arithmetic functions and related utilities.",
+    "subtask_keywords": [
+      "pari_gp",
+      "library",
+      "transcendental_functions",
+      "p-adic",
+      "numerical_precision"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "varlower variable priority and session-history effects",
+        "description": "Behavior of varlower depends on existing session variables and their priorities; defining a variable with a given display name may be a no-op if an existing variable already has the requested priority, or create a distinct low-priority variable that displays with the same name.",
+        "guidance": "Examples show that calling varlower in different session histories results in variables with different priorities (one may be essentially a no-op, the other creates a new variable). Package authors should be aware that user session history can affect behavior; use varlower carefully when defining a base ring or variable that must have a given priority."
+      },
+      {
+        "name": "varlower: display name is arbitrary and not retrievable",
+        "description": "The name passed to varlower is an arbitrary character string only used for display purposes and need not be related to the GP variable holding the result, nor be a valid variable name.",
+        "guidance": "Because the display name is not present in the parser's hash tables, it cannot be used to retrieve the variable. Example: x = varlower(\"#\"); x^2 prints as #^2 but # is not retrievable by name."
+      },
+      {
+        "name": "varlower consumes limited variable slots \u2014 avoid creating new variables unnecessarily",
+        "description": "There are a limited number of variables; if no existing variable with the given display name has the requested priority, varlower uses up one such slot.",
+        "guidance": "Do not create new variables this way unless absolutely necessary; reuse existing names instead and state sensible priority requirements rather than creating new highest-priority variables. Example shows quickly using up variables with a while loop; a no-more-variables error is possible."
+      },
+      {
+        "name": "varlower library syntax",
+        "description": "Library API signature for varlower.",
+        "guidance": "GEN varlower(const char *name, long v = -1) where v is a variable number."
+      },
+      {
+        "name": "Transcendental functions return inexact objects with finite precision",
+        "description": "Since transcendental values cannot be exactly represented, these functions always return an inexact object: a real, complex, p-adic number or power series, each with finite precision.",
+        "guidance": "Treat all transcendental outputs as inexact and manage precision appropriately via the available interfaces."
+      },
+      {
+        "name": "Computation when argument is real or already inexact complex",
+        "description": "If the argument is a real number or an inexact complex number, the computation is done with the precision of the argument.",
+        "guidance": "Changing global realprecision does not affect results already inexact; results may nonetheless be complex (e.g., acos(2.0)). Consult each function's help for branch cuts and principal-value choices. Example: sin(Pi/4) computed at argument's precision."
+      },
+      {
+        "name": "Conversion of exact arguments to inexact before transcendental evaluation",
+        "description": "If the argument is integer, rational, exact complex, or a quadratic number, it is first converted to a real or complex number using the current precision (realprecision or realbitprecision).",
+        "guidance": "You can set precision in decimal digits with \\p or default(realprecision,...), or in bits with \\pb or default(realbitprecision,...). In library mode, use the function's prec parameter (see separate rubric)."
+      },
+      {
+        "name": "Library-mode precision parameter (prec) semantics",
+        "description": "In library mode, the precision is taken from the prec parameter of each transcendental function; prec stands for the length in words of a real number (including codewords) and must satisfy prec \u2265 3.",
+        "guidance": "prec is ignored when the argument is already inexact. Some functions accept bitprec for finer granularity. Be careful translating between gp interactive realprecision and library prec conventions."
+      },
+      {
+        "name": "Platform-dependent attainable accuracies (32-bit vs 64-bit)",
+        "description": "Some accuracies attainable on 32-bit machines cannot be attained on 64-bit machines for parity reasons (e.g., default gp accuracy corresponds to prec=5 on 32-bit which can't be attained on 64-bit).",
+        "guidance": "Account for platform differences when writing code that depends on specific decimal-digit accuracies."
+      },
+      {
+        "name": "polmod (algebraic number) arguments produce one result per complex embedding",
+        "description": "If the argument is a polmod representing an algebraic number, the function is evaluated for every complex embedding of that algebraic number and a column vector of results is returned (one component per embedding).",
+        "guidance": "The number of components equals the degree of the t_POLMOD modulus; callers should handle vector results accordingly."
+      },
+      {
+        "name": "Limited support for intmod and p-adic arguments in transcendental functions",
+        "description": "Only a few transcendental functions are implemented for intmod or p-adic arguments (e.g., sqrt, sqr, log, exp, powering, teichmuller, agm).",
+        "guidance": "Expect limited functionality; check per-function documentation for supported p-adic/intmod operations."
+      },
+      {
+        "name": "p-adic squaring and multiplication precision differences",
+        "description": "For 2-adic numbers, sqr(x) may increase precision relative to x*x: e.g., (1+O(2^4))^2 gives 1 + O(2^5) while (1+O(2^4))*(1+O(2^4)) gives 1 + O(2^4).",
+        "guidance": "sqr is optimized and may produce more precise results for identical operands; be mindful when reasoning about p-adic precision propagation."
+      },
+      {
+        "name": "Treatment of intmod (exact) vs p-adic (inexact) arithmetic re: modulus changes",
+        "description": "intmod is an exact object and PARI assumes modulus must not change (so results keep same modulus), whereas p-adics are inexact and treated differently (e.g., expected changes in apparent modulus/treatment).",
+        "guidance": "Design code cognizant of these semantic differences when mixing intmod and p-adic operations."
+      },
+      {
+        "name": "Polynomial/power series/rational-function arguments: conversion via seriesprecision",
+        "description": "Polynomial, power series or rational function arguments are converted to power series using the current series precision (default seriesprecision), controlling the number of significant terms.",
+        "guidance": "In gp use \\ps or default(seriesprecision,...). In library mode it is strongly advised to explicitly convert to power series (e.g., x = gtoser(x, seriesprec)). If not converted, a global precdl is used; tampering with precdl is deprecated and discouraged."
+      },
+      {
+        "name": "Vector and matrix arguments: componentwise evaluation",
+        "description": "If the argument is a vector or a matrix, transcendental functions are evaluated componentwise; transcendental functions on square matrices (not implemented in this version) will have different names if implemented.",
+        "guidance": "Expect and handle vector/matrix outputs; do not assume matrix-function behavior unless explicitly provided."
+      },
+      {
+        "name": "Exponentiation operator semantics (x^y) for non-integer exponent",
+        "description": "If y is not an integer, x^y is evaluated as exp(y*log(x)).",
+        "guidance": "This applies to p-adic numbers as well as usual types. Library syntax: GEN gpow(GEN x, GEN n, long prec). Be aware of branch/log choices that affect results."
+      },
+      {
+        "name": "Reserved constant names (Catalan, Euler, I, Pi)",
+        "description": "Catalan, Euler, I, Pi (and a few others) are reserved names and cannot be used for user variables.",
+        "guidance": "Avoid using these identifiers for user variables; documentation notes when a name is reserved."
+      },
+      {
+        "name": "abs(x) special semantics",
+        "description": "abs(x) returns the absolute value (modulus if complex). Rational-function arguments are not allowed. Contrary to most transcendental functions, an exact argument is not converted to a real number and an exact result is returned if possible.",
+        "guidance": "For polynomials, returns -x if leading coefficient is real and negative, else returns x; for power series, the constant coefficient is considered. Library syntax: GEN gabs(GEN x, long prec)."
+      },
+      {
+        "name": "Principal branch and branch-cut conventions documented per function",
+        "description": "Inverse trig, inverse hyperbolic and many complex functions have explicit principal branch definitions and branch-cut locations and ranges (e.g., acos in [0,\u03c0], asin in [\u2212\u03c0/2,\u03c0/2], atan real part in (\u2212\u03c0/2,\u03c0/2) etc.).",
+        "guidance": "Consult each function's entry for precise branch cut and principal-value conventions when relying on complex-valued behavior; identities relating functions (e.g., acos(x)=\u03c0/2\u2212asin(x)) are stated."
+      },
+      {
+        "name": "agm (arithmetic-geometric mean) behavior for complex/p-adic/series arguments",
+        "description": "For complex or negative numbers, agm returns the optimal AGM (largest in absolute value over all choices of signs of square roots); p-adic or power series arguments are allowed but a p-adic agm exists only if x/y \u2261 1 (mod p) (mod 16 for p=2). x and y cannot both be vectors or matrices.",
+        "guidance": "Check existence conditions for p-adic agm; use library syntax GEN agm(GEN x, GEN y, long prec)."
+      },
+      {
+        "name": "eint1: absolute-error vs relative-error behavior when optional n present",
+        "description": "eint1(x,{n}) extends the function definition analytically and if n is present returns the n-dimensional vector [eint1(x),...,eint1(nx)]; for this case values are correct up to a bounded absolute, rather than relative, error 10^{-n} (where n is precision(x) if x is t_REAL and defaults to realprecision otherwise).",
+        "guidance": "This absolute-error control is faster than repeatedly calling eint1(i*x) but less precise in relative terms; useful where weighted sums require absolute error bounds (e.g., L-function computations). Library syntax: GEN veceint1(GEN x, GEN n = NULL, long prec)."
+      },
+      {
+        "name": "expm1 recommended for numerical accuracy near zero",
+        "description": "expm1(x) returns exp(x)\u22121 computed accurately when real part of x is near 0, avoiding catastrophic cancellation that affects exp(x)-1.",
+        "guidance": "Use expm1 rather than exp(x)-1 for small x for much improved relative error. Library syntax: GEN gexpm1(GEN x, long prec). Example demonstrates orders-of-magnitude relative-error improvement."
+      },
+      {
+        "name": "gamma: domain and p-adic extension (Morita gamma)",
+        "description": "Gamma(s) is the Euler gamma function for complex s (pole at non-positive integers). For t_PADIC s, evaluates the Morita gamma function (unique continuous p-adic extension).",
+        "guidance": "Expect errors at poles for complex gamma; p-adic gamma extensions are provided (showing an example with O(p^n) output). Library syntax: GEN ggamma(GEN s, long prec); p-adic Qp_gamma also available."
+      },
+      {
+        "name": "gammamellininvinit guarantees absolute-error bounds (caveat)",
+        "description": "Contrary to general PARI convention, gammamellininvinit and related gammamellininv routines guarantee an absolute rather than relative error bound.",
+        "guidance": "This is intended for computing inverse Mellin transforms used in L-value computations where absolute error control is desired. Example demonstrates extremely small absolute difference."
+      },
+      {
+        "name": "polylog function variants via flag argument",
+        "description": "polylog(m,x,{flag=0}) computes different modified polylogarithms depending on flag: flag=0 (standard mth polylog), flag=1 computes \u02dcD_m(x), flag=2 computes D_m(x), flag=3 computes P_m(x) according to Zagier's notation and functional equations fm(1/x)=(\u22121)^{m\u22121}fm(x).",
+        "guidance": "The implementation uses functional equations and chooses algorithms depending on |x| to ensure convergence/efficiency; library syntax: GEN polylog0(long m, GEN x, long flag, long prec) and GEN gpolylog(long m, GEN x, long prec) (flag=0)."
+      },
+      {
+        "name": "sqr vs multiplication and precision effects",
+        "description": "sqr(x) is an optimized squaring routine not always identical to x*x in implementation; for p-adics squaring can increase precision (e.g., (1+O(2^4))^2 yields higher precision than multiplying two independent copies).",
+        "guidance": "sqr is used when operands are known identical (same variable) and when computing powers; use gsqr(GEN x) library call when optimal squaring is desired."
+      },
+      {
+        "name": "sqrt and sqrtn principal-branch and root-recovery semantics",
+        "description": "sqrt(x) returns principal branch with Arg(sqrt(x)) \u2208 (\u2212\u03c0/2,\u03c0/2] (imag part positive if x<0 real); sqrtn(x,n,{&z}) returns principal n-th root with Arg \u2208 (\u2212\u03c0/n,\u03c0/n]; optional &z yields a root of unity to recover all roots, set to zero when impossible and if no nth root exist sqrtn returns 0 (instead of raising error) when &z present.",
+        "guidance": "Intmod (prime), t_PADIC and t_FFELT are allowed. A helper function sqrtnall(x,n) shows how to enumerate all roots using returned z when available. Library syntax: GEN gsqrt(GEN x,long prec) and GEN gsqrtn(GEN x,GEN n,GEN *z=NULL,long prec)."
+      },
+      {
+        "name": "teichmuller: definition, optional tab for speed, and cache-accuracy caveat",
+        "description": "teichmuller(x,{tab}) returns the Teichm\u00fcller character of a p-adic x (a (p\u22121)-th root of unity congruent to x/p^{v_p(x)} mod p). If x = [p,n] returns lifts of i+O(p^n). The optional tab (precomputed table) speeds up many computations but if tab accuracy is lower than x precision the lower tab accuracy is used; if tab accuracy is higher, x precision is used.",
+        "guidance": "For computing many values ( > p/2(log2(p)+hammingweight(p)) ), initialize tab via teichmuller([p,n]) to achieve significant speedups. Use teichmullerinit helpers in library mode. Example timings show large speedup factors."
+      },
+      {
+        "name": "theta and thetanullk function definitions and library syntax",
+        "description": "theta(q,z) is Jacobi sine theta-function \u03b81 with series definition; thetanullk(q,k) returns k-th derivative at z=0 and vecthetanullk returns vector of odd derivatives; tau-based variants are available.",
+        "guidance": "Use appropriate library calls GEN theta(GEN q, GEN z, long prec), GEN thetanullk and vecthetanullk_tau when working with q=exp(2i\u03c0tau)."
+      },
+      {
+        "name": "weber function variants and identities (flag semantics)",
+        "description": "weber(x,{flag=0}) returns one of Weber's f functions depending on flag: flag=0 returns f(x)=exp(\u2212i\u03c0/24)\u00b7\u03b7((x+1)/2)/\u03b7(x), flag=1 returns f1(x)=\u03b7(x/2)/\u03b7(x), flag=2 returns f2(x)=\u221a2 \u03b7(2x)/\u03b7(x); identities linking f,f1,f2 to j-invariant and algebraic relations are documented.",
+        "guidance": "Library syntax: GEN weber0(GEN x,long flag,long prec) and convenience wrappers GEN weberf, weberf1, weberf2. Use flag to select desired function and exploit identities in computations."
+      },
+      {
+        "name": "zeta(s) numeric strategy and p-adic Kubota\u2013Leopoldt extension",
+        "description": "For complex s, \u03b6(s) is computed using Euler\u2013Maclaurin summation except integer cases where Bernoulli numbers or modular forms are used; for p-adic s, compute Kubota\u2013Leopoldt p-adic zeta (unique continuous p-adic interpolation of (1\u2212p^{\u2212k})\u03b6(k) at suitable k).",
+        "guidance": "Be aware of different algorithms used depending on s type and value region; library syntax: GEN gzeta(GEN s,long prec)."
+      },
+      {
+        "name": "Arithmetic functions accept factorizations to avoid repeated factoring",
+        "description": "Arithmetic functions (totient, M\u00f6bius, divisor sums, etc.) by definition accept integers but also accept alternate argument formats: t_MAT (fa=factor(N)), or t_VEC [N,fa] to provide N and its factorization; this allows reusing factorizations when computing multiple arithmetic functions.",
+        "guidance": "When computing many arithmetic functions for same N, pass [N,fa] to avoid repeated factoring; examples show eulerphi(N), eulerphi(faN), eulerphi([N,faN]) giving same result quickly."
+      },
+      {
+        "name": "Arithmetic functions share the factoring engine and factor_proven default",
+        "description": "All arithmetic functions call the common factoring machinery (Shanks SQUFOF, Pollard Rho, ECM, MPQS stages) after trial division, and have an early exit option for moebius and issquarefree. The machinery relies on a probabilistic primality test but default(factor_proven,1) can be set to ensure proven factorizations.",
+        "guidance": "Set default(factor_proven,1) if you require fully proven factorizations at some performance cost; otherwise accept probabilistic factorization for speed."
+      },
+      {
+        "name": "Orders and discrete-log functions accept optional group-order data and prefer [N,fa] format",
+        "description": "Functions computing group orders (ellorder, fforder, znorder) and discrete logs (elllog, fflog, znlog) accept an optional integer N or representation of the group order; formats allowed: t_INT (N), t_MAT (factorization fa), t_VEC [N,fa] (preferred).",
+        "guidance": "For repeated computations on the same group, initialize and pass [N,fa] once to avoid recomputing factorization; example shows znorder(Mod(2,p), v) with v = [p-1,factor(p-1)]."
+      },
+      {
+        "name": "Dirichlet character representations and preferred Conrey logarithm format",
+        "description": "A Dirichlet character can be represented by a t_INT (Conrey label m), a t_COL (Conrey logarithm in terms of Conrey generators), or a t_VEC (SNF representation). t_COL (Conrey logarithm) is the preferred, fastest representation. Various conversion utilities exist (znconreychar, znconreylog, znconreyexp).",
+        "guidance": "Use idealstar(,N) to initialize (Z/NZ)^* and pass it to character-handling functions. Prefer Conrey-format t_COL for speed; use provided conversion routines as needed. Note differences between SNF generators and Conrey generators and their implications."
+      },
+      {
+        "name": "addprimes: user-defined primes table usage and caveats",
+        "description": "addprimes({x=[]}) appends integers in x to a special table of 'user-defined primes' which factor will trial divide by; if x omitted returns current list.",
+        "guidance": "Entries must actually be primes; there is no internal primality check even if factor_proven is set. Use removeprimes to delete entries. Use cautiously as incorrect entries break factoring assumptions."
+      },
+      {
+        "name": "bestappr: bounded-denominator rational approximation and modular/p-adic rational reconstruction",
+        "description": "bestappr(x,{B}) returns a rational approximation a/b with denominator limited by B (if omitted returns best given input accuracy). For t_REAL or t_FRAC uses continued fractions. For t_INTMOD modulo N or t_PADIC precision N=pk, performs rational modular reconstruction modulo N producing unique a/b with |a|<N/2B and b\u2264B, or [] if not possible.",
+        "guidance": "If seeking true rationals approximated, first increase input accuracy. Omitting B chooses B ~ N/2 for modular reconstruction. The function applies recursively to components of composite objects; failure for any entry returns []. Hensel lifting is used in many modular cases."
+      }
+    ]
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/22a65dc64b18.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "22a65dc64b18.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 5,
+  "chunk_chars": 39998,
+  "model": "gpt-5-mini",
+  "elapsed_s": 56.1482539589997,
+  "input_tokens": 14310,
+  "output_tokens": 5418,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "users of GAP (computational group theorists, mathematicians and students learning GAP)",
+    "subtask_short": "using GAP for group actions and algebras",
+    "subtask_description": "Practical guidance and usage rules for GAP functions dealing with group actions, stabilizers, homomorphisms, nice monomorphisms, vector spaces, and algebras. Includes warnings, recommended functions, and how to interpret/construct objects and mappings correctly in GAP.",
+    "subtask_keywords": [
+      "gap",
+      "computational_group_theory",
+      "group_actions",
+      "homomorphisms",
+      "vector_spaces",
+      "algebras"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "OnSets argument must be a set",
+        "description": "If you specify OnSets as third argument to a function like Stabilizer, you have to make sure that the point (i.e. the second argument) is indeed a set.",
+        "guidance": "Otherwise you will get a puzzling error message or even wrong results. In the example blocks[1] came from Blocks which returns a list of sets, so using blocks[1] with OnSets was OK."
+      },
+      {
+        "name": "Use Stabilizer with appropriate action argument",
+        "description": "Stabilizer(G, point, action) computes the stabilizer of an action; provide the correct action (e.g., OnSets, OnTuples, OnRight) to reflect the intended domain.",
+        "guidance": "You can compute stabilizers of groups or subgroups; for actions on cosets use OnRight, for tuples use OnTuples, for sets use OnSets. Example: u8_56 := Stabilizer(a8_56, blocks[1], OnSets)."
+      },
+      {
+        "name": "Lift stabilizers via PreImages when using action homomorphisms",
+        "description": "When you have an action homomorphism h: A -> B and compute a stabilizer inside B, obtain the corresponding subgroup of A via PreImages(h, stabilizer_in_B).",
+        "guidance": "Example: u8b := PreImages(h56, u8_56) and then Index(a8, u8b) matched Index in the action representation."
+      },
+      {
+        "name": "Verify conjugacy of subgroups with IsConjugate",
+        "description": "Use IsConjugate(a8, u8, u8b) to check whether two subgroups are conjugate in the ambient group.",
+        "guidance": "This confirms whether a subgroup found via lifting/preimages is conjugate to a known subgroup."
+      },
+      {
+        "name": "Check subgroup maximality via primitive action",
+        "description": "A subgroup of index n is maximal if the induced action on the n blocks is primitive (and there are no subgroups of smaller forbidden indices).",
+        "guidance": "Use IsPrimitive(action_group, blocks, OnSets) to verify primitiveness. Example: u28 is maximal because a8 has no subgroups of index 2,4,7 and IsPrimitive returned true for the 28 blocks."
+      },
+      {
+        "name": "Search for larger subgroups via block systems of induced actions",
+        "description": "To find subgroups above a given subgroup H, compute the action of the ambient group on the cosets of H and look for nontrivial block systems of that action.",
+        "guidance": "Compute blocks := Blocks(a8_336, [1..336]) and inspect blocks[1]; closures of H with representatives of cosets corresponding to entire blocks yield larger subgroups (ClosureGroup)."
+      },
+      {
+        "name": "Use Orbit and OnTuples (or OnPairs/OnPoints) for constructing action domains",
+        "description": "To get domains like the set of k-tuples (without repetition) on which a subgroup acts, use Orbit(G, seed_tuple, OnTuples) (or OnPairs/OnPoints for pairs/points).",
+        "guidance": "Then pass that list as action domain to functions like IsRegular to test regularity. Example: IsRegular(u336, Orbit(u336, [4,5,6], OnTuples), OnTuples) returned true."
+      },
+      {
+        "name": "Regular action implies equivalence to right-coset action",
+        "description": "If IsRegular(G, domain, action) returns true, then the action is equivalent to the action of G on its elements from the right (i.e., right coset action).",
+        "guidance": "You can then build permutation representations via RightTransversal and Action(..., OnRight)."
+      },
+      {
+        "name": "Construct permutation representations via RightTransversal and Action(..., OnRight)",
+        "description": "To create a permutation representation of G on the cosets of H, compute a right transversal t := RightTransversal(G,H) and then a permutation group a := Action(G, t, OnRight).",
+        "guidance": "This produces a permutation group isomorphic to the action on cosets and can be used to search for block systems, subgroups, etc."
+      },
+      {
+        "name": "Use RepresentativeAction to map one orbit point to another when forming closures",
+        "description": "To form the subgroup above a stabilizer corresponding to another point in the same orbit, use rep := RepresentativeAction(G, point1, point2) to get an element mapping point1 to point2.",
+        "guidance": "If the two points are not in the same orbit RepresentativeAction returns fail. Use the representative to form ClosureGroup(stabilizer, rep) to get the subgroup of the desired index."
+      },
+      {
+        "name": "Prefer Size(ConjugacyClass(G,g)) over OrbitLength when computing conjugacy class sizes",
+        "description": "Although OrbitLength(G,g) gives the length of the conjugacy class, Size(ConjugacyClass(G,g)) is probably more efficient.",
+        "guidance": "Use Size(ConjugacyClass(a8, element)) to compute conjugacy class sizes."
+      },
+      {
+        "name": "Stabilizer uses specialised centralizer algorithm when appropriate",
+        "description": "If the stabilizer is actually a centralizer of an element in a permutation group, Stabilizer detects this and computes it using the centralizer algorithm (more efficient).",
+        "guidance": "Thus calling Stabilizer on an element that is centralizable triggers the centralizer algorithm internally."
+      },
+      {
+        "name": "GroupHomomorphismByImages requires gens generating G and imgs as images in H",
+        "description": "To construct a homomorphism G -> H by images use GroupHomomorphismByImages(G, H, gens, imgs) where gens is a generating set of G and imgs lists images of those generators in H.",
+        "guidance": "The function checks whether the data defines a homomorphism and returns fail if not. Example: hom := GroupHomomorphismByImages(s4, s3, GeneratorsOfGroup(s4), [(1,2),(2,3)]) produced the standard surjection S4 -> S3."
+      },
+      {
+        "name": "Use PreImagesRepresentative for preimages of elements under non-injective homomorphisms",
+        "description": "If a homomorphism is surjective but not injective, PreImage(hom, element) fails for elements; use PreImagesRepresentative(hom, element) to get one preimage (or fail if none exist).",
+        "guidance": "PreImage works for preimages of sets or subgroups (those always exist). Example: PreImagesRepresentative(hom, (1,2,3)) returned (1,4,2)."
+      },
+      {
+        "name": "GroupHomomorphismByImagesNC (no-check) trusts the user and can produce nonsense",
+        "description": "GroupHomomorphismByImagesNC constructs a mapping without checking validity; if the images do not respect relations in G it may produce inconsistent or nonsensical results.",
+        "guidance": "Do not use NC unless you are sure the specified images define a homomorphism. Example: mapping an element of order 4 to one of order 3 produced absurd kernel/size results."
+      },
+      {
+        "name": "Use GroupGeneralMappingByImages for multi-valued or non-total mappings and test with IsGroupHomomorphism",
+        "description": "If the target images don't define a homomorphism (e.g., reversing arrows), use GroupGeneralMappingByImages to get a general (possibly multi-valued) mapping; test IsGroupHomomorphism on it.",
+        "guidance": "Group general mappings allow reversal of arrows and enable computation of cokernels; IsGroupHomomorphism returns false if the mapping is not a homomorphism."
+      },
+      {
+        "name": "Reversal of arrows yields general mappings; cokernel = kernel of reversed mapping",
+        "description": "Reversing the direction of a homomorphism yields a group general mapping which may be multi-valued or not total; GAP uses this to compute kernels/cokernels (CoKernel of reversed mapping corresponds to kernel of original).",
+        "guidance": "CoKernel(rev) can return the kernel of the original homomorphism when rev is the reversed general mapping."
+      },
+      {
+        "name": "GAP requires homomorphisms to be single-valued and total",
+        "description": "A group homomorphism in GAP must be both single-valued (functional) and total (defined on all elements); GroupHomomorphismByImages enforces this by checking that gens generate G and imgs define images on the whole group.",
+        "guidance": "If gens do not generate G the function returns fail even if the images would define a homomorphism on the subgroup generated by gens."
+      },
+      {
+        "name": "Use injective action homomorphisms (nice monomorphisms) for computations in 'nicer' representations",
+        "description": "For some groups (e.g., matrix groups) it's best to compute in an isomorphic group in a better representation (typically a permutation group); an injective homomorphism giving such an image is called a nice monomorphism.",
+        "guidance": "Construct via ActionHomomorphism or NiceMonomorphism; check IsInjective(hom) or set injectivity flag with SetIsInjective(map,true) if you are sure. Use Image(hom, grp) to get the image (hom may be defined on a larger domain)."
+      },
+      {
+        "name": "GAP can automatically use NiceMonomorphism for finite matrix groups",
+        "description": "If GAP knows a matrix group is finite (e.g., after IsFinite) it will automatically handle it by a nice monomorphism; calling NiceMonomorphism(grp) returns a suitable action isomorphism.",
+        "guidance": "After obtaining hom := NiceMonomorphism(grp) you can compute ConjugacyClasses(grp) by lifting classes from the permutation image using PreImagesRepresentative and StabilizerOfExternalSet."
+      },
+      {
+        "name": "A nice monomorphism may be defined on a larger group than grp",
+        "description": "Because NiceMonomorphism might be defined on a larger ambient group, always use Image(hom, grp) (not Image(hom)) to restrict to the image of the intended group.",
+        "guidance": "This avoids including extra elements from the larger domain where the homomorphism is defined."
+      },
+      {
+        "name": "You can compose NiceMonomorphism with isomorphisms to obtain preferred representations",
+        "description": "Compose a nice monomorphism with an isomorphism (e.g., to a pc group) to create a 'personal' nicer monomorphism; you may then set this as the group's NiceMonomorphism attribute for future computations.",
+        "guidance": "Reconstructing the group and prescribing SetNiceMonomorphism may lose other gathered information; injectivity of the composed map must be known (IsInjective) or set via SetIsInjective."
+      },
+      {
+        "name": "Only domains constructed as vector spaces are treated as vector spaces in GAP",
+        "description": "An additive group that does not know about an acting domain of scalars is not regarded as a vector space in GAP; vector spaces must be constructed via VectorSpace, F^n, or AsVectorSpace.",
+        "guidance": "Use LeftActingDomain(V) to find the field of definition. Example: V := VectorSpace(F, generators) or V := F^3 constructs row spaces recognized as vector spaces."
+      },
+      {
+        "name": "Fields are viewed as vector spaces over their prime fields by default; use AsVectorSpace to change",
+        "description": "By default GAP views fields as vector spaces over their prime fields. Use AsVectorSpace(target_field, field) to view a field as a vector space over a different subfield.",
+        "guidance": "LeftActingDomain shows the acting field; AsVectorSpace(GF(4), GF(16)) yields a view of GF(16) as GF(4)-vector space when appropriate."
+      },
+      {
+        "name": "Vector space attributes and basis handling",
+        "description": "A vector space in GAP has attributes: LeftActingDomain (field), Dimension, and a Basis. Basis objects are special lists (often SemiEchelonBasis) used to compute coefficients and linear combinations.",
+        "guidance": "Use Basis(V) to get a basis object, BasisVectors(Basis(V)) to extract vectors, Coefficients(B, v) for coordinates, and LinearCombination(B, coeffs) to form vectors. You may also supply a user-prescribed basis: Basis(V, [v1,v2,...])."
+      },
+      {
+        "name": "Create subspaces, quotient spaces, and natural projection maps",
+        "description": "Use Subspace(V, generators) to make subspaces, form quotient V/W by using V/W, and obtain the natural projection with NaturalHomomorphismBySubspace(V,W).",
+        "guidance": "Then Image(h, v) gives the image of v in the quotient, and PreImagesRepresentative(h, rep) finds a preimage representative in V of an element of the quotient."
+      },
+      {
+        "name": "Algebras: construction from generators or structure constants",
+        "description": "An algebra is a vector space with a bilinear multiplication closed under that multiplication. Construct with Algebra(field, generators) for matrix or Lie algebras, or use structure-constants tables and AlgebraByStructureConstants.",
+        "guidance": "For Lie algebras use LieAlgebra(field, list_of_matrices) or LieObject to wrap ordinary matrices; for structure constants use EmptySCTable and SetEntrySCTable to fill entries, then AlgebraByStructureConstants or LieAlgebraByStructureConstants (if you know the table defines a Lie algebra to avoid Jacobi checks)."
+      },
+      {
+        "name": "Representation of structure constants table and symmetry flags",
+        "description": "A structure constants table T is an n\u00d7n array where T[i][j] encodes the nonzero basis-coefficients of xi*xj. The table includes a symmetry flag (1 symmetric, -1 antisymmetric, 0 none) and the zero element of the field.",
+        "guidance": "Use EmptySCTable(dimension, zero_element, 'symmetric'|'antisymmetric'|none) to create a table and SetEntrySCTable(T,i,j,[k_indices..., constants...]) to populate. Symmetric/antisymmetric flags auto-fill the symmetric entries."
+      },
+      {
+        "name": "Construct subalgebras, ideals, and factor algebras; connect via homomorphisms",
+        "description": "Subalgebras and ideals are built by specifying generators (Subalgebra, Ideal); quotient algebra A/id is formed by A/id but to relate them use NaturalHomomorphismByIdeal(A, I) and then ImagesSource(h) to obtain the factor algebra tied to the homomorphism.",
+        "guidance": "This connection allows lifting central idempotents etc. via PreImagesRepresentative on the natural homomorphism."
+      },
+      {
+        "name": "Use provided constructors for common algebras (SimpleLieAlgebra, QuaternionAlgebra)",
+        "description": "GAP includes constructors for many standard algebras: SimpleLieAlgebra(name, rank, field) gives simple Lie algebras with root systems; QuaternionAlgebra(FieldByGenerators([...])) constructs quaternion algebras over number fields.",
+        "guidance": "Use RootSystem, PositiveRoots, CartanMatrix on Lie algebras; for quaternion algebras examine IsAssociative, IsCommutative, IsDivisionRing, compute units and actions using OperationAlgebraHomomorphism to get matrix representations in chosen bases."
+      },
+      {
+        "name": "Get matrix representations of algebra/group actions via OperationAlgebraHomomorphism",
+        "description": "To obtain matrices representing algebra elements in a chosen basis use op := OperationAlgebraHomomorphism(algebra, basis, OnRight) and then ImagesRepresentative(op, element) to get the matrix of that element.",
+        "guidance": "Select a basis (e.g., CanonicalBasis) first; the resulting matrices can be used for further computations or to derive permutation representations via actions on cosets."
+      }
+    ]
+  }
+}

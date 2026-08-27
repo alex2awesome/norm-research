@@ -1,0 +1,60 @@
+You are the ARBITER for a preregistered criterion-routing protocol.
+
+Two independent parties disagree about where a scoring criterion belongs:
+
+  TRACK A = the criterion measures genuine evidence about the construct named below
+            (substance, reasoning, evidence, craft, content). Track-A criteria JOIN the
+            articulated-criterion bank and are allowed to raise the bank's measured AUC.
+  TRACK B = the criterion measures something predictive but NOT the construct: length,
+            format, boilerplate, community style, topic markers, temporal tells, or a
+            textual fingerprint of some upstream circumstance of the item's production
+            (who made it, with what resources, when, with what help). Track-B channels
+            become DECLARED NUISANCES and are used only to discount the other models.
+
+For each dispute below you see: the criterion, the track that proposed it, that
+proposer's rationale, and an independent blind auditor's contrary verdict. Rule on each.
+
+Decide on the criterion's TEXT and what it would actually make a judge measure -- not on
+who proposed it and not on which answer is more generous. The decisive question is:
+if a judge scored exactly this instruction, would a high score be evidence ABOUT the
+construct, or evidence about something that merely travels with it?
+
+Also return `mixed`: true if you route it B but its upstream cause plausibly produces
+genuine quality as well (these are reported in both discounted and undiscounted readouts).
+
+DISPUTES:
+
+--- DISPUTE cell=peer_curation round=2 id=A12 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT: research quality
+CRITERION NAME: Concrete, vivid endpoint achievement stated in plain language
+SCORING INSTRUCTION: Score whether the abstract includes at least one concrete, vivid, easily-visualized achievement stated in plain language, as opposed to only abstract percentage deltas. 10 = the abstract names a specific, memorable, real-world-legible milestone (e.g., 'first to reach X', a named game/benchmark landmark). 0 = all claimed achievements are stated only as abstract numeric deltas with no plain-language milestone.
+PROPOSED BY TRACK: A
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R33 states RECODE 'is the first agent to reach the end screen in Pitfall!' (dense_pct=1.000, the single most dense-favored row in the slice); R04 (Hungry Hungry Hippos) reports concrete, legible claims like generating text '2.4x faster than Transformers.' Both dense_high/card_low.
+BLIND AUDITOR SAID: incidental -- Rewards plain-language vividness of a stated achievement over numeric deltas, which is a framing choice rather than a property of the underlying evidence, though genuinely landmark results are also more naturally described in vivid terms.
+
+--- DISPUTE cell=peer_curation round=2 id=B04 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT: research quality
+CRITERION NAME: Quantified result detail
+SCORING INSTRUCTION: Rate 0–10 how much the abstract presents exact numerical results, percentages, margins, error values, or speedups; judge only the quantity and specificity of numerical detail, not whether the results are good.
+PROPOSED BY TRACK: B
+PROPOSER'S UPSTREAM PARENT TAG: institutional resources
+PROPOSER'S RATIONALE: R17 gives multiple attack-success percentages, R39 reports several precise benchmark improvements, and R57 lists multiplication reductions and accuracy changes. Resource-rich teams may support more extensive measurement, which can also contribute to genuine quality.
+BLIND AUDITOR SAID: quality_relevant -- Presenting exact margins, error values, and specific quantitative detail is evidence of rigorous, verifiable empirical reporting rather than a mere style marker.
+
+--- DISPUTE cell=nc_outcome round=2 id=A08 ---
+CORPUS: public comments submitted to United States federal agency rulemaking dockets   ITEM: public comment   CONSTRUCT: the substantive quality of the comment
+CRITERION NAME: Written for this docket versus repurposed campaign or marketing copy
+SCORING INSTRUCTION: 10 = the prose is addressed to the decisionmaker in this proceeding and could not be lifted intact from another context: it names the rule, addresses the agency, and its register is that of a submission. 5 = docket-aware but partly templated. 0 = the text is evidently written for another audience and pasted in, marked by second-person consumer address, headline-style openers, action-alert urgency in the close, rhetorical questions repeated verbatim, or no addressee at all. Judge the genre of the writing only, never the position taken or the sincerity of the writer.
+PROPOSED BY TRACK: A
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R04 opens 'Dads, you wouldn't knowingly bring poison into your home' and repeats its 90-ppm rhetorical question verbatim, a distributed advocacy article rather than a comment, at dense .147 / card .811; R16 closes with 'There's no time to waste. Please act swiftly', at dense .023 / card .929; R02 opens with petition language, at dense .031 / card .910. All three carry real numbers and clean prose, which is exactly why a criterion bank scores them high while the dense model does not.
+BLIND AUDITOR SAID: incidental -- This scores the genre/register of the writing (docket-addressed versus repurposed campaign copy), explicitly excluding the position taken or its sincerity, though genuinely engaged writers plausibly also produce better-tailored substance.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"rulings": [
+  {"cell": "<cell>", "round": <round>, "blind_id": "<id>", "route": "A" or "B",
+   "mixed": true or false, "reason": "<two sentences max>"},
+  ... one per dispute ...
+]}

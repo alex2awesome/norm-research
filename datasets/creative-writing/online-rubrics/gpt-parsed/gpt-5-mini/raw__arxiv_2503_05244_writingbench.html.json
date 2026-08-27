@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/arxiv_2503_05244_writingbench.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16610,
+  "output_tokens": 4271,
+  "elapsed_s": 362.8025043341331,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/ML researchers and practitioners building or evaluating LLMs for generative writing (benchmark authors, evaluation engineers, and model builders)",
+    "subtask_short": "generative_writing_benchmark_evaluation",
+    "subtask_description": "Designing and applying a comprehensive benchmark and query-dependent evaluation framework to evaluate LLMs on diverse generative writing tasks (style/format/length across multiple domains) including criteria generation and a critic model for rubric-aware scoring.",
+    "subtask_keywords": [
+      "generative_writing",
+      "benchmark",
+      "llm_evaluation",
+      "criteria_generation",
+      "critic_model"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Query-dependent evaluation (dynamic criteria generation)",
+        "description": "Given a query q in WritingBench, the LLM is prompted to automatically generate a set of five evaluation criteria C_q = {c1,\u2026,c5} \u2014 opting for five criteria reflects a common approach \u2014 using a carefully designed instruction to ensure structural guidance during criteria specification.",
+        "guidance": "Each generated criterion should be instance-specific and diverse to capture the query\u2019s unique requirements (instead of relying on static global or domain-level dimensions). The process aims to address domain exhaustiveness, requirement specificity (style/format/length), and material dependency. See Appendix B.4 for the exact criteria-generation prompt."
+      },
+      {
+        "name": "Criterion structure (name + extended description + 1-2/3-4/5-6/7-8/9-10 bands)",
+        "description": "Each criterion must include: a concise name summarizing the criterion; an extended description elaborating the evaluation focus; and detailed scoring rubrics that provide fine-grained quality levels (explicitly labeled 1-2, 3-4, 5-6, 7-8, 9-10).",
+        "guidance": "The scoring bands should distinguish subtle differences in quality and be actionable for automated or human scoring. The Criteria Generation Prompt (Appendix B.4) enforces this JSON format and five-band breakdown."
+      },
+      {
+        "name": "Rubric-based scoring (per-criterion 1\u201310 with justification; average for overall)",
+        "description": "For each criterion ci \u2208 C_q, the evaluator independently assigns an integer score on a 1\u201310 scale to a response r, and provides a justification. The final overall score is computed by averaging scores across all criteria.",
+        "guidance": "Evaluators (LLMs or critic model) must provide concrete reasons for each score, referencing specific passages or elements of the response that support strengths or deficiencies. Detailed scoring prompt in Appendix B.5 requires JSON output {\"score\": integer, \"reason\": \"...\"}."
+      },
+      {
+        "name": "Style requirement (R1)",
+        "description": "Assessments related to tone, voice, register and other stylistic constraints (examples: 'Use a friendly and simple tone that kids can easily understand.').",
+        "guidance": "Style criteria judge appropriateness of tone, consistency of voice, audience suitability, and other stylistic instructions. Style may be marked as one of the query\u2019s core competencies and only criteria relevant to style should be averaged into the style-specific C column when applicable."
+      },
+      {
+        "name": "Format requirement (R2)",
+        "description": "Assessments enforcing structural or format constraints (examples: 'Follow the IEEE conference template', 'output in a specific format or outline').",
+        "guidance": "Format criteria evaluate conformity to templates, structural organization (headings, sections), specified formatting rules, and any required syntactic/structural conventions."
+      },
+      {
+        "name": "Length requirement (R3)",
+        "description": "Assessments enforcing output length constraints, including total word/token counts and section-specific counts (examples: 'Generate a 500-word executive summary', or multi-dimensional length constraints).",
+        "guidance": "Length criteria evaluate both global length (total words/tokens) and finer-grained constraints (per-section, temporal sequencing, or section-specific word counts). The paper notes diminished precision for complex multi-dimensional length requirements and recommends combining learned metrics with rule-based checks for strict control."
+      },
+      {
+        "name": "Material dependency / source integration",
+        "description": "Criterion checking whether the response appropriately uses the provided reference materials (e.g., incorporating data points, referencing statutes or financial reports, maintaining narrative continuity with input materials).",
+        "guidance": "Assessors should verify factual incorporation, correct citation/usage of supplied materials, and whether the output respects the context supplied by heterogeneous source materials. During construction, annotators collect and prune materials to ensure relevance; evaluation must confirm usage rather than ignore materials."
+      },
+      {
+        "name": "Query diversification guidance (six refinement dimensions)",
+        "description": "During query construction, refinement strategies include three core requirements and three auxiliary dimensions used to create multi-requirement prompts: stylistic adjustments, format specifications, length constraints, personalization, content specificity, and expression (e.g., make expression shorter).",
+        "guidance": "These diversification strategies are applied to generate richer queries and can themselves become explicit evaluation/production constraints in the query (e.g., personalization: 'From the viewpoint of an educator with two decades of experience')."
+      },
+      {
+        "name": "Domain-specific evaluation expectations",
+        "description": "Domain-aware quality expectations for each primary domain: Academic & Engineering (clarity, precision, logical argumentation, integration of empirical evidence), Finance & Business (clarity, conciseness, financial acumen, strategic insights), Politics & Law (authoritative/formal tone, adherence to legal/procedural standards), Literature & Art (creativity, evocative language, thematic and emotional depth), Education (clarity, accessibility, instructional effectiveness), Advertising & Marketing (persuasiveness, audience understanding, creativity).",
+        "guidance": "Static, one-size-fits-all criteria are insufficient; evaluation should adapt to domain characteristics. Criteria generation and scoring should reflect these domain-specific priorities when relevant to the query."
+      },
+      {
+        "name": "Static baseline dimensions (common but limited)",
+        "description": "Common fixed evaluation dimensions used in prior work (examples mentioned: fluency, coherence, relevance, accuracy).",
+        "guidance": "The paper highlights these as insufficient for many diverse, instance-specific writing tasks (e.g., they fail to capture creativity, argumentation strength, domain-specific adherence and material usage). They serve as baselines for comparison but are not adequate replacements for dynamic criteria."
+      },
+      {
+        "name": "Criteria generation output constraints (machine-readable JSON & strict format)",
+        "description": "Criteria must be returned strictly in the specified JSON format with fields: name, criteria_description, and text for bands '1-2','3-4','5-6','7-8','9-10'.",
+        "guidance": "Prompts instruct the LLM to output only the JSON and no extra text to ensure machine-readability and consistent downstream scoring. See Appendix B.4 and Table 13 for exact format."
+      },
+      {
+        "name": "Scoring output constraints (JSON score + reason; concrete textual evidence)",
+        "description": "The scoring prompt requires the evaluator to return a JSON {\"score\": integer between 1 and 10, \"reason\": \"...\"} and to provide reasons that are concrete, citing specific passages or elements of the response that justify the score.",
+        "guidance": "Evaluators must align justification with the criterion definitions and point to where strengths/deficiencies occur in the text. This is required for both LLM judges and the critic model (Appendix B.5, Table 14)."
+      },
+      {
+        "name": "Critic model rubric mapping and expectations",
+        "description": "A fine-tuned critic model M implements the rubric-based scoring mapping M_c: (q, r, C_i) \u21a6 [1,10] \u00d7 \ud835\udca5, outputting a numerical score and a justification text aligned with the predefined rubric. The critic model was fine-tuned on 50K instances to perform this mapping and reached 83% human alignment.",
+        "guidance": "The critic model is intended to replicate rubric-aware scoring with lower computation cost than large LLM judges. It should return both score and justification in the defined JSON format and be robust across diverse queries, criteria, and responses."
+      },
+      {
+        "name": "Evaluation protocol comparability (uniform generation settings)",
+        "description": "To ensure fair comparison across models on WritingBench, uniform generation settings are applied (example: up to 16,000 tokens, temperature 0.7, top-k 20, top-p 0.8) and critic input length capped for scoring stability.",
+        "guidance": "Consistent generation hyperparameters and input/output limits are treated as part of the evaluation protocol so performance comparisons reflect model capability rather than generation variance."
+      },
+      {
+        "name": "Evaluation-guided data curation (filtering by instance-specific criteria)",
+        "description": "Use the query-dependent criteria and critic scoring to filter and curate training data: e.g., apply instance-specific criteria generation to 24K SFT samples and use the critic model to filter ~50% to yield 12K higher-quality samples.",
+        "guidance": "Data curation is a two-phase filtering process: (1) generate instance-specific criteria for candidate samples; (2) evaluate with the critic model to retain higher-quality samples. The curated subset should better reflect high-quality writing per the instance-specific rubrics and can improve fine-tuned models."
+      },
+      {
+        "name": "Design choice: five criteria per instance",
+        "description": "The benchmark opts to generate five evaluation criteria per instance, noting that opting for five criteria reflects a common approach observed in contemporary evaluation contexts.",
+        "guidance": "This is a deliberate design choice to balance granularity and annotator/judge effort; criteria should still be diverse and sufficient to capture the query\u2019s important aspects."
+      }
+    ]
+  }
+}

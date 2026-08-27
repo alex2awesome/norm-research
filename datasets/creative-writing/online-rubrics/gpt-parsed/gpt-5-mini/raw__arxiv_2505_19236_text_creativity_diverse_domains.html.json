@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/arxiv_2505_19236_text_creativity_diverse_domains.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18353,
+  "output_tokens": 4365,
+  "elapsed_s": 376.10577095788904,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners developing automatic creativity evaluation, dataset curators, and LLM developers",
+    "subtask_short": "text creativity evaluation",
+    "subtask_description": "Designing, annotating, and automatically evaluating the creativity of individual textual responses across diverse domains using pairwise comparison and LLM-based evaluators. Includes dataset construction, human annotation protocol, evaluator training, and metrics for system comparison.",
+    "subtask_keywords": [
+      "creativity_evaluation",
+      "pairwise_comparison",
+      "llm_evaluator",
+      "dataset",
+      "cross_domain"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Creativity definition (new, surprising, and valuable)",
+        "description": "Creativity is defined (citing Boden 2003) as 'ideas or artifacts that are new, surprising and valuable.'",
+        "guidance": "Use this tripartite definition as the conceptual foundation for labeling and evaluation: novelty (not merely different), surprise (unexpectedness), and value (meaningful/relevant). It is the paper's working definition for dataset construction, prompts, and annotator guidance."
+      },
+      {
+        "name": "Context-aware pairwise-comparison protocol",
+        "description": "Evaluate text creativity by comparing two responses to the same instruction/context and judging which is more creative (or if they are comparable).",
+        "guidance": "Provide a shared contextual instruction to annotators/evaluators to improve consistency. Present paired responses in randomized order; evaluator outputs one of: R1 more creative, R2 more creative, or comparable/tie. This isolates text-level creativity and increases inter-annotator agreement relative to decontextualized judgments."
+      },
+      {
+        "name": "Text-level granularity (individual-response evaluation)",
+        "description": "Assess creativity at the level of individual responses (text-level) rather than model- or subject-level.",
+        "guidance": "Text-level judgments enable distinguishing which of two responses to the same prompt is more creative, yielding actionable feedback for generation improvement. This contrasts with many prior methods that only provide model-level scores."
+      },
+      {
+        "name": "Human annotation procedure (4-point Likert & aggregation)",
+        "description": "Annotators rate response creativity on a 4-point Likert scale; each response's creativity score is the average of all annotator ratings.",
+        "guidance": "Recruit multiple qualified annotators (paper used 30 annotators from diverse majors), randomize response order, show instruction+responses, compute average score per response. Monitor inter-rater reliability (ICC). Annotation interface should be minimal and focused to reduce noise."
+      },
+      {
+        "name": "Inter-annotator reliability target (ICC)",
+        "description": "Measure and aim for high inter-annotator agreement (Intraclass Correlation Coefficient, ICC).",
+        "guidance": "Shared contextual instructions increased ICC from moderate (0.59) to good (0.75) in experiments; the paper reports ICC(2k)=0.92 on final labeled test set. Use ICC to validate annotation consistency and dataset trustworthiness."
+      },
+      {
+        "name": "Label thresholds for distinguishable vs comparable (tie) pairs",
+        "description": "Pairs are labeled distinguishable if the averaged score difference > 0.3 and comparable (tie) if difference < 0.1.",
+        "guidance": "Use these numeric thresholds to construct test labels from averaged human scores: >0.3 => 'distinguishable' (clear creative difference); <0.1 => 'comparable' (tie). Other ranges may be left unlabeled or handled with different policies."
+      },
+      {
+        "name": "Perplexity (PPL) as a creativity proxy",
+        "description": "Use model perplexity of a response as a proxy for novelty/creativity\u2014higher perplexity implies higher novelty.",
+        "guidance": "This is a simple baseline metric, but the paper finds poor correlation with human judgments (e.g., near-zero Kappa). Treat PPL cautiously; it may reflect low-level novelty but misses semantic/meaningful creativity."
+      },
+      {
+        "name": "Divergent Semantic Integration (DSI)",
+        "description": "Measure average semantic distance between words in a response using BERT-based embeddings; higher DSI indicates higher creativity.",
+        "guidance": "DSI captures lexical-semantic dispersion as a proxy for divergent thinking. It can help detect some creative variations but is limited by reliance on static embeddings and surface-level semantic distance; it does not fully align with human judgments across domains."
+      },
+      {
+        "name": "Creativity Index (corpus n-gram dissimilarity)",
+        "description": "A corpus-based metric computing creativity inversely proportional to n-gram similarity to a reference corpus (less overlap => higher creativity).",
+        "guidance": "Captures lexical novelty relative to a corpus but fails to capture semantic or stylistic creativity (metaphor, imagery). The paper reports moderate improvement over PPL/DSI but still limited by n-gram matching."
+      },
+      {
+        "name": "Evaluation metrics for evaluator performance (F1, Cohen's Kappa, Agreement rate)",
+        "description": "Use F1 score, Kappa score, and agreement rate to quantify agreement of automatic evaluators with human labels.",
+        "guidance": "Calculate all metrics twice by swapping response order and average the results to mitigate positional effects. Use these metrics for model comparisons and ablations."
+      },
+      {
+        "name": "Positional-bias mitigation (swap augmentation)",
+        "description": "Mitigate LLM evaluators' positional bias by augmenting training data with swapped R1/R2 and adjusting labels accordingly.",
+        "guidance": "Train with swapped examples to ensure the evaluator does not favor a response based on position. Ablation shows omitting swapping reduces performance and consistency. Evaluate consistency by measuring agreement after swapping order at test time."
+      },
+      {
+        "name": "Training data composition requirement (human + synthetic + negative samples)",
+        "description": "Effective training requires a mix: original human-created responses, synthetic responses of varying creativity, and negative (low-creative) samples.",
+        "guidance": "Ablation results: removing synthetic data or human data harms performance; negative samples add information about relevance and improve discrimination. Human responses contributed most; synthetic data help model grasp LLM-generated creative patterns; negatives improve awareness of instruction relevance."
+      },
+      {
+        "name": "Weakly-supervised pseudo-labeling heuristics",
+        "description": "Assign large-scale pseudo labels using heuristics: (1) stronger models produce more creative outputs than weaker ones; (2) creativity-focused prompts elicit more creative outputs than ordinary prompts.",
+        "guidance": "Paper validated these heuristics with human annotations (accuracy 86.6% for model-strength heuristic, 81.4% for prompt heuristic). Use these assumptions to scale training labels when human labeling is infeasible, but validate with spot checks and human-labeled test sets."
+      },
+      {
+        "name": "Reference creativity features used in prompts (novelty criteria)",
+        "description": "Prompts and creative criteria emphasize features: (1) uncommon/novel word choices and combinations; (2) unique syntactic structures (unconventional word order); (3) rhythmic or phonetic elements (rhyme, alliteration); (4) clever rhetorical devices, literary allusions, quotations, or humor-based wordplay.",
+        "guidance": "Use these explicit features to steer creative generation and to instruct annotators or LLM-evaluators on what counts as 'creative' (paper's Prompt_c and creative response generation guidance). They serve as actionable indicators during both generation and evaluation."
+      },
+      {
+        "name": "Top semantic/stylistic attributes CrEval attends to",
+        "description": "CrEval frequently associates creativity judgments with attributes such as Unique Imagery, Vivid Metaphor, Unconventional Expression, Sincere Emotion, Profound Symbolism, Imaginative Elaboration, Distinctive Layers, Concrete Details, Rich Visuals, and Precise Word Choice.",
+        "guidance": "These are empirical (Table 6) attributes extracted by analyzing CrEval judgments over test pairs; they indicate semantic/stylistic patterns that align with human notions of creativity. Use them as diagnostic categories when interpreting evaluator decisions or designing annotator rubrics."
+      },
+      {
+        "name": "Creativity filter scoring and format (analysis + 1\u20136 score in JSON)",
+        "description": "A filtering/quality-check prompt requires a critic to produce a concise analysis and a creativity score from 1 to 6, output in JSON with fields 'analysis' and 'score'.",
+        "guidance": "Scoring rules: novel expressions and original meanings receive high scores; excessive repetition/commonplace expressions receive low scores; if judged moderate, score should not exceed 3. Use this filter to remove low-creative samples before adding to creative dataset."
+      },
+      {
+        "name": "Response augmentation by multi-models and multi-prompts",
+        "description": "Generate multiple responses per instruction using various base models and two prompting modes (Prompt_o ordinary, Prompt_c creative) to induce a range of creativity levels.",
+        "guidance": "Set k (number of augmented responses per instruction) to a fixed value (paper used k=5). Use different model capacities and creativity-oriented prompts to fill the creativity spectrum for pair construction. Analyze diversity and ensure coverage across domains and lengths."
+      },
+      {
+        "name": "Negative sampling for least-creative response",
+        "description": "During training, include negative sampling by randomly selecting a response to serve as an explicit least-creative example to improve model discrimination.",
+        "guidance": "Negative sampling increases the model's awareness of instruction-response relevance and provides anchor points in the creativity scale. Ablation (CrEval-w/o Neg.) shows modest performance drop without negatives."
+      },
+      {
+        "name": "Rank/score aggregation for candidate responses (3/1/0 scheme)",
+        "description": "When ranking multiple candidate responses, perform pairwise comparisons and aggregate scores: win=3, tie=1, loss=0 to produce an overall creativity ranking.",
+        "guidance": "This scoring yields a creativity ranking used for data selection in training (e.g., DPO rejection sampling). Control the ratio of 'hard' (top-ranked) vs 'easy' samples when using ranked data for rejection-based fine-tuning; paper finds ~30% hard rejects optimal for DPO."
+      },
+      {
+        "name": "Out-of-distribution domain generalization requirement",
+        "description": "Evaluators should generalize across diverse creative domains (e.g., short texts, lyrics, ancient poetry, prose, Oogiri-Go, problem-solving, AUT) and maintain alignment with human judgments.",
+        "guidance": "Benchmark evaluators on held-out OOD datasets (creative writing corpora, Alternative Uses Task, etc.). Paper demonstrates CrEval outperforms similar-scale models and even some larger frontier models on OOD tests, attributing this to diverse training data."
+      }
+    ]
+  }
+}

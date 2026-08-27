@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_970e4e0d1065.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_970e4e0d1065.html",
+  "chunk_idx": 2,
+  "n_chunks": 6,
+  "chunk_chars": 39985,
+  "model": "gpt-5-mini",
+  "elapsed_s": 76.72699799999828,
+  "input_tokens": 11391,
+  "output_tokens": 4050,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI planning researchers, language designers, and planner implementers interested in formal semantics of PDDL2.1 (temporal and numeric planning).",
+    "subtask_short": "pddl2.1 temporal semantics",
+    "subtask_description": "Formal semantics and well-formedness conditions for PDDL2.1 domain and plan constructs, covering states, numeric fluents, action grounding/flattening, concurrency (mutex), simple and durative plans, executability and validity.",
+    "subtask_keywords": [
+      "pddl2.1",
+      "temporal_planning",
+      "durative_actions",
+      "numeric_fluents",
+      "formal_semantics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of state (include time, logical state, numeric vector)",
+        "description": "A state is a tuple (time, logical_state, numeric_vector) where time is a real value, logical_state is a subset of atoms, and the numeric_vector is a vector of real values (Rdim_\u22a5) allowing \u22a5 for undefined numeric values.",
+        "guidance": "Initial state is (0, Initlogical, x) with x giving initial numeric assignments (unspecified values treated as \u22a5). Unde\ufb01ned (\u22a5) values are allowed because some terms may start undefined but be initialized by actions. This extension replaces the usual notion of state as just a set of atoms."
+      },
+      {
+        "name": "Treatment of propositions and numeric satisfaction (Num(s,p))",
+        "description": "Satisfaction of a ground propositional formula p in a state (t,s,X) is defined via Num(s,p)(X): p is satisfied iff s |= N(p)[X := X], where atoms are true iff in s and numeric comparisons use standard real ordering.",
+        "guidance": "Comparisons involving \u22a5 (including equality between two \u22a5) are undefined, so enclosing propositions are undefined and not satisfied. This is key for deciding applicability of actions with numeric preconditions."
+      },
+      {
+        "name": "Primitive numeric expressions and initial/goal numeric handling",
+        "description": "Primitive numeric expressions (PNEs) are terms from function symbols applied to objects. Initnumeric assigns constant real values to a subset of PNEs; goals may include numeric propositions between PNEs and numbers.",
+        "guidance": "Dimension dim is number of distinct PNEs. Numeric parts of state require special handling (normalisation/indexing) to map expressions to vector indices."
+      },
+      {
+        "name": "Numeric effect syntactic forms and priming convention",
+        "description": "Numeric effects use assignment operators (assign, increase, decrease, scale-up, scale-down) with an lvalue PNE and an rvalue numeric expression; additive (increase/decrease), scaling, and simple assignment effects are distinguished. Assignment propositions are converted to equality propositions with primed lvalues to denote post-action values.",
+        "guidance": "E.g. (increase p q) becomes (= p' (+ p q)). Priming distinguishes postcondition numeric values from precondition values, enabling uniform treatment of numeric updates alongside logical effects."
+      },
+      {
+        "name": "Normalisation of numeric expressions (indexing to vector)",
+        "description": "Replace each primitive numeric expression f in a ground proposition by an indexed literal X_indexI(f) to obtain the normalised form N(p), enabling consistent binding to elements of the numeric vector state.",
+        "guidance": "This allows convenient substitution of the vector of actual parameter values for the abstract X literals when evaluating numeric preconditions/effects."
+      },
+      {
+        "name": "Flattening actions (eliminate conditional effects and quantifiers)",
+        "description": "Transform action schemas by syntactic steps: (1) replace conditional effects (when P Q) by splitting the schema into two copies with P conjoined to precondition / Q to effects and (not P) to precondition of the other; (2) expand quantifiers by substituting all objects for variables (forall\u2192conjunction, exists\u2192disjunction). Repeat until no conditional effects/quantifiers remain.",
+        "guidance": "Flattening converts syntactic sugar into equivalent sets of action schemas, simplifying instantiation and later concurrency analysis. This is similar to Gazen & Knoblock (1997)."
+      },
+      {
+        "name": "Ground action structure (Pre, Add, Del, NP sets)",
+        "description": "A grounded non-durative action a has: Name, Pre_a (propositional precondition; set GPre_a), Add_a (positive postconditions), Del_a (negative postconditions), NP_a (numeric postconditions as assignment propositions).",
+        "guidance": "Define sets La (lvalues), Ra (PNEs in rvalues or preconditions), and L*_a (lvalues that are additive assignments). These sets are used to check interference and numeric update constraints."
+      },
+      {
+        "name": "Valid ground action (no conflicting numeric assignments)",
+        "description": "A ground action a is valid if no primitive numeric expression appears as an lvalue in more than one simple assignment effect, or in more than one different type of assignment effect.",
+        "guidance": "Prevents syntactic actions that assign conflicting numeric values (e.g., two different assignments to same PNE). Validity ensures well-defined numeric update functions."
+      },
+      {
+        "name": "Updating function for numeric effects (composition and commutativity)",
+        "description": "For a valid ground action, the numeric updating function is the composition of per-assignment functions NPF_p mapping pre-state vectors to post-state vectors, where unchanged entries remain the same.",
+        "guidance": "Validity plus restrictions on assignment types ensure the component functions commute (so composition order is irrelevant) and arithmetic on rvalues yields correct lvalues."
+      },
+      {
+        "name": "No moving targets rule (conservative concurrency / mutex condition)",
+        "description": "Concurrent actions are allowed only if they are non-interfering per Definition 12: GP_rea \u2229 (Add_b \u222a Del_b) = GP_reb \u2229 (Add_a \u222a Del_a) = \u2205; Add_a \u2229 Del_b = Add_b \u2229 Del_a = \u2205; L_a \u2229 R_b = R_a \u2229 L_b = \u2205; and L_a \u2229 L_b \u2286 L*_a \u222a L*_b. If not, actions are mutex.",
+        "guidance": "This conservative rule disallows concurrent actions that affect parts of the state relevant to other actions' precondition tests (the 'no moving targets' principle), even if intuition might allow concurrency. It keeps the concurrency check tractable (polynomial) and avoids needing to reason about all interleavings. Example given demonstrates why seemingly parallel actions can be mutex (actions with overlapping conditions/effects)."
+      },
+      {
+        "name": "Applicability of a ground action",
+        "description": "A ground action a is applicable in a state s if Pre_a is satisfied in s (per the Num(s,p)/normalisation rules).",
+        "guidance": "Because numeric comparisons involving \u22a5 are undefined, actions with preconditions depending on \u22a5 will be considered not satisfied; applicability ties together logical state and numeric vector via normalisation."
+      },
+      {
+        "name": "Simple plan format and timing conventions",
+        "description": "A simple plan is a finite collection of timed simple actions (t : (action args)) where t is a positive rational; multiple actions can share a time stamp (concurrency). If no time points are given, first action defaults to time 1 and subsequent actions occur at integer increments.",
+        "guidance": "Earliest activity must be strictly after time 0 because initial state is at time 0; effects are applied in intervals closed on the left (starting at t), preconditions tested in interval open on the right preceding the action. Actions need not be listed in time order."
+      },
+      {
+        "name": "Happening execution requirements (AH size, mutex check)",
+        "description": "Given a happening H at time t and state (t,s,x), the activity AH is the set of grounded actions whose names are in H, are valid, and whose preconditions are satisfied in (t,s,x). The result is undefined if |AH| \u2260 |H| or any pair in AH is mutex; otherwise apply deletes/adds and composed numeric updates to produce new state.",
+        "guidance": "Requiring |AH| = |H| enforces that each action name resolves to an applicable valid action (conditional-effects flattening ensures at most one applicable). If none is applicable, the attempt to apply the action is undefined. The commutativity guarantee on numeric update functions (from validity) ensures x0 is well-defined."
+      },
+      {
+        "name": "Executability of a simple plan (unique trace)",
+        "description": "A simple plan SP is executable if it defines a happening sequence {t_i} and there is a state sequence {S_i} starting at the initial state such that each S_{i+1} is the result of executing the happening at t_i; an executable plan produces a unique trace.",
+        "guidance": "Executability separates from goal attainment; if any happening execution is undefined (due to AH mismatch or mutex), plan is not executable."
+      },
+      {
+        "name": "Validity of a simple plan (achieves goal)",
+        "description": "A simple plan is valid if it is executable and the final state produced satisfies the planning instance's goal specification.",
+        "guidance": "Validity therefore requires both syntactic/semantic executability and semantic goal satisfaction per the Num(s,p) evaluation rules."
+      },
+      {
+        "name": "Durative action grounding and temporal annotations",
+        "description": "Durative actions must have temporally annotated propositions (at start p), (at end p), (over all p); effects are similarly annotated. Each durative action without continuous/conditional effects maps to two simple actions (DAstart, DAend) parameterised by ?duration and one monitoring action DAinv (for invariants).",
+        "guidance": "DAstart/DAend get the appropriate at-start/at-end preconditions/effects; DC_{DA}_start and DC_{DA}_end handle duration expressions involving ?duration. Each conjunct in durative conditions/effects contributes to exactly one of DAstart, DAend, or DAinv. Parameter ?duration must be substituted with actual duration value."
+      },
+      {
+        "name": "Mapping plans with durative actions to induced simple plans",
+        "description": "A plan P with durative actions is transformed into an induced simple plan simplify(P): include (t,a) for simple actions, (t, a_start[?duration:=t0]) and (t+t0, a_end[?duration:=t0]) for durative actions (t,a[t0]), and insert ((t_i + t_{i+1})/2, a_inv) monitoring actions between happenings lying within the durative interval.",
+        "guidance": "Invariant-checking actions are inserted midway between successive happenings to avoid violating the 'no moving targets' rule (avoids accessing values at same time as updates). Monitoring actions have no effects; their presence forces invariants to remain true after start and after each subsequent happening during the durative action's interval. This mapping allows semantics of durative plans to be defined in terms of simple plan semantics."
+      },
+      {
+        "name": "Restriction to endpoints for durative annotations (language design choice)",
+        "description": "PDDL2.1 restricts temporal annotations/refs to only the end points of actions (at start, at end, over all) rather than arbitrary internal time points during an action's duration.",
+        "guidance": "Allowing references to arbitrary timepoints increases language complexity without expressive power (scheduled internal timepoints can be emulated by sequences of linked durative actions). This design choice aims to keep PDDL2.1 simple."
+      },
+      {
+        "name": "Handling of continuous effects and conditional durative effects (deferred complexity)",
+        "description": "Durative actions with continuous effects or conditional effects whose conditions/effects are associated with different times complicate the semantics; discrete-effect durative actions are handled by the start/end/invariant mapping, while continuous and complex conditional cases require more complex treatment (discussed in later sections).",
+        "guidance": "The presented mapping captures most behaviour but continuous effects need special treatment (Section 9). The flattening approach postpones complex conditional/temporal interactions to a later, more detailed account."
+      }
+    ]
+  }
+}

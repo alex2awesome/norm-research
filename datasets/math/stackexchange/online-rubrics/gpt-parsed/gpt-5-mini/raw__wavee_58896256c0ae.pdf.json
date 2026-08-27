@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_58896256c0ae.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 9690,
+  "output_tokens": 3841,
+  "elapsed_s": 1403.0972577079665,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "TeX/METAPOST users and developers who generate scientific plots (including programmers who preprocess data in C++/other languages)",
+    "subtask_short": "creating METAPOST plots with MetaPlot",
+    "subtask_description": "Guidance and conventions for producing plot-object files (from preprocessing programs) and arranging/annotating them in METAPOST via the MetaPlot/MetaContour packages. Covers data-export format, required metadata, instance/positioning conventions, axis/tick macros, color handling, and idioms for combining preprocessing and METAPOST layout.",
+    "subtask_keywords": [
+      "metapost",
+      "metaplot",
+      "plot_generation",
+      "latex_figures",
+      "cpp_preprocessor"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Divide calculations between preprocessor and METAPOST",
+        "description": "Do the mathematical and data-visualization calculations in a preprocessing program and do the graphical and layout calculations in METAPOST.",
+        "guidance": "Advantages: use traditional languages for numerics, floating point, libraries, and interactivity; use METAPOST for declarations, typeset labels, and flexible layout. Anti-patterns: doing all calculations inside METAPOST (slow, fixed-point limits) or doing all layout in the preprocessor (loses METAPOST typesetting/layout benefits)."
+      },
+      {
+        "name": "Use a standardized plot-object interface",
+        "description": "Represent plots as 'plot objects' containing pictures, filled contours, and metadata independent of page positioning.",
+        "guidance": "Plot objects are the output of preprocessors and are generic so MetaPlot macros can scale/position them later. Example: capillary.fplot, capillary.lplot, plus numeric and pair metadata."
+      },
+      {
+        "name": "Rescale plot geometry into a unit box",
+        "description": "Paths and contours that make up a plot object are rescaled to fit within a unit box (extending from 0 to 1 in both coordinate directions) and treated as the bounding box for scaling/positioning.",
+        "guidance": "Benefits: avoids coordinates too small/large for METAPOST's fixed-point representation and makes positioning a simple matter of scaling by final width/height and shifting by lower-left corner."
+      },
+      {
+        "name": "Provide four required scale metadata variables",
+        "description": "Each plot object must include numeric variables named .xleft, .xright, .ybot, and .ytop that record the original data extents corresponding to the unit-box bounds.",
+        "guidance": "These names must be used for MetaPlot macros to compute scales and alignments; they are the basis for inst.scaleleft/inst.scaleright/inst.scalebottom/inst.scaletop."
+      },
+      {
+        "name": "Allow arbitrary additional metadata in unit-box coordinates",
+        "description": "Plot objects may include any number of additional metadata variables (e.g., contactpoint, contactangle), which can have arbitrary names and are given in the unit-box coordinate system.",
+        "guidance": "Using unit-box coordinates lets the same scaling/positioning macros place metadata-based annotations correctly. Example: capillary.contactpoint = (0.0, 1.0); capillary.contactangle = 45.0."
+      },
+      {
+        "name": "Plot object may contain multiple picture components with arbitrary names",
+        "description": "A plot object can contain any number (including zero) of picture components (e.g., fplot, lplot) with arbitrary names; the decision which component to draw is deferred to METAPOST.",
+        "guidance": "Example: include both a filled-contour picture (fplot) and a line-plot picture (lplot) to let METAPOST choose rendering later (overlaying, dashed lines, etc.)."
+      },
+      {
+        "name": "Use suffix-argument/name-construction idiom for data structures",
+        "description": "Use METAPOST suffix arguments and multi-token variable names to approximate structured objects; MetaPlot depends on constructing variable names from fragments.",
+        "guidance": "Because METAPOST has no true data types, this idiom lets MetaPlot treat arbitrary elements generically; arbitrary fields can be added without changing type definitions."
+      },
+      {
+        "name": "Plot instance must contain page-position and scale info and reference parent object",
+        "description": "A plot instance must include coordinates/dimensions for placement on the page (pageleft, pagebottom, pagewidth, pageheight), the plot's internal scale (scaleleft, scalebottom, scaleright, scaletop), and a way to access picture components from its parent plot object.",
+        "guidance": "MetaPlot provides plot_instantiate(inst, plot_object) which sets up inst.plot(name) = plot_object.name xscaled inst.pagewidth yscaled inst.pageheight shifted (inst.pageleft, inst.pagebottom)."
+      },
+      {
+        "name": "Constrain page variables for consistency",
+        "description": "Relate instance page variables with linear constraints: inst.pageleft + inst.pagewidth = inst.pageright and inst.pagebottom + inst.pageheight = inst.pagetop.",
+        "guidance": "These equalities let METAPOST solve layout using linear equations and determine page extents when some values are unknown."
+      },
+      {
+        "name": "Provide conversion macros between plot coordinate and page coordinate systems",
+        "description": "Use provided macros plot_xpageloc, plot_ypageloc, plot_zpageloc (and inverse xscaleloc/yscaleloc) to convert coordinates between a plot's internal scale and page locations.",
+        "guidance": "Example: plot_xpageloc(inst)(expr scalex) = inst.pageleft + (scalex - inst.scaleleft) * (inst.pagewidth / (inst.scaleright - inst.scaleleft)). These macros are fundamental to annotating and aligning plot elements."
+      },
+      {
+        "name": "Avoid using unknown page variables in denominators",
+        "description": "Write equations so page-related variables do not appear in denominators because METAPOST can only solve linear equations.",
+        "guidance": "Example: plot_setequalaxes(inst) computes inst.pagewidth in terms of inst.pageheight and scale ratios; the macro is written so denominators only contain known (scale) values."
+      },
+      {
+        "name": "Set equal-axis scaling via explicit scale-ratio formula",
+        "description": "To force x and y axes to have equal scaling, set pagewidth = pageheight * ((scaleright - scaleleft) / (scaletop - scalebottom)).",
+        "guidance": "This preserves aspect ratio in page units consistent with data scales; the provided plot_setequalaxes macro implements this."
+      },
+      {
+        "name": "Axis/tick macros require explicit formatting choices",
+        "description": "MetaPlot's axis-drawing functionality requires the user to specify most formatting details (tick lengths, spacing, direction, zero reference, step size, label format) for flexibility.",
+        "guidance": "The plot_xtickscale and plot_ytickscale macros wrap axes.tickscale with parameters: (startpoint, endpoint, ticklength, tickspace, tickdir, tickzero, tickstep, ticklabelformat). The ticklabelformat follows format.mp syntax; use \"\" to omit labels."
+      },
+      {
+        "name": "Tickscale macros return picture objects (do not draw themselves)",
+        "description": "The tickscale helper macros produce a picture object rather than drawing directly, leaving the user free to draw them with different pens or omit them.",
+        "guidance": "This allows different line styles for axis lines versus ticks and enables composition (e.g., drawing ticks, then axis line separately). Example usage in paper shows draw plot_xtickscale(plotB)(...) withpen pencircle scaled 0.5pt."
+      },
+      {
+        "name": "Axis macros do not draw axis lines",
+        "description": "Tick/label macros intentionally do not include axis lines so the user can draw axis lines with different styles or leave them off.",
+        "guidance": "Draw axis lines separately if desired to control appearance (e.g., linecap, stroke width)."
+      },
+      {
+        "name": "Color directives in plot objects and drawing-time override",
+        "description": "Plot objects may include color directives for individual elements (e.g., contourcolor array entries), but drawing commands can override these (draw ... withcolor black).",
+        "guidance": "MetaContour outputs per-line color directives (withcolor contourcolorN). To force uniform color, override at draw time. Define contourcolor[] before reading plot object file to set palette."
+      },
+      {
+        "name": "Use fixed-number formatting in preprocessor output for portability",
+        "description": "When emitting METAPOST point coordinates from a preprocessor, set fixed-precision formatting (e.g., five decimal places) to produce stable, readable numeric literals.",
+        "guidance": "Example: use ostringstream.setf(ios_base::fixed, ios_base::floatfield); pointstring.precision(5); to produce points like (0.01556,0.75006). This reduces string length and keeps numbers in reasonable range for METAPOST."
+      },
+      {
+        "name": "Be mindful of METAPOST numeric limits; consider string-based arithmetic for extremes",
+        "description": "The numeric scale variables shown are numerics and thus still vulnerable to under- or overflow; for extreme ranges, replace them with string-represented numbers (e.g., via sarith package).",
+        "guidance": "Paper notes it's simple to replace numeric extents with string numbers using sarith to avoid fixed-point issues when necessary."
+      },
+      {
+        "name": "Align/overlay different plot instances by matching unit-box anchor points",
+        "description": "To overlay multiple plots at the same scale, require their (0,0) and (1,1) points to coincide on the page using plot_zpageloc equality constraints.",
+        "guidance": "Example: plot_zpageloc(plotB,0.0,0.0) = plot_zpageloc(plotC,0.0,0.0) and similarly for (1.0,1.0). This aligns unit-box corners and ensures consistent scaling/overlay."
+      },
+      {
+        "name": "Typical preamble workflow for MetaPlot figures",
+        "description": "A figure preamble typically inputs the MetaPlot macros, inputs the METAPOST file containing plot objects (produced by preprocessor), and calls MetaPlot macros to instantiate and position plots.",
+        "guidance": "Example sequence: input metaplot; input capillary; plot_instantiate(plotA, capillary); set instance page variables; beginfig; draw plotA.plot(fplot) ... endfig."
+      },
+      {
+        "name": "Design formatting macros to be largely independent of plot details",
+        "description": "Write MetaPlot formatting macros generically so they do not depend on the specifics of a particular plot and can be widely distributed.",
+        "guidance": "MetaPlot's macros assume plot objects adhere to the unit-box and required metadata conventions so a single set of macros can format many plot types."
+      }
+    ]
+  }
+}

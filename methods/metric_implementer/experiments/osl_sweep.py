@@ -53,6 +53,26 @@ EXECUTORS = {
     "qwen25-72b":  ("Qwen/Qwen2.5-72B-Instruct", "qwen25", 72.7e9),
     "mistral7b":   ("mistralai/Mistral-7B-Instruct-v0.3", "mistral", 7.25e9),
     "phi4":        ("microsoft/phi-4", "phi", 14.7e9),
+    # qwen3 hybrid family (user 2026-08-06): third+ family staircase for plateau-robustness;
+    # same weights carry the thinking toggle for the self-articulation arm
+    "qwen3-1.7b":  ("Qwen/Qwen3-1.7B", "qwen3", 1.72e9),
+    "qwen3-4b":    ("Qwen/Qwen3-4B", "qwen3", 4.02e9),
+    "qwen3-8b":    ("Qwen/Qwen3-8B", "qwen3", 8.19e9),
+    "qwen3-14b":   ("Qwen/Qwen3-14B", "qwen3", 14.8e9),
+    "qwen3-32b":   ("Qwen/Qwen3-32B", "qwen3", 32.8e9),
+    # reasoning/dial slate (user 2026-08-06): matched-base pairs + dose dials; MoE models are
+    # z-axis points only (axis discipline: pool on z, ladder within family, forecast dense-only)
+    "gpt-oss-20b":  ("openai/gpt-oss-20b", "gptoss", 21e9),
+    "gpt-oss-120b": ("openai/gpt-oss-120b", "gptoss", 117e9),
+    "r1-qwen-1.5b": ("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", "r1qwen", 1.78e9),
+    "r1-qwen-7b":   ("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B", "r1qwen", 7.62e9),
+    "r1-qwen-14b":  ("deepseek-ai/DeepSeek-R1-Distill-Qwen-14B", "r1qwen", 14.8e9),
+    "r1-qwen-32b":  ("deepseek-ai/DeepSeek-R1-Distill-Qwen-32B", "r1qwen", 32.8e9),
+    "r1-llama-8b":  ("deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "r1llama", 8.03e9),
+    "phi4-reasoning": ("microsoft/Phi-4-reasoning", "phi", 14.7e9),
+    "magistral-24b": ("mistralai/Magistral-Small-2509", "mistral", 23.6e9),
+    "seed-oss-36b": ("ByteDance-Seed/Seed-OSS-36B-Instruct", "seedoss", 36e9),
+    "glm-z1-32b":   ("zai-org/GLM-Z1-32B-0414", "glmz", 32.6e9),
     "gemma4-31b":  ("google/gemma-4-31b-it", "gemma4", 31e9),
     # 5th primary-family rung (curvature probe, user 2026-07-07): FP8, TP=4 via OSL_TP env.
     # Repo resolved at download time (nvidia ModelOpt quant preferred, meta official fallback).

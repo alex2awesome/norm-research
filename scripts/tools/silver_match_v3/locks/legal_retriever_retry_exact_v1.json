@@ -1,0 +1,94 @@
+{
+  "schema_version": "silver-match-v3-legal-retriever-retry-predeclaration-v1",
+  "status": "FROZEN_BEFORE_INTERNAL_SPLIT_MATERIALIZATION_TRAINING_OR_EXTERNAL_DEV",
+  "frozen_at": "2026-07-13T01:20:00-07:00",
+  "task": "legal-outcome-prediction",
+  "inputs": {
+    "canonical_manifest_sha256": "b614e345a07123f9fe79d9521351886107476d34cf2b09daa50efce71dc1356f",
+    "relocated_manifest_sha256": "9687911088b55742ce5f161cb8528638796ba9d090b7367a35cbc750665b2e7c",
+    "bank_source_sha256": "7a71e70ca35c335ff982822f8e327457217a890fde2ee587b1ee256251d99be4",
+    "bank_artifact_sha256": "c530391ad14ed8b617e7188577990c016f5028a42d341bf51658cb6ec5e57ab9",
+    "exact_teacher_union_sha256": "548b869ec09298a6d8bbf1d912fb39d4a8ba882c92c2115dca2d7e75a164cfa6",
+    "exact_teacher_union_meta_sha256": "9dad5328f4610677321685230498545cd461f05160cf67a1071b606e33f21574",
+    "teacher_rows": 156,
+    "teacher_source_groups": 156,
+    "teacher_metrics": 32,
+    "prior_human_rows": 101,
+    "new_exact_optimize_rows": 55,
+    "immutable_select_rows_excluded": 360,
+    "optimize_truth_release_sha256": "e7d1c3bc162d4cbd1dbe9765b4a58488df2865c2367639c78952785f75d4de0e",
+    "select_truth_release_sha256": "4149a7b385eeed3f7793801a9fe48d25bc56b67e57e7a284d7d028bc558dfa5e",
+    "external_dev_sha256": "9fbf5332758147a9b5704370892e9a4b2f8918841e0592611183361d61fdabf3",
+    "external_dev_test_sha256": "ee5707b833e19566fb9395904e19e7c1aa56f9172feed5be6ce8cf1b034658e3",
+    "teacher_external_source_group_overlap": 0,
+    "teacher_select_uid_overlap": 0,
+    "teacher_select_source_group_overlap": 0
+  },
+  "split_policy": {
+    "internal_seed": 714302863,
+    "seed_derivation": "base16(first_8_hex(sha256(teacher_build_report.json)))",
+    "seed_search_allowed": false,
+    "train_percent": 80,
+    "dev_percent": 10,
+    "test_percent": 10,
+    "feasibility_gate": "Proceed only if this single predeclared seed gives nonempty train/dev/test source-group partitions."
+  },
+  "base_model": {
+    "name": "nvidia/llama-embed-nemotron-8b",
+    "snapshot_revision": "aa3b43a495a9b280d1bdb716da37c54bb495d630",
+    "content_inventory_sha256": "629023c4f3aaf30a29d6de547628d246fc34bd290ea7523d7b4f3052b4e3e172"
+  },
+  "implementation": {
+    "trainer_sha256": "1d5885b1367377f1b901998231e95a343e6b473e764dc098bef62bc14f904d5d",
+    "teacher_union_freezer_sha256": "6a61b71da3aa4f5053ebe49dfd8ed87234e6fe99fbe758486549f83685a3c3eb",
+    "launcher_sha256": "ec65db19e97743812d27dadf72f43884c9875d283a117d18425295a61d66047c"
+  },
+  "fixed_training": {
+    "epochs": 5,
+    "batch_size": 8,
+    "gradient_accumulation_steps": 4,
+    "eval_batch_size": 32,
+    "max_seq_length": 512,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "margin": 0.15,
+    "hard_negative_pool": 32,
+    "negatives_per_positive": 6,
+    "lora_rank": 32,
+    "lora_alpha": 64,
+    "lora_dropout": 0.05,
+    "split_seed": 714302863,
+    "train_percent": 80,
+    "dev_percent": 10,
+    "selection_k": 50,
+    "epoch_selection_policy": "depth_lexicographic",
+    "attention": "eager",
+    "cublas_workspace_config": ":4096:8"
+  },
+  "predeclared_variants": [
+    {"name": "legal-exact-a-lr5e5-seed1739", "seed": 1739, "learning_rate": 0.00005, "gpu_preference": 4},
+    {"name": "legal-exact-b-lr2e5-seed1741", "seed": 1741, "learning_rate": 0.00002, "gpu_preference": 5}
+  ],
+  "internal_variant_selection": {
+    "data": "internal_dev_only",
+    "order": ["higher_recall_at_50", "higher_mrr", "higher_recall_at_30", "higher_recall_at_16", "higher_recall_at_10", "higher_recall_at_5", "higher_recall_at_3", "higher_recall_at_1", "lexicographically_smaller_variant_name"],
+    "external_dev_may_select_between_variants": false,
+    "base_is_fallback": true
+  },
+  "external_promotion": {
+    "selected_adapter_only": true,
+    "minimum_dev_exact_recall_at_50_gain": 0.03,
+    "dev_exact_recall_at_80_may_decrease": false,
+    "failed_or_tied_action": "retain frozen unadapted Nemotron",
+    "external_test_before_selection_freeze": false
+  },
+  "prohibitions": {
+    "weak_or_forced_positive_labels": false,
+    "nonmatch_labels_as_retriever_positives": false,
+    "select_or_external_rows_in_gradient": false,
+    "external_dev_in_internal_variant_selection": false,
+    "external_test_read_before_final_selection": false,
+    "mi_or_outcome_fields": false,
+    "post_result_seed_or_hyperparameter_changes": false
+  }
+}

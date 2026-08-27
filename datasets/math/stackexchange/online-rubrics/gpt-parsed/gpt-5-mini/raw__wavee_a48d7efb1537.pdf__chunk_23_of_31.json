@@ -1,0 +1,196 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 23,
+  "n_chunks": 31,
+  "chunk_chars": 39986,
+  "model": "gpt-5-mini",
+  "elapsed_s": 136.9948116670057,
+  "input_tokens": 14082,
+  "output_tokens": 5971,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "LaTeX/TikZ/PGF users creating and customizing paths, snakes, and arrow tips",
+    "subtask_short": "tikz pgf path and arrow customization",
+    "subtask_description": "Instructions and API-level rules for defining and using 'snake' path automata, general path usage (stroke/fill/clip), and for declaring/using arrow tip kinds in PGF/TikZ. Covers command semantics, allowed options, and practical guidance for producing correct graphics.",
+    "subtask_keywords": [
+      "tikz",
+      "pgf",
+      "paths",
+      "snakes",
+      "arrows",
+      "latex"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "\\state command (state declaration)",
+        "description": "\\state{<name>}[<options>]{<code>} declares a new state inside the current snake automaton. The state is named <name>. When pgf is in that state: (1) the <options> are parsed (they may immediately cause a state switch); (2) the <code> is executed with a coordinate transformation placing the origin at the start of the segment and the target pointing east; (3) after code execution the state switches to whatever next state was specified in the options (or remains the same if none).",
+        "guidance": "Options are executed in order and an option that causes a state switch takes effect immediately (subsequent options are not executed). Use \\state to define the drawing behavior for each segment/state of a snake automaton."
+      },
+      {
+        "name": "switch if less than option",
+        "description": "Inside a state options list: switch if less than=<dimension> to <new state> \u2014 when encountered, pgf checks whether the remaining distance to the target is less than <dimension>; if so, an immediate state switch to <new state> occurs.",
+        "guidance": "Use to change behavior near the target (e.g., switch to final/short segment when remaining distance small). Because options execute in order and switches are immediate, place this option appropriately relative to width/other options."
+      },
+      {
+        "name": "width option (state segment width)",
+        "description": "width=<dimension> tells pgf the width of the segment appended to the path; afterwards the coordinate system is translated by <dimension> so the next segment starts where the current one ended. In addition, it causes an immediate switch to state 'final' if the remaining distance is less than <dimension> (equivalent to 'switch if less than=<dimension> to final' executed just before width).",
+        "guidance": "Use width to lay out successive segments of a snake; beware it implicitly checks remaining distance and may trigger final-state behavior."
+      },
+      {
+        "name": "next state option",
+        "description": "next state=<new state> \u2014 after the segment has been added to the path, a state switch to <new state> is performed. If not given, the next state is the same as the current state.",
+        "guidance": "Use to encode deterministic transitions between drawing states (e.g., oscillation between 'up' and 'down')."
+      },
+      {
+        "name": "\\pgfsnakeremainingdistance dimension",
+        "description": "A TeX dimension that holds the remaining distance to the target while processing snake lists or segments.",
+        "guidance": "Accessible inside state code or while processing snake lists to make conditional drawing decisions based on remaining distance."
+      },
+      {
+        "name": "\\pgfsnakecompleteddistance dimension",
+        "description": "A TeX dimension that holds the distance already completed on the snake (progress along the total distance).",
+        "guidance": "Useful alongside \\pgfsnakeremainingdistance to implement 'growing' vs 'shrinking' behavior and other distance-dependent logic."
+      },
+      {
+        "name": "\\pgfdeclaresnake usage (declaring snakes)",
+        "description": "\\pgfdeclaresnake{<name>}{<initial state>}{<state definitions>} declares a snake automaton by giving an initial state and a set of \\state declarations. The \\state command is defined only while the states argument is executed.",
+        "guidance": "Define complex path patterns (snakes) by composing states that use options and code; examples show simple and complicated snakes (zigzag, growing/shrinking behavior)."
+      },
+      {
+        "name": "\\pgfpathsnakealongvector (append snake along vector)",
+        "description": "\\pgfpathsnakealongvector{<snake>}{<length>}{<vector>} appends the named <snake> to the current path. <length> is the snake length; <vector> must be a normalized vector (length 1pt) pointing in the direction the snake should grow.",
+        "guidance": "Use when you want to append a specific snake of a given length in a specified direction; ensure the vector is normalized."
+      },
+      {
+        "name": "\\pgfpathsnakesto and snake list format",
+        "description": "\\pgfpathsnakesto{<snake list>}{<target>} appends the snakes in <snake list> to the current path so it ends at <target>. The snake list is a comma-separated list of pairs {<snake name>}{<distance>}, e.g. {lineto}{1cm},{moveto}{2cm}. The command computes the distance from the current point to <target>, normalizes the vector, and repeatedly calls \\pgfpathsnakealongvector for the items.",
+        "guidance": "No checking is done that subsnake distances add up to the total distance. While processing the list, \\pgfsnakeremainingdistance and \\pgfsnakecompleteddistance are set correctly for each subsnake. You can use expressions like {zigzag}{\\pgfsnakeremainingdistance} to make a subsnake span the remaining distance. Note: computed distances may be imprecise; placement precision of snakes is not perfect."
+      },
+      {
+        "name": "\\pgfpathsnaketo (shortcut)",
+        "description": "\\pgfpathsnaketo{<snake>}{<target>} is a shortcut for calling \\pgfpathsnakesto for a single snake whose length is \\pgfsnakeremainingdistance (i.e., snake runs to the target).",
+        "guidance": "Convenience wrapper when you want a single named snake to reach the target point."
+      },
+      {
+        "name": "\\pgfsetsnakesegmenttransformation (per-segment transformation)",
+        "description": "\\pgfsetsnakesegmenttransformation{<code>} installs code that will be executed at the very beginning of each segment; typically a transformation (e.g., reflect around the x-axis) to modify how each segment is rendered.",
+        "guidance": "Use to apply a 'last minute' coordinate transform before each segment; e.g., mirroring the snake along the path by reflecting the y-axis."
+      },
+      {
+        "name": "Allowed uses of constructed paths (stroke/fill/clip/shade/bounding box)",
+        "description": "Once a path is constructed it can be stroked (drawn), filled, used for clipping, shaded, or used as the picture bounding box. Combinations are allowed, but fill and shade at the same time make no sense.",
+        "guidance": "Decide ahead how the path will be used; rendering-affecting options (set via \\pgfset...) apply to the entire path and cannot vary per subsegment \u2014 use multiple paths to get different colors/styles in parts."
+      },
+      {
+        "name": "\\pgfusepath actions and ordering",
+        "description": "\\pgfusepath{<actions>} applies actions to the current path and then empties it. Actions include fill, stroke, clip, use as bounding box, discard. When more than one of the first three (stroke, fill, clip) are specified they are applied in the fixed order: stroke, then fill, then clip \u2014 regardless of ordering in the actions list.",
+        "guidance": "Be aware the application order is fixed; {stroke,fill} and {fill,stroke} have the same effect. 'discard' is equivalent to giving an empty actions list."
+      },
+      {
+        "name": "Graphic parameters apply to whole path and scope persistence",
+        "description": "All graphic parameters that influence how paths are rendered apply to the entire path, never only to a part. Graphic parameters are local to the current {pgfscope} but persist past TeX groups, except interior rule and arrow tip kinds (these may persist only to end of TeX group).",
+        "guidance": "To vary appearance within a drawing, construct multiple paths and apply different parameters/scope for each."
+      },
+      {
+        "name": "Line width (\\pgfsetlinewidth and \\pgflinewidth)",
+        "description": "\\pgfsetlinewidth{<line width>} sets the line width for subsequent strokes in the current pgfscope. The current line width can be accessed via the TeX dimension \\pgflinewidth.",
+        "guidance": "Specify normal TeX dimensions (e.g., 0.4pt, 1mm). The stored \\pgflinewidth reflects the value correctly across scopes; use it when designing arrow tip scaling or relative sizes."
+      },
+      {
+        "name": "Caps and joins (line cap/join settings)",
+        "description": "Commands such as \\pgfsetbuttcap, \\pgfsetroundcap, \\pgfsetrectcap set the line cap style; \\pgfsetroundjoin, \\pgfsetbeveljoin, \\pgfsetmiterjoin set line joins; \\pgfsetmiterlimit{<factor>} sets miter limit.",
+        "guidance": "Set appropriate caps and joins for consistent arrow tip and stroked path appearance; these affect entire strokes and should be set before drawing."
+      },
+      {
+        "name": "Dashing (\\pgfsetdash)",
+        "description": "\\pgfsetdash{<list of even length of dimensions>}{<phase>} sets the dash pattern: first list entry length of first solid part, second entry gap length, etc. <phase> specifies the offset where the first solid part starts relative to the start of the line. Use \\pgfsetdash{}{0pt} for a solid line.",
+        "guidance": "Provide even-length lists; phase shifts the pattern along the path. When designing arrow tips, ensure dashing is set to solid within arrow tip code."
+      },
+      {
+        "name": "Stroke color and \\pgfsetcolor",
+        "description": "\\pgfsetstrokecolor{<color>} sets the color used for stroking lines (lasts till end of current pgfscope, not just TeX group). \\pgfsetcolor{<color>} sets both stroke and fill color and lasts till end of current pgfscope. A normal \\color command overrides these 'immediately'.",
+        "guidance": "In plain TeX pgf emulates minimalistic color support (gray/rgb). Remember that \\color will override stroke/fill special settings."
+      },
+      {
+        "name": "Stroke opacity (\\pgfsetstrokeopacity)",
+        "description": "\\pgfsetstrokeopacity{<value>} sets opacity for stroking operations; <value> between 0 and 1 (1 opaque, 0 transparent).",
+        "guidance": "Opacity for PostScript output is only rendered correctly with recent GhostScript; some programs/printers may ignore opacity settings."
+      },
+      {
+        "name": "Arrow tips when stroking (limitations)",
+        "description": "PGF adds arrow tips after a path has been drawn, but it will only add arrows correctly at the ends of paths that consist of a single open part. For closed paths or multi-part paths the result is undefined.",
+        "guidance": "Ensure paths intended to have arrow tips are single open segments. Otherwise arrow placement may be incorrect."
+      },
+      {
+        "name": "\\pgfsetarrowsstart / \\pgfsetarrowsend / \\pgfsetarrows (installing arrow kinds)",
+        "description": "\\pgfsetarrowsstart{<arrow kind>} sets the arrow tip kind used at the start of subsequent strokes in the current TeX group; \\pgfsetarrowsend sets the kind used at the end. \\pgfsetarrows{<start>-<end>} sets both. Use an empty argument to clear the arrow at that end.",
+        "guidance": "The effect of these commands persists till end of current TeX scope/group. Beware compatibility mode: older commands \\pgfsetstartarrow / \\pgfsetendarrow exist but are incompatible with meta-arrow management."
+      },
+      {
+        "name": "\\pgfsetshortenstart / \\pgfsetshortenend (shortening paths)",
+        "description": "\\pgfsetshortenstart{<dimension>} shortens the start of every stroked path by <dimension> (in addition to automatic shortening done by start arrow). \\pgfsetshortenend works analogously for the end.",
+        "guidance": "Useful to make arrows or lines stop just before a given point (e.g., leave a gap between a circle and a tangent arrow)."
+      },
+      {
+        "name": "Filling interior rule (even-odd vs nonzero)",
+        "description": "When filling a path, point-inside decisions for self-intersecting or multi-part paths use either the nonzero winding number rule (default) or the even-odd rule. \\pgfseteorule sets even-odd for subsequent fills in the current TeX scope; \\pgfsetnonzerorule sets nonzero (default).",
+        "guidance": "Set the rule appropriate for your geometry before filling; the rule's effect lasts only to the end of the current TeX scope."
+      },
+      {
+        "name": "Fill color (\\pgfsetfillcolor) and fill opacity (\\pgfsetfillopacity)",
+        "description": "\\pgfsetfillcolor{<color>} sets the color used for filling paths (lasts only till next use of \\color). \\pgfsetfillopacity{<value>} sets opacity for filling operations (0..1). Filling transparency applies also to text and images.",
+        "guidance": "Use these commands to control fill look; remember \\color overrides these until next use, and opacity may not be fully supported in all output pipelines."
+      },
+      {
+        "name": "Clipping a path behavior",
+        "description": "Adding 'clip' to \\pgfusepath uses the current path to clip subsequent drawings. The same point-in-path rule (even-odd or nonzero) applies. Clipping never enlarges the clipping area; clipping twice clips to the intersection. The only way to enlarge clipping is to end the pgfscope where clipping was done (reinstalls previous clipping).",
+        "guidance": "Manage clipping scopes carefully; to reset clipping, end the pgfscope. Clipping is cumulative (intersection)."
+      },
+      {
+        "name": "Using path as bounding box",
+        "description": "Adding the 'use as bounding box' action enlarges the picture bounding box to encompass the path; subsequent paths in the current TeX scope do not affect the bounding box. Typically used at the beginning of a {pgfpicture}.",
+        "guidance": "Use when you want the bounding box to include invisible helper paths or to reserve space."
+      },
+      {
+        "name": "Arrow tips are 'meta-arrows' and should adapt to line width",
+        "description": "PGF's arrow tips are 'meta-arrows' (blueprints) rather than simply scaled shapes. Arrow tip code is re-executed for each line width to allow non-linear sizing behavior: e.g., an arrow at 5pt line width should not be 5x larger than at 1pt; instead designers usually grow arrow size slowly with line width.",
+        "guidance": "Design arrow tip code to consult \\pgflinewidth (or compute an \\arrowsize) and draw appropriately; avoid naive global scaling."
+      },
+      {
+        "name": "\\pgfarrowsdeclare (declare arrow tip kind) and arrow tip code constraints",
+        "description": "\\pgfarrowsdeclare{<start name>}{<end name>}{<extend code>}{<arrow tip code>} declares a new arrow kind. The arrow tip code should draw an arrow pointing right (line from left to origin). The extend code must call \\pgfarrowsrightextend{<dim>} and \\pgfarrowsleftextend{<dim>} to inform PGF how much the arrow protrudes on each side.",
+        "guidance": "Inside arrow tip code you may not use \\pgfusepath (use quick versions \\pgfusepathqstroke, \\pgfusepathqfill, \\pgfusepathqfillstroke). The arrow tip code is executed once per line width (so it must be robust and set dashing/caps/joins explicitly). The code runs in a low-level scope and the high-level transform is identity at first execution."
+      },
+      {
+        "name": "Arrow tip code best practices (joins, caps, dashing)",
+        "description": "When stroking inside arrow tip code, first set dashing to solid and set fixed joins and caps to ensure consistent arrow appearance across uses.",
+        "guidance": "Use \\pgfsetdash{}{0pt}, \\pgfsetroundjoin, \\pgfsetroundcap, etc., inside arrow tip code. Note that the arrow tip code is protocoled and stored; it's reexecuted for each line width but only once per width."
+      },
+      {
+        "name": "Arrow extend code (left/right extend) and alignment",
+        "description": "The extend code reports how far the arrow protrudes left/right relative to the origin by calling \\pgfarrowsleftextend{<dim>} and \\pgfarrowsrightextend{<dim>}. PGF uses these extends to shorten lines appropriately and to compose/reverse arrows.",
+        "guidance": "Compute extends taking into account arrow size logic (e.g., half an \\arrowsize shifts). Proper extends are crucial for correct arrow placement and for composing arrow kinds."
+      },
+      {
+        "name": "Declaring derived arrow kinds (alias, reversed, combine, double, triple)",
+        "description": "PGF provides \\pgfarrowsdeclarealias to create another name for an existing arrow kind; \\pgfarrowsdeclarereversed to create a reversed arrow kind; \\pgfarrowsdeclarecombine (and star variant) to combine two arrow kinds (inner and outer) with optional offset; \\pgfarrowsdeclaredouble and \\pgfarrowsdeclaretriple are shortcuts for composing the same arrow multiple times.",
+        "guidance": "When deriving arrow kinds, ensure left/right extends are set correctly for both components so composition and reversal produce correct geometry. Use optional offset to tweak spacing between components when combining."
+      },
+      {
+        "name": "Using declared arrow tip kinds and compatibility warning",
+        "description": "Install declared arrow kinds with \\pgfsetarrowsstart/\\pgfsetarrowsend/\\pgfsetarrows. Effects last to the end of the current TeX scope. Warning: in compatibility mode old commands \\pgfsetstartarrow / \\pgfsetendarrow exist and are incompatible with the meta-arrow system.",
+        "guidance": "Prefer the meta-arrow commands; clear arrow kinds by passing empty names. Use \\pgfsetarrows{<start>-<end>} as shorthand."
+      },
+      {
+        "name": "Predefined arrow tip kinds",
+        "description": "A number of arrow tip kinds are pre-defined (e.g., stealth, to, latex and their reversed forms, and |-|-).",
+        "guidance": "These built-in kinds are available immediately; see manual listing for appearance and 'thick' vs 'thin' variants."
+      }
+    ]
+  }
+}

@@ -106,7 +106,9 @@ result — read each file's header docstring before using. Core non-driver utili
 **Diagnostic paths retained:**
 - Free reconstruction still supports balanced examples, `free_dd`, reasoning, and GEPA. These do not replace
   the primary MCQ identification measurement.
-- `m_omega_gepa.py` optimizes discrimination on the design split. It is not a reconstruction optimum or a
+- `m_omega_gepa.py` optimizes discrimination on the design split (official `gepa.optimize` since
+  2026-07-19; the in-house loop it replaced is archived verbatim in
+  `archive/inhouse_m_omega_gepa_deprecated.py`). It is not a reconstruction optimum or a
   certificate, and the resulting prompt is frozen before held-out scoring.
 
 **Still open:**

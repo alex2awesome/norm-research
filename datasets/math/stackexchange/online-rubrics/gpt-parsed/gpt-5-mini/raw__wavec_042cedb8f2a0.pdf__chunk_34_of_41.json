@@ -1,0 +1,196 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 34,
+  "n_chunks": 41,
+  "chunk_chars": 39591,
+  "model": "gpt-5-mini",
+  "elapsed_s": 302.5178059999962,
+  "input_tokens": 13749,
+  "output_tokens": 6089,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "users of the Magma computer algebra system; mathematicians and programmers working with enumerative combinatorics, incidence structures and graph theory",
+    "subtask_short": "magma_combinatorics_graphs_reference",
+    "subtask_description": "Reference/documentation for Magma functions and conventions for enumerative combinatorics (subsets, partitions, Bell numbers) and finite incidence structures and graphs, including constructors, returned objects, and semantics of testing/transforming structures.",
+    "subtask_keywords": [
+      "magma",
+      "combinatorics",
+      "graphs",
+      "incidence_structures",
+      "partitions",
+      "bell_numbers"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Subsets vs PowerSet behavior",
+        "description": "The function Subsets(S) should be distinguished from PowerSet(S). Both return the power set of S mathematically, but Subsets returns the subsets explicitly, whereas PowerSet merely returns them as a formal object.",
+        "guidance": "Example output shows enumerated subsets. Use Subsets when you need an explicit enumerated set of subsets; use PowerSet when the formal object is sufficient."
+      },
+      {
+        "name": "k-subset definition and Subsets(S, k)",
+        "description": "A k-subset of S is a subset of S having cardinality k (an unordered set of size k with distinct elements). Subsets(S, k) returns all k-subsets of S as an enumerated set of enumerated sets.",
+        "guidance": "If k > n (n = |S|) then an empty set will be returned."
+      },
+      {
+        "name": "Multisets, Subsequences, Permutations semantics",
+        "description": "Multisets(S, k) returns all multisets of size k (counting multiplicity) with elements in S. Subsequences(S, k) returns all sequences (ordered multisets) of length k with elements in S. Permutations(S, k) returns all distinct-element sequences (ordered sets) of length k with elements in S. Permutations(S) is special for k = |S|.",
+        "guidance": "These functions allow ordered or repeated elements as appropriate; if k > n then an empty set is returned."
+      },
+      {
+        "name": "Counting formulae for subset-like objects",
+        "description": "If only the totals are needed, use the counting functions: number of k-subsets = Binomial(n,k); number of k-multisets = Binomial(n + k \u2212 1, k); number of k-sequences = n^k; number of k-permutations = NumberOfPermutations(n,k) (or Factorial(n) if k = n).",
+        "guidance": "Use counting functions from Table 35.1 when enumeration is unnecessary or expensive."
+      },
+      {
+        "name": "Partitions(n) and partition ordering",
+        "description": "A partition of an integer n is a representation as the sum of positive integers, ignoring order. Partitions(n) returns a sequence containing all partitions of n, each partition given as a non-increasing sequence of positive integers.",
+        "guidance": "NumberOfPartitions(n) returns the count; RestrictedPartitions(n, T) restricts component values to set T of positive integers (useful for coin-change style problems)."
+      },
+      {
+        "name": "RestrictedPartitions semantics and example",
+        "description": "RestrictedPartitions(n, T) returns only those partitions whose components all lie in set T.",
+        "guidance": "Example: RestrictedPartitions(50, {5,10,20}) lists ways to give change for 50 cents using coins {5,10,20}."
+      },
+      {
+        "name": "Bell numbers (definition)",
+        "description": "Bell number B_n is the number of partitions of a set of n objects into non-empty subsets (with B_0 = 1).",
+        "guidance": "Multiple formulae and implementations are provided: via Stirling numbers, recursive summation, infinite series approximation, and generating functions; these have differing efficiencies."
+      },
+      {
+        "name": "Bell via Stirling numbers",
+        "description": "B_n = sum_{k=1..n} StirlingSecond(n,k) for n >= 1, with B_0 = 1.",
+        "guidance": "Implement by constructing StirlingSecond(n,k) sequence then summing (demonstrated Magma implementation)."
+      },
+      {
+        "name": "Bell via recursive summation (inefficiency warning)",
+        "description": "Recursive formula: B_0 = 1; for n >= 1, B_n = sum_{k=0..n-1} Binomial(n-1,k) * B_k.",
+        "guidance": "Direct recursive implementation is inefficient because intermediate B_k are recomputed repeatedly. Prefer computing and storing all B_k up to N as a recursively-defined sequence (memoization/sequence technique). Take care with Magma's 1-based sequence indexing when handling B_0."
+      },
+      {
+        "name": "Bell via infinite series (numerical approximation)",
+        "description": "B_n = (1/e) * sum_{k=0..infty} k^n / k! .",
+        "guidance": "Use PositiveSum for summation of positive terms; set real precision appropriately (e.g., precision depends on n). Numerical precision limits applicability to moderately small n; numerical analysis recommended to choose precision for larger n."
+      },
+      {
+        "name": "Bell via exponential generating function",
+        "description": "Exponential generating function: sum_{n>=0} B_n t^n / n! = exp(exp(t)-1). Coefficient extraction yields B_n.",
+        "guidance": "Use power series ring with sufficient precision and extract coefficient*Factorial(n); demonstrated Magma code."
+      },
+      {
+        "name": "Magma sequence indexing caveat",
+        "description": "Magma\u2019s sequences are indexed beginning at 1, so special handling is required for terms corresponding to index 0 (e.g., B_0).",
+        "guidance": "Implementations using sequences must adjust indices or treat B_0 separately to avoid off-by-one errors."
+      },
+      {
+        "name": "Incidence structures: multi-sorted nature and returns",
+        "description": "Incidence structures are multi-sorted algebras with more than one carrier set (e.g., point-set and block-set). Every function/constructor returning an incidence structure also returns the point-set and block-set (or vertex-set and edge-set) as second and third return values.",
+        "guidance": "When assigning an incidence structure to an identifier, users may assign the carrier sets simultaneously: I, P, B := incstr constructor. Many access operations for I involve P or B as the parents of basic objects."
+      },
+      {
+        "name": "Blocks vs enumerated sets",
+        "description": "A block may be regarded as a set of points and limited set-style operations are supported for blocks, but a block is distinguished from a mere enumerated set of points.",
+        "guidance": "Use Set(block-set) / Set(line-set) to obtain ordinary sets of points for display or set-operations; be aware that blocks belong to special categories."
+      },
+      {
+        "name": "IncidenceMatrix semantics",
+        "description": "IncidenceMatrix(I) returns the incidence matrix m of I as an integer matrix with #P rows and #B columns; entry m_ij = 1 iff point i is incident with block j, else 0.",
+        "guidance": "Use IncidenceMatrix to inspect incidence relation numerically; can construct an incidence structure from an incidence matrix via IncidenceGraph or appropriate constructors."
+      },
+      {
+        "name": "Equality vs isomorphism for incidence structures",
+        "description": "Two incidence structures I and J in same category are equal if their point-sets and block-sets are equal (I eq J). An isomorphism maps P_I to P_J and B_I to B_J preserving incidence. IsIsomorphic(I,J) returns true and the isomorphism mapping if isomorphic.",
+        "guidance": "Isomorphism testing has parameter AutomorphismGroups with values \"None\",\"Left\",\"Right\", or \"Both\" to specify which automorphism groups, if any, to construct first; changing this can speed some tests."
+      },
+      {
+        "name": "AutomorphismGroup(I) return values and representation",
+        "description": "AutomorphismGroup(I) returns: the automorphism group G as a permutation group on a natural support \u03a9={1..n}, a G-set for the action on points, a G-set for blocks, the parent M for automorphisms represented as maps, and a transfer map t from G to M.",
+        "guidance": "If there are no repeated blocks support is P else P \u222a B. Use G-sets to compute orbits, stabilizers etc. Use t(g) or g@t to convert a permutation g \u2208 G to the corresponding mapping on the incidence structure. Aut(I) returns M and t without constructing G."
+      },
+      {
+        "name": "Block/Edge/LineGroup convenience",
+        "description": "BlockGroup(I), EdgeGroup(I) or LineGroup(I) return the automorphism group of I acting on the blocks (edges, lines) as a permutation group on the set of blocks, and the G-set of blocks.",
+        "guidance": "Use these when emphasis is on block-action rather than point-action (convenient alternative to AutomorphismGroup)."
+      },
+      {
+        "name": "Automorphism subgroup helpers for large structures",
+        "description": "When computing the full automorphism group G is too expensive, Magma offers functions computing useful subgroups: AutomorphismGroupStabilizer(I, k) computes subgroup fixing first k base points; AutomorphismSubgroup(I) computes a subgroup generated by one element.",
+        "guidance": "These functions return five values: the subgroup and the four auxiliary values as returned by AutomorphismGroup(I). They are helpful to test non-triviality of G without full computation."
+      },
+      {
+        "name": "Simple graph definition",
+        "description": "A graph consists of vertices joined by edges. Simple graphs have no multiple edges between the same pair of vertices and no loops. Undirected graphs have no direction on edges; digraphs have directed edges. Here 'graph' denotes undirected simple graphs.",
+        "guidance": "Magma supports constructing both simple graphs and digraphs (digraphs not discussed in this chapter)."
+      },
+      {
+        "name": "Graph construction syntaxes",
+        "description": "Standard graph constructors (CompleteGraph, BipartiteGraph, EmptyGraph, KCubeGraph, PathGraph, PolygonGraph, RandomGraph, RandomTree, MultipartiteGraph) provide common graphs. General constructor: Graph<p | specification of edges>.",
+        "guidance": "Edge specification may be a list of sets of vertex pairs or a sequence of p sets giving neighbours of each vertex. Methods may be mixed; Magma combines information. In neighbour-sequence method it is permissible to specify adjacency only in one direction (asymmetric listing), Magma will infer edges."
+      },
+      {
+        "name": "VertexSet/EdgeSet and Vertices/Edges semantics",
+        "description": "VertexSet(G) and EdgeSet(G) return sets in special categories VertSet and EdgeSet. Vertices(G) and Edges(G) return enumerated sets whose universes are those special sets. Universe(Vs) and Universe(Es) show the parent vertex-/edge-set.",
+        "guidance": "Refer to ith vertex via G.i or V!i. Edge between u and v is E!{u,v} or E!{i,j}. Number of vertices Order(G) or #V; number of edges Size(G) or #E. Use ParentGraph to revert from subset to parent graph."
+      },
+      {
+        "name": "Graph addition/subtraction semantics",
+        "description": "Add/remove edges or vertices: G + {u,v} adds edge; G - e removes edge; G - v removes vertex (causes renumbering and removes incident edges). G - {u, v} removes vertices u and v (not an edge).",
+        "guidance": "Be careful to distinguish using a set of two vertices (vertex removal) from using an edge object (edge removal): G - {u,v} vs G - E!{u,v}."
+      },
+      {
+        "name": "sub< G | vertices > and sub< G | edges > constructors",
+        "description": "sub< G | list of vertices > constructs the subgraph induced by listed vertices (renumbered as needed); sub< G | list of edges > constructs subgraph with all vertices but only listed edges.",
+        "guidance": "Lists may contain vertex/edge sets as well as individual vertices/edges. Coercion functions relate subgraph vertices/edges back to main graph via VertexSet(G) ! sub.i and EdgeSet(G) ! edge."
+      },
+      {
+        "name": "Quotient graph construction (quo< G | partition >)",
+        "description": "quo< G | {P1,...,Pr} > constructs quotient graph by identifying vertices according to partition subsets Pi. Vertices of Q correspond to the Pi, and two vertices of Q are adjacent if some vertex in one subset is adjacent to some vertex in the other subset.",
+        "guidance": "Function Contract(S) also constructs graphs formed by identifying vertices in set S; Contract(u,v) and Contract(e) are special cases."
+      },
+      {
+        "name": "Standard graph transformations (Complement, Contract, InsertVertex, LineGraph, Switch)",
+        "description": "Table of standard related graphs: Complement(G) (edges are exactly the non-adjacent pairs in G); Contract(u,v)/Contract(e)/Contract(S) identify vertices; InsertVertex(e)/InsertVertex(T) insert degree-2 vertices into edges; LineGraph(G) returns line graph; Switch(u)/Switch(S) toggle adjacency for neighbours of u or all vertices in S.",
+        "guidance": "Use these constructors for common graph manipulations; semantics described in table (see examples)."
+      },
+      {
+        "name": "Graph unions and products semantics",
+        "description": "Union(G,H) gives graph with vertex-set V_G \u222a V_H and edge-set E_G \u222a E_H (treats vertices as disjoint); EdgeUnion(G,H) when G and H have same order identifies corresponding vertices; CompleteUnion(G,H) = Union(G,H) plus all cross-edges; LexProduct, CartesianProduct, TensorProduct, and G^n defined with vertex-set V_G \u00d7 V_H and adjacency determined as per definitions (various product rules).",
+        "guidance": "Union of two copies of same graph yields twice as many vertices; choose product appropriate to combinatorial construction needed."
+      },
+      {
+        "name": "Graph property test functions",
+        "description": "Functions to test graph properties include IsBipartite(G), IsComplete(G), IsPath(G), IsPolygon(G), IsTree(G), IsForest(G), IsEmpty(G), etc.",
+        "guidance": "Semantics: IsTree(G) true if connected and has no cycles; IsForest(G) true if no cycles; IsEmpty(G) true if G has no edges; use these to assert/verify structural properties."
+      },
+      {
+        "name": "Incidence, adjacency, and distance matrices for graphs",
+        "description": "IncidenceMatrix(G) is p\u00d7q with columns representing edges containing exactly two 1s at end-vertices. AdjacencyMatrix(G) is p\u00d7p with 1s for adjacent pairs. DistanceMatrix(G) is p\u00d7p symmetric with integer entries giving distances or -1 where not connected (as per Magma conventions).",
+        "guidance": "Use IncidenceGraph(M) to construct graph from incidence matrix. These matrices are useful for numeric computations and constructing other objects."
+      },
+      {
+        "name": "Distance, paths, connectedness and related functions",
+        "description": "Distance(u,v) returns length of shortest path or -1 if not connected. Geodesic(u,v) returns a shortest path (sequence) or empty sequence if not connected. Ball(u,n) returns set of vertices at distance \u2264 n; Sphere(u,n) at distance exactly n. Diameter(G) returns length of longest path or -1 if not connected; DiameterPath returns a sequence realizing diameter. IsConnected(G), Component(u), Components(G) give connectivity information. Girth(G) and GirthCycle(G) give length and witness cycle respectively. IsEulerian(G) true if there is a cycle visiting each vertex exactly once (all vertices even degree).",
+        "guidance": "Use these functions for routing, distance-based queries, and cycle analysis; note -1 conventions for disconnected pairs."
+      },
+      {
+        "name": "Cliques, independent sets and extremal functions",
+        "description": "CliqueNumber(G) returns maximum clique size; IndependenceNumber(G) returns maximum independent set size. LargestClique(G) and LargestIndependent(G) return example sets. Clique(G, n) returns a clique of cardinality at least n (empty if n > clique number); Independent(G, n) analogous.",
+        "guidance": "Use these to analyze dense/sparse substructures and for reductions to combinatorial optimization problems."
+      },
+      {
+        "name": "Chromatic number and index semantics",
+        "description": "ChromaticNumber(G) returns minimum number of vertex colours so no adjacent vertices share colour. ChromaticIndex(G) returns minimum number of edge colours so no adjacent edges share colour.",
+        "guidance": "Examples: KCubeGraph(3) has ChromaticNumber 2 and ChromaticIndex 3; consider maximum degree lower bounds and use these functions to compute exact colourings."
+      },
+      {
+        "name": "AutomorphismGroup(G) for graphs",
+        "description": "AutomorphismGroup(G) returns the automorphism group of G (permutation group acting on vertices) and can be used to inspect order, generators, and action. The ^ operator computes action of an automorphism on a vertex (v ^ g).",
+        "guidance": "Group actions can be applied to vertices, sets, or sequences via ^. Large multipartite graphs can have very large automorphism groups; CompositionFactors and other group functions can be applied to the returned group."
+      }
+    ]
+  }
+}

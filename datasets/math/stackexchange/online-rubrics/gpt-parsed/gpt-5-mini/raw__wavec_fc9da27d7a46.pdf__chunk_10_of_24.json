@@ -1,0 +1,146 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 10,
+  "n_chunks": 24,
+  "chunk_chars": 39934,
+  "model": "gpt-5-mini",
+  "elapsed_s": 103.16735916700418,
+  "input_tokens": 13767,
+  "output_tokens": 6733,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users of PARI/GP doing computational algebraic number theory (people calling bnfinit/bnrinit and related routines)",
+    "subtask_short": "PARI/GP number_field_functions",
+    "subtask_description": "Documentation and usage rules for PARI/GP number-field-related routines (nf, bnf, bnr prefixes): required input types, flags, parameter meanings, return formats, correctness guarantees (GRH), and error/precision behavior.",
+    "subtask_keywords": [
+      "pari_gp",
+      "bnf",
+      "bnr",
+      "number_field",
+      "computational_number_theory",
+      "documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Number-field type hierarchy and substitution rule",
+        "description": "All functions specific to relative extensions, number fields, Buchmann\u2019s number fields, Buchmann\u2019s number rays share the prefixes rnf, nf, bnf, bnr respectively. They take as first argument a number field of that precise type output by rnfinit, nfinit, bnfinit, and bnrinit. It is permissible, if the function expects an nf, to use a bnf instead (which contains more information). However, if the function requires a bnf, it will not launch bnfinit for you; instead it will give a specific error message.",
+        "guidance": "Types are ordered nf \u2264 bnf \u2264 bnr: each function requires a minimal type but you may always substitute a larger type. Do not rely on automatic initialization of larger types (e.g. functions requiring bnf will not call bnfinit)."
+      },
+      {
+        "name": "Default reliance on GRH for bnf routines",
+        "description": "Some functions starting with bnf implement sub-exponential algorithms for class and unit group computations that are conditional on the Generalized Riemann Hypothesis (GRH) by default (historically; from version 2.4.0 results are always rigorous under GRH).",
+        "guidance": "By default, most bnf routines depend on the correctness of the GRH: class number, class group structure, class group generators, regulator and fundamental units may be wrong independently. The only unconditional guarantee is that the units given generate a subgroup of finite index. Use bnfcertify to certify computations unconditionally."
+      },
+      {
+        "name": "Technical parameters (tech = [c1,c2,nrpid]) and their roles",
+        "description": "The general call to class-group routines may take a technical vector tech = [c1, c2, nrpid]. The numbers c1 \u2264 c2 are non-negative reals used to form bounds Bi = ci (log |dK|)^2; S(B1) is the factorbase used to compute a tentative Cl(K) and S(B2) is used to check generation. nrpid is the maximal number of small norm relations searched per ideal in the factor base.",
+        "guidance": "The tech interface is obsolete and should not be tampered with. Defaults: c1 = c2 = 0 (algorithm increases bounds until proof under GRH); Bach gives c2 = 12 as a universal (pessimistic) choice. nrpid default 4; reasonable values 4\u201320; set nrpid = 0 to disable small-norm relation search."
+      },
+      {
+        "name": "bnfinit flag and unit-computation behavior",
+        "description": "bnfinit(P, {flag=0}, {tech=[]}) initializes a bnf structure computing class group, regulator, and fundamental units via Buchmann\u2019s algorithm. If precision becomes insufficient, gp by default does not strive to compute the units (flag = 0). When flag = 1, the routine insists on finding fundamental units.",
+        "guidance": "Setting flag = 1 may take a very long time and can fail if fundamental units are too large to represent; an error will be issued in that case. Compact representations of algebraic numbers exist internally but are not publicly accessible yet. Leave tech empty unless you know what you're doing."
+      },
+      {
+        "name": "bnfcertify: removing GRH assumption (and flag variant)",
+        "description": "bnfcertify(bnf, {flag=0}) checks whether the bnf result is correct unconditionally (i.e., whether one can remove the GRH assumption). Returns 1 if correct. If incorrect the program may output errors or loop; debugging level can show progress. The bnf structure must contain fundamental units unless flag is set.",
+        "guidance": "If flag is present (flag=1), only certify that the class group is a quotient of the one computed in bnf (units may form a subgroup); in this variant units are not needed. If bnfcertify reports missing units, re-run bnfinit with units included (e.g., bnfinit(pol,1))."
+      },
+      {
+        "name": "bnfcompress / sbnf: compressed storage vs usability",
+        "description": "bnfcompress(bnf) computes a compressed version of bnf (an sbnf), a 12-component vector containing selected exact data (polynomial, number of real embeddings, discriminant, zk, roots, certain matrices, factor base in compact form, roots of unity data, fundamental units on the integral basis, etc.). All components are exact except roots in v[5].",
+        "guidance": "An sbnf is useful for storage/printing only; it is useless for almost all computations and must be converted back to a full bnf with bnfinit on the result before use. Do not feed sbnf into routines that expect a full bnf."
+      },
+      {
+        "name": "bnrinit: ray class initialization and generator-computation flag",
+        "description": "bnrinit(bnf, f, {flag = 0}) initializes data linked to the ray class group modulo modulus f, returning a bnr structure whose members include .bnf (underlying bnf), .mod (modulus), .bid (bid structure), .clgp, .no, .cyc, .gen (ray class group and generators).",
+        "guidance": "If flag = 0 (default) generators of the ray class group are not computed (saves time) and bnr.gen would produce an error. If flag = 1, generators are computed. Use bnr.bnf.xxx to access underlying class-group members and bnr.bid.xxx for (ZK/f)^* data."
+      },
+      {
+        "name": "bnrL1: computing abelian L-values and flag bits",
+        "description": "bnrL1(bnr,{H},{flag=0}) returns, for each character \u03c7 of the ray class group trivial on H, the value at s = 1 (or s = 0) of the associated abelian L-function. For s = 0 it returns for each \u03c7 a vector [r_\u03c7, c_\u03c7] giving the leading term L(s,\u03c7) = c s^r + O(s^(r+1)).",
+        "guidance": "Flag bits: bit 1 choose s (unset => s=0, set => s=1); bit 2 choose primitive L vs L with Euler factors at modulus removed; bit 3 return the character if set. The function may fail with an overflow if the approximate functional equation requires summing too many primes (discriminant too large)."
+      },
+      {
+        "name": "Use bnrclassno for ray class numbers (efficiency tip)",
+        "description": "bnrclassno(A,{B},{C}) returns the relative degree [L:K] for a class field defined by [A,B,C]; when A is a bnf and B a modulus this computes the ray class number modulo B. This function is faster than bnrinit when only the ray class number is needed.",
+        "guidance": "If you need ray class numbers for many moduli up to a bound, use bnrclassnolist (which accepts a list of moduli)."
+      },
+      {
+        "name": "bnrconductor: flag outputs",
+        "description": "bnrconductor(A,{B},{C},{flag=0}) returns the conductor f of the subfield of a ray class field defined by [A,B,C].",
+        "guidance": "If flag = 0 return f. If flag = 1 return [f, Cl_f, H] where Cl_f is the ray class group modulo f and H the subgroup defining the extension. If flag = 2 return [f, bnr(f), H] where Cl_f is replaced by a bnr structure."
+      },
+      {
+        "name": "bnrdisc: absolute vs relative discriminant and conductor check",
+        "description": "bnrdisc(A,{B},{C},{flag=0}) outputs data [N, r1, D] giving discriminant and signature of the class field L depending on flag bits.",
+        "guidance": "Flag bit 1: unset => output absolute data related to L/Q (N = [L:Q], r1 real places of L, D discriminant of L/Q); set => output relative data for L/K (N = [L:K], r1 number of real places of K unramified in L, D relative discriminant ideal of L/K). Flag bit 2: if set and the modulus is not the conductor of L, return 0."
+      },
+      {
+        "name": "bnrdisclist output structure and decoding",
+        "description": "bnrdisclist(bnf, bound, {arch}) computes a list of discriminants of abelian extensions of bnf by increasing modulus norm up to bound. The output is a vector of vectors encoding for each modulus m data [m, d, r, D] (or nested arrays when arch omitted) where d is absolute degree, r number of real places, D absolute discriminant factorization.",
+        "guidance": "The finite-part modulus m is encoded (prime ideals coded as integers); decode m with bnfdecodemodule. For a single-field discriminant computation, bnrclassno or bnrdisc is usually more efficient."
+      },
+      {
+        "name": "bnfisprincipal / bnrisprincipal: principal ideal decomposition and flags",
+        "description": "bnfisprincipal(bnf, x, {flag = 1}) tests whether an ideal x is principal. Returns [e, t] where e is vector of exponents on class-group generators and t a number-field element with x = (t) * product(gen_i^{e_i}). bnrisprincipal is the analogous routine for ray class groups (bnr).",
+        "guidance": "If flag bit 1 (binary digit 1) is unset/zero, output only e (faster). If bit 2 is set, attempt to recover t and if impossible warn and set t = [] (may induce lengthy computations). For symbolic clarity prefer nf_GEN and nf_FORCE flags rather than hardcoded integers. The empty vector when class number 1 is considered a zero vector."
+      },
+      {
+        "name": "bnfisnorm: norm-testing, flag meanings, and GRH-guarantee condition",
+        "description": "bnfisnorm(bnf, x, {flag=1}) attempts to determine whether rational x is the norm of some element in bnf; returns [a, b] with x = Norm(a) * b. It looks for an S-unit solution with S containing primes dividing x and possibly additional primes depending on flag.",
+        "guidance": "If bnf is Galois set flag = 0 (x is a norm iff b = 1). If flag > 0 the program adds ideals of norm less than flag; if flag < 0 adds ideals dividing flag. Assuming GRH the answer is guaranteed if S contains all primes less than 12 log(disc(Bnf))^2, where Bnf is the Galois closure of bnf."
+      },
+      {
+        "name": "bnfisunit / bnfissunit: unit decomposition behavior and requirements",
+        "description": "bnfisunit(bnf, x) decomposes x on fundamental units and roots of unity if x is a unit, outputting [x1, ..., xr, xr+1] with x = u1^{x1} ... ur^{xr} * \u03b6^{xr+1}. bnfissunit(bnf, sfu, x) gives exponents of x on fundamental S-units and roots of unity (empty vector if x not a unit).",
+        "guidance": "bnf need not contain the fundamental units explicitly; bnfisunit can succeed even when bnf.fu is missing (it reports the decomposition relative to the implicitly stored unit). Error messages about missing units indicate default accuracy too low; increase precision or rerun bnfinit with appropriate flags."
+      },
+      {
+        "name": "bnfsunit: S-unit computation output format",
+        "description": "bnfsunit(bnf, S) computes fundamental S-units where S is a list of prime ideals. Returns a 6-component vector v: v[1] minimal integral generators of the S-unit group modulo the unit group; v[2] technical data for bnfissunit; v[3] (historical) empty vector for logarithmic embeddings; v[4] S-regulator; v[5] S-class group structure [S-class number, cyclic components, generators]; v[6] copy of S.",
+        "guidance": "Call as bnfsunit(bnf,S,prec). Use v[1] and v[5] to work with S-units and S-class group data; v[2] is needed for bnfissunit."
+      },
+      {
+        "name": "bnfnarrow: narrow class group output format",
+        "description": "bnfnarrow(bnf) computes the narrow class group of bnf. The output is a 3-component row vector v analogous to bnf.clgp: v.no is the narrow class number, v.cyc a vector of SNF cyclic components, and v.gen the generators of the corresponding cyclic groups.",
+        "guidance": "This function is a special case of bnrinit and can be used when the narrow class group is desired specifically."
+      },
+      {
+        "name": "factornf: variable-priority and coefficient-variable consistency constraints",
+        "description": "factornf(x, t) factors univariate polynomial x over the number field defined by polynomial t. The main variable of t must be of lower priority than that of x. If non-rational number-field elements occur as coefficients of x (polmods), the variable of those polmods must be the same as the main variable of t.",
+        "guidance": "Violating these priority/variable rules yields errors (e.g., 'inconsistent data in rnf function' or 'incorrect variable in rnf function'). Use examples shown in documentation to get variable ordering right (e.g., factornf(x^2 + Mod(y,y^2+1), y^2+1) is OK)."
+      },
+      {
+        "name": "bnrrootnumber: requirements and flag for primitive characters",
+        "description": "bnrrootnumber(bnr, chi, {flag=0}) returns the Artin root number W(\u03c7) of modulus 1 associated to a character \u03c7 of a ray class group. The generators of the ray class group are needed.",
+        "guidance": "If the character is known to be primitive, set flag = 1 to indicate primitiveness. Ensure bnr.gen (generators) are available (use bnrinit with generators computed)."
+      },
+      {
+        "name": "bnrstark: Stark-unit method constraints and fallback",
+        "description": "bnrstark(bnr, {subgroup}) finds a relative equation for the class field corresponding to the modulus in bnr and the given congruence subgroup, using Stark units. The main variable of bnr must not be x, and both the ground field and class field must be totally real. When base field is Q, galoissubcyclo is used instead.",
+        "guidance": "bnrstark may need a suitable auxiliary conductor (which may not exist for non-cyclic class fields) and may return multiple polynomials whose compositum is the class field. Computation may be infeasible (huge intermediate coefficients); in difficult cases try rnfkummer as an alternative."
+      },
+      {
+        "name": "bns/auxiliary function flags, precision and error behavior (general guidance)",
+        "description": "Many routines expose binary-digit flags controlling output verbosity/detail (e.g., include/exclude generators, output t with recovered element, compute primitive vs non-primitive L, choose s=0/1, etc.). Several functions also take a precision argument and may fail or emit warnings if the working precision is insufficient.",
+        "guidance": "Prefer symbolic flag constants when available (nf_GEN, nf_FORCE, nf_INIT) rather than numeric bit patterns. If a routine fails due to precision issues, increase precision and recompute; watch for costly operations (computing units, recovering t) which may take long or be impossible at given precision."
+      },
+      {
+        "name": "galoisexport / galoisfixedfield: export formats and flag semantics",
+        "description": "galoisexport(gal,{flag}) exports a Galois group's underlying permutation group as a string suitable for GAP (flag=0) or Magma (flag=1). galoisfixedfield(gal, perm, {flag}, {v=y}) computes fixed fields for a given subgroup or permutation; output formats depend on flag: 0 => [P,x], 1 => P only, 2 => [P,x,F] where F is factorization over the field defined by P.",
+        "guidance": "Use the export string with external algebra systems (examples show running GAP). For galoisfixedfield ensure variable priorities are correct (v priority less than gal.pol variable)."
+      },
+      {
+        "name": "bnfisintnorm and bnfisintnormabs: solving absolute norm equations and GRH dependence",
+        "description": "bnfisintnorm(bnf, x) computes a complete system of solutions modulo units of the absolute norm equation Norm(a) = x where a is an integer in bnf. bnfisintnormabs solves |Norm(x)| = |a| simultaneously.",
+        "guidance": "If bnf has not been certified the correctness depends on GRH. See bnfisnorm for norm-testing variants that may be faster in some cases."
+      }
+    ]
+  }
+}

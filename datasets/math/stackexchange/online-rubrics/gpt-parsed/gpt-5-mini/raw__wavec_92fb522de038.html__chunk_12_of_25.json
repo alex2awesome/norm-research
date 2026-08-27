@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_92fb522de038.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_92fb522de038.html",
+  "chunk_idx": 12,
+  "n_chunks": 25,
+  "chunk_chars": 39931,
+  "model": "gpt-5-mini",
+  "elapsed_s": 47.47251133299869,
+  "input_tokens": 14121,
+  "output_tokens": 4378,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "MathML authors and assistive-technology implementers (authors of accessible mathematical content, AT developers)",
+    "subtask_short": "mathml intent annotation",
+    "subtask_description": "Guidance for using the MathML 'intent' attribute and related MathML constructs to make mathematical content accessible (speech/braille) and to disambiguate notation for assistive technologies. Includes grammar, properties, dictionaries, error-recovery, and examples.",
+    "subtask_keywords": [
+      "mathml",
+      "accessibility",
+      "intent_attribute",
+      "assistive_technology",
+      "authoring"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of intent attribute to express author intent",
+        "description": "MathML 4 adds a lightweight method for authors to express their intent: the intent attribute. This annotation is not meant to provide a full mathematical definition of the term. It is primarily meant to help AT generate audio and/or braille renderings, and may also be useful to guide translations to Content MathML, or computational systems.",
+        "guidance": "intent is similar to aria-label but does not affect braille generation; use intent to disambiguate notation (example: intent=\"power($base,$exp)\" on msup to indicate exponentiation). CSS and visual styling should not be relied on for AT; use intent for meaningful stylistic emphases or custom names."
+      },
+      {
+        "name": "Grammar for intent attribute values",
+        "description": "The value of the intent attribute should match the formal grammar given (intent := self-property-list | expression; expression := S ( term property* ) S; term := concept-or-literal | number | reference | application; application := expression '(' arguments? S ')'; property := S ':' NCName; etc.).",
+        "guidance": "NCName as in xml-names; numbers allow optional negative and decimal; references are of form '$'NCName and refer to descendants with arg attributes. Authors should follow the grammar; processors should ignore an intent attribute that does not match the grammar (see error recovery)."
+      },
+      {
+        "name": "Intent Concept Dictionary usage (core and open lists)",
+        "description": "Every AT system that supports intent contains, at least implicitly, a list of the concepts that it recognizes (an Intent Concept Dictionary). The Working Group maintains Core and Open lists of concept names; AT SHOULD recognize Core concepts and MAY recognize Open concepts.",
+        "guidance": "Concept dictionary entries map concept names to speech/text/braille templates and default fixity/arity. The concept lists are hosted in the w3c/mathml-docs GitHub repository. Implementations may use any mechanism (tables, XPath, regex, ML) to match concepts, but must accept cases listed in the Core dictionary and produce acceptable speech hints."
+      },
+      {
+        "name": "Normalization and matching rules for concepts",
+        "description": "When consulting an Intent Concept Dictionary the concept name should be normalized ( '_' and '.' to '-') and compared using ASCII case-insensitive match. If arguments are given explicitly the arity is the number of arguments; fixity is from explicit property or may default from the concept dictionary.",
+        "guidance": "A concept is 'supported' when normalized name, fixity property, and arity all match an entry. Supported-concept speech hints may be used as guides but AT is not constrained to them; unsupported concepts are treated as literals (spoken as-is after normalizing '-' '_' '.' to spaces)."
+      },
+      {
+        "name": "Intent properties and their major classes (:prefix, :infix, :postfix, :function, :silent)",
+        "description": "Intent properties act as modifiers of the speech or Braille and often influence fixity (spoken word order) or suppression of the function name in readings.",
+        "guidance": "When used in a function application, these properties request that the reading of the name be suppressed or that word ordering be adjusted. Examples: f:prefix($x) -> 'f x'; f:infix($x,$y) -> 'x f y'; f:postfix($x) -> 'x f'; f:function($x,$y) -> 'f of x and y'; f:silent($x,$y) -> 'x y'. Properties refer to spoken ordering, not necessarily displayed notation ordering."
+      },
+      {
+        "name": "Style-control properties (:literal, :common, :legacy)",
+        "description": ":literal, :common and :legacy control the overall style of generated speech; :literal requests no inference and literal speaking, :common requests heuristics for common notations, and :legacy requests system-specific behavior.",
+        "guidance": ":literal causes elements to be spoken literally (e.g. 'vertical bar'); :common allows AT to infer intent for common notations; these properties set default intent-inference rules for elements without explicit intent."
+      },
+      {
+        "name": "Table/array properties (:matrix, :system-of-equations, :lines, :continued-row, :equation-label)",
+        "description": "These properties may be used on mtable (or references to it) to affect how parts of an alignment are announced (e.g. matrix vs system-of-equations).",
+        "guidance": ":matrix should be read in style suitable for matrices (typically announce column numbers). :system-of-equations is suitable for displayed equations (typically column numbers not announced). :equation-label marks a cell containing an equation label. Exact wording is system-specific."
+      },
+      {
+        "name": "Pause properties (:pause-short, :pause-medium, :pause-long, :pause-xlong)",
+        "description": "Used as a self-property to cause a pause in speech before processing the element.",
+        "guidance": "Applied to an element via intent=\":pause-medium\" etc. The pause acts only once on the element it is applied to and does not affect descendants beyond that element's processing."
+      },
+      {
+        "name": "use-argname self-property",
+        "description": "When used as a self-property on an element with arg, causes the value of the arg attribute (possibly translated) to be spoken by AT when the user moves to that child.",
+        "guidance": "Useful for making navigation/readout name explicit to listeners."
+      },
+      {
+        "name": "Interpretation when a concept is supported vs unsupported",
+        "description": "If the normalized name, fixity, and arity match an entry in the concept dictionary the concept is 'supported' and AT may use the matching speech hint; otherwise it is 'unsupported' and treated like a literal (spoken as-is after normalization).",
+        "guidance": "Even for unsupported concepts, if fixity and arguments are given, the speech for arguments should be composed consistent with the fixity property if possible. AT may choose different renderings for supported concepts depending on context (e.g., fractions as 'three quarters' vs 'three over x')."
+      },
+      {
+        "name": "Expanding reference ('$name') semantics",
+        "description": "When an intent expression includes a reference (e.g. $name), the reference may be replaced by the effective intent of the referenced descendant element (an element with arg=\"name\").",
+        "guidance": "If the referenced element has an explicit intent expression, it can be substituted; properties following the reference take priority over properties on the referenced element. If the referenced element has no intent, the effective intent (inferred or literal) is used. When searching for a matching element, only descendants are considered, and search stops at descendants that have intent or arg attributes (without descending into them)."
+      },
+      {
+        "name": "Self-property-list semantics",
+        "description": "An intent value starting with ':' denotes a self-property-list whose effect is limited to the element and its descendants (unless overridden).",
+        "guidance": "Examples: <mrow intent=\":pause-medium\"> sets a pause before processing that mrow; <mrow intent=\":literal\"> sets default inference to literal for that element's scope. Self-properties do not affect ancestors or unrelated elements."
+      },
+      {
+        "name": "Multiple properties evaluation order",
+        "description": "If multiple properties appear in a self-property-list or term they are evaluated left-to-right; where groups of properties set the same internal parameter their effects are mutually exclusive and the last one wins.",
+        "guidance": "Example: f:prefix:suffix acts as f:suffix because both set fixity. Conversely f:pause-medium:prefix is equivalent to f:prefix:pause-medium because both properties have different effects and order only affects priority where they compete."
+      },
+      {
+        "name": "Intent error handling and recovery",
+        "description": "An intent processor may report errors in various ways but should offer a recovery mode: if an intent attribute does not match the grammar, the processor should act as if the attribute were not present; if a reference like $x does not correspond to an arg attribute, the processor should act as if the reference were replaced by the literal _dollar_x.",
+        "guidance": "In web contexts it is often inappropriate to expose errors to readers who cannot fix source; processors should recover to produce sensible fallback text from MathML and its descendants, using other valid intent attributes present."
+      },
+      {
+        "name": "Warning about literal and property features (use with restraint)",
+        "description": "literal and property features extend coverage and allow speech preferences, but excessive use will reduce AT's ability to adapt, limit translation and locale-specific speech, and make meanings more opaque.",
+        "guidance": "Prefer using named concepts from dictionaries when possible. When custom speech is required, prefer a literal name (prefixed with '_') rather than an unsupported concept to avoid future collisions with dictionary updates. Discouraged examples illustrate how complex literal/property combinations hamper adaptability."
+      },
+      {
+        "name": "Intent for disambiguation of common ambiguous constructs (examples)",
+        "description": "Use intent to disambiguate constructs that share syntax but different meanings (e.g., msup could be power, transpose, derivative, or embellished symbol).",
+        "guidance": "Provide intent values that indicate concept and argument roles, e.g. msup intent=\"power($base,$exp)\" speaks as 'x to the n-th power'; msup intent=\"$op :postfix ($a)\" with op intent 'transpose' gives 'A transpose'. Examples also show using underscore literals to supply custom names, multilingual fragments, and grouped narration."
+      },
+      {
+        "name": "CSS and visual styling not reliable for AT; use intent for semantic emphasis",
+        "description": "CSS customization of MathML is generally not made available to AT and is ignored in accessible readouts. Authors should use intent for meaningful stylistic emphases or stylized constructs with custom names.",
+        "guidance": "Example: color-coding subexpressions for teaching should be accompanied by intent annotations (e.g. intent=\"highlighted-step($step)\") so AT can announce 'highlighted step of six over two' etc."
+      },
+      {
+        "name": "Lambda element usage and domain restriction",
+        "description": "The lambda element constructs a user-defined function from expression, bound variables (bvar), and optional qualifiers. The first n children are bvar elements identifying placeholders; bound variables can be restricted by domainofapplication qualifier. The lambda construct denotes an n-ary function returning the last child expression with bound variables replaced by arguments.",
+        "guidance": "If lambda has no bound variables it is superfluous and may be removed unless it contains a domainofapplication; then the domainofapplication may restrict existing functional arguments (or be ignored if the last child is not a function). Example: lambda with domainofapplication integers to represent function on integers; example presentations provided."
+      },
+      {
+        "name": "Interval element usage and closure attribute",
+        "description": "The interval element represents simple mathematical intervals of the real line. It takes an optional closure attribute with values open, closed, open-closed, closed-open (default closed).",
+        "guidance": "As described in 4.3.3.1, interval is interpreted as a qualifier if it immediately follows bvar. Sample presentations show (x,1), [0,1], (0,1], [0,1)."
+      },
+      {
+        "name": "Limit element usage and direction/type mapping",
+        "description": "The limit element represents taking a limit of a sequence. The limit point is expressed by a lowlimit and a bvar, or by a condition on bound variables. The direction from which the limit is approached is given as an argument limit in Strict Content MathML with direction specifiers both_sides, above, below, corresponding to tendsto type values all, above, below; null corresponds to no type attribute.",
+        "guidance": "Examples include <apply><limit/> <bvar><ci>x</ci></bvar><lowlimit><cn>0</cn></lowlimit><apply><sin/></apply></apply> and condition variants using tendsto or tendsto type='above'. Sample presentation shows lim_{x\u21920} sin x and lim_{x\u2192a+} sin x."
+      },
+      {
+        "name": "Piecewise/piece/otherwise element usage and domain disjointness",
+        "description": "piecewise, piece, and otherwise elements represent piecewise function definitions. piecewise contains zero or more piece elements and optionally one otherwise element. Each piece has exactly two children: first is value, second is condition. The otherwise element specifies a default value.",
+        "guidance": "No order of execution is implied by ordering of piece elements. Authors must ensure subsets of the domain defined by piece conditions are disjoint, or where they overlap the values coincide; otherwise meaning is undefined. A degenerate case of no piece elements and no otherwise is treated as undefined."
+      }
+    ]
+  }
+}

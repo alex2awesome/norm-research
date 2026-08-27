@@ -32,6 +32,16 @@ FIXED_EVAL_FRACTION = 0.1
 FIXED_TEST_FRACTION = 0.1
 EVALS_PER_EPOCH = 5
 
+# Tolerance on the observed 80/10/10 fractions of an EXISTING on-disk split.
+# Default 2e-2 = the frozen behaviour; every existing caller leaves the env unset
+# and is therefore unaffected (same opt-in-override pattern as DENSE_SCORE_MAXLEN
+# in methods/dense/score_eval_dense_v4.py). The override exists for cells whose
+# canonical split is a STABLE HASH of the grouping unit rather than a ratio-
+# targeted draw, so the realised fractions land slightly off 80/10/10 and must
+# NOT be reshuffled to hit them (feedback_stable_hash_splits). First user:
+# cw_royalroad_verdict, md5("split::"+fiction_id)%1000, realised 77.8/11.1/11.1.
+SPLIT_FRACTION_ATOL = float(os.environ.get("DENSE_SPLIT_FRACTION_ATOL", "2e-2"))
+
 
 # ─────────────────────────────────────────────
 # 1. CONFIGURATION
@@ -143,6 +153,13 @@ def parse_args():
     )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
+        "--init_adapter",
+        default=None,
+        help="Stage-B transfer: path to an existing LoRA adapter to initialise from "
+             "instead of a fresh LoRA init. Opt-in; unset reproduces the frozen recipe "
+             "exactly. Refuses to load an adapter trained on a different base model.",
+    )
+    parser.add_argument(
         "--class_weight_auto",
         "--class-weight-auto",
         action="store_true",
@@ -184,6 +201,15 @@ def parse_args():
         type=str,
         default=None,
         help="Optuna storage URL. Defaults to sqlite in output_dir.",
+    )
+
+    parser.add_argument(
+        "--selection_split",
+        type=str,
+        choices=["test", "eval"],
+        default="test",
+        help="Split used for per-epoch checkpoint selection. Default 'test' preserves legacy "
+        "behavior; pass 'eval' for honest held-out reporting (score test once, post hoc).",
     )
 
     # Output
@@ -316,14 +342,14 @@ def get_or_create_fixed_split(df: pd.DataFrame, args) -> tuple[pd.DataFrame, pd.
         observed_eval_fraction = len(eval_df) / total
         observed_test_fraction = len(test_df) / total
         if (
-            not np.isclose(observed_train_fraction, FIXED_TRAIN_FRACTION, atol=2e-2)
-            or not np.isclose(observed_eval_fraction, FIXED_EVAL_FRACTION, atol=2e-2)
-            or not np.isclose(observed_test_fraction, FIXED_TEST_FRACTION, atol=2e-2)
+            not np.isclose(observed_train_fraction, FIXED_TRAIN_FRACTION, atol=SPLIT_FRACTION_ATOL)
+            or not np.isclose(observed_eval_fraction, FIXED_EVAL_FRACTION, atol=SPLIT_FRACTION_ATOL)
+            or not np.isclose(observed_test_fraction, FIXED_TEST_FRACTION, atol=SPLIT_FRACTION_ATOL)
         ):
             raise RuntimeError(
                 "Existing split ratios do not match expected train/eval/test 80/10/10 "
                 f"(observed train={observed_train_fraction:.4f}, eval={observed_eval_fraction:.4f}, "
-                f"test={observed_test_fraction:.4f}) in {split_dir}."
+                f"test={observed_test_fraction:.4f}, atol={SPLIT_FRACTION_ATOL}) in {split_dir}."
             )
         return train_df, eval_df, test_df
 
@@ -484,7 +510,27 @@ def build_model(args):
         args.lora_dropout,
         ", ".join(args.lora_target_modules),
     )
-    model = get_peft_model(model, lora_config)
+    if getattr(args, "init_adapter", None):
+        # Stage-B transfer: start from an already-trained LoRA adapter instead of a
+        # fresh init. Opt-in only -- every existing caller leaves --init_adapter unset
+        # and gets byte-identical behaviour (same pattern as DENSE_SCORE_MAXLEN /
+        # DENSE_SPLIT_FRACTION_ATOL). The adapter must have been trained on the same
+        # base model and the same num_labels head, which the loader below asserts.
+        from peft import PeftModel
+        acfg_p = os.path.join(args.init_adapter, "adapter_config.json")
+        if not os.path.exists(acfg_p):
+            raise RuntimeError(f"--init_adapter {args.init_adapter} has no adapter_config.json")
+        with open(acfg_p) as fh:
+            acfg = json.load(fh)
+        base_of_adapter = acfg.get("base_model_name_or_path")
+        if base_of_adapter and args.model_name not in str(base_of_adapter):
+            raise RuntimeError(
+                f"--init_adapter was trained on {base_of_adapter!r} but this run uses "
+                f"{args.model_name!r}; refusing to transfer across base models.")
+        logger.info("Stage-B transfer: initialising LoRA from %s", args.init_adapter)
+        model = PeftModel.from_pretrained(model, args.init_adapter, is_trainable=True)
+    else:
+        model = get_peft_model(model, lora_config)
     if hasattr(model, "config"):
         model.config.pad_token_id = tokenizer.pad_token_id
     if hasattr(model, "base_model") and hasattr(model.base_model, "config"):
@@ -567,7 +613,7 @@ def train(args):
             "Bradley-Terry mode requires both label classes in train split. "
             "Current train split has one class after subsetting."
         )
-    selection_split_name = "eval" if getattr(args, "is_optuna_trial", False) else "test"
+    selection_split_name = "eval" if getattr(args, "is_optuna_trial", False) else args.selection_split
     selection_df = eval_df if selection_split_name == "eval" else test_df
     logger.info("Model-selection split: %s (eval reserved for Optuna trials)", selection_split_name)
 

@@ -1,0 +1,156 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 8,
+  "n_chunks": 92,
+  "chunk_chars": 39846,
+  "model": "gpt-5-mini",
+  "elapsed_s": 51.08587474999513,
+  "input_tokens": 12456,
+  "output_tokens": 4907,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and developers (package authors, library maintainers) who write, profile, test, and instrument GAP code",
+    "subtask_short": "GAP profiling and testing",
+    "subtask_description": "Reference guidelines for using GAP's info/message system, assertions, timing and memory tracking, function- and line-level profiling, and the Test framework (test files, TestDirectory). Intended to instruct how to instrument, measure, and validate GAP code and packages.",
+    "subtask_keywords": [
+      "gap",
+      "profiling",
+      "testing",
+      "info_classes",
+      "assertions",
+      "timing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Info classes and levels (SetInfoLevel / InfoLevel)",
+        "description": "Sets and queries the integer info level for an info class (SetInfoLevel(infoclass, level); InfoLevel(infoclass) returns the level).",
+        "guidance": "Use non-negative integer levels per info class to control which Info(...) statements trigger. The Info statement for an infoclass at level L is executed only if the class's info level is >= L. Levels can be combined via selectors (see Info selectors)."
+      },
+      {
+        "name": "Creating and declaring info classes (NewInfoClass / DeclareInfoClass)",
+        "description": "NewInfoClass(name) creates a new info class; DeclareInfoClass(name) creates and binds it to a global variable name (the variable must be writable and will be made read-only).",
+        "guidance": "Declare info classes for distinct message categories (e.g., InfoWarning, InfoPerformance). Use DeclareInfoClass when you want a global symbol bound to the class; otherwise NewInfoClass suffices."
+      },
+      {
+        "name": "Info statement semantics (Info(infoclass, level, info[, moreinfo,...]))",
+        "description": "If the info level of infoclass is at least level, then the third and subsequent arguments are evaluated and displayed; otherwise they are not evaluated.",
+        "guidance": "Because unevaluated arguments can be expensive or impossible to compute, structure Info calls to avoid work unless the message will be shown. Default display: each evaluation is viewed preceded by \"#I \" and followed by newline. Info can accept a set (selector) of info classes; the message triggers if any class in the selector has sufficient level. Use Info to provide optional diagnostic output without paying the cost when disabled."
+      },
+      {
+        "name": "ShowUsedInfoClasses (diagnose which info classes were used)",
+        "description": "ShowUsedInfoClasses(true) makes GAP print the info class and level of any executed Info statement (each level/class printed once); ShowUsedInfoClasses(false) stops this printing; history reset when passing true.",
+        "guidance": "Use to discover which info classes/levels would be printed for executed Info statements. Helpful for tuning info levels; output shows a one-time report per class/level."
+      },
+      {
+        "name": "Customizing Info behavior and output (SetInfoHandler / SetInfoOutput / InfoOutput / UnbindInfoOutput / SetDefaultInfoOutput)",
+        "description": "SetInfoHandler(infoclass, handler) sets a custom handler (function of three args: infoclass, level, list) for how Info outputs are handled. SetInfoOutput/InfoOutput/UnbindInfoOutput override/reset/retrieve the file/stream for an infoclass. SetDefaultInfoOutput(out) sets the initial default for all classes.",
+        "guidance": "Default handler DefaultInfoHandler prints \"#I \" then the third+ args then a newline. out can be a filename, open stream, or special names \"*Print*\", \"*errout*\", \"*stdout*\". Example: SetDefaultInfoOutput(\"*errout*\") sends Info output to standard error. If Info's first arg is a sum of classes, handler of the first summand is used."
+      },
+      {
+        "name": "InfoWarning class usage",
+        "description": "InfoWarning is an info class for general warnings; its default level is 1. More specialized warnings may be shown at InfoWarning level 2.",
+        "guidance": "Use InfoWarning for general warning messages; reserve higher levels for more detailed or implementation-specific warnings (e.g., autoloading package info)."
+      },
+      {
+        "name": "Assertion framework (SetAssertionLevel / AssertionLevel / Assert)",
+        "description": "SetAssertionLevel(lev) sets the global assertion level (default 0). Assert(lev, cond[, message]) tests cond when AssertionLevel() >= lev and raises an error if not true; optional message printed on error.",
+        "guidance": "Use assertions to detect algorithmic errors by checking intermediate results. Be aware that enabling assertions can significantly slow execution. Use the message form to provide informative failure diagnostics. Equivalent expansion: if AssertionLevel() >= lev and not <cond> then Error(\"Assertion failure\"); end."
+      },
+      {
+        "name": "Runtime measurement: Runtimes() and Runtime()",
+        "description": "Runtimes() returns a record with components user_time, system_time, user_time_children, system_time_children (integers or fail). Runtime() returns the time spent by GAP in milliseconds (same as user_time).",
+        "guidance": "On some systems only user_time is supported; user_time may include system time on some platforms. Use Runtimes to inspect breakdown across user/system and children; Runtime gives a simple millisecond measure. Use StringTime to format milliseconds. Note that some components may be fail if not available."
+      },
+      {
+        "name": "NanosecondsSinceEpoch and NanosecondsSinceEpochInfo",
+        "description": "NanosecondsSinceEpoch() returns a monotonic-ish nanosecond wallclock time since an unspecified epoch (resolution depends on system). NanosecondsSinceEpochInfo() returns Method, Monotonic, Reliable, Resolution.",
+        "guidance": "Use NanosecondsSinceEpoch for wallclock timing measurements. Check NanosecondsSinceEpochInfo to determine monotonicity (guarantee of increasing values), resolution (ns), and whether the reported resolution is reliable (queried from OS) or estimated."
+      },
+      {
+        "name": "time and memory_allocated read-eval-print loop variables",
+        "description": "In the REPL, global variable time stores milliseconds the last command took; memory_allocated stores bytes allocated by the last completed statement.",
+        "guidance": "Use these variables for quick ad-hoc measurements of command duration and memory allocation in interactive sessions."
+      },
+      {
+        "name": "Sleep and MicroSleep semantics",
+        "description": "Sleep(time) pauses execution for time seconds; MicroSleep(time) pauses for microseconds.",
+        "guidance": "Use to introduce delays; MicroSleep provides microsecond resolution if supported."
+      },
+      {
+        "name": "Tracking total memory allocated (TotalMemoryAllocated)",
+        "description": "TotalMemoryAllocated() returns the total amount of memory in bytes allocated by the GAP memory manager since start.",
+        "guidance": "Use to measure cumulative allocations by GAP during a run."
+      },
+      {
+        "name": "Profiling workflow and its overhead",
+        "description": "Profiling workflow: enable profiling for chosen functions/operations/methods, run computations, examine DisplayProfile, optionally clear profile info, then disable profiling. Profiling slows GAP runtime.",
+        "guidance": "Plan experiments because profiling changes performance. Recorded information is kept even after turning profiling off; clearing stored info requires ClearProfile()."
+      },
+      {
+        "name": "Function-level profiling controls (ProfileGlobalFunctions / ProfileOperations / ProfileOperationsAndMethods / ProfileFunctions / UnprofileFunctions / ProfileMethods / UnprofileMethods)",
+        "description": "ProfileGlobalFunctions([bool]) / ProfileOperations([bool]) / ProfileOperationsAndMethods([bool]) start/stop profiling for groups (global functions, operations, operations+methods). ProfileFunctions(funcs) / UnprofileFunctions(funcs) start/stop profiling for listed functions. ProfileMethods(ops) / UnprofileMethods(ops) start/stop profiling of methods for listed operations.",
+        "guidance": "Calling with true starts profiling and clears old profile info for that group; calling with false stops profiling for that group but retains recorded information. Calling without arguments displays profile info for that group (DisplayProfile behavior). Use these to limit profiling scope to reduce overhead and data volume."
+      },
+      {
+        "name": "DisplayProfile metrics and filtering",
+        "description": "DisplayProfile([functions][,][mincount, mintime]) prints profile lines for profiled functions. Each function shows: count, self/ms, chld/ms, stor/kb, chld/kb, package. The list is sorted by total time (self/ms + chld/ms). mincount and mintime filter by minimum call count or total time threshold. GAPInfo.ProfileThreshold default is [10000, 30].",
+        "guidance": "Use mincount/mintime to focus on costly or frequently-called functions. The output includes OTHER and TOTAL lines for aggregated time/memory not shown. For interactive exploration, use the BrowseProfile package. The package field identifies which package or whether function belongs to GAP or is an operation."
+      },
+      {
+        "name": "ClearProfile (clearing stored profiling info)",
+        "description": "ClearProfile() clears all stored profile information.",
+        "guidance": "Call before a new profiling run to avoid mixing old and new data (ProfileGlobalFunctions(true) also clears old info for that group when starting)."
+      },
+      {
+        "name": "Line-by-line profiling modes (coverage vs timing) and limitations",
+        "description": "Line-by-line profiling can collect Coverage (which lines executed) or Timing (time spent per line). CoverageLineByLine(ProfileLineByLine with coverage=true) records executed lines; ProfileLineByLine can record timing. Limitations: profiler only tracks code inside functions; by default wall-clock time is recorded (lower overhead), and profiler files grow large.",
+        "guidance": "Prefer writing a wrapper function that starts profiling, runs target code, and stops profiling to get accurate attribution. If filename ends with .gz it will be compressed automatically. Use the 'profiling' package transform functions (e.g., OutputAnnotatedCodeCoverageFiles) to make human-readable reports. Note forked processes (IO_fork) produce separate files with PID appended."
+      },
+      {
+        "name": "ProfileLineByLine options (coverage, wallTime, recordMem, resolution)",
+        "description": "ProfileLineByLine(filename[, options]) supports options: coverage (Boolean, default false), wallTime (Boolean, default true), recordMem (Boolean, default false), resolution (Integer, default 0).",
+        "guidance": "coverage=true makes the call equivalent to CoverageLineByLine. wallTime=true measures wall-clock rather than CPU time (lower overhead). recordMem records sizes of new objects per line instead of CPU time. resolution>0 samples execution every resolution nanoseconds to reduce overhead and file size at cost of accuracy; profiler still records statements executed at least once."
+      },
+      {
+        "name": "UnprofileLineByLine / UncoverageLineByLine and IsLineByLineProfileActive",
+        "description": "UnprofileLineByLine() and UncoverageLineByLine() stop profiling started by ProfileLineByLine/CoverageLineByLine. IsLineByLineProfileActive() returns whether line-by-line profiling is active.",
+        "guidance": "Always stop profiling after the measured region to close files and finalize traces. Check IsLineByLineProfileActive to determine state before/after operations."
+      },
+      {
+        "name": "DisplayCacheStats and ClearCacheStats for method selection caches",
+        "description": "DisplayCacheStats() shows statistics about caches used by method selection; ClearCacheStats() clears these statistics.",
+        "guidance": "Use these to inspect and reset method-selection cache behavior when debugging performance related to dispatch/method selection."
+      },
+      {
+        "name": "Recording GAP version and citation information (GAPInfo.Version, Cite)",
+        "description": "GAPInfo.Version holds the GAP version number. Cite produces sample citations for the used GAP version or for a package in the installation.",
+        "guidance": "Include version and banner (architecture, used libraries, loaded packages) when reporting bugs to GAP Support or forums to aid reproducibility. Use CompareVersionNumbers to compare versions."
+      },
+      {
+        "name": "Test files structure and START_TEST/STOP_TEST conventions",
+        "description": "Test files for Test() contain GAP input/output lines: input lines start with \"gap> \" and may continue with \"> \". START_TEST(name) and STOP_TEST(name) may be used in files read via Test; START_TEST reinitializes caches and the global RNG, sets assertion level to 2 (if lower), and STOP_TEST restores previous assertion level.",
+        "guidance": "Begin a test file with gap> START_TEST(\"identifier\"); and finish with gap> STOP_TEST(\"same identifier\");. Use START_TEST to make tests independent of reading order and to normalize environment. Tests are stored in the tst directory of the GAP distribution; running teststandard.g executes all tests (may be long)."
+      },
+      {
+        "name": "Test function format and #@ directives",
+        "description": "Test(fname[, optrec]) runs GAP input/output examples from fname and compares actual output to stored output. Lines starting with \"gap> \" are GAP input; default ignored lines: leading comment/empty lines and one empty line plus one+ lines starting with \"#\". #@ lines (e.g., #@local, #@exec, #@if ... #@fi) define special configuration options.",
+        "guidance": "Use #@local to run tests as if in a function with listed locals; use #@exec to execute code before tests (e.g., to load packages or define globals). #@if/#@elif/#@else/#@fi allow conditional parts depending on evaluated EXPR (cannot depend on test results or package loads in tests; cannot nest #@if). Test returns true if outputs match, false on differences. Use rewriteToFile option to regenerate test output files safely."
+      },
+      {
+        "name": "Test optrec options for customizing comparisons and reporting",
+        "description": "optrec components recognized by Test include: ignoreComments, width, compareFunction, transformFunction, reportDiff, rewriteToFile, writeTimings, compareTimings, reportTimeDiff, ignoreSTOP_TEST, showProgress, subsWindowsLineBreaks, returnNumFailures.",
+        "guidance": "compareFunction can be a function or abbreviations like \"uptowhitespace\" or \"uptonl\". transformFunction can normalize outputs (e.g., \"removewhitespace\", \"removenl\"). rewriteToFile writes new output to the given filename (or to fname if true) to assist generating/refreshing tests. writeTimings records timings; compareTimings compares against stored timing file (defaults: threshold 100 ms and 20% significance; can override with [timingfile, threshold, percentage]). reportDiff is a custom reporter function. showProgress controls progress printing; subsWindowsLineBreaks controls CRLF handling; returnNumFailures returns number of failing input lines instead of Boolean."
+      },
+      {
+        "name": "TestDirectory behavior and optrec components",
+        "description": "TestDirectory(inlist[, optrec]) runs Test on files found in inlist (files or directories, recursively searching .tst files) and returns true if all tests pass. optrec components include testOptions (record passed to Test), earlyStop (stop on first failure), showProgress, suppressStatusMessage, rewriteToFile, etc.",
+        "guidance": "Use TestDirectory to run suites of tests. testOptions allows per-file customization; earlyStop speeds failure detection; suppressStatusMessage hides status lines after tests. rewriteToFile is useful for regenerating test outputs across a directory."
+      }
+    ]
+  }
+}

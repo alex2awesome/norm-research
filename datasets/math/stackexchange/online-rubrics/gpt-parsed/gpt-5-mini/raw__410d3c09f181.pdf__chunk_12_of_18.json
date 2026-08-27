@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/410d3c09f181.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "410d3c09f181.pdf",
+  "chunk_idx": 12,
+  "n_chunks": 18,
+  "chunk_chars": 39883,
+  "model": "gpt-5-mini",
+  "elapsed_s": 90.64686162499856,
+  "input_tokens": 12557,
+  "output_tokens": 5178,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "C programmers writing PARI/GP library code or extensions (developers manipulating GEN objects and managing PARI stack/precision)",
+    "subtask_short": "pari_c_api_programming",
+    "subtask_description": "Guidance for creating, assigning, copying, converting, and garbage-collecting PARI GEN objects from C, and for writing portable code across 32/64-bit architectures with correct precision handling.",
+    "subtask_keywords": [
+      "pari",
+      "c_api",
+      "gen_objects",
+      "garbage_collection",
+      "precision_management"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use symbolic precision/size macros for portability",
+        "description": "Use the provided macros (BITS_IN_LONG, LONG_IS_64BIT, DEFAULTPREC, MEDDEFAULTPREC, BIGDEFAULTPREC) rather than hard-coded numeric values so programs run identically on 32-bit and 64-bit machines.",
+        "guidance": "Because prec sets the size of inexact results counted in (long) words (including codewords), the same numeric prec yields different bit accuracy on 32-bit vs 64-bit machines. Either use the DEFAULTPREC/MEDDEFAULTPREC/BIGDEFAULTPREC macros or conditional constructs like #ifndef LONG_IS_64BIT ... #else ... #endif (example: prec = MEDDEFAULTPREC). Note: half the accuracies available on 32-bit architectures (the odd ones) have no precise equivalents on 64-bit machines."
+      },
+      {
+        "name": "Compute bit and decimal accuracy from prec",
+        "description": "bit accuracy(prec) = (prec \u2212 2) * BITS_IN_LONG; decimal accuracy = bit_accuracy * log(2)/log(10).",
+        "guidance": "Example: prec=5 \u21d2 on 32-bit (BITS_IN_LONG=32) accuracy \u2248 (5\u22122)*log(2^32)/log(10) \u2248 28 decimal digits; on 64-bit \u2248 57 digits. Use this when choosing prec to get desired numeric accuracy across architectures."
+      },
+      {
+        "name": "Create PARI objects with cgetg(length,type)",
+        "description": "GEN cgetg(long length, long type) creates a PARI object by allocating 'length' longwords and setting its type.",
+        "guidance": "length must be correct: cgetg performs no checking, so giving an incorrect length causes disasters. Many types have predetermined lengths (e.g., 3 for t_INTMOD,t_FRAC,..., 4 for t_QUAD,t_QFI, 5 for t_PADIC,t_QFR). Prefer documented usage; most of the time you won't need cgetg because PARI functions return usable GENs."
+      },
+      {
+        "name": "Use cgeti/cgetr for leaves (integers/reals)",
+        "description": "For creating leaves (integers or reals), use GEN cgeti(long length) and GEN cgetr(long length) instead of cgetg(..., t_INT/t_REAL).",
+        "guidance": "These are very common and simpler. Macros lgetg, lgeti, lgetr are predefined synonyms for (long)cgetg, (long)cgeti, (long)cgetr respectively."
+      },
+      {
+        "name": "When constructing recursive/compound types, create all branches",
+        "description": "cgetg only creates the 'root' of recursive PARI types (e.g., matrices are row vectors of column vectors); you must create all sub-objects to build the full tree.",
+        "guidance": "Example: to create a 4\u00d73 matrix, call z = cgetg(4, t_MAT); then for each column z[i] = lgetg(5, t_COL); then allocate each column's elements. Common mistake: assuming a single cgetg creates all nested structure."
+      },
+      {
+        "name": "Understand plain C assignment vs PARI assignment",
+        "description": "C assignment y = x moves the pointer; modifying x or y afterwards modifies the same underlying object. To copy PARI structure, use gaffect or gcopy.",
+        "guidance": "Physical modification (e.g., x[1]=0) will change the other pointer. Use gaffect(GEN x, GEN y) to copy x into preexisting y (copies whole structure) or gcopy(GEN x) to create a new copy on the stack. Beware semantics and choose appropriately."
+      },
+      {
+        "name": "Use gaffect to assign PARI object structures with constraints",
+        "description": "void gaffect(GEN x, GEN y) copies structure of x into existing object y, but several conditions must be met for assignment to be possible.",
+        "guidance": "Allowed examples: assign integer into a real; forbidden: assign real into integer (use truncation/rounding functions instead). y must be large enough and have compatible tree structure (e.g., cannot assign non-zero integer into y if y has length 2). Changing precision of inexact objects is allowed; assignment of imprecise into a precise one usually 'does not make sense'. Functions ending in 'z' implicitly use gaffect (they record avma, perform op, gaf f ect result to last operand, restore avma)."
+      },
+      {
+        "name": "Use gaffsg to assign C long into PARI object",
+        "description": "void gaffsg(long s, GEN y) assigns an ordinary C long integer s into a PARI object y.",
+        "guidance": "Useful for setting small integer values into PARI objects when appropriate. But generally avoid many gaf f ect statements unless for simple leaves or coercions (see exceptions)."
+      },
+      {
+        "name": "Prefer gerepile family to manual gaffect for garbage cleanup",
+        "description": "gerepile functions clean up stack garbage and update pointers safely; they are generally preferred over many manual gaffect usages.",
+        "guidance": "Main function: GEN gerepile(long ltop, long lbot, GEN q) cleans stack between lbot and ltop, translates objects in [avma,lbot[ upward to abut ltop, updates pointers and returns updated q. Use idiom ltop=avma; ... lbot=avma; q=anything(); return gerepile(ltop,lbot,q). Beware of evaluation order pitfalls (e.g., gerepile(ltop, avma, anything()) is dangerous)."
+      },
+      {
+        "name": "Keep garbage connected for gerepile to work",
+        "description": "gerepile expects the garbage zone to be a connected interval; if garbage is interspersed with significant objects, gerepile may error or corrupt pointers.",
+        "guidance": "Programming idiom: arrange computations so garbage is contiguous between lbot and ltop. Example: compute p1 and p3 before p2 so p1 and p3 garbage become connected, then create container and use gerepile. If garbage cannot be made connected, use gerepilemany."
+      },
+      {
+        "name": "Use gerepileupto when q is created before its components",
+        "description": "GEN gerepileupto(long ltop, GEN q) cleans stack between ltop and the connected object q and returns q updated; q must have been created before all its components.",
+        "guidance": "Simpler to use in many cases because result is guaranteed to be suitable for gerepileupto if produced by documented PARI functions. But be careful to satisfy creation-order constraint."
+      },
+      {
+        "name": "Use gerepilemany to preserve multiple results (robust)",
+        "description": "void gerepilemany(long ltop, GEN *gptr[], long n) cleans recent stack while updating n GEN pointers provided in array gptr; copies are done before cleaning.",
+        "guidance": "Use when you need to preserve several objects (z1,z2,...) produced by computation; this is most robust but slower. To avoid copying when constraints hold, use gerepilemanysp."
+      },
+      {
+        "name": "Use gerepilemanysp for faster but stricter updates",
+        "description": "void gerepilemanysp(long ltop, long lbot, GEN *gptr[], long n) cleans stack between lbot and ltop and updates GENs pointed by gptr without initial copying.",
+        "guidance": "Faster but subject to same restrictions as gerepile (garbage connectivity, object adjacency). Less prone to user error is gerepilemany (with copy)."
+      },
+      {
+        "name": "Use cgiv to give back the latest PARI object",
+        "description": "void cgiv(GEN z) destroys (gives back) the latest PARI object on the stack when saving avma is not possible.",
+        "guidance": "Use only when you want to free the very last object; cannot free objects not at the top of the stack."
+      },
+      {
+        "name": "Programming idiom: record avma before creating garbage and restore after",
+        "description": "Record long ltop = avma before creating intermediate objects and later restore avma = ltop (or use gerepile) to discard garbage.",
+        "guidance": "Example pattern: ltop=avma; garbage(); lbot=avma; q=anything(); return gerepile(ltop,lbot,q); Avoid returning gerepile(ltop, avma, anything()) due to compiler evaluation order unpredictability."
+      },
+      {
+        "name": "For loops, use occasional gerepilemany when memory low",
+        "description": "In loops producing temporary objects, do garbage work each iteration but call gerepilemany only when memory (avma) crosses a threshold.",
+        "guidance": "Example: set limit = stack_lim(avma,1) instead of simple arithmetic to avoid overflow; when avma < limit, preserve needed objects (x,y,...) in a gptr array and call gerepilemany(ltop, gptr, n)."
+      },
+      {
+        "name": "When in doubt, force a copy then gerepileupto",
+        "description": "If stack is messy and you need a reliable way to keep results, use z = gerepileupto(ltop, gcopy(z)) to force a safe copy at bottom of stack, then clean.",
+        "guidance": "This is slower but safe. For multiple results use gerepilemany."
+      },
+      {
+        "name": "Avoid overuse of assignment statements; prefer gerepile for efficiency",
+        "description": "Using gaffect and manual assignments is often inefficient and awkward; gerepile/gerepile* is usually preferred except in some small or controlled cases.",
+        "guidance": "Two exceptions where gaffect is acceptable: simple leaves whose size is controlled, and to coerce an inexact object to a given precision (example: gaffect(x, (tmp=cgetr(3))); x = tmp;). Using preallocated large objects with gaddz/gaddz-style in-place ops can avoid gerepile but is often slower and more cumbersome."
+      },
+      {
+        "name": "Memory layout law for gerepile relocation",
+        "description": "If a given PARI object is to be relocated by gerepile then, apart from universal objects, the chunks of memory used by its components should be in consecutive memory locations.",
+        "guidance": "Documented PARI functions guarantee this. If objects become disconnected (garbage interspersed), gerepile may fail to update pointers correctly \u2014 be wary when allowing objects to become disconnected."
+      },
+      {
+        "name": "Beware of non-checking macros for performance",
+        "description": "Macros handling codewords and type/length (typ, settyp, lg, setlg, signe, setsigne, lgef, setlgef, varn, setvarn, expo, setexpo, etc.) do not check types for efficiency.",
+        "guidance": "Use them correctly; they accept arguments without explicit casts and assume correct types. Misuse will produce incorrect behavior without safety checks."
+      },
+      {
+        "name": "Type-specific internal representation rules (integers)",
+        "description": "Type t_INT second codeword z[1] contains sign (1,0,-1) and effective length (number of significant longwords), and integers are normalized so first mantissa longword z[2] is non-zero (except 0).",
+        "guidance": "Recognize zero by sign==0 or effective length==2. Absolute value is represented in base 2^BITS_IN_LONG by (z[2],z[3],...,z[lgefint(z)-1]). Use mpodd and mod2..mod64 macros for fast residue checks (they return long, avoid stack clutter)."
+      },
+      {
+        "name": "Type-specific internal representation rules (reals)",
+        "description": "Type t_REAL second codeword z[1] encodes sign and a biased binary exponent (bias HIGHEXPOBIT). Mantissa is normalized: z[2] most significant bit is 1 when non-zero; mantissa words represent number between 1 (included) and 2 (excluded).",
+        "guidance": "Do not detect real zero by checking z[2] (it may be defined and 0); use sign==0. Use expo()/setexpo() to access unbiased exponent. Note dbltor(double s) yields about 19 decimal digits (but on 32-bit only ~16 significant)."
+      },
+      {
+        "name": "Type-specific rules for modular/polynomial/p-adic types",
+        "description": "Each composite type has structural constraints: t_INTMOD has z[1]=modulus, z[2]=class (both integers) with 0\u2264z[2]<z[1]; t_POLMOD analogous for polynomials; t_FRAC/t_FRACN have z[1]=numerator,z[2]=denominator (integers), and may be reduced with gred; t_PADIC encodes precision, biased exponent and components at z[2],z[3],z[4]; etc.",
+        "guidance": "Keep modulus objects on the heap to share them among objects instead of making stack copies. For p-adics use precp/valp accessors; a p-adic z \u2260 0 satisfies z = p^valp(z) * (z[4] + O(pprecp(z))). Follow chapter-specific hierarchy rules for polymods and variables."
+      },
+      {
+        "name": "Polynomials and power series conventions and cautions",
+        "description": "Type t_POL second codeword contains sign, variable number, and effective length; coefficients are in ascending order z[2]..z[lgef(z)-1]; degree = effective_length - 3; zero polynomial may have e\ufb00ective length > 2 if leading coefficient is not an exact zero. Type t_SER has sign, variable number and biased exponent (HIGHVALPBIT); do not use expo/setexpo on power series.",
+        "guidance": "Use lgef/gvar/degree to inspect polynomials. Be careful distinguishing exact zero coefficients from approximate zeros in series/polynomials."
+      },
+      {
+        "name": "Copy vs forcecopy vs clone semantics",
+        "description": "GEN gcopy(GEN x) creates a new copy on the stack but does not duplicate universal components (it copies only pointers to them). GEN forcecopy(GEN x) forces a complete copy. GEN gclone(GEN x) creates a permanent heap copy; void gunclone(GEN x) deletes a clone.",
+        "guidance": "If you copy a clone back to the stack and then delete it, use forcecopy not gcopy to avoid missing components (e.g., moduli). No PARI object should keep references to a clone after it has been destroyed."
+      },
+      {
+        "name": "Conversions between C and PARI types",
+        "description": "Use provided conversion functions: GEN stoi(long s), GEN dbltor(double s), long itos(GEN x), double rtodbl(GEN x), long gtolong(GEN x), double gtodouble(GEN x).",
+        "guidance": "Be aware of accuracy limits: dbltor yields about 19 decimal digits but on 32-bit only ~16 are significant. Use appropriate conversion routines for your needs."
+      }
+    ]
+  }
+}

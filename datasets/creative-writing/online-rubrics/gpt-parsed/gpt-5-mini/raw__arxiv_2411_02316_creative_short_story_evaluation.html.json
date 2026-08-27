@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/arxiv_2411_02316_creative_short_story_evaluation.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 20172,
+  "output_tokens": 3789,
+  "elapsed_s": 365.58903779182583,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in NLP/computational creativity evaluating short-story generation (LLM and human comparison)",
+    "subtask_short": "evaluating short story creativity",
+    "subtask_description": "Evaluating creative five-sentence short stories (cue-word based) produced by humans and LLMs using automated metrics and human/LLM judges across multiple creativity dimensions (novelty, surprise, diversity, complexity, effectiveness).",
+    "subtask_keywords": [
+      "creative_writing",
+      "short_story",
+      "evaluation",
+      "llm",
+      "computational_creativity"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Creativity (global rating)",
+        "description": "A global creativity rating given by judges (experts, non-experts, and LLM judges) reflecting overall creativity of a story.",
+        "guidance": "Rated on a 5-point scale in this study; creativity ratings are highly correlated with originality, surprise and effectiveness (experts r\u2248.83-.89, non-experts r\u2248.64-.74, LLMs r\u2248.92-.99). Experts' composite scores computed as mean of two trained expert raters; non-expert ratings use the median of five raters (to reduce outlier influence); LLM judges' scores are averaged. Inter-rater reliability reported (ICC ranges: experts .62-.90, non-experts .43-.71, LLMs .86-.94)."
+      },
+      {
+        "name": "Originality",
+        "description": "Judge-rated originality as a separate judged dimension related to but distinct from creativity.",
+        "guidance": "Collected alongside creativity, surprise and effectiveness; treated as an outcome variable correlated with creativity. Expert and non-expert raters follow provided definitions (see CAT-inspired instructions)."
+      },
+      {
+        "name": "Effectiveness (value)",
+        "description": "Judge-rated effectiveness \u2014 the perceived value/effectiveness of the story.",
+        "guidance": "Collected as a separate judged variable and shown to correlate with other judged variables; used in descriptive statistics and analyses but the main analyses focus on creativity and human-vs-AI judgments."
+      },
+      {
+        "name": "Surprise (judge-rated unexpectedness)",
+        "description": "Human/LLM judge assessment of how surprising or unexpected a story is.",
+        "guidance": "Collected as a separate judged variable. Also operationalized via an automated metric (see Automated Surprise Metric entry). Judges were given explicit definitions during annotation to improve consistency."
+      },
+      {
+        "name": "Lexical diversity (n-gram diversity)",
+        "description": "Lexical diversity measured as n-gram diversity: for each n (1 to 5), the ratio of unique n-grams to total n-grams in a story.",
+        "guidance": "Often averaged across n=1..5 to yield a mean n-gram diversity per story; used as the representative lexical diversity predictor in regression models. Higher lexical diversity is associated with certain judge responses and used to characterize repeated templates vs varied phrasing."
+      },
+      {
+        "name": "Semantic diversity (inverse homogenization)",
+        "description": "Semantic diversity operationalized as inverse homogenization: the average pairwise semantic distance between a story and all other stories written on the same item set.",
+        "guidance": "Defined formally inv_hom(s|t) = (1/(|S_t|-1)) sum_{s' in S_t\\{s}} semdis(s,s'). Semantic distance function uses 1 - cosine_similarity over sentence embeddings (gte-large). Used to measure thematic/semantic variety across stories; chosen as the semantic diversity predictor in regressions."
+      },
+      {
+        "name": "Automated Surprise Metric (temporal unexpectedness)",
+        "description": "Surprise measured automatically as the average semantic distance between consecutive fragments/sentences in a story, normalized to [0,2].",
+        "guidance": "Formally Sur(S_n) = (2/(|F|-1)) sum_{i=2}^{|F|} |D(F_i) - D(F_{i-1})| where F_i are fragments (sentences) and D() is the dominant-term distance; captures how much each sentence deviates from the previous, producing temporal surprise effects. Used to compare surprise profiles across sentence positions and story sources."
+      },
+      {
+        "name": "Novelty (dominant-term semantic-distance metric)",
+        "description": "Novelty computed following Karampiperis et al.: average semantic distance between the dominant (lemmatized content) terms of the story versus dominant terms across the full corpus, normalized to [0,2].",
+        "guidance": "Formally D(S_n) = average pairwise semdis between dominant terms T_n; D(S_G) similarly for corpus. Nov(S_n) = 2 * |D(S_n) - D(S_G)|. Uses 1 - cosine_similarity over embedding space for semdis and lemmatized content words as dominant terms. Used to quantify how different a story's core content is relative to corpus norms."
+      },
+      {
+        "name": "Lexical complexity metrics",
+        "description": "Lexical-level complexity metrics including number of unique words, average word length, average sentence length, and readability (Flesch reading ease).",
+        "guidance": "Number of unique words chosen as the representative lexical_complexity predictor in regressions. Higher lexical complexity (e.g., more unique words) was found to drive higher creativity ratings from non-expert and LLM judges (verbosity bias). Readability (Flesch) indicates ease of reading; more complex lexical profiles can reduce human readability despite being judged positively by some raters."
+      },
+      {
+        "name": "Syntactic complexity metrics",
+        "description": "Syntactic-level complexity metrics including POS tag ratios (nouns, adjectives, pronouns, adverbs), average dependency path length, and average constituency tree depth.",
+        "guidance": "Average constituency tree depth was selected as the representative syntactic_complexity predictor in regressions. Average dependency path length defined as mean lengths of dependency paths for each word. Syntactic complexity distinguishes model outputs (generally higher) from human outputs and interacts with readability and perceived complexity."
+      },
+      {
+        "name": "Semantic distance computation",
+        "description": "Semantic distances used throughout (for novelty, inverse homogenization, surprise, etc.) are computed as 1 - cosine_similarity of embeddings from a sentence embedding model (gte-large).",
+        "guidance": "Explicit use of gte-large embeddings; semantic distance values feed definitions of inverse homogenization, novelty, surprise; normalization to [0,2] used in metric formulas."
+      },
+      {
+        "name": "Diversity of themes (clustering-based theme counts)",
+        "description": "Quantify theme diversity by clustering story embeddings (agglomerative clustering with Ward variance minimization) and counting resulting theme clusters for an item set.",
+        "guidance": "Clustering threshold used: 0.6 on embeddings for stories in a given item set. Theme summaries for clusters can be produced (authors used GPT-4 to summarize combined stories per cluster). Used to show humans cover more themes than models."
+      },
+      {
+        "name": "Judging protocol (CAT-inspired: experts vs non-experts vs LLMs)",
+        "description": "Evaluation protocol inspired by the Consensual Assessment Technique: obtain ratings from expert judges, non-expert judges, and LLM judges with blinding to source and standardized instructions/definitions.",
+        "guidance": "In this study: 2 trained expert judges (graduate psychology students with creative writing experience) who were blinded to source produced means (composite scores); 96 non-expert raters provided 5 ratings per story and medians were used; 3 LLM judges (Claude, Gemini, GPT-4) were prompted and their means taken (median for human-vs-AI votes). Report ICCs to assess inter-rater reliability and choose aggregation method accordingly (mean for reliable groups, median for noisier non-experts). Provide annotators with definitions of creativity, novelty, surprise, effectiveness to improve consistency."
+      },
+      {
+        "name": "Human-vs-AI (Turing-style) judgment",
+        "description": "Binary judge decision whether a story is human-written or AI-generated, used as a Turing-style test.",
+        "guidance": "Collected from experts, non-experts, and LLM judges. Aggregation: median vote for LLMs and non-experts when appropriate; report classification accuracy (experts ~94%, non-experts ~81%, LLMs ~71% in this study). Ask annotators to explain strategies to gain qualitative insight into cues used."
+      },
+      {
+        "name": "Task constraints and preprocessing",
+        "description": "Constraints on story production and preprocessing to ensure comparability: five-sentence cue-word-based generation task; final filtering to stories between 3 and 7 sentences.",
+        "guidance": "Prompt: ask for ~five-sentence short story using three cue words (items) and include a 'boring_storyline' hint to discourage the obvious storyline. Model decoding hyperparameters used in study: temperature=0.7, top_p=0.95 (zero-shot). Filtering removed stories <3 or >7 sentences, yielding final evaluation set of 431 stories. These constraints are prescribed to keep length and format comparable across sources."
+      },
+      {
+        "name": "Predictor set for modeling judged creativity",
+        "description": "A concise set of automated predictors used to model/predict human and LLM creativity ratings: semantic_diversity, lexical_diversity, novelty, surprise, syntactic_complexity (avg constituency tree depth), lexical_complexity (number of unique words).",
+        "guidance": "Authors use a single representative metric per construct to build explainable regression models. Empirical findings: expert creativity ratings are best predicted by higher semantic diversity, surprise and lexical diversity; non-expert and LLM ratings are driven primarily by lexical complexity (number of unique words) and negatively related to semantic diversity, novelty and surprise in this dataset (indicative of verbosity bias)."
+      }
+    ]
+  }
+}

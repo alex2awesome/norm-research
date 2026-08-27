@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/410d3c09f181.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 21728,
+  "output_tokens": 3617,
+  "elapsed_s": 1944.0237615839578,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "mathematicians and number theorists (and programmers) who use PARI/GP as a programmable calculator or as a library; developers embedding or extending PARI",
+    "subtask_short": "using pari-gp calculator and library",
+    "subtask_description": "Guidance for using PARI/GP either interactively (GP calculator) or as a library from higher-level languages; covers data types, operation semantics, defaults/configuration, portability and programming advice for producing correct and efficient PARI code.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "number_theory",
+      "calculator",
+      "library",
+      "software_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Modes of use",
+        "description": "PARI can be used (1) as a library called from an upper-level language (C, C++, Pascal, Fortran) or (2) as a programmable calculator named GP.",
+        "guidance": "Choose library mode for embedding into applications; choose GP for interactive or scripting work. Chapters 2 and 3 explain GP usage; chapters 3\u20135 explain library programming. A tutorial (tutorial.dvi) is recommended as a first read."
+      },
+      {
+        "name": "PARI philosophy: exactness and permissiveness",
+        "description": "Operations and functions should first give as exact a result as possible, and secondly be permitted if they make any kind of sense.",
+        "guidance": "If you operate on exact objects (non-imprecise), the result will be exact (e.g. 4/3 yields the rational (4/3)). Operations involving imprecise objects produce results 'as precise as possible' and PARI automatically determines correct precision. PARI is permissive: many functions are extended componentwise (e.g. applying exp to a vector yields componentwise exponentials). For situations where componentwise is ambiguous (square matrices), special functions exist (e.g. matexp)."
+      },
+      {
+        "name": "Types and recursiveness",
+        "description": "PARI types are recursive: complex, polynomials, vectors, matrices, lists, etc. are built from basic scalar types (t_INT, t_REAL, t_INTMOD, t_FRAC, t_FRACN, t_COMPLEX, t_PADIC, t_QUAD, t_POLMOD, ...).",
+        "guidance": "Components of recursive types can be of different compatible types; for example a complex number a+bi may have a integer and b rational. Beware of creating pathological nested types (e.g. complex-of-complex) \u2014 PARI may produce nonsense. Polynomials in several variables are implemented as polynomials with polynomial coefficients. See section 1.2 for full list and discussion."
+      },
+      {
+        "name": "Type compatibility rules",
+        "description": "Components can be mixed only when types are compatible for the intended operations (e.g., if real is present, integermod components are not allowed).",
+        "guidance": "Compatibility is defined by whether operations like + or \u00d7 make sense; mixing incompatible component types can lead to errors or nonsensical results. When designing data structures, prefer homogeneous scalar choices or ensure compatibility across operations you will perform."
+      },
+      {
+        "name": "Exact vs imprecise objects",
+        "description": "Objects containing real, p-adic, or power series types anywhere in their tree are imprecise; other objects are exact.",
+        "guidance": "Exact objects avoid numerical analysis and are preferable when exact arithmetic is required. Imprecise objects carry precision/approximation metadata and arithmetic on them yields results with computed precision. Understand which parts of your computations are exact vs imprecise to avoid precision-related surprises."
+      },
+      {
+        "name": "Definition and handling of zero for imprecise types",
+        "description": "For imprecise types zeros are represented with order notation: p-adic zeros are O(p^e), power series zeros O(X^e), real zeros O(2^e)\u2014there are infinitely many distinct imprecise zeros.",
+        "guidance": "Precision parameters (like the mantissa precision k) are irrelevant for the identity of a zero; for p-adics and series the exponent e indicates valuation/order. Be careful: small reals or results smaller than the working exponent may be treated as exact zeros in printed output or in further computations (example: 0.E-28 + 1.E-100 yields 0.E-28)."
+      },
+      {
+        "name": "Limits and performance tradeoffs (implementation notes)",
+        "description": "PARI has multiple implementation variants: assembly-optimized kernels for some architectures (fastest), mixed C/assembly kernels, and a pure-C portable version (slower). PARI is optimized for numbers with at most a few thousand decimal digits; fancy multiplication algorithms beyond Karatsuba are not implemented.",
+        "guidance": "Choose a build appropriate to your architecture for best performance. Expect speedups of 5\u2013100\u00d7 over other CAS on many tasks. For extremely large-digit computations (e.g. 10^7 digits) specialized programs may be better than PARI. See Appendix A for compilation/installation and Appendix C for example functions."
+      },
+      {
+        "name": "Operation semantics: division and integer/polynomial operations",
+        "description": "Division is exact when possible (e.g. 4/3 gives rational (4/3)). Integer/polynomial Euclidean division and remainder operators exist (\\, %, \\/ for quotient with minimal remainder). Exponentiation ^ is defined when exponent is integer; otherwise treated as transcendental.",
+        "guidance": "Use appropriate operators for exact arithmetic; to force real arithmetic use 1./3 or add 0. to an expression. Be aware of operator semantics when mixing types to avoid unintended transcendental evaluations."
+      },
+      {
+        "name": "Transcendental and componentwise functions",
+        "description": "Transcendental functions usually operate on any object in C and some on p-adics; by extension PARI applies transcendental functions componentwise to vectors and matrices.",
+        "guidance": "This permissive extension is convenient but be explicit if you need matrix-level transcendental operations (use dedicated functions like matexp when implemented). Check Chapter 3 for specific function behaviors and p-adic support."
+      },
+      {
+        "name": "GP metacommands and interactive conventions",
+        "description": "Commands starting with \\ or symbols like ? or # are metacommands (non-computational) for interacting with GP \u2014 e.g. ? for help, ?functionname for short help, ?? for extended help, ?\\ for metacommand list. Ctrl-C interrupts current computation.",
+        "guidance": "Use ?n to see category n (maps to manual Section 3.n). Use ?? or ??? for full descriptions if extended help is available. Metacommands include settings, file operations, history control; see Section 2.2 for keyboard shortcuts and metacommands. Keep Ctrl-C in mind to abort long computations."
+      },
+      {
+        "name": "Defaults, configuration and string expansions",
+        "description": "GP has many internal defaults (set via default(def,value)) for behavior: prompt, buffersize, colors, compatible, debug levels, echo, format, help program, histsize, etc. String-valued defaults support time expansion (strftime) and environment expansion ($VAR, ~).",
+        "guidance": "Use default(...) to set persistent behavior or put settings in gprc preferences file. String context expansion allows runtime values (e.g. default(logfile, \"name\" a \".log\")). When setting colors or other terminal-related defaults, be aware of terminal/Emacs/readline compatibility issues. See Section 2.1 and misc/gprc.dft for examples."
+      },
+      {
+        "name": "Backward compatibility modes",
+        "description": "The 'compatible' default controls backward compatibility between GP versions: 0=no compatibility, 1=warn on obsolete functions but accept them, 2=use old naming scheme (case-sensitive differences), 3=attempt to mimic former behavior exactly.",
+        "guidance": "Prefer compatible=0 for up-to-date behavior; switching between groups {0,1} and {2,3} can erase previously defined user functions/aliases (variables unaffected). Use whatnow to discover mapping of old functions to new ones."
+      },
+      {
+        "name": "Formatting and precision defaults",
+        "description": "format default controls printed format for reals (xm.n where x in {e,f,g}); the real precision and seriesprecision defaults control internal working precision for real and series arithmetic; buffersize and histsize set buffer and history capacities.",
+        "guidance": "Set format to suit display preferences (g0.28 default for 32-bit). To print full precision use negative n in format. Adjust realprecision/seriesprecision for desired numerical accuracy; be mindful that combining imprecise operands discards lesser precision digits."
+      },
+      {
+        "name": "Portability and OS-specific features",
+        "description": "Some features (readline editing, extended help, UNIX goodies, EMX ports) depend on build options and OS support. GP includes UNIX- and EMACS-specific conveniences where available.",
+        "guidance": "If you rely on line-editing or extended help, ensure PARI was compiled with the necessary options and libraries. On non-UNIX systems, some features may be absent or only available via ports (EMX, Cygwin). Consult Appendix A for installation and Appendix file notes for OS-specific behavior."
+      },
+      {
+        "name": "Care with imprecise arithmetic and cancellation",
+        "description": "When combining imprecise numbers, the resulting accuracy depends on operand precisions, sizes (exponents), and cancellation (size of x+y).",
+        "guidance": "Unexpected loss of precision or zeros can occur (example: 0.E-28 + 1.E-100 yields 0.E-28). Understand exponent/precision interactions; if you need decimal/real answers from rationals use explicit real forms (1./3) or increase precision. PARI computes result precision automatically, but you must design computations to avoid catastrophic cancellation."
+      }
+    ]
+  }
+}

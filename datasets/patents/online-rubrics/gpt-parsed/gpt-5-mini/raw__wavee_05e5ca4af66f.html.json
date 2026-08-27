@@ -1,0 +1,171 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_05e5ca4af66f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17027,
+  "output_tokens": 4807,
+  "elapsed_s": 3086.524081582902,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and engineers working on patent text embeddings and information retrieval; practitioners building/evaluating patent embedding models and datasets",
+    "subtask_short": "patent_text_embedding_benchmark",
+    "subtask_description": "Designing, constructing, and evaluating a comprehensive benchmark and model family for patent text embeddings covering retrieval, classification, paraphrase detection, and clustering across multi-domain patent data.",
+    "subtask_keywords": [
+      "patent",
+      "embedding",
+      "benchmark",
+      "retrieval",
+      "classification",
+      "paraphrase",
+      "clustering"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Multi-task coverage (15 tasks)",
+        "description": "PatenTEB spans 15 tasks across retrieval, classification, paraphrase, and clustering with ~2.06M examples to reflect diverse patent analysis workflows.",
+        "guidance": "Include tasks covering retrieval (symmetric and asymmetric), classification (IPC3, bloom, NLI-oldnew), paraphrase (problem/solution), and clustering (IPC and inventor) so a single benchmark assesses multiple real-world patent workflows."
+      },
+      {
+        "name": "Domain-stratified splits (IPC3 80/10/10)",
+        "description": "Use an 80%/10%/10% split stratified by IPC3, retaining 109 IPC3 classes with \u2265100 families each to ensure domain balance across train/val/test.",
+        "guidance": "Stratify splits by IPC3 to preserve domain balance and prevent domain imbalance-driven performance artifacts. Retain only IPC3 codes with sufficient family counts (\u2265100)."
+      },
+      {
+        "name": "Family-level leakage prevention",
+        "description": "Construct simple families (DAPFAM strategy) as atomic units and ensure disjoint family sets across splits to avoid family leakage.",
+        "guidance": "Reconstruct families across jurisdictions and split at family granularity so that related filings do not appear in both train and test; enforce disjointness during split creation."
+      },
+      {
+        "name": "Domain relationship labeling (IN/OUT/FULL_MIX/PART_MIX)",
+        "description": "Classify query-target family pairs by IPC3 code-set intersection into IN-domain (identical), OUT-domain (disjoint), FULL_MIX (one-sided containment), and PART_MIX (partial overlap).",
+        "guidance": "Use these relationship categories to control cross-domain retrieval difficulty and to guide negative sampling strategies for each retrieval objective."
+      },
+      {
+        "name": "Domain-aware hard negative mining",
+        "description": "All negative candidates are drawn from outside the citation network and negatives are selected from domain relationship categories aligned with the retrieval objective (e.g., MIXED negatives for IN-domain retrieval).",
+        "guidance": "For IN-domain retrieval select MIXED-category hard negatives to force content-based discrimination; for OUT-domain retrieval select OUT-domain negatives; for MIXED retrieval select PART_MIX negatives. Exclude citation-connected candidates."
+      },
+      {
+        "name": "Limits on positives and triplets per query",
+        "description": "Each query is limited to at most 100 positive examples and at most 10 training triplets.",
+        "guidance": "Enforce upper bounds on positives and triplets per query to avoid domination by prolific families and to cap training complexity."
+      },
+      {
+        "name": "Asymmetric retrieval tasks and fragment-to-document matching",
+        "description": "Include five asymmetric tasks (title\u2192full, problem\u2192full, effect\u2192full, problem\u2192solution, effect\u2192substance) to capture fragment-to-document matching scenarios absent from general embedding benchmarks.",
+        "guidance": "Design asymmetric tasks that reflect real patent search queries (titles, problem statements, desired effects). Ensure the retrieval target is the full document and that queries are document fragments with differing rhetorical roles."
+      },
+      {
+        "name": "Deterministic fragment removal to prevent trivial matching",
+        "description": "Reconstruct each target by removing the query fragment (titles via metadata, problem/effect via string-level normalization) so that trivial lexical overlap cannot yield positive matches.",
+        "guidance": "Deterministically remove fragment text from targets and normalize strings to avoid label leakage and trivial lexical signals; this is mandatory for asymmetric tasks."
+      },
+      {
+        "name": "Fragment extraction methodology (seven patterns)",
+        "description": "Extract problem/effect/solution segments using seven predefined patterns (e.g., 'PROBLEM TO BE SOLVED:' followed by 'SOLUTION:' etc.), with special-case handling (remove 'SELECTED DRAWING', truncate effect at first sentence, keep final value for multi-valued field segments).",
+        "guidance": "Use pattern-based extraction tuned to patent abstract conventions; apply normalization and trimming heuristics to obtain reliable fragments for asymmetric tasks."
+      },
+      {
+        "name": "Symmetric retrieval objectives (IN/MIXED/OUT)",
+        "description": "Create three symmetric retrieval objectives grouping domain relationships: IN-domain (same IPC3), MIXED-domain (FULL_MIX+PART_MIX), and OUT-domain (disjoint IPC3).",
+        "guidance": "Train separate retrieval objectives for same-domain fine discrimination, partially-overlapping domain robustness, and cross-domain transfer; each objective uses domain-aligned hard negatives."
+      },
+      {
+        "name": "Task-specific dataset sizing and standardized splits",
+        "description": "Provide explicit train/validation/test sizes per task (e.g., 150k train triplets for many tasks; smaller sizes for effect-derived tasks) and standardized splits across tasks.",
+        "guidance": "Report and use fixed per-task splits (train/val/test counts) so results are comparable and multi-task mixing proportions can be controlled."
+      },
+      {
+        "name": "Per-task evaluation metrics",
+        "description": "Use NDCG@10 for retrieval tasks, Pearson correlation for paraphrase tasks, Macro-F1 for classification (note: Macro-F1 reported with 20% few-shot training), and V-measure for clustering.",
+        "guidance": "Select metrics matching task families (ranking metrics for retrieval, correlation for regression-like paraphrase measures, classification F1 for taxonomy tasks, clustering-suitable V-measure) and report them consistently."
+      },
+      {
+        "name": "Clustering tasks are evaluation-only with cluster size constraints",
+        "description": "Include two clustering tasks (IPC-based and inventor-based) as test-only; retain clusters sized 200\u20131000 for IPC clustering and 100\u20131000 for inventor clustering to avoid trivial or overly granular clusters.",
+        "guidance": "Make clustering tasks evaluation-only; enforce cluster-size filters to ensure meaningful cluster granularity for V-measure evaluation."
+      },
+      {
+        "name": "Dataset source and preprocessing filters",
+        "description": "Source data from Lens.org, reconstruct families (DAPFAM approach), and apply filters: year \u2265 1980, cited_by \u2265 1, cites \u2264 100, availability of segmented abstracts (structured segments), family size < 500, and bidirectional citation graph construction.",
+        "guidance": "Apply conservative temporal and citation filters to ensure data quality and structural completeness; use family-level aggregation for stability across jurisdictions."
+      },
+      {
+        "name": "Domain assignment via dominant IPC3",
+        "description": "Assign each family a dominant IPC3 code because IPC3 provides balanced granularity between top-level sections and full classification; retain IPC3 codes with \u2265100 families.",
+        "guidance": "Use dominant IPC3 as the per-family domain label for stratification and domain-aware sampling; choose a classification level balancing granularity and sample counts."
+      },
+      {
+        "name": "Hard negative mining excludes citation network neighbors",
+        "description": "Negative candidates are drawn from outside the citation network so that negatives are not citation-related neighbors.",
+        "guidance": "Exclude citation neighbors to prevent misleading negatives that are actually related via citations and to force semantic discrimination based on content rather than citation topology."
+      },
+      {
+        "name": "Paraphrase positive sampling ratio (14%)",
+        "description": "For paraphrase tasks positives comprise 14% of examples in each split, with paraphrase pairs sampled from IN-domain citation pairs that share the relevant segment.",
+        "guidance": "Set positive-to-negative ratios reflecting realistic prevalence (14% positive) to ensure contrastive training has both positive and abundant negative examples."
+      },
+      {
+        "name": "Stratified subsampling to balance multi-task training mix",
+        "description": "Apply conservative stratified subsampling when tasks would otherwise dominate the training mix, preserving per-domain and per-label minimum representation.",
+        "guidance": "Control per-task sampling to avoid overwhelming the multi-task objective with any single task; preserve minimal representation per domain/label to keep coverage."
+      },
+      {
+        "name": "Export and data format standards",
+        "description": "Export all data in Apache Parquet format with standardized splits for reproducibility.",
+        "guidance": "Provide machine-readable, columnar exports (Parquet) with explicit train/val/test splits to facilitate downstream reuse and efficient IO."
+      },
+      {
+        "name": "Prompt-based task conditioning",
+        "description": "Use concise, role-specific prompt prefixes (INSTRUCTOR-style) with distinct prompts for query and target fields to help the encoder learn task-specific representations.",
+        "guidance": "Design short, semantically clear prompts per task/field (examples in Table 11) and apply identical prompts at inference for tasks that benefited from them; prompts can change performance and should be ablated."
+      },
+      {
+        "name": "Loss function assignment by task family",
+        "description": "Use Multiple Negatives Ranking Loss (InfoNCE) for all retrieval tasks (in-batch negatives), Online Contrastive Loss for paraphrase tasks (margin \u03b5=0.5), Batch-Hard Soft-Margin Triplet Loss for single-document classification tasks, and Cross-Entropy (concatenated embeddings) for pairwise classification (class_nli_oldnew).",
+        "guidance": "Match loss families to task structures: in-batch contrastive losses for efficient retrieval supervision, explicit contrastive margins for paraphrase discrimination, triplet-based metric learning for multi-class document classification, and standard cross-entropy for pairwise classification heads."
+      },
+      {
+        "name": "Global training objective: uniform task weighting",
+        "description": "Combine all task-specific losses with uniform weighting (sum of task losses) rather than tuning per-task weights.",
+        "guidance": "Use equal \u03bb_t = 1 for all 13 training tasks to avoid an expensive hyperparameter search across task-weight vectors; note this choice trades off benchmark optimization vs. multi-task generalization and can be revisited."
+      },
+      {
+        "name": "Single-epoch multi-task training with optimizer details",
+        "description": "Train over a single epoch of the aggregated multi-task dataset using paged AdamW 8-bit, cosine LR decay, 10% warmup, gradient norm clipping 1.0, and mixed precision; learning rates vary by initialization source.",
+        "guidance": "Adopt memory-efficient optimizers and mixed precision; set learning rates depending on initialization (e.g., 1e-5 for BERT-for-Patents, 5e-5 for gte-modernbert-base, 1e-4 for distilled models). Document training schedule and seed details for reproducibility."
+      },
+      {
+        "name": "Knowledge distillation pipeline for model family",
+        "description": "Distill patembed-large into smaller variants by regular-stride subsampling of teacher layers, caching teacher embeddings for 2,318,732 unique texts, fitting incremental PCA projections on 200k sampled embeddings, and training students to minimize MSE to PCA-projected teacher embeddings.",
+        "guidance": "Perform three-stage distillation: (1) cache teacher encodings, (2) fit PCA projection matrices for target embedding dims, (3) train students with MSE loss against projected teacher embeddings. Preserve teacher vocabulary and hidden size, project to lower dims with learned linear layers initialized via incremental PCA."
+      },
+      {
+        "name": "Model family and long-context variants",
+        "description": "Provide a model family (patembed-large \u2192 patembed-nano) with multiple layer/embedding size variants and long-context versions (1024/2048/4096 tokens) initialized from appropriate encoders (BERT-for-Patents for main large model, gte-modernbert-base for long-context variants).",
+        "guidance": "Offer a spectrum of model sizes (67M\u2013344M params) and context-window options for deployment trade-offs; document architecture details (layers, hidden sizes, output dims) and initialization sources explicitly for reproducibility."
+      },
+      {
+        "name": "Pooling and normalization for embedding usage",
+        "description": "Use mean pooling over final layer token embeddings followed by \u21132 normalization to produce unit-norm embeddings suitable for cosine similarity.",
+        "guidance": "Apply standard pooling+normalization pipelines compatible with sentence-transformer style cosine similarity; make pooling choice explicit when comparing baselines."
+      },
+      {
+        "name": "Quality control checks",
+        "description": "Run citation integrity checks, domain balance verification, triplet quality assessment, and other quality controls during dataset construction.",
+        "guidance": "Include procedural quality assurance steps (verify citation links, domain distributions, triplet labeling correctness) to detect and correct noisy or leaked labels prior to training/evaluation."
+      },
+      {
+        "name": "Evaluation toolchain and hyperparameters",
+        "description": "Document evaluation probes and algorithms (scikit-learn LogisticRegression for classification probes, MiniBatchKMeans for clustering with specific batch sizes and random states, Sentence-Transformers InformationRetrievalEvaluator and EmbeddingSimilarityEvaluator for retrieval/paraphrase evaluation).",
+        "guidance": "Specify the exact evaluation library calls, solver/regularization settings, clustering batch sizes, random seeds, and any post-processing to ensure reproducing reported metrics."
+      },
+      {
+        "name": "External validation and prompt sensitivity",
+        "description": "Validate on external benchmarks (MTEB BigPatentClustering.v2 and DAPFAM) and report that prompt-based conditioning can materially affect external metrics (e.g., improvements on BigPatent and DAPFAM when using prompts).",
+        "guidance": "Always validate models on held-out external datasets to assess generalization; include prompt/no-prompt ablations and report \u0394 to show sensitivity."
+      }
+    ]
+  }
+}

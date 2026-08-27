@@ -1,0 +1,345 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 4,
+  "n_chunks": 38,
+  "chunk_chars": 39869,
+  "model": "gpt-5-mini",
+  "elapsed_s": 162.0377425830011,
+  "input_tokens": 13762,
+  "output_tokens": 8165,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "users and programmers of the PARI/GP calculator (mathematicians/number-theorists and script authors)",
+    "subtask_short": "programming in PARI/GP",
+    "subtask_description": "Usage and programming guidelines for PARI/GP: editing and readline integration, function/prototype syntax and flags, control statements and loop constructs, debugging commands, and detailed classification of runtime/error conditions. Geared to writing gp scripts and using the GP interactive calculator.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "manual",
+      "scripting",
+      "number_theory"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Readline keybindings and editing commands",
+        "description": "C- combinations act on characters, M- (Meta/Alt) operate on words; ordinary keys insert text, arrow keys move cursor; familiar Emacs bindings work (C-a/C-e, M-b/M-f, C-k, M-d, C-y, M-y, C- for undo, C-t/M-t transpose).",
+        "guidance": "Meta key may be labelled Alt or show a black diamond; Esc can replace Meta. Use <Return> to send commands. Many movement commands available (Emacs-style and Vi-mode via M-C-j). Examples: C-k kills to end of line, M-d kills to end of word, C-y yanks, M-y rotates kill-ring. M-- gives numeric argument to next readline command (e.g. M-- C-k)."
+      },
+      {
+        "name": ".inputrc customization",
+        "description": "You can change default readline bindings by creating a .inputrc file in your home directory; gp respects conditional sections ($if Pari-GP ... $endif).",
+        "guidance": "Example lines: set show-all-if-ambiguous; \"\\C-h\": backward-delete-char; \"\\e\\C-h\": backward-kill-word. Use C-x C-r to re-read the init file during a session. Be careful: some bindings like ( and [ may be bound to pari-matched-insert (electric parentheses) which can be toggled by passing numeric arguments (e.g. M--2()). If readline version outputs 8-bit characters for Alt/Meta, set convert-meta on and set output-meta off in .inputrc."
+      },
+      {
+        "name": "Command completion behavior",
+        "description": "Hitting <TAB> completes words context-dependently: gp attempts only meaningful completions based on context (user names after ~, paths, default keywords after default(), member keywords after '.').",
+        "guidance": "If only one completion is meaningful, gp completes and may append a comma (if completing a default) or parentheses (if completing a function name); pressing <TAB> again will show the function's argument list. Pressing <TAB> twice shows a list of possible completions. Examples: typing def<TAB>se<TAB>10 to get default(seriesprecision,10). M-h gives short help on the word under cursor; M-H yields extended help (may open a dvi previewer)."
+      },
+      {
+        "name": "Optional argument notation in GP function syntax",
+        "description": "Optional arguments are shown between braces { } with a default value; the {} are not typed by the user and denote optional arguments.",
+        "guidance": "Typing foo(x) is equivalent to foo(x,0) if flag default is 0. A missing optional argument can be signaled by a comma or closing parenthesis (foo(x,) uses default). When a function has several optional arguments they are filled in order; use the empty-arg trick foo(6,,1) to set a far argument while leaving intermediate ones default. A star after an optional argument ({x}*) means any number of such arguments may be provided (used for print routines). A function with no mandatory arguments can be invoked without parentheses (not recommended in scripts)."
+      },
+      {
+        "name": "Library (C) prototype mapping and mandatory arguments",
+        "description": "The GP function prototype is translated into a library function signature (GEN foo(GEN x, long fl = 0)). For library programming, all arguments are mandatory; default values are encoded (NULL pointers, -1, etc.).",
+        "guidance": "In the library, functions are implemented without variable-argument GP-style behavior; variants exist for different flag values. The manual includes = default tokens in prototypes to indicate how missing arguments map to library encodings. Refer to the User\u2019s Guide to the PARI library for details."
+      },
+      {
+        "name": "Flags: generic vs binary",
+        "description": "Flags are optional arguments that change a routine's default behavior. There are two kinds: generic (explicit values described individually) and binary (compact integer representing many 0/1 toggles using bit positions).",
+        "guidance": "Binary flags are annotated by listing the meaning of each bit (e.g., 1: p0, 2: p1, 4: p2...). Binary numeric flags are concise but error-prone and rigid; use them primarily in interactive gp for speed. Where available, mnemonics (strings) are provided as an alternative."
+      },
+      {
+        "name": "Mnemonics for binary flags",
+        "description": "Binary flags may be replaced by character strings of symbolic identifiers (mnemonics) corresponding to toggles; mnemonics can be negated by prefixing no or removing the prefix.",
+        "guidance": "Mnemonics are grouped by punctuation; example: Binary digits of flags mean: 1 = Parametric, 2 = Recursive. Instead of using 1, one could use \"Parametric; no Recursive\" or simply \"Parametric\". C-style bit-or notation like \"Parametric | no Recursive\" is also accepted."
+      },
+      {
+        "name": "Pointer (&) arguments",
+        "description": "Parameters prefixed with & in prototypes (foo(x, &e)) indicate the function may assign a value to e as a side-effect; when passing the argument, the & must be typed explicitly.",
+        "guidance": "As of version 2.11.1, these pointer arguments are optional for documented functions and therefore appear in brackets in prototypes (e.g., Z issquare(x, {&e}))."
+      },
+      {
+        "name": "Lexical scoping of loop variables",
+        "description": "In constructs like for (X = a,b, seq) the loop variable X is lexically scoped to the loop; modifying a same-named variable outside the loop remains unaffected.",
+        "guidance": "Example caveat: n = 5; for (n = 1,10, if (something_nice(), break)); \\ at this point n is 5. If seq modifies the loop index variable, the loop iterator is modified accordingly (demonstrated with n += 2 inside the loop)."
+      },
+      {
+        "name": "break({n = 1})",
+        "description": "Interrupts execution of current seq and exits from the n innermost enclosing loops within the current function call (or the top-level loop).",
+        "guidance": "n must be positive; if n exceeds the number of enclosing loops, all enclosing loops are exited."
+      },
+      {
+        "name": "breakpoint() and break loop",
+        "description": "Interrupts the program and enters the break loop; program continues when the break loop is exited.",
+        "guidance": "Example: calling breakpoint() inside a function suspends execution and shows the break prompt where local variables can be inspected; type <Return> to continue or 'break' to return to gp. The break loop is useful for interactive debugging."
+      },
+      {
+        "name": "dbg_down({n = 1})",
+        "description": "In the break loop: go down n frames in the call stack (opposite of dbg_up).",
+        "guidance": "Used to navigate stack frames while debugging to cancel prior dbg_up calls."
+      },
+      {
+        "name": "dbg_err()",
+        "description": "In the break loop: return the error data of the current error, if any (same data as provided to iferr's E parameter).",
+        "guidance": "Example: iferr(1/(Mod(2,12019)^(6!)-1),E,Vec(E)) shows how dbg_err()/iferr present error vectors. Use Vec(dbg_err()) to inspect the error components."
+      },
+      {
+        "name": "dbg_up({n = 1})",
+        "description": "In the break loop: go up n frames to inspect parent function data.",
+        "guidance": "Use dbg_down to cancel a dbg_up call."
+      },
+      {
+        "name": "dbg_x(A, {n})",
+        "description": "Prints the inner structure of A (complete if n omitted, or up to level n otherwise), useful for debugging; similar to \\x but does not require A to be a history entry.",
+        "guidance": "Can be used inside the break loop to inspect objects."
+      },
+      {
+        "name": "for(X = a, b, seq)",
+        "description": "Evaluate seq where X goes from a to b (nothing done if a > b); a and b must be in R. If b is +oo, loop must be broken explicitly by user.",
+        "guidance": "Loop variable is lexically scoped. Use break/return to exit infinite loops. Example: for (n = 1, 10, n += 2; print(n))."
+      },
+      {
+        "name": "forcomposite(n = a, {b}, seq)",
+        "description": "Evaluate seq where n ranges over composite numbers between a and b (inclusive if composite). Nothing is done if a > b.",
+        "guidance": "Omitting b runs through all composites \u2265 a (infinite loop unless broken). The loop index is read-only inside seq (attempting to modify it errors). Example output: 4,6,8,9,10 for a=0..10."
+      },
+      {
+        "name": "fordiv(n, X, seq)",
+        "description": "Evaluate seq where X ranges through the divisors of n; accepts either integer n or a factorization matrix (output of factor(n)). Divisors of an integer are returned in increasing size.",
+        "guidance": "To avoid storing all divisors, use a slower constant-space method (example FORDIV implementation uses factorback). Timing examples compare fordiv vs equivalent implementations; fordiv is significantly faster and memory-efficient."
+      },
+      {
+        "name": "fordivfactored(n, X, seq)",
+        "description": "Evaluate seq where X ranges over [d, factor(d)] for each divisor d of n; useful because it avoids refactoring each divisor when evaluating multiplicative functions on divisors.",
+        "guidance": "Accepts factorization matrix instead of n. Faster than fordiv when n is hard to factor; example timings show fordivfactored faster than repeated factor calls. Also forfactored wrapper avoids factoring many consecutive n's."
+      },
+      {
+        "name": "forell(E, a, b, seq, {flag = 0})",
+        "description": "Iterate over elliptic curves of conductors from a to b: E = [name, M, G] where name is Cremona name, M minimal model, G Z-basis of free part of E(Q). If flag != 0 select only first curve in each isogeny class.",
+        "guidance": "Requires elldata database for specified conductors. Example: forell(E,1,500,c++); returns number of curves or isogeny classes depending on flag. Library syntax provided."
+      },
+      {
+        "name": "forfactored(N = a, b, seq)",
+        "description": "Iterate where N is [n, factor(n)] and n goes from a to b (integers); implemented for |a|,|b| < 2^64 (2^32 on 32-bit machines). Uses a sieve on interval and is much faster than factoring each n separately when interval length large.",
+        "guidance": "Timings given for various ranges show large speedups versus repeated factor calls. Performance depends on primelimit; function slows if primelimit < sqrt(b). Works best when b-a is large compared to primelimit."
+      },
+      {
+        "name": "forpart(X = k, seq, {a = k}, {n = k})",
+        "description": "Iterate over partitions X of integer k (nondecreasing sequences summing to k). By default parts are positive; optional parameters n (length restrictions) and a (part size restrictions) allow filtering and zero-padding.",
+        "guidance": "Parts returned as t_VECSMALL vectors in specific order (by increasing size, lexicographic within size). Examples show restricting number of parts and part sizes; behavior unspecified if X is modified inside the loop."
+      },
+      {
+        "name": "forperm(a, p, seq)",
+        "description": "Iterate p over permutations: if a is integer, permutations of {1,..,a} in lexicographic order; if a is a vector, iterate multipermutations lexicographically \u2265 a.",
+        "guidance": "Examples show lexicographic ordering of generated permutations or multipermutations."
+      },
+      {
+        "name": "forprime(p = a, {b}, seq)",
+        "description": "Iterate p over prime numbers between real a and b, incrementing p to nextprime(p+1) each iteration. Nothing is done if a > b.",
+        "guidance": "Setting b to +oo runs over all primes \u2265 a (infinite loop unless user breaks). The loop index p is read-only inside seq (attempt to modify errors)."
+      },
+      {
+        "name": "forprimestep(p = a, b, q, seq)",
+        "description": "Iterate p over primes in an arithmetic progression in [a,b]: q is integer modulus (p \u2261 a mod q) or an intmod restricting to a congruence class. Nothing is done if a > b.",
+        "guidance": "If b = +oo runs indefinitely. Current implementation restricts modulus to unsigned long (64 or 32 bits). p is read-only inside seq; overflow of modulus triggers an error."
+      },
+      {
+        "name": "forsquarefree(N = a, b, seq)",
+        "description": "Iterate N = [n, factor(n)] where n runs over squarefree integers between integers a and b (same sign). Nothing done if a > b.",
+        "guidance": "Only implemented for |a|,|b| < 2^64 (2^32 on 32-bit). Uses a sieve and is much faster than factoring each n; runs in time O(...). Example timings show speed advantage relative to forfactored and factor. Note: set of fundamental discriminants can be enumerated with this loop but they may not be in order."
+      },
+      {
+        "name": "forstep(X = a, b, s, seq)",
+        "description": "Iterate X from a to b in increments of s; s can be a real step, an intmod (arithmetic progression), or a vector of successive steps.",
+        "guidance": "Nothing done when step sign incompatible with bounds (s > 0 and a > b, etc.). b = +oo yields an infinite loop unless broken. Examples show integer step, Mod step, and vector steps."
+      },
+      {
+        "name": "forsubgroup(H = G, {bound}, seq)",
+        "description": "Evaluate seq for each subgroup H of abelian group G (SNF form or list of elementary divisors). If bound is present restrict output to subgroups of index less than bound or exactly a given index.",
+        "guidance": "Subgroups are not ordered obviously (except for p-groups). A subgroup is returned as a generator matrix whose columns give its generators. For maximal speed output is algorithmic; use mathnf(concat(G,H)) to canonicalize subgroups. Intended for huge groups where enumerating all subgroups would be massive."
+      },
+      {
+        "name": "forsubset(nk, s, seq)",
+        "description": "If nk is integer n, iterate s over all subsets of {1,..,n}; if nk is [n,k], iterate subsets of size k. Order: lexicographic among subsets of same size; smaller subsets come first.",
+        "guidance": "Running time proportional to number of subsets (2^n or binomial(n,k)). Examples and timings given (e.g., binomial(40,35))."
+      },
+      {
+        "name": "forvec(X = v, seq, {flag = 0})",
+        "description": "Let v be n-component vector of two-component ranges [ai,bi]; X varies over the n-dimensional hyperrectangle with lexicographic ordering; type of X matches v (t_VEC or t_COL).",
+        "guidance": "If flag=1 generate only nondecreasing vectors X; flag=2 strictly increasing. Example: forvec (X=[[0,1],[-1,1]], print(X))."
+      },
+      {
+        "name": "if(a, {seq1}, {seq2})",
+        "description": "Evaluate seq1 if a is non-zero, otherwise seq2; seq1 or seq2 may be empty. The value of an if expression is the value of the branch evaluated.",
+        "guidance": "You may omit the second comma when only seq1 is desired. Compound ifs can be chained to emulate switch/case. Boolean operators && and || short-circuit when determining truth value. Note: break/next operate on loops only; if is not a loop."
+      },
+      {
+        "name": "iferr(seq1, E, seq2, {pred})",
+        "description": "Evaluate seq1; if an error occurs set the formal parameter E to the error data and, if pred absent or true, catch the error and evaluate seq2. The return value is seq1 if no error, else seq2.",
+        "guidance": "seq2 and pred can reference E; code in seq2 should verify the error is expected (errname(E)). The error can be rethrown using error(E). Example: using iferr to implement ECM factoring where certain errors trigger returning gcd of component(E,2) with N. Use dbg_err() in break loop to inspect current error data."
+      },
+      {
+        "name": "Internal error: \"e ARCH\"",
+        "description": "A requested feature s is not available on this architecture or operating system.",
+        "guidance": "E has one component (t_STR): the missing feature name s."
+      },
+      {
+        "name": "Internal error: \"e BUG\"",
+        "description": "A bug in the PARI library, in function s.",
+        "guidance": "E has one component (t_STR): the function name s."
+      },
+      {
+        "name": "Internal error: \"e FILE\"",
+        "description": "Error while trying to open a file.",
+        "guidance": "E has two components: 1 (t_STR) the file type (input, output, etc.), 2 (t_STR) the file name."
+      },
+      {
+        "name": "Internal error: \"e IMPL\"",
+        "description": "A requested feature s is not implemented.",
+        "guidance": "E has one component (t_STR): the feature name s."
+      },
+      {
+        "name": "Internal error: \"e PACKAGE\"",
+        "description": "Missing optional package s.",
+        "guidance": "E has one component (t_STR): the package name s."
+      },
+      {
+        "name": "Syntax/dimension error: \"e DIM\"",
+        "description": "The dimensions of arguments x and y submitted to function s do not match (e.g., matrix dimension mismatch).",
+        "guidance": "E has three components: 1 (t_STR) function name s, 2 offending argument x, 3 offending argument y."
+      },
+      {
+        "name": "Flag error: \"e FLAG\"",
+        "description": "A flag argument is out of bounds in function s.",
+        "guidance": "E has one component (t_STR): the function name s."
+      },
+      {
+        "name": "Not-a-function error: \"e NOTFUNC\"",
+        "description": "Generated by the evaluator when trying to call a GEN x which is not a t_CLOSURE (e.g. f = 1; f(2);).",
+        "guidance": "E has one component: the offending GEN x."
+      },
+      {
+        "name": "Operation error: \"e OP\"",
+        "description": "Impossible operation between two objects that cannot be typecast to a sensible common domain for deeper reasons than a type mismatch.",
+        "guidance": "E has three components: 1 (t_STR) operator name op; 2 first argument; 3 second argument. Example: O(2)+O(3) or incompatible p-adic additions."
+      },
+      {
+        "name": "Type error: \"e TYPE\"",
+        "description": "An argument x of function s had an unexpected type (e.g., factor(\"blah\")).",
+        "guidance": "E has two components: 1 (t_STR) function name s, 2 the offending argument x."
+      },
+      {
+        "name": "Type mismatch error: \"e TYPE2\"",
+        "description": "Forbidden operation between two objects that cannot be typecast to a common domain because their types do not match (e.g., Mod(1,2) + Pi).",
+        "guidance": "E has three components: 1 (t_STR) operator name op, 2 first argument, 3 second argument."
+      },
+      {
+        "name": "Priority error: \"e PRIORITY\"",
+        "description": "Object o in function s contains variables whose priority is incompatible with expected operation (e.g., creating a polynomial whose coefficients have higher-priority variables).",
+        "guidance": "E has four components: 1 (t_STR) function name s, 2 offending argument o, 3 (t_STR) operator op describing priority error, 4 (t_POL) variable v describing priority error. The argument satisfies variable(x) op variable(v)."
+      },
+      {
+        "name": "Variable mismatch error: \"e VAR\"",
+        "description": "The variables of arguments x and y submitted to function s do not match up (e.g., Mod(t,t^2+1) inside nfinit(x^2+1)).",
+        "guidance": "E has three components: 1 (t_STR) function name s, 2 (t_POL) argument x, 3 (t_POL) argument y."
+      },
+      {
+        "name": "Component access error: \"e COMPONENT\"",
+        "description": "Attempt to access a non-existent component of a vector/matrix/list: index out of allowed range (<1 or >allowed length).",
+        "guidance": "E has four components: 1 (t_STR) function name, 2 (t_STR) operator op (< or >), 3 (t_GEN) numerical limit l, 4 (GEN) the index x. It satisfies x op l."
+      },
+      {
+        "name": "Domain error: \"e DOMAIN\"",
+        "description": "An argument is not in the function's domain (numeric or other bounds violated).",
+        "guidance": "E has five components: 1 (t_STR) function name, 2 (t_STR) mathematical name of out-of-domain argument, 3 (t_STR) operator op describing domain error, 4 (t_GEN) numerical limit l, 5 (GEN) the out-of-domain argument x (satisfies x op l)."
+      },
+      {
+        "name": "Max prime list overflow: \"e MAXPRIME\"",
+        "description": "A function using the precomputed list of prime numbers ran out of primes (requested prime bound overran primelimit or is 0/unknown).",
+        "guidance": "E has one component: 1 (t_INT) the requested prime bound."
+      },
+      {
+        "name": "Memory allocation error: \"e MEM\"",
+        "description": "A call to pari_malloc or pari_realloc failed (out of memory).",
+        "guidance": "E has no component."
+      },
+      {
+        "name": "Representation overflow: \"e OVERFLOW\"",
+        "description": "An object in function s becomes too large to be represented within PARI's hardcoded limits (e.g., extremely large tower exponentials).",
+        "guidance": "E has one component (t_STR): the function name s."
+      },
+      {
+        "name": "Precision error: \"e PREC\"",
+        "description": "Function s fails because input accuracy is too low (default accuracy issue).",
+        "guidance": "E has one component (t_STR): the function name s. Example: floor(1e100) failing at default accuracy."
+      },
+      {
+        "name": "Stack overflow: \"e STACK\"",
+        "description": "The PARI stack overflows during execution.",
+        "guidance": "E has no component."
+      },
+      {
+        "name": "Alarm/timeout error: \"e ALARM\"",
+        "description": "A timeout generated by the alarm function.",
+        "guidance": "E has one component (t_STR): the error message to print."
+      },
+      {
+        "name": "User-triggered error: \"e USER\"",
+        "description": "A user error as triggered by error(g1, ..., gn).",
+        "guidance": "E has one component (t_VEC): the vector of n arguments given to error."
+      },
+      {
+        "name": "Mathematical error: \"e CONSTPOL\"",
+        "description": "An argument of function s is a constant polynomial, which does not make sense for that function.",
+        "guidance": "E has one component (t_STR): the function name s. Example: galoisinit(Pol(1))."
+      },
+      {
+        "name": "Mathematical error: \"e COPRIME\"",
+        "description": "Function s expected coprime arguments but received x,y which were not coprime.",
+        "guidance": "E has three components: 1 (t_STR) function name s, 2 argument x, 3 argument y."
+      },
+      {
+        "name": "Mathematical error: \"e INV\"",
+        "description": "Tried to invert a non-invertible object x in function s.",
+        "guidance": "E has two components: 1 (t_STR) function name s, 2 the non-invertible x. If x = Mod(a,b) and a not 0 mod b, this indicates gcd(a,b) may reveal a non-trivial factor of modulus b."
+      },
+      {
+        "name": "Mathematical error: \"e IRREDPOL\"",
+        "description": "Function s expected an irreducible polynomial but received a reducible one.",
+        "guidance": "E has two components: 1 (t_STR) function name s, 2 (t_POL) the offending polynomial. Example: nfinit(x^2-1)."
+      },
+      {
+        "name": "Generic math error: \"e MISC\"",
+        "description": "A generic uncategorized error with a message.",
+        "guidance": "E has one component (t_STR): the error message to print."
+      },
+      {
+        "name": "Modulus inconsistency: \"e MODULUS\"",
+        "description": "Moduli x and y submitted to function s are inconsistent (incompatible modulus contexts).",
+        "guidance": "E has three components: 1 (t_STR) function s, 2 argument x, 3 argument y. Example: nfalgtobasis(nfinit(t^3-2), Mod(t,t^2+1))."
+      },
+      {
+        "name": "Primality expectation error: \"e PRIME\"",
+        "description": "Function s expected a prime number and received p which was not prime.",
+        "guidance": "E has two components: 1 (t_STR) function name s, 2 the argument p. Example: idealprimedec(nf,4)."
+      },
+      {
+        "name": "Zero-polynomial roots error: \"e ROOTS0\"",
+        "description": "An argument of function s is the zero polynomial and roots are needed (e.g., polroots(0)).",
+        "guidance": "E has one component (t_STR): the function name s."
+      },
+      {
+        "name": "Nth-root error: \"e SQRTN\"",
+        "description": "Trying to compute an n-th root of x which does not exist in the given context.",
+        "guidance": "E has two components: 1 (t_STR) function name s, 2 the argument x. Example: sqrt(Mod(-1,3))."
+      }
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_54cd7d3ed73e.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 6924,
+  "output_tokens": 2961,
+  "elapsed_s": 1114.8659705838654,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and engineers developing or evaluating LLM-based long-form narrative generation and retrieval-augmented evaluation systems",
+    "subtask_short": "LLM narrative coherence evaluation",
+    "subtask_description": "Evaluation and improvement of long-form AI-generated narratives (episodic stories) using a Retrieval-Augmented Generation (RAG) pipeline that tracks key item states, generates episode summaries, and measures coherence, consistency, and QA ability.",
+    "subtask_keywords": [
+      "llm",
+      "story_generation",
+      "coherence_evaluation",
+      "rag",
+      "episode_summarization"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Narrative coherence",
+        "description": "Assessed by examining logical consistency in character behavior and plot development to avoid continuity errors; coherence is measured as the average semantic or logical flow score across responses.",
+        "guidance": "Measured quantitatively (average semantic/logical flow); improved by RAG with context-aware summaries and retrieval of semantically-similar episodes. Ablation shows removing Context Summary causes a large coherence drop (\u201322.5 points), indicating the centrality of concise episode summaries for maintaining coherence."
+      },
+      {
+        "name": "Consistency",
+        "description": "Defined as the fraction of responses not conflicting with prior information (i.e., non-contradictory with earlier episodic facts and states).",
+        "guidance": "Detect continuity errors where later responses conflict with earlier episode facts; Dynamic State Tracking is critical \u2014 its removal causes the largest drop in consistency (\u201317.6 points). Use key-item state formalism Si(t) and flag contradictions where states improperly transition (e.g., active after previously lost/destroyed)."
+      },
+      {
+        "name": "Item status / Item accuracy",
+        "description": "Calculated as the proportion of required elements (key items and their correct states) present and correctly reported in each response; effectively measures correct recognition and maintenance of item states.",
+        "guidance": "Track item states using Si(t) \u2208 {active, lost, destroyed}; if an item reappears with Si(tk)=active after previously being Si(tk\u22121) \u2208 {lost, destroyed}, flag a continuity error and preserve the earlier state to avoid erroneous updates. SCORE reports near-complete improvements (item status recognition approaching ~98% with full system)."
+      },
+      {
+        "name": "Complex question answering (Complex QA)",
+        "description": "Fraction of correctly answered complex questions about the story (multi-episode reasoning / QA).",
+        "guidance": "Use RAG to retrieve semantically and sentimentally aligned episodes as context for the LLM; this substantially increases QA performance (e.g., large absolute gains reported, especially for open-source models where gains of 30\u201338 points were observed)."
+      },
+      {
+        "name": "Character consistency",
+        "description": "Evaluation of whether characters' actions, attributes, and development remain consistent across episodes (captures Ac(t): actions of character c at time t, relationships, and emotional changes).",
+        "guidance": "Generate episode-level summaries that encapsulate Ac(t) and track character interactions over time; analyze and document character actions to enable correct future retrieval and to flag inconsistent behavior."
+      },
+      {
+        "name": "Emotional coherence / sentiment consistency",
+        "description": "Degree to which emotional tone and affect of episodes remain appropriate and consistent across episodes (emotional realism).",
+        "guidance": "Assign a sentiment score \u03c3(e) \u2208 [0,1] (e.g., via GPT-4) for each episode and incorporate sentiment in retrieval and evaluation to avoid retrieving episodes with large sentiment discrepancies. Sentiment integration improves selection and refines evaluation."
+      },
+      {
+        "name": "Episode summarization (context-aware summarization)",
+        "description": "Automatic generation of concise episode summaries that capture key plot points, character actions, and item interactions to support retrieval and evaluation.",
+        "guidance": "Summaries should include essential elements (Ac(t), Ii(t), relationships, emotional changes) and be stored in structured JSON for embedding. Context Summary is critical for coherence \u2014 ablation removing it causes large drops in coherence (\u201322.5%)."
+      },
+      {
+        "name": "Similarity-based episode retrieval (hybrid retrieval)",
+        "description": "Retrieve past episodes relevant to a current episode or query by computing embeddings and cosine similarity scores S(ec, ep), selecting top-N similar episodes for context.",
+        "guidance": "Segment content, embed with OpenAI embeddings (or equivalent) and index with FAISS for efficient retrieval. Combine semantic similarity with sentiment filtering (\u03c3(e)) to ensure retrieved episodes are both semantically and emotionally aligned. Ablation shows Hybrid Retrieval contributes positively to overall performance."
+      },
+      {
+        "name": "Continuity analysis and error correction",
+        "description": "Systematic detection of continuity errors (e.g., items or facts reappearing inconsistently) and automated correction policies to maintain narrative continuity.",
+        "guidance": "Formalize item state transitions Si(t); flag cases where an item reappears incorrectly and avoid incorrect state updates by preserving prior Si(tk\u22121). Use these flags to prompt correction or annotate inconsistencies for downstream processing."
+      },
+      {
+        "name": "Key item interaction analysis",
+        "description": "Per-episode analysis that documents interactions Ii(t) between characters and key items, aggregating these interactions to support accurate retrieval and continuity checking.",
+        "guidance": "Summarize interactions alongside episode summaries so retrieval and future analyses can access structured facts about who interacted with which items, when, and how; this reduces redundancy and improves retrieval precision."
+      },
+      {
+        "name": "Evaluation process (two-stage evaluation methodology)",
+        "description": "A two-stage evaluation pipeline: (1) baseline evaluation by uploading episodes to an LLM without added context; (2) enriched evaluation with preprocessed files and RAG support to provide context-aware assessment.",
+        "guidance": "Compare baseline LLM-only performance with RAG-enhanced evaluation to quantify the benefit of the retrieval and summarization pipeline. Use consistent test stories across baselines to measure improvements in consistency, coherence, item status, and complex QA."
+      },
+      {
+        "name": "Dataset preparation and quality control",
+        "description": "Guidelines for constructing an evaluation dataset: collect multi-episode stories across genres, enforce episode length ranges, and apply manual filtering and stratification to ensure quality and diversity.",
+        "guidance": "Example practice: construct 5,000 episodes from 1,000 GPT-generated stories across science fiction, drama, fantasy, comedy; use multiple prompt templates per genre; perform manual filtering with multiple annotators (reported \u03ba=0.78) and stratify by complexity (multi-character interactions, non-linear timelines, symbolic systems) for robust validation."
+      },
+      {
+        "name": "Component ablation and configuration importance",
+        "description": "Assess contributions of system modules (Dynamic Tracking, Context Summary, Hybrid Retrieval, Sentiment) via ablation experiments and measure their impact on metrics like Consistency, Coherence, Item Acc., and Complex QA.",
+        "guidance": "Design ablations removing one module at a time and report metric deltas (e.g., removal of Dynamic Tracking caused \u201317.6 in Consistency and \u201337.1 in Item Acc.; Context Summary removal caused \u201322.5 in Coherence). Use these results to prioritize modules when optimizing for specific metrics."
+      }
+    ]
+  }
+}

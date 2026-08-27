@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_3c7d9d1f76b1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12253,
+  "output_tokens": 4054,
+  "elapsed_s": 2154.261444083182,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners working on satire/irony/sarcasm detection, dataset creators, and ML engineers evaluating language models",
+    "subtask_short": "sentence-level satire detection",
+    "subtask_description": "Creation and evaluation of a sentence-level dataset for satire detection (Romanian) and baseline experimental protocols for training and evaluating models in zero-shot and fine-tuning settings. Includes annotation, preprocessing, dataset splits, baseline models, and evaluation/reporting guidelines.",
+    "subtask_keywords": [
+      "satire_detection",
+      "sentence_classification",
+      "romanian",
+      "dataset",
+      "nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Sentence-level annotation labels and procedure",
+        "description": "Annotators were instructed to label sentences as satirical, neutral, or uncertain. Samples with uncertain labels were discarded. The final dataset comprises sentences annotated by at least three annotators; the final label is determined by majority voting (the label common to at least two annotators).",
+        "guidance": "Use multiple native speakers; track annotator demographics (authors report six native Romanian-speaking students, ages 20\u201325, two male and four female). Ensure each sentence has annotations from \u22653 annotators; discard uncertain labels before forming majority vote."
+      },
+      {
+        "name": "Inter-annotator agreement measurement",
+        "description": "Measure and report inter-annotator agreement using multiple metrics: Fleiss' Kappa, Kendall\u2019s W, average Cohen\u2019s Kappa, percentage agreement, and human-level performance (agreement of individual annotators with majority vote).",
+        "guidance": "Report values (paper reports Fleiss\u2019 Kappa=0.4036, Kendall\u2019s W=0.4378, avg Cohen\u2019s Kappa=0.4053, avg percent agreement=71.1%, human-level performance=85.5%) to contextualize annotation difficulty and reliability."
+      },
+      {
+        "name": "Data collection and manual filtering",
+        "description": "Collect data from satirical and non-satirical news outlets (paper cut-off date: February 2018) and perform manual filtering to remove articles containing inappropriate language, celebrity names, or references to sensitive or potentially controversial topics (including those related to religious institutions).",
+        "guidance": "Use web scraping (authors used Scrapy), extract article titles and contents, apply manual inspection to remove problematic items early (authors reduced 10,806 titles to 3,692 after filtering). Document cut-off date and sources."
+      },
+      {
+        "name": "Anonymization of named entities",
+        "description": "Anonymize texts by identifying and removing named entities using a NER tool (authors used Spacy) and replacing occurrences with tags such as <PERSON>, <NORP>, <GPE>, <ORG>, <LOC>, and <FAC>. Also filter out URLs with an @URL tag and manually filter entities missed by the NER model.",
+        "guidance": "Preserve placeholder tags during later preprocessing. Anonymization aims to reduce potential unwanted biases related to personalities and institutions and to address ethical concerns."
+      },
+      {
+        "name": "Pre-processing to reduce satirical-cue leakage",
+        "description": "Provide a pre-processed variant where anonymized text is lowercased, incorrect diacritics are corrected (e.g., replace cedilla forms), tokenized with Spacy, stop words, punctuation, and short tokens (\u22643 characters) are removed, and tokens are lemmatized. Placeholder tags remain unchanged.",
+        "guidance": "Use the pre-processed version for classical ML methods (e.g., SVMs) and text analysis; document each step to allow reproducibility and to reduce leakage of stylistic or structural satirical cues."
+      },
+      {
+        "name": "Provide multiple dataset variants",
+        "description": "Release at least two dataset variants: an anonymized version and an anonymized + pre-processed version.",
+        "guidance": "Make both variants publicly available to support different use cases (modern neural fine-tuning vs. classical ML/text analysis)."
+      },
+      {
+        "name": "Grouping sentences by article in data splits",
+        "description": "When splitting into train/validation/test, group sentences from the same news article into the same split to avoid leaking contextual information across splits.",
+        "guidance": "Authors propose splits with train=9,800, validation\u22482,000, test\u22482,000 samples; enforce article-level grouping to prevent contamination."
+      },
+      {
+        "name": "Report dataset statistics and topic distributions",
+        "description": "Provide dataset statistics such as counts per label, token counts per split, sentence length distributions (word/character means, medians, quartiles), domain distributions, and topic distributions (authors used BERTopic to identify topics with a minimum topic size).",
+        "guidance": "Include tables/figures for domain/topic coverage, token counts, and length statistics to help interpret model performance and dataset biases (authors report 8,179 regular and 5,694 satirical sentences, total 13,873)."
+      },
+      {
+        "name": "Evaluation metrics and reporting protocol",
+        "description": "Evaluate models using accuracy and F1-score computed on the test set; run experiments multiple times and report mean and standard deviation; perform statistical significance testing (authors run experiments 5 times and use Student\u2019s t-test, reporting p<0.01 for significance).",
+        "guidance": "Run repeated trials (\u22655) to estimate variance; report mean \u00b1 std; note significance tests and p-values when comparing models."
+      },
+      {
+        "name": "Baseline model selection and comparison settings",
+        "description": "Evaluate a diverse set of baselines including pretrained language models (Romanian BERT, RoGPT2), open-source LLM families (Gemma 3 at multiple sizes, RoMistral, RoLlama, RoGemma, Llama 3.1), and closed-source models (GPT-4o family, GPT-4.1, o4-mini), in both zero-shot and fine-tuning settings.",
+        "guidance": "Include Romanian-specific models and multiple model sizes; compare zero-shot vs fine-tuning performance and report both to show gaps and strengths across settings."
+      },
+      {
+        "name": "Experimental reproducibility: hyperparameters and training details",
+        "description": "Provide detailed training and fine-tuning hyperparameters: optimizer type (Adam/AdamW), learning rates, weight decay, number of epochs, batch sizes, frozen vs unfrozen layers, QLoRA 4-bit quantization and LoRA settings (R=16, \u03b1=32, dropout=0.05), scheduler/warmup, max input length, and hardware used.",
+        "guidance": "Authors give concrete settings (e.g., BERT: Adam weight decay 0.01, lr=2e-3, 40 epochs, batch 64; LLM fine-tuning: QLoRA, lr up to 1e-4, 3 epochs, batch 32, max input length 1024). Document inference hardware (authors used NVIDIA H100 80GB)."
+      },
+      {
+        "name": "Inference prompting and parameter control",
+        "description": "For inference-only (zero-shot) models, provide a prompt specifying output format and insert classes in random order to avoid position bias. Use specified decoding settings (authors: default temperature 0.8, top-k=64, top-p=0.95, max output tokens=50; exceptions listed per model).",
+        "guidance": "Differentiate prompt complexity for fine-tuned models (shorter prompts) vs inference-only; randomize class order; document temperature/top-k/top-p/max tokens per model for reproducibility."
+      },
+      {
+        "name": "Ethical considerations and licensing",
+        "description": "Address copyright and ethical issues: retain original copyright with authors, release dataset for academic purposes under CC BY-NC-SA 4.0, anonymize entities to minimize bias and discrimination, and filter out harmful content via manual and automatic inspection.",
+        "guidance": "Document the license, anonymization steps, filtering policies, and the intent (do not endorse original article views). Keep records of manual inspections and filtering criteria."
+      },
+      {
+        "name": "Model behavior analysis and error type reporting",
+        "description": "Analyze and report model error types and per-topic performance: note tendencies such as higher false positive rates (Type I errors) in zero-shot settings and reduction of FPR after fine-tuning; report FNRs and topic-specific F1 variations.",
+        "guidance": "Provide confusion analysis and per-topic/per-domain breakdowns (authors report Gemma 3 FPR 32\u201352% in zero-shot, reduced to <20% after fine-tuning; FNR <15%; topic-specific F1 differences). Use these insights to guide future improvements."
+      },
+      {
+        "name": "Report human-level performance as baseline",
+        "description": "Report human-level performance by comparing individual annotator labels to the majority-vote labels to provide an upper/upper-intermediate bound (authors report human-level performance of 85.5%).",
+        "guidance": "Use human-level agreement as an interpretable benchmark when assessing model gap to human performance."
+      }
+    ]
+  }
+}

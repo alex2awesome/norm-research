@@ -1,0 +1,220 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 26,
+  "n_chunks": 38,
+  "chunk_chars": 39896,
+  "model": "gpt-5-mini",
+  "elapsed_s": 341.92748612500145,
+  "input_tokens": 15683,
+  "output_tokens": 7035,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "users of the PARI/GP library (computational number theorists, mathematicians, and developers working with associative algebras and elliptic curves)",
+    "subtask_short": "PARI/GP elliptic_curve function reference",
+    "subtask_description": "Reference documentation for PARI/GP functions handling associative algebras and elliptic curves: input conventions, assumptions, returned data, flags, performance notes and warnings for correct usage.",
+    "subtask_keywords": [
+      "pari_gp",
+      "elliptic_curves",
+      "library_documentation",
+      "number_theory",
+      "algebra_functions"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "algtableinit: assumptions and purpose",
+        "description": "Initializes an associative algebra over K = Q (p omitted) or Fp defined by multiplication table mt; assumes e1 = 1 and that Ke1 \u2295 ... \u2295 Ken describes an associative algebra over K; in case K = Q the multiplication table must be integral.",
+        "guidance": "Used to input a finite dimensional K-algebra to later compute its radical and split the quotient algebra as a product of simple algebras over K. If the algebra is already known to be central and simple, using alginit is preferred (the Fp case is useless then). The table is provided as a t_VEC of n matrices giving left multiplication by the basis elements."
+      },
+      {
+        "name": "PARI algebra object layout (algtable output)",
+        "description": "The pari object representing such an algebra A is a t_VEC containing: the characteristic of A (accessed with algchar), the multiplication table (algmultable), and the traces of the basis elements.",
+        "guidance": "The precise layout is described: these fields are used by other algebra routines; users should rely on accessors rather than assuming internal layout."
+      },
+      {
+        "name": "algtensor: domain and limitations",
+        "description": "Given two algebras al1 and al2, computes their tensor product; currently implemented only for cyclic algebras of coprime degree over the same center K.",
+        "guidance": "Computes a maximal order by default; set maxord = 0 to prevent maximal order computation."
+      },
+      {
+        "name": "algtomatrix: behavior depending on algebra representation and abs flag",
+        "description": "Given x in al, returns the image under a homomorphism to a matrix algebra. If al is a table algebra output by algtableinit or abs = 1, returns the left multiplication table on the integral basis; if al is a central simple algebra and abs = 0, returns \u03c6(x) where \u03c6 : A\u2297K L \u2192 Md(L) is an isomorphism stored in al.",
+        "guidance": "Also accepts a square matrix with coefficients in al. Choose abs appropriately depending on whether you want the absolute left multiplication matrix (abs=1) or the reduced image via stored isomorphism (abs=0)."
+      },
+      {
+        "name": "algtrace: reduced vs absolute trace (abs flag)",
+        "description": "Given x in al, computes its trace. If al is a table algebra or abs = 1, returns the absolute trace (element of Fp or Q); if al is output of alginit and abs = 0 (default), returns the reduced trace (element of the center of al).",
+        "guidance": "Also accepts square matrices with coefficients in al. Use abs=1 to obtain a scalar absolute trace for comparisons in Q or Fp."
+      },
+      {
+        "name": "algtype: integer type codes",
+        "description": "Given an algebra al output by alginit or algtableinit, returns an integer indicating the type: 0:not a valid algebra; 1:table algebra (algtableinit); 2:central simple algebra represented by multiplication table over its center; 3:central simple algebra represented by a cyclic algebra.",
+        "guidance": "Use algtype to programmatically branch on representation and to choose appropriate functions (e.g., algtomatrix behavior depends on this)."
+      },
+      {
+        "name": "ellinit: required inputs and model types",
+        "description": "ellinit initializes and returns an ell structure from a vector of coefficients [a1,a2,a3,a4,a6] (Weierstrass model) or [a4,a6] (short Weierstrass), or a Cremona name string (e.g. '11a1'). Optional argument allows specifying the base field when not inferable from coefficients.",
+        "guidance": "The ell structure contains data needed by elliptic-curve functions; expensive data are skipped on initialization and computed lazily. The precise internal layout is undefined\u2014use provided accessors and member functions."
+      },
+      {
+        "name": "ell structure required invariants and their meaning",
+        "description": "All domains: members include a1,a2,a3,a4,a6 (coefficients), b2,b4,b6,b8 (b-invariants), c4,c6 (c-invariants), disc (non-zero discriminant), and j (j-invariant).",
+        "guidance": "disc is required to be non-zero (curve nonsingular). Access these members via E.b4, E.disc, etc., rather than assuming internal representation."
+      },
+      {
+        "name": "ellperiods: outputs and normalization convention",
+        "description": "For curves over C (in particular curves defined over Q), ellperiods computes/cache: area (volume of complex lattice), roots (three complex roots of g(x) of b-model), omega = [\u03c91,\u03c92] (periods forming lattice basis with \u03c91 the positive real period and \u03c92 chosen so \u03c4 = \u03c91/\u03c92 belongs to Poincar\u00e9's half-plane), and eta quasi-periods \u03b71,\u03b72 satisfying Legendre relation \u03b72\u03c91 \u2212 \u03b71\u03c92 = 2\u03c0i.",
+        "guidance": "Warning: the library uses the convention \u03c4 = \u03c91/\u03c92 (not \u03c92/\u03c91). Many sources use the inverse; be careful when comparing conventions because \u03c92 might be the negative of other authors' \u03c92. This ensures natural PSL2 action on \u03c4."
+      },
+      {
+        "name": "Curves over Qp: input advice and supported cases",
+        "description": "Advise to input a model defined over Q for curves over Qp. If an approximate model with t_PADIC coefficients is given, it will be replaced by a lift to Q. Currently non-trivial functions only support curves with multiplicative reduction (vp(j) < 0); the curve is analytically isomorphic to a Tate curve with Tate period q.",
+        "guidance": "tate returns detailed Henniart-Mestre data [u2,u,q,[a,b],L,Ei] and stores certain quadratic extensions as t_POLMOD. Be aware of the technicalities for u not in Qp."
+      },
+      {
+        "name": "Curves over Fq: structure fields",
+        "description": "For curves over Fq, E.p is characteristic, E.no is #E(Fq), cyc gives cycle structure of E(Fq), gen returns generators, and group returns [no,cyc,gen].",
+        "guidance": "Use ellinit with a finite field domain to obtain these members and ellgroup/ellcard/ellap to inspect their group-theoretic properties."
+      },
+      {
+        "name": "Curves over Q: minimal model recommendation and elldata dependency",
+        "description": "All functions should return correct results whether the model is minimal or not, but using a minimal model is recommended (faster) when gcd(c4,c6) is easy to factor. Some routines (ellgenerators, ellidentify, ellsearch, forell) require the optional elldata package (Cremona database).",
+        "guidance": "ellminimalmodel replaces E0 by a minimal model E and returns coordinate change v to map between them. Functions using elldata load chunks of a large database and require at least 2MB stack to avoid stack overflows."
+      },
+      {
+        "name": "Curves over number fields: nf/bnf and period vectors",
+        "description": "For curves over number fields, ell structures include nf (number field structure), possibly bnf (bnf structure) and omega, eta, area vectors attached to complex embeddings in the same order as E.nf.roots.",
+        "guidance": "Some routines require a full bnf and will error if only an nf is available; users should provide appropriate field data."
+      },
+      {
+        "name": "Reduction and ellinit(E,p) semantics and consistency checks",
+        "description": "ellinit(E,p) constructs the reduction \u007fE/Fp (or Fq) provided E has good reduction at p; inconsistent moduli (e.g., passing different primes) will raise exceptions. If model is not locally minimal at p, elllocalred and ellchangecurve help reduce to that case.",
+        "guidance": "ellcard, ellap, ellgroup and ellissupersingular implicitly replace equation by a local minimal model and consider the group of non-singular points so they can work with bad reduction too."
+      },
+      {
+        "name": "ellL1: computing L^{(r)}(1) and precision usage",
+        "description": "ellL1(E,{r=0}) returns the value at s=1 of the derivative of order r of the L-function of E. Typical use is computing leading term at high accuracy after determining order of vanishing via ellanalyticrank.",
+        "guidance": "Use ellanalyticrank to find order of vanishing; increase realprecision/bitprec (e.g., \\p200) to compute ellL1 at high precision for BSD checks. Syntax: GEN ellL1_bitprec(GEN E, long r, long bitprec)."
+      },
+      {
+        "name": "elladd: point addition interface",
+        "description": "elladd(E,z1,z2) returns sum of points z1 and z2 on curve corresponding to E.",
+        "guidance": "Use elladd for group operations; supply E as ell structure and z1,z2 as affine or point-at-infinity representation."
+      },
+      {
+        "name": "ellak: computation of L-function coefficients and model sensitivity",
+        "description": "ellak(E,n) computes the coefficient a_n of the L-function of an elliptic curve E/Q (coefficients of corresponding newform). E must be ell structure over Q and given by an integral model (not necessarily minimal); minimal model makes function faster.",
+        "guidance": "If model is not minimal at some bad primes the function is slower for n divisible by those primes. Example timings show significant slowdowns when using a non-minimal model at a bad prime."
+      },
+      {
+        "name": "ellan: Fourier coefficients for curves over number fields",
+        "description": "ellan(E,n) computes the vector of first n Fourier coefficients a_k for elliptic curves over number fields. For E over Q the model need not be minimal; for general number fields the model must be locally minimal at all primes above 2 and 3.",
+        "guidance": "A memory-saving variant ellanQ_zv returns t_VECSMALL instead of t_VEC."
+      },
+      {
+        "name": "ellanalyticrank: determining analytic rank with eps threshold",
+        "description": "ellanalyticrank(E,{eps}) returns the order of vanishing at s=1 and the value of the first non-zero derivative; values below eps are considered zero. Default eps is 2^{-b/2} where b is current bit precision.",
+        "guidance": "Use appropriate eps given working precision; syntax GEN ellanalyticrank_bitprec(GEN E, GEN eps=NULL, long bitprec)."
+      },
+      {
+        "name": "ellap: trace of Frobenius semantics and input conventions",
+        "description": "ellap(E,{p}) returns trace t defined by #E(Fq) = q + 1 \u2212 t. For K=Fq omit p; for K=Q best omit p (or must pass p=(cid:96)?) otherwise give prime number or prime ideal for number fields. The equation need not be minimal/integral at p though minimal model is more efficient.",
+        "guidance": "When E is defined over a number field p must be given in idealprimedec format. Uses different algorithms depending on CM, size of q, and characteristic; availability of seadata package speeds computation for large q."
+      },
+      {
+        "name": "ellap: algorithm selection and complexity notes",
+        "description": "If E/Fq has CM by principal imaginary quadratic order use fast explicit formula in O((log q)^2) bit operations; otherwise Shanks-Mestre baby-step/giant-step ~O(q^{1/4}) time and space; for large q the SEA algorithm becomes available heuristically ~O((log q)^4). In small characteristic specialized algorithms (Mestre p=2, Kohel p=3,5,7,13, Satoh-Harley, Kedlaya) are used.",
+        "guidance": "For q with about 30 digits baby-step/giant-step becomes impractical; select algorithmic route by q size and curve properties."
+      },
+      {
+        "name": "ellbil deprecated alias",
+        "description": "ellbil(E,z1,z2) is a deprecated alias for ellheight(E,P,Q).",
+        "guidance": "Use ellheight / ellheight0 instead of ellbil for N\u00e9ron-Tate heights and bilinear computations."
+      },
+      {
+        "name": "ellbsd: BSD-predicted constant and precision",
+        "description": "ellbsd(E) returns a real number c such that BSD predicts L^{(r)}(1)/r! = c R S where r is rank, R regulator, S Tate-Shafarevich cardinal. Syntax allows specifying precision.",
+        "guidance": "Compare ellbsd(E) against numerical lfun(e,1) at matching precision to check consistency with BSD expectation; syntax GEN ellbsd(GEN E, long prec)."
+      },
+      {
+        "name": "ellcard: order of group semantics",
+        "description": "ellcard(E,{p}) returns #E(Fq) if K=Fq or order of reduction of E at p (for other fields). As with ellap, argument p is optional for K=Q; the function considers the group of non-singular points of a minimal model reduction and so makes sense even for bad reduction.",
+        "guidance": "Minimality and field choices affect performance. Uses algorithms referenced by ellap; seadata package aids large-characteristic computations."
+      },
+      {
+        "name": "ellchangecurve / ellchangepoint / ellchangepointinv: coordinate-change conventions",
+        "description": "Coordinate changes use v=[u,r,s,t] so new coordinates x',y' relate to old ones by x = u^2 x' + r, y = u^3 y' + s u^2 x' + t. v=1 denotes trivial change [1,0,0,0]. ellchangecurve changes curve data; ellchangepoint maps point(s) according to v; ellchangepointinv uses inverse isomorphism.",
+        "guidance": "Use ellchangecurve and ellchangepointinv to map points back and forth between models; examples illustrate round-trip recovery of points."
+      },
+      {
+        "name": "ellconvertname: Cremona name conversion",
+        "description": "ellconvertname(name) converts elliptic curve name strings (e.g. '123b1') to triplets [conductor,isogeny_class,index] and back.",
+        "guidance": "Useful when interfacing with elldata database and programmatic curve identification."
+      },
+      {
+        "name": "elldivpol: division polynomial definition and roots",
+        "description": "elldivpol(E,n,{v=x}) returns n-division polynomial f_n; for affine point P=(X,Y), [n]P has coordinates expressed in \u03c6n,\u03c8n,\u03c9n and f_n(X)=\u03c8n(X) for n odd (and a related expression for n even). Roots of f_n for n\u22652 are X-coordinates of E[n].",
+        "guidance": "Use elldivpol to find x-coordinates of n-torsion points; polynomials are in Z[a1,a2,a3,a4,a6][X,Y]."
+      },
+      {
+        "name": "elleisnum: numerical Eisenstein series evaluation",
+        "description": "elleisnum(w,k,{flag=0}) computes numerical value of Eisenstein series of even weight k at lattice w (or ell structure). If flag non-zero and k=4 or 6 returns elliptic invariants g2 or g3.",
+        "guidance": "Input w can be ellperiods output or [\u03c91,\u03c92]; q=exp(2i\u03c0\u03c4) with \u03c4=\u03c91/\u03c92 used in series. Choose precision appropriately; syntax allows specifying prec."
+      },
+      {
+        "name": "elleta: quasi-periods output",
+        "description": "elleta(w) returns quasi-periods [\u03b71,\u03b72] attached to lattice basis w=[\u03c91,\u03c92] or to ellinit output E (returns E.eta).",
+        "guidance": "Used in conjunction with ellperiods and ellzeta; provides values used in Legendre and other relations."
+      },
+      {
+        "name": "ellformal* family: formal group series conventions and outputs",
+        "description": "Functions ellformaldifferential, ellformalexp, ellformallog, ellformalpoint, ellformalw compute various formal power series attached to E: \u03c9 = f(t)dt, \u03b7 = g(t)dt (ellformaldifferential); Exp (ellformalexp) normalized inverse of elliptic logarithm; L (ellformallog) with dL=\u03c9; coordinates x(t),y(t) in formal group (ellformalpoint); w(t) = -1/y expansion (ellformalw).",
+        "guidance": "Return n terms (seriesprecision by default). Normalizations: t = -x/y at \u221e, Exp\u2218L = Id. Use these for formal group computations and power series expansions; syntax supports variable numbering and precision."
+      },
+      {
+        "name": "ellfromeqn / ellfromj: conversions to Weierstrass form",
+        "description": "ellfromeqn(P) given a genus 1 plane curve f(x,y)=0 returns Weierstrass coefficients [a1,a2,a3,a4,a6] of its Jacobian; ellfromj(j) returns coefficients of a fixed elliptic curve with j-invariant j.",
+        "guidance": "Implements Artin-Tate-Villegas transformations; examples include converting twisted Edwards coords and deriving curves for congruent number problems. Use ellinit on output to get ell structures."
+      },
+      {
+        "name": "ellgenerators: returns generators and caution about generator orders",
+        "description": "For E/Q returns a Z-basis of free part of Mordell-Weil group using elldata when available; for E/Fq returns a minimal set of generators for E(Fq).",
+        "guidance": "Caution: when group is not cyclic of shape Z/d1 x Z/d2 the returned [P,Q] need not have orders exactly d1 and d2: P has order d1, Q generates quotient E(Fq)/<P> and Weil pairing w(P,Q) has order d2. If you need Q of exact order d2, must solve a discrete logarithm [d2]Q = [x]([d2]P) which may be expensive if d1/d2 has large prime factors."
+      },
+      {
+        "name": "ellglobalred: global conductor, Tamagawa product and local data",
+        "description": "ellglobalred(E) computes arithmetic conductor N, obsolete v (coordinate change info kept for compatibility), c product of local Tamagawa numbers, F factorization of N, and L vector of local data L[i] = elllocalred(E,F[i,1]).",
+        "guidance": "Output differs slightly if E defined over Q or number field. For Q the local coordinate change is replaced by 0; for number fields local coordinate changes are relative to integral model v. Use ellminimalmodel/ellintegralmodel to get desired starting models."
+      },
+      {
+        "name": "ellgroup: group-structure output formats and flag semantics",
+        "description": "For K=Fq, ellgroup(E,{p},{flag}) returns: if flag=0, structure [] (trivial), [d1] (cyclic), or [d1,d2] (non-cyclic) with d2|d1; if flag=1 returns [h,cyc,gen] where h is curve cardinality, cyc gives cyclic factors, and gen are generator points. For other fields p must be prime number or prime ideal; bad reduction case returns cyclic group of non-singular points.",
+        "guidance": "If flag=1 the requested generators depend on the model which must be minimal at p or an exception is thrown. It is not guaranteed that Q has exact order d2 without additional discrete log work; ellweilpairing can be used to verify orders."
+      },
+      {
+        "name": "ellheegner: Heegner point method and rank precondition",
+        "description": "ellheegner(E) for E/Q assumed of (analytic) rank 1 returns a non-torsion rational point whose canonical height equals regulator times analytic Sha. Uses Heegner point method with complexity proportional to sqrt(conductor) times height of point; preferable to apply to strong Weil curves.",
+        "guidance": "Function will error if curve does not have odd analytic rank (e.g., even analytic rank)."
+      },
+      {
+        "name": "ellheight and ellheightmatrix: N\u00e9ron-Tate height conventions and matrix normalization",
+        "description": "ellheight(E,P,{Q}) computes global N\u00e9ron-Tate height h(P) using Cremona normalization. With Q present returns bilinear form (h(P+Q)-h(P-Q))/4. ellheightmatrix(x) returns Gram matrix with entries ellbil(E,x[i],x[j]) whose determinant equals regulator if x is basis.",
+        "guidance": "Note: height normalization follows Cremona; divide the returned matrix by 2 to match Silverman's normalization. Use appropriate precision argument for accurate results."
+      },
+      {
+        "name": "ellidentify: lookup in elldata and output format",
+        "description": "ellidentify(E) looks up elliptic curve E (arbitrary model over Q) in elldata and returns [[N,M,G],C] where N is Cremona name, M minimal model, G Z-basis of free part of E(Q), and C change-of-coordinates suitable for ellchangecurve.",
+        "guidance": "Requires elldata package; useful to canonicalize curves and obtain known generators from database."
+      },
+      {
+        "name": "ellinit domain argument D semantics",
+        "description": "ellinit(x,{D=1}) optional argument D describes domain: t_INT 1 (default) for Q, t_INT p for finite field Fp, t_INTMOD Mod(a,p) for prime finite field Fp, and other domain types as appropriate.",
+        "guidance": "Providing D allows creating elliptic curves over finite fields or other domains directly and alters behavior of downstream functions (e.g., ellap/ellgroup/ellcard)."
+      }
+    ]
+  }
+}

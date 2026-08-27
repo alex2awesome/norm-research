@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/6a084bb1c478.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 4769,
+  "output_tokens": 4055,
+  "elapsed_s": 1993.4943023750093,
+  "extracted": {
+    "orientation": "stylebook",
+    "intended_audience": "Isabelle/HOL users, proof engineers, and formalisation authors",
+    "subtask_short": "Isabelle/HOL proof style",
+    "subtask_description": "A style guide giving advanced rules and best practices for writing readable, maintainable Isabelle/HOL theories and proofs (Isar/Eisbach) used in formal verification. Focuses on proof structure, naming, automation, and local context management.",
+    "subtask_keywords": [
+      "isabelle_hol",
+      "proof_style",
+      "isar",
+      "eisbach",
+      "formal_verification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use structured Isar proofs instead of apply scripts.",
+        "description": "Use structured Isar proofs instead of apply scripts.",
+        "guidance": "Not always feasible, but most often easier to read and maintain."
+      },
+      {
+        "name": "Prove your assumptions are not vacuous.",
+        "description": "Prove your assumptions are not vacuous.",
+        "guidance": "Show that assumptions can actually be satisfied: e.g. if you prove an invariant, show it is true for at least one state; if you model a mathematical structure by its axioms, show there is at least one such structure; for top-level theorems show assumptions are satisfiable. Avoid producing lemmas whose premises can never hold."
+      },
+      {
+        "name": "Use Eisbach instead of ML code for custom tactics.",
+        "description": "Use Eisbach instead of ML code for custom tactics.",
+        "guidance": "Eisbach (new in Isabelle2015) extends Isar with a proof method language; proof methods in Eisbach are easier to understand and maintain for non-experts compared to ML tactic code."
+      },
+      {
+        "name": "Compress single-step low-level proofs into automated search.",
+        "description": "Compress single-step low-level proofs into automated search.",
+        "guidance": "Use judiciously to make scripts shorter and more robust by using search instead of many low-level steps. Example: a long apply-sequence can often be replaced by by (fastforce simp: X intro!: my_rule). Cautions: overuse produces large opaque search invocations that give unhelpful 'Failed to apply proof method' errors; can increase processing time; only use if the rules (e.g. my_rule) are safe and search won't be too slow. Using 'by' allows asynchronous processing."
+      },
+      {
+        "name": "Use context instead of global simp/attribute changes.",
+        "description": "Use context instead of global simp/attribute changes.",
+        "guidance": "Avoid global declares that change [simp] or [cong] state across a file; instead keep changes local using notes/using inside a proof or using the context command to limit scope. Bad forms that try to restore state by re-declaring risks breaking when assumptions differ or when merging theories. Preferred patterns: wrap declarations in context ... begin ... end, or use notes with includes/bundles so the changes are local to the lemmas that need them. If you have multiple declarations, group them with bundle (e.g. bundle cong_word = if_cong[cong] word_neq_0_conv[simp]) and include that bundle where needed."
+      },
+      {
+        "name": "Avoid unnecessary quantifiers and type annotations.",
+        "description": "Avoid unnecessary quantifiers and type annotations.",
+        "guidance": "Humans and Isabelle infer types well; free variables are universally quantified after a lemma is complete so explicit quantifiers are often redundant. Bad: lemma \"\u22c0x (y::32 word). ...\" Good: lemma \"... \u27f9 ...\". Exceptions: when complex types are hard for humans to infer, an annotation may add clarity."
+      },
+      {
+        "name": "Decide on good normal forms and use them consistently.",
+        "description": "Decide on good normal forms and use them consistently.",
+        "guidance": "When designing simpsets and automation, choose the normal forms your lemmas should have (e.g. prefer clarsimp normal form for lemmas used in automation). Prefer statements that match what simp will produce (e.g. use Suc x rather than x + 1 if simp rewrites x + 1 to Suc x). Test a lemma by running apply clarsimp immediately after stating it; if clarsimp changes it, the lemma is not in clarsimp normal form and may be less useful for automation."
+      },
+      {
+        "name": "Use text and section commands to document your proofs.",
+        "description": "Use text and section commands to document your proofs.",
+        "guidance": "Isabelle supports literate proofs\u2014use the text command and structure (chapter, section, subsection) to document basic definitions, fundamental assumptions, top-level theorems, peculiarities, workarounds, and tricks. Even if you won't produce a PDF, organizing theory files improves readability."
+      },
+      {
+        "name": "Adhere to library naming schemes where they exist.",
+        "description": "Adhere to library naming schemes where they exist.",
+        "guidance": "Follow established conventions from the standard libraries: lists named xs, ys (s for sequence); set names are capital letters like A, S; elements x, y, a, b; predicates P, Q, R; types and type constructors lower_case with under_score_names; data constructors upper CamelCaseNames; theory and file names Upper_Camel_Underscore_Case. Inspect src/HOL and the Isabelle distribution for examples."
+      },
+      {
+        "name": "Think of a naming scheme for your application, and use it consistently.",
+        "description": "Think of a naming scheme for your application, and use it consistently.",
+        "guidance": "Consistent naming aids maintenance and distributed development: one reader/author should be able to predict how another names lemmas, definitions, and constants."
+      },
+      {
+        "name": "Avoid one-letter names for constants and types.",
+        "description": "Avoid one-letter names for constants and types.",
+        "guidance": "One-letter constants (e.g. definition f where 'f = ...') reserve names that would otherwise be used for variables and lead to confusion in formulas like \u2200f. P f. Prefer longer names for functions and constants, while keeping parameters and variables short."
+      },
+      {
+        "name": "Avoid unnecessary parentheses, unless precedence is exotic or especially unclear.",
+        "description": "Avoid unnecessary parentheses, unless precedence is exotic or especially unclear.",
+        "guidance": "Isabelle's syntax minimises parentheses; follow the distribution's style. If unsure, enter a term and see how Isabelle echoes it to remove unnecessary parentheses. Use parentheses sparingly; sometimes they add clarity, but prefer what the Isabelle distribution uses. Bad example: definition \"my_fun f xs =  (map (f)) xs @ [(f (hd xs))]\"; good example: definition \"my_fun f xs = map f xs @ [f (hd xs)]\"."
+      },
+      {
+        "name": "Consider forcing failure when a proof method does not solve its goal.",
+        "description": "Consider forcing failure when a proof method does not solve its goal.",
+        "guidance": "Replace e.g. apply simp with apply (simp; fail) so that changes or new Isabelle releases where simp no longer solves the goal cause an early failure. The ';' operator runs fail on all new goals produced after simp, so the step will only succeed if no new goals are produced. In Eisbach you can use apply (solves \u2039simp\u203a). These forms are more verbose but help detect regressions in long proofs or new proof-method behaviours."
+      },
+      {
+        "name": "Avoid theorem-transforming attributes such as [simplified] and [rule_format] in lemma statements.",
+        "description": "Avoid theorem-transforming attributes such as [simplified] and [rule_format] in lemma statements.",
+        "guidance": "[rule_format] is rarely necessary now; [simplified] is unpredictable because its outcome depends on which simplification rules are declared in the global context\u2014moving the lemma or changing context can change its meaning. Instead write out the transformed form explicitly (e.g. state P (Suc x) and then apply simp in the proof). Use Isar's term abbreviations if P is large."
+      },
+      {
+        "name": "Avoid apply (auto; ...)",
+        "description": "Avoid apply (auto; ...).",
+        "guidance": "The ';' operator applies the second tactic only to the goals produced from the first subgoal, not to all subgoals produced by auto. This makes behaviour hard to predict when auto works on multiple goals. Example: if you have two subgoals and auto produces two new subgoals from each (total 4), apply (auto; x) will apply x only to the first two. The same caveat applies to tactics that work on multiple goals simultaneously (e.g. simp_all)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_b1a089b322e7.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 20028,
+  "output_tokens": 3980,
+  "elapsed_s": 1421.7804197079968,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine-learning researchers and practitioners studying LLM mathematical reasoning, robustness, and dataset/benchmark design",
+    "subtask_short": "evaluating LLM math robustness",
+    "subtask_description": "Designing, curating, and evaluating a benchmark (MATH-Perturb) to measure large language models' robustness to simple and hard perturbations of hard math problems. Includes annotation rubrics, evaluation protocols, metrics, and failure-mode analyses.",
+    "subtask_keywords": [
+      "math_reasoning",
+      "benchmark",
+      "llm",
+      "robustness",
+      "perturbations",
+      "dataset_curation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Origin of the Dataset (seed selection)",
+        "description": "Use level-5 (hardest) problems from the MATH dataset (Hendrycks et al., 2021) as the seed problems. Use level-5 problems from both the train split and the test split as seeds so behavior on both splits can be investigated.",
+        "guidance": "Focus on hardest problems because state-of-the-art models already achieve high accuracy on easier levels. Problems may contain LaTeX/Asymptote graphics."
+      },
+      {
+        "name": "Annotation Criterion \u2014 MATH-P-Simple (simple perturbation)",
+        "description": "Construct a modified problem as a simple perturbation: make non-essential modifications such that the modified problem can be solved using the same method as the original problem.",
+        "guidance": "Examples: numerical modifications, asking for a different but related quantity, adding/removing non-essential constraints, changing a mathematical concept to its contrasting counterpart. Ensure the reasoning pattern remains the same."
+      },
+      {
+        "name": "Annotation Criterion \u2014 MATH-P-Hard (hard perturbation)",
+        "description": "Construct a modified problem as a hard perturbation: apply small but fundamental modifications so the modified problem cannot be solved using the same method as the original and requires deeper math understanding and harder problem-solving skills.",
+        "guidance": "General strategies: increase the complexity of mathematical objects (e.g., raise polynomial degree), alter key numbers to make brute-force infeasible, relax constraints to cover more general cases, change essential conditions so original simplifying properties (symmetry, reducibility, linearity) no longer hold."
+      },
+      {
+        "name": "Minimal Edits",
+        "description": "Annotators must make as minimal modifications as possible to the original problem text so the modified problems stay close in text form.",
+        "guidance": "This tests generalization and elicits memorization behaviors; minimal edits keep lexical similarity high even when problem formula changes."
+      },
+      {
+        "name": "Changed Answers",
+        "description": "For both simple and hard modifications, guarantee that the answers to the modified problems are different from the original answer.",
+        "guidance": "Prevents models from 'cheating' by pattern recognition or outputting memorized original answers."
+      },
+      {
+        "name": "Quality Control \u2014 annotator qualifications",
+        "description": "Recruit annotators with strong mathematical backgrounds: annotators were PhD students with bachelor\u2019s degrees in mathematics, research experience in theoretical ML, and/or mathematical competition experience.",
+        "guidance": "Use expert annotators to ensure correctness and appropriate difficulty changes when perturbing hard-level problems."
+      },
+      {
+        "name": "Quality Control \u2014 annotation workflow (double-check and cross-validation)",
+        "description": "Require annotators to double-check their annotations; each modified problem is cross-validated by an independent annotator to ensure the answer is correct.",
+        "guidance": "Manually review problematic cases (e.g., where a model's answer differs from the annotated answer) and remove annotations failing quality checks."
+      },
+      {
+        "name": "Manual verification for model-disagreement cases",
+        "description": "Manually inspect and confirm annotated answers for problems where a model (o1-mini in this study) and the annotator disagree.",
+        "guidance": "Ensures benchmark answers are reliable even when models produce alternative outputs."
+      },
+      {
+        "name": "Similarity quantification between original and perturbed problems",
+        "description": "Quantify similarity using (1) normalized edit distance (edit distance normalized by original problem length) and (2) cosine similarity between embeddings of the two problems using OpenAI's text-embedding-3-large.",
+        "guidance": "Report distributions of normalized edit distances and cosine similarities to show lexical/semantic closeness; useful to characterize how 'minimal' edits are and to interpret model behavior."
+      },
+      {
+        "name": "Retrieval-based similarity metric (MRR)",
+        "description": "Compute Mean Reciprocal Rank (MRR) when using the perturbed problem as a query to retrieve the corresponding original problem from the full set of original problems using cosine similarity of embeddings.",
+        "guidance": "High MRR (close to 1) indicates the perturbed problem retrieves its original counterpart, showing closeness under typical semantic retrieval methods (reported: 0.995 for MATH-P-Simple, 0.986 for MATH-P-Hard)."
+      },
+      {
+        "name": "Perturbation strategy taxonomy \u2014 simple perturbation examples",
+        "description": "Enumerate common strategies for simple perturbations: numerical modifications; asking for a different but related quantity; adding/removing non-essential constraints; other non-essential lexical or numeric changes.",
+        "guidance": "Annotators verify that these modifications do not alter the fundamental reasoning pattern."
+      },
+      {
+        "name": "Perturbation strategy taxonomy \u2014 hard perturbation examples",
+        "description": "Enumerate common strategies for hard perturbations: increasing complexity of mathematical objects; altering key numbers to disable brute-force methods; relaxing constraints to generalize cases; modifying essential conditions so simplifying properties no longer hold.",
+        "guidance": "These changes aim to force different solving methods and deeper theorems rather than computational shortcuts."
+      },
+      {
+        "name": "Evaluation protocol \u2014 zero-shot Chain-of-Thought (CoT)",
+        "description": "Adopt zero-shot chain-of-thought prompting as the standard evaluation method for model responses on the benchmark.",
+        "guidance": "Used to elicit reasoning steps; referenced works include Wei et al. (2022) and Kojima et al. (2022)."
+      },
+      {
+        "name": "Tool usage prohibition",
+        "description": "Disallow any tool usage during evaluation, including access to code interpreters.",
+        "guidance": "Precludes trivial brute-force programmatic solutions that would defeat the intent of testing reasoning robustness."
+      },
+      {
+        "name": "Answer equivalence checking",
+        "description": "Check whether a generated answer matches the ground-truth answer by first performing string normalization and then using the sympy package to check equivalence of two mathematical objects.",
+        "guidance": "Follows precedent from Hendrycks et al. (2021) and Shao et al. (2024); necessary to accept mathematically equivalent expressions that differ lexically."
+      },
+      {
+        "name": "Model selection diversity",
+        "description": "Benchmark a wide range of models, including long-CoT models, closed-source large models, open-sourced smaller models, and math-specific models.",
+        "guidance": "Track and report version information; diversity helps understand how robustness varies across model classes and sizes."
+      },
+      {
+        "name": "Primary reported metric \u2014 accuracy (%) across variants and splits",
+        "description": "Report model accuracy (%) on Original problems, MATH-P-Simple, and MATH-P-Hard; also report accuracies separately for problems originating from train and test splits.",
+        "guidance": "Use these comparisons to quantify performance drops due to perturbations and possible data-contamination/generalization effects."
+      },
+      {
+        "name": "Error rate reporting and visualization",
+        "description": "Report error rates (%) for Original, Simple (0-shot), Simple (ICL), Hard (0-shot), Hard (ICL) and visualize differences to show ICL and perturbation impacts.",
+        "guidance": "Decompose error-rate changes into components attributable to ICL gains and misleading effects."
+      },
+      {
+        "name": "Failure-mode categorization (Case I\u2013IV)",
+        "description": "Classify each triple (Original, Simple, Hard) response correctness into four cases: Case I \u2014 at least one of Original/Simple correct and Hard correct; Case II \u2014 Original and Simple incorrect and Hard incorrect; Case III \u2014 Original and Simple incorrect but Hard correct; Case IV \u2014 at least one of Original/Simple correct but Hard incorrect.",
+        "guidance": "Compute percentages of responses in each case per model to characterize generalization/failure patterns."
+      },
+      {
+        "name": "Qualitative failure-mode taxonomy",
+        "description": "Identify common error types when models face harder problems: mistakes in basic numerical computations and algebra, unjustified claims, missed cases, and lack of specific math knowledge.",
+        "guidance": "These are considered general failure modes more prominent in weaker models; stronger models show fewer such basic errors and more memorization-related failures."
+      },
+      {
+        "name": "Memorization detection and characterization",
+        "description": "Detect forms of memorization beyond verbatim recitation: (a) models ignore modified assumptions and assume original assumptions hold; (b) models blindly apply learned problem-solving techniques without judging applicability; (c) models may output desired outcomes from original problems rather than the modified target.",
+        "guidance": "Quantify via manual inspection and via nsame (number of errors where final answer equals original-answer); compute normalized edit distances between responses to identify superficial vs semantic collapse. Estimate proportion of errors due to memorization per model (e.g., 40% for o1-mini, 25% for Claude-3.5-Sonnet in manual samples)."
+      },
+      {
+        "name": "Mode collapse measurement (nsame and edit distances)",
+        "description": "For each model, report nsame: number of problems where the model\u2019s final answer equals the corresponding original problem's ground-truth; also compute normalized edit distance between full response to modified problem and response to original problem.",
+        "guidance": "Use these statistics to determine whether errors are due to naive recitation (mode collapse) or more subtle ignoring of changed assumptions."
+      },
+      {
+        "name": "In-context learning (ICL) evaluation and decomposition",
+        "description": "Evaluate one-shot ICL using the corresponding original (problem, solution) as demonstration. Decompose ICL influence on MATH-P-Hard into: n_wrong\u2192correct (ICL effect that reduces errors) and n_correct\u2192wrong (misleading effect that increases errors); normalize percentages appropriately.",
+        "guidance": "Large models often show both ICL gains and substantial misleading effects; net improvements on MATH-P-Hard are marginal for most models."
+      },
+      {
+        "name": "ICL ablation \u2014 original vs random example",
+        "description": "Compare one-shot ICL using the corresponding original example versus using a random example from the same category to assess specificity of the demonstration.",
+        "guidance": "ICL with the original problem and solution typically outperforms ICL with a random example; report the exception cases."
+      },
+      {
+        "name": "Inference-time scaling metrics (pass@k and self-consistency)",
+        "description": "Measure inference-time scaling by computing pass@k (generate N independent solutions and compute pass@k formula) and self-consistency (majority-vote among k sampled responses).",
+        "guidance": "Choose N (e.g., N=64 for some models, N=8 for others) and report pass@k and self-consistency accuracies with standard deviation. Use to study gains from increased inference compute and sampling."
+      },
+      {
+        "name": "Reporting dataset statistics and subject distribution",
+        "description": "Report final dataset size (279 pairs after quality-control removals), counts from train/test splits (164 train, 115 test), and distribution across subjects: Prealgebra, Algebra, Number Theory, Counting & Probability, Geometry, Intermediate Algebra, Precalculus.",
+        "guidance": "Provide per-subject counts and percentages to contextualize difficulty distribution across mathematical topics."
+      },
+      {
+        "name": "No-tool/no-brute-force rule justification",
+        "description": "Disallow tool access explicitly because many perturbed problems could be solved trivially by brute-force programmatic search, which would not test reasoning robustness.",
+        "guidance": "This is part of the evaluation protocol; enforce across all model evaluations."
+      }
+    ]
+  }
+}

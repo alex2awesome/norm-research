@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/be24afdabb15.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "be24afdabb15.html",
+  "chunk_idx": 1,
+  "n_chunks": 5,
+  "chunk_chars": 39426,
+  "model": "gpt-5-mini",
+  "elapsed_s": 72.26958587500121,
+  "input_tokens": 14345,
+  "output_tokens": 3858,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "users and contributors of the Metamath set.mm database; mathematicians and formalizers working on Metamath formalizations of logic and set theory",
+    "subtask_short": "metamath set.mm axioms & classes",
+    "subtask_description": "Documentation and implementation guidelines for the Metamath set.mm formalization: lists the ZFC axioms and related axioms, explains the definitional theory of classes, and specifies how Metamath treats axiom schemes, substitution, and definitional soundness checks.",
+    "subtask_keywords": [
+      "metamath",
+      "set.mm",
+      "axioms",
+      "class_theory",
+      "formalization"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Zermelo-Fraenkel Set Theory with Choice (ZFC) axioms",
+        "description": "The core axioms used in set.mm: Extensionality, Replacement, Power Set, Union, Regularity (Foundation), Infinity, and Choice (ax-ext, ax-rep, ax-pow, ax-un, ax-reg, ax-inf, ax-ac). All setvar variables are assumed distinct in the statements shown.",
+        "guidance": "We selected formalizations that are short in terms of set theory primitives; some versions (ax-inf2, ax-ac2) are provided for conventional forms. Note that these axioms are to be combined with logic axioms (resulting in ~20 axioms and 2 rules in this system). Distinct-variable conditions are important; see connected links for explicit distinct variable conditions."
+      },
+      {
+        "name": "Tarski\u2013Grothendieck Axiom (ax-groth)",
+        "description": "A strong additional axiom postulating the existence of very large sets (inaccessible cardinals) used for category theory and other developments beyond ZFC.",
+        "guidance": "This axiom is not usually considered part of ZFC and is not elementary when expanded; it implies Axiom of Infinity, Axiom of Choice, and Axiom of Power Sets. It is provided separately and can be asserted as a new axiom or used as a hypothesis for theorems that require it."
+      },
+      {
+        "name": "Theory of classes / class builders",
+        "description": "Introduce definitional notation for classes in the form {x | \u03c6} (class builder / class abstraction); classes may be represented by upper-case class variables and need not be sets. The language is extended to include classes, yielding three kinds of variables: wff variables, setvar variables, and class variables.",
+        "guidance": "A class is 'the class of all x such that \u03c6 holds.' Every class is a (possibly empty) collection of sets, though not every collection is a set. Class variables (upper-case) range over class builders or other class objects; setvar variables can be treated as classes via a canonical builder. When defining new class expressions you must ensure dummy/bound variables do not conflict with existing variables (choose fresh variables)."
+      },
+      {
+        "name": "Definition of class abstraction (df-clab)",
+        "description": "Characterization: (x \u2208 {y | \u03c6} \u2194 [x/y] \u03c6).",
+        "guidance": "df-clab extends the \u2208 connective to allow a class builder on the right-hand side. The \u03c6 in df-clab is a wff in the extended language and may itself contain class builders. Proper substitution [x/y] is defined elsewhere (df-sb). This definition is a central ingredient of the algorithm that eliminates class builders to produce basic-language formulas."
+      },
+      {
+        "name": "Defining characterization of class equality (df-cleq)",
+        "description": "Characterization: (A = B \u2194 \u2200x (x \u2208 A \u2194 x \u2208 B)).",
+        "guidance": "df-cleq extends = to allow classes on both sides. The full definition has hypotheses that are shown eliminated in the derived dfcleq for practical use. Without the hypotheses df-cleq would produce extensionality as a special case and thus is not sound in the context of predicate calculus without set theory; the hypotheses force explicit use of ax-ext so one can track where it is used in proofs."
+      },
+      {
+        "name": "Defining characterization of class membership (df-clel)",
+        "description": "Characterization: (A \u2208 B \u2194 \u2203x (x = A \u2227 x \u2208 B)).",
+        "guidance": "df-clel similarly extends \u2208 to allow classes on both sides. The definition includes hypotheses (eliminated in the derived version) to help determine where predicate-calculus axioms were used in proofs. Unlike df-cleq, df-clel without hypotheses would still be sound in predicate calculus, but the hypotheses are included for traceability of axiom use."
+      },
+      {
+        "name": "Eliminability of the theory of classes",
+        "description": "For every formula in the extended language (with class builders) one can construct a logically equivalent formula in the basic language of predicate calculus used for set theory.",
+        "guidance": "The document demonstrates an explicit algorithm (example elimination provided) that converts extended wffs into unique equivalent basic-language wffs, subject to canonical conventions for traversing the syntax tree and naming introduced variables. Eliminability justifies treating the class theory as a notational extension with no extra expressive power."
+      },
+      {
+        "name": "Conservation of the theory of classes",
+        "description": "Any proof of a basic-language formula in the extended system can be transformed into a proof of the same formula in the basic system; the extended theory is conservative over the base set theory for set statements.",
+        "guidance": "Combined with eliminability, conservation implies the extended language is a definitional extension and is sound relative to the basic system. The text cites Levy, Quine, and Takeuti & Zaring as sources for rigorous justification of these metatheoretic properties."
+      },
+      {
+        "name": "Treatment of class definitions as definitions (not axioms)",
+        "description": "The three class characterizations are called definitions rather than axioms because they are eliminable and conservative, even though they are metamathematically nontrivial (their soundness relies on external eliminability/conservation proofs).",
+        "guidance": "Because their definitional soundness is not trivially checkable by mmj2, trusting Levy's (and others') metamathematics is required; alternatively, one may rename them to axioms (ax- prefix) in the database to achieve machine-verifiable rigor. The author prefers 'definitions' to avoid suggesting ZFC is insufficient."
+      },
+      {
+        "name": "mmj2 definitional soundness checker exceptions",
+        "description": "The mmj2 checker currently rejects these definitions because they overload existing connectives: df-clab, df-cleq, df-clel, and also df-bi. These are specified as exceptions in RunParms.txt.",
+        "guidance": "RunParms.txt should include: SetMMDefinitionsCheckWithExclusions,ax-*,df-bi,df-clab,df-cleq,df-clel. This documents exactly which definitions are trusted outside of Metamath's automatic checker. A skeptic may rename these to axioms if desired."
+      },
+      {
+        "name": "Metamath axioms are axiom schemes (meta-level) not object-language axioms",
+        "description": "Metamath's 'axioms' and 'theorems' are schemes: metavariables in axiom schemes generate infinite families of actual object-language axioms. The setvar metavariables are metavariables ranging over individual variables.",
+        "guidance": "Do not conflate scheme-level metavariables with object-language variables. An axiom scheme is a recipe that generates many actual axioms; working in Metamath is always at the scheme level. Examples and comparisons with Tarski's system are provided to illustrate the distinction."
+      },
+      {
+        "name": "Direct substitution and distinct-variable conditions (no proper substitution)",
+        "description": "By default Metamath uses direct substitution with no restrictions on substitutions (subject only to metavariable types). Restrictions are enforced only via 'distinct variable' conditions attached to schemes, rather than textbook 'proper substitution' rules based on free/bound occurrences.",
+        "guidance": "This design removes the traditional machinery of free/bound variable considerations at the scheme level. When substitution restrictions are needed, specify distinct variable conditions (e.g., for ax-6/Tarski differences). This makes allowed substitutions easy to determine."
+      },
+      {
+        "name": "Scheme completeness and Metamath extensions to Tarski",
+        "description": "Metamath extends Tarski's system with additional axiom schemes (ax-10 through ax-13) to achieve 'scheme completeness' (metalogical completeness), allowing proofs of theorem schemes entirely inside Metamath using only direct substitution.",
+        "guidance": "These extensions are logically redundant relative to Tarski's system (provable outside Metamath), but they are included to simplify metalogic and avoid reliance on induction on formula length or other external metalogical arguments. Except for ax-6, Metamath includes all of Tarski's schemes; ax-6 in Metamath is stronger (no distinct-variable restriction) for convenience."
+      },
+      {
+        "name": "Substitution instances of schemes (interpretation and uniqueness)",
+        "description": "A scheme instance is a particular actual axiom/theorem resulting from substituting actual object-language variables for metavariables; different substitution instances are independent axioms at the object-language level.",
+        "guidance": "Metamath's substitution rule always creates a new scheme from an old one; Metamath never works with actual axioms/theorems directly. Examples illustrate how an instance like \u2203x x = y can produce many actual axioms (e.g., \u2203v3 v3 = v2 and \u2203v3 v3 = v3), each sound but distinct. Understanding this distinction is crucial when reasoning about proofs and derivations in the system."
+      },
+      {
+        "name": "Guidelines for introducing defined class expressions (dummy variable choice)",
+        "description": "When introducing definitions like A \u222a B = { x | (x \u2208 A \u2228 x \u2208 B) }, any variable introduced in the definiens (bound/dummy variable) must not occur in the defined expressions A or B; the dummy variable can be chosen arbitrarily subject to nonconflict.",
+        "guidance": "When eliminating definitions, one must pick fresh variables not occurring in the expressions being defined (Theorem unjust describes this). This mirrors the usual rule for bound variables in mathematics (choose a fresh dummy variable) and is important for uniqueness of the elimination translation."
+      }
+    ]
+  }
+}

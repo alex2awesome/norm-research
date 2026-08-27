@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/arxiv_inconsistency_2014_neurips.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17006,
+  "output_tokens": 3763,
+  "elapsed_s": 456.5565572080668,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference program chairs, peer-review researchers, and the machine-learning research community interested in reviewing processes",
+    "subtask_short": "conference_peer_review_evaluation",
+    "subtask_description": "Analysis and measurement of conference peer-review quality, consistency, and predictive validity (NeurIPS 2014). Covers scoring scales, calibration, consistency metrics, reviewer behaviours (timing/length/confidence), and connections between review scores and later citation impact.",
+    "subtask_keywords": [
+      "conference_peer_review",
+      "neurips",
+      "quality_scores",
+      "reviewer_calibration",
+      "accept_consistency"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Quantitative Evaluation (quality score, 10-point Likert)",
+        "description": "The main reviewer verdict summarized by the \u2018Quantitative Evaluation\u2019 score on a 10 point Likert scale (referred to as a quality score).",
+        "guidance": "Used as the principal score on which accept/reject decisions were made. The paper notes this single score may conflate separate ideas (quality, clarity, originality, significance, rigour) and that collapsing to one score can reduce consistency; suggests separating into multiple scores (clarity, rigour, significance, originality) to improve consistency and allow program chairs to weight components. Calibration is applied per reviewer to account for differences in scale interpretation."
+      },
+      {
+        "name": "Reviewer calibration / removal of reviewer offset",
+        "description": "A process to eliminate bias in reviewer scale interpretation by estimating and removing reviewer-specific offsets (b_j) so scores are comparable across reviewers.",
+        "guidance": "Implemented here via a Bayesian variant of the Platt\u2013Burges model (formulated as a Gaussian process). The score model decomposes y_{i,j} = f_i + b_j + \u03b5_{i,j} (objective quality + reviewer offset + subjective component). Calibration estimates f_i + \u03b5_{i,j} as the calibrated reviewer score. Note that calibrated scores still include the reviewer's subjective opinion. Calibration parameters (\u03b1_f, \u03b1_b, \u03c3^2) quantify variance attributable to objective quality, reviewer offset, and subjective rating."
+      },
+      {
+        "name": "Subjectivity proportion in reviewer scores",
+        "description": "The portion of variance in reviewer scores attributable to reviewer-specific subjective opinion (\u03b5_{i,j}).",
+        "guidance": "Under the fitted calibration model approximately 50% of a typical reviewer\u2019s score variance was subjective (\u03b1_f\u22481.28, \u03c3^2\u22481.27, \u03b1_b\u22480.24). The paper argues this subjectivity is a major driver of inconsistency between committees and demonstrates via simulation that subjectivity levels strongly affect accept consistency. It also warns against removing all subjectivity, since some subjective judgement (e.g., novelty) is valuable."
+      },
+      {
+        "name": "Impact score (binary indicator of potential future impact)",
+        "description": "An independent scoring indicator introduced (in 2013) asking whether a paper is potentially highly impactful for the community; implemented as a binary value (e.g., 'potentially have a major impact' vs 'unlikely').",
+        "guidance": "Although coarse (two values), the impact score showed a statistically significant \u2014 but small \u2014 correlation with eventual citation impact for accepted papers. The paper suggests including an independent impact score separate from the quality score to capture likely future influence."
+      },
+      {
+        "name": "Reviewer confidence score (1\u20135 Likert)",
+        "description": "A confidence score (1='educated guess' to 5='absolutely certain') reflecting how confident a reviewer feels about their assessment and their expertise on the paper.",
+        "guidance": "Area Chairs use confidence to decide how much weight to place on a review and whether additional reviews are needed. Empirically, average reviewer confidence correlated more strongly with future citation impact than the quality score (correlation \u2248 0.25), suggesting confidence may proxy for paper clarity. Correlation of confidence across committees was 0.39\u00b10.072, indicating some reliability."
+      },
+      {
+        "name": "Number of reviewers per paper",
+        "description": "The count of independent reviewers assigned to each submission.",
+        "guidance": "Simulations show increasing the number of reviewers per paper improves accept consistency (accept precision), but with diminishing returns. For three reviewers and ~50% subjectivity the simulation predicted an accept consistency around ~63% (subject to sampling error and simplifications). Program chairs can trade reviewer load vs desired consistency."
+      },
+      {
+        "name": "Accept consistency / accept precision / agreed accept rate",
+        "description": "Metrics quantifying decision agreement between independent committees: e.g., percent of papers where committees both accept (consistent accept), percent where they disagree (inconsistent), accept precision (percentage of presented papers that would have been the same under an independent rerun), reject precision, and agreed accept rate.",
+        "guidance": "These statistics are sensitive to sample size and conference accept rate; Bayesian (Dirichlet\u2013multinomial) analysis and Monte Carlo estimation were used to quantify uncertainty (e.g., observed inconsistent decisions 0.26\u00b10.09; accept precision 0.51\u00b10.13). The paper cautions that single headline numbers (e.g., '50%') can be misleading due to wide error bars and low power when accept rate is low."
+      },
+      {
+        "name": "Use of citation counts as a proxy for impact (log10(1+citations))",
+        "description": "Transform citation counts via citation impact = log10(1 + number_of_citations) to reduce heavy tails and enable correlation analyses with reviewer scores.",
+        "guidance": "Authors acknowledge citation counts are imperfect proxies of impact (miss industry adoption, policy influence, public awareness) but are objective and community-driven. They compute Pearson correlations between transformed citation impact and reviewer scores (quality, impact, confidence), finding no significant correlation with quality for accepted papers, weak correlation between impact score and citations, and a stronger correlation for confidence."
+      },
+      {
+        "name": "Separation of scoring dimensions (clarity, rigour, originality, significance)",
+        "description": "Rather than a single composite quality score, ask reviewers to provide separate scores for distinct facets: clarity, rigour, significance, and originality.",
+        "guidance": "The paper argues the current single quantitative score may conflate different aspects and that different reviewers weight these components differently \u2014 contributing to subjectivity and inconsistency. Separating dimensions could improve consistency and allow program committees to choose weightings appropriate to conference goals."
+      },
+      {
+        "name": "Timeliness of reviews (on-time vs late)",
+        "description": "Whether a review was submitted by the requested deadline or arrived late (but before rebuttal period).",
+        "guidance": "Late reviews were on average shorter, gave higher quality scores, and had lower confidence. Correlation across committees dropped when late reviews arrived. The paper finds small but statistically significant differences (e.g., quality score higher for late reviews with p=0.007%). Suggests timely submission improves review quality and reliability."
+      },
+      {
+        "name": "Review length (word count of review text)",
+        "description": "Length (combined summary and main body) of reviewer comments as an indicator of review thoroughness.",
+        "guidance": "Late reviews were about 100 words shorter on average (in ~2,400-word reviews) and this difference was statistically significant (p\u22480.55%). Shorter reviews correlated with lower confidence and possibly lower informational content; length can be monitored as a crude quality signal."
+      },
+      {
+        "name": "Use of reviewer confidence to weight reviews",
+        "description": "Operational rule: Area Chairs should use declared reviewer confidence to determine how much weight to give a review or whether to solicit additional reviews.",
+        "guidance": "Because confidence reflects reviewer expertise and correlates with later impact, the conference process should consider confidence in decision-making (e.g., flag low-confidence reviews for follow-up). The calibration model and other methods may incorporate confidence for better adjustments (MacKay et al. referenced)."
+      },
+      {
+        "name": "Balance between consistency and correctness",
+        "description": "Conceptual principle: consistency between committees is desirable only insofar as it corresponds to correctness; consistency alone can be uninformative or even harmful if consistent errors result.",
+        "guidance": "The paper highlights that consistent but arbitrary criteria (e.g., accept by number of references) would be poor despite high consistency. Given inevitable errors, some variation can protect against systematic discrimination of particular paper types. Thus, the goal should be to improve correctness (or predictive validity) not consistency per se; measure correctness via external proxies (e.g., citations) where feasible."
+      },
+      {
+        "name": "Data release / plotting privacy (differential privacy for plots)",
+        "description": "When plotting per-paper scores vs. citations, obfuscate individual paper identities by adding differentially private noise to plotted points and removing axis scales.",
+        "guidance": "Authors added Laplacian/differentially private noise to plotted points and withheld axes to prevent re-identification while computing correlations on the true data. This serves as a guideline for responsibly releasing review-related data."
+      },
+      {
+        "name": "Simulation-based evaluation of review process",
+        "description": "Use simulation models based on the scoring decomposition (y_{i,j} = f_i + b_j + \u03b5_{i,j}) to estimate expected accept consistency as a function of subjectivity, number of reviewers, and accept rate.",
+        "guidance": "The paper uses 100,000 simulation samples assuming three reviewers and 50% subjectivity to predict accept consistency curves vs accept rate. Simulations are a practical tool to explore the expected behaviour of review processes under varying assumptions, but must note simplifications (e.g., ignoring discussion stage) and sample-size-induced uncertainty."
+      },
+      {
+        "name": "Treatment of duplicated-review experiment logistics (authors provide two rebuttals)",
+        "description": "Operational requirement for randomized duplication experiments: authors of papers selected for duplicate review must provide two independent author rebuttals.",
+        "guidance": "This increases author workload but is necessary for an independent re-run by a second committee. The experiment design choice (final accept if any committee accepts) and manual Area Chair split to ensure expertise coverage are also part of experimental controls."
+      }
+    ]
+  }
+}

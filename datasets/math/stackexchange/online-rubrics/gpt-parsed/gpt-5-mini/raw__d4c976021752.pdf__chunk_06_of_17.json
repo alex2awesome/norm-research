@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/d4c976021752.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "d4c976021752.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 17,
+  "chunk_chars": 39993,
+  "model": "gpt-5-mini",
+  "elapsed_s": 79.87693004199537,
+  "input_tokens": 12863,
+  "output_tokens": 5435,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Authors of Isabelle/Isar proofs (Isabelle/HOL and Isabelle/Pure users, theorem-proving practitioners, proof engineers)",
+    "subtask_short": "writing_structured_isar_proofs",
+    "subtask_description": "Guidance and language semantics for composing structured Isar proofs: commands, proof-structure conventions, proof-method composition, calculational reasoning, case/induction handling, and how local contexts/abbreviations/facts interact. Targeted at people authoring or maintaining formal proofs in Isabelle/Isar.",
+    "subtask_keywords": [
+      "isabelle",
+      "isar",
+      "proofs",
+      "formal_verification",
+      "theorem_proving"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "oops: discontinuing proof attempts",
+        "description": "oops : proof \u2192 local_theory | theory \u2014 The oops command discontinues the current proof attempt, while considering the partial proof text as properly processed.",
+        "guidance": "Conceptually different from sorry: oops does not observe proof structure at all, goes back to theory level, and does not produce any result theorem (no intended claim that the proof can be completed). Typical application: explain Isar proofs within the system and in documents (partial or wrong attempts can be discussed in a logically sound manner). Isabelle LaTeX macros can be adapted to print elisions instead of the keyword."
+      },
+      {
+        "name": "fix: introducing fixed local variables",
+        "description": "fix : proof (state) \u2192 proof (state) \u2014 fix x introduces a local variable x that is arbitrary, but fixed.",
+        "guidance": "Fixed variables correspond to Skolem constants/meta-level universal quantification: any result \u03d5[x] exported from the context will be universally closed wrt. x at the outermost level. Use fix to introduce local parameters usable in subsequent proof steps."
+      },
+      {
+        "name": "assume vs presume: local assumptions semantics",
+        "description": "assume : proof (state) \u2192 proof (state) and presume : proof (state) \u2192 proof (state) \u2014 both introduce a local fact \u03d5 by assumption.",
+        "guidance": "assume expects the assumption to be usable immediately to unify with existing premises in a goal (may introduce new subgoals via that unification), while presume leaves the assumption as a new subgoal to be proved later. In forward reasoning (within a context block) there is no difference between assume and presume, but in backward reasoning the distinction matters. Several assumptions may be given (separated by and). Use presume to delay proof obligations; use assume when you intend immediate discharge via unification."
+      },
+      {
+        "name": "define: local definitions visible in logic",
+        "description": "define : proof (state) \u2192 proof (state) \u2014 de\ufb01ne x where x = t introduces a local (non-polymorphic) definition.",
+        "guidance": "Internally adds equational assumption x \u2261 t; exporting results replaces x by t (assumption discharged by reflexivity). Default fact name is x_def; simultaneous definitions allowed. Unlike let abbreviations, define produces a visible equation in the logic and does not support polymorphism."
+      },
+      {
+        "name": "let and (is ...) term abbreviations",
+        "description": "let : proof (state) \u2192 proof (state); (is p1 ... pn) syntax for annotating statements \u2014 abbreviations may be bound by let p \u2261 t or by (is ...) patterns.",
+        "guidance": "Higher-order matching binds text variables (named ?x or anonymous _). In let the patterns occur on the left; is patterns match the preceding statement (is is not a separate command but part of others). Abbreviations disappear during the input process just after type checking (not visible in the logic). Polymorphism of term bindings follows Hindley-Milner style; type variables referring to local assumptions or open goal statements are fixed."
+      },
+      {
+        "name": "distinction: term abbreviations vs local definitions",
+        "description": "Term abbreviations (let / is) differ from define: abbreviations vanish after input while define introduces equations into the logic.",
+        "guidance": "Use let/is for syntactic convenience and to guide matching/type inference during authoring; use define when you need an actual logical equation available in proofs and exports."
+      },
+      {
+        "name": "implicit abbreviations: thesis, this, and '...' usage",
+        "description": "For any open goal, thesis refers to its object-level statement (abstracted over meta-parameters); this is bound for fact statements; '...' binds the argument of the preceding object-logic application.",
+        "guidance": "These conveniences are canonical for calculational proofs (e.g., argument of a curried infix expression is its right-hand side). They are automatically bound by goal statements and help write concise calculational steps."
+      },
+      {
+        "name": "facts and forward chaining primitives",
+        "description": "note, then, from, with, using, unfolding, method_facts \u2014 mechanisms to record facts and forward-chain them into subsequent proof steps.",
+        "guidance": "note a = b1...bn recalls existing facts binding result as a (attributes may be involved). then indicates forward chaining by the current facts to the next claimed goal. from b abbreviates 'note b then'; with b1...bn abbreviates 'from b1...bn and this'. using augments facts for a subsequent refinement step; unfolding is like using but unfolds definitional equations throughout the goal and facts. (use b1...bn in method) passes only those facts to the given method; method_facts dynamically refers to currently used facts of the goal state. Forward chaining with an empty list has no effect."
+      },
+      {
+        "name": "ordering and relevance of facts",
+        "description": "Basic proof methods expect multiple facts in proper order corresponding to a prefix of rule premises; automated methods insert given facts before operation.",
+        "guidance": "Order of facts matters for basic methods; positions can be skipped with underscore _. Automated methods (simp, auto) are less sensitive to order. Use using/from/then to control which facts are visible to which proof steps; avoid flooding with irrelevant facts to keep automated search relevant."
+      },
+      {
+        "name": "goal declaration forms and their roles",
+        "description": "lemma/theorem/corollary/proposition/schematic_goal and short vs long statements; have/show/hence/thus/print_statement \u2014 forms to enter proof mode and declare claims.",
+        "guidance": "lemma/theorem/corollary/proposition are equivalent names (formal comment). schematic_goal allows unbound schematic variables (like Prolog goals), which loses compositionality and impacts performance. Short statements list propositions (postfix if/for); long statements explicitly mark context (local parameters, assumptions) and produce assms in the proof. shows states simultaneous propositions (conjunction); obtains claims several contexts (disjunction of eliminated parameters/assumptions). Use long statements to set up explicit local context when needed."
+      },
+      {
+        "name": "have vs show semantics",
+        "description": "have a: \u03d5 claims a local goal producing a fact in the current logical context, independent from pending sub-goals; show a: \u03d5 behaves like have plus a second stage to refine some pending subgoal after export.",
+        "guidance": "Use have for experimental exploration and establishing intermediate lemmas inside a proof body; use show for claims intended to discharge existing subgoals. Print_statement prints facts in long-statement form. Structured goal statements bind term abbreviations like ?thesis automatically."
+      },
+      {
+        "name": "calculational reasoning primitives",
+        "description": "also/finally/moreover/ultimately \u2014 commands to build calculational proofs using an auxiliary calculation register and implicit transitivity.",
+        "guidance": "Calculations are forward reasoning with implicit application of transitivity rules (e.g., =, \u2264). Calculation commands may occur only after commands that produce theorems (assume, note, finished have/show). also updates the calculation register (first also initializes it with this; subsequent also composes with calculation via trans rules). finally concludes the calculational thread and exhibits the final calculation for forward chaining (abbreviates also from calculation). moreover/ultimately collect results only without applying rules. Calculations are block-structured: new block opens a new calculational thread; nesting is supported."
+      },
+      {
+        "name": "trans/sym/symmetric and printing transitivity rules",
+        "description": "trans : attribute; sym : attribute; symmetric : attribute; print_trans_rules prints transitivity and symmetry rules in the current context.",
+        "guidance": "trans declares theorems as transitivity rules used by calculational commands; sym declares symmetry rules; symmetric resolves a theorem with a sym-declared rule (e.g., assume [symmetric]: x = y produces swapped fact). Use print_trans_rules to inspect available rules for calculations."
+      },
+      {
+        "name": "proof-method expressions and combinators",
+        "description": "Proof methods composed via ',' (sequential), ';' (structural), '|' (alternatives), '?' (try), '+' (repeat at least once), '[n]' (restrict first n subgoals); parentheses optional for single methods. Precedence | ; , [] + ? (low to high).",
+        "guidance": "In practice method specs are comma-separated name args. Regular Isar methods do not admit direct goal addressing (operate on first subgoal or uniformly on all). Improper/tactic-emulation methods permit explicit addressing. Choose combinators to control determinism and goal propagation carefully."
+      },
+      {
+        "name": "goal restriction and structural composition semantics",
+        "description": "Goal restriction wraps the proof state exposing certain subgoals while 'parking' others; structural composition 'm1; m2' applies m1 to the first exposed subgoal and then m2 to each newly emerged subgoal; '[n]' exposes first n subgoals (default n=1).",
+        "guidance": "Structural composition corresponds to THEN_ALL_NEW; e.g., (rule r; blast) applies rule r then solves all new subgoals by blast. Improper methods / tactic emulations provide [!] for all goals and [n-] for all goals starting from n. Use goal restriction to emulate subgoal addressing only when necessary; prefer structured composition for readability and maintainability."
+      },
+      {
+        "name": "initial and terminal proof steps: proof / qed / by / .. / . / sorry",
+        "description": "proof m1 (initial refinement) reduces a goal to subgoals; qed m2 (terminal) is intended to solve remaining goals; by m1 m2 abbreviates proof m1 qed m2 with backtracking; '..' abbreviates by standard; '.' abbreviates by this; sorry is a fake proof.",
+        "guidance": "Proof methods may be invoked in only two places (initial and terminal) \u2014 central design to avoid unstructured tactic scripts. No facts are passed to terminal methods (qed). show is the only other proper way to affect pending goals inside the body. As a rule of thumb, initial methods should either solve the goal completely or perform a well-understood reduction to new subgoals; avoid arbitrary automatic tools that leave badly structured subgoals. sorry taints derivations via an oracle and should be used only for experimentation/top-down development; facts from sorry are not the 'real thing'."
+      },
+      {
+        "name": "standard initial method behaviour",
+        "description": "standard : method \u2014 default initial method unless given explicitly.",
+        "guidance": "In Isabelle/Pure, standard performs elementary introduction/elimination steps (rule), introduction of type classes (intro_classes) and locales (intro_locales). In Isabelle/HOL, standard also considers classical rules. Use standard or explicit methods for predictable initial reductions."
+      },
+      {
+        "name": "proof style guidance: prefer structured reductions",
+        "description": "Arbitrary goal refinement via tactics is considered harmful; structure the proof so initial methods either solve goals or reduce to well-understood subgoals.",
+        "guidance": "Avoid automatic tools that leave many badly structured subgoals \u2014 they hinder intelligibility and maintainability of proof documents. Use show/have and explicit context management to make proofs readable and modular."
+      },
+      {
+        "name": "fundamental methods and attributes (rule/intro/elim/dest/OF/of/where/_)",
+        "description": "Primitives: rule, intro, elim, dest, OF, of, where, '_' (underscore), assumption, this, fact, subproofs, goal_cases, print_rules, etc.",
+        "guidance": "rule applies a theorem backward (introduction or with facts elimination); without args it's plain introduction. intro/elim/dest declare rules used by rule and similar tools; rule del undeclares them. OF a1...an applies theorems to given rules in right-to-left order (parallel emergence of premises). of t1...tn performs positional instantiation; where x1 = t1 ... performs named instantiation of schematic variables. '_' refers to the propositional identity rule and can skip argument positions. fact a1...an composes a fact modulo unification (ignores rule structure). assumption solves a goal by a single assumption step. this applies all current facts directly as rules (dot abbreviates 'by this'). Use these primitives deliberately to control rule application and instantiation."
+      },
+      {
+        "name": "subproofs method: deterministic per-subgoal proofs",
+        "description": "subproofs m applies method expression m consecutively to each subgoal, constructing individual subproofs internally.",
+        "guidance": "Search alternatives of m are truncated (method forced to be deterministic). This combinator impacts derivation structure (creates cascade of let-expressions) and may improve scalability. Use when you want one deterministic strategy applied separately to each subgoal."
+      },
+      {
+        "name": "goal_cases and case command: case analysis semantics",
+        "description": "goal_cases a1...an turns current subgoals into named cases; case command provides a shorthand to refer to a local context symbolically (c: x1...xm, \u03d51...\u03d5n).",
+        "guidance": "case c is equivalent to 'fix x1...xm assume c: \u03d51...\u03d5n'. By default case parameters are hidden (cannot be referred to later); use case (c y1...ym) to pick local names. Proper use of case does not peek at the current goal state; goal_cases and case i (for subgoals) are available but require care because internal tactical machinery may intrude and parameter names from automated tools can be unpredictable. Proper cases are available only if the proof method and rules support them; attributes can declare case names, conclusions, and parameters."
+      },
+      {
+        "name": "defining proof methods: method_setup",
+        "description": "method_setup : local_theory \u2192 local_theory \u2014 method_setup name = text description defines a proof method in the current context.",
+        "guidance": "The given text must be an ML expression of type (Proof.context -> Proof.method) context_parser. Combinators like METHOD and SIMPLE_METHOD turn tactics into official proof methods; primed versions refer to tactics with explicit goal addressing. Examples show method definitions with/without context and with theorem arguments. Use method_setup to provide reusable, documented proof methods for a theory."
+      }
+    ]
+  }
+}

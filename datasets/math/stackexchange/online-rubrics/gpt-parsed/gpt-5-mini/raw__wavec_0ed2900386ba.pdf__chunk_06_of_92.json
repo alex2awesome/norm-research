@@ -1,0 +1,175 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 92,
+  "chunk_chars": 39860,
+  "model": "gpt-5-mini",
+  "elapsed_s": 47.09874666700489,
+  "input_tokens": 12269,
+  "output_tokens": 5299,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and library developers (authors of GAP functions / interactive scripts)",
+    "subtask_short": "writing_gap_functions_and_io",
+    "subtask_description": "Guidance for implementing and using GAP functions, naming conventions, printing/viewing operations, interactive main/break loop behavior, and error/exit handling in GAP. Covers which methods to implement, performance tradeoffs, and debugging facilities in break loops.",
+    "subtask_keywords": [
+      "gap",
+      "reference_manual",
+      "functions",
+      "printing",
+      "error_handling"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "ReturnTrue",
+        "description": "ReturnTrue(...): This function takes any number of arguments, and always returns true.",
+        "guidance": "Can be used where a predicate is required but always true is desired (e.g., family predicate in InstallMethod). Example: f := ReturnTrue; f(); -> true; f(42) -> true."
+      },
+      {
+        "name": "ReturnFalse",
+        "description": "ReturnFalse(...): This function takes any number of arguments, and always returns false.",
+        "guidance": "Useful as a fixed predicate returning false. Example: f := ReturnFalse; f() -> false; f(\"any_string\") -> false."
+      },
+      {
+        "name": "ReturnFail",
+        "description": "ReturnFail(...): This function takes any number of arguments, and always returns fail.",
+        "guidance": "Use when a function must syntactically be present but should always return fail. Example: oops := ReturnFail; oops() -> fail."
+      },
+      {
+        "name": "ReturnNothing",
+        "description": "ReturnNothing(...): This function takes any number of arguments, and always returns nothing.",
+        "guidance": "Use when a placeholder function that returns no value is needed. Example: n := ReturnNothing; n(); (no output)."
+      },
+      {
+        "name": "ReturnFirst",
+        "description": "ReturnFirst(...): This function takes one or more arguments, and always returns the first argument.",
+        "guidance": "Useful when a function should forward the first argument unchanged. Note: calling with 0 arguments causes an error. Example: f := ReturnFirst; f(2,3,4) -> 2."
+      },
+      {
+        "name": "IdFunc",
+        "description": "IdFunc(obj): returns obj. Behaves similarly to ReturnFirst but only accepts a single argument.",
+        "guidance": "Use as a one-argument identity function. Example: id := IdFunc; id(42) -> 42."
+      },
+      {
+        "name": "IsFunction / FunctionsFamily",
+        "description": "IsFunction(obj) is the category test for functions. FunctionsFamily is the family of all functions.",
+        "guidance": "Use IsFunction to test whether an object is a function. Example: IsFunction(x->x^2) -> true. Library functions and certain mappings may or may not be considered functions depending on category."
+      },
+      {
+        "name": "Function naming conventions",
+        "description": "Rules that help memorizing or guessing library function names: capitalize first letters of words; if the first part is a verb the function may modify its arguments; 'Of' indicates information deduced from arguments (often attributes); 'By' indicates constructed from parts; 'With' sometimes alternative to 'By'; 'AsSomething' indicates conversion/coercion-like semantics; suffix 'NC' stands for 'no check' where an unchecked variant exists.",
+        "guidance": "Interpret names to infer semantics (e.g., Append modifies its argument, Concatenation returns a new object). 'By' versus 'With' difference example: StructByGenerators vs StructWithGenerators (With guarantees GeneratorsOfStruct equals given set). Use NC variants to avoid expensive argument checks when safe. Note: these rules are heuristics and not slavishly followed (e.g., Zero exists instead of ZeroOfElement/ZeroOfAdditiveGroup)."
+      },
+      {
+        "name": "Code annotations (pragmas)",
+        "description": "Pragmas are single-line comments starting with #% stored in the function object (unlike regular comments), usable to mark parts of functions for later manipulation.",
+        "guidance": "Pragmas appear in Display( last ) output; heavy use slows down function execution similarly to adding empty ';' statements. Use pragmas sparingly, and for tooling that manipulates function objects later (e.g., for programmatic edits)."
+      },
+      {
+        "name": "Main loop (read-eval-print loop) interaction rules",
+        "description": "GAP's normal interaction is the read-eval-print loop: type input, press RETURN to have GAP read/evaluate and show result. The prompt gap> signals readiness; a partial prompt > appears when a statement is incomplete.",
+        "guidance": "Every statement must be terminated by a semicolon; RETURN begins evaluation. You may enter multiple statements on one line (each must end with ';'). If a statement spans lines, leaving it incomplete will show a partial prompt. Entering RETURN when parts are syntactically correct may cause those parts to be evaluated. Suppress printing of results by terminating statements with double semicolons (;;)."
+      },
+      {
+        "name": "Convenience variables in REPL",
+        "description": "The read-eval-print loop provides convenience variables: last, last2, last3 for previous results; time for milliseconds spent by last statement; memory_allocated for bytes allocated by last statement. These variables are write-protected.",
+        "guidance": "Use last/last2/last3 to refer to recent values in subsequent commands. time and memory_allocated let you measure cost of a single REPL statement."
+      },
+      {
+        "name": "Special rules for input lines (continuation & prompt handling)",
+        "description": "Long input (big integers, long strings, long identifiers) can be continued by ending a line with a backslash (optionally with a carriage return). In line editing mode, when pasted lines start with whitespace following gap>/>, that leading part is removed to allow easy copy/paste of examples.",
+        "guidance": "Use backslash at line end to continue input across lines; GAP will ignore those backslashes and newlines when reading. This also affects how pasted examples can be imported into the session."
+      },
+      {
+        "name": "Display vs View vs Print purposes",
+        "description": "Three different operations to show objects: Display should print a human-readable relatively complete and verbose form; ViewObj prints a short concise form (used in main loop); PrintObj prints a complete, GAP-readable form whenever possible.",
+        "guidance": "Choose the printing operation to match the intended audience: humans (Display), concise REPL output (View), or machine-readable/exportable output (Print). Each has corresponding String-returning operations (DisplayString, ViewString, PrintString, String)."
+      },
+      {
+        "name": "Delegation order for printing/viewing operations",
+        "description": "Methods may delegate to other operations only following a specific order to avoid circular delegations: Display -> ViewObj -> PrintObj -> DisplayString -> ViewString -> PrintString -> String (as listed).",
+        "guidance": "Implementations should ensure that delegations only go 'down' this list. In particular, string-producing operations must not delegate to printing operations. Delegation outside this order may create circularity or suboptimal behavior."
+      },
+      {
+        "name": "Default delegations in the library",
+        "description": "The library provides default low-ranked methods: DisplayString returns DEFAULTDISPLAYSTRING; ViewString returns DEFAULTVIEWSTRING; Display prints DisplayString if not DEFAULTDISPLAYSTRING else delegates to PrintObj; ViewObj prints ViewString else delegates to PrintObj; PrintObj prints result of PrintString; PrintString returns result of String.",
+        "guidance": "Understand these defaults when relying on or overriding printing behavior. If you do not install specific methods, these defaults determine what appears in the REPL."
+      },
+      {
+        "name": "Recommendations for implementing print/view methods",
+        "description": "What methods one should implement for new GAP objects: at minimum install String to allow printing; install PrintString for nicer line breaks for larger objects; install PrintObj for performance-sensitive large objects; install ViewString unless String suffices; install DisplayString/Display for verbose human-readable forms when needed.",
+        "guidance": "General guidance: install String for minimal support. For large objects where line breaks matter, implement PrintString and use control characters \\< and \\> for line-break positions. Install PrintObj if output performance/memory matters. ViewString/DisplayString only if you need distinct short or verbose forms. If only String is installed, ViewObj will work and ViewString/DisplayString return default constants\u2014install additional methods to override defaults."
+      },
+      {
+        "name": "View/Print behavior for strings",
+        "description": "Default Print/View behavior for strings differs: Print strips enclosing quotes and processes backslash escapes (so it's suitable for formatted output), whereas View and ViewObj print strings with enclosing double quotes.",
+        "guidance": "Use Print when producing formatted textual output (e.g., Print(i, \" \", i^2) to format columns). Be aware of how quotes and escape sequences are handled."
+      },
+      {
+        "name": "SetName / Name / SetNameObject usage",
+        "description": "SetName assigns a display string to an object (used by Print/View); Name returns the assigned string. SetNameObject sets an interactive-session display name for an object (lower-level interfacing with display routines).",
+        "guidance": "SetName is useful to hide structure in examples (e.g., SetName(g, \"C4\")). SetNameObject works for objects represented internally (like permutations). Use SetNameObject sparingly because it can slow down printing; delete by calling SetNameObject(o, fail)."
+      },
+      {
+        "name": "Break loop entry and prompt",
+        "description": "When an error occurs or the user interrupts GAP (e.g., Ctrl-C), GAP enters a break loop similar to the main REPL but within the error's context. The prompt changes from gap> to brk>, and nested break loops use brk_nn> numbering.",
+        "guidance": "Within a break loop you can inspect and modify local variables and call statements in the environment where the error occurred. The initial message explains how to quit or return. Multiple nested break loops must be left iteratively."
+      },
+      {
+        "name": "Leaving a break loop by quit (quit;)",
+        "description": "Enter quit; or the EOF character at brk> to quit out of the break loop; from gap> quit; exits GAP.",
+        "guidance": "Quitting a break loop returns to the outer loop or main loop. Warning: quitting without completing a command may (rarely) corrupt data structures or leave options on the options stack; use ResetOptionsStack to remove unwanted options pushed earlier. QUIT (capital) is an emergency immediate exit usable at any prompt."
+      },
+      {
+        "name": "Leaving a break loop by return (return; or return obj;)",
+        "description": "Use return; to continue execution when interrupted; use return obj; to resume after an error if appropriate. The message on entering the break loop explains what is possible (quit vs return vs returning a value).",
+        "guidance": "When the break loop was entered due to an error you may need to modify variables or return an appropriate object so computation can continue. If break loop was entered by an interrupt, return; usually continues."
+      },
+      {
+        "name": "OnBreak customization",
+        "description": "OnBreak is a user-configurable global whose value is called when a break loop is entered; default value is Where. If OnBreak is a function it is called with no arguments.",
+        "guidance": "Override OnBreak to run custom code on entering break loops (e.g., print 'Hello\\n'). To locally change OnBreak for a function, save and restore the previous value (pattern shown in ErrorNoTraceBack example)."
+      },
+      {
+        "name": "OnBreakMessage customization",
+        "description": "OnBreakMessage is a user-configurable function producing the message after 'Entering break read-eval-print loop ...'. By default it prints help text about quit/return.",
+        "guidance": "Override OnBreakMessage with a no-op or custom message if you do not want the default instructions. Save and restore default when changing globally to avoid losing it permanently."
+      },
+      {
+        "name": "Where and WhereWithVars backtrace",
+        "description": "Where(nr) shows the last nr commands on the execution stack where the error occurred (nr defaults to 5). WhereWithVars acts similarly but also shows arguments and local variables of each function.",
+        "guidance": "Use Where to inspect the call chain. Note: variables displayed may be at a higher environment level and DownEnv may be needed to access them. The trace does not work from within compiled code; start GAP with -M to avoid compiled code if needed. -T option disables the break loop and simply returns errors to main loop."
+      },
+      {
+        "name": "DownEnv and UpEnv for environment navigation",
+        "description": "DownEnv(nr) moves down nr steps in the environment (default 1) to inspect variables at that level; UpEnv(nr) moves in the reverse direction.",
+        "guidance": "Use DownEnv/UpEnv to view variables in enclosing call frames while in the break loop. Changes only affect variable access in the break loop; return jumps to the proper environment level again. Note that name lookup prefers the chain of outer functions enclosing a function's definition before the chain of calling functions."
+      },
+      {
+        "name": "Error and ErrorNoReturn",
+        "description": "Error(messages, ...) prints messages (as Print would) and then enters a break loop (unless stderr not a terminal). ErrorNoReturn behaves similarly but disallows using return; to continue execution; the break loop can only be exited with quit;.",
+        "guidance": "Use Error when you want to allow the possibility of returning to continue execution after diagnosis; use ErrorNoReturn to force termination flow. The printed messages are produced as if by Print."
+      },
+      {
+        "name": "ErrorCount",
+        "description": "ErrorCount() returns the number of errors (including user interruptions) that have occurred in the session; the count increments for each error even if break loop disabled with -T.",
+        "guidance": "Use ErrorCount to programmatically detect how many errors/interupts have happened during a session."
+      },
+      {
+        "name": "Exiting GAP: GapExitCode / QuitGap / ForceQuitGap / QUIT",
+        "description": "GapExitCode([ret]) sets the exit value returned to the OS (integer -128..127 or boolean true/false mapping to 0/1). QuitGap([ret]) exits cleanly, calling functions installed via InstallAtExit; ForceQuitGap([ret]) exits immediately ignoring those functions. QUIT is an emergency way to leave GAP usable at any prompt.",
+        "guidance": "Use QuitGap for a clean exit that runs cleanup handlers; use ForceQuitGap to force immediate termination. GapExitCode controls the OS-level return value. QUIT cannot be called from a function (but QuitGap can)."
+      },
+      {
+        "name": "InstallAtExit and QUITTING",
+        "description": "InstallAtExit(func) registers functions to be called (with no arguments) before GAP terminates; during their execution the global QUITTING is set to true for user-typed QUIT and false otherwise.",
+        "guidance": "Use InstallAtExit to clean up temporary files or close files on exit. If an error occurs during execution of an at-exit function it is abandoned (no break loop). Use QUITTING inside handlers to distinguish emergency QUIT from normal exit."
+      }
+    ]
+  }
+}

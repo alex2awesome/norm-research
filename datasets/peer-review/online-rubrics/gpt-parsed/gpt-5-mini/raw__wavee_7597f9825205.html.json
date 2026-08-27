@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_7597f9825205.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16265,
+  "output_tokens": 4206,
+  "elapsed_s": 1214.6017722079996,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/ML researchers and practitioners studying automated peer review, LLM robustness, and adversarial text attacks",
+    "subtask_short": "LLM automated peer-review evaluation",
+    "subtask_description": "Evaluation of large language models used as automated peer reviewers, including generation of aspect-tagged reviews and score prediction, and assessment of robustness to textual adversarial attacks.",
+    "subtask_keywords": [
+      "peer_review",
+      "llm",
+      "adversarial_attack",
+      "review_generation",
+      "score_prediction"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Task \u2014 Review Generation",
+        "description": "The automatic generation of reviews for academic papers: produce constructive peer reviews that are coherent and consistent with human evaluations. Prompt LLMs to write a review in the style of ICLR and tag each sentence with an aspect type at the beginning of the sequence.",
+        "guidance": "Use a predefined aspect typology (see Aspect Typology rubric) and explicit prompt instructions so the generated review addresses all relevant evaluation criteria (e.g., Summary, Motivation, Substance, Originality, Soundness, Clarity, Replicability, Meaningful comparison). Structured prompts with aspect tags increase coverage. Example: produce an aspect-tagged review where each sentence begins with its aspect label (illustrated in Fig. 2)."
+      },
+      {
+        "name": "Task \u2014 Score Prediction",
+        "description": "Assign quantitative evaluations of a paper across predefined aspects (e.g., overall, substance, appropriateness, meaningful comparison, soundness correctness, originality, clarity, impact), with scores expected to fall within a specific conference range (e.g., 1 to 10).",
+        "guidance": "Ask the LLM to include a brief justification for each score to mirror human reviewers. Compare LLM-assigned scores with human-provided scores to assess alignment. Use score prediction to study sensitivity to input variations and adversarial perturbations."
+      },
+      {
+        "name": "Aspect Typology (aspect labels)",
+        "description": "Predefined aspect typology aligned with ACL review guidelines including: \"Summary\", \"Motivation\", \"Substance\", \"Originality\", \"Soundness\", \"Clarity\", \"Replicability\", \"Meaningful comparison\", and \"None\". Except for \"Summary\", each aspect is further classified into positive and negative sentiments to capture strengths and weaknesses.",
+        "guidance": "Tag each sentence with the corresponding aspect type; use the \"None\" tag for sentences that do not fit any category. This typology is used both to generate structured reviews and to compute Aspect Coverage (ACOV). Sentiment-tagging (pos/neg) enables analysis of how attacks change positive/negative tag counts."
+      },
+      {
+        "name": "Aspect Coverage (ACOV)",
+        "description": "ACOV = (# of aspect tags in generated review) / (# of predefined aspects). Measures how many predefined aspects a generated review covers.",
+        "guidance": "Interpret ACOV as a coverage-oriented metric, not a direct indicator of human-level review quality. ACOV increases substantially when prompts include explicit aspect tags (ablation study showed w/ tags >> w/o tags). Do not equate high ACOV with high insightfulness\u2014use alongside human evaluation."
+      },
+      {
+        "name": "Similarity to human (automatic metrics)",
+        "description": "Semantic/lexical similarity between LLM-generated reviews and human-annotated ground truth measured by ROUGE-1, ROUGE-2, ROUGE-L, and BertScore. For multiple human references, select the maximum score between the LLM output and the human-written ground truths.",
+        "guidance": "These metrics capture surface-level qualities (fluency, lexical overlap, semantic embedding similarity) but offer limited insight into coherence, usefulness, or critical depth. Use them together with human evaluation metrics. Sampling (e.g., across-paper pairs sampled 10%) may be used to reduce computation."
+      },
+      {
+        "name": "Pairing types for similarity evaluation",
+        "description": "Two human-review pairing strategies for baseline similarity: (1) Within-Paper Pairs \u2014 review pairs from the same paper (to capture semantic similarity for same context). (2) Across-Paper Pairs \u2014 review pairs from different papers (to capture unrelated-content similarity).",
+        "guidance": "Within-paper pairs yield higher ROUGE scores due to shared vocabulary; across-paper pairs are naturally lower. Compare LLM outputs to both to contextualize scores. When across-paper pairs are numerous, random sampling (e.g., 10%) can be used."
+      },
+      {
+        "name": "Human evaluation criteria for review quality",
+        "description": "Three human-judged dimensions used in controlled evaluation: (1) Fluency & Consistency \u2014 is the review easy to read and internally coherent? (2) Content Relevance \u2014 does the review address the paper\u2019s core contributions and align with meta-review context? (3) Insightfulness \u2014 does the review provide substantive, constructive feedback that could help improve the paper?",
+        "guidance": "Use ranking tasks where annotators rank multiple (anonymized) reviews along each criterion and record confidence. Use concise context (meta-review) to avoid fatigue. These human judgments complement automatic metrics and capture deeper qualities such as usefulness."
+      },
+      {
+        "name": "Robustness \u2014 Attack Success Rate (ASR) and Score Shift",
+        "description": "ASR: proportion of attacks considered successful. An attack is considered successful if the score shift between the clean output and the attacked output is at least +1.0 in the total score. Score Shift: quantitative change in predicted scores after attack.",
+        "guidance": "Use ASR and average score shift to quantify LLM vulnerability. Report per-attack and per-model ASR and shifts. Combine with statistical testing (see Wilcoxon rubric) and tag-shift analysis to understand behavioral changes (e.g., increase in positive tags, decrease in negative tags)."
+      },
+      {
+        "name": "Statistical validation (Wilcoxon signed-rank test)",
+        "description": "Use the Wilcoxon signed-rank test to assess whether post-attack scores are significantly greater than pre-attack scores; pair scores predicted on clean content with those on attacked content and test at p = 0.05.",
+        "guidance": "Report p-values alongside ASR and score shifts to confirm that observed score inflation is unlikely due to chance. Use paired testing because comparisons are between clean and attacked outputs on the same inputs."
+      },
+      {
+        "name": "Attack Focus Localization (localization via LCS)",
+        "description": "Algorithm that identifies modifiable subsequences in long papers by computing the Longest Common Subsequence (LCS) between the paper content and the generated review; matched subsequences are highlighted as candidate regions for adversarial perturbation.",
+        "guidance": "Steps: (1) identify modifiable indexes M = LCS(x_clean, fr(x_clean)), (2) for each m in M search perturbations P_m via attack method A, (3) construct candidate attacked documents and select x_adv maximizing total score shift. Ablation shows localization dramatically increases ASR and average score shift compared to global perturbation. Use LCS at character- or word-level depending on attack."
+      },
+      {
+        "name": "Textual adversarial attack taxonomies and examples",
+        "description": "Categorize attacks by perturbation granularity and attacker knowledge: character-level (e.g., DeepWordBug, PuncAttack \u2014 insert/delete/replace characters or punctuation), word-level (e.g., TextFooler, BERT-Attack \u2014 synonym/contextual word replacements), and sentence-level (e.g., StyleAdv \u2014 paraphrase or stylistic transformations). Also white-box vs black-box distinctions.",
+        "guidance": "Character-level attacks create typos that are sometimes noticeable but can be stealthy across long texts; word-level synonym swaps preserve grammaticality and are semantically similar but can be stealthy; sentence-level style transformations can be highly deceptive. Evaluate each granularity's stealthiness via human study and measure #queries required (efficiency)."
+      },
+      {
+        "name": "Tag-shift metrics (Avg. #Pos Shift and Avg. #Neg Shift)",
+        "description": "Track the average change in the number of positive and negative aspect tags in generated reviews after attack: Avg. #Pos Shift (increase in positive tags) and Avg. #Neg Shift (decrease in negative tags).",
+        "guidance": "Use these measures to interpret how adversarial perturbations bias sentiment in reviews (e.g., inflating positivity and suppressing criticism). Correlate tag shifts with score shifts to demonstrate mechanism of score inflation. Report per-model variations to capture model-specific biases."
+      },
+      {
+        "name": "Attack stealthiness / human imperceptibility evaluation",
+        "description": "Human studies measuring (1) Attack Identification \u2014 can annotators distinguish attacked papers from originals? and (2) Attack Localization \u2014 can annotators locate the perturbed paragraph when told a paper was attacked? Metrics: accuracy (Acc.), uncertainty rate (Unc.), and confidence (Conf.).",
+        "guidance": "Recruit annotators with relevant domain experience; present both pairwise and single-document tasks. Findings: semantic-preserving attacks (e.g., BERT-Attack) can be at chance-level identification and very low localization accuracy, whereas punctuation or stylistic attacks have different trade-offs between identifiability and localization. Use these human metrics to assess real-world risk."
+      },
+      {
+        "name": "Defense assessment \u2014 limitations of AI-text detectors",
+        "description": "Existing AI-text detectors (e.g., GPTZero, OpenAI Classifier) are primarily trained to distinguish human-written vs LLM-generated text and are not effective at identifying subtle, semantics-preserving adversarial perturbations injected into paper content. Detecting machine-generated reviews also faces policy ambiguity and ease of bypass.",
+        "guidance": "Do not rely solely on detector-based defenses. Consider that policies may allow LLM-assisted text (ambiguous boundary) and that adversaries can paraphrase or prompt-engineer to bypass detectors. Complement detectors with inference-time monitoring, human-in-the-loop verification, and robust prompt/processing strategies."
+      },
+      {
+        "name": "Dataset selection and aspect-tagging for evaluation",
+        "description": "Use datasets with human reviews (e.g., PeerRead ICLR-2017 subset, AgentReview) containing acceptance labels and human-written reviews; since reviews may lack aspect tags, employ an aspect tagger pre-trained on ASAP (Yuan et al., 2022) to automatically annotate human reviews.",
+        "guidance": "Explicitly document dataset composition (number of papers, accepted vs rejected) and sampling procedures (e.g., random sampling for across-paper pairs). Use the same aspect typology and tagging pipeline for both LLM-generated and human reviews to enable fair ACOV and tag-shift comparisons."
+      },
+      {
+        "name": "Ablation study practices (prompting and localization impacts)",
+        "description": "Assess contribution of specific components (e.g., explicit aspect tags in prompts, Attack Focus Localization) by comparing metrics 'with' vs 'without' the component (e.g., ACOV w/ tag vs w/o tag; ASR/score shift with and without localization).",
+        "guidance": "Report paired comparisons (e.g., ASR and average score shift as 'Without/With Attack Focus Localization'). Use ablation to attribute effects to prompt structure or localization, and interpret metrics carefully (e.g., ACOV increases due to prompt structure, not necessarily insightfulness)."
+      },
+      {
+        "name": "Evaluation of review output characteristics (fluency, relevance, insightfulness trade-offs)",
+        "description": "Assess models not only on coverage/similarity but on the balance between fluency, content relevance, and insightfulness; models may trade off strict adherence to prompts for sharper critique (e.g., GPT-4o produced exhaustive but surface-level comments, GPT-4o-mini produced more targeted insight).",
+        "guidance": "Use combined automatic and human evaluations to detect when high lexical/surface metrics fail to reflect meaningful critique. Report per-model profiles across the three human-judged criteria and consider how prompting rigidity affects insightfulness."
+      },
+      {
+        "name": "Recommended safeguards and system-level desiderata",
+        "description": "While exploring defenses, recommend human oversight, inference-time monitoring, and human-in-the-loop verification as mitigations \u2014 automated detectors alone are insufficient to secure review integrity against adversarial paper manipulations.",
+        "guidance": "Adopt multi-pronged mitigations: robust prompting, monitoring for unusual tag/score shifts, targeted human audits triggered by anomaly detection, and policy clarification regarding acceptable LLM assistance. Report limitations and keep humans responsible for final decisions."
+      }
+    ]
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 142,
+  "n_chunks": 160,
+  "chunk_chars": 39990,
+  "model": "gpt-5-mini",
+  "elapsed_s": 616.0739105419998,
+  "input_tokens": 17349,
+  "output_tokens": 3712,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "users and developers of the SINGULAR computer algebra system (mathematicians / computational algebraists) who use the tropicalNewton library and install/build SINGULAR or embed libSingular",
+    "subtask_short": "using tropicalNewton library",
+    "subtask_description": "Guidelines and preconditions for calling tropicalNewton.lib procedures (e.g., tropicalVarietyNewton, tropicalLinkNewton), plus related SINGULAR usage, build, and libSingular integration notes. Covers required settings, assumptions, example usage, and installation/build constraints.",
+    "subtask_keywords": [
+      "singular",
+      "tropical_geometry",
+      "tropicalnewton_lib",
+      "library_usage",
+      "build_install",
+      "libsingular"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "tropicalVarietyNewton preconditions",
+        "description": "Assume: uniformizingParameter is set, I monomial free and zero-dimensional",
+        "guidance": "Usage: tropicalVarietyNewton(I); I ideal. Return: matrix containing all elements of the tropical variety. Example usage in the manual: set ring and uniformizingParameter (e.g., ring r = (0,t),(z,y,x),lp; number uniformizingParameter = t; export(uniformizingParameter);), define I (monomial-free, zero-dimensional), call list TI = tropicalVarietyNewton(I); iterate through TI to print. After use, kill uniformizingParameter. The procedure comes from tropicalNewton.lib."
+      },
+      {
+        "name": "tropicalVarietyNewton return format",
+        "description": "Return: matrix, a matrix containing all elements of the tropical variety",
+        "guidance": "The caller should expect a matrix output whose rows/columns correspond to elements of the tropical variety as shown in the example (list TI printed). Use printing/iteration to inspect rows; the example prints several vectors such as 0,0,0 etc."
+      },
+      {
+        "name": "tropicalLinkNewton preconditions",
+        "description": "Assume: constant coefficient case, inI is monomial free, its tropical variety has codimension one lineality space and is a polyhedral fan",
+        "guidance": "Usage: tropicalLinkNewton(inI); inI ideal. Return: matrix containing generators of all rays of the tropical variety. Note: if printlevel sufficiently high the procedure will print intermediate results. Example: set number uniformizingParameter = t; export(uniformizingParameter); set printlevel = 3; list TinI = tropicalLinkNewton(inI); the procedure will report steps like 'reducing to one-dimensional fan', 'intersecting with pairs of affine hyperplanes', 'total number of rays: N', and will produce a list/matrix of generated rays."
+      },
+      {
+        "name": "printlevel influences diagnostic output",
+        "description": "Note: if printlevel sufficiently high will print intermediate results",
+        "guidance": "Set printlevel to a higher value (e.g., printlevel = 3) before calling tropicalLinkNewton or similar procedures to get progress/diagnostic messages (e.g., statuses 'reducing to one-dimensional fan', 'intersecting with pairs of affine hyperplanes', and counts of rays), which helps debugging and understanding intermediate computation steps."
+      },
+      {
+        "name": "uniformizingParameter must be defined and exported when required",
+        "description": "Several tropicalNewton.lib procedures assume a uniformizingParameter is set and exported (e.g., number uniformizingParameter = t; export(uniformizingParameter);).",
+        "guidance": "Set a numeric name for the uniformizing parameter before calling functions that require it. After the computation, the examples explicitly call kill uniformizingParameter to remove it. The manual also warns when uniformizingParameter is already global."
+      },
+      {
+        "name": "minpoly side-effect when set",
+        "description": "Setting minpoly results in changing the current coefficient domain and clears all previously defined variables of that ring",
+        "guidance": "Be cautious when using the minpoly option: it alters the coefficient domain and will delete variables dependent on the current ring. This can change subsequent computations and may remove user-defined variables; set minpoly only when intended and be aware of its destructive effect on variables tied to the ring."
+      },
+      {
+        "name": "ring-dependent options belong to individual polynomial rings",
+        "description": "Formally global Singular options now belong to individual polynomial rings; changing rings can change these options' effects.",
+        "guidance": "Options that now belong to individual rings include intStrategy, redTail, redThrough. Additionally the following settings now belong to individual (currently active) polynomial rings: short, minpoly, noether. When switching between rings, remember these options affect results (notably Groebner basis computations). Check/restore options when changing rings to ensure reproducible behavior."
+      },
+      {
+        "name": "version schema interpretation",
+        "description": "Singular version format is a.b.c.d (also shown as a-b-c-d); component meanings: a indicates major incompatible changes, b indicates incompatible changes in some commands/libraries, c indicates compatible changes (new commands/options/algorithms), d increments for bugfix releases",
+        "guidance": "To get the complete version number use system(\"version\"); or the SINGULAR_VERSION symbol in C. Development builds may display 'Development version a.b.c' while official versions show 'version a.b.c'."
+      },
+      {
+        "name": "build/install procedure for SINGULAR",
+        "description": "Standard UNIX-like build/install: Download and extract source (.tar.gz), run ./configure, run make, then run make install",
+        "guidance": "There are many configure options; run ./configure --help to list them. For multicore builds, run make with -j [cores] to parallelize. Example notes include optional external dependencies (FLINT, 4ti2, surf, normaliz) and guidance for installing FLINT: ./configure --with-gmp=/usr --prefix=$HOME/tmp --disable-shared; make && make install. Typical installation prefix example: --prefix=$HOME/Singular4; then make && make install produces $prefix/bin/Singular."
+      },
+      {
+        "name": "side-by-side installation constraint",
+        "description": "Due to changed path choices it is no longer possible to have a side-by-side installation of different Singular versions or versions for different architectures",
+        "guidance": "Plan upgrades accordingly; do not expect multiple installed versions to coexist without custom manual changes to install paths."
+      },
+      {
+        "name": "libSingular signal handler requirement",
+        "description": "When using libSingular (the C++ library) at least a handler for SIGCHLD must be installed for certain routines to work correctly",
+        "guidance": "If child processes are started by libSingular the handler must call sig_chld_hdl from Singular/links/ssiLink.cc or implement equivalent behavior (e.g., call slClose(l) for ssi links). libSingular lacks two things compared to the full executable: memory allocation functions for GMP (mmInit) and signal handlers (init_signals); ensure your embedding application provides a SIGCHLD handler."
+      },
+      {
+        "name": "alias syntax restriction",
+        "description": "New syntax: alias may be used as a prefix to a variable declaration, but it can only be used in procedure headings",
+        "guidance": "Use alias only in procedure headers; other uses are not allowed. See Section 3.5.1 for details."
+      },
+      {
+        "name": "new module ordering with component weights",
+        "description": "New ordering for modules: weights may be assigned to module components when defining a monomial ordering; ordering sorts by weighted degree, then by ring monomial order, then by component index",
+        "guidance": "Example: ring R = 0, (x,y,z), (am(1,2,3,10,20,30,40), dp, C); assigns weights 1,2,3 to x,y,z and weights 10,20,30,40,... to module components. This influences term ordering in module computations and should be used when component-weighted orderings are needed."
+      },
+      {
+        "name": "search paths and tree structure changes",
+        "description": "The tree structure of the binary Singular distribution and Singular search paths have been changed; display current search paths with Singular -v",
+        "guidance": "Be aware of the new installation tree layout (see the project's wiki for the typical tree). When moving libraries, dynamic modules, or custom files, update or inspect search paths using Singular -v. Multi-arch installations of Singular 4 are not currently possible."
+      },
+      {
+        "name": "use of kill uniformizingParameter after computations",
+        "description": "Examples explicitly call kill uniformizingParameter after computations that required it",
+        "guidance": "To avoid leaving global state that may interfere with later computations, remove the uniformizingParameter when you are done (e.g., kill uniformizingParameter;). This is shown in examples for both tropicalVarietyNewton and tropicalLinkNewton."
+      }
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_d95cc9ee4e26.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16129,
+  "output_tokens": 4380,
+  "elapsed_s": 1547.7936545410194,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational linguistics / NLP researchers and practitioners",
+    "subtask_short": "semantic_role_labeling_system_design",
+    "subtask_description": "Designing, training, and evaluating statistical systems for automatic semantic role labeling (using FrameNet-annotated data), including feature engineering, training-data handling, generalization to unseen predicates, and evaluation (accuracy/precision/recall).",
+    "subtask_keywords": [
+      "semantic_role_labeling",
+      "FrameNet",
+      "statistical_NLP",
+      "feature_engineering",
+      "parsing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Training data and annotation standards (FrameNet)",
+        "description": "System is trained on a hand-labeled data set: the FrameNet database. The preliminary version used contains 49,013 annotated sentences and 99,232 annotated frame elements across 67 frame types from 12 semantic domains and 1,462 distinct lexical predicates (927 verbs, 339 nouns, 175 adjectives). Sentences were chosen from the British National Corpus using subcorpora to capture different argument structures; annotations include boundaries, frame semantic role (frame element), syntactic category, and grammatical function.",
+        "guidance": "FrameNet focuses on completeness of examples for lexicographic needs rather than statistical representativeness. FrameNet annotations include certain extras (word sense tags, metaphoric usage) not used here. The annotation conventions (e.g., including relative pronoun and antecedent in a frame element) affect matching to automatic parses. Interannotator agreement tests show sentence-level agreement from .66 to .82 (kappa .67\u2013.82), which provides an empirical upper bound on automatic performance."
+      },
+      {
+        "name": "Evaluation metrics (accuracy, precision, recall, per-sentence correctness)",
+        "description": "Primary reported evaluation metrics include: 82% accuracy for identifying semantic role of presegmented constituents; for jointly segmenting and labeling constituents the system achieved 65% precision and 61% recall. The system correctly identifies all frame elements in 38% of test sentences. Interannotator agreement (.66\u2013.82) is reported as a comparison point.",
+        "guidance": "Distinguish per-frame-element metrics (accuracy/precision/recall) from per-sentence all-elements-correct metrics. Use interannotator agreement to contextualize performance. Report whether evaluation uses gold (hand) boundaries or automatically detected segments."
+      },
+      {
+        "name": "Phrase type feature",
+        "description": "The phrase type feature indicates the syntactic category (Penn Treebank nonterminal labels) of the phrase expressing the semantic role (e.g., NP, PP, ADVP). In the training data, frame elements are most commonly NPs (47%) and PPs (22%). Phrase types are derived from automatically generated parse trees.",
+        "guidance": "When matching annotated frame-element spans to parse constituents, choose the constituent with identical begin/end positions; if multiple matches due to unary productions, choose the higher constituent. Parser/annotation mismatches (e.g., relative-pronoun inclusion) and parser errors cause ~13% of frame elements to have no exact matching parse constituent; training examples with no match were discarded, while at test time the largest constituent within the element bounds was used."
+      },
+      {
+        "name": "Governing category (gov) feature",
+        "description": "A grammatical-function feature for NPs with two values (S or VP) corresponding roughly to subjects (S) and objects (VP). Computed by following parent links up the parse tree from the constituent until an S or VP ancestor is found.",
+        "guidance": "Restricted to NPs because it had little effect on other phrase types. Robust to some parser attachment errors by searching higher ancestors, but confuses direct objects with adjunct NPs (e.g., temporal adjuncts) and does not distinguish direct vs. indirect objects."
+      },
+      {
+        "name": "Parse tree path feature",
+        "description": "Represents the syntactic path from the target word (predicate) through the parse tree to the constituent, encoded as a string of nonterminals with \u2191/\u2193 markers (e.g., VB\u2191VP\u2193NP). The first element is the part-of-speech of the target, the last is the constituent phrase type.",
+        "guidance": "Path captures the syntactic relation between predicate and constituent and is highly informative for role assignment but has high value sparsity (thousands of distinct paths) and is susceptible to parser errors and differences in parse formalism (Treebank-2 conventions). The feature was sometimes collapsed (e.g., all verb POS tags to VB) to reduce sparsity."
+      },
+      {
+        "name": "Position feature (before/after predicate)",
+        "description": "A binary feature indicating whether the constituent occurs before or after the predicate. Intended to partially substitute for syntactic information and to be robust to parser errors.",
+        "guidance": "Highly correlated with grammatical function (subjects typically before, objects after) and useful when parse-derived features are unreliable or unavailable."
+      },
+      {
+        "name": "Head word feature",
+        "description": "The lexical head (word) of the constituent used as a feature to predict semantic role (i.e., P(role | head)).",
+        "guidance": "Very informative when the role filler/head word has been seen in training (high accuracy coverage), but suffers from severe sparsity for unseen fillers. To mitigate sparsity, the authors used lexical clustering and semantic class generalization for head words."
+      },
+      {
+        "name": "Subcategorization / sentence-level alternation features",
+        "description": "Features designed to represent systematic alternations in verb argument structure (e.g., raising, equi, small clauses) and other sentence-level cues that affect argument realization.",
+        "guidance": "Selecting sentence-level features carefully allows the model to introduce dependencies between frame element decisions within a sentence without excessive complexity. Path and gov features help capture alternations; special handling of raising/equi constructions is necessary because parse annotation styles affect the observed paths."
+      },
+      {
+        "name": "Lexical clustering / automatic semantic classes",
+        "description": "Use of automatic lexical clustering algorithms to group words (predicates or role fillers) to generalize lexical statistics beyond seen items.",
+        "guidance": "Automatic clustering provides broader coverage that tends to outweigh its imprecision; compared with hand-built resources, automatically derived clusters can better address sparsity. Clustering was used to generalize across possible fillers of roles and to smooth P(role | head/predicate)."
+      },
+      {
+        "name": "Selectional preferences and higher-level semantic knowledge",
+        "description": "Modeling of selectional restrictions on role fillers (semantic compatibility constraints) using hand-built and automatically derived resources to supplement lexical statistics.",
+        "guidance": "Incorporating selectional preference information can help when lexical statistics are sparse; experiments compared hand-built resources versus automatically derived resources for this purpose."
+      },
+      {
+        "name": "Handling unmatched/mismatched parse constituents",
+        "description": "Techniques for dealing with cases where annotated frame-element spans do not exactly match parse constituents: ignore punctuation in span alignment, discard training examples with no exact match, and at test time use the largest constituent inside the element bounds as an approximation.",
+        "guidance": "Systematic annotation conventions (e.g., inclusion of relative pronoun + antecedent) cause mismatches in ~1% of cases; parser error accounts for most unmatched cases (~13%). A near-match heuristic handles common parse errors (e.g., PP misattachments)."
+      },
+      {
+        "name": "Segmentation vs labeling subtask decomposition",
+        "description": "Task decomposed into two subproblems: (1) finding the relevant sentence constituents (segmentation), and (2) assigning them correct semantic labels (labeling). The reported 82% accuracy refers to labeling when gold/hand boundaries are given; joint segmentation+labeling yields lower precision/recall.",
+        "guidance": "Evaluate both subtasks separately and jointly. Performance with gold segmentation provides an upper-bound indication of labeling quality; joint evaluation is necessary for real-world performance estimates."
+      },
+      {
+        "name": "Generalization to unseen predicates and frames",
+        "description": "Experiments to test generalization: (a) holding out individual predicates within the same frame; (b) collapsing FrameNet roles into 18 abstract thematic roles and retraining; (c) cross-frame and cross-domain jackknife tests (holding out entire frames or domains).",
+        "guidance": "Mapping FrameNet roles to abstract thematic roles can preserve reasonable performance (example: 82.1% for abstract roles vs 80.4% for frame-specific roles). Generalization degrades as semantic distance increases; mapping choices affect cross-frame generalization and are somewhat arbitrary."
+      },
+      {
+        "name": "Integration of role labeling with syntactic parsing",
+        "description": "Combine syntactic parsing and semantic role identification into a single probabilistic model vs. treating them as separate pipeline modules.",
+        "guidance": "Integration yielded only a slight gain over an unintegrated system, suggesting robustness of simple probabilistic systems and modest benefit from joint modeling in this setup."
+      },
+      {
+        "name": "Feature combination and probability estimation / smoothing",
+        "description": "Compute probabilities for each role r conditioned on various features (e.g., P(r | path), P(r | head), P(r)), and combine them via interpolation (linear interpolation) or other smoothing/backoff methods to mitigate sparsity.",
+        "guidance": "Treat some complex structured features (path strings) as atomic values; use interpolation weights (\u03bb) to balance features. The path feature may be powerful but sparse; interpolation with head or prior distributions can improve robustness. Jelinek-Mercer-style interpolation is referenced."
+      },
+      {
+        "name": "Use of automatic syntactic parser (Collins 1997) and its limitations",
+        "description": "An automatic, statistical parser (Collins 1997 model trained on Penn Treebank) is used to generate parse trees and extract syntactic features for constituents.",
+        "guidance": "Parser errors affect feature extraction (13% of frame elements had no matching parse constituent). Parser annotation scheme (Treebank-2) decisions (e.g., use of S nodes, empty categories) affect observed path/gov features and must be accounted for in feature design and evaluation."
+      },
+      {
+        "name": "Annotation conventions and frame-element granularity (frame-level roles vs abstract thematic roles)",
+        "description": "FrameNet defines frame elements at the level of semantic frames (intermediate between very specific verb roles and very general thematic roles) so that roles like Speaker, Addressee, Message are frame-specific and shared across lexical entries invoking the same frame.",
+        "guidance": "Choosing role granularity affects learnability and generalization; intermediate frame-level roles strike a balance between generality and lexical specificity. Abstract thematic-role collapses are an experimental way to improve generalization across frames/predicates."
+      },
+      {
+        "name": "Interannotator agreement as performance ceiling",
+        "description": "Reported interannotator agreement at the sentence level ranged from .66 to .82 and kappa .67\u2013.82 for a small number of predicates; system performance (.65/.61 precision/recall; 38% sentences with all frame elements correct) is below human agreement.",
+        "guidance": "Report and compare automatic system performance relative to human agreement to understand remaining headroom; different predicates show variable human agreement, so per-predicate ceilings may differ."
+      },
+      {
+        "name": "Experimental protocols for generalization testing (jackknife / hold-out)",
+        "description": "Use jackknife protocols that hold out one predicate, one frame, or one domain at a time to assess generalization. Also perform cross-domain tests by training on 11 domains and testing on the held-out domain.",
+        "guidance": "Design experiments to reflect varying levels of semantic novelty (unseen predicate within same frame vs. unseen domain) and evaluate how different features/generalization strategies perform under those scenarios."
+      }
+    ]
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 18,
+  "n_chunks": 37,
+  "chunk_chars": 39529,
+  "model": "gpt-5-mini",
+  "elapsed_s": 193.14234491599927,
+  "input_tokens": 13441,
+  "output_tokens": 5274,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "authors/typesetters using plain TeX (intermediate/advanced users)",
+    "subtask_short": "plain_tex_table_alignment",
+    "subtask_description": "Designing and debugging \\\\halign/\\\\valign preambles, table layouts, spanned columns, ruled tables, and basic output-routine/page-format changes in plain TeX. Includes techniques for aligning decimals, spanning columns, vertical/horizontal rules, nested alignments, and headlines/footlines.",
+    "subtask_keywords": [
+      "tex",
+      "halign",
+      "tables",
+      "plain_tex",
+      "output_routines"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Preamble reading and template parts (u and v)",
+        "description": "The template in a preamble has two parts, called the u and v parts, where u precedes the \u2018#\u2019 and v follows it; macros are not expanded while the preamble is being read (except as described), and after the \\cr that ends the preamble TEX looks ahead for \\noalign or \\omit and then begins reading the template (expanding macros) and places the entry into an \"unset box\" (via an internal \\endtemplate) whose glue will be set later when final column widths are known.",
+        "guidance": "Design preambles with awareness of the timing of expansion: the u part is read, then the entry, then the v part; \\endtemplate causes entries to be collected into unset boxes for later sizing. Keep templates explicit and predictable."
+      },
+      {
+        "name": "Using \\omit to escape the template",
+        "description": "If the very first token of an alignment entry (after macro expansion) is \\omit, then the template of the preamble is omitted and the trivial template \u2018#\u2019 is used instead.",
+        "guidance": "Use \\omit as the first token when a particular entry should not use the column's template (e.g., title 'B.C.' without colon). \\omit may be used in any column but must come first in the entry."
+      },
+      {
+        "name": "Avoid beginning alignment entries with conditionals (\\if...)",
+        "description": "Macros are expanded while TEX is looking for a possible \\omit, so if an entry begins with \\if... (or a macro that expands to an \\if) the conditional will be evaluated before the template is inserted, which can produce incorrect behavior.",
+        "guidance": "Protect macros that might expand to conditionals by prefixing with \\relax (e.g., define \\strut as \\relax\\ifmmode... ). Careful macro design avoids timing problems where expansion happens earlier than expected."
+      },
+      {
+        "name": "Align decimal points using a digit-width active character",
+        "description": "To line up decimal points, choose a character not used elsewhere (e.g., '?'), make it active, and make it produce a blank equal to the width of a digit; then insert such nulls so entries have equal total widths and their decimal points align.",
+        "guidance": "Example setup: \\newdimen\\digitwidth \\setbox0=\\hbox{\\rm0} \\digitwidth=\\wd0 \\catcode\u2018?=\\active \\def?{\\kern\\digitwidth}. Keep the active-character defs local (inside a group or vbox) so normal behavior resumes outside the table."
+      },
+      {
+        "name": "Periodic preambles using '&&' to repeat pattern",
+        "description": "Placing an extra '&' just before one template makes TEX treat the preamble as an infinite sequence that restarts at the marked template when a \\cr is reached, allowing a compact specification for tables with periodic column structure.",
+        "guidance": "Use '&&' to indicate repetition (tabskip glue after each template is copied with that template). Example: to handle many columns with repeating template, write a short periodic preamble using '&&'."
+      },
+      {
+        "name": "Insert '{}' to preserve spacing around relations when splitting formulas",
+        "description": "When breaking a math formula across alignment columns, insert '{}' at the beginning of the right-hand formula so TEX will put the proper space before relation symbols ('$\\{\\}=...$' has correct spacing but '$=...$' doesn't).",
+        "guidance": "When you place '&' immediately before a relation (like '='), start the right-hand column entry with '{}', as in '${}#\\hfil$' templates, to get the same spacing as a single formula."
+      },
+      {
+        "name": "Use \\hidewidth to make entries visually span without affecting column widths",
+        "description": "\\hidewidth is equivalent to \\hskip-1000pt plus 1fill; placed at left or right of an entry it gives the entry an extremely negative natural width so it will stick out (ignored for width calculations) and may stretch without limit.",
+        "guidance": "Use \\hidewidth to allow titles or spanning items to not affect numeric column widths, or to let text stick out into margins. Place it left, right, or both as needed."
+      },
+      {
+        "name": "Span columns with \\span and \\multispan",
+        "description": "Outside preambles, \\span (used instead of '&') causes the material before and after to be processed but then placed into a single hbox whose width is the sum of the individual column widths plus the tabskip glue between them. \\multispanN expands to \\omit\\span\\omit... (N times) to span several columns; if N>9 use braces: \\multispan{13}.",
+        "guidance": "Use \\span when you want entries to occupy multiple columns and line up with non-spanning boxes; combine with \\omit when necessary to skip templates in spanned columns."
+      },
+      {
+        "name": "Width of a spanning box equals sum of column widths plus tabskip glue",
+        "description": "If columns have widths w1,w2,... and tabskip glue after them g1,g2,..., then an entry 'a1\\span a2\\span a3' will be placed into an hbox of width w1 + g1 + w2 + g2 + w3, and that hbox is preceded and followed by the appropriate outer glue.",
+        "guidance": "Understand how tabskip glue contributes to the combined width; use \\omit to suppress templates when spanning and adjust tabskip when needed to get desired visual result."
+      },
+      {
+        "name": "Algorithm for computing column widths with spanned entries",
+        "description": "After merging pairs of adjacent columns that are always spanned, let wij be the maximum natural width of entries that span columns i..j (\u2013\u221e if none) and tk be natural tabskip widths. Then column widths wj are set in order by wj = max_{1\u2264i\u2264j} (wij \u2212 \u03a3_{i\u2264k<j} (wk + tk)). This ensures wij \u2264 wi + ti + ... + tj\u22121 + wj for all i\u2264j.",
+        "guidance": "If this allocation yields undesirable distributions (e.g., a very wide spanning entry concentrates width in later columns), remedy with \\hidewidth or by increasing tabskip natural widths so excess distributes differently."
+      },
+      {
+        "name": "Use \\offinterlineskip and a strut for boxed/ruled tables",
+        "description": "\\offinterlineskip disables interline glue so vertical rules (\n\\vrule) can abut across lines; include a strut (via the preamble) so each line has proper height and depth and vrules extend correctly to top and bottom.",
+        "guidance": "Put a strut in every line by including it in the preamble template. Without struts the vrules might not reach full height; using \\offinterlineskip and struts is standard for boxed tables."
+      },
+      {
+        "name": "Allocate dedicated columns for vertical rules using '\\vrule#' template",
+        "description": "A 'column' should be allocated to every vertical rule; assign such a column the template '\\vrule#' and obtain a vertical rule by leaving the column entry blank (or using \\omit to omit the rule in some lines, or giving explicit heights).",
+        "guidance": "Reserving columns for vrules simplifies vertical rule alignment across rows; use 'height 10pt' or similar entries to change rule height per line."
+      },
+      {
+        "name": "Horizontal rules via \\hrule or \\noalign{\\hrule}",
+        "description": "Horizontal rules are obtained by saying '\\hrule' outside the \\halign or '\\noalign{\\hrule}' inside it, since the \\halign is in a vbox. Alternatively, a rule spanning all columns can be produced by '\\multispanN\\hrulefill' inside the \\halign.",
+        "guidance": "Use \\noalign{\\hrule} for horizontal rules between rows; combine with short 'height2pt&\\omit&&\\omit&\\cr' lines to extend vertical rules slightly where they meet horizontal rules for improved appearance."
+      },
+      {
+        "name": "Extend vertical rules at horizontal intersections using short-height lines",
+        "description": "Include lines such as 'height2pt&\\omit&&\\omit&\\cr' where the first column contains a strut suppressed by \\omit and 'height2pt' makes the first \\vrule 2pt high; the other vrules follow suit, so vertical rules extend by a small amount where they touch horizontal rules.",
+        "guidance": "This subtle touch improves the appearance of boxed tables\u2014look for it as a mark of quality."
+      },
+      {
+        "name": "Use \\hidewidth and \\rlap for titling and special characters that shouldn't affect alignment",
+        "description": "Use \\hidewidth in title lines so the width of columns is determined by numeric data; use \\rlap to place characters (like an asterisk) that shouldn't affect alignment.",
+        "guidance": "Example: title line '&&\\multispan5\\hfil AT\\&T Common Stock\\hfil&\\cr' with \\hidewidth on columns ensures numbers determine column widths; use \\rlap* so the '*' doesn't shift numeric alignment."
+      },
+      {
+        "name": "Debugging preambles with an undeclared control (\\ddt) and \\showlists",
+        "description": "Putting '\\ddt' at the beginning and end of templates causes TEX to stop and display the rest of the template; then use \\showlists and other diagnostics to see what TEX thinks it's doing. If TEX doesn't stop, that part of the template was never reached.",
+        "guidance": "Insert diagnostics into templates to trace where parsing or expansion fails when debugging complex alignments."
+      },
+      {
+        "name": "Braces-level rule for nested alignments (&, \\span, \\cr end entries only at same brace level)",
+        "description": "An entry ends when '&' or '\\span' or '\\cr' occurs at the same level of braces that was current when the entry began; so &s and \\crs enclosed in braces (e.g., inside a \\matrix argument) do not terminate the outer alignment entry.",
+        "guidance": "When embedding alignments or using macros whose arguments contain & or \\cr, ensure braces balance so tokens are associated with the intended alignment level."
+      },
+      {
+        "name": "Tokens (&, \\span, \\cr) are recognized even without macro expansion",
+        "description": "These tokens are intercepted by TEX\u2019s scanner even when it is not expanding macros. For example, doing '\\let\\x=\\span' in the midst of an alignment entry will make TEX think a \\span ends the entry; you can hide such assignments by putting them in braces (e.g., '{\\global\\let\\x=\\span}').",
+        "guidance": "Be careful performing \\let or other assignments affecting alignment tokens while an alignment is being scanned; use grouped assignments to avoid interfering with the scanner."
+      },
+      {
+        "name": "Protect against missing final \\cr with \\crcr",
+        "description": "\\crcr acts exactly like \\cr except that it does nothing when it immediately follows a \\cr or a \\noalign{...}. Thus macros like \\matrix can insert \\crcr at the end of the user's argument: this covers up a missing final \\cr but does no harm if the final \\cr was present.",
+        "guidance": "Define user-facing macros to include \\crcr to be forgiving of user input omissions and avoid strange later errors."
+      },
+      {
+        "name": "Automatically insert \\cr at ends of input lines with \\obeylines",
+        "description": "You can get plain TeX to insert an automatic \\cr at the end of each input line by using '\\begingroup \\let\\par=\\cr \\obeylines % \\halign{hpreamblei ... }\\endgroup'. \\obeylines makes the ASCII return active and makes it use the current meaning of \\par.",
+        "guidance": "If you don't want a \\cr at the end of a certain line, type '%' to comment it out. This mode doesn't work with \\+ lines unless \\+ is redefined to use an alternative delimiter (e.g., make \\+ use ^^M)."
+      },
+      {
+        "name": "Use \\valign when roles of rows/columns should be swapped",
+        "description": "\\valign is analogous to \\halign but rows and columns change roles: \\cr marks the bottom of a column and aligned columns are vboxes put together in horizontal mode; entries are vboxed with depth zero and row heights are maximized similarly to \\halign column-width maximization.",
+        "guidance": "\\valign is less commonly needed, but is useful when you need vertical alignment of vboxes (often used as '\\valign{\\vfil#\\vfil\\cr...}')."
+      },
+      {
+        "name": "Page-building model and the role of the output routine",
+        "description": "TEX gathers material until it has more than will fit on a page, chooses a breakpoint, ejects one page, and then runs the current output routine which attaches page numbers/headings and handles insertions like \\footnote and \\topinsert.",
+        "guidance": "To customize headers/footers or handle complex page tasks define or modify the output routine carefully; remember it may run at unexpected times relative to the main vertical list."
+      },
+      {
+        "name": "Change page geometry via \\hsize and \\vsize (early in job)",
+        "description": "Plain TeX sets \\hsize=6.5in and \\vsize=8.9in by default; change \\hsize to alter horizontal line width and \\vsize to change vertical amount of copy per page. It's best not to change \\hsize or \\vsize except at the start of a job or after ejecting all pages from TEX's memory.",
+        "guidance": "Changing \\hsize mid-job can have complex side-effects; set page sizes early or between pages."
+      },
+      {
+        "name": "Offset output with \\hoffset and \\voffset but beware of physical margins",
+        "description": "You can move the output area on the physical medium with \\hoffset (right) and \\voffset (down), e.g., '\\hoffset=.5in \\voffset=1.5in', but be careful not to offset so far the output falls off the printed medium.",
+        "guidance": "Use offsets to fine-tune placement for brochures or different printers, but verify the final placement on the target device."
+      },
+      {
+        "name": "Suppress or customize page numbers via \\nopagenumbers, \\headline and \\footline",
+        "description": "\\nopagenumbers is an abbreviation for setting \\footline to '{\\hfil}', suppressing footlines. Plain TeX inserts \\line{\\the\\headline} at the top and \\line{\\the\\footline} at the bottom of each page; redefine \\headline and \\footline to change header/footer content.",
+        "guidance": "Always include font selection (e.g., \\tenrm) inside headline/footline definitions, because the output routine may be invoked when unexpected fonts are current."
+      },
+      {
+        "name": "Page numbering registers and roman- numeral conversion (\\pageno, \\count0, \\folio)",
+        "description": "Page number appears in \\count0 (\\pageno is an abbreviation). Set \\pageno to change the next page number. \\folio converts negative page numbers to roman numerals via '\\ifnum\\pageno<0 \\romannumeral-\\pageno \\else\\number\\pageno \\fi'.",
+        "guidance": "Use \\pageno to start numbering where desired (e.g., \\pageno=-1 to start with i) and include font selection when printing the number in \\footline or \\headline."
+      },
+      {
+        "name": "Different headers for odd and even pages and adjusting \\voffset for running heads",
+        "description": "You can set \\headline to choose between \\rightheadline and \\leftheadline via '\\headline={\\ifodd\\pageno\\rightheadline\\else\\leftheadline\\fi}', and define those macros to include \\folio at left or right. When using headlines, it is generally wise to set \\voffset to the equivalent of two lines of text so there will still be a one-inch top margin.",
+        "guidance": "Adjust \\voffset so headers don't reduce top margin; use \\ifodd\\pageno to get conventional right/left running heads."
+      }
+    ]
+  }
+}

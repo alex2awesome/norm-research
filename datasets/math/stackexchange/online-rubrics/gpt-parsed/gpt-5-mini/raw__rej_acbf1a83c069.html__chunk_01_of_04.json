@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_acbf1a83c069.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "rej_acbf1a83c069.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39930,
+  "model": "gpt-5-mini",
+  "elapsed_s": 45.14932358299848,
+  "input_tokens": 18674,
+  "output_tokens": 4144,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in computational number theory, lattice algorithms, and cryptanalysis (people implementing/analyzing lattice enumeration and BDD/CVP solvers)",
+    "subtask_short": "pruned_enumeration_for_BDD",
+    "subtask_description": "Designing and implementing pruned lattice-point enumeration (Schnorr\u2013Euchner style DFS with cylinder pruning) to solve bounded-distance decoding / closest-vector problems on (possibly unbalanced) integer lattices; choosing pruning functions, lattice construction parameters, and algorithmic bounds to trade off cost vs coverage.",
+    "subtask_keywords": [
+      "lattice_enumeration",
+      "pruning",
+      "BDD",
+      "schnorr_euchner",
+      "lattice_construction"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dimension vs practicality",
+        "description": "To maximize (2.6) or (2.7) it makes sense to take N as large as possible, but high-quality lattice reduction becomes extremely time-consuming for N \u2265 100; non-trivial lattice tasks (e.g., closest lattice point) typically run in time exponential in N.",
+        "guidance": "Balance the desire to include many summands (large N) with the exponential growth of lattice-reduction/enumeration cost. Treat N \u2265 100 as impractical for the trial-and-error strategy used in [KR23]."
+      },
+      {
+        "name": "When to prefer enumeration over reduction",
+        "description": "When the lattice dimension is moderate, it is possible to enumerate all lattice points within any small ball, or many points inside a larger ball; enumeration is naturally a DFS of a carefully constructed tree (Schnorr\u2013Euchner enumeration, adapted by GNR10 and LN13).",
+        "guidance": "Use enumeration when dimension is moderate and the target region is small enough that enumeration (possibly pruned) is computationally feasible; prefer DFS enumeration trees for zero-centered or shifted balls."
+      },
+      {
+        "name": "Running-time dependence",
+        "description": "The running time of enumeration depends on the radius R and the basis B, but is typically super-exponential in n, even if L \u2229 S is small.",
+        "guidance": "Expect worst-case super-exponential behaviour; use pruning and good bases to reduce practical cost. Estimate performance as a function of R and Gram\u2013Schmidt properties of B."
+      },
+      {
+        "name": "Pruned enumeration & pruning set P",
+        "description": "Pruned enumeration uses a pruning set P \u2286 \u211d^n and outputs L \u2229 (t + P); for suitable P enumerating L \u2229 (t + P) is much cheaper than L \u2229 S, yet under mild heuristics is expected to cover most of L \u2229 S.",
+        "guidance": "Design P to trade coverage vs cost: smaller P reduces enumerated nodes but risks missing solutions. Treat the pruning set as a random variable depending on basis B."
+      },
+      {
+        "name": "Cylinder pruning definition (P_f(B,R))",
+        "description": "In GNR10, the pruning set P is defined by a function f:{1,\u2026,n}\u2192[0,1], a radius R>0 and basis B as P_f(B,R) = { x \u2208 \u211d^n s.t. ||\u03c0_{n+1-i}(x)|| \u2264 f(i) R for all 1 \u2264 i \u2264 n } (intersection of cylinders).",
+        "guidance": "Use cylinder pruning: choose f(i) in [0,1] to set coordinate-wise projection bounds. This representation makes pruning geometrically interpretable and amenable to volume estimates."
+      },
+      {
+        "name": "GNR decision algorithm guarantee",
+        "description": "GNR10 provides an algorithm which, given (B, R, f), decides if L \u2229 P_f(B,R) is non-empty, and if so outputs one element of L \u2229 P_f(B,R). It can be modified to handle L \u2229 (t + P_f(B,R)).",
+        "guidance": "When implementing, ensure the algorithm returns an element if one exists; extend to shifted targets t by the LN13 modifications."
+      },
+      {
+        "name": "Choosing f from projection statistics",
+        "description": "If x denotes the projection of a random unit vector onto an i-dimensional subspace then ||x||^2 \u223c Beta(i/2,(n\u2212i)/2). In experiments the authors used f^2(i) = \u03bc_i + 2 \u03c3_i (expectation plus twice std. dev.) \u2014 a function close to linear.",
+        "guidance": "Choose f by modeling projection norms with Beta distributions; the rule f^2(i)=\u03bc_i+2\u03c3_i is a practical heuristic intended to make P_f cover most of the projected mass. Use this to pick pruning profiles close to linear."
+      },
+      {
+        "name": "Estimate cost and coverage via volume and Gaussian heuristic",
+        "description": "GNR10 computed tight lower/upper bounds for vol(P_f(B,R)) and estimated the cost of enumerating L\u2229S\u2229P_f using the Gaussian heuristic |L\u2229S| \u2248 vol S / det L (applied to projected lattices); these estimates are usually accurate and applicable in CVP case as well.",
+        "guidance": "Use volume bounds and the Gaussian heuristic to predict enumeration cost and expected number of lattice points. Apply these estimates to tune R, f, and basis choices before running heavy enumerations."
+      },
+      {
+        "name": "View pruning set as basis-dependent random variable",
+        "description": "The pruning set P should be viewed as a random variable: it depends on the choice of basis B.",
+        "guidance": "Different reduced bases yield different effective pruning behaviour; when evaluating pruning performance, consider basis variability and possibly average heuristics over typical bases."
+      },
+      {
+        "name": "Algorithm 1 inputs and required data",
+        "description": "Algorithm 1 requires: a reduced basis B=(b1,\u2026,bm), a target vector t = \u2211_{i=1}^m t_i b_i, bounding radii R_1^2 \u2264 \u2026 \u2264 R_m^2, Gram\u2013Schmidt matrix \u03bc = (\u27e8b_i,b_j^*\u27e9/||b_j^*||^2), and the squared norms ||b_j^*||^2.",
+        "guidance": "Ensure basis is reduced and compute Gram\u2013Schmidt data accurately. Provide non-decreasing R_i^2 as per the algorithm preconditions."
+      },
+      {
+        "name": "Node acceptance and duplicate-avoidance invariant",
+        "description": "The algorithm enumerates vectors v \u2208 L whose projections satisfy ||\u03c0_{m+1-k}(v\u2212t)|| \u2264 R_k for all k, and enforces the extra constraint that there is no x_1 \u2208 \u2124 with ||v + x_1 b_1 \u2212 t|| < ||v \u2212 t|| to avoid returning too many vectors when b_1 is much shorter than det(L)^{1/m}.",
+        "guidance": "Implement the duplicate-avoidance check to prevent returning trivial translations along very short basis vectors. Maintain the projection bounds invariants to prune the DFS correctly."
+      },
+      {
+        "name": "Operational node test and return condition",
+        "description": "During the DFS maintain \u03c1_k (squared norm contribution) and accept the current node if \u03c1_k \u2264 R_{m+1-k}^2; if k=1 return (v_1,\u2026,v_m) as solution; if k reaches m+1 return \u2205 (no solution).",
+        "guidance": "Implement rho accumulation and compare with the appropriate R bound for pruning. Follow the k increment/decrement rules to traverse the enumeration tree and detect success/failure."
+      },
+      {
+        "name": "Lattice construction for optimizing h_P or h_StR (matrix (3.2))",
+        "description": "For each nontrivial zero \u03c1 with Im \u03c1 > 0 define \u03b1^* (attenuated \u03b1 depending on \u03b3), corresponding \u03b3 and \u03c8, choose parameters \u03bd, \u03bd_y, \u03bd_t and consider the integer lattice L spanned by rows of the (N+1)\u00d7(N+1) matrix (3.2) whose first row entries are \u230a\u221a(\u03b1_i^*) \u03b3_i 2^{\u03bd_y}\u230b and diagonal-like entries \u230a\u221a(\u03b1_i^*) 2\u03c0 2^{\u03bd}\u230b, and last column includes 2^{\u03bd_t}; the target vector t has components \u230a\u221a(\u03b1_i^*) \u03c8_i 2^{\u03bd}\u230b and a trailing 0.",
+        "guidance": "When building lattices to search for large values of h_P or h_StR follow the scaling and floor conventions in (3.2). Choose \u03b1^* differently depending on whether optimizing h_P (use exp(-1.5e-6 \u03b3^2)) or h_StR (use exp(-3e-9 \u03b3^2)). Set \u03bd, \u03bd_y, \u03bd_t to control balance/unbalance of the lattice."
+      },
+      {
+        "name": "Replace \u03b1 by \u03b1^* when optimizing h_P/h_StR",
+        "description": "Use \u03b1^* = \u03b1 exp(\u22121.5\u00b710^{\u22126} \u03b3^2) to find large |h_P|, or \u03b1^* = \u03b1 exp(\u22123\u00b710^{\u22129} \u03b3^2) to find large |h_StR|; \u03b1^* replaces \u03b1 from (2.5).",
+        "guidance": "Use the attenuated \u03b1^* to bias the lattice construction towards optimizing the quantity of interest (h_P or h_StR) instead of q_N as in prior work [OtR85]."
+      },
+      {
+        "name": "Parameter K and success criterion (expected inequality)",
+        "description": "For \u03b3 \u2265 1 define K := \u03b3 sqrt((N+1)/(2\u03c0 e)) det(L)^{1/(N+1)} (K is an approximate radius). The search aims to find u \u2208 L with ||u \u2212 t|| < K, which (after algebra) translates to inequalities like (3.4) and (3.5) bounding modular differences and a weighted sum \u2211 \u03b1_i^* |\u03b3_i^* y \u2212 \u03c8_i^*|_{2\u03c0}^2 < K^2 / 2^{2\u03bd}.",
+        "guidance": "Use K to set radius thresholds and predict success probability. Translate the geometric condition into arithmetic inequalities on x,y and tune \u03bd and other scaling exponents so the expected inequality is achievable."
+      },
+      {
+        "name": "Diagnose unbalanced lattices via \u03bd \u226b \u03bd_y",
+        "description": "The lattice defined by (3.2) is unbalanced when \u03bd \u226b \u03bd_y: then the i-th coefficient of the first row is much smaller than the i-th diagonal coefficient, so the first row has norm much smaller than det(L)^{1/(N+1)} and is likely to be a shortest vector of L.",
+        "guidance": "If the lattice appears unbalanced and the first row becomes shortest (undesired trivial short vector), adjust \u03bd and \u03bd_y to rebalance. Use this diagnosis to avoid pathological short vectors that make enumeration trivial or misleading."
+      }
+    ]
+  }
+}

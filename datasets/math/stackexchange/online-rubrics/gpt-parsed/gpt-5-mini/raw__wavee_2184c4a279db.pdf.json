@@ -1,0 +1,189 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_2184c4a279db.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17303,
+  "output_tokens": 4951,
+  "elapsed_s": 1422.0556021661032,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in scientific machine learning, computational scientists, and applied mathematicians working on physics-informed neural networks (PINNs)",
+    "subtask_short": "design_and_evaluation_of_PINNs",
+    "subtask_description": "Guidance and evaluation criteria for building, training, and analyzing physics-informed neural networks (PINNs) to solve forward and inverse PDE problems, including architectural choices, loss design, training strategies, and theoretical/convergence considerations.",
+    "subtask_keywords": [
+      "physics-informed_neural_networks",
+      "pdes",
+      "scientific_machine_learning",
+      "neural_network_architecture",
+      "numerical_methods"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Loss composition (PDE residual, boundary/initial conditions, data)",
+        "description": "PINN loss functions include terms reflecting the PDE residual (LF), the initial and boundary conditions (LB), and any observed data (Ldata); the overall loss is a weighted sum \u03b8* = arg min_\u03b8 (\u03c9F LF(\u03b8) + \u03c9B LB(\u03b8) + \u03c9d Ldata(\u03b8)).",
+        "guidance": "Explicitly construct loss terms for equation residuals at collocation points, for boundary/initial conditions, and for data-fitting; choose and tune weights \u03c9F, \u03c9B, \u03c9d to balance contributions. The paper emphasizes this composition as the fundamental design choice for PINNs."
+      },
+      {
+        "name": "Loss term weighting and balancing",
+        "description": "Weights \u03c9F, \u03c9B, \u03c9d must be selected to balance the magnitude and learning dynamics of the PDE, boundary, and data losses.",
+        "guidance": "Imbalanced losses can prevent learning (e.g., PDE residual dominates and BCs/data ignored). Use adaptive weighting strategies, gradient-based balancing, or curriculum schedules to mitigate competing loss objectives. Monitor individual loss components during training."
+      },
+      {
+        "name": "Boundary condition enforcement: soft vs hard",
+        "description": "Boundary/initial conditions may be enforced softly via loss terms (soft BC) or hard-encoded into the network architecture (hard BC/PCNN).",
+        "guidance": "Soft BCs are flexible and straightforward but require proper loss weighting; hard BCs (custom architectures, multiplicative factors) enforce constraints exactly and can improve stability for some problems. Choose based on problem requirements (e.g., strict conservation or geometric constraints)."
+      },
+      {
+        "name": "Neural network architecture selection (FFNN, CNN, RNN, GAN, DeepONet, etc.)",
+        "description": "PINNs can use a variety of network architectures\u2014feed-forward (MLP), convolutional (CNN), recurrent (RNN/LSTM/GRU), autoencoders, GANs, DeepONet, branch/trunk splits\u2014chosen according to problem structure.",
+        "guidance": "Use FFNNs for general PDEs and smooth fields; CNNs/encoder\u2013decoders for image-like or grid-structured data; RNNs or time-stepping cells for temporal integration or sequence modeling; DeepONet or multiple networks for operator learning or multi-output problems. Match architecture to data modality and geometric regularity."
+      },
+      {
+        "name": "Network depth and width (size/hyperparameters)",
+        "description": "The number of layers and neurons per layer affects expressive power and trainability; small networks may underfit, very large networks may be hard to train, especially with limited data.",
+        "guidance": "Empirically choose depth/width for the PDE at hand (examples: 4\u20139 layers, 20\u2013250 neurons used in literature). Consider problem complexity: discontinuities/shocks may require deeper networks or domain decomposition. Monitor training and test errors; consider capacity vs optimization trade-offs."
+      },
+      {
+        "name": "Multiple networks / domain decomposition",
+        "description": "Using multiple neural networks (one per subdomain, variable, or equation component) can improve expressivity and handle complex or multi-physics problems.",
+        "guidance": "Examples include separate networks for subdomains, for interfaces in Stefan problems, or branch/trunk DeepONet architectures. Domain decomposition helps with discontinuities and localized features; coordinate synchronization or interface conditions must be enforced."
+      },
+      {
+        "name": "Activation function choice",
+        "description": "Activation functions (tanh, sigmoid, ReLU, Swish, periodic functions) significantly affect PINN training; smooth activations are often preferred because PINNs require derivatives.",
+        "guidance": "Use infinitely differentiable activations (tanh, sigmoid, Swish) when high-order derivatives are computed (PINNs often need second derivatives). ReLU may hamper second-derivative evaluation. Trainable activations (Swish with parameter \u03b2) can improve convergence. Consider periodic/sinusoidal activations for problems with oscillatory solutions."
+      },
+      {
+        "name": "Automatic differentiation vs numerical differentiation",
+        "description": "PINNs typically use automatic differentiation (AD) to compute PDE residual derivatives; older approaches used finite differences.",
+        "guidance": "AD yields exact derivatives up to machine precision and integrates smoothly with modern frameworks (TensorFlow, PyTorch). Finite-difference approximations may be used with CNN-based discretizations but can introduce discretization error. Prefer AD unless specific numerical stencil approaches are required."
+      },
+      {
+        "name": "Sampling of collocation points",
+        "description": "Selection of collocation points (where the PDE residual is evaluated) matters: uniform grids, random sampling, Latin hypercube, or adaptive/residual-based sampling are used.",
+        "guidance": "Random or quasi-random sampling can avoid bias; adaptive/residual-based sampling focuses points where residual is large and can improve accuracy. Volume vs boundary point counts must be considered; sampling affects numerical conditioning and convergence."
+      },
+      {
+        "name": "Adaptive/residual-based refinement",
+        "description": "Iteratively adapt collocation point distribution or network capacity based on residuals to improve solution in regions with large error.",
+        "guidance": "Use residual-guided sampling, hp-refinement, or adaptive weighting to focus learning on difficult regions (steep gradients, shocks). hp-VPINN and similar methods implement domain/subdomain adaptive strategies."
+      },
+      {
+        "name": "Normalization and nondimensionalization",
+        "description": "Rescale PDEs and inputs/outputs (e.g., to [0,1]) to improve training stability and make activation regimes appropriate.",
+        "guidance": "Rescale variables to avoid wide dynamic ranges; dimensionless PDEs can avoid numerical ill-conditioning. Many activation functions behave best in limited input ranges; normalization of inputs and outputs is recommended."
+      },
+      {
+        "name": "Optimizer selection and training schedules",
+        "description": "Choice of optimizer (Adam, L-BFGS, hybrid schemes) and learning rate schedules impacts convergence; common practice uses Adam for initial training then quasi-Newton (L-BFGS) for refinement.",
+        "guidance": "Use stochastic optimizers for large-scale problems or noisy data; L-BFGS can converge to lower loss for smaller problems. Combine Adam with later L-BFGS; tune learning rates and consider adaptive schedules, early stopping, and multi-stage training."
+      },
+      {
+        "name": "Initialization and its effect (NTK perspective)",
+        "description": "Weight initialization influences training dynamics and can be analyzed through neural tangent kernel (NTK) perspectives; poor initialization may hamper convergence.",
+        "guidance": "Use established initialization schemes; be aware of NTK-related failure modes (when PINNs fail to train). Pretraining or transfer learning can provide better starting points for optimization."
+      },
+      {
+        "name": "Gradient pathologies and mitigation",
+        "description": "PINNs can suffer from problematic gradient flow (vanishing/exploding gradients, imbalance across loss terms, temporal stiffness), which prevents training.",
+        "guidance": "Mitigate via adaptive loss weighting, gradient normalization, respecting causality (causal training), reordering/weighting collocation points, curriculum learning (time-wise), or reformulating loss (e.g., Sobolev or energy norms). Monitor gradients per loss component and apply remedies."
+      },
+      {
+        "name": "Causality and training order for time-dependent problems",
+        "description": "Respecting causality (temporal ordering) during training can improve convergence and avoid learning failures in time-dependent PDEs.",
+        "guidance": "Use curriculum or causality-aware sampling (train from earlier times outward) and time-marching/discrete-step PINN variants. Methods that enforce causality can stabilize training for long-time integration."
+      },
+      {
+        "name": "Variational / energy-based formulations (Deep Ritz, VPINN, hp-VPINN)",
+        "description": "Alternative PINN variants use variational/energy formulations where the loss is an energy functional rather than pointwise residuals.",
+        "guidance": "Deep Ritz and VPINN can be more appropriate when the PDE has an underlying variational principle; variational forms may yield better stability and convergence for certain PDE classes. Employ hp-VPINN for hp-refinement in a variational framework."
+      },
+      {
+        "name": "Conservation and structure-preserving enforcement (CPINN, conservative forms)",
+        "description": "Enforcing conservation laws or conservative forms explicitly (e.g., CPINN) helps preserve physical invariants and improve solution fidelity.",
+        "guidance": "Formulate residuals or architecture to ensure conserved quantities (mass, momentum, energy). Conservative enforcement is important in fluid dynamics, shocks, and advection-dominated problems."
+      },
+      {
+        "name": "Handling complex geometries and grids (coordinate transforms, PhyGeoNet)",
+        "description": "Irregular domains and non-uniform meshes challenge standard PINNs; coordinate transformations or geometry-adaptive CNNs (PhyGeoNet) can be used.",
+        "guidance": "Map irregular physical domains to reference domains, use geometry-aware architectures, or employ mesh-based CNN convolutions with appropriate padding representing boundary conditions. For complex geometries, hard enforcement of BCs or domain decomposition may help."
+      },
+      {
+        "name": "Discontinuities and shocks handling",
+        "description": "Problems with discontinuous solutions (shocks) are difficult for global smooth approximators; strategies include domain decomposition, multiple networks, hp-refinement, or specialized architectures.",
+        "guidance": "Use multiple subdomain networks, increase network capacity in affected regions, or employ conservative formulations and adaptive sampling. Avoid expecting a single smooth FFNN to resolve steep discontinuities without targeted tactics."
+      },
+      {
+        "name": "Uncertainty quantification (Bayesian PINNs, adversarial UQ, ensembles)",
+        "description": "Quantify epistemic and aleatoric uncertainty in predictions using Bayesian PINNs, ensembles, adversarial methods, or probabilistic frameworks.",
+        "guidance": "Employ Bayesian neural networks, Stein variational inference, adversarial uncertainty estimation, or ensemble methods to produce error bars and assess confidence\u2014particularly important for inverse problems and noisy data."
+      },
+      {
+        "name": "Inverse problems and parameter discovery",
+        "description": "Treat unknown physical parameters \u03b3 as optimization variables jointly with network parameters \u03b8 to perform inverse modeling.",
+        "guidance": "Formulate loss to include data and residuals; include regularization and uncertainty quantification. Use same PINN framework for forward and inverse problems with minor modifications; ensure identifiability and careful weighting of data vs PDE residuals."
+      },
+      {
+        "name": "Hybridizing PINNs with classical numerical methods",
+        "description": "Combine PINNs with numerical discretizations (FEM, finite volumes, finite differences) or with operator-learning methods for better performance or physical fidelity.",
+        "guidance": "Use numerical stencils inside CNNs, incorporate finite-volume discretization for conservation, or use FEM/variational embeddings. Hybrid approaches can leverage strengths of both data-driven and classical solvers."
+      },
+      {
+        "name": "Fourier features and frequency-aware representations",
+        "description": "Fourier features, periodic activations, or spectral biases can help PINNs represent high-frequency components more effectively (mitigate frequency principle bias).",
+        "guidance": "Use sinusoidal activations or Fourier feature mappings to capture oscillatory solutions. Be aware of the frequency principle: standard networks tend to learn low frequencies first; use architectural or input feature engineering to accelerate high-frequency learning."
+      },
+      {
+        "name": "Loss norms and Sobolev / energy-based training",
+        "description": "Choice of loss norm (L2, H1/Sobolev norms, energy norms) affects convergence properties and error control.",
+        "guidance": "Consider H1 or energy-norm-based losses when derivative accuracy or variational properties matter. Residual minimization in stronger norms can yield different approximation properties; choose according to PDE and desired error metric."
+      },
+      {
+        "name": "Evaluation metrics and error estimation",
+        "description": "Assess PINN performance via relative L2 errors, residual norms, convergence behavior, wall-clock time, and solution fidelity (e.g., conservation violations).",
+        "guidance": "Report multiple metrics: relative error in solution norm, PDE residual distribution, boundary condition satisfaction, and computational cost. Use cross-validation, hold-out points, or analytical solutions for benchmarks. Consider error-estimation methods and theoretical bounds where available."
+      },
+      {
+        "name": "Computational cost, scalability, and distributed training",
+        "description": "PINNs can be computationally intensive (AD, large networks, many collocation points); scalability requires multi-GPU or distributed training frameworks.",
+        "guidance": "Use distributed training tools (e.g., Horovod), exploit parallel evaluation of collocation points, and design minibatch strategies. Balance collocation point count, network size, and optimizer choices to manage computational cost."
+      },
+      {
+        "name": "Regularization and handling noisy data",
+        "description": "Regularization (weight decay, dropout variants), robust loss choices, and Bayesian formulations help PINNs cope with noisy measurements.",
+        "guidance": "When training with noisy data, incorporate noise models (aleatoric/epistemic), use Bayesian PINNs, or include regularization terms. Robust loss functions and uncertainty quantification can prevent overfitting to noisy observations."
+      },
+      {
+        "name": "Transfer learning and pretraining",
+        "description": "Pretraining a PINN or transferring parameters from related problems can speed convergence and improve generalization.",
+        "guidance": "Use pretrained networks as initializations across parametric sweeps or similar PDEs. Transfer learning can reduce required training iterations and help avoid poor local minima."
+      },
+      {
+        "name": "Discrete-time and time-stepping PINN variants",
+        "description": "Discrete time-stepping PINNs integrate temporal evolution using neural-network-based time integrators (e.g., using Runge\u2013Kutta-like cells or recurrent architectures).",
+        "guidance": "For long-time integration or stiff temporal dynamics, use discrete-time schemes, recurrent PINN cells, or time-marching hybrid methods to improve stability and accuracy versus monolithic spatio-temporal training."
+      },
+      {
+        "name": "Architectural encoding of physical priors (hard constraints, symmetries)",
+        "description": "Embed physical structure (symmetries, conservation, boundary behavior) directly into network architecture or output parametrization.",
+        "guidance": "Design networks that automatically satisfy invariances (e.g., equivariant layers), use multiplicative factors to impose BCs exactly, or build physics constraints into output parametrization to reduce search space and improve interpretability."
+      },
+      {
+        "name": "Choice of training data modalities (data-free vs data-assisted)",
+        "description": "PINNs can be trained purely from physics (data-free) or with a combination of physics and labeled data (data-assisted); the methodology differs accordingly.",
+        "guidance": "For data-free settings rely on collocation/residual losses and BCs; for data-assisted or inverse problems include data-loss terms and model data noise. Balance physics and data via loss weights and consider multi-fidelity or multi-source data integration."
+      },
+      {
+        "name": "Use of ensembles and model averaging",
+        "description": "Ensembles of PINNs can improve robustness and provide empirical uncertainty measures.",
+        "guidance": "Train multiple PINNs with varied initializations or architectures, aggregate predictions, and use ensemble spread as an uncertainty proxy. Ensembles help detect mode collapse or optimization failures."
+      },
+      {
+        "name": "Monitoring and diagnosing training (per-component losses, gradients, residual maps)",
+        "description": "Track individual loss components, gradient norms, and spatial residual distributions to diagnose failures and guide adaptive interventions.",
+        "guidance": "Plot PDE residual heatmaps, boundary residuals, gradient magnitudes per loss, and learning curves. Use diagnostics to trigger adaptive reweighting, resampling, or architecture modifications."
+      }
+    ]
+  }
+}

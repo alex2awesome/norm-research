@@ -59,13 +59,15 @@ def _files(tmp_path: Path):
 
 
 def _response(paper_id="p1"):
+    quantity = {"start": 21, "end": 31, "raw": "20 percent", "value": 20,
+                "unit": "percent"}
     certificate = {
         "decision": "supported", "witness_kind": "relation_certificate", "reason": "same relation",
         "claim": {"sentence_index": 0, "text": "Method A improves by 20 percent.",
-                  "relation": "numeric", "quantities": [], "comparison": None},
+                  "relation": "numeric", "quantities": [quantity], "comparison": None},
         "evidence": {"sentence_index": 0, "start": 0, "end": 59,
                      "text": "Experiments show Method A improves by 20 percent over B.",
-                     "quantities": [], "comparison": None},
+                     "quantities": [quantity], "comparison": None},
         "checks": {"bm25": None, "claim_term_coverage": None, "quantity_matches": 1,
                    "quantity_required": 1, "relation_state": "aligned"},
     }
@@ -278,6 +280,53 @@ def test_ingest_rejects_case_punctuation_and_token_normalized_variants(
     ).read_text()
 
 
+def test_ingest_rejects_grounded_but_qualitative_strong_certificate(tmp_path):
+    source, spec, model = _files(tmp_path)
+    bundle = tmp_path / "bundle"
+    prepare(source, spec, model, bundle)
+    _, requests = verify_bundle(bundle)
+    req = next(iter(requests.values()))
+    response = _response()
+    for witness in (response["certificates"][0], response["matches"][0]):
+        witness["claim"]["relation"] = "qualitative"
+        witness["claim"]["quantities"] = []
+        witness["evidence"]["quantities"] = []
+        witness["checks"]["quantity_matches"] = 0
+        witness["checks"]["quantity_required"] = 0
+    raw = tmp_path / "raw.jsonl"
+    raw.write_text(json.dumps(_bound(
+        req, response=response, bundle_manifest_sha256=hash_file(bundle / "manifest.json")
+    )) + "\n")
+    summary = ingest(bundle, raw, bundle / "normalized.jsonl", bundle / "rejects.jsonl")
+    assert summary["accepted_new"] == 0 and summary["rejected"] == 1
+    assert "relation must be numeric or comparative" in (
+        bundle / "rejects.jsonl"
+    ).read_text()
+
+
+def test_ingest_rejects_numeric_certificate_without_quantity_payload(tmp_path):
+    source, spec, model = _files(tmp_path)
+    bundle = tmp_path / "bundle"
+    prepare(source, spec, model, bundle)
+    _, requests = verify_bundle(bundle)
+    req = next(iter(requests.values()))
+    response = _response()
+    for witness in (response["certificates"][0], response["matches"][0]):
+        witness["claim"]["quantities"] = []
+        witness["evidence"]["quantities"] = []
+        witness["checks"]["quantity_matches"] = 0
+        witness["checks"]["quantity_required"] = 0
+    raw = tmp_path / "raw.jsonl"
+    raw.write_text(json.dumps(_bound(
+        req, response=response, bundle_manifest_sha256=hash_file(bundle / "manifest.json")
+    )) + "\n")
+    summary = ingest(bundle, raw, bundle / "normalized.jsonl", bundle / "rejects.jsonl")
+    assert summary["accepted_new"] == 0 and summary["rejected"] == 1
+    assert "numeric certificate has no quantity relation" in (
+        bundle / "rejects.jsonl"
+    ).read_text()
+
+
 def test_ingest_rejects_wrong_bundle_manifest_binding(tmp_path):
     source, spec, model = _files(tmp_path)
     bundle = tmp_path / "bundle"
@@ -340,7 +389,11 @@ def test_evaluate_treats_code_as_comparator_not_truth(tmp_path):
     assert payload["normalization_evaluation_instrument"]["sha256"] == hash_file(
         Path(__file__).with_name("articulability_pipeline.py")
     )
-    assert payload["isomorphism"]["status"] == "descriptive_unsupervised_reconstruction_comparison"
+    assert payload["isomorphism"]["status"] == "non_estimating_descriptive_comparison"
+    assert payload["isomorphism"]["estimating"] is False
+    assert "fewer_than_two_shared_papers" in payload["isomorphism"][
+        "non_estimating_reasons"
+    ]
     assert payload["isomorphism"]["matched_witnesses"] == 1
     assert "not ground truth" in payload["isomorphism"]["interpretation"]
 

@@ -1,0 +1,1004 @@
+<!-- URL: https://en.wikipedia.org/wiki/News_embargo -->
+<!-- HTTP: 200 SIZE:   132993 -->
+<!DOCTYPE html>
+<html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>News embargo - Wikipedia</title>
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )enwikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"0933dbd9-c7d3-42ae-bd5d-c0e98dc76528","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"News_embargo","wgTitle":"News embargo","wgCurRevisionId":1337724435,"wgRevisionId":1337724435,"wgArticleId":3122143,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Articles with short description","Short description is different from Wikidata","Use dmy dates from August 2024","All articles with dead external links","Articles with dead external links from January 2018","Articles with permanently dead external links","Censorship","Journalism"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"News_embargo","wgRelevantArticleId":3122143,"wgTempUserName":null,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgNoticeProject":"wikipedia","wgFlaggedRevsParams":{"tags":{"status":{"levels":1}}},"wgConfirmEditCaptchaNeededForGenericEdit":"hcaptcha","wgConfirmEditForceShowCaptcha":false,"wgConfirmEditHCaptchaVisualEditorOnLoadIntegrationEnabled":false,"wgConfirmEditHCaptchaSiteKey":"5d0c670e-a5f4-4258-ad16-1f42792c9c62","wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true,"wgPopupsFlags":0,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en"},"wgMFDisplayWikibaseDescriptions":{"search":true,"watchlist":true,"tagline":false,"nearby":true},"wgWMESchemaEditAttemptStepOversample":false,"wgWMEPageLength":20000,"wgTestKitchenUserExperiments":{"overrides":[],"enrolled":[],"assigned":[],"subject_ids":[]},"wgEditSubmitButtonLabelPublish":true,"wgVisualEditorPageIsDisambiguation":false,"wgULSPosition":"interlanguage","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false,"wgWikibaseItemId":"Q1065052","wgCheckUserClientHintsHeadersJsApi":["brands","architecture","bitness","fullVersionList","mobile","model","platform","platformVersion"],"GEHomepageSuggestedEditsEnableTopics":true,"wgGESuggestedEditsTaskTypes":{"taskTypes":["copyedit","link-recommendation"],"unavailableTaskTypes":[]},"wgGETopicsMatchModeEnabled":false,"wgGELevelingUpEnabledForUser":false,"wgPersonalDashboardMenuVisible":false};
+RLSTATE={"ext.globalCssJs.user.styles":"ready","site.styles":"ready","user.styles":"ready","ext.globalCssJs.user":"ready","user":"ready","user.options":"loading","ext.wikimediamessages.styles":"ready","ext.cite.styles":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","jquery.makeCollapsible.styles":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","ext.uls.interlanguage":"ready","wikibase.client.init":"ready"};RLPAGEMODULES=["ext.parsermigration.survey","ext.cite.ux-enhancements","mediawiki.page.media","site","mediawiki.page.ready","jquery.makeCollapsible","mediawiki.toc","skins.vector.js","ext.centralNotice.geoIP","ext.centralNotice.startUp","ext.gadget.ReferenceTooltips","ext.gadget.switcher","ext.urlShortener.toolbar","ext.centralauth.centralautologin","ext.testKitchen","mmv.bootstrap","ext.popups","ext.visualEditor.desktopArticleTarget.init","ext.echo.centralauth","ext.eventLogging","ext.wikimediaEvents","ext.navigationTiming","ext.uls.interface","ext.cx.eventlogging.campaigns","ext.cx.uls.quick.actions","wikibase.client.vector-2022","wikibase.databox.fromWikidata","ext.checkUser.clientHints","ext.quicksurveys.init","ext.growthExperiments.SuggestedEditSession"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=ext.cite.styles%7Cext.uls.interlanguage%7Cext.visualEditor.desktopArticleTarget.noscript%7Cext.wikimediamessages.styles%7Cjquery.makeCollapsible.styles%7Cskins.vector.icons%2Cstyles%7Cskins.vector.search.codex.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector-2022">
+<script async="" src="/w/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=vector-2022"></script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector-2022">
+<meta name="generator" content="MediaWiki 1.47.0-wmf.1">
+<meta name="referrer" content="origin">
+<meta name="referrer" content="origin-when-cross-origin">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/20170810-OSEC-LSC-0046_%2836113531420%29.jpg/1280px-20170810-OSEC-LSC-0046_%2836113531420%29.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="782">
+<meta name="viewport" content="width=1120">
+<meta property="og:title" content="News embargo - Wikipedia">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="//upload.wikimedia.org">
+<link rel="alternate" type="application/x-wiki" title="Edit this page" href="/w/index.php?title=News_embargo&amp;action=edit">
+<link rel="apple-touch-icon" href="/static/apple-touch/wikipedia.png">
+<link rel="icon" href="/static/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="/w/rest.php/v1/search" title="Wikipedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="//en.wikipedia.org/w/api.php?action=rsd">
+<link rel="canonical" href="https://en.wikipedia.org/wiki/News_embargo">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">
+<link rel="alternate" type="application/atom+xml" title="Wikipedia Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="dns-prefetch" href="//meta.wikimedia.org" />
+<link rel="dns-prefetch" href="auth.wikimedia.org">
+</head>
+<body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-News_embargo rootpage-News_embargo skin-vector-2022 action-view">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
+<div class="vector-header-container">
+	<header class="vector-header mw-header no-font-mode-scale">
+		<div class="vector-header-start">
+			<nav class="vector-main-menu-landmark" aria-label="Site">
+				
+<div id="vector-main-menu-dropdown" class="vector-dropdown vector-main-menu-dropdown vector-button-flush-left vector-button-flush-right"  title="Main menu" >
+	<input type="checkbox" id="vector-main-menu-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-main-menu-dropdown" class="vector-dropdown-checkbox "  aria-label="Main menu"  >
+	<label id="vector-main-menu-dropdown-label" for="vector-main-menu-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-menu mw-ui-icon-wikimedia-menu"></span>
+
+<span class="vector-dropdown-label-text">Main menu</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+				<div id="vector-main-menu-unpinned-container" class="vector-unpinned-container">
+		
+<div id="vector-main-menu" class="vector-main-menu vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-main-menu-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="main-menu-pinned"
+	data-pinnable-element-id="vector-main-menu"
+	data-pinned-container-id="vector-main-menu-pinned-container"
+	data-unpinned-container-id="vector-main-menu-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Main menu</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-main-menu.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-main-menu.unpin">hide</button>
+</div>
+
+	
+<div id="p-navigation" class="vector-menu mw-portlet mw-portlet-navigation"  >
+	<div class="vector-menu-heading">
+		Navigation
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-mainpage-description" class="mw-list-item"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z"><span>Main page</span></a></li><li id="n-contents" class="mw-list-item"><a href="/wiki/Wikipedia:Contents" title="Guides to browsing Wikipedia"><span>Contents</span></a></li><li id="n-currentevents" class="mw-list-item"><a href="/wiki/Portal:Current_events" title="Articles related to current events"><span>Current events</span></a></li><li id="n-randompage" class="mw-list-item"><a href="/wiki/Special:Random" title="Visit a randomly selected article [x]" accesskey="x"><span>Random article</span></a></li><li id="n-aboutsite" class="mw-list-item"><a href="/wiki/Wikipedia:About" title="Learn about Wikipedia and how it works"><span>About Wikipedia</span></a></li><li id="n-contactpage" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us" title="How to contact Wikipedia"><span>Contact us</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-interaction" class="vector-menu mw-portlet mw-portlet-interaction"  >
+	<div class="vector-menu-heading">
+		Contribute
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-help" class="mw-list-item"><a href="/wiki/Help:Contents" title="Guidance on how to use and edit Wikipedia"><span>Help</span></a></li><li id="n-introduction" class="mw-list-item"><a href="/wiki/Help:Introduction" title="Learn how to edit Wikipedia"><span>Learn to edit</span></a></li><li id="n-portal" class="mw-list-item"><a href="/wiki/Wikipedia:Community_portal" title="The hub for editors"><span>Community portal</span></a></li><li id="n-recentchanges" class="mw-list-item"><a href="/wiki/Special:RecentChanges" title="A list of recent changes to Wikipedia [r]" accesskey="r"><span>Recent changes</span></a></li><li id="n-upload" class="mw-list-item"><a href="/wiki/Wikipedia:File_upload_wizard" title="Add images or other media for use on Wikipedia"><span>Upload file</span></a></li><li id="n-specialpages" class="mw-list-item"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q"><span>Special pages</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+				</div>
+
+	</div>
+</div>
+
+		</nav>
+			
+<a href="/wiki/Main_Page" class="mw-logo">
+	<img class="mw-logo-icon" src="/static/images/icons/enwiki-25.svg" alt="" aria-hidden="true" height="50" width="50">
+	<span class="mw-logo-container skin-invert">
+		<img class="mw-logo-wordmark" alt="Wikipedia" src="/static/images/mobile/copyright/wikipedia-wordmark-en-25.svg" style="width: 8.75em; height: 1.375em;">
+		<img class="mw-logo-tagline" alt="The Free Encyclopedia" src="/static/images/mobile/copyright/wikipedia-tagline-en-25.svg" width="140" height="11" style="width: 8.75em; height: 0.6875em;">
+	</span>
+</a>
+
+		</div>
+		<div class="vector-header-end">
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-collapses vector-search-box-show-thumbnail vector-search-box-auto-expand-width vector-search-box">
+	<a href="/wiki/Special:Search" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only search-toggle" title="Search Wikipedia [f]" accesskey="f"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+	</a>
+	<div class="vector-typeahead-search-container">
+		<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail cdx-typeahead-search--auto-expand-width">
+			<form action="/w/index.php" id="searchform" class="cdx-search-input cdx-search-input--has-end-button">
+				<div id="simpleSearch" class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+					<div class="cdx-text-input cdx-text-input--has-start-icon">
+						<input
+							class="cdx-text-input__input mw-searchInput" autocomplete="off"
+							 type="search" name="search" placeholder="Search Wikipedia" aria-label="Search Wikipedia" autocapitalize="none" spellcheck="false" title="Search Wikipedia [f]" accesskey="f" id="searchInput"
+							>
+						<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+					</div>
+					<input type="hidden" name="title" value="Special:Search">
+				</div>
+				<button class="cdx-button cdx-search-input__end-button">Search</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+			<nav class="vector-user-links vector-user-links-wide" aria-label="Personal tools">
+	<div class="vector-user-links-main">
+	
+<div id="p-vector-user-menu-preferences" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-userpage" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	<nav class="vector-appearance-landmark" aria-label="Appearance">
+		
+<div id="vector-appearance-dropdown" class="vector-dropdown "  title="Change the appearance of the page&#039;s font size, width, and color" >
+	<input type="checkbox" id="vector-appearance-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-appearance-dropdown" class="vector-dropdown-checkbox "  aria-label="Appearance"  >
+	<label id="vector-appearance-dropdown-label" for="vector-appearance-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-appearance mw-ui-icon-wikimedia-appearance"></span>
+
+<span class="vector-dropdown-label-text">Appearance</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+			<div id="vector-appearance-unpinned-container" class="vector-unpinned-container">
+				
+			</div>
+		
+	</div>
+</div>
+
+	</nav>
+	
+<div id="p-vector-user-menu-notifications" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-overflow" class="vector-menu mw-portlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=" cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=News+embargo" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span>Create account</span></a>
+</li>
+<li id="pt-login-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=News+embargo" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	</div>
+	
+<div id="vector-user-links-dropdown" class="vector-dropdown vector-user-menu vector-button-flush-right vector-user-menu-logged-out user-links-collapsible-item"  title="Log in and more options" >
+	<input type="checkbox" id="vector-user-links-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-user-links-dropdown" class="vector-dropdown-checkbox "  aria-label="Personal tools"  >
+	<label id="vector-user-links-dropdown-label" for="vector-user-links-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-ellipsis mw-ui-icon-wikimedia-ellipsis"></span>
+
+<span class="vector-dropdown-label-text">Personal tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+		
+<div id="p-personal" class="vector-menu mw-portlet mw-portlet-personal user-links-collapsible-item"  title="User menu" >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=""><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=News+embargo" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span class="vector-icon mw-ui-icon-userAdd mw-ui-icon-wikimedia-userAdd"></span>
+
+<span>Create account</span></a>
+</li>
+<li id="pt-login" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=News+embargo" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span class="vector-icon mw-ui-icon-logIn mw-ui-icon-wikimedia-logIn"></span>
+
+<span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+</nav>
+
+		</div>
+	</header>
+</div>
+<div class="mw-page-container">
+	<div class="mw-page-container-inner">
+		<div class="vector-sitenotice-container">
+			<div id="siteNotice"><!-- CentralNotice --></div>
+		</div>
+		<div class="vector-column-start">
+			<div class="vector-main-menu-container">
+		<div id="mw-navigation">
+			<nav id="mw-panel" class="vector-main-menu-landmark" aria-label="Site">
+				<div id="vector-main-menu-pinned-container" class="vector-pinned-container">
+				
+				</div>
+		</nav>
+		</div>
+	</div>
+	<div class="vector-sticky-pinned-container">
+				<nav id="mw-panel-toc" aria-label="Contents" data-event-name="ui.sidebar-toc" class="mw-table-of-contents-container vector-toc-landmark">
+					<div id="vector-toc-pinned-container" class="vector-pinned-container">
+					<div id="vector-toc" class="vector-toc vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-toc-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="toc-pinned"
+	data-pinnable-element-id="vector-toc"
+	data-pinned-container-id="vector-toc-pinned-container"
+	data-unpinned-container-id="vector-toc-unpinned-container"
+>
+	<h2 class="vector-pinnable-header-label">Contents</h2>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-toc.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-toc.unpin">hide</button>
+</div>
+
+
+	<ul class="vector-toc-contents" id="mw-panel-toc-list">
+		<li id="toc-mw-content-text"
+			class="vector-toc-list-item vector-toc-level-1">
+			<a href="#" class="vector-toc-link">
+				<div class="vector-toc-text">(Top)</div>
+			</a>
+		</li>
+		<li id="toc-Examples"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Examples">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">1</span>
+				<span>Examples</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Examples-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-On_articles_in_scientific_journals"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#On_articles_in_scientific_journals">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">2</span>
+				<span>On articles in scientific journals</span>
+			</div>
+		</a>
+		
+		<ul id="toc-On_articles_in_scientific_journals-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-See_also"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#See_also">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>See also</span>
+			</div>
+		</a>
+		
+		<ul id="toc-See_also-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-References"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#References">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>References</span>
+			</div>
+		</a>
+		
+		<ul id="toc-References-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Further_reading"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Further_reading">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>Further reading</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Further_reading-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-External_links"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#External_links">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">6</span>
+				<span>External links</span>
+			</div>
+		</a>
+		
+		<ul id="toc-External_links-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+</ul>
+</div>
+
+					</div>
+		</nav>
+			</div>
+		</div>
+		<div class="mw-content-container">
+			<main id="content" class="mw-body">
+				<header class="mw-body-header vector-page-titlebar no-font-mode-scale">
+					<nav aria-label="Contents" class="vector-toc-landmark">
+						
+<div id="vector-page-titlebar-toc" class="vector-dropdown vector-page-titlebar-toc vector-button-flush-left"  title="Table of Contents" >
+	<input type="checkbox" id="vector-page-titlebar-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-titlebar-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+	<label id="vector-page-titlebar-toc-label" for="vector-page-titlebar-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+							<div id="vector-page-titlebar-toc-unpinned-container" class="vector-unpinned-container">
+			</div>
+		
+	</div>
+</div>
+
+					</nav>
+					<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">News embargo</span></span></h1>
+							
+<div id="p-lang-btn" class="vector-dropdown mw-portlet mw-portlet-lang"  >
+	<input type="checkbox" id="p-lang-btn-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-p-lang-btn" class="vector-dropdown-checkbox mw-interlanguage-selector" aria-label="Go to an article in another language. Available in 9 languages"   >
+	<label id="p-lang-btn-label" for="p-lang-btn-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive mw-portlet-lang-heading-9" aria-hidden="true"  ><span class="vector-icon mw-ui-icon-language-progressive mw-ui-icon-wikimedia-language-progressive"></span>
+
+<span class="vector-dropdown-label-text">9 languages</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+		<div class="vector-menu-content">
+			
+			<ul class="vector-menu-content-list">
+				
+				<li class="interlanguage-link interwiki-ar mw-list-item"><a href="https://ar.wikipedia.org/wiki/%D8%AD%D8%B8%D8%B1_%D9%86%D8%B4%D8%B1_%D8%A7%D9%84%D8%A3%D8%AE%D8%A8%D8%A7%D8%B1" title="حظر نشر الأخبار – Arabic" lang="ar" hreflang="ar" data-title="حظر نشر الأخبار" data-language-autonym="العربية" data-language-local-name="Arabic" class="interlanguage-link-target"><span>العربية</span></a></li><li class="interlanguage-link interwiki-de mw-list-item"><a href="https://de.wikipedia.org/wiki/Sperrfrist_(Presse)" title="Sperrfrist (Presse) – German" lang="de" hreflang="de" data-title="Sperrfrist (Presse)" data-language-autonym="Deutsch" data-language-local-name="German" class="interlanguage-link-target"><span>Deutsch</span></a></li><li class="interlanguage-link interwiki-es mw-list-item"><a href="https://es.wikipedia.org/wiki/Embargo_de_noticias" title="Embargo de noticias – Spanish" lang="es" hreflang="es" data-title="Embargo de noticias" data-language-autonym="Español" data-language-local-name="Spanish" class="interlanguage-link-target"><span>Español</span></a></li><li class="interlanguage-link interwiki-fa mw-list-item"><a href="https://fa.wikipedia.org/wiki/%D8%AA%D8%B9%D9%84%DB%8C%D9%82_%D8%A7%D9%86%D8%AA%D8%B4%D8%A7%D8%B1_%D8%AE%D8%A8%D8%B1" title="تعلیق انتشار خبر – Persian" lang="fa" hreflang="fa" data-title="تعلیق انتشار خبر" data-language-autonym="فارسی" data-language-local-name="Persian" class="interlanguage-link-target"><span>فارسی</span></a></li><li class="interlanguage-link interwiki-fi mw-list-item"><a href="https://fi.wikipedia.org/wiki/Embargo" title="Embargo – Finnish" lang="fi" hreflang="fi" data-title="Embargo" data-language-autonym="Suomi" data-language-local-name="Finnish" class="interlanguage-link-target"><span>Suomi</span></a></li><li class="interlanguage-link interwiki-fr mw-list-item"><a href="https://fr.wikipedia.org/wiki/Embargo_d%27information" title="Embargo d&#039;information – French" lang="fr" hreflang="fr" data-title="Embargo d&#039;information" data-language-autonym="Français" data-language-local-name="French" class="interlanguage-link-target"><span>Français</span></a></li><li class="interlanguage-link interwiki-he mw-list-item"><a href="https://he.wikipedia.org/wiki/%D7%90%D7%9E%D7%91%D7%A8%D7%92%D7%95_(%D7%A2%D7%99%D7%AA%D7%95%D7%A0%D7%95%D7%AA)" title="אמברגו (עיתונות) – Hebrew" lang="he" hreflang="he" data-title="אמברגו (עיתונות)" data-language-autonym="עברית" data-language-local-name="Hebrew" class="interlanguage-link-target"><span>עברית</span></a></li><li class="interlanguage-link interwiki-ko mw-list-item"><a href="https://ko.wikipedia.org/wiki/%EB%89%B4%EC%8A%A4_%EC%97%A0%EB%B0%94%EA%B3%A0" title="뉴스 엠바고 – Korean" lang="ko" hreflang="ko" data-title="뉴스 엠바고" data-language-autonym="한국어" data-language-local-name="Korean" class="interlanguage-link-target"><span>한국어</span></a></li><li class="interlanguage-link interwiki-uk mw-list-item"><a href="https://uk.wikipedia.org/wiki/%D0%95%D0%BC%D0%B1%D0%B0%D1%80%D0%B3%D0%BE_(%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D1%96%D1%81%D1%82%D0%B8%D0%BA%D0%B0)" title="Ембарго (журналістика) – Ukrainian" lang="uk" hreflang="uk" data-title="Ембарго (журналістика)" data-language-autonym="Українська" data-language-local-name="Ukrainian" class="interlanguage-link-target"><span>Українська</span></a></li>
+			</ul>
+			<div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1065052#sitelinks-wikipedia" title="Edit interlanguage links" class="wbc-editpage">Edit links</a></span></div>
+		</div>
+
+	</div>
+</div>
+</header>
+				<div class="vector-page-toolbar vector-feature-custom-font-size-clientpref--excluded">
+					<div class="vector-page-toolbar-container">
+						<div id="left-navigation">
+							<nav aria-label="Namespaces">
+								
+<div id="p-associated-pages" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-associated-pages"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/News_embargo" title="View the content page [c]" accesskey="c"><span>Article</span></a></li><li id="ca-talk" class="vector-tab-noicon mw-list-item"><a href="/wiki/Talk:News_embargo" rel="discussion" title="Discuss improvements to the content page [t]" accesskey="t"><span>Talk</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+								
+<div id="vector-variants-dropdown" class="vector-dropdown emptyPortlet"  >
+	<input type="checkbox" id="vector-variants-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-variants-dropdown" class="vector-dropdown-checkbox " aria-label="Change language variant"   >
+	<label id="vector-variants-dropdown-label" for="vector-variants-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">English</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+					
+<div id="p-variants" class="vector-menu mw-portlet mw-portlet-variants emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+						<div id="right-navigation" class="vector-collapsible">
+							<nav aria-label="Views">
+								
+<div id="p-views" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-views"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/News_embargo"><span>Read</span></a></li><li id="ca-edit" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=News_embargo&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-history" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=News_embargo&amp;action=history" title="Past revisions of this page [h]" accesskey="h"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+							</nav>
+				
+							<nav class="vector-page-tools-landmark" aria-label="Page tools">
+								
+<div id="vector-page-tools-dropdown" class="vector-dropdown vector-page-tools-dropdown"  >
+	<input type="checkbox" id="vector-page-tools-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-tools-dropdown" class="vector-dropdown-checkbox "  aria-label="Tools"  >
+	<label id="vector-page-tools-dropdown-label" for="vector-page-tools-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">Tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+									<div id="vector-page-tools-unpinned-container" class="vector-unpinned-container">
+						
+<div id="vector-page-tools" class="vector-page-tools vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-page-tools-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="page-tools-pinned"
+	data-pinnable-element-id="vector-page-tools"
+	data-pinned-container-id="vector-page-tools-pinned-container"
+	data-unpinned-container-id="vector-page-tools-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Tools</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-page-tools.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-page-tools.unpin">hide</button>
+</div>
+
+	
+<div id="p-cactions" class="vector-menu mw-portlet mw-portlet-cactions emptyPortlet vector-has-collapsible-items"  title="More options" >
+	<div class="vector-menu-heading">
+		Actions
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-more-view" class="selected vector-more-collapsible-item mw-list-item"><a href="/wiki/News_embargo"><span>Read</span></a></li><li id="ca-more-edit" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=News_embargo&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-more-history" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=News_embargo&amp;action=history"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-tb" class="vector-menu mw-portlet mw-portlet-tb"  >
+	<div class="vector-menu-heading">
+		General
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-whatlinkshere" class="mw-list-item"><a href="/wiki/Special:WhatLinksHere/News_embargo" title="List of all English Wikipedia pages containing links to this page [j]" accesskey="j"><span>What links here</span></a></li><li id="t-recentchangeslinked" class="mw-list-item"><a href="/wiki/Special:RecentChangesLinked/News_embargo" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k"><span>Related changes</span></a></li><li id="t-upload" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [u]" accesskey="u"><span>Upload file</span></a></li><li id="t-permalink" class="mw-list-item"><a href="/w/index.php?title=News_embargo&amp;oldid=1337724435" title="Permanent link to this revision of this page"><span>Permanent link</span></a></li><li id="t-info" class="mw-list-item"><a href="/w/index.php?title=News_embargo&amp;action=info" title="More information about this page"><span>Page information</span></a></li><li id="t-cite" class="mw-list-item"><a href="/w/index.php?title=Special:CiteThisPage&amp;page=News_embargo&amp;id=1337724435&amp;wpFormIdentifier=titleform" title="Information on how to cite this page"><span>Cite this page</span></a></li><li id="t-urlshortener" class="mw-list-item"><a href="/w/index.php?title=Special:UrlShortener&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FNews_embargo"><span>Get shortened URL</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-coll-print_export" class="vector-menu mw-portlet mw-portlet-coll-print_export"  >
+	<div class="vector-menu-heading">
+		Print/export
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="coll-download-as-rl" class="mw-list-item"><a href="/w/index.php?title=Special:DownloadAsPdf&amp;page=News_embargo&amp;action=show-download-screen" title="Download this page as a PDF file"><span>Download as PDF</span></a></li><li id="t-print" class="mw-list-item"><a href="/w/index.php?title=News_embargo&amp;printable=yes" title="Printable version of this page [p]" accesskey="p"><span>Printable version</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-wikibase-otherprojects" class="vector-menu mw-portlet mw-portlet-wikibase-otherprojects"  >
+	<div class="vector-menu-heading">
+		In other projects
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-wikibase" class="wb-otherproject-link wb-otherproject-wikibase-dataitem mw-list-item"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1065052" title="Structured data on this page hosted by Wikidata [g]" accesskey="g"><span>Wikidata item</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+									</div>
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="vector-column-end no-font-mode-scale">
+					<div class="vector-sticky-pinned-container">
+						<div class="wp25eastereggs-vector-sitenotice-landmark"></div>
+						<nav class="vector-page-tools-landmark" aria-label="Page tools">
+							<div id="vector-page-tools-pinned-container" class="vector-pinned-container">
+				
+							</div>
+		</nav>
+						<nav class="vector-appearance-landmark" aria-label="Appearance">
+							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
+
+							</div>
+		</nav>
+					</div>
+				</div>
+				<div id="bodyContent" class="vector-body" aria-labelledby="firstHeading" data-mw-ve-target-container>
+					<div class="vector-body-before-content">
+							<div class="mw-indicators">
+		</div>
+
+						<div id="siteSub" class="noprint">From Wikipedia, the free encyclopedia</div>
+					</div>
+					<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+					
+					
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-subjectpageheader">
+</div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="shortdescription nomobile noexcerpt noprint searchaux" style="display:none">Tactic for delaying publication by the press of a news item</div>
+<p class="mw-empty-elt">
+</p>
+<figure class="mw-default-size" typeof="mw:File/Thumb"><a href="/wiki/File:20170810-OSEC-LSC-0046_(36113531420).jpg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/8/86/20170810-OSEC-LSC-0046_%2836113531420%29.jpg/250px-20170810-OSEC-LSC-0046_%2836113531420%29.jpg" decoding="async" width="250" height="163" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/86/20170810-OSEC-LSC-0046_%2836113531420%29.jpg/500px-20170810-OSEC-LSC-0046_%2836113531420%29.jpg 2x" data-file-width="2412" data-file-height="1571" /></a><figcaption>A sign at a U.S. <a href="/wiki/National_Agricultural_Statistics_Service" title="National Agricultural Statistics Service">National Agricultural Statistics Service</a> briefing on crop production, held at a secure <a href="/wiki/Data_room" title="Data room">data room</a> where politicians and journalists are briefed on embargoed data two hours before its release</figcaption></figure>
+<p>In <a href="/wiki/Journalism" title="Journalism">journalism</a> and <a href="/wiki/Public_relations" title="Public relations">public relations</a>, a <b>news embargo</b> or <b>press embargo</b> is a request or requirement by a <a href="/wiki/Journalism_sourcing" class="mw-redirect" title="Journalism sourcing">source</a> that the <a href="/wiki/Information" title="Information">information</a> or <a href="/wiki/News" title="News">news</a> provided by that source not be published until a certain date or certain conditions have been met. They are often used by businesses making a product announcement, by medical journals, and by government officials announcing policy initiatives; the media is given advance knowledge of details being held secret so that reports can be prepared to coincide with the announcement date and yet still meet press time.<sup id="cite&#95;ref-1" class="reference"><a href="#cite_note-1"><span class="cite-bracket">&#91;</span>1<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>In theory, press embargoes reduce inaccuracy in the reporting of breaking stories by reducing the incentive for journalists to cut corners by writing up information quickly in hopes of "scooping" the competition. A similar concept are review embargoes in video games, computer hardware and films; in these, reviewers are given early access to content or products in exchange for keeping review results secret until the embargo is lifted, preventing inaccuracies in reviews or lackluster sales at launch or to allow any flaws, bugs or other inconsistencies discovered by reviewers to be fixed before launch, preventing problems after launch.<sup id="cite&#95;ref-2" class="reference"><a href="#cite_note-2"><span class="cite-bracket">&#91;</span>2<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-3" class="reference"><a href="#cite_note-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-4" class="reference"><a href="#cite_note-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The understanding is that if the embargo is broken by reporting before then, the source will retaliate by restricting access to further information by that journalist or their publication, giving them a long-term disadvantage relative to more cooperative outlets. Embargoes are usually arranged in advance as "<a href="/wiki/Gentlemen%27s_agreement" title="Gentlemen&#39;s agreement">gentlemen's agreements</a>."  However, sometimes publicists will send embargoed <a href="/wiki/Press_release" title="Press release">press releases</a> to newsrooms unsolicited in hopes that they will respect the embargo date without having first agreed to do so—the phrase "For Immediate Release" often found at the top of press releases indicates that the information in the release is not embargoed.
+</p><p>News organizations sometimes break embargoes and report information before the embargo expires, either accidentally (due to miscommunication in the newsroom) or intentionally (to get the jump on their competitors). Breaking an embargo is typically considered a serious breach of trust and can result in the source barring the offending news outlet from receiving advance information for a long period of time.
+</p><p>News embargoes are one of several ways a source can influence media presentation of the information they provide; others include providing information "on background" or "not for attribution", limiting or providing "access", or even direct <a href="/wiki/Government" title="Government">government</a> or market intervention against the reporters or media company. (See <a href="/wiki/Journalism_sourcing#Confidentiality_terminology" class="mw-redirect" title="Journalism sourcing">confidentiality terminology in journalism</a> for a full discussion of these.)  The manner in which journalists react to these and other attempts to influence coverage are a matter of <a href="/wiki/Journalism_ethics_and_standards" title="Journalism ethics and standards">journalistic ethics</a>.
+</p><p>An example of an embargo being deliberately broken occurred on 19 July 2017. The television presenter and former tabloid editor <a href="/wiki/Piers_Morgan" title="Piers Morgan">Piers Morgan</a> antagonised other journalists when he intentionally breached a BBC news embargo. This was in connection with the publication of details of BBC presenters earning more than £150,000 annually. He announced the details via his Twitter account about an hour earlier than the report's indicated time of publication. He excused his action by describing it as a "scoop".<sup id="cite&#95;ref-5" class="reference"><a href="#cite_note-5"><span class="cite-bracket">&#91;</span>5<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-6" class="reference"><a href="#cite_note-6"><span class="cite-bracket">&#91;</span>6<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-7" class="reference"><a href="#cite_note-7"><span class="cite-bracket">&#91;</span>7<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<meta property="mw:PageProp/toc" />
+<div class="mw-heading mw-heading2"><h2 id="Examples">Examples</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=News_embargo&amp;action=edit&amp;section=1" title="Edit section: Examples"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<figure class="mw-default-size" typeof="mw:File/Thumb"><a href="/wiki/File:20170810-OSEC-LSC-0007_(36372931501).jpg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/2/2c/20170810-OSEC-LSC-0007_%2836372931501%29.jpg/250px-20170810-OSEC-LSC-0007_%2836372931501%29.jpg" decoding="async" width="250" height="235" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/2/2c/20170810-OSEC-LSC-0007_%2836372931501%29.jpg/500px-20170810-OSEC-LSC-0007_%2836372931501%29.jpg 2x" data-file-width="3900" data-file-height="3663" /></a><figcaption>Journalists' mobile phones are locked away at a U.S. <a href="/wiki/National_Agricultural_Statistics_Service" title="National Agricultural Statistics Service">National Agricultural Statistics Service</a> briefing on crop production figures before the public release of information at noon.</figcaption></figure>
+<ul><li>Biweekly press briefings from the <a href="/wiki/International_Monetary_Fund" title="International Monetary Fund">International Monetary Fund</a> are typically embargoed until 10:30&#160;a.m. Washington time, 1430 GMT (for synchronised effect on global stock markets).</li>
+<li>Reporters who accompanied U.S. President <a href="/wiki/George_W._Bush" title="George W. Bush">George W. Bush</a> on a <a href="/wiki/Thanksgiving" title="Thanksgiving">Thanksgiving</a> visit to Iraq in 2003 were embargoed from filing until the President left the country.  They were told that, in the interests of security, the trip would be canceled if news broke before its conclusion.<sup id="cite&#95;ref-8" class="reference"><a href="#cite_note-8"><span class="cite-bracket">&#91;</span>8<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>The <a href="/wiki/Ministry_of_Defence_(United_Kingdom)" title="Ministry of Defence (United Kingdom)">Ministry of Defence</a> in the <a href="/wiki/United_Kingdom" title="United Kingdom">United Kingdom</a> informed a small number of journalism outlets that <a href="/wiki/Prince_Harry" class="mw-redirect" title="Prince Harry">Prince Harry</a> would be serving in <a href="/wiki/Afghanistan" title="Afghanistan">Afghanistan</a>, on condition that the information not be released until the end of his deployment.  The information was leaked after about two months, and officials agreed to end the embargo.  The prince was immediately removed from the battlefield, reportedly for his safety and that of his fellow soldiers.</li>
+<li>In <a href="/wiki/Canada" title="Canada">Canada</a>, <a href="/wiki/Australia" title="Australia">Australia</a> and other countries, prior to the release of the <a href="/wiki/Government_budget" title="Government budget">budget</a> and other important government announcements, reporters are held in a "lockup" so that they can prepare stories in advance.  They are not permitted to file until after the official announcement (for example, after the Minister of Finance rises to deliver the budget speech).  Lockups are particularly aimed at preventing <a href="/wiki/Insider_trading" title="Insider trading">insider trading</a> on the basis of leaked government announcements.<sup id="cite&#95;ref-9" class="reference"><a href="#cite_note-9"><span class="cite-bracket">&#91;</span>9<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-10" class="reference"><a href="#cite_note-10"><span class="cite-bracket">&#91;</span>10<span class="cite-bracket">&#93;</span></a></sup>  It is uncertain if a similar lockup is done in the United States when the <a href="/wiki/Federal_Reserve_Board" class="mw-redirect" title="Federal Reserve Board">Federal Reserve Board</a> is preparing to adjust an interest rate.</li>
+<li><i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i> in 2008 prompted suppression of the story of the <a href="/wiki/Kidnapping_of_David_Rohde" title="Kidnapping of David Rohde">kidnapping of David Rohde</a> (their reporter) in news outlets and on Wikipedia until his return in 2009. This example, in which the instigator of the embargo is not the source, may be a case of <a href="/wiki/Self-censorship" title="Self-censorship">self-censorship</a> instead.</li></ul>
+<div class="mw-heading mw-heading2"><h2 id="On_articles_in_scientific_journals">On articles in scientific journals</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=News_embargo&amp;action=edit&amp;section=2" title="Edit section: On articles in scientific journals"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1320445320">.mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{padding-left:1.6em;margin-bottom:0.5em}.mw-parser-output .hatnote i{font-style:normal}.mw-parser-output .hatnote+link+.hatnote{margin-top:-0.5em}@media print{body.ns-0 .mw-parser-output .hatnote{display:none!important}}</style><div role="note" class="hatnote navigation-not-searchable">Main article: <a href="/wiki/Ingelfinger_rule" title="Ingelfinger rule">Ingelfinger rule</a></div>
+<p>News embargoes are commonly applied on information of health-related news regarding upcoming medical journal articles.  All major medical journals, including the <i><a href="/wiki/New_England_Journal_of_Medicine" class="mw-redirect" title="New England Journal of Medicine">New England Journal of Medicine</a></i>, the <i><a href="/wiki/Journal_of_the_American_Medical_Association" class="mw-redirect" title="Journal of the American Medical Association">Journal of the American Medical Association</a></i>, and <i><a href="/wiki/The_Lancet" title="The Lancet">The Lancet</a></i>, have publication embargoes.
+</p><p>The <i>JAMA</i> embargo probably dates back to the editorship of Morris Fishbein, from 1924 to 1949, and holds until 15:00 <a href="/wiki/Central_Time_zone" class="mw-redirect" title="Central Time zone">Central Time</a> on the day before the cover date of the issue.  Journalists who agree to not publish (in print, on television, on radio, or via Internet) until that time the information contained in a manuscript to be published by the journal receive advance copies of the journal by mail during the week before publication.  For selected articles, press releases and news release videos are also prepared by science writers and released to journalists during that week.<sup id="cite&#95;ref-JAMA1&#95;11-0" class="reference"><a href="#cite_note-JAMA1-11"><span class="cite-bracket">&#91;</span>11<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The reasons given for such embargoes are twofold.  First, they enable journalists to produce more comprehensive and accurate coverage, as the embargo provides time in which they can research the background to a story and thus publish "backgrounders" along with the story's release.  Second, they enable doctors and scientists to receive and to analyze medical studies before the general public does, enabling them to be better informed when called upon to comment or to react by journalists or by patients.  However, some object to the medical news embargo system, claiming that it is driven by <a href="/wiki/Profit_motive" title="Profit motive">profit motives</a> on the parts of the medical journals.<sup id="cite&#95;ref-JAMA1&#95;11-1" class="reference"><a href="#cite_note-JAMA1-11"><span class="cite-bracket">&#91;</span>11<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-12" class="reference"><a href="#cite_note-12"><span class="cite-bracket">&#91;</span>12<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=News_embargo&amp;action=edit&amp;section=3" title="Edit section: See also"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1266661725">.mw-parser-output .portalbox{padding:0;margin:0.5em 0;display:table;box-sizing:border-box;max-width:175px;list-style:none}.mw-parser-output .portalborder{border:1px solid var(--border-color-base,#a2a9b1);padding:0.1em;background:var(--background-color-neutral-subtle,#f8f9fa)}.mw-parser-output .portalbox-entry{display:table-row;font-size:85%;line-height:110%;height:1.9em;font-style:italic;font-weight:bold}.mw-parser-output .portalbox-image{display:table-cell;padding:0.2em;vertical-align:middle;text-align:center}.mw-parser-output .portalbox-link{display:table-cell;padding:0.2em 0.2em 0.2em 0.3em;vertical-align:middle}@media(min-width:720px){.mw-parser-output .portalleft{margin:0.5em 1em 0.5em 0}.mw-parser-output .portalright{clear:right;float:right;margin:0.5em 0 0.5em 1em}}</style><ul role="navigation" aria-label="Portals" class="noprint portalbox portalborder portalright">
+<li class="portalbox-entry"><span class="portalbox-image"><span class="noviewer" typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Newspaper_nicu_buculei_01.svg/40px-Newspaper_nicu_buculei_01.svg.png" decoding="async" width="28" height="28" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Newspaper_nicu_buculei_01.svg/60px-Newspaper_nicu_buculei_01.svg.png 2x" data-file-width="160" data-file-height="160" /></span></span></span><span class="portalbox-link"><a href="/wiki/Portal:Journalism" title="Portal:Journalism">Journalism portal</a></span></li></ul>
+<ul><li><a href="/wiki/Coordinated_vulnerability_disclosure" title="Coordinated vulnerability disclosure">Coordinated vulnerability disclosure</a></li>
+<li><a href="/wiki/Damage_control_(news)" class="mw-redirect" title="Damage control (news)">Damage control</a></li>
+<li><a href="/wiki/Journalism_sourcing" class="mw-redirect" title="Journalism sourcing">Journalism sourcing</a></li>
+<li><a href="/wiki/Media_bias" title="Media bias">Media bias</a></li>
+<li><a href="/wiki/Media_democracy" title="Media democracy">Media democracy</a></li>
+<li><a href="/wiki/Media_transparency" title="Media transparency">Media transparency</a></li>
+<li><a href="/wiki/News_desert" title="News desert">News desert</a></li>
+<li><a href="/wiki/Publication_ban" title="Publication ban">Publication ban</a></li>
+<li><a href="/wiki/Press_censorship" class="mw-redirect" title="Press censorship">Press censorship</a></li></ul>
+<div class="mw-heading mw-heading2"><h2 id="References">References</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=News_embargo&amp;action=edit&amp;section=4" title="Edit section: References"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1327269900">.mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflist-columns-3{column-width:25em}body.skin-vector-2022 .mw-parser-output .reflist-columns-2{column-width:27em}body.skin-vector-2022 .mw-parser-output .reflist-columns-3{column-width:22.5em}.mw-parser-output .references[data-mw-group=upper-alpha]{list-style-type:upper-alpha}.mw-parser-output .references[data-mw-group=upper-roman]{list-style-type:upper-roman}.mw-parser-output .references[data-mw-group=lower-alpha]{list-style-type:lower-alpha}.mw-parser-output .references[data-mw-group=lower-greek]{list-style-type:lower-greek}.mw-parser-output .references[data-mw-group=lower-roman]{list-style-type:lower-roman}.mw-parser-output div.reflist-liststyle-upper-alpha .references{list-style-type:upper-alpha}.mw-parser-output div.reflist-liststyle-upper-roman .references{list-style-type:upper-roman}.mw-parser-output div.reflist-liststyle-lower-alpha .references{list-style-type:lower-alpha}.mw-parser-output div.reflist-liststyle-lower-greek .references{list-style-type:lower-greek}.mw-parser-output div.reflist-liststyle-lower-roman .references{list-style-type:lower-roman}</style><div>
+<div class="mw-references-wrap mw-references-columns"><ol class="references">
+<li id="cite&#95;note-1"><span class="mw-cite-backlink"><b><a href="#cite_ref-1">^</a></b></span> <span class="reference-text"><style data-mw-deduplicate="TemplateStyles:r1333433106">.mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-parser-output .citation q{quotes:"\"""\"""'""'"}.mw-parser-output .citation:target{background-color:rgba(0,127,255,0.133)}.mw-parser-output .id-lock-free.id-lock-free a{background:url("//upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-limited.id-lock-limited a,.mw-parser-output .id-lock-registration.id-lock-registration a{background:url("//upload.wikimedia.org/wikipedia/commons/d/d6/Lock-gray-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-subscription.id-lock-subscription a{background:url("//upload.wikimedia.org/wikipedia/commons/a/aa/Lock-red-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .cs1-ws-icon a{background:url("//upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg")right 0.1em center/12px no-repeat}body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-free a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-limited a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-registration a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-subscription a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .cs1-ws-icon a{background-size:contain;padding:0 1em 0 0}.mw-parser-output .cs1-code{color:inherit;background:inherit;border:none;padding:inherit}.mw-parser-output .cs1-hidden-error{display:none;color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-visible-error{color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-maint{display:none;color:#085;margin-left:0.3em}.mw-parser-output .cs1-kern-left{padding-left:0.2em}.mw-parser-output .cs1-kern-right{padding-right:0.2em}.mw-parser-output .citation .mw-selflink{font-weight:inherit}@media screen{.mw-parser-output .cs1-format{font-size:95%}html.skin-theme-clientpref-night .mw-parser-output .cs1-maint{color:#18911f}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .cs1-maint{color:#18911f}}</style><cite id="CITEREFDelkic2018" class="citation news cs1">Delkic, Melina (11 August 2018). <a rel="nofollow" class="external text" href="https://www.nytimes.com/2018/08/11/insider/embargoes-reporting.html">"Ready, Set, Embargo"</a>. <i>New York Times</i><span class="reference-accessdate">. Retrieved <span class="nowrap">20 August</span> 2019</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=New+York+Times&amp;rft.atitle=Ready%2C+Set%2C+Embargo&amp;rft.date=2018-08-11&amp;rft.aulast=Delkic&amp;rft.aufirst=Melina&amp;rft&#95;id=https%3A%2F%2Fwww.nytimes.com%2F2018%2F08%2F11%2Finsider%2Fembargoes-reporting.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-2"><span class="mw-cite-backlink"><b><a href="#cite_ref-2">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSolca2018" class="citation web cs1">Solca, Bogdan (13 September 2018). <a rel="nofollow" class="external text" href="https://www.notebookcheck.net/New-Nvidia-Turing-RTX-2000-series-key-features-detailed-ahead-of-review-embargo-lift.331414.0.html">"New Nvidia Turing RTX 2000-series key features detailed ahead of review embargo lift"</a>. <i>Notebookcheck</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Notebookcheck&amp;rft.atitle=New+Nvidia+Turing+RTX+2000-series+key+features+detailed+ahead+of+review+embargo+lift&amp;rft.date=2018-09-13&amp;rft.aulast=Solca&amp;rft.aufirst=Bogdan&amp;rft&#95;id=https%3A%2F%2Fwww.notebookcheck.net%2FNew-Nvidia-Turing-RTX-2000-series-key-features-detailed-ahead-of-review-embargo-lift.331414.0.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-3"><span class="mw-cite-backlink"><b><a href="#cite_ref-3">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSmith2020" class="citation web cs1">Smith, Callum (1 July 2020). <a rel="nofollow" class="external text" href="https://www.hitc.com/en-gb/2020/07/01/ghost-of-tsushima-review-embargo-lift-date/">"Ghost Of Tsushima: Review embargo lift date revealed and it's fantastic news!"</a>. <i>HITC</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=HITC&amp;rft.atitle=Ghost+Of+Tsushima%3A+Review+embargo+lift+date+revealed+and+it%27s+fantastic+news%21&amp;rft.date=2020-07-01&amp;rft.aulast=Smith&amp;rft.aufirst=Callum&amp;rft&#95;id=https%3A%2F%2Fwww.hitc.com%2Fen-gb%2F2020%2F07%2F01%2Fghost-of-tsushima-review-embargo-lift-date%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-4"><span class="mw-cite-backlink"><b><a href="#cite_ref-4">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://www.denofgeek.com/culture/review-embargoes-what-are-they-and-do-they-help/">"Review Embargoes: What are They, and Do They Help?"</a>. <i>Den of Geek</i>. 23 November 2017.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Den+of+Geek&amp;rft.atitle=Review+Embargoes%3A+What+are+They%2C+and+Do+They+Help%3F&amp;rft.date=2017-11-23&amp;rft&#95;id=https%3A%2F%2Fwww.denofgeek.com%2Fculture%2Freview-embargoes-what-are-they-and-do-they-help%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-5"><span class="mw-cite-backlink"><b><a href="#cite_ref-5">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFOppenheim2017" class="citation news cs1">Oppenheim, Maya (19 July 2017). <span class="id-lock-subscription" title="Paid subscription required"><a rel="nofollow" class="external text" href="https://www.independent.co.uk/arts-entertainment/tv/news/bbc-pay-piers-morgan-embargo-break-scoop-woman-petal-earning-22-million-year-salaries-good-morning-a7848921.html">"Piers Morgan leaks BBC salaries by breaking embargo and calls it a scoop"</a></span>. <i>The Independent</i>. <a rel="nofollow" class="external text" href="https://ghostarchive.org/archive/20220618/https://www.independent.co.uk/arts-entertainment/tv/news/bbc-pay-piers-morgan-embargo-break-scoop-woman-petal-earning-22-million-year-salaries-good-morning-a7848921.html">Archived</a> from the original on 18 June 2022<span class="reference-accessdate">. Retrieved <span class="nowrap">16 July</span> 2018</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+Independent&amp;rft.atitle=Piers+Morgan+leaks+BBC+salaries+by+breaking+embargo+and+calls+it+a+scoop&amp;rft.date=2017-07-19&amp;rft.aulast=Oppenheim&amp;rft.aufirst=Maya&amp;rft&#95;id=https%3A%2F%2Fwww.independent.co.uk%2Farts-entertainment%2Ftv%2Fnews%2Fbbc-pay-piers-morgan-embargo-break-scoop-woman-petal-earning-22-million-year-salaries-good-morning-a7848921.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-6"><span class="mw-cite-backlink"><b><a href="#cite_ref-6">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFYork2017" class="citation news cs1">York, Chris (19 July 2017). <a rel="nofollow" class="external text" href="http://www.huffingtonpost.co.uk/entry/piers-morgan-bellend_uk_596f2ef5e4b0000eb1972485">"Piers Morgan Branded 'Bellend' For Breaking BBC Pay Embargo"</a>. <i>HuffPost</i><span class="reference-accessdate">. Retrieved <span class="nowrap">16 July</span> 2018</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=HuffPost&amp;rft.atitle=Piers+Morgan+Branded+%27Bellend%27+For+Breaking+BBC+Pay+Embargo&amp;rft.date=2017-07-19&amp;rft.aulast=York&amp;rft.aufirst=Chris&amp;rft&#95;id=http%3A%2F%2Fwww.huffingtonpost.co.uk%2Fentry%2Fpiers-morgan-bellend&#95;uk&#95;596f2ef5e4b0000eb1972485&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-7"><span class="mw-cite-backlink"><b><a href="#cite_ref-7">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFPowell2017" class="citation news cs1">Powell, Tom (19 July 2017). <a rel="nofollow" class="external text" href="https://www.standard.co.uk/news/uk/piers-morgan-blasted-for-leaking-bbc-salaries-and-claiming-scoop-a3591346.html">"Piers Morgan blasted for 'leaking' BBC salaries and claiming 'scoop'<span class="cs1-kern-right"></span>"</a>. <i>London Evening Standard</i><span class="reference-accessdate">. Retrieved <span class="nowrap">16 July</span> 2018</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=London+Evening+Standard&amp;rft.atitle=Piers+Morgan+blasted+for+%27leaking%27+BBC+salaries+and+claiming+%27scoop%27&amp;rft.date=2017-07-19&amp;rft.aulast=Powell&amp;rft.aufirst=Tom&amp;rft&#95;id=https%3A%2F%2Fwww.standard.co.uk%2Fnews%2Fuk%2Fpiers-morgan-blasted-for-leaking-bbc-salaries-and-claiming-scoop-a3591346.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-8"><span class="mw-cite-backlink"><b><a href="#cite_ref-8">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMonizKeen2003" class="citation news cs1">Moniz, Dave; Keen, Judy (27 November 2003). <a rel="nofollow" class="external text" href="https://www.usatoday.com/news/washington/2003-11-27-bush-secrecy_x.htm">"Secrecy, Precautions Minimized Risk"</a>. <i><a href="/wiki/USA_Today" title="USA Today">USA Today</a></i><span class="reference-accessdate">. Retrieved <span class="nowrap">2 December</span> 2006</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=USA+Today&amp;rft.atitle=Secrecy%2C+Precautions+Minimized+Risk&amp;rft.date=2003-11-27&amp;rft.aulast=Moniz&amp;rft.aufirst=Dave&amp;rft.au=Keen%2C+Judy&amp;rft&#95;id=https%3A%2F%2Fwww.usatoday.com%2Fnews%2Fwashington%2F2003-11-27-bush-secrecy&#95;x.htm&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-9"><span class="mw-cite-backlink"><b><a href="#cite_ref-9">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFHildebrandt2006" class="citation news cs1">Hildebrandt, Amber (5 February 2006). <a rel="nofollow" class="external text" href="http://www.cbc.ca/news/background/budget2006/blog.html">"CBC News Indepth: Federal Budget 2006"</a>. <a href="/wiki/Canadian_Broadcasting_Corporation" title="Canadian Broadcasting Corporation">Canadian Broadcasting Corporation</a><span class="reference-accessdate">. Retrieved <span class="nowrap">2 December</span> 2006</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=CBC+News+Indepth%3A+Federal+Budget+2006&amp;rft.date=2006-02-05&amp;rft.aulast=Hildebrandt&amp;rft.aufirst=Amber&amp;rft&#95;id=http%3A%2F%2Fwww.cbc.ca%2Fnews%2Fbackground%2Fbudget2006%2Fblog.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-10"><span class="mw-cite-backlink"><b><a href="#cite_ref-10">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFAllan2007" class="citation news cs1">Allan, Tony (14 May 2007). <a rel="nofollow" class="external text" href="https://web.archive.org/web/20160303232108/http://www2b.abc.net.au/guestbookcentral/entry.asp?GuestbookID=389&amp;EntryID=755777">"ABC Rural Victorian Country Hour Blog: Locked up with the Federal Budget"</a>. <a href="/wiki/Australian_Broadcasting_Corporation" title="Australian Broadcasting Corporation">Australian Broadcasting Corporation</a>. Archived from <a rel="nofollow" class="external text" href="http://www2b.abc.net.au/guestbookcentral/entry.asp?GuestbookID=389&amp;EntryID=755777">the original</a> on 3 March 2016<span class="reference-accessdate">. Retrieved <span class="nowrap">27 July</span> 2007</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=ABC+Rural+Victorian+Country+Hour+Blog%3A+Locked+up+with+the+Federal+Budget&amp;rft.date=2007-05-14&amp;rft.aulast=Allan&amp;rft.aufirst=Tony&amp;rft&#95;id=http%3A%2F%2Fwww2b.abc.net.au%2Fguestbookcentral%2Fentry.asp%3FGuestbookID%3D389%26EntryID%3D755777&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-JAMA1-11"><span class="mw-cite-backlink">^ <a href="#cite_ref-JAMA1_11-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-JAMA1_11-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFFontanarosaFlanaginDeAngelis2000" class="citation journal cs1">Fontanarosa, Phil B.; Flanagin, Annette &amp; DeAngelis, Cathering D. (13 December 2000). "The Journal's Policy Regarding Release of Information to the Public". <i><a href="/wiki/Journal_of_the_American_Medical_Association" class="mw-redirect" title="Journal of the American Medical Association">Journal of the American Medical Association</a></i>. <b>284</b> (22): <span class="nowrap">2929–</span>2931. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1001%2Fjama.284.22.2929">10.1001/jama.284.22.2929</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/11147991">11147991</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+the+American+Medical+Association&amp;rft.atitle=The+Journal%27s+Policy+Regarding+Release+of+Information+to+the+Public&amp;rft.volume=284&amp;rft.issue=22&amp;rft.pages=2929-2931&amp;rft.date=2000-12-13&amp;rft&#95;id=info%3Adoi%2F10.1001%2Fjama.284.22.2929&amp;rft&#95;id=info%3Apmid%2F11147991&amp;rft.aulast=Fontanarosa&amp;rft.aufirst=Phil+B.&amp;rft.au=Flanagin%2C+Annette&amp;rft.au=DeAngelis%2C+Cathering+D.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-12"><span class="mw-cite-backlink"><b><a href="#cite_ref-12">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFRoberts1994" class="citation journal cs1">Roberts, John (30 April 1994). <span class="id-lock-subscription" title="Paid subscription required"><a rel="nofollow" class="external text" href="http://www.bmj.com/cgi/content/full/308/6937/1168/a">"Medicine and the Media: News Embargoes—in Whose Interest?"</a></span>. <i><a href="/wiki/British_Medical_Journal" class="mw-redirect" title="British Medical Journal">British Medical Journal</a></i>. <b>308</b> (6937): <span class="nowrap">1168–</span>1169. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1136%2Fbmj.308.6937.1168a">10.1136/bmj.308.6937.1168a</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:70573709">70573709</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=British+Medical+Journal&amp;rft.atitle=Medicine+and+the+Media%3A+News+Embargoes%E2%80%94in+Whose+Interest%3F&amp;rft.volume=308&amp;rft.issue=6937&amp;rft.pages=1168-1169&amp;rft.date=1994-04-30&amp;rft&#95;id=info%3Adoi%2F10.1136%2Fbmj.308.6937.1168a&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A70573709%23id-name%3DS2CID&amp;rft.aulast=Roberts&amp;rft.aufirst=John&amp;rft&#95;id=http%3A%2F%2Fwww.bmj.com%2Fcgi%2Fcontent%2Ffull%2F308%2F6937%2F1168%2Fa&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></span>
+</li>
+</ol></div></div>
+<div class="mw-heading mw-heading2"><h2 id="Further_reading">Further reading</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=News_embargo&amp;action=edit&amp;section=5" title="Edit section: Further reading"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1239549316">.mw-parser-output .refbegin{margin-bottom:0.5em}.mw-parser-output .refbegin-hanging-indents>ul{margin-left:0}.mw-parser-output .refbegin-hanging-indents>ul>li{margin-left:0;padding-left:3.2em;text-indent:-3.2em}.mw-parser-output .refbegin-hanging-indents ul,.mw-parser-output .refbegin-hanging-indents ul li{list-style:none}@media(max-width:720px){.mw-parser-output .refbegin-hanging-indents>ul>li{padding-left:1.6em;text-indent:-1.6em}}.mw-parser-output .refbegin-columns{margin-top:0.3em}.mw-parser-output .refbegin-columns ul{margin-top:0}.mw-parser-output .refbegin-columns li{page-break-inside:avoid;break-inside:avoid-column}@media screen{.mw-parser-output .refbegin{font-size:90%}}</style><div class="refbegin refbegin-columns references-column-width" style="column-width: 30em">
+<ul><li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFd&#39;Adler1988" class="citation journal cs1">d'Adler, MA (1988). "The Transfer of Medical Information: A Journalist's View". <i>International Journal of Technology Assessment in Health Care</i>. <b>4</b> (1): <span class="nowrap">59–</span>63. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1017%2FS0266462300003263">10.1017/S0266462300003263</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/10287116">10287116</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:23626893">23626893</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=International+Journal+of+Technology+Assessment+in+Health+Care&amp;rft.atitle=The+Transfer+of+Medical+Information%3A+A+Journalist%27s+View&amp;rft.volume=4&amp;rft.issue=1&amp;rft.pages=59-63&amp;rft.date=1988&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A23626893%23id-name%3DS2CID&amp;rft&#95;id=info%3Apmid%2F10287116&amp;rft&#95;id=info%3Adoi%2F10.1017%2FS0266462300003263&amp;rft.aulast=d%27Adler&amp;rft.aufirst=MA&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFFontanarosaDeAngelis2002" class="citation journal cs1">Fontanarosa, Phil B.; DeAngelis, Catherine D. (14 August 2002). "The Importance of the Journal Embargo". <i><a href="/wiki/Journal_of_the_American_Medical_Association" class="mw-redirect" title="Journal of the American Medical Association">Journal of the American Medical Association</a></i>. <b>288</b> (6): <span class="nowrap">748–</span>750. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1001%2Fjama.288.6.748">10.1001/jama.288.6.748</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/12169080">12169080</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+the+American+Medical+Association&amp;rft.atitle=The+Importance+of+the+Journal+Embargo&amp;rft.volume=288&amp;rft.issue=6&amp;rft.pages=748-750&amp;rft.date=2002-08-14&amp;rft&#95;id=info%3Adoi%2F10.1001%2Fjama.288.6.748&amp;rft&#95;id=info%3Apmid%2F12169080&amp;rft.aulast=Fontanarosa&amp;rft.aufirst=Phil+B.&amp;rft.au=DeAngelis%2C+Catherine+D.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span>—a detailed report on a news embargo on a story about a scientific study and the consequences of it being breached by journalists</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFKassirerAngell1994" class="citation journal cs1">Kassirer, Jerome P. &amp; Angell, Marcia (2 June 1994). <a rel="nofollow" class="external text" href="https://doi.org/10.1056%2FNEJM199406023302211">"Violations of the Embargo and a New Policy on Early Publicity"</a>. <i><a href="/wiki/New_England_Journal_of_Medicine" class="mw-redirect" title="New England Journal of Medicine">New England Journal of Medicine</a></i>. <b>330</b> (22): <span class="nowrap">1608–</span>1609. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://doi.org/10.1056%2FNEJM199406023302211">10.1056/NEJM199406023302211</a></span>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/8177252">8177252</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=New+England+Journal+of+Medicine&amp;rft.atitle=Violations+of+the+Embargo+and+a+New+Policy+on+Early+Publicity&amp;rft.volume=330&amp;rft.issue=22&amp;rft.pages=1608-1609&amp;rft.date=1994-06-02&amp;rft&#95;id=info%3Adoi%2F10.1056%2FNEJM199406023302211&amp;rft&#95;id=info%3Apmid%2F8177252&amp;rft.aulast=Kassirer&amp;rft.aufirst=Jerome+P.&amp;rft.au=Angell%2C+Marcia&amp;rft&#95;id=https%3A%2F%2Fdoi.org%2F10.1056%252FNEJM199406023302211&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span>—the reaction of the <i>NEJM</i> and the <a href="/wiki/National_Cancer_Institute" title="National Cancer Institute">National Cancer Institute</a> to a violation of an embargo by <a href="/wiki/American_Broadcasting_Company" title="American Broadcasting Company">ABC</a>'s <i>World News Tonight</i> in 1994</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFKiernan1997" class="citation journal cs1">Kiernan, Vincent (1997). "Ingelfinger, Embargoes, and Other Controls on the Dissemination of Science News". <i>Science Communication</i> (Abstract). <b>18</b> (4): <span class="nowrap">297–</span>319. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1177%2F1075547097018004002">10.1177/1075547097018004002</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:144786190">144786190</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Science+Communication&amp;rft.atitle=Ingelfinger%2C+Embargoes%2C+and+Other+Controls+on+the+Dissemination+of+Science+News&amp;rft.volume=18&amp;rft.issue=4&amp;rft.pages=297-319&amp;rft.date=1997&amp;rft&#95;id=info%3Adoi%2F10.1177%2F1075547097018004002&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A144786190%23id-name%3DS2CID&amp;rft.aulast=Kiernan&amp;rft.aufirst=Vincent&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span> —a study of whether "journal editors may [...] be using [news embargoes and the Ingelfinger Rule] to enhance the status of their publications, with an eye toward attracting better scientific papers, expanding circulation, and luring advertising"</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFKiernan1998" class="citation journal cs1">Kiernan, Vincent (1998). "Changing Embargoes and the <i>New York Times</i><span class="nowrap" style="padding-left:0.1em;">&#39;s</span> Coverage of the <i>Journal of the American Medical Association</i>". <i>Science Communication</i> (Abstract). <b>19</b> (3): <span class="nowrap">212–</span>221. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1177%2F1075547098019003003">10.1177/1075547098019003003</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:144418364">144418364</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Science+Communication&amp;rft.atitle=Changing+Embargoes+and+the+New+York+Times%27s+Coverage+of+the+Journal+of+the+American+Medical+Association&amp;rft.volume=19&amp;rft.issue=3&amp;rft.pages=212-221&amp;rft.date=1998&amp;rft&#95;id=info%3Adoi%2F10.1177%2F1075547098019003003&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A144418364%23id-name%3DS2CID&amp;rft.aulast=Kiernan&amp;rft.aufirst=Vincent&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span>—a report that embargoed early access to journals, granted to medical and science journalists, is an information subsidy that encourages greater coverage of the journals in news media</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFLoscalzoBonowJacobs2004" class="citation journal cs1">Loscalzo, Joseph; Bonow, Robert O. &amp; Jacobs, Alice K. (2004). <a rel="nofollow" class="external text" href="https://doi.org/10.1161%2F01.CIR.0000151096.25445.34">"Coronary Calcium Screening and the American Heart Association News Embargo"</a>. <i>Circulation</i>. <b>110</b> (23): <span class="nowrap">3504–</span>3505. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://doi.org/10.1161%2F01.CIR.0000151096.25445.34">10.1161/01.CIR.0000151096.25445.34</a></span>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/15583087">15583087</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Circulation&amp;rft.atitle=Coronary+Calcium+Screening+and+the+American+Heart+Association+News+Embargo&amp;rft.volume=110&amp;rft.issue=23&amp;rft.pages=3504-3505&amp;rft.date=2004&amp;rft&#95;id=info%3Adoi%2F10.1161%2F01.CIR.0000151096.25445.34&amp;rft&#95;id=info%3Apmid%2F15583087&amp;rft.aulast=Loscalzo&amp;rft.aufirst=Joseph&amp;rft.au=Bonow%2C+Robert+O.&amp;rft.au=Jacobs%2C+Alice+K.&amp;rft&#95;id=https%3A%2F%2Fdoi.org%2F10.1161%252F01.CIR.0000151096.25445.34&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span>—a detailed report on a news embargo on a Scientific Statement from the American Heart Association and the consequences of it being breached by journalists</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMarshall1998" class="citation journal cs1">Marshall, Eliot (30 October 1998). "Embargoes: Good, Bad, or 'Necessary Evil'?". <i>Science</i>. <b>282</b> (5390): <span class="nowrap">860–</span>867. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1126%2Fscience.282.5390.860">10.1126/science.282.5390.860</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/9841429">9841429</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:32711052">32711052</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Science&amp;rft.atitle=Embargoes%3A+Good%2C+Bad%2C+or+%27Necessary+Evil%27%3F&amp;rft.volume=282&amp;rft.issue=5390&amp;rft.pages=860-867&amp;rft.date=1998-10-30&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A32711052%23id-name%3DS2CID&amp;rft&#95;id=info%3Apmid%2F9841429&amp;rft&#95;id=info%3Adoi%2F10.1126%2Fscience.282.5390.860&amp;rft.aulast=Marshall&amp;rft.aufirst=Eliot&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMolitor1993" class="citation journal cs1">Molitor, Fred (1993). "Accuracy in Science News Reporting by Newspapers: The Case of Aspirin for the Prevention of Heart Attacks". <i>Health Communication</i>. <b>5</b> (3): <span class="nowrap">209–</span>224. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1207%2Fs15327027hc0503_4">10.1207/s15327027hc0503_4</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Health+Communication&amp;rft.atitle=Accuracy+in+Science+News+Reporting+by+Newspapers%3A+The+Case+of+Aspirin+for+the+Prevention+of+Heart+Attacks&amp;rft.volume=5&amp;rft.issue=3&amp;rft.pages=209-224&amp;rft.date=1993&amp;rft&#95;id=info%3Adoi%2F10.1207%2Fs15327027hc0503&#95;4&amp;rft.aulast=Molitor&amp;rft.aufirst=Fred&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span>—a study of how a report published in the <i>New England Journal of Medicine</i> was reported by journalists who "omitt[ed] information, sensationaliz[ed] the results of the study, and [made] incorrect generalizations", and "may have been responsible for promoting unhealthy behaviors".</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMorgan1984" class="citation journal cs1">Morgan, PP (1 February 1984). <a rel="nofollow" class="external text" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1875359">"Scientific Journals and the News Media: Partners or Competitors?"</a>. <i>Canadian Medical Association Journal</i>. <b>130</b> (3): 252. <a href="/wiki/PMC_(identifier)" class="mw-redirect" title="PMC (identifier)">PMC</a>&#160;<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1875359">1875359</a></span>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/6692201">6692201</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Canadian+Medical+Association+Journal&amp;rft.atitle=Scientific+Journals+and+the+News+Media%3A+Partners+or+Competitors%3F&amp;rft.volume=130&amp;rft.issue=3&amp;rft.pages=252&amp;rft.date=1984-02-01&amp;rft&#95;id=https%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fpmc%2Farticles%2FPMC1875359%23id-name%3DPMC&amp;rft&#95;id=info%3Apmid%2F6692201&amp;rft.aulast=Morgan&amp;rft.aufirst=PP&amp;rft&#95;id=https%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fpmc%2Farticles%2FPMC1875359&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFRelman1988" class="citation journal cs1">Relman, AS (7 April 1988). "Reporting the Aspirin Study: The Journal and the Media". <i>New England Journal of Medicine</i>. <b>318</b> (14): <span class="nowrap">918–</span>920. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1056%2FNEJM198804073181409">10.1056/NEJM198804073181409</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/3352675">3352675</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=New+England+Journal+of+Medicine&amp;rft.atitle=Reporting+the+Aspirin+Study%3A+The+Journal+and+the+Media&amp;rft.volume=318&amp;rft.issue=14&amp;rft.pages=918-920&amp;rft.date=1988-04-07&amp;rft&#95;id=info%3Adoi%2F10.1056%2FNEJM198804073181409&amp;rft&#95;id=info%3Apmid%2F3352675&amp;rft.aulast=Relman&amp;rft.aufirst=AS&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSchecter2006" class="citation book cs1">Schecter, Danny (2006). <span class="id-lock-registration" title="Free registration required"><a rel="nofollow" class="external text" href="https://archive.org/details/whennewsliesmedi00sche"><i>When News Lies: Media Complicity and the Iraq War</i></a></span>. Select Books (NY). <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-1-59079-073-1" title="Special:BookSources/978-1-59079-073-1"><bdi>978-1-59079-073-1</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=When+News+Lies%3A+Media+Complicity+and+the+Iraq+War&amp;rft.pub=Select+Books+%28NY%29&amp;rft.date=2006&amp;rft.isbn=978-1-59079-073-1&amp;rft.aulast=Schecter&amp;rft.aufirst=Danny&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fwhennewsliesmedi00sche&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFStacey1985" class="citation journal cs1">Stacey, J. (11 October 1985). "The Press Embargo: Friend or Foe?". <i>Journal of the American Medical Association</i>. <b>254</b> (14): 1965. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1001%2Fjama.254.14.1965">10.1001/jama.254.14.1965</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/3900440">3900440</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+the+American+Medical+Association&amp;rft.atitle=The+Press+Embargo%3A+Friend+or+Foe%3F&amp;rft.volume=254&amp;rft.issue=14&amp;rft.pages=1965&amp;rft.date=1985-10-11&amp;rft&#95;id=info%3Adoi%2F10.1001%2Fjama.254.14.1965&amp;rft&#95;id=info%3Apmid%2F3900440&amp;rft.aulast=Stacey&amp;rft.aufirst=J.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFWilkes1997" class="citation journal cs1">Wilkes, Michael S. (1 February 1997). "The Public Dissemination of Medical Research: Problems and Solutions". <i>Journal of Health Communication</i>. <b>2</b> (1): <span class="nowrap">3–</span>15. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1080%2F108107397127888">10.1080/108107397127888</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/10977233">10977233</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Health+Communication&amp;rft.atitle=The+Public+Dissemination+of+Medical+Research%3A+Problems+and+Solutions&amp;rft.volume=2&amp;rft.issue=1&amp;rft.pages=3-15&amp;rft.date=1997-02-01&amp;rft&#95;id=info%3Adoi%2F10.1080%2F108107397127888&amp;rft&#95;id=info%3Apmid%2F10977233&amp;rft.aulast=Wilkes&amp;rft.aufirst=Michael+S.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ANews+embargo" class="Z3988"></span><sup class="noprint Inline-Template"><span style="white-space: nowrap;">&#91;<i><a href="/wiki/Wikipedia:Link_rot" title="Wikipedia:Link rot"><span title="&#160;Dead link tagged January 2018">permanent dead link</span></a></i>&#93;</span></sup></li></ul>
+</div>
+<div class="mw-heading mw-heading2"><h2 id="External_links">External links</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=News_embargo&amp;action=edit&amp;section=6" title="Edit section: External links"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li><a rel="nofollow" class="external text" href="http://hydeparkassociates.com/blog/?p=346">1st Hyde Park - Amendment proposes online news embargo</a> - 13/11/06</li>
+<li><a rel="nofollow" class="external text" href="https://web.archive.org/web/20060928133543/http://www.councilscienceeditors.org/members/securedDocuments/v27n1p007.pdf">The Journalistic - The Future of the Embargo</a></li>
+<li><a rel="nofollow" class="external text" href="https://query.nytimes.com/gst/fullpage.html?sec=health&amp;res=9F05E1DC113EF937A25757C0A962958260">The New York Times - Early Report By ABC News Is Criticized</a> - 14/04/94</li>
+<li><a rel="nofollow" class="external text" href="http://www.thetruthaboutcars.com/?p=1218">The Truth About Cars - Embargo This!</a> - 04/01/05</li>
+<li><a rel="nofollow" class="external text" href="http://embargowatch.wordpress.com">Embargo Watch</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.rba.gov.au/media/lockup-procedures.html">Reserve Bank of Australia - Lockup procedures</a></li></ul>
+<div class="navbox-styles"><style data-mw-deduplicate="TemplateStyles:r1333133064">.mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist ul{margin:0;padding:0}.mw-parser-output .hlist dd,.mw-parser-output .hlist dt,.mw-parser-output .hlist li{margin:0;display:inline}.mw-parser-output .hlist.inline,.mw-parser-output .hlist.inline dl,.mw-parser-output .hlist.inline ol,.mw-parser-output .hlist.inline ul,.mw-parser-output .hlist dl dl,.mw-parser-output .hlist dl ol,.mw-parser-output .hlist dl ul,.mw-parser-output .hlist ol dl,.mw-parser-output .hlist ol ol,.mw-parser-output .hlist ol ul,.mw-parser-output .hlist ul dl,.mw-parser-output .hlist ul ol,.mw-parser-output .hlist ul ul{display:inline}.mw-parser-output .hlist .mw-empty-li{display:none}.mw-parser-output .hlist dt::after{content:": "}.mw-parser-output .hlist dd::after,.mw-parser-output .hlist li::after{content:"\a0 · ";font-weight:bold}.mw-parser-output .hlist dd:last-child::after,.mw-parser-output .hlist dt:last-child::after,.mw-parser-output .hlist li:last-child::after{content:none}.mw-parser-output .hlist dd dd:first-child::before,.mw-parser-output .hlist dd dt:first-child::before,.mw-parser-output .hlist dd li:first-child::before,.mw-parser-output .hlist dt dd:first-child::before,.mw-parser-output .hlist dt dt:first-child::before,.mw-parser-output .hlist dt li:first-child::before,.mw-parser-output .hlist li dd:first-child::before,.mw-parser-output .hlist li dt:first-child::before,.mw-parser-output .hlist li li:first-child::before{content:" (";font-weight:normal}.mw-parser-output .hlist dd dd:last-child::after,.mw-parser-output .hlist dd dt:last-child::after,.mw-parser-output .hlist dd li:last-child::after,.mw-parser-output .hlist dt dd:last-child::after,.mw-parser-output .hlist dt dt:last-child::after,.mw-parser-output .hlist dt li:last-child::after,.mw-parser-output .hlist li dd:last-child::after,.mw-parser-output .hlist li dt:last-child::after,.mw-parser-output .hlist li li:last-child::after{content:")";font-weight:normal}.mw-parser-output .hlist ol{counter-reset:listitem}.mw-parser-output .hlist ol>li{counter-increment:listitem}.mw-parser-output .hlist ol>li::before{content:" "counter(listitem)"\a0 "}.mw-parser-output .hlist dd ol>li:first-child::before,.mw-parser-output .hlist dt ol>li:first-child::before,.mw-parser-output .hlist li ol>li:first-child::before{content:" ("counter(listitem)"\a0 "}</style><style data-mw-deduplicate="TemplateStyles:r1314944253">.mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:100%;clear:both;font-size:88%;text-align:center;padding:1px;margin:1em auto 0}.mw-parser-output .navbox .navbox{margin-top:0}.mw-parser-output .navbox+.navbox,.mw-parser-output .navbox+.navbox-styles+.navbox{margin-top:-1px}.mw-parser-output .navbox-inner,.mw-parser-output .navbox-subgroup{width:100%}.mw-parser-output .navbox-group,.mw-parser-output .navbox-title,.mw-parser-output .navbox-abovebelow{padding:0.25em 1em;line-height:1.5em;text-align:center}.mw-parser-output .navbox-group{white-space:nowrap;text-align:right}.mw-parser-output .navbox,.mw-parser-output .navbox-subgroup{background-color:#fdfdfd;color:inherit}.mw-parser-output .navbox-list{line-height:1.5em;border-color:#fdfdfd}.mw-parser-output .navbox-list-with-group{text-align:left;border-left-width:2px;border-left-style:solid}.mw-parser-output tr+tr>.navbox-abovebelow,.mw-parser-output tr+tr>.navbox-group,.mw-parser-output tr+tr>.navbox-image,.mw-parser-output tr+tr>.navbox-list{border-top:2px solid #fdfdfd}.mw-parser-output .navbox-title{background-color:#ccf;color:inherit}.mw-parser-output .navbox-abovebelow,.mw-parser-output .navbox-group,.mw-parser-output .navbox-subgroup .navbox-title{background-color:#ddf;color:inherit}.mw-parser-output .navbox-subgroup .navbox-group,.mw-parser-output .navbox-subgroup .navbox-abovebelow{background-color:#e6e6ff;color:inherit}.mw-parser-output .navbox-even{background-color:#f7f7f7;color:inherit}.mw-parser-output .navbox-odd{background-color:transparent;color:inherit}.mw-parser-output .navbox .hlist td dl,.mw-parser-output .navbox .hlist td ol,.mw-parser-output .navbox .hlist td ul,.mw-parser-output .navbox td.hlist dl,.mw-parser-output .navbox td.hlist ol,.mw-parser-output .navbox td.hlist ul{padding:0.125em 0}.mw-parser-output .navbox .navbar{display:block;font-size:100%}.mw-parser-output .navbox-title .navbar{float:left;text-align:left;margin-right:0.5em}body.skin--responsive .mw-parser-output .navbox-image img{max-width:none!important}@media print{body.ns-0 .mw-parser-output .navbox{display:none!important}}</style></div><div role="navigation" class="navbox" aria-labelledby="Censorship3885" style="padding:3px"><table class="nowraplinks hlist mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><style data-mw-deduplicate="TemplateStyles:r1239400231">.mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-parser-output .navbar-collapse{float:left;text-align:left}.mw-parser-output .navbar-boxtext{word-spacing:0}.mw-parser-output .navbar ul{display:inline-block;white-space:nowrap;line-height:inherit}.mw-parser-output .navbar-brackets::before{margin-right:-0.125em;content:"[ "}.mw-parser-output .navbar-brackets::after{margin-left:-0.125em;content:" ]"}.mw-parser-output .navbar li{word-spacing:-0.125em}.mw-parser-output .navbar a>span,.mw-parser-output .navbar a>abbr{text-decoration:inherit}.mw-parser-output .navbar-mini abbr{font-variant:small-caps;border-bottom:none;text-decoration:none;cursor:inherit}.mw-parser-output .navbar-ct-full{font-size:114%;margin:0 7em}.mw-parser-output .navbar-ct-mini{font-size:114%;margin:0 4em}html.skin-theme-clientpref-night .mw-parser-output .navbar li a abbr{color:var(--color-base)!important}@media(prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .navbar li a abbr{color:var(--color-base)!important}}@media print{.mw-parser-output .navbar{display:none!important}}</style><div class="navbar plainlinks hlist navbar-mini"><ul><li class="nv-view"><a href="/wiki/Template:Censorship" title="Template:Censorship"><abbr title="View this template">v</abbr></a></li><li class="nv-talk"><a href="/wiki/Template_talk:Censorship" title="Template talk:Censorship"><abbr title="Discuss this template">t</abbr></a></li><li class="nv-edit"><a href="/wiki/Special:EditPage/Template:Censorship" title="Special:EditPage/Template:Censorship"><abbr title="Edit this template">e</abbr></a></li></ul></div><div id="Censorship3885" style="font-size:114%;margin:0 4em"><a href="/wiki/Censorship" title="Censorship">Censorship</a></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%">Media regulation</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Book_censorship" title="Book censorship">Books</a>
+<ul><li><a href="/wiki/List_of_books_banned_by_governments" title="List of books banned by governments">books banned</a></li></ul></li>
+<li><a href="/wiki/Film_censorship" title="Film censorship">Films</a>
+<ul><li><a href="/wiki/List_of_banned_films" title="List of banned films">banned films</a></li></ul></li>
+<li><a href="/wiki/Internet_censorship" title="Internet censorship">Internet</a>
+<ul><li><a href="/wiki/Internet_censorship_circumvention" title="Internet censorship circumvention">circumvention</a></li></ul></li>
+<li><a href="/wiki/Censorship_of_LGBTQ_issues" title="Censorship of LGBTQ issues">LGBTQ issues</a></li>
+<li><a href="/wiki/Music_censorship" title="Music censorship">Music</a></li>
+<li><a href="/wiki/Postal_censorship" title="Postal censorship">Postal</a></li>
+<li><a href="/wiki/Freedom_of_the_press" title="Freedom of the press">Press</a></li>
+<li><a href="/wiki/Radio_jamming" title="Radio jamming">Radio</a></li>
+<li><a href="/wiki/Freedom_of_speech" title="Freedom of speech">Speech and expression</a></li>
+<li><a href="/wiki/Censorship_of_student_media" class="mw-redirect" title="Censorship of student media">Student media</a></li>
+<li><a href="/wiki/Television_censorship" title="Television censorship">Televisions</a>
+<ul><li><a href="/wiki/Television_censorship#List_of_banned_television_series" title="Television censorship">banned televisions</a></li></ul></li>
+<li><a href="/wiki/Freedom_of_thought" title="Freedom of thought">Thought</a></li>
+<li><a href="/wiki/Video_game_censorship" title="Video game censorship">Video games</a>
+<ul><li><a href="/wiki/List_of_banned_video_games_by_country" title="List of banned video games by country">banned video games</a></li></ul></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Methods</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Blacklisting" title="Blacklisting">Blacklisting</a></li>
+<li><a href="/wiki/Bleep_censor" title="Bleep censor">Bleeping</a></li>
+<li><a href="/wiki/Book_burning" title="Book burning">Book burning</a></li>
+<li><a href="/wiki/Broadcast_delay" title="Broadcast delay">Broadcast delay</a></li>
+<li><a href="/wiki/Censorship_by_copyright" title="Censorship by copyright">By copyright</a></li>
+<li><a href="/wiki/Cancel_culture" title="Cancel culture">Cancel culture</a></li>
+<li><a href="/wiki/Censor_bars" title="Censor bars">Censor bars</a></li>
+<li><a href="/wiki/Chilling_effect" title="Chilling effect">Chilling effect</a></li>
+<li><a href="/wiki/Collateral_censorship" title="Collateral censorship">Collateral censorship</a></li>
+<li><a href="/wiki/Concision_(media_studies)" title="Concision (media studies)">Concision</a></li>
+<li><a href="/wiki/Conspiracy_of_silence_(expression)" title="Conspiracy of silence (expression)">Conspiracy of silence</a></li>
+<li><a href="/wiki/Content-control_software" class="mw-redirect" title="Content-control software">Content-control software</a></li>
+<li><a href="/wiki/Damnatio_memoriae" title="Damnatio memoriae">Damnatio memoriae</a></li>
+<li><a href="/wiki/Debanking" title="Debanking">Debanking</a>
+<ul><li><a href="/wiki/Financial_censorship" title="Financial censorship">Financial censorship</a></li></ul></li>
+<li><a href="/wiki/Deplatforming" title="Deplatforming">Deplatforming</a></li>
+<li><a href="/wiki/Euphemism" title="Euphemism">Euphemism</a>
+<ul><li><a href="/wiki/Minced_oath" title="Minced oath">Minced oath</a></li></ul></li>
+<li><a href="/wiki/Expurgation" title="Expurgation">Expurgation</a></li>
+<li><a href="/wiki/Fig_leaf" title="Fig leaf">Fig leaf</a></li>
+<li><a href="/wiki/Fogging_(censorship)" title="Fogging (censorship)">Fogging</a></li>
+<li><a href="/wiki/Gag_order" title="Gag order">Gag order</a></li>
+<li><a href="/wiki/Gatekeeping_(communication)" title="Gatekeeping (communication)">Gatekeeping</a></li>
+<li><a href="/wiki/Hallin%27s_spheres" title="Hallin&#39;s spheres">Hallin's spheres</a></li>
+<li><a href="/wiki/Heckler" title="Heckler">Heckling</a></li>
+<li><a href="/wiki/Heckler%27s_veto" title="Heckler&#39;s veto">Heckler's veto</a></li>
+<li><a href="/wiki/Hush_money" title="Hush money">Hush money</a></li>
+<li><a href="/wiki/Internet_police" title="Internet police">Internet police</a></li>
+<li><a href="/wiki/Malinformation" title="Malinformation">Malinformation</a></li>
+<li><a href="/wiki/Media_blackout" title="Media blackout">Media blackout</a></li>
+<li><a href="/wiki/Memory_hole" title="Memory hole">Memory hole</a></li>
+<li><a href="/wiki/National_intranet" title="National intranet">National intranet</a></li>
+<li><a class="mw-selflink selflink">News embargo</a></li>
+<li><a href="/wiki/Newspaper_theft" title="Newspaper theft">Newspaper theft</a></li>
+<li><a href="/wiki/Non-disclosure_agreement" title="Non-disclosure agreement">Non-disclosure agreement</a></li>
+<li><a href="/wiki/Opinion_corridor" title="Opinion corridor">Opinion corridor</a></li>
+<li><a href="/wiki/Overton_window" title="Overton window">Overton window</a></li>
+<li><a href="/wiki/Pixelization" title="Pixelization">Pixelization</a></li>
+<li><a href="/wiki/Political_correctness" title="Political correctness">Political correctness</a></li>
+<li><a href="/wiki/Prior_restraint" title="Prior restraint">Prior restraint</a></li>
+<li><a href="/wiki/Propaganda" title="Propaganda">Propaganda</a></li>
+<li><a href="/wiki/Purge" title="Purge">Purge</a></li>
+<li><a href="/wiki/Redaction" title="Redaction">Redaction</a></li>
+<li><a href="/wiki/Historical_negationism" title="Historical negationism">Revisionism</a></li>
+<li><a href="/wiki/Sanitization_(classified_information)" class="mw-redirect" title="Sanitization (classified information)">Sanitization</a></li>
+<li><a href="/wiki/Self-censorship" title="Self-censorship">Self-censorship</a></li>
+<li><a href="/wiki/Shadow_banning" title="Shadow banning">Shadow banning</a></li>
+<li><a href="/wiki/Social_rejection" title="Social rejection">Social rejection</a></li>
+<li><a href="/wiki/Speech_code" title="Speech code">Speech code</a></li>
+<li><a href="/wiki/Spiral_of_silence" title="Spiral of silence">Spiral of silence</a></li>
+<li><a href="/wiki/Strategic_lawsuit_against_public_participation" title="Strategic lawsuit against public participation">Strategic lawsuit</a></li>
+<li><a href="/wiki/Super-injunctions_in_English_law" title="Super-injunctions in English law">Super-injunction</a></li>
+<li><a href="/wiki/Surveillance" title="Surveillance">Surveillance</a>
+<ul><li><a href="/wiki/Computer_and_network_surveillance" title="Computer and network surveillance">computer and network</a></li>
+<li><a href="/wiki/Mass_surveillance" title="Mass surveillance">mass</a></li></ul></li>
+<li><a href="/wiki/Taboo" title="Taboo">Taboo</a></li>
+<li><a href="/wiki/Whitewashing_(censorship)" class="mw-redirect" title="Whitewashing (censorship)">Whitewashing</a></li>
+<li><a href="/wiki/Wordfilter" title="Wordfilter">Word filtering</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Contexts</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/AI_alignment" title="AI alignment">AI</a></li>
+<li><a href="/wiki/Algorithmic_bias" title="Algorithmic bias">Algorithmic</a></li>
+<li><a href="/wiki/Chinese_censorship_abroad" title="Chinese censorship abroad">Chinese censorship abroad</a></li>
+<li><a href="/wiki/Criminal_speech" class="mw-redirect" title="Criminal speech">Criminal</a></li>
+<li><a href="/wiki/Corporate_censorship" title="Corporate censorship">Corporate</a>
+<ul><li><a href="/wiki/Censorship_by_Apple" title="Censorship by Apple">Apple</a></li>
+<li><a href="/wiki/Censorship_by_Facebook" title="Censorship by Facebook">Facebook</a></li>
+<li><a href="/wiki/Censorship_by_Google" title="Censorship by Google">Google</a></li></ul></li>
+<li><a href="/wiki/Hate_speech" title="Hate speech">Hate speech</a>
+<ul><li><a href="/wiki/Online_hate_speech" title="Online hate speech">Online</a></li></ul></li>
+<li><a href="/wiki/Ideological_repression" title="Ideological repression">Ideological</a>
+<ul><li><a href="/wiki/Academic_bias" title="Academic bias">Academic</a></li></ul></li>
+<li><a href="/wiki/Censorship_of_LGBT_issues" class="mw-redirect" title="Censorship of LGBT issues">LGBT issues</a></li>
+<li><a href="/wiki/Media_bias" title="Media bias">Media bias</a></li>
+<li><a href="/wiki/Moral_police" title="Moral police">Moral police</a></li>
+<li><a href="/wiki/Moralistic_fallacy" title="Moralistic fallacy">Moralistic fallacy</a></li>
+<li><a href="/wiki/Naturalistic_fallacy" title="Naturalistic fallacy">Naturalistic fallacy</a></li>
+<li><a href="/wiki/Political_censorship" title="Political censorship">Political censorship</a>
+<ul><li><a href="/wiki/List_of_banned_political_parties" title="List of banned political parties">Banned parties</a></li>
+<li><a href="/wiki/Political_prisoner" title="Political prisoner">Political prisoner</a></li></ul></li>
+<li><a href="/wiki/Propaganda_model" title="Propaganda model">Propaganda model</a></li>
+<li><a href="/wiki/Religious_censorship" title="Religious censorship">Religious</a>
+<ul><li><a href="/wiki/Blasphemy_law" title="Blasphemy law">Blasphemy law</a></li>
+<li><a href="/wiki/Censorship_in_Islamic_societies" title="Censorship in Islamic societies">Islamic</a>
+<ul><li><a href="/wiki/Islamic_religious_police" title="Islamic religious police">Police</a></li></ul></li></ul></li>
+<li><a href="/wiki/Dissent" title="Dissent">Suppression of dissent</a></li>
+<li><a href="/wiki/Systemic_bias" title="Systemic bias">Systemic bias</a></li>
+<li><a href="/wiki/Censorship_of_Wikipedia" title="Censorship of Wikipedia">Wikipedia</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">By location</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Censorship_by_country" title="Censorship by country">Censorship by country</a>
+<ul><li><a href="/wiki/Blasphemy_law#By_country" title="Blasphemy law">Blasphemy law</a></li>
+<li><a href="/wiki/Freedom_of_speech_by_country" title="Freedom of speech by country">Freedom of speech</a></li>
+<li><a href="/wiki/Internet_censorship_and_surveillance_by_country" title="Internet censorship and surveillance by country">Internet censorship</a></li>
+<li><a href="/wiki/Censorship_in_the_Middle_East" title="Censorship in the Middle East">In the Middle East</a></li>
+<li><a href="/wiki/Censorship_in_South_Asia" title="Censorship in South Asia">In South Asia</a></li></ul></li></ul>
+</div></td></tr></tbody></table></div>
+<!-- 
+NewPP limit report
+Parsed by mw‐web.codfw.main‐6fc5bb98bd‐mk7pf
+Cached time: 20260503040116
+Cache expiry: 2592000
+Cache expiry source: Module:Citation/CS1 (os.date(%Y))
+Reduced expiry: false
+Complications: [vary‐revision‐sha1, prevent‐selective‐update, show‐toc]
+CPU time usage: 0.357 seconds
+Real time usage: 0.425 seconds
+Preprocessor visited node count: 1515/1000000
+Revision size: 18118/2097152 bytes
+Post‐expand include size: 71737/2097152 bytes
+Template argument size: 1769/2097152 bytes
+Highest expansion depth: 14/100
+Expensive parser function count: 5/500
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 83334/5000000 bytes
+Lua time usage: 0.230/10.000 seconds
+Lua memory usage: 6256226/52428800 bytes
+Number of Wikibase entities loaded: 0/500
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  350.646      1 -total
+ 33.37%  117.022      1 Template:Reflist
+ 23.03%   80.746      7 Template:Cite_news
+ 18.80%   65.907      1 Template:Censorship
+ 18.44%   64.652      1 Template:Navbox
+ 15.83%   55.496     14 Template:Cite_journal
+ 14.67%   51.429      1 Template:Short_description
+  8.23%   28.873      2 Template:Pagetype
+  4.75%   16.643      1 Template:Dead_link
+  4.27%   14.969      1 Template:Fix
+-->
+
+<!-- Render ID bb879cd9-46a4-11f1-a0e3-3524c9e86b97 -->
+
+<!-- Saved in parser cache with key enwiki:pcache:3122143:|#|:idhash:canonical and timestamp 20260503040116 and revision id 1337724435. Rendering was triggered because: page_view
+ -->
+</div><noscript><img src="https://en.wikipedia.org/wiki/Special:CentralAutoLogin/start?useformat=desktop&amp;type=1x1&amp;usesul3=1" alt="" width="1" height="1" style="border: none; position: absolute;"></noscript>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://en.wikipedia.org/w/index.php?title=News_embargo&amp;oldid=1337724435">https://en.wikipedia.org/w/index.php?title=News_embargo&amp;oldid=1337724435</a>"</div></div>
+					<div id="catlinks" class="catlinks" data-mw-interface=""><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Help:Category" title="Help:Category">Categories</a>: <ul><li><a href="/wiki/Category:Censorship" title="Category:Censorship">Censorship</a></li><li><a href="/wiki/Category:Journalism" title="Category:Journalism">Journalism</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden categories: <ul><li><a href="/wiki/Category:Articles_with_short_description" title="Category:Articles with short description">Articles with short description</a></li><li><a href="/wiki/Category:Short_description_is_different_from_Wikidata" title="Category:Short description is different from Wikidata">Short description is different from Wikidata</a></li><li><a href="/wiki/Category:Use_dmy_dates_from_August_2024" title="Category:Use dmy dates from August 2024">Use dmy dates from August 2024</a></li><li><a href="/wiki/Category:All_articles_with_dead_external_links" title="Category:All articles with dead external links">All articles with dead external links</a></li><li><a href="/wiki/Category:Articles_with_dead_external_links_from_January_2018" title="Category:Articles with dead external links from January 2018">Articles with dead external links from January 2018</a></li><li><a href="/wiki/Category:Articles_with_permanently_dead_external_links" title="Category:Articles with permanently dead external links">Articles with permanently dead external links</a></li></ul></div></div>
+				</div>
+			</main>
+			
+		</div>
+		<div class="mw-footer-container">
+			
+<footer id="footer" class="mw-footer" >
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> This page was last edited on 11 February 2026, at 03:02<span class="anonymous-show">&#160;(UTC)</span>.</li>
+	<li id="footer-info-copyright">Text is available under the <a href="/wiki/Wikipedia:Text_of_the_Creative_Commons_Attribution-ShareAlike_4.0_International_License" title="Wikipedia:Text of the Creative Commons Attribution-ShareAlike 4.0 International License">Creative Commons Attribution-ShareAlike 4.0 License</a>;
+additional terms may apply. By using this site, you agree to the <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Terms_of_Use" class="extiw" title="foundation:Special:MyLanguage/Policy:Terms of Use">Terms of Use</a> and <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy" class="extiw" title="foundation:Special:MyLanguage/Policy:Privacy policy">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a rel="nofollow" class="external text" href="https://wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, a non-profit organization.</li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-privacy"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy">Privacy policy</a></li>
+	<li id="footer-places-about"><a href="/wiki/Wikipedia:About">About Wikipedia</a></li>
+	<li id="footer-places-disclaimers"><a href="/wiki/Wikipedia:General_disclaimer">Disclaimers</a></li>
+	<li id="footer-places-contact"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a></li>
+	<li id="footer-places-legal-safety-contacts"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Legal:Wikimedia_Foundation_Legal_and_Safety_Contact_Information">Legal &amp; safety contacts</a></li>
+	<li id="footer-places-wm-codeofconduct"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Universal_Code_of_Conduct">Code of Conduct</a></li>
+	<li id="footer-places-developers"><a href="https://developer.wikimedia.org">Developers</a></li>
+	<li id="footer-places-statslink"><a href="https://stats.wikimedia.org/#/en.wikipedia.org">Statistics</a></li>
+	<li id="footer-places-cookiestatement"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Cookie_statement">Cookie statement</a></li>
+	<li id="footer-places-mobileview"><a href="//en.wikipedia.org/w/index.php?title=News_embargo&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="footer-icons" class="noprint">
+	<li id="footer-copyrightico"><a href="https://www.wikimedia.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/static/images/footer/wikimedia-button.svg" width="84" height="29"><img src="/static/images/footer/wikimedia.svg" width="25" height="25" alt="Wikimedia Foundation" lang="en" loading="lazy"></picture></a></li>
+	<li id="footer-poweredbyico"><a href="https://www.mediawiki.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/w/resources/assets/poweredby_mediawiki.svg" width="88" height="31"><img src="/w/resources/assets/mediawiki_compact.svg" alt="Powered by MediaWiki" lang="en" width="25" height="25" loading="lazy"></picture></a></li>
+</ul>
+
+</footer>
+
+		</div>
+	</div> 
+</div> 
+<div class="vector-header-container vector-sticky-header-container no-font-mode-scale">
+	<div id="vector-sticky-header" class="vector-sticky-header">
+		<div class="vector-sticky-header-start">
+			<div class="vector-sticky-header-icon-start vector-button-flush-left" aria-hidden="true">
+				<button class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-sticky-header-search-toggle" tabindex="-1" data-event-name="ui.vector-sticky-search-form.icon"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+			</button>
+		</div>
+			
+		<div role="search" class="vector-search-box-vue  vector-search-box-show-thumbnail vector-search-box">
+			<div class="vector-typeahead-search-container">
+				<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail">
+					<form action="/w/index.php" id="vector-sticky-search-form" class="cdx-search-input cdx-search-input--has-end-button">
+						<div  class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+							<div class="cdx-text-input cdx-text-input--has-start-icon">
+								<input
+									class="cdx-text-input__input mw-searchInput" autocomplete="off"
+									
+									type="search" name="search" placeholder="Search Wikipedia">
+								<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+							</div>
+							<input type="hidden" name="title" value="Special:Search">
+						</div>
+						<button class="cdx-button cdx-search-input__end-button">Search</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-context-bar">
+				<nav aria-label="Contents" class="vector-toc-landmark">
+						
+					<div id="vector-sticky-header-toc" class="vector-dropdown mw-portlet mw-portlet-sticky-header-toc vector-sticky-header-toc vector-button-flush-left"  >
+						<input type="checkbox" id="vector-sticky-header-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-sticky-header-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+						<label id="vector-sticky-header-toc-label" for="vector-sticky-header-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+						</label>
+						<div class="vector-dropdown-content">
+					
+						<div id="vector-sticky-header-toc-unpinned-container" class="vector-unpinned-container">
+						</div>
+					
+						</div>
+					</div>
+			</nav>
+				<div class="vector-sticky-header-context-bar-primary" aria-hidden="true" ><span lang="en" dir="ltr"><span class="mw-page-title-main">News embargo</span></span></div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-end" aria-hidden="true">
+			<div class="vector-sticky-header-icons">
+				<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-event-name="talk-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-event-name="subject-sticky-header"><span class="vector-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-event-name="history-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only mw-watchlink" id="ca-watchstar-sticky-header" tabindex="-1" data-event-name="watch-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-star mw-ui-icon-wikimedia-wikimedia-star"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-event-name="wikitext-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-event-name="ve-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-event-name="ve-edit-protected-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span>
+
+<span></span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-buttons">
+				<button class="cdx-button cdx-button--weight-quiet mw-interlanguage-selector" id="p-lang-btn-sticky-header" tabindex="-1" data-event-name="ui.dropdown-p-lang-btn-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>9 languages</span>
+			</button>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive" id="ca-addsection-sticky-header" tabindex="-1" data-event-name="addsection-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbleAdd-progressive mw-ui-icon-wikimedia-speechBubbleAdd-progressive"></span>
+
+<span>Add topic</span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-icon-end">
+				<div class="vector-user-links">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+	<ul>
+		
+	</ul>
+</div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgHostname":"mw-web.codfw.main-7c7b59648b-q7qnx","wgBackendResponseTime":86,"wgPageParseReport":{"limitreport":{"cputime":"0.357","walltime":"0.425","ppvisitednodes":{"value":1515,"limit":1000000},"revisionsize":{"value":18118,"limit":2097152},"postexpandincludesize":{"value":71737,"limit":2097152},"templateargumentsize":{"value":1769,"limit":2097152},"expansiondepth":{"value":14,"limit":100},"expensivefunctioncount":{"value":5,"limit":500},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":83334,"limit":5000000},"entityaccesscount":{"value":0,"limit":500},"timingprofile":["100.00%  350.646      1 -total"," 33.37%  117.022      1 Template:Reflist"," 23.03%   80.746      7 Template:Cite_news"," 18.80%   65.907      1 Template:Censorship"," 18.44%   64.652      1 Template:Navbox"," 15.83%   55.496     14 Template:Cite_journal"," 14.67%   51.429      1 Template:Short_description","  8.23%   28.873      2 Template:Pagetype","  4.75%   16.643      1 Template:Dead_link","  4.27%   14.969      1 Template:Fix"]},"scribunto":{"limitreport-timeusage":{"value":"0.230","limit":"10.000"},"limitreport-memusage":{"value":6256226,"limit":52428800}},"cachereport":{"origin":"mw-web.codfw.main-6fc5bb98bd-mk7pf","timestamp":"20260503040116","ttl":2592000,"transientcontent":false,"expiry-source":"Module:Citation/CS1 (os.date(%Y))"}}});});</script>
+<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Article","name":"News embargo","url":"https:\/\/en.wikipedia.org\/wiki\/News_embargo","sameAs":"http:\/\/www.wikidata.org\/entity\/Q1065052","mainEntity":"http:\/\/www.wikidata.org\/entity\/Q1065052","author":{"@type":"Organization","name":"Contributors to Wikimedia projects"},"publisher":{"@type":"Organization","name":"Wikimedia Foundation, Inc.","logo":{"@type":"ImageObject","url":"https:\/\/www.wikimedia.org\/static\/images\/wmf-hor-googpub.png"}},"datePublished":"2005-11-10T02:24:28Z","dateModified":"2026-02-11T03:02:21Z","image":"https:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/86\/20170810-OSEC-LSC-0046_%2836113531420%29.jpg","headline":"term"}</script>
+</body>
+</html>

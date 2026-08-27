@@ -1,0 +1,136 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 21,
+  "n_chunks": 31,
+  "chunk_chars": 39965,
+  "model": "gpt-5-mini",
+  "elapsed_s": 106.5303272500023,
+  "input_tokens": 13525,
+  "output_tokens": 5084,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "LaTeX/TeX users and pgf/tikz authors creating graphics (advanced users and package authors)",
+    "subtask_short": "pgf/tikz graphics authoring",
+    "subtask_description": "Guidelines and rules for creating structured graphics with the pgf package (scoping, transformations, coordinate specification, text/images insertion, and package/module loading). Intended for users writing pgf/TikZ graphics and library authors.",
+    "subtask_keywords": [
+      "pgf",
+      "tikz",
+      "latex",
+      "graphics",
+      "coordinates",
+      "scoping"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Prefer coordinate transformations over canvas transformations",
+        "description": "pgf provides two transformation systems: pgf\u2019s coordinate transformation matrix and the backend (PDF/PostScript) canvas transformation matrix. By default, all transformations apply only to the coordinate transformation system.",
+        "guidance": "Coordinate transformations scale coordinates only (not line widths or text). Canvas transformations scale everything (including line thickness and text), which can produce inconsistent-looking text/line thickness (different for horizontal vs vertical lines). Use \\\\pgflowlevel to apply a transformation to the canvas when you really need canvas-level effects. Generally prefer coordinate transforms to avoid uneven line/text scaling."
+      },
+      {
+        "name": "Structure use of pgf via the {pgfpicture} environment",
+        "description": "The {pgfpicture} environment is the outermost scope for graphics; most pgf commands must be given within it. Some commands dealing with images and shadings are exceptions but generally graphic commands belong inside {pgfpicture}.",
+        "guidance": "Graphic state changes are local to a picture; you cannot set graphic parameters globally outside a {pgfpicture}. If you want default settings across pictures, define macros to set them inside each picture. The size of the picture box is computed from the bounding box of coordinates mentioned during parsing; use \\\\pgfusepath{use as bounding box} to override when needed."
+      },
+      {
+        "name": "Use {pgfscope} to make graphic-state changes local",
+        "description": "Inside a {pgfpicture} you can use a {pgfscope} environment so that changes to the graphic state are local to that scope.",
+        "guidance": "The graphic state includes line width, stroke and fill colors, dash pattern, line join/cap, miter limit, canvas transformation matrix, and clipping path. Start of a scope requires the current path to be empty. Prefer {pgfscope} rather than raw TeX groups for structuring graphics. Avoid introducing TeX groups inside graphics unless necessary."
+      },
+      {
+        "name": "Know which parameters are scoped by TeX groups versus {pgfscope}",
+        "description": "Some graphic parameters are scoped by TeX groups rather than by {pgfscope}; coordinate transformations are always local to the current TeX group.",
+        "guidance": "Because every {pgfscope} automatically creates a TeX group, many parameters local to TeX groups are also local to {pgfscope}. However, some parameters (e.g., arrow tip kind) persist only to the end of the current TeX group. If you need to limit effects of such parameters, use TeX groups directly. Also some situations require TeX groups because a path must be constructed and used entirely in the same {pgfscope}."
+      },
+      {
+        "name": "Do not introduce TeX groups inside graphics except for coordinate-transformation locality",
+        "description": "The manual recommends against using TeX groups inside graphics except when you need to keep coordinate transformations local.",
+        "guidance": "Using TeX groups inside graphics can produce confusing scoping interactions since some parameters are TeX-group-scoped. Use {pgfscope} for structure; only use TeX groups intentionally and sparingly."
+      },
+      {
+        "name": "Use \\\\pgftext to insert normal TeX text or images into a picture",
+        "description": "You cannot directly place normal TeX text or includegraphics inside a {pgfpicture}; use \\\\pgftext{...} to typeset text (or insert an image/shading) in normal TeX mode and place the resulting box into the picture.",
+        "guidance": "The text box is centered at the origin by default; options (left,right,top,bottom,base,at=,x=,y=,rotate=) control placement and rotation. pgf synchronizes the high-level coordinate transformation with the canvas when inserting the text box (so current rotations/transforms apply to the inserted text); if you don't want that, temporarily reset the high-level transformation matrix. The text argument may contain verbatim text (argument handling is special)."
+      },
+      {
+        "name": "Baseline handling of pgf pictures",
+        "description": "When a pgf picture is inserted into normal text, the baseline is normally at the bottom of the graphic (the y-coordinate of the bottom).",
+        "guidance": "Use \\\\pgfsetbaseline{<dimension>} to set the picture's baseline to a specific y-coordinate. Alternatively use \\\\pgfsetbaselinepointnow{<point>} or \\\\pgfsetbaselinepointlater{<point>} to set baseline from a point immediately or computed at the end of the picture, respectively."
+      },
+      {
+        "name": "Remembering picture positions requires enabling and has limitations",
+        "description": "To reference nodes in different pictures, pgf can remember picture positions if the TeX-if \\\\ifpgfrememberpicturepositiononpage is set true at the end of the {pgfpicture} environment.",
+        "guidance": "Remembering positions currently works only with pdfTeX, requires two runs of TeX (first pass positions wrong), and writes lines to the .aux file (may grow large). Enable globally only if using pdfTeX and a small number of pictures (e.g., <100) to avoid overhead."
+      },
+      {
+        "name": "Package/layer loading and library usage",
+        "description": "The pgf package is layered: system (pgfsys), basic (pgfcore), frontend (TikZ, pgfpict2e), and libraries. Use \\usepackage{pgf} to load the basic layer and frontends can be loaded separately.",
+        "guidance": "Options: \\usepackage[draft]{pgf} replaces images with empty rectangles (faster compilation). Version option controls compatibility command loading. Load libraries with \\usepgflibrary{<list of libraries>} (commas-separated); loading the same library twice does nothing. To write your own library, create a file named pgflibrary<name>.code.tex accessible to TeX. Consider providing a TikZ library that includes your pgf library."
+      },
+      {
+        "name": "Use of interrupt environments for path/bounding-box/picture interruptions",
+        "description": "pgf provides {pgfinterruptpath}, {pgfinterruptpicture}, and {pgfinterruptboundingbox} to temporarily interrupt path construction, interrupt a picture (for subpicture construction), and temporarily set up a new bounding box respectively.",
+        "guidance": "{pgfinterruptpath} stores and restores the current path so you can construct a new path without interfering (used e.g., for arrow-tip caching). This environment does not install {pgfsys} commands and so is safe in the middle of path construction. {pgfinterruptpicture} is intended for use around boxes later inserted into {pgfpicture} (not inside a picture). {pgfinterruptboundingbox} replaces the current bounding box with an empty one during the environment and restores the original afterwards."
+      },
+      {
+        "name": "At the start of a {pgfscope}, the current path must be empty",
+        "description": "You cannot open a scope while a path is being constructed; the current path must be empty when starting a {pgfscope}.",
+        "guidance": "Follow this rule to avoid path-construction errors. Use interrupt environments if you need to temporarily suspend path construction."
+      },
+      {
+        "name": "Basic coordinate specification commands and units",
+        "description": "\\\\pgfpoint{<x>}{<y>} yields a point with coordinates given as TeX dimensions; \\pgfpointorigin is the origin (0pt,0pt).",
+        "guidance": "Use standard TeX dimensions (cm, pt, ex, etc.). Many pgf path commands accept points produced by these commands. Examples: \\pgfpoint{1cm}{1cm}, \\pgfpathcircle{\\pgfpoint{1cm}{1cm}}{2pt}."
+      },
+      {
+        "name": "Polar coordinates: \\pgfpointpolar (degrees only)",
+        "description": "\\\\pgfpointpolar{<degree>}{<radius>[/<y-radius>]} yields a point in polar coordinates; only degrees are supported (radians not supported). If y-radius is provided, point lies on an ellipse.",
+        "guidance": "Use integer/float degrees. For elliptical polar coordinates specify radius as <x-radius>/<y-radius>."
+      },
+      {
+        "name": "XY-coordinate system: \\pgfpointxy and setting x/y vectors",
+        "description": "\\\\pgfpointxy{<sx>}{<sy>} yields sx * x-vector + sy * y-vector. The x- and y-vectors default to 1cm in x and 1cm in y, but can be changed via \\pgfsetxvec{<point>} and \\pgfsetyvec{<point>}.",
+        "guidance": "x- and y-vectors need not be orthogonal or aligned with page axes. Useful for skewed or custom coordinate systems. Example: \\pgfsetxvec{\\pgfpoint{0.75cm}{0cm}} changes the x-vector."
+      },
+      {
+        "name": "Polar coordinates within the xy-coordinate system: \\pgfpointpolarxy",
+        "description": "Use \\pgfpointpolarxy{<degree>}{<radius>} to interpret polar coordinates relative to the current xy-coordinate system where degree=0 aligns with the x-vector and 90 aligns with the y-vector. Radius can be a pair separated by a slash for different x/y factors.",
+        "guidance": "Useful when using custom x/y vectors; combine with \\begin{scope}[x=...,y=...] or \\pgfsetxvec/\\pgfsetyvec."
+      },
+      {
+        "name": "Three-dimensional coordinates: \\pgfpointxyz and related commands",
+        "description": "\\\\pgfpointxyz{<sx>}{<sy>}{<sz>} yields sx*x-vector + sy*y-vector + sz*z-vector. Also available: \\pgfpointcylindrical{<degree>}{<radius>}{<height>} and \\pgfpointspherical{<longitude>}{<latitude>}{<radius>} for spherical/cylindrical coordinates.",
+        "guidance": "Useful for simple 3D graphics; use \\pgfsetzvec to set the z-vector. \\pgfpointcylindrical is equivalent to adding a polar xy point and the z displacement. \\pgfpointspherical treats equator as xy-plane."
+      },
+      {
+        "name": "Building coordinates by arithmetic: add, scale, diff, normalised",
+        "description": "Commands exist to combine/manipulate points: \\pgfpointadd{v1}{v2}, \\pgfpointscale{factor}{point}, \\pgfpointdiff{start}{end}, and \\pgfpointnormalised{point}.",
+        "guidance": "\\pgfpointnormalised returns a vector of length 1pt in the direction of the point; if input is zero or extremely short it returns a 1pt upward vector. Implementation uses polar tables so direction accuracy is ~1 degree \u2014 adequate for most uses."
+      },
+      {
+        "name": "Specifying points along lines and curves (parameterization caveat)",
+        "description": "Use \\pgfpointlineattime{t}{p}{q} for linear interpolation p + t(q\u2212p) (t=0\u2192p, t=1\u2192q). Use \\pgfpointlineatdistance{distance}{start}{end} to get a point a given distance from the start toward the end. Use \\pgfpointcurveattime{t}{p}{s1}{s2}{q} for points on a B\u00e9zier curve.",
+        "guidance": "For curves, the parameter t does not correspond to arc-length; t=1/2 is not necessarily the midpoint along the curve. If you need arc-length parameterization, additional math is required. Examples provided showing how points at various t map along lines/curves."
+      },
+      {
+        "name": "Points on borders of shapes: borderrectangle and borderellipse",
+        "description": "\\\\pgfpointborderrectangle{<direction point>}{<corner>} returns intersection of ray from origin toward direction point with rectangle centered at origin with upper-right corner at <corner>. Similarly \\pgfpointborderellipse for ellipses.",
+        "guidance": "The direction point should have length about 1pt; it will be normalized automatically. The closer its length to 1pt the less rounding error you'll have. Useful for computing border attachment points for nodes/shapes."
+      },
+      {
+        "name": "Intersection of lines: \\pgfpointintersectionoflines (warning on parallel/non-intersecting lines)",
+        "description": "\\\\pgfpointintersectionoflines{p}{q}{s}{t} returns intersection of line through p,q and line through s,t.",
+        "guidance": "If the lines do not intersect (parallel or nearly so), an arithmetic overflow will occur \u2014 guard inputs or check for degeneracy before calling."
+      },
+      {
+        "name": "Extracting x/y coordinates into TeX dimensions",
+        "description": "\\\\pgfextractx{<dimen register>}{<point>} sets the given TeX dimension to the x-coordinate of the point (similarly for \\pgfextracty).",
+        "guidance": "Use \\newdimen to declare a dimension register and then extract coordinates for further TeX-level computations (e.g., positioning or arithmetic outside pgf path commands)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_a20075304e45.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12804,
+  "output_tokens": 3288,
+  "elapsed_s": 1605.6944475001656,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "attorneys, legal technologists, e-discovery/practice leaders, and machine learning researchers working on legal document review / predictive coding",
+    "subtask_short": "explainable_predictive_coding_legal_review",
+    "subtask_description": "Designing and evaluating explainable text-classification (predictive coding) systems to identify responsive documents and the specific text snippets (rationales) that explain those classifications in legal document review / e-discovery.",
+    "subtask_keywords": [
+      "legal",
+      "predictive_coding",
+      "explainable_ai",
+      "text_classification",
+      "e-discovery"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Primary goal of explainable predictive coding",
+        "description": "The main goal of the explainable predictive coding concept introduced in this paper is not to revisit underlying enhanced predictive model performance metrics, such as precision and recall. Rather, the goal is to provide additional information (explanations) for each labeling of each responsive document and to help attorneys more effectively and efficiently identify responsive documents during legal document review.",
+        "guidance": "Explainability is intended to make model decisions human-understandable to lawyers, increase confidence in results, and reduce review time by locating responsive text snippets that justify a document\u2019s responsive label."
+      },
+      {
+        "name": "Two-subtask decomposition (document model + rationale model)",
+        "description": "Explainable predictive coding builds a model to estimate Pr(r = Rationale | x, y = Responsive) \u00b7 Pr(y = Responsive | x). The task consists of two separate subtasks: (1) a traditional text classification task to identify responsive documents (document model); (2) a text-classification model to identify responsive rationales (rationale model) within responsive documents.",
+        "guidance": "Both subtasks may be addressed independently; explainability emerges from combining document-level responsiveness probability with snippet-level rationale probability."
+      },
+      {
+        "name": "Process for identifying rationales (Table 1)",
+        "description": "A six-step pipeline: 1) Train a Document Model; 2) Train a Rationale Model; 3) Use the Document Model to identify responsive documents; 4) Break each responsive document into a set of overlapping text snippets with n words; 5) Apply the Rationale Model to score all text snippets of responsive documents; 6) For each responsive document, select the top n scored snippets as the identified rationale(s).",
+        "guidance": "Follow the full pipeline to produce explainable outputs. Steps 1\u20132 generate models; steps 3\u20136 identify and extract rationales for attorney review."
+      },
+      {
+        "name": "Document-model-based rationale generation",
+        "description": "Use a document-level predictive model (trained on documents labeled responsive/not responsive) to classify small overlapping text snippets drawn from a document; the model assigns a probability (0\u20131) to each snippet and the top-scoring n snippets are selected as rationales.",
+        "guidance": "Iteratively break high-scoring snippets into smaller sizes to find snippet granularity until probability scores stop increasing. This approach requires no attorney annotation of rationales."
+      },
+      {
+        "name": "Rationale-model-based rationale generation",
+        "description": "Train a snippet-level model (rationale model) using manually annotated rationales from responsive training documents as positive examples and randomly generated snippets from not-responsive documents as negative examples. Apply the trained rationale model to overlapping snippets in responsive documents to identify rationales.",
+        "guidance": "Requires attorneys to highlight the text supporting a document\u2019s responsive label during training; expected to perform better when snippet length approximates annotated rationale length but less tolerant to noisy/long snippets."
+      },
+      {
+        "name": "Definition and expected size range of a text snippet / rationale",
+        "description": "For the purposes of this paper, a text snippet is a small passage of words within a document usually ranging from 50 to 200 words. Annotated rationales in the data set had a mean length of 52 words (std 112.5); 97.5% fewer than 250 words.",
+        "guidance": "In experiments, snippets of sizes 50, 100, and 200 words (with overlaps) were evaluated; rationale-models perform best when snippet size is similar to annotated rationale length."
+      },
+      {
+        "name": "Annotated rationale inclusion criteria (training data filtering)",
+        "description": "Annotated rationales were limited to those with 10 or more words but fewer than 250 words and those that can be precisely identified in the data set\u2014resulting in 23,791 responsive documents with annotated rationales (57% of all responsive docs).",
+        "guidance": "Filter out outliers (very long or short rationales) to reduce noise when preparing training data for rationale models."
+      },
+      {
+        "name": "Not-responsive snippet sampling constraints (negative examples)",
+        "description": "To sample a not-responsive snippet from a not-responsive document enforce: (1) length is a random number between 10 and 250 (same range as responsive snippets); (2) starting position is a random position between zero and (document length \u2212 snippet length). One not-responsive snippet was selected from each not-responsive document.",
+        "guidance": "Use these constraints to make negative samples comparable to positives in length and position; sampling randomly ensures diverse negatives."
+      },
+      {
+        "name": "Overlapping snippet construction and overlap parameterization",
+        "description": "Responsive documents are divided into a set of n-word snippets with n/2 words overlapping between neighboring text snippets (e.g., for n = 50, 100, 200).",
+        "guidance": "Overlap helps ensure rationales spanning snippet boundaries are captured; average number of snippets per document reported (e.g., ~39 for 50-word snippets)."
+      },
+      {
+        "name": "Selection rule for identified rationale(s) \u2014 top-K snippets",
+        "description": "One simple way to identify a document\u2019s rationale is to select the snippet with the largest model score; experiments also consider selecting the top M (1\u20135) scoring snippets as identified rationales for each document.",
+        "guidance": "Choosing top K influences recall/precision trade-offs; top-1 emphasizes precision for the single best snippet, top-3 or top-5 increase recall."
+      },
+      {
+        "name": "Evaluation metric: precision and recall for snippet classification",
+        "description": "Precision and recall are used as performance metrics. For snippet-level discrimination (annotated rationales vs. not-responsive snippets), compute precision/recall curves (averaged over cross-validation folds).",
+        "guidance": "Use precision/recall curves to evaluate tradeoffs; the paper reports e.g., rationale models achieving ~70% precision at 80% recall in snippet discrimination."
+      },
+      {
+        "name": "Evaluation metric: recall for rationale identification in documents",
+        "description": "In the document-level simulation, recall is defined as the percentage of annotated rationales successfully identified: an annotated rationale is correctly identified if it is included in the text snippet with the largest score (or within the top-K selected snippets).",
+        "guidance": "Use overlap between identified snippet and annotated rationale to determine true positives (see overlap criterion)."
+      },
+      {
+        "name": "Overlap criterion for true rationale match",
+        "description": "An identified snippet is a true rationale if it overlaps with the annotated rationale identified by the attorney reviewer.",
+        "guidance": "Overlap-based matching captures partial coverage; the paper uses this overlap rule to compute recall for top K selected snippets."
+      },
+      {
+        "name": "Model and preprocessing choices as experimental baseline",
+        "description": "The machine learning algorithm used was Logistic Regression. Other parameters: bag-of-words with 1-gram features and normalized frequency.",
+        "guidance": "These choices are recommended as a practical baseline in legal document predictive coding (the authors\u2019 prior studies found logistic regression performs well). Other algorithms can be explored but results here use this configuration."
+      },
+      {
+        "name": "Cross-validation / experimental protocol",
+        "description": "Results are averaged over fivefold cross-validation. In each fold, document/rationale models were trained on 80% random subsets and tested on the remaining 20% (training and testing sizes specified in the experiments).",
+        "guidance": "Use k-fold cross-validation to obtain robust performance estimates; report averages across folds and maintain consistent sampling constraints between folds."
+      },
+      {
+        "name": "Iterative splitting strategy to determine optimal snippet size",
+        "description": "Determining the optimal size of text snippets is difficult because rationale size is unknown. The authors deploy an iterative approach: break documents into relatively large snippets; for snippets receiving large probability scores, further break them into smaller sizes; continue until probability scores stop increasing.",
+        "guidance": "This heuristic seeks to refine the localization of rationales\u2014stop splitting when further subdivision fails to improve snippet score."
+      },
+      {
+        "name": "Practical trade-offs: rationale models vs document models (noise tolerance)",
+        "description": "Rationale models (trained on annotated rationales) do not tolerate noise (irrelevant words) very well and therefore perform better for snippet lengths similar to annotated rationales. Document models (trained on full-document text) are more tolerant of noise and can perform better for longer snippets.",
+        "guidance": "Choose rationale vs document model depending on availability of annotated rationales and expected snippet/noise characteristics; document models are easier to implement when annotated rationales are unavailable."
+      },
+      {
+        "name": "Practical acceptability threshold: using top snippets to reduce review",
+        "description": "In practice, reviewing a small number of top-scoring snippets (e.g., top four 50-word snippets or top five document-model snippets) can substantially reduce the number of words attorneys must review while achieving practicable recall (e.g., ~76% recall for top four 50-word rationale-model snippets; ~75% recall for top five document-model snippets).",
+        "guidance": "Use reported recall/precision tradeoffs to choose how many and what size snippets to present to reviewers based on acceptable risk of missed responsive content and expected review savings."
+      }
+    ]
+  }
+}

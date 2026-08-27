@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/wavee_64e855b6d949.html",
+  "task": "grant-funding",
+  "source_dir": "raw",
+  "source_file": "wavee_64e855b6d949.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39989,
+  "model": "gpt-5-mini",
+  "elapsed_s": 55.225107707999996,
+  "input_tokens": 13213,
+  "output_tokens": 3768,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, scientometricians, research evaluators, funders, and modelers interested in predicting long-term scholarly impact",
+    "subtask_short": "predicting long-term scholarly impact",
+    "subtask_description": "Developing and evaluating statistical models (OLS and variants) that predict a publication's long-term citation impact by combining early citation counts, readership (Mendeley) metrics, and non-scientific publication features.",
+    "subtask_keywords": [
+      "science_of_science",
+      "citation_prediction",
+      "mendeley",
+      "research_evaluation",
+      "bibliometrics"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Early citation counts (L_IMPACT_t / L_IMPACT_t0)",
+        "description": "Early citations\u2014impact values measured at early time points after publication (e.g., IMPACT_t0 through IMPACT_t6). The coefficient for L_IMPACT_t steadily increases across iterations and is among the strongest predictors of long-term impact.",
+        "guidance": "Early citations, particularly within the first few years post-publication, remain among the strongest indicators of future impact. Use early-citation windows (0\u20132 years) as key predictors. Do NOT include all impact variables simultaneously in a predictive model because successive IMPACT_t variables are highly autocorrelated (e.g., corr between t0 and t1 = 0.77, t1\u2013t2 = 0.96), which would cause severe multicollinearity."
+      },
+      {
+        "name": "Mendeley readership (READ_t / L_READ_t)",
+        "description": "Mendeley readership measured at different time points (READ_t) used as a predictor; early readership correlates strongly with subsequent citations.",
+        "guidance": "Incorporate early readership metrics (e.g., READ_t0) because they capture broader visibility and engagement and improve prediction especially in 0\u20132 year citation windows. Note that the predictive role of readership diminishes over longer time horizons (L_READ_t decreases from 0.278 at t0 to 0.070 at t6)."
+      },
+      {
+        "name": "Journal impact factor (L_IF)",
+        "description": "The hosting source's impact factor is included as a regressor (L_IF); it has a positive contribution early but its effect wanes and can become negative over longer time windows.",
+        "guidance": "Include journal impact factor as a predictor for early citation prediction; monitor its coefficient across time (positive at t0, decreasing and possibly negative by t6). It is particularly relevant in early iterations but loses explanatory power later."
+      },
+      {
+        "name": "Authorship characteristics (number of authors / L_AUTH)",
+        "description": "Metrics related to authorship, such as the number of authors (L_AUTH), included as predictors; L_AUTH shows a positive coefficient at t0 but turns negative in later iterations.",
+        "guidance": "Model authorship effects (co-authorship counts) because they influence initial visibility/citations; be aware the effect may reverse over time (becoming detrimental in later stages). Consider also accounting for field-dependent co-authorship norms via SC controls."
+      },
+      {
+        "name": "Native English-speaking authorship (D_ENG)",
+        "description": "Dummy variable indicating presence of a native English-speaking author; shows a small positive coefficient at t0 that turns negative by later time points.",
+        "guidance": "Include language-composition indicators (D_ENG) to capture a possible early 'linguistic advantage.' Track temporal dynamics: initial positive effect may reverse over longer windows."
+      },
+      {
+        "name": "International collaboration (D_FOREIGN)",
+        "description": "Dummy variable indicating when the address list contains more than one country (D_FOREIGN); correlated with D_ENG and associated with varying influence over time.",
+        "guidance": "Include an international-collaboration indicator to capture visibility/impact advantages of multinational teams. Note correlation with D_ENG (reported corr = 0.60) and its diminishing coefficient over iterations (from 0.019 at t0 to 0.001 at t6)."
+      },
+      {
+        "name": "Funding presence (D_FUNDING)",
+        "description": "Dummy variable capturing whether the publication reports funding (D_FUNDING); exhibits a negative trajectory over iterations (turns from positive to negative).",
+        "guidance": "Include funding indicators but be cautious: D_FUNDING may exert positive influence early and then decline or become negative in later prediction windows, so interpret effects as time-sensitive."
+      },
+      {
+        "name": "Open access status (D_OPEN)",
+        "description": "Dummy variable for open access (D_OPEN); positive contributor to early impact but its effect lessens over time.",
+        "guidance": "Model open-access status as a predictor of early visibility. Expect diminishing long-term marginal effect; open access contributes to initial visibility but may not sustain citations over long horizons."
+      },
+      {
+        "name": "Number of pages (L_PAGES / PAGES)",
+        "description": "The length of the document (number of pages) included as L_PAGES/PAGES; shows positive influence early with decreasing coefficient over time.",
+        "guidance": "Include document length as a predictor\u2014longer papers tend to receive more citations initially. Monitor declining influence across citation windows."
+      },
+      {
+        "name": "Document type: Review vs Article (D_REW, D_ART)",
+        "description": "Dummy variables indicating document type (review D_REW vs article D_ART); reviews initially have a strong positive coefficient which can turn negative over time; D_ART is inversely correlated and shows changing influence.",
+        "guidance": "Control for document type because reviews and articles have different citation dynamics (e.g., D_REW correlated with number of references). Expect the initial positive advantage of reviews to decline in later windows."
+      },
+      {
+        "name": "Number of references (L_REFER / REFER)",
+        "description": "The count of references in a publication used as a predictor; initially positive association with citations but may turn negative at later time points.",
+        "guidance": "Include reference-list size as a predictor (positively correlated with being a review and with pages). Watch for temporal reversal: positive early effects can become negative by t3\u2013t6."
+      },
+      {
+        "name": "Subject category (SC) fixed effects / SC dummies",
+        "description": "Use of a large set of dummy variables for subject categories (247 SC dummies) to control for disciplinary differences in citation practices.",
+        "guidance": "Always control for field/discipline via SC dummies to account for variability in citation patterns across fields. The study used 247 SC dummies (SC number 1 as baseline). Distribution of SC coefficients shifts with citation window (e.g., for t0 mean = -0.4; by t6 many SCs have positive coefficients)."
+      },
+      {
+        "name": "Avoid including highly autocorrelated time series regressors simultaneously",
+        "description": "Impact/readership values across successive years are highly autocorrelated (e.g., IMPACT t1\u2013t2 corr = 0.96), so models that include all timepoint variables simultaneously are vulnerable to severe multicollinearity.",
+        "guidance": "Do not construct predictive models that consider all impact variables at once. Selectively include time windows or transform variables to avoid multicollinearity. Check correlation matrices prior to model construction."
+      },
+      {
+        "name": "Model specification: Full vs Reduced vs Completely Reduced",
+        "description": "Compare alternative model specifications: Full model (many predictors), Reduced model (fewer variables), and Completely Reduced model (IMPACT only + SC controls).",
+        "guidance": "Use more complex (Full) models to obtain higher explanatory power in early citation windows; simpler models (Reduced/Completely Reduced) converge in explanatory power for longer windows. Choose model complexity based on citation time window and parsimony considerations."
+      },
+      {
+        "name": "Model comparison metrics (Adjusted R\u00b2 and ANOVA F-statistic)",
+        "description": "Use Adjusted R\u00b2 to assess explanatory power accounting for number of predictors; use ANOVA F-tests to evaluate whether additional predictors significantly improve explanatory power.",
+        "guidance": "Compare models across time windows using Adjusted R\u00b2 and ANOVA F-statistics. In this study the Full model had higher Adjusted R\u00b2 in early iterations; all ANOVA comparisons yielded F values with p < 0.01 indicating Full model > Reduced models, though the F-statistic declines with longer citation windows."
+      },
+      {
+        "name": "Diagnostic checks on residuals (normality, outliers)",
+        "description": "Post-estimation analysis should examine residual distribution (histograms, kernel density, Q\u2013Q plots) to assess normality and detect heavy tails or outliers.",
+        "guidance": "Evaluate normality of residuals visually and statistically; departures (especially in tails) can affect inference. If residuals show heavy tails or outliers, consider robust inference techniques (e.g., bootstrapping)."
+      },
+      {
+        "name": "Bootstrap for robust inference",
+        "description": "Apply bootstrap procedures to estimate distributional properties of model coefficients when residuals deviate from normality.",
+        "guidance": "Use bootstrap resampling to obtain empirical Bias and Standard Error estimates for coefficients (the study used 500 iterations and reported minimal bias/SE). Bootstrapping provides more robust estimates when parametric assumptions are in doubt."
+      },
+      {
+        "name": "Temporal framing of impact (short-term vs long-term)",
+        "description": "Differentiate short-term impact (within 6 years) and long-term impact (11 years after publication); predictors behave differently across these horizons.",
+        "guidance": "Define the citation time window explicitly when predicting long-term impact. Early windows (0\u20132 years) benefit most from non-citation predictors combined with early citations; long-term (e.g., 11 years) correlates more weakly with t0 citations and may require different modeling choices."
+      },
+      {
+        "name": "Consider broader altmetrics and text-based features",
+        "description": "Beyond Mendeley and citations, alternative metrics (social media, news, policy citations) and non-numeric text features (novelty, clarity, interdisciplinarity via NLP) may improve prediction.",
+        "guidance": "Explore incorporating altmetrics and machine-learning text features (NLP on abstracts, measures of novelty/interdisciplinarity) to capture non-numeric dimensions of influence not reflected in citations or readership alone."
+      },
+      {
+        "name": "Generalizability and contextual limitations",
+        "description": "Results are based on Italian publications from 2010\u20132012; predictor importance may vary across countries, years, and disciplines.",
+        "guidance": "Test and validate models on datasets from other regions, time periods, and fields before generalizing. Be cautious about policy/funding decisions when models are trained on a narrow contextual sample."
+      },
+      {
+        "name": "Handle autocorrelation and temporal dynamics in predictors",
+        "description": "Recognize and explicitly account for the strong temporal autocorrelation patterns in impact and readership measures (readership corr t0\u2013t1 = 0.82; drops to 0.67 by t6).",
+        "guidance": "Model temporal dependence carefully (e.g., lag structures, selective time-window predictors) and avoid naive inclusion of multiple consecutive timepoint predictors that induce multicollinearity. Use diagnostic correlation matrices to inform model design."
+      }
+    ]
+  }
+}

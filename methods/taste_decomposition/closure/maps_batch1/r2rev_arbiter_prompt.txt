@@ -1,0 +1,60 @@
+You are the ARBITER for a preregistered criterion-routing protocol.
+
+Two independent parties disagree about where a scoring criterion belongs:
+
+  TRACK A = the criterion measures genuine evidence about the construct named below
+            (substance, reasoning, evidence, craft, content). Track-A criteria JOIN the
+            articulated-criterion bank and are allowed to raise the bank's measured AUC.
+  TRACK B = the criterion measures something predictive but NOT the construct: length,
+            format, boilerplate, community style, topic markers, temporal tells, or a
+            textual fingerprint of some upstream circumstance of the item's production
+            (who made it, with what resources, when, with what help). Track-B channels
+            become DECLARED NUISANCES and are used only to discount the other models.
+
+For each dispute below you see: the criterion, the track that proposed it, that
+proposer's rationale, and an independent blind auditor's contrary verdict. Rule on each.
+
+Decide on the criterion's TEXT and what it would actually make a judge measure -- not on
+who proposed it and not on which answer is more generous. The decisive question is:
+if a judge scored exactly this instruction, would a high score be evidence ABOUT the
+construct, or evidence about something that merely travels with it?
+
+Also return `mixed`: true if you route it B but its upstream cause plausibly produces
+genuine quality as well (these are reported in both discounted and undiscounted readouts).
+
+DISPUTES:
+
+--- DISPUTE cell=peer_revealed round=2 id=A10 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT: research quality
+CRITERION NAME: Explicit code/artifact release mention
+SCORING INSTRUCTION: Score whether the abstract explicitly states that code, models, or data will be or are publicly released. A 10 states a concrete release (e.g., a GitHub link or explicit 'code is available'). A 0 makes no mention of release or reproducibility artifacts.
+PROPOSED BY TRACK: A
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R23 ('Open code for reproducing and extending our results is provided') and R60 ('Code is available at https://github.com/...') both make explicit release statements and both are dense_low_card_high, with R60 among the largest dense/scorecard gaps in the whole slice -- suggesting the scorecard treats a release statement as a quality proxy that dense does not reward.
+BLIND AUDITOR SAID: incidental -- Scores only the presence of an explicit release statement, not the work's substance, though it may track genuinely more rigorous or open producers.
+
+--- DISPUTE cell=peer_revealed round=2 id=A15 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT: research quality
+CRITERION NAME: Concrete numeric result density
+SCORING INSTRUCTION: Score how many specific, checkable numeric results (percentages, deltas, counts, timings) the abstract reports, independent of how positive or well-supported they are. A 10 packs multiple precise figures (e.g., '10.9% improvement', '5-fold reduction', '76 minutes'). A 0 reports only qualitative adjectives ('significant', 'considerable', 'remarkable') with no numbers at all.
+PROPOSED BY TRACK: A
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: Rows like R60 (10.9%/12.4% MAE improvement) and R41 (5-fold/2-fold/4x speedups) sit in the dense_low_card_high half despite the underlying contribution being narrow engineering work, suggesting the scorecard is drawn to numeric specificity as a rigor proxy even when dense judges the overall contribution as modest.
+BLIND AUDITOR SAID: incidental -- Same numeral-density surface measure as X15, disclaiming how positive or well-supported the results are.
+
+--- DISPUTE cell=peer_revealed round=2 id=A11 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT: research quality
+CRITERION NAME: Rhetorical framing as adjudicating a field debate
+SCORING INSTRUCTION: Score whether the abstract explicitly frames itself as resolving an open question or tension in prior literature, using a direct question or an explicit 'prior work suggests X, but...' setup, versus simply stating 'we propose method M for task T' without any such framing device. A 10 opens with an explicit posed question or named tension the paper will resolve. A 0 states its contribution directly with no debate-framing device.
+PROPOSED BY TRACK: A
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R07 opens with 'a recent line of...results has corroborated a widely observed phenomenon...however, is random optimal?' and R54 frames itself as identifying 'potential hazards' in a standard approach -- both dense_low_card_high, suggesting this structural rhetorical device is something a criterion-based scorecard rewards more than the dense reader.
+BLIND AUDITOR SAID: incidental -- Scores presence of a rhetorical framing device (posed question or stated tension) rather than genuine engagement with or resolution of a debate, though real engagement with field tensions can be the upstream cause.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"rulings": [
+  {"cell": "<cell>", "round": <round>, "blind_id": "<id>", "route": "A" or "B",
+   "mixed": true or false, "reason": "<two sentences max>"},
+  ... one per dispute ...
+]}

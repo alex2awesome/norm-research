@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_bddf6a7268eb.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_bddf6a7268eb.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39835,
+  "model": "gpt-5-mini",
+  "elapsed_s": 58.27256070799922,
+  "input_tokens": 13917,
+  "output_tokens": 3762,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on autoformalization, formal theorem proving, and benchmark/dataset creators (Lean/ML community)",
+    "subtask_short": "autoformalization dataset creation",
+    "subtask_description": "Designing, verifying, and releasing a corrected benchmark dataset (miniF2F-v2) for autoformalization and formal theorem proving in Lean4, including guidance on formal/informal statement matching, verification, and evaluation procedures.",
+    "subtask_keywords": [
+      "autoformalization",
+      "formal_mathematics",
+      "dataset",
+      "lean4",
+      "benchmark"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Benchmark reliability: comprehensive and error-free",
+        "description": "Benchmarks must be both comprehensive and error-free.",
+        "guidance": "Ensuring the reliability of LLM benchmarks is a critical concern for the research community. Vendrow et al. introduced the concept of platinum benchmarks, i.e. those containing minimal errors and verified by human experts. The integrity of these benchmarks is essential for measuring progress in formal reasoning. The authors dedicate efforts to exhaustively verify the miniF2F dataset."
+      },
+      {
+        "name": "Human verification of evaluations",
+        "description": "Model accuracy/evaluation should be verified by humans familiar with the proof assistant (Lean); LLM-only judging is unreliable.",
+        "guidance": "Herald reported 97% accuracy measured by an LLM and not verified by a human familiar with Lean; the authors found a substantial gap when comparing LLM evaluation to expert human verification, with many formalizations marked correct by LLMs despite differing from intended statements. Example: SoTA autoformalization model accuracy on miniF2F-v1 is 66% by human evaluation, not 97% reported by LLM judgement."
+      },
+      {
+        "name": "Dataset components per instance",
+        "description": "Each theorem instance should consist of four components: informal statement and informal proofs in English, formal statements and formal proofs in Lean 4.",
+        "guidance": "miniF2F theorems each consist of 4 components: informal statement and informal proofs in English, formal statement and formal proofs in Lean4. The dataset includes 488 theorems and follows the same split as original (244 test, 244 validation)."
+      },
+      {
+        "name": "Formal artifacts must compile in Lean4",
+        "description": "Every formal statement and formal proof must compile with no error in Lean4.",
+        "guidance": "All formal statements and proofs in miniF2F-v2 compile with no error in Lean4. The authors used the Lean compiler to type-check formal statements as part of preprocessing/cleaning."
+      },
+      {
+        "name": "Informal artifacts must be human-checked",
+        "description": "Informal statements and informal proofs must be checked by human reviewers.",
+        "guidance": "All informal statements and proofs are checked by humans; clearer informal proofs improve the reliability of autoformalization and can increase model success rates (example: aime_1987_p5)."
+      },
+      {
+        "name": "Self-contained corrected dataset",
+        "description": "The released dataset should be a self-contained corrected version of the original benchmark.",
+        "guidance": "miniF2F-v2 is described as a self-contained corrected version of miniF2F, with no external dependencies required for the corrected informal/formal statements."
+      },
+      {
+        "name": "Preserve original problem difficulty and realism",
+        "description": "Corrections should preserve or match the difficulty of source problems and recreate realistic evaluation settings (e.g., Olympiad setting).",
+        "guidance": "Hundreds of theorems were re-verified and changed to match the difficulty of their source problems; to recreate a realistic Olympiad competition setting, the authors built an automated theorem-proving pipeline starting from natural language statements and evaluated SoTA models accordingly."
+      },
+      {
+        "name": "Do not introduce extra assumptions not present in the informal statement",
+        "description": "Formal statements should not add hypotheses (e.g., nonzero conditions) that are absent from the informal source, unless those assumptions are part of an explicit correction.",
+        "guidance": "Example: in aime_1990_p4 the original formal statement included extra hypotheses asserting expressions are nonzero; these were removed in v2 to better match the informal statement and increase challenge for provers."
+      },
+      {
+        "name": "Ensure formal/informal correspondence (match goals/content)",
+        "description": "Formal and informal statements must correspond precisely: goals, quantifiers, and solution specifications should match the informal prompt.",
+        "guidance": "Mismatches occur when formal statements ask for extra solutions or drop details ('a possible solution'). The dataset contains two strategies: v2s (amend informal statement with answer to match the formal statement) and v2c (keep informal and change formal to reflect the question as originally posed). Examples: imo_1960_p2, amc12b_2003_p6 show how v2s and v2c differ and how matching affects autoformalization and proving difficulty."
+      },
+      {
+        "name": "Handle questions that require finding the answer (goal specification)",
+        "description": "Decide whether to include the solution in the informal statement or to leave the goal unspecified in the formal statement; both choices affect difficulty.",
+        "guidance": "If the informal statement omits the answer (asks to find it), autoformalizers should leave the formal goal undefined (a 'sorry'). miniF2F-v2c leaves such goals undefined, while v2s includes the answer to make formal and informal match. Advanced models (e.g., o4-mini) may find the solution during translation and incorporate it, which may simplify proving and is not credited in the evaluation."
+      },
+      {
+        "name": "Avoid ambiguity and underspecification in informal statements",
+        "description": "Informal statements must avoid ambiguous notation or omissions (e.g., '...') and should specify recursive definitions, limits, domains, and other critical details.",
+        "guidance": "Example mathd_algebra_31 had '...' for a limit and omitted explicit recursive definition; after providing a precise recursive definition, Kimina succeeded whereas before both Herald and Kimina failed. Clear, detailed informal statements improve autoformalization reliability."
+      },
+      {
+        "name": "Use correct mathematical definitions consistent with target libraries (Mathlib)",
+        "description": "Formalizations must respect the target proof assistant's library definitions; if the library's definition differs from the informal intended meaning, adapt the formalization appropriately.",
+        "guidance": "Example: cube root in precollege math differs from Mathlib's rpow-based nth-root definition, causing an unprovable formalization in miniF2F-v1. Fixes include adding nonnegativity assumptions, defining a new nth root matching precollege math, or excluding problematic roots. Correct formalizations allow provers to succeed."
+      },
+      {
+        "name": "Fix unprovable or incorrect formalizations",
+        "description": "Identify unprovable statements caused by incorrect formalization and provide corrected formalizations that preserve intent.",
+        "guidance": "Sixteen unprovable statements in the original dataset were fixed. The authors provided multiple corrected formalizations for problematic cases (e.g., algebra5778) and produced formal proofs of unprovability when appropriate (counterexamples)."
+      },
+      {
+        "name": "Document dataset with a datasheet",
+        "description": "Follow a datasheet framework documenting motivation, composition, collection process, preprocessing/cleaning, uses, distribution, maintenance, and possible issues.",
+        "guidance": "The paper follows the framework of [53,54], with a table answering detailed questions about motivation, creators, composition (488 theorems, components listed), collection, preprocessing (manual post-processing, Lean type checking), uses (benchmarking provers/autoformalizers), distribution (GitHub/HuggingFace), license (MIT), maintenance (planned updates as Lean evolves) and errata handling."
+      },
+      {
+        "name": "Use of tooling for preprocessing and validation",
+        "description": "Employ the proof assistant/compiler and other software to preprocess and validate formal artifacts (e.g., type-checking).",
+        "guidance": "The authors used the Lean compiler to type check formal statements during preprocessing/cleaning. Raw data is open-source; software used for preprocessing should be made available when possible."
+      },
+      {
+        "name": "Release policy and licensing",
+        "description": "Make the dataset publicly available under a permissive license and provide repositories for access.",
+        "guidance": "The dataset will be released on GitHub and HuggingFace under the MIT license, along with the camera-ready paper. Public links to GitHub/HuggingFace will be provided."
+      },
+      {
+        "name": "Maintain dataset and provide errata/updates",
+        "description": "Provide a designated maintainer, contact method, erratum mechanism, and plan for periodic updates (e.g., as Lean versions change).",
+        "guidance": "The last author will support/host/maintain the dataset; contact via email or public GitHub profile. Formal statements do not require erratum, but corrected informal statements are treated as errata of the original. Updates are planned as new Lean versions appear."
+      },
+      {
+        "name": "Train/evaluation split hygiene",
+        "description": "Do not use the test set (and preferably the validation set) for training theorem provers and autoformalizers.",
+        "guidance": "The dataset follows the same split as the original (244 test, 244 validation). The authors explicitly recommend not using test and preferably validation sets for training models to preserve benchmark integrity."
+      },
+      {
+        "name": "Provide multiple corrected variants where appropriate",
+        "description": "When correcting mismatches, provide variants (e.g., v2s and v2c) reflecting different correction philosophies to allow different evaluation regimes.",
+        "guidance": "miniF2F-v2 offers variants: e.g., v2s (synchronized: amend informal statements to include answers) and v2c (canonical: change formal statements to better reflect original informal multiple-choice or unspecified-goal formulations). Different variants have differing difficulty and effects on autoformalizers."
+      },
+      {
+        "name": "Report evaluation methodology and caveats",
+        "description": "Describe the automated evaluation pipeline, the set of models evaluated, and caveats about automated judging vs human verification.",
+        "guidance": "The authors built a completely automated pipeline of theorem proving starting from natural language statements and evaluated SoTA models (Herald, Kimina, Deepseek-Prover-V1.5-RL, Goedel-Prover-SFT, Kimina-Prover-Distill-7B, o4-mini). They note that while the pipeline is automated, LLM-based evaluation may overestimate performance and human verification is necessary for reliability."
+      }
+    ]
+  }
+}

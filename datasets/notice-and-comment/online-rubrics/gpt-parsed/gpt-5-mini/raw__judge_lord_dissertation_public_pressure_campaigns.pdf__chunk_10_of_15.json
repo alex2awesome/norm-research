@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/judge_lord_dissertation_public_pressure_campaigns.pdf",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "judge_lord_dissertation_public_pressure_campaigns.pdf",
+  "chunk_idx": 10,
+  "n_chunks": 15,
+  "chunk_chars": 39968,
+  "model": "gpt-5-mini",
+  "elapsed_s": 59.05525345899514,
+  "input_tokens": 10421,
+  "output_tokens": 4251,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academics, researchers, and policymakers studying administrative rulemaking, public participation, and environmental justice",
+    "subtask_short": "rulemaking responsiveness measurement",
+    "subtask_description": "Measuring whether and how agencies change rule text in response to public comments\u2014especially comments invoking 'environmental justice'\u2014using text-based indicators (presence/change of phrase), organizational and surname-based analyses, and regression models.",
+    "subtask_keywords": [
+      "rulemaking",
+      "notice_and_comment",
+      "environmental_justice",
+      "text_analysis",
+      "policy_responsiveness"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Public Pressure Hypothesis (Hypothesis 4.5)",
+        "description": "Hypothesis 4.5. Policies are more likely to address an issue when they receive more public attention (e.g., more public comments) and at least one comment raises that issue.",
+        "guidance": "This hypothesis frames responsiveness as an interaction: overall public attention conditions policy responses to specific claims. Competing intuition: many comments may indicate pre-existing salience and final positions already stated; alternative is no relation between public attention and policy change."
+      },
+      {
+        "name": "Use of 'environmental justice' as an intentional frame",
+        "description": "When 'environmental justice' appears in a text, it is rarely a coincidence of words; its appearance is a result of the movement or reactions to it.",
+        "guidance": "Justification for using this phrase as a measurable signal: the phrase is distinctive, frequently used, few synonyms exist, and agencies/commenters cite Executive Order 12898 when addressing EJ. Thus presence of the phrase is treated as an indicator that an actor is framing an issue in EJ terms."
+      },
+      {
+        "name": "Dataset inclusion criterion (rules selected)",
+        "description": "Select rulemaking documents from agencies that published at least one rule explicitly addressing EJ from 1993 to 2020.",
+        "guidance": "This selection yields over 25,000 rulemaking dockets from 40 agencies; 12,257 have both a proposed and final rule. Note: some final rules publish without a draft; some proposed rules are withdrawn or never finalized."
+      },
+      {
+        "name": "Identifying comments that raise EJ concerns by phrase occurrence",
+        "description": "Identify comments that raise EJ concerns through the presence of the phrase 'environmental justice' (and related EJ language) in comment texts.",
+        "guidance": "Many rules that did not initially address EJ nonetheless received comments raising EJ concerns. This textual search is the primary means to classify whether commenters raised EJ issues."
+      },
+      {
+        "name": "Second-order representation: identify organizations and assess representativeness",
+        "description": "Identify the organization behind each comment (hand-coding and text analysis) and investigate whom these groups claim to represent and whether those people are involved in organizational decisions.",
+        "guidance": "This assessment distinguishes types of mobilizers (national 'big greens', litigation-focused groups, membership organizations, community-led groups, industry groups), evaluates resource asymmetries, and assesses whether mobilized comments reflect genuine local representation or surrogate advocacy. Useful for interpreting substantive and normative implications of comment-driven effects."
+      },
+      {
+        "name": "Estimating commenter race via probabilistic surname distribution",
+        "description": "For commenters who signed a surname appearing in Census records, estimate racial distribution by using the proportion of people with that surname in each racial category from the 2010 Census; represent each commenter as a probability vector and sum to estimate sample distribution.",
+        "guidance": "This does not assign specific individuals to categories; it's a probabilistic aggregate. The author recodes 'Hispanic' as 'Latinx'. Example result: commenters raising EJ appear slightly disproportionately Black relative to 2010 Census distribution."
+      },
+      {
+        "name": "Measure 1: Adding Text Addressing EJ to Final Rules",
+        "description": "For draft rules that did not address EJ, measure whether agencies added any mention of 'environmental justice' in the final rule.",
+        "guidance": "Additions frequently take the form of an 'E.O. 12898' section or appear in the agency's response to comments. Added text can be generic and not satisfy critics. Agencies may also explicitly dismiss EJ comments and decline to add a 12898 section. Most frequently, agencies neither responded nor added a section."
+      },
+      {
+        "name": "Measure 2: Changing Text Addressing EJ in Final Rules (sentence-level)",
+        "description": "For draft rules that did address EJ, measure whether the rule changed how it discussed 'environmental justice' between draft and final versions by parsing documents into sentences and identifying sentences containing 'environmental justice'; unchanged sentences and no new EJ sentences suggest no engagement.",
+        "guidance": "Sentence-level matching is computationally faster, avoids section-numbering mismatches, and captures EJ attention outside formal 12898 sections (e.g., in responses to comments). Alternative metrics (percent of EJ sentences changed, percent words changed in 12898 section, topic-proportion changes) are noted as useful extensions."
+      },
+      {
+        "name": "Preprocessing rule: remove text copied from proposed rule from comments",
+        "description": "Remove text copied from the proposed rule that appears in comments (e.g., commenters attaching annotated versions of the draft) to avoid falsely attributing draft text to comment content.",
+        "guidance": "Example anti-pattern: a commenter including the draft with only 'no comment' next to the 12898 section would otherwise appear to have raised EJ text; preprocessing removes such copied draft text from comments."
+      },
+      {
+        "name": "Regression outcome variables: EJ Added and EJ Changed",
+        "description": "Define two binary dependent variables used in logit regressions: whether the agency 'added' environmental justice to the final rule (for drafts without EJ) and whether the agency 'changed' how EJ is discussed (for drafts with EJ).",
+        "guidance": "These are treated as indicators of agency engagement with EJ claims and are modeled with logit regressions controlling for various factors."
+      },
+      {
+        "name": "Regression predictors: EJ comment indicator, total comments, unique EJ comments, and interaction",
+        "description": "Predictors include: whether comments raised EJ concerns (binary), Log(Comments+1) (total number of comments including form letters), Log(Unique EJ Comments+1) (number of unique non-form-letter comments addressing EJ), and the interaction between total comments and whether any comment raised EJ concerns.",
+        "guidance": "The interaction assesses whether overall public attention conditions responsiveness to specific EJ claims (i.e., whether high comment volume amplifies the effect of an EJ-raising comment)."
+      },
+      {
+        "name": "Model specification: presidential and agency fixed effects",
+        "description": "Include fixed effects for the presidential administration in all models; some models also include agency fixed effects.",
+        "guidance": "Models without agency FE include variation across agencies; models with agency FE rely on within-agency variation. All estimates rely on variation within each presidential administration."
+      },
+      {
+        "name": "Inclusive measure of change across multiple draft versions",
+        "description": "Count a change if it occurs between any proposed and any final rule on the docket (inclusive measure), rather than only between the first proposed and final versions.",
+        "guidance": "This captures change occurring across intermediate drafts; robustness checks indicate similar estimates if only first-to-final changes are counted."
+      },
+      {
+        "name": "Low empirical bar for responsiveness measures",
+        "description": "Both measures (adding EJ and changing EJ text) represent a relatively low bar\u2014indicating whether the agency explicitly paid any attention to EJ (procedural responsiveness).",
+        "guidance": "This choice is defended because prior research shows little effect of comments and low levels of EJ attention; the measures are similar to 'procedural responsiveness' measures used in previous literature (e.g., Balla et al., 2020)."
+      },
+      {
+        "name": "Parsing choice rationale and alternative measures",
+        "description": "Rationale for parsing by sentences: computational speed, avoids section-matching issues, and detects EJ attention outside 12898 sections; alternative measures include percent of EJ sentences changed, percent of words in 12898 section changed, or change in topic proportions.",
+        "guidance": "Sentence parsing likely detects attention to EJ if the agency is paying attention, but more granular or compositional measures could refine sensitivity to substantive vs. cosmetic textual change."
+      },
+      {
+        "name": "Interpreting logit results via predicted probabilities",
+        "description": "Because logit coefficients are not easily interpretable, present predicted probabilities (e.g., probability of adding EJ) holding other variables at modal values to illustrate substantive effects.",
+        "guidance": "Example modal settings used in plots: EPA, zero additional EJ comments, one comment total. Predicted probabilities show large increases when comments raise EJ concerns even after controlling for agency and comment counts."
+      }
+    ]
+  }
+}

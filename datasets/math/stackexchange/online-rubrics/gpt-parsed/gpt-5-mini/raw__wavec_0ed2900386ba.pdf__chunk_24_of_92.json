@@ -1,0 +1,265 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 24,
+  "n_chunks": 92,
+  "chunk_chars": 39998,
+  "model": "gpt-5-mini",
+  "elapsed_s": 156.75313845799974,
+  "input_tokens": 12239,
+  "output_tokens": 6809,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP developers and advanced users implementing or using vector and matrix object types (authors of GAP packages or methods)",
+    "subtask_short": "implementing GAP vector/matrix types",
+    "subtask_description": "Guidance and required behaviors for GAP vector and matrix object operations, representations, mutability, consistency checks, and the methods that must be provided when implementing new vector/matrix object types.",
+    "subtask_keywords": [
+      "gap",
+      "matrix_objects",
+      "vector_objects",
+      "implementation",
+      "reference_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "NewMatrix/NewZeroMatrix/NewIdentityMatrix construction rules",
+        "description": "NewMatrix returns a matrix object that has ConstructingFilter (26.3.2) value filt, is defined over the base domain R, and has the entries given by the list list or the matrix object M respectively. NewZeroMatrix returns a zero matrix object with m rows and n columns which has filt and R as ConstructingFilter and BaseDomain values. NewIdentityMatrix returns an identity matrix object with n rows and columns which has filt and R as ConstructingFilter and BaseDomain values, and contains the identity element of R in the diagonal and the zero of R in each off-diagonal position.",
+        "guidance": "If the ConstructingFilter value of the result implies IsCopyable (12.6.1) then the result is mutable if and only if the argument that determines the entries of the result is mutable (for NewMatrix) or the result is fully mutable (for NewZeroMatrix/NewIdentityMatrix). If list already contains vector objects, they are copied. Default methods for these operations delegate appropriately (Matrix -> NewMatrix, ZeroMatrix -> NewZeroMatrix, IdentityMatrix -> NewIdentityMatrix)."
+      },
+      {
+        "name": "Matrix function overloads and guessing behavior",
+        "description": "Matrix has many overloads (Matrix(filt,R,list,ncols), Matrix(R,list,ncols), Matrix(list,ncols), Matrix(list), Matrix(M1,M2), etc.) returning a matrix object; when a semiring R is given as first argument its ConstructingFilter value is guessed from R; when only a list (and maybe ncols) is given, both ConstructingFilter and BaseDomain are guessed from the list.",
+        "guidance": "When the last argument is a matrix object, ConstructingFilter and BaseDomain of that last argument are taken for the result. If the global option check is set to false then Matrix need not perform consistency checks."
+      },
+      {
+        "name": "Global option check may skip consistency checks",
+        "description": "If the global option check is set to false then various operations (NewMatrix, Matrix, SetMatElm, NewVector, methods that modify mutable objects, CopySubVector, CopySubMatrix, etc.) need not perform consistency checks.",
+        "guidance": "Methods that modify mutable objects or construct new objects normally must check arguments for consistency (filter/base domain compatibility, entries compatibility, correct number of entries), except when global option check is false. See Chapter 8 for global options."
+      },
+      {
+        "name": "Mutability tied to ConstructingFilter implies IsCopyable",
+        "description": "If the ConstructingFilter (26.3.2) value of the result implies IsCopyable (12.6.1) then the result is mutable (or fully mutable) depending on the operation and the mutability of inputs.",
+        "guidance": "This rule is repeated across NewMatrix/NewZeroMatrix/NewIdentityMatrix, ExtractSubMatrix, MutableCopyMatrix, and representation descriptions (IsPlistMatrixRep, IsGF2MatrixRep, etc.)."
+      },
+      {
+        "name": "Copy semantics for list inputs (ShallowCopy behavior)",
+        "description": "In the case of a mutable result it is guaranteed that the given list list is copied in the sense of ShallowCopy (12.7.1), and if list is a nested list then it is not guaranteed that also the entries of list are copied.",
+        "guidance": "If list already contains vector objects, they are copied. ShallowCopy semantics mean top-level list is copied but nested elements may be shared."
+      },
+      {
+        "name": "ZeroMatrix behavior and representation guessing",
+        "description": "ZeroMatrix(m,n,M) returns a new matrix object with m rows and n columns in the same representation and over the same base domain as M containing only zeros. ZeroMatrix(R,m,n) guesses the representation from R. ZeroMatrix(filt,R,m,n) takes filt and R as ConstructingFilter and BaseDomain of the result.",
+        "guidance": "If the ConstructingFilter of the result implies IsCopyable then the result is fully mutable. Default methods for ZeroMatrix delegate to NewZeroMatrix."
+      },
+      {
+        "name": "IdentityMatrix behavior and representation guessing",
+        "description": "IdentityMatrix(n,M) returns an identity matrix with n rows/columns in same representation and base domain as M. IdentityMatrix(R,n) guesses representation from R. IdentityMatrix(filt,R,n) uses filt and R for ConstructingFilter and BaseDomain.",
+        "guidance": "If the ConstructingFilter implies IsCopyable then the result is fully mutable. Default methods delegate to NewIdentityMatrix."
+      },
+      {
+        "name": "OneOfBaseDomain and ZeroOfBaseDomain cheap access",
+        "description": "OneOfBaseDomain(v/M) and ZeroOfBaseDomain(v/M) return the identity element and the zero element of the BaseDomain value of the vector v or matrix M. If v or M is a plain list then computing its BaseDomain can be expensive, whereas calling OneOfBaseDomain or ZeroOfBaseDomain can be regarded as cheap.",
+        "guidance": "If v or M is not a plain list one can also call BaseDomain first without loss of performance."
+      },
+      {
+        "name": "Equality of vector objects in IsList",
+        "description": "Two vector objects in IsList (21.1.1) are equal if they are equal as lists.",
+        "guidance": "Two matrix objects in IsList are equal if equal as lists."
+      },
+      {
+        "name": "Equality of vector/matrix objects not in IsList",
+        "description": "Two vector objects of which at least one is not in IsList are equal with respect to \\= if they have the same ConstructingFilter, the same BaseDomain, the same length, and the same entries. Two matrix objects of which at least one is not in IsList are equal w.r.t. \\= if they have the same ConstructingFilter, the same BaseDomain, the same dimensions, and the same entries.",
+        "guidance": "No general rule is stated for ordering (\\<) of vector/matrix objects; implementations may choose representations. \\= and \\< are used to form sorted lists and sets (Sort, Set)."
+      },
+      {
+        "name": "Unpack returns a new mutable plain list",
+        "description": "Unpack(v) / Unpack(M) returns a new mutable plain list containing the entries of vector v or matrix M; for matrices the result is a plain list of plain lists.",
+        "guidance": "Changing the result does not change v or M. The entries themselves are not copied."
+      },
+      {
+        "name": "ChangedBaseDomain preserves entries and mutability",
+        "description": "ChangedBaseDomain(v,R) / ChangedBaseDomain(M,R) returns a new vector/matrix object with BaseDomain value R, ConstructingFilter equal to that of v/M, and the same entries as v/M. The result is mutable iff v/M is mutable.",
+        "guidance": "Example: create a vector defined over GF(4) from one defined over GF(2) with this operation."
+      },
+      {
+        "name": "Randomize replaces entries with randoms from base domain",
+        "description": "Randomize([Rs,] v/M) replaces every entry in the mutable vector/matrix with a random one from the base domain of v/M and returns the argument.",
+        "guidance": "If given, random source Rs is used; then a Random method must exist taking Rs as first arg and base domain as second."
+      },
+      {
+        "name": "Element access v[i] and assignment v[i]:=",
+        "description": "For vector object v and positive integer i \u2264 Length(v), v[i] is the entry at position i. If v is mutable and obj is compatible with v's base domain then v[i] := obj assigns obj to position i.",
+        "guidance": "If global option check is false then assignments need not perform consistency checks."
+      },
+      {
+        "name": "Sublist access v{list} and sublist assignment guidance",
+        "description": "If list is a list of positive integers \u2264 Length(v) then v{list} returns a new mutable vector object in same representation as v that contains the listed entries. The sublist assignment operation { }:= is intentionally left out to discourage inefficient intermediate constructions; use CopySubVector instead.",
+        "guidance": "The manual warns against patterns like v{[1..3]} := w{[4..6]} and recommends CopySubVector."
+      },
+      {
+        "name": "PositionNonZero and PositionLastNonZero definitions",
+        "description": "PositionNonZero(v) returns index of first nonzero entry; if all zero returns Length(v)+1. PositionLastNonZero(v) returns index of last nonzero entry; if all zero returns 0.",
+        "guidance": ""
+      },
+      {
+        "name": "ListOp on vectors returns plain list of func applied to entries",
+        "description": "ListOp(v[, func]) applies func to each entry of v and returns results as a mutable plain list. If func omitted, applies IdFunc.",
+        "guidance": "Allows calling List on vector objects."
+      },
+      {
+        "name": "Unary arithmetical operations for vectors preserve ConstructingFilter/BaseDomain",
+        "description": "AdditiveInverseMutable/AdditiveInverseSameMutability/ZeroMutable/ZeroSameMutability return a vector object with same ConstructingFilter and BaseDomain as v such that sum with v is zero (or zero vector), and mutability as prescribed.",
+        "guidance": "Behavior not specified if base domain does not admit additive inverses."
+      },
+      {
+        "name": "Binary arithmetical operations for vectors preconditions",
+        "description": "Sum/difference/product (scalar*vector), vector*vector (componentwise) and ScalarProduct are defined only if the vector objects have same length, same base domain, same representation, and if scalar products belong to the base domain; otherwise behavior is unspecified.",
+        "guidance": "Results are new mutable vector objects with same representation and base domain as arguments. Quotient v/s returns vector of corresponding quotients."
+      },
+      {
+        "name": "AddVector in-place semantics and optional parameters",
+        "description": "AddVector(dst, src[, mul[, from, to]]) replaces entries of dst in-place by entries of dst + src (or dst + src*mul or dst + mul*src depending on argument order). Optional from/to limits index range [from..to] guaranteed to be affected; other indices may be affected for convenience. If from > to the operation does nothing.",
+        "guidance": "Useful when entries of src are known to be zero. Returns nothing."
+      },
+      {
+        "name": "MultVector/MultVectorLeft/MultVectorRight semantics and left/right convention",
+        "description": "MultVector(v,mul[,from,to]) (alias MultVectorLeft) multiplies v by mul in-place from the left; MultVectorRight multiplies from the right. MultVector chosen since vectors are row vectors in GAP and scalars usually applied from the left.",
+        "guidance": "Optional from/to restrict guaranteed affected index range; if from>to does nothing."
+      },
+      {
+        "name": "ConcatenationOfVectors returns vector in representation of first argument",
+        "description": "ConcatenationOfVectors(v1,v2,...) or ConcatenationOfVectors(vlist) returns a new mutable vector object in representation of v1 (or first entry of nonempty vlist) whose entries are concatenation of given vectors.",
+        "guidance": "Concatenation (general) is a function for which no methods can be installed; use this operation for vectors."
+      },
+      {
+        "name": "ExtractSubVector and CopySubVector differences",
+        "description": "ExtractSubVector(v,l) returns a new mutable vector object of same representation containing entries at positions in l (same as v{l}). CopySubVector(src,dst,scols,dcols) assigns src{scols} to positions dcols in dst without creating an intermediate object, more efficient in special cases.",
+        "guidance": "For compressed vectors efficiency larger when scols/dcols are ranges with increment 1. If global option check false then CopySubVector need not perform checks."
+      },
+      {
+        "name": "WeightOfVector and DistanceOfVectors definitions",
+        "description": "WeightOfVector(v) returns Hamming weight (number of nonzero entries). DistanceOfVectors(v1,v2) returns Hamming distance (number of differing entries), vectors must have equal length.",
+        "guidance": ""
+      },
+      {
+        "name": "Unary matrix arithmetic operations preserve ConstructingFilter/BaseDomain and mutability rules",
+        "description": "AdditiveInverseMutable/AdditiveInverseSameMutability/ZeroMutable/ZeroSameMutability/OneMutable/OneSameMutability/InverseMutable/InverseSameMutability operate analogously to vector variants: return matrix object with same ConstructingFilter and BaseDomain and prescribed mutability. Inverse operations return fail if M not invertible.",
+        "guidance": "Identity/One operations require M square and base domain admitting identity; Characteristic returns base domain characteristic; IsZero/IsOne properties defined as specified."
+      },
+      {
+        "name": "Binary matrix arithmetic preconditions and mutability",
+        "description": "Sum/difference/scalar*matrix/matrix*scalar/product of two matrices/quotient/power are defined only if matrices have same dimensions, same base domain, same representation, and scalar products belong to base domain; otherwise unspecified. Results are new fully mutable matrix objects with same representation and base domain as arguments.",
+        "guidance": "If both factors are in IsOrdinaryMatrix filter then ordinary matrix product entries are used. M^n behavior specified for square nonempty matrices over associative base domain; negative powers require invertibility."
+      },
+      {
+        "name": "MatElm and SetMatElm semantics and M[row,col] vs M[row][col]",
+        "description": "MatElm(M,row,col) returns entry in row and column; syntax M[row,col] supported. SetMatElm(M,row,col,obj) assigns obj to position for mutable M if obj compatible with BaseDomain; syntax M[row,col] := obj supported. Note M[row,col] is not equivalent to M[row][col].",
+        "guidance": "If global option check false then SetMatElm need not perform consistency checks."
+      },
+      {
+        "name": "ExtractSubMatrix preserves representation and mutability",
+        "description": "ExtractSubMatrix(M,rows,cols) creates a copy of the submatrix described by lists rows and cols (M{rows}{cols}) and returns result preserving the representation of the matrix. If ConstructingFilter of result implies IsCopyable then result is fully mutable.",
+        "guidance": ""
+      },
+      {
+        "name": "MutableCopyMatrix returns fully mutable copy preserving filters/domains",
+        "description": "MutableCopyMatrix(M) returns a fully mutable copy of M with same ConstructingFilter and BaseDomain values.",
+        "guidance": ""
+      },
+      {
+        "name": "CopySubMatrix without intermediate object",
+        "description": "CopySubMatrix(src,dst,srows,drows,scols,dcols) does dst{drows}{dcols} := src{srows}{scols} without creating an intermediate object and thus can be much more efficient.",
+        "guidance": "For certain objects (like compressed vectors) it's significantly more efficient if scols and dcols are ranges with increment 1. If global option check false then CopySubMatrix need not perform consistency checks."
+      },
+      {
+        "name": "CompatibleVector returns zero vector of appropriate representation",
+        "description": "CompatibleVector(M) called with matrix M with m rows returns a mutable zero vector v of length m in the representation given by CompatibleVectorFilter value of M (provided such a representation exists), intended to form efficient product vM.",
+        "guidance": ""
+      },
+      {
+        "name": "RowsOfMatrix returns plain list of row representations",
+        "description": "RowsOfMatrix(M) returns a plain list of objects in representation given by CompatibleVectorFilter of M, where the i-th entry describes the i-th row of input.",
+        "guidance": ""
+      },
+      {
+        "name": "CompanionMatrix conventions and type selection",
+        "description": "CompanionMatrix(pol,M) returns companion matrix of monic univariate polynomial pol as matrix object with same ConstructingFilter and BaseDomain as M. CompanionMatrix(filt,pol,R) returns with ConstructingFilter filt and BaseDomain R. CompanionMatrix(pol,R) guesses representation from R.",
+        "guidance": "Uses column convention: negatives of polynomial coefficients appear in last column. If ConstructingFilter implies IsCopyable then result is fully mutable. Example provided."
+      },
+      {
+        "name": "Row list matrix (IsRowListMatrix) behavioral restrictions",
+        "description": "Row list matrices (ConstructingFilter implying IsRowListMatrix) support operations to access rows as vector objects, but such matrices need not be lists in IsList sense. Unbinding an entry or a row is allowed only in last position, and all rows must have same length and base domain.",
+        "guidance": "One implementation is IsPlistMatrixRep where rows are IsPlistVectorRep; these objects do not lie in IsList, so operations are defined restrictively."
+      },
+      {
+        "name": "List access for row list matrix: M[pos]",
+        "description": "If M is row list matrix and pos is positive integer \u2264 number of rows, M[pos] returns the pos-th row as a vector object.",
+        "guidance": "Not specified what happens if pos is larger."
+      },
+      {
+        "name": "List assignment for row list matrix M[pos] := v",
+        "description": "If M is a row list matrix, v is a vector object compatible with rows of M (same base domain, right length, right vector representation), and pos is \u2264 number of rows + 1, then assignment sets v as pos-th row of M.",
+        "guidance": "In all other situations behavior is not specified."
+      },
+      {
+        "name": "Sublist access and assignment for row list matrices",
+        "description": "M{poss} returns a new mutable row list matrix with same representation as M whose rows are identical to those at positions poss. For mutable M, M{poss} := M2 assigns rows of M2 to positions poss in M if M2 has same vector type and base domain.",
+        "guidance": "It is not specified what happens if resulting row positions range is not dense."
+      },
+      {
+        "name": "IsBound[], Unbind[] behavior for row list matrices",
+        "description": "IsBound[](M,pos) returns true if pos \u2264 number of rows of M, false otherwise. Unbind[](M,pos) removes the last row for a mutable row list matrix with pos rows; not specified for other pos values.",
+        "guidance": ""
+      },
+      {
+        "name": "Add (append/insert) for row list matrices",
+        "description": "Add(M,v[,pos]) for mutable row list matrix M and compatible vector v: two-argument form adds v at end of rows; if pos given, v is added at position pos and later rows shifted up by one.",
+        "guidance": ""
+      },
+      {
+        "name": "Remove for row list matrices returns removed row or nothing",
+        "description": "Remove(M[,pos]) removes pos-th row and shifts later rows down; default pos is number of rows. Returns removed row object if existed, otherwise nothing.",
+        "guidance": ""
+      },
+      {
+        "name": "Append for two row list matrices",
+        "description": "Append(M1,M2) for M1 mutable and ConstructingFilter and BaseDomain equal appends rows of M2 to M1.",
+        "guidance": ""
+      },
+      {
+        "name": "ShallowCopy for row list matrix shares rows",
+        "description": "ShallowCopy(M) returns a new mutable matrix with same ConstructingFilter and BaseDomain as M which shares its rows with M.",
+        "guidance": ""
+      },
+      {
+        "name": "ListOp for row list matrix returns list of rows or function-applied rows",
+        "description": "ListOp(M[, func]) with one argument returns the plain list of its rows; with two arguments returns plain list of values of these rows under func.",
+        "guidance": ""
+      },
+      {
+        "name": "Basic row/column reduction operations and left/right conventions",
+        "description": "Operations MultMatrixRowLeft/MultMatrixRow (left-multiply row by scalar), MultMatrixRowRight, MultMatrixColumnRight/MultMatrixColumn (right-multiply column), MultMatrixColumnLeft, AddMatrixRowsLeft/AddMatrixRows (adds elm* j-th row to i-th, elm multiplied from left), AddMatrixRowsRight, AddMatrixColumnsRight/AddMatrixColumns (adds elm * j-th column to i-th, elm multiplied from right), AddMatrixColumnsLeft, SwapMatrixRows, SwapMatrixColumns.",
+        "guidance": "Naming choices reflect conventional notation (row operations multiply scalars from left, column ops often from right). All operate in-place and return nothing; some are synonyms (MultMatrixRow = MultMatrixRowLeft, AddMatrixRows = AddMatrixRowsLeft, MultMatrixColumn = MultMatrixColumnRight, AddMatrixColumns = AddMatrixColumnsRight)."
+      },
+      {
+        "name": "Implementing new vector object types: required operations",
+        "description": "When designing a new type of vector objects one must create a new filter as ConstructingFilter and install specific methods at least for: BaseDomain (26.3.1), Length (26.3.4), [] (26.7.1), []:= (26.7.1) (with consistency checks unless global option check false), \\< (31.11.1), ConstructingFilter (26.3.2), NewVector (26.4.1) (with consistency checks unless global option check false, install with InstallTagBasedMethod when default installed with this).",
+        "guidance": "Advisable to install specific methods also for other operations for performance reasons. Check lib/matobj.gi for default method installations."
+      },
+      {
+        "name": "Implementing new matrix object types: required operations",
+        "description": "When designing a new type of matrix objects one must install specific methods at least for: BaseDomain (26.3.1), NumberRows (26.3.5), NumberColumns (26.3.5), MatElm (26.11.1), SetMatElm (26.11.2) (with consistency checks unless global option check false), \\< (31.11.1), ConstructingFilter (26.3.2), CompatibleVectorFilter (26.3.3), NewMatrix (26.4.4) (with consistency checks unless global option check false, install with InstallTagBasedMethod when default installed with this).",
+        "guidance": "Methods for NewVector and NewMatrix must check arguments for consistency (filter & base domain fit, entries compatible, number of matrix entries multiple of ncols) except if global option check is false. Same holds for methods that modify mutable vector/matrix objects ([], []:=, SetMatElm, CopySubVector, CopySubMatrix) and for those methods of Vector and Matrix that do not delegate to NewVector/NewMatrix."
+      },
+      {
+        "name": "Representations imply IsCopyable and base domain constraints",
+        "description": "Representation filters like IsGF2VectorRep, Is8BitVectorRep, IsPlistVectorRep, IsZmodnZVectorRep and corresponding matrix representations (IsGF2MatrixRep, Is8BitMatrixRep, IsPlistMatrixRep, IsZmodnZMatrixRep) define vector/matrix objects with entries in specified domains and imply IsCopyable (thus can be mutable).",
+        "guidance": "Is8Bit* representations require finite field with q elements (3 \u2264 q \u2264 256). IsPlist* behave like row list matrices/vectors. For ZmodnZ types base domain is residue class ring ZmodnZ."
+      }
+    ]
+  }
+}

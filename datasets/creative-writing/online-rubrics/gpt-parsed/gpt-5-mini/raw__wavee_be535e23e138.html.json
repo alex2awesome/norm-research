@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_be535e23e138.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11563,
+  "output_tokens": 4240,
+  "elapsed_s": 1223.9332976669539,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on long-form story generation",
+    "subtask_short": "length-controlled long-story generation",
+    "subtask_description": "Designing and evaluating models that recursively generate paragraph-by-paragraph long stories with explicit control over length while maintaining coherence and producing appropriate endings (completeness). Includes architectural components (CWC, LSP), datasets, and automatic evaluators.",
+    "subtask_keywords": [
+      "nlp",
+      "story_generation",
+      "longform",
+      "length_controlled",
+      "recursive_generation",
+      "research_paper"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Coherence",
+        "description": "The natural flow between paragraphs; whether consecutive paragraphs form a coherent progression.",
+        "guidance": "Scoring method: construct true pairs (two consecutive paragraphs) and fake pairs (two randomly selected paragraphs), train GPT-2 as a classifier to distinguish true vs fake pairs, and convert the classifier output to a score \u2208 [0,1] with a sigmoid. Higher score = better coherence. Empirical notes: Memory (M) is central to capturing natural flow (ablations show LongStory\u00acM drops coherence); balancing long- and short-term contexts affects coherence. Report coherence per-length (e.g., 5,10,20,30,50 paragraphs)."
+      },
+      {
+        "name": "Completeness",
+        "description": "The ability to conclude a story appropriately \u2014 producing a proper last paragraph/ending for stories of any length.",
+        "guidance": "This paper introduces completeness as a new open-domain metric. Scoring method: same GPT-2 classifier approach as coherence, but true folds are last paragraphs and fake folds are non-last paragraphs. Reported completeness = (last paragraph's completeness score) \u2212 (average completeness score of non-last paragraphs). This formulation rewards producing distinctive, appropriately 'final' last paragraphs. Ablation notes: combination of Memory and Cheating plus LSP tokens improves completeness."
+      },
+      {
+        "name": "Repetitiveness (in-SELF BLEU)",
+        "description": "Measure of internal repetition/diversity within a single generated document.",
+        "guidance": "Compute n-gram BLEU by taking one paragraph as hypothesis and the rest of the paragraphs in the document as references, then average across paragraphs \u2014 called in-SELF BLEU. Higher in-SELF BLEU implies more repetition (less diversity). Distinct from prior self-BLEU which treats whole documents differently. Empirical notes: Cheating (short-term context) helps reduce repetition; LongStory generally reduces repetitiveness compared to baselines for longer outputs."
+      },
+      {
+        "name": "Relevance (ROUGE scores)",
+        "description": "How well the generated document reproduces content relevant to the golden label / how well keywords map to generated text.",
+        "guidance": "Use ROUGE-1, ROUGE-2, and ROUGE-L between generated documents and golden labels to assess relevance. Caveat: n-gram overlap metrics like ROUGE may penalize creative/novel but valid stories; therefore they should be complemented by coherence/completeness metrics. Use ROUGE results alongside other metrics when comparing models."
+      },
+      {
+        "name": "Coherence, Completeness, and Repetitiveness as primary evaluation dimensions",
+        "description": "Treat coherence, completeness, and repetitiveness as the core automatic metrics for long story generation beyond conventional n-gram scores.",
+        "guidance": "The paper argues these three capture properties n-gram metrics miss (completeness is newly emphasized). Report all three across target lengths to characterize model performance on long-form generation."
+      },
+      {
+        "name": "Coherence scorer procedure (implementation detail)",
+        "description": "Operational procedure to compute coherence scores using a learned classifier.",
+        "guidance": "Create dataset of paragraph-pairs: positive = consecutive paragraphs, negative = random pairs. Train a GPT-2 classifier on this task and convert classifier outputs via sigmoid into a [0,1] coherence score. Use consistent construction across datasets and lengths."
+      },
+      {
+        "name": "Completeness scorer procedure (implementation detail)",
+        "description": "Operational procedure to compute completeness scores using a learned classifier.",
+        "guidance": "Create dataset of paragraph instances: positive = last paragraphs, negative = non-last paragraphs. Train GPT-2 classifier and convert outputs via sigmoid. Report completeness as last-paragraph score minus average non-last score to emphasize distinction between endings and body paragraphs."
+      },
+      {
+        "name": "Long and short-term contexts weight calibrator (CWC)",
+        "description": "A module (implemented with BERT-tiny) that calibrates how much the model uses long-term Memory (M) vs short-term Cheating (C) vs input embeddings when generating each paragraph.",
+        "guidance": "CWC input: discourse tokens (LSP) and the last generated paragraph; pooler output of BERT-tiny is used to determine \u03b2 (learnable) and, with \u03b1 hyperparameter, \u03b3 = 1 \u2212 \u03b1 \u2212 \u03b2. Final attention combination: LM(X_t,M_t,C_t) = \u03b1 Attention(Q,K,V) + \u03b2 Attention(Q,M_t,M_t) + \u03b3 Attention(Q,C_t,C_t). CWC is trained jointly (BERT-tiny fine-tuned with same negative log-likelihood loss). Augmented CWC variants (making \u03b1 learnable) can improve ROUGE but may hurt coherence and completeness \u2014 indicating trade-offs between relevance and narrative quality."
+      },
+      {
+        "name": "Long story structural positions (LSP) / discourse tokens",
+        "description": "Provide explicit structural positional information per paragraph via discourse tokens to inform the generator about paragraph order and macro-structure.",
+        "guidance": "Use tokens: <intro>, <body>, <tail>, and more fine-grained tokens <front>, <middle>, <ending>, <next-is-ending>. Mapping: <intro> = first paragraph; <tail> = last paragraph; <front>/<middle>/<ending> split the document roughly into thirds (first 1/3, next 1/3, last 1/3); <next-is-ending> labels the paragraph immediately before the end. More granular tokens were added because a single <body> token is insufficient for representing many-paragraph documents. Ablations show LSP tokens help completeness and reduce repetition, though in some cases they may slightly reduce ROUGE (relevance)."
+      },
+      {
+        "name": "Memory (M_t) \u2014 long-term context vector",
+        "description": "A memory vector that stores long-term context across paragraphs to sustain a broad understanding of the story.",
+        "guidance": "Mt is initialized and updated using gated updates (gt, \u02c6M_t formulas; see paper) akin to Plotmachine. It is incorporated into attention via weighted attention (\u03b2). Empirical note: Memory contributes strongly to coherence (LongStory\u00acM performs worse on coherence)."
+      },
+      {
+        "name": "Cheating (C_t) \u2014 short-term context window",
+        "description": "Short-term context constructed from embeddings of the most recent generated tokens/paragraphs to preserve local continuity.",
+        "guidance": "Ct = tanh(Emb(last c paragraph tokens...)). c is a hyperparameter (here up to last three paragraphs). Incorporated into attention via weight \u03b3. Empirical note: Cheating helps local continuity, improves relevance in some ablations, and reduces repetition by preventing over-attending to older contexts."
+      },
+      {
+        "name": "Recursive paragraph generation requirement",
+        "description": "The model must generate each paragraph recursively: produce paragraph t using previous paragraphs' contexts plus inputs (keywords + discourse tokens).",
+        "guidance": "Formulation: input X_t = (keywords with [SEP] tokens, discourse token(s)), generate Y_t conditioned on previous paragraphs and X_t. Recursive generation introduces information-leak/forgetting challenges that architectures must mitigate (hence Memory and Cheating). Evaluate across multiple target lengths to ensure robustness."
+      },
+      {
+        "name": "Use of keywords (whole-story keyword input) for planning",
+        "description": "Use extracted keywords representing the entire story as input to guide paragraph generation without providing a full plot.",
+        "guidance": "Keywords are extracted (RAKE used in experiments) and concatenated with discourse tokens to form X_t. The model must produce paragraphs consistent with the keywords; ROUGE vs golden labels is used to measure how well keywords drive generation (relevance). This enables more challenging open-domain generation vs methods that require detailed outlines."
+      },
+      {
+        "name": "Training and dataset diversity recommendation",
+        "description": "Train on datasets with varied average document lengths to learn representations across length scales and support zero-shot generalization.",
+        "guidance": "The paper trains on Writing Prompts, Booksum (chapters), and Reedsy Prompts, using consistent segmentation into paragraphs (max 200 tokens each). Combining datasets (Total) improved zero-shot performance on other dataset types versus single-dataset trained models. Recommendation: include diverse length distributions during training to improve generalization."
+      },
+      {
+        "name": "Generation hyperparameters and decoding settings to reproduce results",
+        "description": "Specific training and decoding practices found useful for the task.",
+        "guidance": "Training: teacher-forcing used so labels are used for contexts during training. Hyperparameters: \u03b1 set to 1/2 in main experiments; cheating window c up to last three paragraphs. Decoding: beam sampling with top_k=50, top_p=0.95, no_repeat_ngram_size=3, repetition_penalty=3.5. These settings contributed to reported performance and are recommended when reproducing experiments."
+      },
+      {
+        "name": "Ablation and evaluation protocol",
+        "description": "Systematically ablate model components to quantify their contribution.",
+        "guidance": "Create variants: LongStory\u00acM (no memory), LongStory\u00acC (no cheating), LongStory\u00acD (no new discourse tokens). Compare across ROUGE, in-SELF BLEU, Coherence, Completeness, and Avg paragraph length across multiple target paragraph lengths. Use ablations to draw conclusions about which components most affect coherence, completeness, relevance, and repetitiveness."
+      },
+      {
+        "name": "Limitations of n-gram metrics for long-form story evaluation",
+        "description": "Caveat that traditional n-gram matching metrics (ROUGE, BLEU) do not fully capture story quality.",
+        "guidance": "Authors note that well-crafted stories may diverge from golden labels and thus score poorly on ROUGE/BLEU despite being good. Therefore, complement ROUGE with coherence/completeness/repetitiveness metrics. Use human evaluation or learned discriminators where possible to capture narrative quality beyond n-grams."
+      }
+    ]
+  }
+}

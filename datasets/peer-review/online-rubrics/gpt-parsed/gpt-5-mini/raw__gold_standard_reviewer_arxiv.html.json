@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/gold_standard_reviewer_arxiv.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16396,
+  "output_tokens": 3444,
+  "elapsed_s": 691.8751900421921,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference organizers working on reviewer-assignment / similarity-computation algorithms (computer science / machine learning)",
+    "subtask_short": "reviewer-paper similarity evaluation",
+    "subtask_description": "Designing, collecting data for, and evaluating algorithms that compute similarity/expertise scores between reviewers and papers to inform reviewer assignment in conferences. Covers dataset collection, evaluation metrics, algorithm inputs, and experimental protocols.",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "similarity_computation",
+      "dataset",
+      "conference_pc"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Gold standard dataset desiderata (D1)",
+        "description": "The dataset should comprise evaluations of expertise for papers participants read to a reasonable extent.",
+        "guidance": "Collect self-evaluations only for papers the participant actually read to a reasonable extent so the expertise judgments are informed."
+      },
+      {
+        "name": "Gold standard dataset desiderata (D2)",
+        "description": "The dataset should be released publicly without disclosing any sensitive information.",
+        "guidance": "Release data in a form that preserves participants' privacy (e.g., do not release email addresses) while providing representations (Semantic Scholar IDs, metadata, PDF links) sufficient for algorithmic work."
+      },
+      {
+        "name": "Gold standard dataset desiderata (D3)",
+        "description": "The dataset should comprise experts\u2019 ratings of their own expertise rather than people judging other peoples\u2019 expertise.",
+        "guidance": "Use self-reported expertise (ex-post evaluations) rather than external judgments or ex-ante bids to better capture reviewers' true ability to judge a paper's content."
+      },
+      {
+        "name": "Participant screening criterion",
+        "description": "Prospective participants must have at least one paper published in the broad area of computer science.",
+        "guidance": "Use this screening to ensure contributors are qualified reviewers for the target domain."
+      },
+      {
+        "name": "Paper selection constraints for survey responses",
+        "description": "Papers reported by a participant should not be authored by them, and should be freely available online.",
+        "guidance": "Recommend arXiv or other open sources to ensure PDFs and metadata can be shared; this enables use of full texts where available."
+      },
+      {
+        "name": "Survey coverage and diversity recommendations",
+        "description": "Ask participants to recall 5\u201310 papers they read in the last year and provide expertise ratings; encourage selecting papers across the spectrum of expertise (some well-separated, some nearly tied), avoid ties, include less-famous papers, and include papers that may be tricky for algorithms.",
+        "guidance": "Provide explicit instructions and examples (e.g., naive similarity pitfalls). Request at least 5 papers; recommended time 5\u201310 minutes."
+      },
+      {
+        "name": "Expertise rating scale and granularity",
+        "description": "Use a 1 ('I am not qualified to review this paper') to 5 ('I have background necessary to evaluate all the aspects of the paper') scale with 0.25 step size.",
+        "guidance": "Smaller step sizes help participants avoid ties and express fine-grained differences in expertise."
+      },
+      {
+        "name": "Data fields to release for participants and papers",
+        "description": "Participant: Semantic Scholar ID and complete bibliography (crawled). Paper: Semantic Scholar ID, title, abstract, list of authors, publication year, arXiv identifier, and links to freely available PDFs when available.",
+        "guidance": "Release these non-sensitive identifiers to enable reproducible algorithm development while withholding email addresses."
+      },
+      {
+        "name": "Primary evaluation metric \u2014 weighted Kendall\u2019s Tau / normalized pairwise loss",
+        "description": "Define algorithm loss by penalizing incorrect pairwise orderings between two papers for the same reviewer by the absolute difference in the reviewer\u2019s expertise; ties in algorithm scores incur half the penalty. Normalize the sum across participants relative to the worst-case (reverse ordering) to obtain L \u2208 [0,1]; lower is better.",
+        "guidance": "This metric captures difficulty (smaller expertise differences are harder) by weighting errors by |\u03b5_i - \u03b5_j|; use this as main metric for ranking algorithms."
+      },
+      {
+        "name": "Additional ranking/evaluation metrics (WKTD@k, MRR@k, NDCG@k, Precision@k)",
+        "description": "Evaluate algorithms using top-k variants: Weighted Kendall Tau Distance@k (WKTD@k), Mean Reciprocal Rank@k (MRR@k), Normalized Discounted Cumulative Gain@k (NDCG@k), and Precision@k.",
+        "guidance": "Define these metrics per participant (e.g., top-k sets Rk and Ak), aggregate across participants, and normalize WKTD appropriately; use multiple metrics to provide complementary views (lower WKTD is better; higher MRR/NDCG/Precision better)."
+      },
+      {
+        "name": "Paper representation choices",
+        "description": "Similarity-computation algorithms may operate on different representations of papers: (i) title only, (ii) title + abstract, (iii) full text.",
+        "guidance": "Title+abstract is often used and supported across algorithms; note that some algorithms (TF-IDF/TPMS) can use full text and that using full text can change relative performance (TPMS with full text can match Specter2 using titles+abstracts)."
+      },
+      {
+        "name": "Reviewer profile construction",
+        "description": "Construct reviewer profiles by selecting a set of reviewer papers (authors' past papers); authors used the 20 most recent papers from Semantic Scholar (use all if fewer than 20), ordered by publication year with uniform random tie-breaking.",
+        "guidance": "Profile size choice affects available information; match realistic profile sizes (NeurIPS mean length ~16.5). Repeat stochastic profile construction multiple times (they repeat 10) and average to reduce randomness."
+      },
+      {
+        "name": "Pooling methods for aggregating paper-to-paper similarities",
+        "description": "Aggregate similarity scores between the submitted paper and each paper in a reviewer\u2019s profile via pooling methods: max, mean, or percentile (e.g., 75th percentile).",
+        "guidance": "Max can be sensitive to fraudulent/outlier papers; percentile pooling (75th) proposed to improve robustness against manipulation; evaluate multiple pooling strategies (the paper evaluates all three for Specter2)."
+      },
+      {
+        "name": "Algorithm baseline and families to evaluate",
+        "description": "Include a trivial baseline (constant score), TF-IDF/TPMS-style methods, OpenReview deep embeddings (ELMo, Specter, Specter+MFR, Specter2), ACL-trained similarity, and off-the-shelf LLMs.",
+        "guidance": "Evaluate a broad set of algorithm families under comparable inputs and default parameters to assess relative strengths; note dataset-domain shifts (e.g., ACL-trained model trained on ACL abstracts may experience distribution shift)."
+      },
+      {
+        "name": "IDF corpus selection for TF-IDF / TPMS",
+        "description": "When using TF-IDF-based methods, choose the corpus used to compute IDF (authors used reviewers\u2019 profiles plus reported papers; larger corpora like all submissions could improve IDF estimates).",
+        "guidance": "Selecting an appropriate IDF corpus affects TF-IDF performance; document and justify IDF corpus choice when benchmarking."
+      },
+      {
+        "name": "Statistical estimation and confidence intervals",
+        "description": "Quantify uncertainty by bootstrapping participants (sample participants with replacement) to compute 95% confidence intervals over loss and over differences between algorithms; also average over repetitions of profile-construction randomness.",
+        "guidance": "Use many bootstrap iterations (they use 1,000) and reuse constructed profiles if profile-construction randomness is negligible to save compute; also compute CIs for pairwise algorithm performance differences (e.g., relative to TPMS)."
+      },
+      {
+        "name": "Assignment-quality objectives beyond cumulative similarity",
+        "description": "Alternative objectives for the assignment stage include cumulative similarity (sum of similarity scores), fairness (avoid discriminating against some submissions), envy-freeness, resistance to strategic behavior, and encouraging diversity.",
+        "guidance": "While this paper focuses on similarity computation, designers of assignment algorithms should consider these objectives\u2014cumulative sum maximization may concentrate expertise unevenly; fairness and other notions address balanced assignment and robustness."
+      },
+      {
+        "name": "Handling evaluation instances of varying difficulty",
+        "description": "Stratify evaluation into easy vs hard instances (e.g., pairs with large vs small expertise differences) and report performance separately because algorithms perform differently across difficulty levels.",
+        "guidance": "Report error rates in both regimes (authors report 12%-30% in easy cases and 36%-43% in hard cases) to expose weaknesses that are masked by aggregate metrics."
+      },
+      {
+        "name": "LLM evaluation protocol (prompt & score format)",
+        "description": "When evaluating off-the-shelf LLMs, prompt them as an expert assigning an integer score (0\u2013100) for reviewer-paper match; request a brief explanation and instruct to not hallucinate.",
+        "guidance": "Provide the reviewer papers (titles+abstracts) and the new paper; require outputs in a strict format (<score> Explanation: ...). Ensure instructions emphasize grounding in provided inputs."
+      },
+      {
+        "name": "Known dataset limitations and recommended usage cautions",
+        "description": "Dataset size is limited (477 evaluations from 58 researchers) and has demographic/geographic skew (e.g., 74% participants from the US); most papers are recent (75% from 2020 or later) and 99% are in broad area of computer science.",
+        "guidance": "Users should be aware of these limitations when drawing conclusions; the authors encourage further contributions to increase size and diversity."
+      }
+    ]
+  }
+}

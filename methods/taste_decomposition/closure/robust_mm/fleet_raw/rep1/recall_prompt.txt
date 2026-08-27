@@ -1,0 +1,265 @@
+You are a BLIND adjudicator in a controlled measurement.
+
+Below are 60 CANDIDATE criteria (ids K01..K60) that a panel of writers proposed for
+judging machine-learning paper abstracts, and 16 TARGET criteria (ids T01..T16) drawn
+from a separate, older rubric bank written in general scientific-reporting language.
+
+For EACH target, decide whether any candidate names the SAME underlying evaluative
+concept -- i.e. a judge scoring an abstract on the target would be scoring essentially
+the same property as a judge scoring it on that candidate.
+
+Calibration, and it matters:
+  * Register differs by design. The targets are written in general scientific-reporting
+    language (the vocabulary of reporting guidelines); the candidates are written in
+    machine-learning language. Judge the underlying property, NOT the vocabulary.
+  * Do NOT accept mere topical adjacency. If the candidate is clearly broader and merely
+    contains the target as one sub-case, or narrower and covers only a fragment of it, or
+    shares a topic while scoring a different property -- that is NOT a match.
+  * A match means substitutable in practice: swapping one for the other in a scorecard
+    would produce nearly the same per-abstract scores.
+  * Some targets will have NO match. Reporting no match is a perfectly good answer and is
+    expected for a substantial share of them. Do not force matches.
+
+OUTPUT. Emit exactly one JSON object and nothing else -- no markdown fences, no
+commentary:
+
+{"results": [
+  {"target": "T01",
+   "match": true or false,
+   "candidate_ids": ["K07", ...],   // every candidate you judge to be the same concept; [] if none
+   "confidence": "high" or "low",
+   "why": "<one sentence>"},
+  ... one entry for every target T01..T16 ...
+]}
+
+=== CANDIDATES ===
+
+K01. Headline number reported together with the baseline's number
+     Score whether the abstract's central empirical claim is anchored: a specific quantity, on a named benchmark, with the comparison value it is being measured against. 10 = both endpoints are given, e.g. '55.7 to 59.2 on SuperGLUE', '40.9% WER versus 86.4%/92.9% for professional lipreaders and 89.8%/76.8% for prior systems', '35.44 BLEU on IWSLT 2014 De-En, +2.6 BLEU over a strong Transformer baseline'. 6 = own number given on a named benchmark but the baseline value is absent. 3 = a relative claim only ('substantial improvements', '3% higher'). 0 = 'consistently outperforms strong baselines', 'achieves state-of-the-art', 'notable margins', with no number anywhere. Do not reward more numbers; reward whether the reader can compute the delta.
+
+K02. Grandest sentence matched by the evidence sentence
+     Locate the abstract's most ambitious claim and its strongest piece of evidence, and score the gap between them. 10 = the two are the same size; a modest claim with matching evidence scores 10 just as a large claim with large evidence does. 3 = the ambition sentence outruns the evidence by roughly one level (a framework claim supported by one task family). 0 = a sweeping claim about the field, the community, or a first-ever bridge between areas, supported by an experiment described in a single clause ('the first work that bridges pruning with the theory of differential privacy' evidenced by an inversion attack on two benchmark datasets; 'acts as a whistleblower for the community'; 'we hope to advance state-of-the-art research and inspire researchers', with no results reported at all). Penalize the gap, never the modesty.
+
+K03. Precise diagnosis of a specific prior-work failure mode
+     Score 10 if the abstract names a specific, mechanistically precise weakness in prior work (a named phenomenon, a specific failure condition, or a designed diagnostic such as targeted robustness checks) rather than a generic complaint. Score 5 if the gap is stated but only in vague terms ('existing methods have limitations'). Score 0 if no gap in prior work is characterized at all.
+
+K04. Positioned against the nearest named prior method, not the field
+     Score the precision of the paper's positioning. 10 = the closest existing method is named, its specific behavior is characterized, and the contribution is stated as a difference from it ('in contrast to parallel WaveNet, we distill a Gaussian inverse autoregressive flow by minimizing a regularized KL divergence computed in closed form'; 'we extend the hybrid latent refinement method, which is designed for in-domain inference and degrades on rate cost cross-domain'; 'on each of the benchmark tasks proposed by Schwarzschild et al.'). 5 = a family of prior work named without a specific comparison point. 0 = positioning against an undifferentiated field ('existing methods', 'previous works', 'traditional approaches') with no named neighbor anywhere.
+
+K05. Density of unanchored superlatives
+     Count the promotional phrases that carry no verifiable content ('extensive experiments', 'comprehensive evaluation', 'consistently outperforms', 'strong baselines', 'notable margins', 'significant improvements', 'remarkable', 'seamlessly', 'efficacy') and score INVERSELY as a fraction of the abstract's claim sentences. 10 = essentially none; every evaluative word is attached to a named object, number, or comparison. 5 = a few, mixed with anchored claims. 0 = the evaluative content of the abstract is carried almost entirely by such phrases, so that deleting them would leave no assessable claim. Long abstracts are not penalized per se; the score is the ratio, not the count.
+
+K06. Bottleneck-to-design fit
+     Score 10 when the method directly targets a sharply identified technical bottleneck with a correspondingly specific design; score 0 when the problem statement and proposed technique are weakly connected or generic.
+
+K07. Cross-setting stress coverage
+     Score 10 when claims are tested across substantially different datasets, domains, tasks, or operating regimes; score 0 when evidence comes from one narrow setting with no stated variation.
+
+K08. Generalizable conceptual unification or named phenomenon
+     Score 10 if the abstract offers a general conceptual framework, a unifying principle across previously separate methods/tasks, or a newly named phenomenon that plausibly has explanatory reach beyond the specific benchmarks tested. Score 5 if the contribution is a solid but narrow point-fix to one method. Score 0 if the abstract presents only an incremental tweak with no broader conceptual claim.
+
+K09. Breadth of systematic multi-dataset or multi-domain validation
+     Score 10 if the method/finding is validated across genuinely distinct datasets, domains, or modalities (not just multiple splits of one dataset or one task family), ideally with a stated count. Score 5 if validated on 2-3 closely related datasets within one task type. Score 0 if validated on a single dataset/benchmark.
+
+K10. Conceptual reframing
+     Score 10 when the work reveals a useful new interpretation, connection, or hidden assumption that changes how an established problem can be understood; score 0 when it is only an incremental component substitution with no conceptual insight.
+
+K11. Theory that constrains the method rather than decorating it
+     If the abstract claims theory, score whether the theory does work. 10 = the analysis produces the design (a derived mismatch motivates the specific regularizer; a derived relation between two algorithms yields the unified model; an estimator is derived and then its reconstruction error is measured), or it makes a prediction the experiments then check. 5 = correct-sounding theory adjacent to but not binding on the method. 0 = a theorem statement that restates the obvious ('performance depends on the quality of the pretrained model and on distribution matching'), or a generality claim ('we extend the analysis from finite-dimensional to infinite-dimensional spaces') with no consequence anywhere else in the abstract. Score 5 by default if no theory is claimed, so that empirical papers are not punished.
+
+K12. Reports its own negative results, failure modes, or residual difficulty
+     Score whether the abstract states something that did not work, a limit of the contribution, or an unresolved difficulty, in its own voice. 10 = a headline negative or an explicit residual ('none of the methods is successful on this benchmark, though careful fine-tuning yields improvements; the benchmark remains challenging'; 'all models face challenges, especially for complex prompts'; 'we present early training results'). 5 = a scoping statement that limits applicability without conceding a failure. 0 = every claim in the abstract is positive and every experiment reported works. A concession invented to look modest but contradicted by the rest of the abstract scores 3, not 10.
+
+K13. Demonstrated cross-task or cross-architecture method generality
+     Score 10 if the abstract provides concrete evidence (not just a claim) that the method transfers across multiple distinct tasks, architectures, or knowledge types, e.g. by naming several settings it was actually tested in. Score 5 if generality is asserted ('plug-and-play', 'broadly applicable') without supporting cross-setting evidence. Score 0 if the method is validated in exactly one narrow setting with no generality claim.
+
+K14. Honest reporting of negative or mixed results
+     Score 10 if the abstract plainly states that its own method or the field's methods fail, partially fail, or remain unsolved on some dimension, without spinning it as a hidden success. Score 5 if limitations are acknowledged only vaguely ('some challenges remain'). Score 0 if the abstract reports uniformly positive, unqualified success on every claim made.
+
+K15. Construct-aligned evaluation
+     Score 10 when evaluation measures the stated construct with human judgments or task-specific correctness checks and identifies proxy-metric failures; score 0 when it relies only on generic automatic scores.
+
+K16. Real-world deployment or competitive validation
+     Score 10 if the method is validated via a real operational deployment, a competitive leaderboard/challenge win, or application to genuine external (non-benchmark-curated) data (e.g. real sensor/rover/production data). Score 5 if the paper merely gestures at 'real-world applicability' without concrete deployment evidence. Score 0 if all validation is confined to standard academic benchmark splits.
+
+K17. Stability under variation
+     Score 10 when the abstract directly measures variation across seeds, checkpoints, models, raters, or samples and reports stability or uncertainty; score 0 when conclusions rest on one unexamined run or checkpoint.
+
+K18. Single coherent problem-to-result throughline
+     Score 10 if the abstract reads as one coherent narrative arc (a single problem motivates a single core insight that motivates the method and its evaluation). Score 5 if there are a couple of loosely related sub-contributions bolted together. Score 0 if the abstract reads as a disjointed list of several separate sub-components/contributions/tasks with no unifying thread.
+
+K19. Shift and transfer robustness
+     Score 10 when the method explicitly addresses unseen domains, objects, tasks, distributions, or conditions and demonstrates transfer across them; score 0 when it is evaluated only in the same conditions used for development.
+
+K20. Breadth of the claim matched by breadth of the demonstration
+     Compare the scope the abstract claims to the scope it evidences, and score the match. 10 = a plug-in or general-purpose claim is backed by demonstration across several distinct host systems or task families named in the text (dropped into ViT, Swin and PVT; three knowledge-driven tasks across six datasets plus probing; 3D grounding benchmarks plus general 2D grounding plus VQA suites). 5 = a claim of moderate scope evidenced on one family. 0 = a universal claim ('customizing to any downstream task seamlessly'; 'used in language models, RL, VAE, GAN, and neural architecture search') evidenced on a single task family or a microbenchmark. Score the ratio: a modest claim modestly evidenced scores 7, not 3.
+
+K21. Absence of self-promotional hype language
+     Score 10 if the abstract's prose is sober and lets results speak for themselves, with no unearned superlatives, mission-statement rhetoric, or self-labeling of the work as a 'breakthrough'/'novel and powerful' etc. Score 5 if there is mild promotional language but it is largely backed by evidence. Score 0 if the abstract contains multiple instances of unsupported hype phrasing (e.g., calling its own idea a 'breakthrough,' declaring a research area 'conspicuously underexplored,' framing the work as a 'mission').
+
+K22. Human-expert or human-judgment grounding
+     Score 10 if the abstract reports comparing the method's outputs/performance directly against human performance, or uses human judgments/ratings as validation data or evaluation ground truth. Score 5 if humans are mentioned only as a motivating analogy with no actual comparison or judgment data collected. Score 0 if evaluation is purely automatic-metric-vs-automatic-metric with no human reference point anywhere.
+
+K23. Validation against the quantity actually cared about, including human data
+     Score whether the evaluation measures the thing the paper claims to care about rather than a convenient proxy. 10 = the target quantity is measured directly, with human judgment collected when the target is a human-facing property, and the collection described concretely (11 scientists rating on correctness, relevance and scientific accuracy; human ratings along established quality dimensions plus ten robustness checks; human-labeled question-answer pairs for the new benchmark; human similarity judgments as the criterion rather than a DNN stand-in). 5 = an automatic metric that is a well-accepted stand-in for the target. 0 = a benchmark number substituted for a target the abstract itself framed in human or deployment terms, with no acknowledgment of the substitution.
+
+K24. Stress-test coverage
+     Score 10 when evaluation deliberately probes distribution shifts, perturbations, difficult subcases, or known failure modes tied to the claim; score 0 when only a standard aggregate benchmark is reported.
+
+K25. Constraint-aware design
+     Score 10 when the method is explicitly designed for a concrete practical constraint and that constraint is evaluated; score 0 when applicability is merely asserted without constrained evidence.
+
+K26. Diagnostic benchmark quality
+     Score 10 when a new dataset or benchmark is designed to expose meaningful failure modes, remove uninformative or leaking cases, and support interpretable evaluation; score 0 when it is mainly a larger collection of routine examples.
+
+K27. Mechanism-specific diagnosis of why prior methods fail
+     Score the causal specificity of the abstract's account of what is wrong with existing approaches, and whether the proposed fix is aimed at that exact mechanism. 10 = the abstract names a concrete mechanism ('layer norm normalizes within each token, so tokens at different positions become similar in magnitude, so positional context cannot be captured'; 'the refined Gaussian conditional and the hyperprior are mismatched, so rate cost inflates'), and the proposed method is visibly the counter to that mechanism. 5 = a limitation is named at the level of a symptom (slow, inaccurate, unstable) with no account of what produces it. 0 = the deficiency is stated only as an adoption or coverage fact ('X remains underexplored', 'ReLU persists', 'existing methods have limitations') with no mechanism at all. Judge only the text; do not reward length.
+
+K28. Quantified efficiency-quality tradeoff
+     Score 10 when a resource reduction is quantified alongside preserved or improved task quality at meaningful scale; score 0 when efficiency or quality is claimed without measuring the other side.
+
+K29. Theory-to-design loop
+     Score 10 when analysis yields a concrete design choice or falsifiable prediction that experiments test, including informative failures; score 0 when theory consists of disconnected bounds or guarantees without tested consequences.
+
+K30. Contribution coherence
+     Score 10 when one coherent contribution explains why each component is needed and how the parts fit together; score 0 when many branded modules are stacked with weakly articulated roles.
+
+K31. Mechanistic explanatory bridge
+     Score 10 when the abstract gives a coherent causal account linking the proposed mechanism to the claimed improvement; score 0 when it only lists components and reports results without explaining why they should work.
+
+K32. Minimal intervention, broad leverage
+     Score 10 when a small, clearly specified change integrates with existing systems and improves several architectures or tasks with little added cost; score 0 when the method requires a large bespoke pipeline or its reuse is unspecified.
+
+K33. Controlled contribution attribution
+     Score 10 when the abstract clearly isolates the effects of individual components, variants, or design choices through controlled comparisons; score 0 when the full system is presented without evidence identifying which parts matter.
+
+K34. Finding revises a belief many people act on
+     Score the abstract's central claim on how much it should change what a practitioner does. 10 = an established default is shown to be wrong or unnecessary in a way that touches many downstream choices (a vision-only encoder without text alignment beats the near-universal choice on fine-grained tasks; six widely-used benchmarks are shown to be largely redundant and reducible to a single common factor; the standard proxy for a target quantity is shown to have a large gap against the quantity itself across 611 models). 5 = a real reversal confined to one hyperparameter or one narrow setting. 0 = the finding is what anyone would have predicted from the setup (adding a regularizer improves the metric it regularizes; more data helps). Reward the substantiated reversal, not the word 'surprisingly'.
+
+K35. Contextualized, not bare, quantitative improvement claims
+     Score 10 if large quantitative improvement claims (especially percentage figures) are accompanied by enough methodological context (what exactly is being measured, against what precise baseline condition) that the number is interpretable. Score 5 if numbers are given but the comparison basis is only loosely specified. Score 0 if headline percentage/speed numbers are presented with minimal context on what baseline or conditions produced them, giving a marketing-flyer feel.
+
+K36. Failure-to-mechanism fit
+     Score 10 when the abstract identifies a concrete failure mode and the proposed mechanism directly addresses it with matching evidence; score 0 when the problem and method are only loosely connected or no failure mode is specified.
+
+K37. Compositional capability
+     Score 10 when the method combines multiple capabilities or representations so that their interaction enables a qualitatively broader target behavior; score 0 when components operate independently without an integrated capability claim.
+
+K38. Reusable research asset
+     Score 10 when the abstract offers a clearly reusable dataset, model suite, benchmark, or tool together with scope that enables follow-up research; score 0 when release is vague, merely promised, or absent.
+
+K39. Released artifact with its magnitude stated
+     Score the concreteness and size of the resource the paper contributes. 10 = a resource with its scale and composition named in the text (340M images annotated with pose, depth and surface normal; 3,886 hours of paired video and text; 206,339 human judgments across three modalities plus all modeling results; 25 fully pretrained checkpoints plus 140 intermediate ones and a statistical library). 5 = a resource named and available but with no stated scale. 2 = a bare promise of future release. 0 = no artifact. Judge only what the abstract states; do not credit an availability URL as scale.
+
+K40. Real-world constraint alignment
+     Score 10 when the abstract grounds the problem, method, and evaluation in concrete operational constraints or realistic data collection and deployment conditions; score 0 when practical relevance is asserted without such constraints or evidence.
+
+K41. Portable intervention
+     Score 10 when the same intervention transfers across architectures, tasks, or domains with low overhead and little bespoke redesign; score 0 when it works only in one setup or requires extensive specialization.
+
+K42. Internal naming consistency across method and artifacts
+     Score 10 if every name/acronym the abstract uses for its own method is used consistently, including in any linked code-repository name, with no unexplained mismatch. Score 5 if there is a minor inconsistency that doesn't affect understanding. Score 0 if the method's stated name clearly does not match the name of its own linked repository or other self-referenced artifact, suggesting careless drafting or leftover text from an earlier version.
+
+K43. Efficiency-quality frontier
+     Score 10 when the abstract quantifies resource savings together with preserved or improved task quality under a fair comparison; score 0 when efficiency is asserted vaguely or quality gains require unreported resource increases.
+
+K44. Component attribution
+     Score 10 when ablations isolate each component's contribution and demonstrate meaningful complementarity; score 0 when only the complete system is compared against baselines.
+
+K45. Core problem framed as a technical tension, not a coverage gap
+     Score how the paper motivates its problem. 10 = a genuine tension between two things that cannot both be maximized, stated concretely, with the method presented as a way to manage it (aligning to a personalized target while preserving text editability; more recurrent iterations should help but instead cause collapse; speech tokens capture linguistics but discard paralinguistics, and adding pitch alone does not close it; sample quality against number of sampling steps). 5 = a concrete difficulty stated without a competing objective. 0 = motivation is that a topic has not been studied ('conspicuously underexplored', 'remains an underexplored area', 'open-source environments have not advanced'). The tension must be technical; a tension between a field's ambitions and its funding does not count.
+
+K46. Evidence specificity
+     Score 10 when claims are anchored by named baselines, datasets, metrics, effect sizes, and evaluation conditions; score 0 when the abstract relies mainly on generic claims of state-of-the-art or significant superiority.
+
+K47. Stated mechanistic hypothesis for why the method works
+     Score 10 if the abstract offers an explicit causal/mechanistic hypothesis for why the proposed technique should improve results (not just that it does), stated as a reasoned claim about mechanism. Score 5 if a mechanism is gestured at but not clearly articulated. Score 0 if the abstract only reports that a method 'improves performance' with no account of why.
+
+K48. Breadth of validation
+     Score 10 when the method is evaluated across multiple independent tasks, datasets, domains, or operating conditions with consistent evidence; score 0 when it is tested in one narrow setting.
+
+K49. Boundary and failure disclosure
+     Score 10 when the abstract explicitly identifies limitations, difficult cases, tradeoffs, or conditions where methods fail; score 0 when it presents only unqualified success claims.
+
+K50. Procedure-level generality
+     Score 10 when the abstract distinguishes conclusions about a training procedure from a single trained artifact and evaluates variation across seeds, checkpoints, models, or implementations; score 0 when conclusions rest on one unreplicated instance.
+
+K51. Order-of-magnitude regime shift versus incremental delta
+     Score the size of the reported change relative to the operating range of the problem. 10 = the result moves the problem into a different regime that changes what is feasible: 1024-8192 sampling steps reduced to 4 at comparable perceptual quality; six benchmarks compressed to under 3% of their size while reconstructing the total score to 0.58% RMSE; a method scaled to graphs with hundreds of millions of nodes. 5 = a solid but within-regime improvement (a few points on a standard benchmark). 0 = an improvement of a size that would be indistinguishable from run-to-run variation or hyperparameter luck, or an improvement whose axis has no practical consequence. Score the magnitude claimed in the text, not the credibility of the claim (that is scored elsewhere).
+
+K52. Theory-to-method closure
+     Score 10 when theoretical analysis yields a concrete algorithmic choice or design principle that is then empirically examined; score 0 when theory and experiments are disconnected or theory is merely decorative.
+
+K53. One load-bearing idea versus stacked named sub-modules
+     Score whether the contributions cohere into one mechanism or are an assortment of separately-named additions. 10 = a single idea, stated once, that the whole paper is about; if there are two components, the abstract makes clear they are two halves of one mechanism serving one goal. 5 = two or three contributions with a stated but loose relation. 0 = a framework acronym containing two or more sub-acronyms, or a list of four or more heterogeneous contributions (a model, plus an augmentation trick, plus a visualization method, plus an extra analysis) with no argument that any of them requires the others. Penalize naming a component that is one heuristic; do not penalize naming the method itself.
+
+K54. Explanatory mechanism
+     Score 10 when the method's behavior is explained by an interpretable, testable mechanism linking representations or objectives to outcomes; score 0 when the abstract presents only an architectural recipe.
+
+K55. Meta-scientific rigor about measurement validity itself
+     Score 10 if the paper's core contribution concerns the reliability/validity of measurement or evaluation itself (e.g. reproducibility across seeds/checkpoints, statistical inference frameworks for comparing models, quantified benchmark-compression with reconstruction error) rather than a new task-performance number. Score 5 if this is a minor side-analysis. Score 0 if the paper only reports a new method's task performance with no reflection on measurement reliability.
+
+K56. Claim specificity and calibration
+     Score 10 when claims specify datasets, metrics, baselines, magnitudes, and operating conditions, while limiting conclusions to what the evidence supports; score 0 when claims are vague, absolute, or unsupported by concrete scope.
+
+K57. Non-obvious discovery
+     Score 10 when the paper reports a surprising, non-trivial finding that changes the design or interpretation and validates it; score 0 when the contribution is merely an expected incremental improvement.
+
+K58. Named, quantified comparison against the strongest baseline
+     Score 10 if the abstract names a specific, currently-strong competing method or baseline by name and reports a precise quantified margin over it. Score 5 if it reports beating 'baselines' or 'state-of-the-art' generically with numbers but no named competitor. Score 0 if no comparison numbers are given at all.
+
+K59. Efficiency claim stated with its base and its quality condition
+     Score cost, speed and memory claims on whether they are interpretable and whether quality is held fixed. 10 = the cost is given in absolute, checkable terms together with the condition under which it holds ('3 minutes to judge 5K samples with 8 A100 GPUs'; 'the full distillation procedure does not take more time than training the original model'; '2-10x reduction in memory while matching or outperforming prior methods'). 5 = a ratio against a named baseline with no absolute anchor. 0 = an unanchored percentage or a raw throughput figure with no base, no hardware, and no statement of what happens to quality ('up to 384% faster and 1822% reduced memory'; '335.5 frames per second'). Score 5 by default if no efficiency claim is made.
+
+K60. Concrete real-world stakes beyond benchmark numbers
+     Score 10 if the abstract articulates a specific downstream consequence or use case for why the capability matters beyond improving a leaderboard number (e.g., a named application domain or a step toward a broader human-relevant capability). Score 5 if 'real-world importance' is asserted only in boilerplate terms. Score 0 if no motivation beyond benchmark performance is given.
+
+=== TARGETS ===
+
+T01. Open data, code, models, and materials provided for reproduction
+     Authors provide the data, code, models/weights, and materials with working links/repositories, version identifiers, and sufficient instructions/documentation to reproduce main results; justify any ethical/legal access limits and state exceptions.
+
+T02. Discussion and conclusions — interpretation and implications
+     Findings are interpreted in light of objectives, prior evidence, and theory; alternative explanations and limitations are considered; conclusions are clear and appropriately restrained; practical/scientific implications and synthesis are articulated.
+
+T03. Intervention and comparator description (TIDieR-complete)
+     Provide TIDieR-complete descriptions of interventions and comparators (components, delivery, dose, timing, provider qualifications, co-interventions, similarity between arms), clinical context/indications, and criteria for modification/discontinuation.
+
+T04. Outcome measures — definition, prioritization, assessment, and precision reporting
+     Clearly define primary/secondary outcomes, how and when they were measured (and any reference standards/criteria), specify prioritization, and report estimates with appropriate precision/uncertainty.
+
+T05. Randomness control and experimental repeats reporting
+     Control/report randomness (fixed seeds) and the exact number of runs/repeats; ensure sufficient repetitions, avoid selective reporting (e.g., best‑of‑N), and use appropriate significance testing.
+
+T06. Dataset/model documentation quality and stewardship
+     Rich, FAIR‑aligned documentation detailing characteristics, intended uses/limits, known gaps, prior uses, maintenance/versioning, and stewardship for reuse.
+
+T07. Data/materials availability, rationale, and reusability
+     Clear rationale for data/material selection; artifacts are accessible with sufficient documentation and intended uses/restrictions specified to enable verification and reuse.
+
+T08. Journal/venue fit and baseline eligibility
+     The submission fits the venue’s aims and policies and meets baseline eligibility (original research where required, scientific validity/technical soundness, and basic reporting standards).
+
+T09. Novelty and positioning vs prior work
+     Evaluates whether the contribution is genuinely original and clearly contrasted with prior work, with the novelty and importance communicated explicitly (e.g., abstract/cover letter).
+
+T10. Procedural and analytical detail sufficient for replication
+     Methods and analyses are described with enough clarity, completeness, and rationale (including groups/controls, who did what/when/where/how, materials used, preprocessing, and analysis/exclusion rules) to permit independent replication; gaps undermining repeatability are addressed.
+
+T11. Ethical/legal compliance and human‑data transparency
+     Ethical/legal compliance and documentation (e.g., approvals, rights), transparency about human data collection/provenance/PII/compensation, and consideration of broader risks and conflicts of interest.
+
+T12. Conciseness, length, and format appropriateness
+     The manuscript is as short as feasible while sufficient for clarity and reproducibility; length/format match the message and venue expectations; identifies where to expand, condense, or restructure.
+
+T13. External validity, scope, and generalizability claims
+     Accurately characterizes where findings apply, limits to transferability, robustness and alternative explanations, and avoids unjustified causal or over‑general claims.
+
+T14. TRIPOD adherence for prediction model studies
+     Prediction model studies (development/validation/update) comply with TRIPOD, stating study type, data sources, modelling/validation methods, and reporting performance (e.g., calibration, discrimination) with uncertainty.
+
+T15. Statistical analysis rigor and transparent reporting
+     Statistical methods are appropriate and clearly reported with assumption checks, correct estimation/tests (frequentist/Bayesian), multiplicity control, defined metrics, software, and justified model choices; uncertainty is quantified and power/validation considerations are addressed.
+
+T16. Positioning within and comparison to prior work
+     The manuscript situates its contribution within the literature, differentiates from prior art, and, for empirical work, compares against strong baselines or prior results.

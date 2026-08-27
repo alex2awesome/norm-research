@@ -27,6 +27,29 @@ from methods.codability.experiments.build_fresh_item_partitions import (
 )
 
 
+# Canonical analysis-implementation closure.  This is the single source of truth for both the
+# execution-manifest compiler and the report generator's self-recorded implementation: the two
+# lists are compared for exact equality at every release/selection gate, so they must never be
+# maintained separately (a 15-vs-12 drift between them blocked the concluding_policy_v1 lockbox
+# on 2026-07-14).  Package __init__ files execute at import and therefore belong in the closure.
+ANALYSIS_IMPLEMENTATION_PATHS = (
+    "methods/codability/__init__.py",
+    "methods/codability/experiments/__init__.py",
+    "methods/codability/experiments/run_policy_isomorphism.py",
+    "methods/codability/experiments/score_fresh_name_arms.py",
+    "methods/codability/experiments/policy_isomorphism.py",
+    "methods/codability/experiments/policy_data.py",
+    "methods/codability/experiments/build_fresh_item_partitions.py",
+    "methods/codability/experiments/target_articulation_frontier.py",
+    "methods/codability/grid_auc_report.py",
+    "methods/codability/experiments/common_target_ladder.py",
+    "methods/metric_implementer/__init__.py",
+    "methods/metric_implementer/manifest.py",
+    "methods/metric_implementer/artifact.py",
+    "methods/metric_implementer/config.py",
+    "methods/metric_implementer/vinfo.py",
+)
+
 PUBLIC_DEVELOPMENT_PARTITIONS = (
     "residual_prompt_selection",
     "residual_unit_certification",

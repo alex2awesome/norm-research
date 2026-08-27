@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 20,
+  "n_chunks": 37,
+  "chunk_chars": 39784,
+  "model": "gpt-5-mini",
+  "elapsed_s": 202.71911733400339,
+  "input_tokens": 12568,
+  "output_tokens": 5060,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users, format designers, and macro programmers",
+    "subtask_short": "tex vertical-mode syntax reference",
+    "subtask_description": "Precise reference and rules for TeX's behavior in vertical mode: syntax of numeric/dimen/glue quantities, internal parameters, output-routine interaction (marks and page breaks), and assignment forms used by format designers and advanced TeX programmers.",
+    "subtask_keywords": [
+      "tex",
+      "vertical_mode",
+      "syntax",
+      "primitives",
+      "format_design"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Output routine continuation lines and mark handling (\\botmark / \\inxcheck)",
+        "description": "When a paragraph whose lines are boxed and broken is split by a page break, the mark following the box for the paragraph's first line (the \\botmark) can be examined by an output routine; \\inxcheck extracts components (main entry and subentry) from \\botmark and can insert continuation lines such as 'Main entry (continued):' and a subsidiary entry.",
+        "guidance": "Example output routine shows \\output invoking \\inxcheck with \\botmark and \\sub separator tokens; \\inxcheck checks for empty \\botmark, emits a continued line for the main entry, conditionally emits subsidiary continuation indented, and inserts a \\kern to compensate for depth differences between the shipped box (\\box255) and the new material inserted before the interline glue already computed by TeX. The reader must understand the reasoning behind the \\kern command before inserting boxes between existing lines of output."
+      },
+      {
+        "name": "Interline glue and kern compensation at page breaks",
+        "description": "Interline glue at a page break is computed based on the depth of the box that preceded the break (known to the output routine as the depth of \\box255); therefore insertion of new boxes/lines by the output routine must compensate for depth differences.",
+        "guidance": "The output routine can insert a \\kern (adjusting by \\prevdepth and \\dimen0) so spacing remains correct; failing to compensate will produce incorrect spacing. Example shows setting \\maxdepth infinite so depth is known and compensable."
+      },
+      {
+        "name": "Behavior of \\end and endgame invocation of output routine",
+        "description": "TeX terminates on \\end only when the main vertical list has been entirely output and if \\deadcycles=0; otherwise TeX inserts the equivalent of '\\line{} \\vfill \\penalty-\u201910000000000' into the main vertical list and re-invokes the output routine repeatedly until everything ships out.",
+        "guidance": "This ensures, e.g., that the last column of two-column format is not lost. Output routines must therefore be prepared to be invoked repeatedly in endgame conditions and should not leave a perpetual residue on the main vertical list (otherwise TeX may never end)."
+      },
+      {
+        "name": "Output-routine endgame detection via special output penalty",
+        "description": "An output routine can detect that it is being invoked by TeX's endgame because of the highly negative \\outputpenalty caused by the special \\penalty-\u201910000000000 inserted by \\end.",
+        "guidance": "When invoked in endgame, the output routine should modify its behavior if necessary so that everything is eventually shipped out and the job can terminate."
+      },
+      {
+        "name": "hnumberi (syntax and meaning)",
+        "description": "hnumberi \u2192 hoptional signsihunsigned numberi; optional signs allow arbitrary leading spaces and plus/minus signs; a hunsigned numberi is either a hnormal integeri or a hcoerced integeri (an internal dimen or glue coerced to integer).",
+        "guidance": "Alphabetic constants denote character codes (token not expanded). An hinteger constanti must not be immediately followed by another hdigiti. Coercion rules: internal dimensions can be coerced to integers by assuming units of scaled points; internal glue coerces to a dimension first (omitting stretch/shrink) then to integer."
+      },
+      {
+        "name": "hdimeni and hmudimeni (dimension and mu-dimension syntax)",
+        "description": "hdimeni \u2192 hoptional signsihunsigned dimeni; hunsigned dimeni is hnormal dimeni or hcoerced dimeni (coerced glue). hnormal dimeni can be an hinternal dimeni or hfactor \u00d7 hunit of measure. hmudimeni is analogous but uses mu units.",
+        "guidance": "hunit of measure can be 'true' physical units (when 'true' present the factor is multiplied by 1000 and divided by \\mag) or internal units (em/ex or internal integer/dimen/glue). Physical units: pt, pc, in, bp, cm, mm, dd, cc, sp. mu units and relation to \\mag explained in Chapter 18."
+      },
+      {
+        "name": "hgluei and hmugluei (glue syntax including stretch and shrink)",
+        "description": "hgluei \u2192 hoptional signsihinternal gluei | hdimenihstretchihshrinki; stretch may be 'plus hdimeni' or 'plus hfil dimeni' (with fil units), shrink may be 'minus hdimeni' or 'minus hfil dimeni'. hmugluei is the mu-glue analogue.",
+        "guidance": "Fil units allow infinite-order stretch/shrink (fil, fill, filll variants). The grammar shows how glue with stretch/shrink components is specified and how optional spaces are treated around these parts."
+      },
+      {
+        "name": "Internal quantities (types and examples)",
+        "description": "TeX exposes many internal quantities: hinternal integeri, hinternal dimeni, hinternal gluei, hinternal mugluei, each of which can be one of several tokens like parameters, register-def tokens (e.g., \\countdef, \\dimen#), lastpenalty, font-related items, etc.",
+        "guidance": "Examples: \\count1, \\tolerance, \\hyphenchar\\tenrm are internal integers; \\dimen10, \\hsize, \\fontdimen6\\tenrm are internal dimensions; \\skip100, \\baselineskip, \\lastskip are internal glue values. When a hcountdef token is used it denotes the corresponding \\count register value. 8-bit and 4-bit number limits (0\u2013255, 0\u201315) apply where referenced. Some internal quantities are mode-specific (e.g., \\spacefactor only an internal integer in horizontal modes; \\prevdepth only internal dimension in vertical modes)."
+      },
+      {
+        "name": "Spaces around numeric/dimension quantities",
+        "description": "TeX allows a hnumberi or hdimeni to be preceded by arbitrarily many spaces and to be followed by at most one space; however there is no optional space after a hnumberi or hdimeni that ends with an unexpandable control sequence.",
+        "guidance": "Examples: when scanning a hnumberi, '\\space\\space24\\space\\space' gobbles up first three spaces and leaves the fourth; similarly for '24pt\\space\\space' and '\\dimen24\\space\\space' and '\\pagegoal\\space'."
+      },
+      {
+        "name": "hinteger parameteri (integer parameters list and meanings)",
+        "description": "A hinteger parameteri is any of the named integer parameters used by TeX (e.g., \\pretolerance, \\tolerance, \\hbadness, \\vbadness, \\linepenalty, \\hyphenpenalty, ... \\errorcontextlines).",
+        "guidance": "Many are explained briefly (e.g., \\pretolerance: badness tolerance before hyphenation; \\tolerance: badness tolerance after hyphenation; \\hbadness: badness above which bad hboxes shown; \\vbadness: analogous for vboxes). Others control tracing, hyphenation minima, global behavior, timing, penalties/demerits, etc. The text enumerates the full set of integer parameters (about 50) used throughout TeX."
+      },
+      {
+        "name": "hdimen parameteri (dimension parameters list)",
+        "description": "A hdimen parameteri is any of the named dimension parameters used by TeX (e.g., \\hfuzz, \\vfuzz, \\overfullrule, \\emergencystretch, \\hsize, \\vsize, \\maxdepth, \\splitmaxdepth, ... \\voffset).",
+        "guidance": "Each controls physical measures: tolerances for overfull boxes, sizes of page/lines, maximum depths, delimiter/spacing constants used in math, display widths/indents, paragraph indentation/hanging indentation, offsets for \\shipout, etc. The text lists the available dimension parameters and notes that full explanations are elsewhere in the book."
+      },
+      {
+        "name": "hglue parameteri and hmuglue parameteri (glue and mu-glue parameters list)",
+        "description": "hglue parameteri includes glue parameters like \\baselineskip, \\lineskip, \\parskip, \\abovedisplayskip, \\leftskip, \\rightskip, \\topskip, \\splittopskip, \\tabskip, \\spaceskip, \\xspaceskip, \\parfillskip, etc. Three hmuglue parameters are \\thinmuskip, \\medmuskip, \\thickmuskip.",
+        "guidance": "These parameters control glue inserted in various typographic situations: baseline spacing, paragraph skips, spacing around displays, alignment/tab glue, spacing between words/sentences, and math formula glue. The three mu-glue parameters are specific to math spacing."
+      },
+      {
+        "name": "htoken parameteri (token-list parameters)",
+        "description": "htoken parameteri is any of TeX's token-list parameters such as \\output (the user's output routine), \\everypar, \\everymath, \\everydisplay, \\everyhbox, \\everyvbox, \\everyjob, \\everycr, \\errhelp.",
+        "guidance": "These token-list parameters are inserted by TeX at the indicated times (e.g., \\everypar tokens when a paragraph begins, \\everyjob tokens at job start). They do not enter numeric syntactic rules but are part of TeX's configuration mechanism."
+      },
+      {
+        "name": "Assignment syntax (hassignmenti) and prefix rules",
+        "description": "Every assignment can have an optional prefix (\\global) and assignments are categorized as hnon-macro assignmenti or hmacro assignmenti; only macro definitions may be prefixed by \\long or \\outer. If \\globaldefs is positive a \\global is implied; if negative a \\global prefix is ignored.",
+        "guidance": "Assignments obey grouping (non-global changes are undone when the group ends). The grammar shows forms for simple assignments, macro definitions, arithmetic assignments (\\advance, \\multiply, \\divide), code assignments, \\let/\\futurelet, font assignments, read/setbox/font loading forms, and global assignments that are always global irrespective of \\global prefix."
+      },
+      {
+        "name": "Macro-definition forms and expansion behavior (\\def, \\gdef, \\edef, \\xdef)",
+        "description": "hde\ufb01nitioni \u2192 hdefihcontrol sequenceihde\ufb01nition texti, where hdefi is \\def | \\gdef | \\edef | \\xdef. The hdefinition text consists of hparameter text, a left brace, and a balanced text; \\gdef \u2261 \\global\\def and \\xdef \u2261 \\global\\edef.",
+        "guidance": "TeX reads the control sequence and parameter text and the opening left brace without expanding them; the hbalanced text is expanded only for \\edef and \\xdef. Parameter text must not contain unmatched braces and follows rules of Chapter 20."
+      },
+      {
+        "name": "hsimple assignmenti patterns (variables, arithmetic, code, let, shorthands)",
+        "description": "Simple assignments include variable assignments (integer/dimen/glue/token variables), arithmetic assignments (\\advance, \\multiply, \\divide on numeric variables), code assignments (category/math/char codes), \\let/\\futurelet assignments, shorthand definitions (\\chardef, \\mathchardef, register defs), font-family and parshape assignments, \\read, \\setbox, \\font loading forms, and global assignments.",
+        "guidance": "The grammar specifies how each form is written (e.g., hvariable assignmenti \u2192 hinteger variablei = hnumberi, \\advancehinteger variablei by hnumberi, etc.). Assignment scanning often does not expand tokens for \\let/\\futurelet; numeric ranges and token type restrictions are sometimes specified for particular code assignments."
+      },
+      {
+        "name": "Constraints for code assignments and parshape",
+        "description": "Numeric limits and special-case rules: the hnumberi at the end of a hcode assignmenti must not be negative (except \\delcode). Specific upper bounds apply: catcode \u2264 15, mathcode \u2264 32768, lccode/uccode \u2264 255, sfcode \u2264 32767, delcode \u2264 2^24\u22121. For \\parshape with hnumberi = n, shape dimensions are empty if n \u2264 0; otherwise they are 2n consecutive hdimeni.",
+        "guidance": "These constraints ensure assignments produce valid internal values and that \\parshape has the right count of dimension entries. TeX does not expand tokens when scanning arguments of \\let and \\futurelet."
+      },
+      {
+        "name": "Global assignments that ignore grouping and \\global prefix",
+        "description": "Some assignments affect global tables or intimately global structures and are unaffected by grouping or the presence/absence of a \\global prefix. These include font assignments (\\fontdimen, \\hyphenchar, \\skewchar), hyphenation assignments (\\hyphenation and \\patterns), box-size assignments (hbox dimension # = dimen), interaction mode (\\errorstopmode, \\scrollmode, \\nonstopmode, \\batchmode), and intimate assignments (special integer/dimen changes).",
+        "guidance": "For these forms the presence or absence of \\global has no effect; they always make permanent/global changes to TeX's state (e.g., altering font tables or hyphenation patterns)."
+      }
+    ]
+  }
+}

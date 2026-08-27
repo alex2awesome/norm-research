@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_2184c4a279db.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_2184c4a279db.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 7,
+  "chunk_chars": 39962,
+  "model": "gpt-5-mini",
+  "elapsed_s": 57.50395458300045,
+  "input_tokens": 12008,
+  "output_tokens": 4743,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on physics-informed neural networks (PINNs), numerical analysts, and computational scientists applying neural nets to differential equations",
+    "subtask_short": "physics-informed neural networks evaluation",
+    "subtask_description": "Criteria and practical guidance for designing, training, and analysing Physics-Informed Neural Networks (PINNs) applied to ODEs/PDEs and related problems, including error decomposition, optimization, architecture choices, boundary-condition enforcement, sampling strategies, and uncertainty quantification.",
+    "subtask_keywords": [
+      "pinn",
+      "pdes",
+      "numerical_pdes",
+      "machine_learning",
+      "model_evaluation"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Optimization difficulty / nonconvex objective",
+        "description": "Because the objective function is nonconvex, the optimization error is unknown. Optimization frequently involves a variety of engineering methods and time-consuming fine-tuning, using gradient-based optimization methods.",
+        "guidance": "Common practice: use stochastic gradient descent variants; many PINNs use Adam and L-BFGS. Empirical evidence suggests gradient-based methods perform well, but they may not find a global minimum; local minima and training engineering are an open problem. Antipattern: assuming optimization error is negligible without diagnostics."
+      },
+      {
+        "name": "Generalization error (EG)",
+        "description": "The measure of the prediction accuracy on unseen data in machine learning is the generalization error: EG := sup_{\u03b8} |R[u_\u03b8] \u2212 (empirical)R[u_\u03b8]|.",
+        "guidance": "Use generalization error to assess how well the loss integral is approximated by a trained network. Convergence of EG has been studied for PINNs in several works; practical evaluation should compare training (empirical) risk to true risk or hold-out validations."
+      },
+      {
+        "name": "Approximation error (EA)",
+        "description": "Approximation error defined as EA := inf_{\u03b8} R[u_\u03b8], reflecting the NN's ability to represent the exact solution; it depends on the network architecture.",
+        "guidance": "Theoretical results: e.g., one-layer networks with high width can approximate functions and partial derivatives (Pinkus). Approximation capacity depends on activation, depth, width, and number of parameters; design architecture accordingly."
+      },
+      {
+        "name": "Decomposition of global error",
+        "description": "Global error between trained network and true solution can be bounded as R[\u00fb*] \u2264 EO + 2EG + EA, where EO is optimization error, EG generalization error, EA approximation error.",
+        "guidance": "Use this decomposition to diagnose sources of error and prioritize efforts: reduce EO via better optimization, EG via more/better samples or regularization, EA via architecture changes."
+      },
+      {
+        "name": "Approximation rates depend on architecture and data",
+        "description": "Approximation bounds (e.g., De Ryck et al.) show that for specific activations (tanh) and two hidden layers, the NN approximation error in Sobolev norms scales with the number of training points N, network width (e.g., N^d), and problem dimension d.",
+        "guidance": "Carefully choose depth/width in relation to available data N and problem dimension; #\u03b8 depends on both N and d. Be aware that theoretical constants (c, C) may be explicit but application-dependent."
+      },
+      {
+        "name": "Generalization error linked to training error and sample size",
+        "description": "For several PDE classes, generalization error can be bounded by the (empirical) training error and the number of training points.",
+        "guidance": "Practical implication: reducing training error and increasing representative training points tends to reduce generalization error. However, the sample-size dependence may be poor for high-dimensional problems (see curse of dimensionality)."
+      },
+      {
+        "name": "Curse of dimensionality (CoD) in generalization bounds",
+        "description": "Some generalization estimates (e.g., De Ryck et al for Navier\u2013Stokes) suffer from the curse of dimensionality: to reduce error by a factor, the required number of training points and network size scale exponentially in the dimension d.",
+        "guidance": "Antipattern: expecting low sample complexity in high-d problems. Mitigation: look for problem structure or special PDE classes (see Kolmogorov-type PDEs) that avoid CoD, use specialized architectures, or exploit logarithmic dependence when possible."
+      },
+      {
+        "name": "Problem classes that avoid CoD",
+        "description": "For certain PDEs (e.g., Kolmogorov-type, heat/Black\u2013Scholes), bounds exist where generalization error depends weakly or not at all on the problem dimension.",
+        "guidance": "When applicable, exploit PDE structure to achieve favorable sample complexity. Check literature results (De Ryck & Mishra, Mishra & Molinaro) to determine if your PDE falls into such classes."
+      },
+      {
+        "name": "Activation function selection guided by physics and outputs",
+        "description": "Select activation functions based on physical considerations and desired output properties: e.g., Softplus for temperature outputs (positive, smooth), Sigmoid for degree-of-cure outputs (in (0,1)), tanh for hidden layers due to smoothness and non-zero derivative.",
+        "guidance": "Design last-layer activations to respect known ranges/constraints of physical variables. Antipattern: using ReLU for outputs requiring smooth derivatives when automatic differentiation is used for residuals."
+      },
+      {
+        "name": "Boundary/initial condition enforcement: hard vs soft",
+        "description": "Boundary and initial conditions can be enforced 'hard' (encoded in the network architecture) or 'soft' (included as loss terms). Example: encode Dirichlet BCs hard into DNN; Neumann BCs often handled softly by adding terms to the loss.",
+        "guidance": "In data-free settings, 'hard' boundary enforcement is often preferable. Choose enforcement strategy based on problem type, availability of data, and numerical stability. Antipattern: treating all BCs equally without considering their nature."
+      },
+      {
+        "name": "Loss weighting and dynamic weighting",
+        "description": "Weights in multi-term loss functions (PDE residuals, boundary, initial, data losses) are crucial; dynamic weight techniques can mitigate training stiffness and local minima.",
+        "guidance": "Select weights based on relative magnitudes/ratios of loss components or use adaptive/dynamic weighting algorithms to balance terms during training. Example: dynamic weights reduced relative prediction error for Stefan problems and alleviated stiffness in gradient flow dynamics."
+      },
+      {
+        "name": "Sampling strategy: number and placement of collocation/training points",
+        "description": "Accuracy depends on the number and placement of initial, boundary, and collocation points (e.g., Raissi et al example: N0=50 initial, Nb=50 boundary, Nc=20,000 collocation).",
+        "guidance": "Randomly sampled points are common, but clustering points near discontinuities/high-gradient areas improves local accuracy. Use adaptive sampling, importance sampling, or active learning to place points where residuals are large."
+      },
+      {
+        "name": "Domain decomposition and localized networks for high-gradient regions",
+        "description": "Splitting the domain into subdomains (cPINN) and using local sub-networks can better capture shocks or regions with steep gradients.",
+        "guidance": "Partition domain when prior knowledge about shock/steep regions exists. Use different sub-PINN architectures per subdomain and enforce interface conditions. Example: cPINN used to partition domain around shocks for Burgers/Euler problems."
+      },
+      {
+        "name": "Architectural choices and inductive biases (VP vs VV, Res-PINN, SPINN, PIELM)",
+        "description": "Different architectures and mathematical formulations affect stability and accuracy: e.g., Res-PINN (ResNet blocks) improves stability; NSFnets consider velocity\u2013pressure vs vorticity\u2013velocity formulations; SPINN yields partially interpretable sparse architectures; PIELM is limited to linear operators.",
+        "guidance": "Match architecture/formulation to problem characteristics (stability, interpretability, operator type). Beware of limitations: PIELM only handles linear differential operators; EikoNet is trained for a single velocity model and requires retraining if velocity changes."
+      },
+      {
+        "name": "Use of physics-informed variations (VPINN, MPINN, PPINN)",
+        "description": "Variants like VPINN (variational PINN) reduce differential operator order via integration-by-parts; MPINN (multiphysics-informed NN) and PPINN (parareal PINN) target multiphysics coupling and divide time for long-time integration respectively.",
+        "guidance": "Consider method variants when standard PINN struggles: VPINN for higher-order operators, PPINN for long-time or parallel-in-time integration (coarse and fine solvers), MPINN for coupled subsurface transport problems."
+      },
+      {
+        "name": "Handling fractional operators: hybrid discretization + AD",
+        "description": "Automatic differentiation is not applicable to fractional operators; build PINNs using numerical schemes (e.g., L1 scheme) or hybrid approaches combining AD for integer-order operators and numerical discretization for fractional parts (fPINN).",
+        "guidance": "Design loss/residual computation to incorporate numerical approximations of fractional derivatives. Antipattern: blindly applying AD to fractional-order terms."
+      },
+      {
+        "name": "Uncertainty quantification via Bayesian PINNs",
+        "description": "B-PINN: the Bayesian neural network serves as a prior and HMC or variational inference can estimate posteriors to quantify aleatoric uncertainty from noisy data.",
+        "guidance": "Use B-PINNs for forward and inverse PDEs with noisy observations to provide uncertainty estimates and robust parameter inference. Example applications include contaminant source inference and stochastic PDEs."
+      },
+      {
+        "name": "Inverse problem difficulties and identifiability \u2014 training minima",
+        "description": "Inverse parameter identification can fail due to local minima in training; basic PINN models may not identify unknown parameters accurately without mitigation.",
+        "guidance": "Mitigate via dynamic weighting, multi-network parameterizations (separate network for interface/free boundary), pre-training, regularization, or alternate optimization schemes. Example: Stefan problem required dynamic weights to identify thermal diffusion values."
+      },
+      {
+        "name": "Regularization terms appropriate to physics (e.g., Total Variation)",
+        "description": "Adding physics-motivated regularizers (e.g., Total Variation for conductivity vectors) into the loss can improve identification and robustness.",
+        "guidance": "Incorporate prior knowledge as regularizers when estimating fields with expected structure (sparsity, smoothness, bounded variation). Example: TV regularization used for anisotropic conductivity in cardiac activation mapping."
+      },
+      {
+        "name": "Active learning and adaptive sampling for parametric spaces",
+        "description": "Active learning algorithms (ALA) combined with domain/mesh generators and traditional solvers can train PINNs over large parametric spaces efficiently.",
+        "guidance": "Use ALA to select informative training points across parameter domains, especially for surrogate or parametric PINNs. This reduces wasted samples and improves generalization over parameter variations."
+      },
+      {
+        "name": "Parameterization strategies: separate networks for components",
+        "description": "Use multiple networks to represent different components: e.g., two-phase Stefan problem uses one DNN for each phase and another DNN for the moving interface; fPINN uses separate networks for each fractional order.",
+        "guidance": "Partition the modeling task across networks when components have different functional properties (ranges, regularity) or when representing interfaces/free boundaries."
+      },
+      {
+        "name": "Training point counts and empirical setups as practical benchmarks",
+        "description": "Practical training setups (e.g., Raissi et al: N0=50 initial, Nb=50 boundary, Nc=20,000 collocation) serve as guidance for data budgets and expected performance.",
+        "guidance": "Use published configs as starting points, but adapt counts to problem complexity, dimensionality, and desired accuracy. Consider sensitivity studies over N0/Nb/Nc to balance data and computation."
+      },
+      {
+        "name": "Importance of point placement for discontinuous/hyperbolic problems",
+        "description": "For hyperbolic PDEs and discontinuous solutions (Euler, shocks), the position of training points is essential; clustering around discontinuities and using characteristic formulations can improve results.",
+        "guidance": "Use targeted sampling or separate localized networks around discontinuities; consider using characteristic forms of conservation laws when available. Example: Mao et al. capture discontinuous flows with few scattered points near discontinuities."
+      },
+      {
+        "name": "Comparative strengths vs classical numerical methods",
+        "description": "PINNs may outperform classical discretization-based methods in certain contexts (e.g., Eikonal anisotropic problems, some advection\u2013dispersion tasks), but also have failure modes (sharp gradients, stiffness).",
+        "guidance": "Benchmark PINNs against established solvers for your specific problem; identify regimes where PINNs excel (mesh-free, parametric, inverse problems) and where classical methods remain superior."
+      }
+    ]
+  }
+}

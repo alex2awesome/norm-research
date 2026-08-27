@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_242df82a9375.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17407,
+  "output_tokens": 3527,
+  "elapsed_s": 2064.5876939580776,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "research mathematicians and computational number theorists (Algorithmic Number Theory Symposium audience)",
+    "subtask_short": "computational study of Mertens conjecture",
+    "subtask_description": "A conference research article describing computational and theoretical methods used to (effectively) disprove the Mertens conjecture: use of analytic reductions (Ingham/Titchmarsh/Pintz), inhomogeneous Diophantine approximation, and lattice-basis-reduction (LLL) computations on many zeta zeros with high precision.",
+    "subtask_keywords": [
+      "mertens_conjecture",
+      "computational_number_theory",
+      "LLL",
+      "riemann_zeta",
+      "inhomogeneous_diophantine"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Simplicity of zeta zeros",
+        "description": "Several theorems invoked (e.g. Titchmarsh's Theorem 1) require that all zeros of the Riemann zeta-function are simple. The statements and consequent constructions depend on this simplicity assumption.",
+        "guidance": "This is an explicit hypothesis for applying the cited theorems; if zeros are not simple the stated conclusions (existence of sequences t_n with certain properties) do not follow. Verify or assume simplicity when using these results."
+      },
+      {
+        "name": "Use (or conditional use) of the Riemann Hypothesis",
+        "description": "Some formulae and manipulations are presented 'on the Riemann hypothesis' (the paper works in ranges where RH is assumed/known true), leading to simplifications (explicit integer relations and parity distinctions).",
+        "guidance": "Where the RH is used the derived identities or bounds rely on that hypothesis; explicitly note when RH is assumed and how expressions change under RH versus unconditionally."
+      },
+      {
+        "name": "Apply Ingham's 'trick' (weighted average with bounded support)",
+        "description": "Replace the infinite series representation by a weighted average whose weight has bounded support so that the infinite series becomes a finite sum (Ingham's method). Two concrete weighted cases are considered in the paper.",
+        "guidance": "Choose a weight function of bounded support to transform the infinite sum into a finite, controllable sum. The choice of weight affects the number of terms and the approximation error; state the weight and support explicitly when applying the trick."
+      },
+      {
+        "name": "Linear independence / Kronecker-type approximation requirement",
+        "description": "To drive the weighted sum arbitrarily large one would like the cos\u2011arguments (linear forms in the zero ordinates) to be close to integer multiples; Kronecker's theorem applies if the relevant zero-ordinates are linearly independent over the rationals.",
+        "guidance": "When invoking Kronecker-type density/approximation, state the linear independence hypothesis. If independence holds then for any prescribed integer multiples one can approximate simultaneously; absence of known dependencies is noted but not proven."
+      },
+      {
+        "name": "Formulate the inhomogeneous Diophantine approximation as an LLL problem",
+        "description": "Transform the problem of finding a real t so that many cos-arguments are near integers into finding short vectors in a lattice by building a specific integer-scaled input matrix for the LLL algorithm. The matrix contains a very large last coordinate so that a short lattice vector corresponds to small deviations of the cos-arguments from integers.",
+        "guidance": "Construct the lattice input carefully (see matrix (4) in the paper) with integer scaling parameter(s) to force the desired structure; explain correspondence between short lattice vectors and small inhomogeneous errors."
+      },
+      {
+        "name": "Use the LLL (Lenstra\u2013Lenstra\u2013Lov\u00e1sz) lattice-basis-reduction algorithm",
+        "description": "The actual computational attack used the LLL algorithm to find short vectors in the constructed lattice; the approach was the crucial computational tool that allowed solving the inhomogeneous approximation for many more terms than previous methods.",
+        "guidance": "Employ a robust implementation of LLL (e.g. qflll in PARI/GP). Be aware that LLL finds a reduced basis; interpret the reduced basis vectors according to the construction (see uniqueness/last-coordinate remarks)."
+      },
+      {
+        "name": "Compute many zeta zeros to high precision",
+        "description": "The computations required many zeta zeros computed to high precision (the paper reports e.g. the first 2000 zeros computed to about 100 decimal digits; local maxima/minima were computed to about 250 decimal digits).",
+        "guidance": "Precision must be chosen in accordance with the number of terms N and the scaling parameters used in the lattice: insufficient precision ruins the integer-scaling construction. Report and justify decimal-digit precision choices; increase precision for local refinement (e.g. finding local maxima)."
+      },
+      {
+        "name": "Select integer scaling parameters / build integer input matrix",
+        "description": "The input matrix for LLL uses an integer parameter (kappa) satisfying inequalities so that the (kappa)-th coordinate is very large compared with other entries; the matrix entries are rounded to integers (floor operations) to create the lattice basis.",
+        "guidance": "Choose kappa (or equivalent scaling) to ensure the last coordinate dominates and that integer rounding does not destroy the required relations. Provide the exact inequalities and rounding rules used in the matrix construction."
+      },
+      {
+        "name": "Interpret LLL output via the last-coordinate uniqueness property",
+        "description": "Because the last coordinate of the original basis is very large, the reduced basis should contain precisely one vector with a nonzero last coordinate equal to the chosen integer (without loss of generality taken to be kappa); that vector encodes the integer approximations and hence the small cos-argument deviations.",
+        "guidance": "After reduction identify the unique basis vector with the prescribed last-coordinate; extract the integer combination it represents and translate back into the inhomogeneous-approximation t (and the deviations). Verify the correspondence numerically."
+      },
+      {
+        "name": "Minimize Euclidean norm to make cos-arguments small",
+        "description": "The LLL algorithm attempts to minimize the Euclidean norm of lattice vectors; in the constructed lattice, minimizing the vector norm corresponds to making the sum of squared deviations (the second sum) small, hence making cos-arguments close to zero and the weighted sum large.",
+        "guidance": "Frame the objective explicitly in Euclidean-norm terms and monitor the norm of candidate vectors as a proxy for success; confirm that small norm indeed implies small argument deviations in the problem encoding."
+      },
+      {
+        "name": "Compute local maxima/minima (refinement) after LLL candidates",
+        "description": "For promising t-values found by the lattice method, the authors computed local maxima/minima of the transformed sum in a neighborhood to obtain refined 'champion' values of the weighted sum and, ultimately, of the unweighted function of interest.",
+        "guidance": "Use high-precision evaluation (reported ~250 decimal digits) to compute local maxima/minima near LLL output; refine t numerically (e.g. via Mathematica/PARI) and verify stability and reproducibility of maxima."
+      },
+      {
+        "name": "Use multiple software/tools and cross-check results",
+        "description": "The authors used qflll from PARI/GP for LLL, Mathematica for local maxima/minima, and also checked results with PARI/GP; cross-checks were performed to ensure correctness of high-precision computations.",
+        "guidance": "Always cross-validate numerically sensitive computations with independent implementations (e.g. both PARI/GP and Mathematica). Report software versions, functions used, and consistency checks."
+      },
+      {
+        "name": "Anticipate heavy computational resources and report timings",
+        "description": "The reported computations required substantial CPU time (about 600 CPU hours on an SGI Altix 3700 system) to run the search over combinations and to compute local maxima to high precision.",
+        "guidance": "Plan for large compute budgets for similar experiments; report wall/time/CPU usage and machine characteristics to allow reproducibility and resource estimation by others."
+      },
+      {
+        "name": "Precision/term-count trade-off and convergence behavior",
+        "description": "The paper notes that several thousands of terms generally suffice to bring the truncation error below 1% for moderate ranges, but for much larger numbers of terms the rate of convergence is poor and the approach may be infeasible; coef\ufb01cients do not form a monotone decreasing sequence and behave irregularly.",
+        "guidance": "When choosing N (number of terms) and precision, balance truncation error versus computational feasibility; empirically test convergence for your chosen N and do not assume monotone error decrease."
+      },
+      {
+        "name": "Apply effective-theorem criteria (Pintz) to deduce falsity of Mertens",
+        "description": "Pintz's effective result gives a numerical criterion: if a certain computed weighted/unweighted value exceeds a threshold (values computed by Odlyzko & Te Riele and later by the authors), then there exists some n for which the Mertens conjecture fails. The paper uses these numerical thresholds to assert existence of such n.",
+        "guidance": "Compute the quantities entering Pintz's theorem to sufficient precision and compare to the thresholds; when the numerical inequality is satisfied, conclude existence of an n violating Mertens as per the theorem, and state the conditional/unconditional assumptions used."
+      }
+    ]
+  }
+}

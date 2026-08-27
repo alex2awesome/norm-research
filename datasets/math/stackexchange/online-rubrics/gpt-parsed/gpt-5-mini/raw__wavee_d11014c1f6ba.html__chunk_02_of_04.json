@@ -1,0 +1,170 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_d11014c1f6ba.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_d11014c1f6ba.html",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39992,
+  "model": "gpt-5-mini",
+  "elapsed_s": 64.137304459,
+  "input_tokens": 12348,
+  "output_tokens": 4931,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "researchers, dataset builders, annotators, and image-generation engineers constructing visually grounded math-problem datasets (GSM8K-V style)",
+    "subtask_short": "math_word_problem_scene_generation",
+    "subtask_description": "Guidelines for extracting mathematical information from word problems and producing multi-scene, visually faithful images that encode only the information needed to solve the final question. Covers triple representation, scene allocation, rendering strategies, interference, image-generation rules, and human verification.",
+    "subtask_keywords": [
+      "math_word_problems",
+      "visualization",
+      "dataset_construction",
+      "image_generation",
+      "annotation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dialogue must not provide numeric values",
+        "description": "Dialogue involves characters communicating contextually relevant text in speech bubbles. The dialogue should never directly provide numbers.",
+        "guidance": "Examples: \u201cA customer says \u2018I\u2019d like a large pizza\u2019\u201d, \u201cA teacher says \u2018Let\u2019s start the exam\u2019\u201d. Use speech-only for semantic content when numbers must be withheld from dialogue."
+      },
+      {
+        "name": "Triple representation requirement",
+        "description": "Given a math word problem, identify only the mathematical information required to solve the final question, and represent it as triples: (object, math value, semantic).",
+        "guidance": "TRIPLE DEFINITIONS: object = the entity described (product, character, item, tool, vehicle). math value = the associated numeric attribute (integer, decimal, ratio, unit). semantic = the contextual role of this fact (placement, relation, or action). Output in the specified JSON format."
+      },
+      {
+        "name": "Concrete math information classification",
+        "description": "Concrete math information: Object is a countable, physical entity and math value is a pure integer (no units/decimals/percentages).",
+        "guidance": "Example: (\"apple\", 3, \"in the basket\"). Use this classification when the object is countable and the value is an integer."
+      },
+      {
+        "name": "Abstract math information classification",
+        "description": "Abstract math information: Object is abstract (time, distance, price, weight, score, duration) OR math value is not an integer (e.g., 1.5, 20%).",
+        "guidance": "Example: (\"distance\", \"12 miles\", \"between A and B\"). Treat such facts differently during rendering (textual/meta descriptions)."
+      },
+      {
+        "name": "Rendering strategy for small vs large vs abstract values",
+        "description": "How to render different numeric types: small countable values (<=10) shown visually; large integers (>10) decomposed; abstract values expressed textually or via meta-descriptions.",
+        "guidance": "Small countable values (<=10): Render directly as visual elements (visual_detail). Large integers (>10): Decompose into m = a [op] b with a <= 10; show 'a' visually, 'b' via speech bubble or text. Abstract values: express textually or with meta-descriptions (e.g., sign board for prices, calendar for dates, ratio graph)."
+      },
+      {
+        "name": "Scene allocation and grouping",
+        "description": "Group triples into scenes based on context so related facts appear in the same scene; the final scene contains only the target question (no numeric values).",
+        "guidance": "Group facts that are contextually related into the same scene. The final scene should use final_scene_description and omit numeric values so the question remains non-numeric visually."
+      },
+      {
+        "name": "Interference types (controlled interference)",
+        "description": "Optional insertion of distractors to increase difficulty: perception interference (visual but irrelevant objects) and semantic interference (semantically close distractors).",
+        "guidance": "Perception example: extra decorative items in a shop scene. Semantic example: show apples and pears when only apples are required. Use interference sparingly to preserve solvability."
+      },
+      {
+        "name": "JSON output schema requirement",
+        "description": "Structured JSON output must follow the specified schema with scenes array, each scene having scene_id, interfere, and scene_math_information entries containing raw_math_information, object, math_value, semantic, use_strategy.",
+        "guidance": "Allowed interfere values: \"none\" | \"perception\" | \"semantic\". Use_strategy options include Distance, Object Measurement, Weight, Graph Ratio, Cross Scene Clock, Dashboard, Day, Sign Board, Action, Visual Detail, Speech Bubble, Label. Follow exact field names and hierarchical structure."
+      },
+      {
+        "name": "Distance meta-description composition",
+        "description": "Distance meta description should render an object as a road sign board with two distinct real-world location icons and a double-headed horizontal arrow between them representing distance.",
+        "guidance": "Composition: Two location icons horizontally aligned on opposite sides; arrow spans between them with midpoint-centered label, bold and unobstructed; icons and label must be clear and centered."
+      },
+      {
+        "name": "Object measurement meta-description composition",
+        "description": "Object measurement meta description: render a single concrete object with a dimension line (bold double-headed arrow) showing the numeric label at the midpoint.",
+        "guidance": "Composition: Object centered with space around it; arrow aligns with relevant edges (length/width/height); arrow tips flush with boundaries; numeric label centered and legible."
+      },
+      {
+        "name": "Weight meta-description composition",
+        "description": "Weight meta description: place the concrete object on a digital scale whose screen shows the weight as the exact math value.",
+        "guidance": "Object centered on weighing surface; display at front and angled to viewer; numeric weight shown in black digits, clearly visible with no glare or obstruction; no overlaps or extra labels."
+      },
+      {
+        "name": "Graph ratio meta-description composition",
+        "description": "Graph ratio meta description: represent ratios as a pie chart divided into T equal radial segments where T = sum of counts, with a legend below mapping colors to semantics.",
+        "guidance": "Start division at top center and proceed clockwise. Legend: horizontal items with small colored square then text \u2018[semantic]\u2019. Place pie chart at semantic position; ensure all objects visible and not overlapping."
+      },
+      {
+        "name": "Cross-scene clock meta-description and time rule",
+        "description": "Cross Scene Clock: render wall clock with specified time; apply time rule: if > 12:00 subtract 12:00 (e.g., 15:00 -> 3:00).",
+        "guidance": "Clock appearance: light beige face, dark blue border, black tick marks, bold numerals 1\u201312, distinct black hour & minute hands. Place clock at indicated semantic position (e.g., upper right)."
+      },
+      {
+        "name": "Dashboard meta-description composition",
+        "description": "Dashboard (speedometer-style) render: perfect circle, no needle, with scale 0\u2013NUMA, increment NUMB, every NUMC labeled, ticks evenly spaced and unit label centered.",
+        "guidance": "Numbers in black sans-serif font near ticks; label: bold unit (e.g., MPH) centered at bottom; place dashboard at semantic position; maintain even spacing and legibility."
+      },
+      {
+        "name": "Day (calendar) meta-description composition",
+        "description": "Day meta description: render a wall-mounted monthly calendar with a colored header and a 7-column grid labeled S M T W T F S, showing days 1\u201331 as bold numerals in a consistent grid.",
+        "guidance": "Header example: month name in all caps centered in bold black sans-serif on bright colored header. Grid: 5 full rows of square date cells; ensure consistent column widths and row heights; calendar placed per semantic field content."
+      },
+      {
+        "name": "Sign board strategy composition",
+        "description": "Sign board: render a semantic board that converts the object into a corresponding icon followed by the math value; icon should be on a separate line above the math value.",
+        "guidance": "Example: price list where 'apple' icon appears above '$3'. Ensure textual label (e.g., 'price list') and that each price appears on its own line for clarity."
+      },
+      {
+        "name": "Action strategy (visual\u2013textual linkage)",
+        "description": "Action links visual-detail and textual-information detail by using clear visual cues that identify which visual elements correspond to which textual math facts.",
+        "guidance": "Approved link strategies: 1) Pointing Gesture, 2) Gaze Direction (eyes aligned to referenced object, directed and specific), 3) Torso Orientation toward target, 4) Holding or Touching the relevant object. Use holding/touching only when unambiguous."
+      },
+      {
+        "name": "Visual detail strategy for countable objects",
+        "description": "Render countable objects as '[math value] [object]' with distinct visual features placed evenly, fully visible, non-overlapping, and easily countable.",
+        "guidance": "Objects should exhibit slight variation in position/size/orientation to enhance perceptual clarity and be arranged so counting is trivial and occlusion is avoided."
+      },
+      {
+        "name": "Speech bubble strategy",
+        "description": "Speech bubble must come from a character and state the semantic content, with the character facing forward or slightly angled.",
+        "guidance": "Speech bubble connected to speaking character with a visible tail, must not overlap other objects, and must fully and exactly state the semantic field content."
+      },
+      {
+        "name": "Label strategy for numeric tags",
+        "description": "Labels must state the exact math value and be attached to the object's surface or be part of the object's inherent surface marking.",
+        "guidance": "The object labeled must match the 'object' field content; the label text must exactly match the 'math value' field content and be legible and unobstructed."
+      },
+      {
+        "name": "Strict image-generation sequencing and uniqueness rules",
+        "description": "Image generation must produce exactly one image per scene, in the exact given order from Scene 1 to Scene N, without skipping, repeating, or regenerating scenes.",
+        "guidance": "Do not generate multiple images for the same scene or skip any scene. Maintain one-to-one correspondence between scenes and images."
+      },
+      {
+        "name": "Image style and format requirements",
+        "description": "All images must follow a specified Pixar-style rendering: clear, sharp, naturally lit, with consistent character design and background tone; square format exactly 1024 x 1024 pixels.",
+        "guidance": "Forbidden: warm tints, soft color haze, textures, yellow glow. Every image must strictly match all numeric and descriptive details from its corresponding scene, and maintain consistency across scenes."
+      },
+      {
+        "name": "Explicit textual progress outputs in generation protocol",
+        "description": "Before and after each scene generation, the generator must emit explicit status strings announcing generation start, scene description, and completion messages.",
+        "guidance": "Example required strings: 'Now generating Scene 1 image (Pixar-style, at exactly 1024 x 1024 pixels (square, 1:1)).' After finishing: 'Scene x image finished, now generate Scene x+1 image (Pixar-style, at exactly 1024 x 1024 pixels (square, 1:1)).' After all scenes: 'All finished!'."
+      },
+      {
+        "name": "Controlled interference use-case and labeling",
+        "description": "When using controlled interference, label the scene's 'interfere' field appropriately as 'semantic' or 'perception' and ensure the interference preserves solvability.",
+        "guidance": "Semantic interference inserts semantically close distractors (e.g., eraser, pencil when only crayons matter). Perception interference adds visually salient but irrelevant items (e.g., a backpack). Scenes with interference should still allow solving without external assumptions."
+      },
+      {
+        "name": "Dual human cross-check verification (3C principles)",
+        "description": "Each problem is independently validated by two annotators who verify scene fidelity under the 3C principles: Consistency, Completeness, and Compliance.",
+        "guidance": "Annotators also solve each problem to confirm correctness of the derived answer. Items violating 3C are refined or re-rendered; severe violations trigger re-rendering with modified scene descriptions."
+      },
+      {
+        "name": "Annotator instructions and annotation labels",
+        "description": "Annotators are automatically assigned questions in random order, must review question/images, solve the problem (human solution), and choose one annotation label: Correct, Incorrect, or Skip.",
+        "guidance": "If choosing Incorrect or Skip, annotators must add a comment (reasons). The training emphasizes consistent use of the supplied error taxonomy. Annotator composition and a one-hour training session are part of the verification protocol."
+      },
+      {
+        "name": "3C principles defined for verification",
+        "description": "Verification is guided by: Consistency (preserve entities, quantities, constraints), Completeness (ensure all problem-relevant information is visually available), Compliance (meet safety and formatting standards, avoid sensitive content, ensure legible numerals).",
+        "guidance": "Items failing any of these principles should be refined; in severe cases, scenes are re-rendered with modified descriptions. Annotators must use the 3C principles when deciding labels."
+      },
+      {
+        "name": "Use of approved meta-description strategies for abstract values",
+        "description": "Abstract values must be rendered via the approved meta-description strategies (Distance, Object Measurement, Weight, Graph Ratio, Cross Scene Clock, Dashboard, Day, Sign Board) rather than raw count visuals.",
+        "guidance": "Select the strategy appropriate to the semantic type and follow that strategy's composition and appearance constraints to maintain clarity and solveability."
+      }
+    ]
+  }
+}

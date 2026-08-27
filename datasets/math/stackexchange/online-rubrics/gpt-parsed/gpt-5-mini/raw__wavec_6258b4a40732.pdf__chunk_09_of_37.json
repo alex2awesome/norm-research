@@ -1,0 +1,180 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 37,
+  "chunk_chars": 39919,
+  "model": "gpt-5-mini",
+  "elapsed_s": 116.29191204100061,
+  "input_tokens": 12912,
+  "output_tokens": 6555,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Users of plain TeX: mathematicians, document authors, and macro writers learning TeX's page-building and math-typing conventions",
+    "subtask_short": "plain TeX typesetting and page breaking",
+    "subtask_description": "Practical rules and conventions for writing plain TeX: how to use registers and boxes, allocate registers safely, control insertions/footnotes and page breaking, and how to type mathematics (math mode, symbols, superscripts/subscripts, roots, spacing).",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "math_typesetting",
+      "page_breaking",
+      "box_registers"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use symbolic names for registers with \\countdef (and similar)",
+        "description": "It's usually desirable to have symbolic names for registers. TeX provides \\countdef (and \\dimendef, \\skipdef, \\muskipdef) to make control sequences abbreviations for numbered registers.",
+        "guidance": "Example: '\\countdef\\chapno=28' makes \\chapno an abbreviation for \\count28; after this definition \\chapno behaves like an integer parameter. Use the corresponding \\dimendef, \\skipdef, and \\muskipdef for other numeric registers to keep code readable and robust."
+      },
+      {
+        "name": "Box-registers are consumptive: use \\copy if you need to reuse a box",
+        "description": "When you use a \\box register (\\boxN) its value is wiped out (becomes void).",
+        "guidance": "Example: '\\raise2pt\\box3' inserts the contents and makes \\box3 void. If you need to keep the box for later, use '\\copy3' instead of '\\box3' (e.g., '\\raise2pt\\copy3'). This is for efficiency to avoid copying large contents unintentionally."
+      },
+      {
+        "name": "Use \\unhbox/\\unvbox to remove one boxing level (and \\unhcopy/\\unvcopy to avoid voiding)",
+        "description": "\\unhbox and \\unvbox extract the inside of an hbox/vbox and remove one level of boxing; like \\box they annihilate the register. \\unhcopy and \\unvcopy are the copy equivalents.",
+        "guidance": "Example contrast: '\\setbox3=\\hbox{A} \\setbox3=\\hbox{\\box3 B}' gives \\hbox{\\hbox{A}B} whereas using \\unhbox yields \\hbox{AB}. Use \\unhcopy/\\unvcopy when you want to unbox but preserve the original register (they behave like \\copy vs \\box)."
+      },
+      {
+        "name": "When accreting large boxes, prefer unboxing (\\unhbox/\\unvbox) to nesting",
+        "description": "To build a large box by accretion (e.g., table of contents), it's best to use \\unhbox/\\unvbox so you don't create deep nested boxes and waste memory.",
+        "guidance": "If you instead nest boxes repeatedly you'll use more memory and might hit hardware/software nesting limits. Use unboxing to append contents into one box rather than creating boxes-inside-boxes."
+      },
+      {
+        "name": "Understand difference between 'void' register and empty box",
+        "description": "A box register is either 'void' or contains an hbox/vbox; there is a difference between a void register and a box that is empty (height,width,depth zero).",
+        "guidance": "If \\box3 is void you can say \\unhbox3, \\unvbox3, \\unhcopy3, or \\unvcopy3; if \\box3 equals \\hbox{} you can say only \\unhbox3 or \\unhcopy3. Also, a '\\global\\setbox3=\\hbox{A}' followed by use makes \\box3 globally void afterwards."
+      },
+      {
+        "name": "Debugging: use \\show, \\showbox, \\showthe, \\tracingonline, \\tracingall",
+        "description": "TeX offers commands to display register/box contents and tracing modes for debugging.",
+        "guidance": "Examples: '\\showthe\\count1', '\\showthe\\dimen2', '\\showthe\\skip3' display contents; '\\showbox4' displays a box (appears in log unless \\tracingonline=1). '\\tracingall' turns on every possible mode including \\tracingonline. Use these when unsure how registers/boxes change."
+      },
+      {
+        "name": "Avoid register conflicts: allocate registers with \\newcount, \\newdimen, \\newbox, \\newinsert, etc.",
+        "description": "Large macro packages must cooperate to avoid using the same numeric registers for different purposes; TeX provides allocation commands that assign unique register numbers and define symbolic names.",
+        "guidance": "Example: '\\newcount\\exno' allocates a count for exercise numbering and defines \\exno with \\countdef semantics. Macro writers should use \\new... operations so they don't need to know which numeric register was actually chosen."
+      },
+      {
+        "name": "Respect traditional scratch-register conventions",
+        "description": "Some registers are traditionally reserved for temporary/scratch work (e.g., \\count255, \\dimen255, \\skip255, \\muskip255, and \\dimen0..\\dimen9, \\skip0..\\skip9, \\muskip0..\\muskip9, \\box0..\\box9).",
+        "guidance": "Use these for short-term storage inside a group when you know they won't conflict. Avoid using \\count0..\\count9 and \\box255 except when you really know what you're doing, because some of these have special conventional uses."
+      },
+      {
+        "name": "Insertion classes: know linked registers (\\insert n \u2194 \\box n, \\count n, \\dimen n, \\skip n)",
+        "description": "Each insertion class \\insert n is tied to registers of the same number. For instance \\insert100 connects with \\count100, \\dimen100, \\skip100, and \\box100.",
+        "guidance": "Use \\newinsert\\footins to allocate a class for footnote insertions and then refer to \\count\\footins, \\dimen\\footins, etc. Appendices/macros use these symbolic names rather than numeric indices."
+      },
+      {
+        "name": "Set \\count n as magnification factor for page-breaking estimates",
+        "description": "\\count n is 1000\u00d7 the factor by which insertion natural height x affects the page goal; it is used for bookkeeping when estimating costs of page breaks.",
+        "guidance": "Example: plain TeX sets '\\count\\footins=1000' for a 1:1 effect. For double-column footnotes use 500. For marginal notes use 0. It's not actual magnification; it's a bookkeeping multiplier for insertion height's effect on page goals."
+      },
+      {
+        "name": "Provide extra space for first footnote via \\skip\\footins (e.g., \\bigskipamount)",
+        "description": "The first footnote on a page commonly requires extra separation from text; plain TeX sets '\\skip\\footins=\\bigskipamount' to model that assumption.",
+        "guidance": "This means the output routine is assumed to add a bigskip of extra space to any page that contains at least one insertion of class \\footins. Adjust \\skip\\footins if different separation is desired."
+      },
+      {
+        "name": "Limit insertion accumulation per page with \\dimen\\footins",
+        "description": "Sometimes you want to limit how much insertion material (e.g., footnotes) can accumulate on a page; plain TeX sets '\\dimen\\footins=8in' so \\box\\footins isn't supposed to exceed that per page.",
+        "guidance": "Set \\dimen\\footins appropriately (e.g., less than page height) to prevent a page consisting entirely of insertions like footnotes."
+      },
+      {
+        "name": "Understand TeX's insertion handling algorithm (Steps 1\u20134) to control splitting and floating",
+        "description": "When an \\insert n is moved toward the current page, TeX follows a multi-step algorithm involving adjusting \\pagegoal, considering previous insertions, testing fit without splitting, and computing least-cost splits if needed.",
+        "guidance": "Key points: (Step 1) decrease pagegoal by hf+w when no previous \\insert n; (Step 2) if previous \\insert n on page has been split, add \\floatingpenalty and skip Steps 3\u20134; (Step 3) test if current insertion fits without splitting using \\dimen n and t+d+x f - z \u2264 g; (Step 4) compute largest v that fits and find least-cost split (vsplit-like), adjust g and q accordingly. Use this knowledge to tune penalties, counts, and splitting behavior."
+      },
+      {
+        "name": "Use penalties inside insertions to influence splits (e.g., -10000 to force breaks or \\floatingpenalty)",
+        "description": "Penalties inside insertion vertical lists affect the split-choice in Step 4 and overall page-breaking cost; extremely negative penalties make splits very attractive.",
+        "guidance": "Example: a '\\penalty-10000' near a desired split point will strongly encourage splitting there. \\floatingpenalty can be used to discourage or allow splits when previous insertion parts exist (Appendix B uses \\floatingpenalty=20000 for footnotes to discourage premature splits, and 0 for floating topinserts)."
+      },
+      {
+        "name": "Use \\vsplit to perform splitting consistent with page-breaking rules",
+        "description": "'\\vsplit<number> to <dimen>' produces a vbox obtained by splitting off specified material from a box register, using splitting algorithm like page-breaking and governed by \\splitmaxdepth and \\splittopskip.",
+        "guidance": "Example: '\\setbox200=\\vsplit100 to 50pt' sets \\box200 to a 50pt vbox containing the least-cost break up to that height. If the optimum breakpoint is at the end, the source box becomes void. Be aware of \\splitmaxdepth used instead of \\maxdepth."
+      },
+      {
+        "name": "Do not change \\box n, \\count n, \\dimen n, or \\skip n while insertions are being contributed",
+        "description": "TeX's insertion algorithm assumes these quantities are static during the contribution of insertions to the current page; changing them can break the algorithm's assumptions.",
+        "guidance": "You may change \\floatingpenalty, \\splittopskip, and \\splitmaxdepth; TeX uses the values current at the closing right brace of '\\insert n{...}' when splitting or floating. Avoid altering the core insertion-linked registers mid-contribution."
+      },
+      {
+        "name": "Footnote placement: insertion in paragraph ensures footnote follows its reference's page",
+        "description": "The \\footnote macro puts an \\insert into the horizontal list, and after paragraph breaking the insertion moves out into the vertical list just after the line that contained it; there is no legal breakpoint between the line and insertion.",
+        "guidance": "Therefore TeX will place the insertion onto the page that contains the line holding the insertion, so footnotes generally appear on the same page as their references."
+      },
+      {
+        "name": "Output routine responsibilities and behavior at chosen breakpoint",
+        "description": "When the best page break is chosen, everything after that breakpoint is removed and handled: output penalty recorded in \\outputpenalty, unsplit insertions appended to \\box n, a split insertion is vsplit to computed size, remainder held over, and a vbox of height g is formed as \\box255; the user's \\output routine assembles final pages from \\box255 and insertion boxes.",
+        "guidance": "Use \\holdinginserts>0 to keep insertions in place for reconsideration. Output routines should usually unbox insertion boxes so glue resets correctly; held-over insertions are reinserted into recent contributions after output. Use struts in insertion boxes (e.g., footnotes) so interline glue is consistent."
+      },
+      {
+        "name": "Use struts for consistent interline spacing in insertion boxes",
+        "description": "When unsplit insertions are appended to \\box n they are concatenated with no interline glue between them, so struts should be used to ensure consistent baseline spacing.",
+        "guidance": "Appendix B's \\vfootnote macro uses struts to ensure split and unsplit footnotes have the same spacing. If you don't insert struts, typographic spacing may be inconsistent."
+      },
+      {
+        "name": "Always enclose math in math mode (use matching $...$ or display math delimiters)",
+        "description": "All mathematical formulas must be enclosed in math mode; in plain TeX the $ sign is used as the math bracket.",
+        "guidance": "Example: type '$x$' for inline math or '$$...$$' for display. Forgetting or misplacing $ will confuse TeX and produce errors. Math-mode changes how characters are interpreted (italics, roman digits, spacing)."
+      },
+      {
+        "name": "Letters typeset italic in math mode; digits and punctuation remain roman",
+        "description": "In math mode letters denote variables and are set in math italic; digits and punctuation are typeset in roman.",
+        "guidance": "Example: '$x$' outputs an italic x; '$2$' outputs a roman 2. Distinguish between letter O and digit 0 in formulas (use x_0 not x_o)."
+      },
+      {
+        "name": "TeX handles math spacing automatically; user spaces between $...$ are ignored",
+        "description": "TeX applies its own spacing rules in math mode and ignores blank spaces you put between $'s for spacing; you don't need to manually add spaces around operators.",
+        "guidance": "You can type '$ (x + y) / (x - y) $' or '$ (x+y)/(x-y) $' and TeX will apply appropriate spacing (extra space around + and - but not /). Use macros/commands to override spacing only when necessary (Chapter 18)."
+      },
+      {
+        "name": "Use control sequences for Greek letters and special math symbols (only in math mode)",
+        "description": "Greek letters and many special symbols are produced by control sequences available only in math mode (Appendix F lists them).",
+        "guidance": "Examples: '\\alpha, \\beta, \\gamma, \\delta' (lowercase); '\\Gamma' (uppercase). Be careful distinguishing visually similar symbols (e.g., \\nu vs v, \\kappa vs k, \\phi vs \\varphi, \\epsilon vs \\varepsilon)."
+      },
+      {
+        "name": "Use ^ and _ for superscripts/subscripts; they apply to the next token only, use braces for multi-token scripts",
+        "description": "The ^ and _ control sequences create superscripts and subscripts but they apply only to the next single character/token. Use braces to group multiple tokens into a single subformula.",
+        "guidance": "Examples: '$x^2$', '$x^{2y}$', '$y_{x_2}$'. Illegal to type 'x^y^z' or 'x_y_z' \u2014 you must write 'x^{y^z}' or 'x_{y_z}'. Braces also serve for grouping/subformula creation."
+      },
+      {
+        "name": "Use explicit empty subformula braces when a script follows nothing (e.g., {}_2F_3)",
+        "description": "A subscript/superscript that follows nothing is interpreted as applying to an empty subformula; it's clearer to make the empty subformula explicit.",
+        "guidance": "Examples: to get '2F3' as in special notations type '{}_2F_3' or '{_2}F_3' or '{_2F_3}'. This avoids ambiguous or surprising results."
+      },
+      {
+        "name": "Simultaneous superscripts and subscripts: order flexible, positioning rules apply",
+        "description": "You can have both subscript and superscript on a character; they can be specified in any order. Superscripts/subscripts on subformulas apply to the whole subformula.",
+        "guidance": "Examples: '$x^2_3$', '$x_3^2$', '$x^{31415}_{92}+\\pi$'. Note subscripts may be lightly tucked in for certain letters; use an empty subformula like '$P{}_2^2$' to align left edges if needed."
+      },
+      {
+        "name": "Use \\prime (or ' shorthand) for prime notation in superscripts",
+        "description": "\\prime represents the prime symbol used mostly in superscripts; plain TeX provides ' shorthand as an abbreviation for ^\\prime and '' for ^{\\prime\\prime}.",
+        "guidance": "Examples: '$y_1^\\prime$', '$y_2^{\\prime\\prime}$' or simpler '$y_1\\''', etc. \\prime is treated as a large symbol that belongs in superscripts."
+      },
+      {
+        "name": "Use \\sqrt, \\root, \\underline, \\overline appropriately; TeX sizes/positions bars/roots to match subformula",
+        "description": "\\sqrt and \\underline/\\overline place lines/roots above/below subformulas and automatically adjust their size/position so they don't collide with content.",
+        "guidance": "Examples: '\\sqrt{x+2}', '\\overline{x+y}', '\\root 3 \\of 2'. For uniform vertical positions across multiple roots use \\mathstrut inside the radical argument so their heights/depths match. For more precise control use \\smash and \\phantom (Ch. 18)."
+      },
+      {
+        "name": "Use \\mathstrut to normalize heights/depths for aligned roots and bars",
+        "description": "\\mathstrut is an invisible zero-width box whose height and depth equal those of a parenthesis; inserting it into subformulae ensures consistent height/depth so bars/roots align uniformly.",
+        "guidance": "Example: '\\sqrt{\\mathstrut a}+\\sqrt{\\mathstrut d}+\\sqrt{\\mathstrut y}' puts the three square roots in the same vertical position. Use \\mathstrut when visual uniformity across varying contents is desired."
+      },
+      {
+        "name": "Know classification of math characters: ordinary symbols, binary operations, relations",
+        "description": "Plain TeX classifies characters: letters and certain characters are 'ordinary symbols' (no extra space), +,-,* are 'binary operations' (extra space inserted when between operands), and =,<,>,: are 'relations' (different spacing).",
+        "guidance": "Examples: use '/ ' as an ordinary symbol (TeX does not treat '/' as binary operation to avoid unwanted spaces). Binary operations behave as ordinary symbols if not between two quantities (e.g., in superscripts, '$x=+1$' shows no extra spacing around +). For many more symbols use Appendix F control sequences (e.g., \\times, \\cup, \\vee, \\wedge)."
+      }
+    ]
+  }
+}

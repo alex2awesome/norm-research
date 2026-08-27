@@ -1,0 +1,410 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_fa24d0a4f61d.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15406,
+  "output_tokens": 7959,
+  "elapsed_s": 1320.4098551250063,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and engineers building creative-plot-generation systems / ML researchers working on preference alignment for creative text",
+    "subtask_short": "premise-conditioned plot generation",
+    "subtask_description": "Generate coherent, premise-conditioned narrative plots (setup \u2192 development \u2192 climax \u2192 resolution) using resource-efficient Small Language Models (SLMs) aligned via structured preference signals and evaluative criteria. The page describes a three-component framework (aspect rating reward model, DPO-aligned MoE plot generator, and independent agentic evaluator) and the metrics used to construct, train, and validate it.",
+    "subtask_keywords": [
+      "creative_writing",
+      "plot_generation",
+      "premise_conditioned",
+      "slm",
+      "preference_alignment",
+      "narrative_quality"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Narrative Quality Dimensions (NQDs) \u2014 overview",
+        "description": "A compact set of five narrative quality dimensions used as the core evaluative axes: character development, tone consistency, pacing, narrative coherence, and emotional turning points.",
+        "guidance": "These five aspects were chosen to span structural (coherence), temporal (pacing), character-centric (development), stylistic (tone consistency), and affective (emotional turning points) components of plot quality; they are the primary signals used for reward modeling, DPO preference construction, and agentic evaluation."
+      },
+      {
+        "name": "Narrative Coherence (NQD)",
+        "description": "Measures global logical consistency and causal connectivity across events.",
+        "guidance": "Evaluate for logical progression, cause\u2013effect consistency, absence of plot holes or contradictions, integration of subplots, and alignment of character motivations with later events. Used as an aspect score (0\u201310) in the Aspect Rating Reward Model and as a multi-criterion agentic evaluation (10 subcriteria summing to 10)."
+      },
+      {
+        "name": "Character Development (NQD)",
+        "description": "Evaluates meaningful internal transformation of characters.",
+        "guidance": "Assess presence of compelling character arcs, clear motivations, psychological depth, relational dynamics, and satisfying journeys. Scored 0\u201310 by the reward model and via the agentic evaluator's detailed criteria."
+      },
+      {
+        "name": "Pacing (NQD)",
+        "description": "Assesses distribution of narrative progression and tension over time.",
+        "guidance": "Check rhythm, scene progression, timing of plot events, transitions, and whether pacing supports tension and emotional beats. Scored 0\u201310 and inspected via the agentic evaluator's pacing subcriteria."
+      },
+      {
+        "name": "Tone Consistency (NQD)",
+        "description": "Captures alignment between stylistic register and the given premise and internal tonal unity.",
+        "guidance": "Detect abrupt or incongruent mood/genre/atmosphere shifts that disrupt immersion; assess dialogue style and genre\u2013tone alignment. Scored 0\u201310 and elaborated through agentic criteria."
+      },
+      {
+        "name": "Emotional Turning Points (NQD)",
+        "description": "Identifies impactful affective transitions and the plausibility of emotional arcs.",
+        "guidance": "Evaluate the presence, strength, and plausibility of pivotal emotional moments and whether they produce meaningful internal change; scored 0\u201310 and decomposed in agentic evaluation."
+      },
+      {
+        "name": "Positive\u2013Negative Prompting (aspect rating method)",
+        "description": "For each aspect, elicit two ratings from LLMs: a positive-only rating r+ (consider only positives) and a negative-only rating r\u2212 (consider only negatives).",
+        "guidance": "Mitigates LLM positivity bias, encourages critical assessment, and yields stronger correlation with external quality indicators. Use an ensemble of LLMs to avoid single-model bias; r+ should 'score generously' and r\u2212 should emphasize issues. Final aspect rating ra(p) is aggregated across models as sum_m (r+_a,m(p) \u2212 r\u2212_a,m(p))."
+      },
+      {
+        "name": "Aspect rating aggregation formula",
+        "description": "Aggregate per-model positive and negative scores to a single aspect rating: ra(p) = sum_m (r+_{a,m}(p) \u2212 r\u2212_{a,m}(p)).",
+        "guidance": "Use an ensemble (the paper uses five models) to mitigate individual-model bias. The aggregated score is continuous and used as the reward signal for preference creation and reward-model supervision."
+      },
+      {
+        "name": "Aspect Rating Reward Model \u2014 target output",
+        "description": "A model fine-tuned to predict continuous-valued aspect-level ratings (typically on a 0\u201310 scale) for each NQD.",
+        "guidance": "Trained via supervised fine-tuning on synthetic aspect-rated data constructed via positive\u2013negative prompting; used to score generated plots and to build high-confidence preference pairs for DPO."
+      },
+      {
+        "name": "Aspect-rating dataset construction (data curation rules)",
+        "description": "Construct dataset by sampling movies (paper: 5,000 from MovieLens), scraping Wikipedia plots (filter: plot length \u2264 4000 words), generating synthetic aspect ratings via LLM ensemble positive\u2013negative prompting, and aggregating them into continuous aspect scores.",
+        "guidance": "IMDb ratings are only used for stratification and not as direct aspect labels. The length filter (\u22644000 words) is applied for token/output/computation constraints."
+      },
+      {
+        "name": "Reward-model training objective (SFT losses)",
+        "description": "Supervised fine-tuning minimizes a weighted sum of Cross-Entropy (CE) token loss and a Huber regression loss to predict continuous aspect ratings.",
+        "guidance": "CE preserves language modeling capability; Huber loss (\u03b4 = 1 in experiments) provides robust learning of continuous-valued rewards (behaves like MSE near zero residuals and MAE for large residuals)."
+      },
+      {
+        "name": "Agentic Evaluation \u2014 independence principle",
+        "description": "Independent post-hoc evaluation module that operates separately from the reward model and training pipeline.",
+        "guidance": "Designed to emulate human critical judgment and avoid circular validation / reward hacking; performs structured, multi-criteria reasoning across NQDs using explicit instructions and interpretable failure modes."
+      },
+      {
+        "name": "Agentic evaluation aggregation rule (per-NQD scoring)",
+        "description": "For each NQD, decompose evaluation into 10 explicit criteria; each criterion is scored 0\u20131 (increments of 0.1 allowed) and scores are summed to produce a total out of 10.",
+        "guidance": "Enables fine-grained, interpretable assessment; agentic prompts provide the per-criterion checklist and output format. Outputs include per-criterion scores and a TOTAL: X.X/10."
+      },
+      {
+        "name": "Agentic evaluator output format requirement",
+        "description": "Agentic evaluation returns per-criterion numeric scores (e.g., 'Plot Progression: X.X') and a summed TOTAL: X.X/10.",
+        "guidance": "Prompts specify strict formatting to ensure consistent, machine-parseable evaluation records used in experiments and analysis."
+      },
+      {
+        "name": "DPO preference pair curation thresholds",
+        "description": "Select high-confidence preference samples where any frontier model achieves the highest reward score, the score \u2265 8, and the model outperforms the next-best model by margin \u2265 0.5.",
+        "guidance": "Applied across generated candidate plots per premise; results in a modest but high-confidence dataset (paper reports 160 samples) used for Direct Preference Optimization fine-tuning."
+      },
+      {
+        "name": "SLM definition (active parameter criterion)",
+        "description": "Small Language Models (SLMs) are defined as models with \u2264 3 billion active parameters per token.",
+        "guidance": "Active parameter count (per-token) is used rather than total parameter count; MoE architectures with large total parameters can be SLMs if active-per-token \u2264 3B (example: Qwen-3-30B-A3B: 30B total, 3B active)."
+      },
+      {
+        "name": "Mixture-of-Experts (MoE) as efficiency/quality design choice",
+        "description": "Use MoE backbone to achieve higher total capacity while keeping active parameters per token within SLM bounds.",
+        "guidance": "MoE enables expert specialization and sparse computation, important for modeling diverse narrative patterns while meeting SLM compute constraints; used as the PlotTwist generator backbone."
+      },
+      {
+        "name": "DPO (Direct Preference Optimization) alignment objective",
+        "description": "Optimize the plot generator using DPO on curated high-confidence preference pairs rather than on-policy RL or explicit reward-model optimization.",
+        "guidance": "DPO reframes alignment as a classification over preference pairs and is chosen for stability and sample efficiency in resource-constrained settings."
+      },
+      {
+        "name": "Quality-adaptive generation behavior (desired property)",
+        "description": "Generation should scale intervention by input quality: light refinements for strong narratives, substantive restructuring for weak narratives, and moderate improvements for mid-quality inputs.",
+        "guidance": "Used as an empirical desideratum and validated by stratified experiments: PlotTwist should not uniformly inflate scores but apply intervention proportional to baseline quality."
+      },
+      {
+        "name": "Use of external validation corpora for evaluator calibration",
+        "description": "Validate reward and agentic evaluators by checking higher scores for a held-out high-quality corpus (101 Greatest Screenplays) than for a low-quality corpus (Razzies).",
+        "guidance": "Balanced subsampling protocol is used to account for class imbalance; statistical tests (CIs, Welch\u2019s t-tests, effect sizes) assess separation across NQDs."
+      },
+      {
+        "name": "Positive prompt strict output rules (r+)",
+        "description": "When eliciting positive-focused ratings, instruct the LLM to output a single JSON object with exactly one integer field (0\u201310), include only the aspect field, and 'score generously'.",
+        "guidance": "Strict formatting ensures consistent automated parsing; positive prompts bias toward noting strengths in the plot for that aspect."
+      },
+      {
+        "name": "Negative prompt strict output rules (r\u2212)",
+        "description": "When eliciting negative-focused ratings, instruct the LLM to output a single JSON object with exactly one integer field (0\u201310), include only the aspect field, and interpret 0 = no issues, 10 = severe issues.",
+        "guidance": "Negative prompts bias toward identifying failure modes and issues for that aspect; combined with r+ this enables the aggregate ra(p) calculation."
+      },
+      {
+        "name": "Aspect score numeric scale",
+        "description": "Aspect ratings and agentic evaluation totals use a 0\u201310 numeric scale (continuous for reward model; summed per-criterion for agentic evaluator).",
+        "guidance": "Reward model predicts continuous values; agentic evaluator sums 10 criteria (each 0\u20131) to produce total out of 10. Many experiments report mean \u00b1 std on this 0\u201310 scale."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Plot Progression",
+        "description": "Plot Progression: logical beginning\u2013middle\u2013end flow; events arise naturally from prior actions.",
+        "guidance": "Scored 0\u20131 as part of the 10-criterion coherence rubric; contributes to the TOTAL/10."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Causal Connectivity",
+        "description": "Causal Connectivity: explicit cause\u2013effect links between events across the plot.",
+        "guidance": "Score 0\u20131; detect missing causal links or unexplained jumps."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Plot Integrity",
+        "description": "Plot Integrity: absence of plot holes or contradictions; internal consistency of world-building.",
+        "guidance": "Score 0\u20131; penalize contradictions and unresolved impossibilities."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Conflict Focus",
+        "description": "Conflict Focus: a sustained central conflict that drives the story.",
+        "guidance": "Score 0\u20131; evaluate whether the plot maintains a central dramatic question or dissipates into unrelated events."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Protagonist Consistency",
+        "description": "Protagonist Consistency: protagonist's actions and decisions are authentic and consistent with characterization.",
+        "guidance": "Score 0\u20131; penalize unexplained behavior shifts that break causal/psychological plausibility."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Supporting Character Function",
+        "description": "Supporting Character Function: supporting characters serve coherent narrative roles and contribute to main arcs.",
+        "guidance": "Score 0\u20131; penalize superfluous or functionless characters."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Resolution",
+        "description": "Resolution: satisfying and coherent wrapping up of central conflict and narrative threads.",
+        "guidance": "Score 0\u20131; assess whether resolution follows logically and addresses major stakes."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Pacing Appropriateness",
+        "description": "Pacing Appropriateness (within coherence rubric): pacing supports narrative flow and causal clarity.",
+        "guidance": "Score 0\u20131; identify rushed expositions or long digressions that harm coherence."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Thematic Integration",
+        "description": "Thematic Integration: themes are consistently woven into events and character arcs.",
+        "guidance": "Score 0\u20131; penalize disconnected thematic signals or unresolved motifs."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Narrative Coherence subcriteria: Tonal Consistency (coherence rubric)",
+        "description": "Tonal Consistency (as part of coherence scoring): tone supports logical immersion and doesn't undercut causal believability.",
+        "guidance": "Score 0\u20131; abrupt tone shifts that break coherence are penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Conflict Resolution",
+        "description": "Conflict Resolution: the turning point addresses or reframes the central conflict; emotion aligns with the established arc.",
+        "guidance": "Score 0\u20131 as part of the 10-criterion emotional-turning-point rubric."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Character Believability",
+        "description": "Character Believability: emotional reactions and stakes are credible given prior characterization.",
+        "guidance": "Score 0\u20131; check that emotional beats follow from established motivations."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Character Transformation",
+        "description": "Character Transformation: the turning point produces meaningful internal change.",
+        "guidance": "Score 0\u20131; assess whether the emotional pivot yields real arc progression."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Emotional Satisfaction",
+        "description": "Emotional Satisfaction: the audience receives an emotionally resonant payoff.",
+        "guidance": "Score 0\u20131; consider catharsis, surprise-with-justification, and emotional completeness."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Narrative Causality",
+        "description": "Narrative Causality: the turning point arises logically from prior events and motivations.",
+        "guidance": "Score 0\u20131; penalize contrived or deus-ex-machina emotional pivots."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Thematic Crystallization",
+        "description": "Thematic Crystallization: the turning point sharpens or clarifies the story's thematic meaning.",
+        "guidance": "Score 0\u20131; evaluate whether emotion reinforces the theme."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Relationship Impact",
+        "description": "Relationship Impact: turning point affects key interpersonal relationships plausibly.",
+        "guidance": "Score 0\u20131; consider whether relationships change in believable ways."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Cinematic Execution",
+        "description": "Cinematic Execution: the turning point could be effectively staged/visualized; attention to executional detail.",
+        "guidance": "Score 0\u20131; evaluates whether the turn translates into compelling scenes."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Structural Necessity",
+        "description": "Structural Necessity: the turning point is necessary for plot progression, not gratuitous.",
+        "guidance": "Score 0\u20131; penalize turns that don't affect story outcome."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Emotional Turning Point subcriteria: Audience Alignment",
+        "description": "Audience Alignment: the emotional turn matches likely audience expectations and reactions (given premise/genre).",
+        "guidance": "Score 0\u20131; consider genre and premise in judging appropriateness."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Motivation Clarity",
+        "description": "Motivation Clarity: characters have clear goals and desires.",
+        "guidance": "Score 0\u20131; unclear or shifting motivations reduce score."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Behavioral Consistency",
+        "description": "Behavioral Consistency: actions align with established personality and motivations.",
+        "guidance": "Score 0\u20131; penalize inexplicable behavior."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Character Arc",
+        "description": "Character Arc: presence of believable, observable transformation over the story.",
+        "guidance": "Score 0\u20131; assess magnitude and believability of change."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Psychological Depth",
+        "description": "Psychological Depth: characters exhibit complexity, internal conflict, and layered motivations.",
+        "guidance": "Score 0\u20131; shallow or one-note characters score lower."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Backstory Integration",
+        "description": "Backstory Integration: backstory supports motivations and is integrated coherently.",
+        "guidance": "Score 0\u20131; penalize irrelevant or contradictory backstory."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Audience Connection",
+        "description": "Audience Connection: protagonist elicits empathy or interest appropriate to genre.",
+        "guidance": "Score 0\u20131; consider whether readers/viewers care about the character's fate."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Character Distinctiveness",
+        "description": "Character Distinctiveness: characters have distinct voices and roles.",
+        "guidance": "Score 0\u20131; avoid generic or interchangeable characters."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Relationship Dynamics",
+        "description": "Relationship Dynamics: relationships evolve credibly and influence arcs.",
+        "guidance": "Score 0\u20131; evaluate mutual influence and narrative function."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Plot Agency",
+        "description": "Plot Agency: characters are agents who make consequential choices rather than passive objects.",
+        "guidance": "Score 0\u20131; penalize passive protagonists who merely react."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Character Development subcriteria: Thematic Alignment (character)",
+        "description": "Thematic Alignment: character development reinforces the story's themes.",
+        "guidance": "Score 0\u20131; check for coherence between character arcs and thematic statements."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Premise Establishment Speed",
+        "description": "Premise Establishment Speed: how quickly and effectively the premise and stakes are introduced.",
+        "guidance": "Score 0\u20131; initial slowness or abrupt exposition is penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Structural Foundation",
+        "description": "Structural Foundation: presence of a sound story skeleton enabling even progression.",
+        "guidance": "Score 0\u20131; weak structural setup reduces pacing quality."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Pacing Consistency",
+        "description": "Pacing Consistency: absence of long stagnant segments or abrupt rushes.",
+        "guidance": "Score 0\u20131; look for uneven momentum."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Event Frequency",
+        "description": "Event Frequency: appropriate density of events to sustain engagement.",
+        "guidance": "Score 0\u20131; too many trivial events or too few significant events are penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Scene Purposefulness",
+        "description": "Scene Purposefulness: each scene advances plot/character or builds theme; no filler.",
+        "guidance": "Score 0\u20131; identify filler scenes that stagnate pacing."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Tension Management",
+        "description": "Tension Management: build and release tension effectively across the arc.",
+        "guidance": "Score 0\u20131; evaluate rises and lulls in dramatic tension."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Transition Quality",
+        "description": "Transition Quality: smooth and logical scene-to-scene transitions supporting momentum.",
+        "guidance": "Score 0\u20131; abrupt or jarring transitions reduce score."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Emotional Beat Timing",
+        "description": "Emotional Beat Timing: placement of emotional moments to maximize impact.",
+        "guidance": "Score 0\u20131; misplaced emotional beats weaken pacing."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Climax Timing",
+        "description": "Climax Timing: climax arrives at a narratively justified point and is properly built up.",
+        "guidance": "Score 0\u20131; premature or delayed climaxes are penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Pacing subcriteria: Genre\u2013Tone Alignment (pacing)",
+        "description": "Genre\u2013Tone Alignment: pacing is appropriate to the genre and tonal promises of the premise.",
+        "guidance": "Score 0\u20131; mismatch between genre expectations and pacing reduces score."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Initial Atmosphere Establishment",
+        "description": "Initial Atmosphere Establishment: clear initial tonal setting that orients the audience.",
+        "guidance": "Score 0\u20131; weak or unclear openings fail to establish tone."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Scene-to-Scene Consistency",
+        "description": "Scene-to-Scene Consistency: tonal continuity across scenes, avoiding jarring shifts.",
+        "guidance": "Score 0\u20131; inconsistent register across scenes is penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Tonal Relief Integration",
+        "description": "Tonal Relief Integration: moments of tonal relief (comic or quiet) are earned and integrated.",
+        "guidance": "Score 0\u20131; relief that undercuts stakes or feels unearned lowers score."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Earned Tone Shifts",
+        "description": "Earned Tone Shifts: any major tonal shifts are justified by plot/character developments.",
+        "guidance": "Score 0\u20131; abrupt unearned shifts are penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Dialogue Style Consistency",
+        "description": "Dialogue Style Consistency: voice and register of dialogue remain consistent with tone and character.",
+        "guidance": "Score 0\u20131; mismatched dialogue voice reduces tone score."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Visual Reinforcement",
+        "description": "Visual Reinforcement: sensory/visual descriptions consistently support the intended tone.",
+        "guidance": "Score 0\u20131; conflicting visual imagery undermines tone."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Stakes Alignment",
+        "description": "Stakes Alignment: stakes set and maintained in tone (serious stakes in serious tone, etc.).",
+        "guidance": "Score 0\u20131; tonal undercutting of stakes penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Comedy/Drama Balance",
+        "description": "Comedy/Drama Balance: comedic elements (if present) are balanced with dramatic stakes as appropriate.",
+        "guidance": "Score 0\u20131; inappropriate balance reduces immersion."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Ending Consistency",
+        "description": "Ending Consistency: the ending's tone aligns with the established tonal arc.",
+        "guidance": "Score 0\u20131; tonal whiplash at the end is penalized."
+      },
+      {
+        "name": "Agentic evaluation \u2014 Tone Consistency subcriteria: Motif and Symbol Unity",
+        "description": "Motif and Symbol Unity: recurring motifs/symbols support and reinforce the tone.",
+        "guidance": "Score 0\u20131; motif mismatch or absence weakens tonal unity."
+      },
+      {
+        "name": "DPO sample-size and selection rationale",
+        "description": "Use a small set of high-quality preference pairs (paper: 160) for DPO to ensure reliable preference signals.",
+        "guidance": "High-confidence curation (thresholds: reward \u2265 8 and margin \u2265 0.5) trades dataset size for signal quality; prior work shows DPO can leverage small numbers of high-quality pairs effectively."
+      },
+      {
+        "name": "Evaluation validation protocol (statistical reporting)",
+        "description": "Report mean \u00b1 standard deviation on 0\u201310 scales, bootstrap confidence intervals, Cohen's d effect sizes, directional consistency across sampling runs, and Welch's t-tests for statistical significance.",
+        "guidance": "Use balanced subsampling when comparing imbalanced corpora, and report multiple statistical measures to demonstrate robust separation across NQDs."
+      },
+      {
+        "name": "Plot-length filter for training/evaluation corpora",
+        "description": "Only include plots with length \u2264 4000 words when scraping Wikipedia plots for dataset construction.",
+        "guidance": "Applied to meet token output and computation requirements for downstream processing and LLM prompting."
+      },
+      {
+        "name": "Strict prompt-output format rules for automated pipelines",
+        "description": "When eliciting aspect scores from LLMs or agentic evaluators, strictly constrain outputs (JSON, only the requested field(s), numeric ranges) to ensure automated parsing and reliable supervision.",
+        "guidance": "Prompts in appendices specify exact output shapes (e.g., single JSON integer field) and scoring conventions; violating these formats invalidates synthetic labels and can bias supervised training."
+      }
+    ]
+  }
+}

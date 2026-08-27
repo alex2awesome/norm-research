@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 47,
+  "n_chunks": 92,
+  "chunk_chars": 39636,
+  "model": "gpt-5-mini",
+  "elapsed_s": 272.10463679099485,
+  "input_tokens": 12978,
+  "output_tokens": 4701,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and computational group theorists simplifying/transforming group presentations with Tietze procedures",
+    "subtask_short": "simplifying_group_presentations",
+    "subtask_description": "Guidance and option/algorithmic criteria for applying GAP's Tietze transformations, substitutions, decoding tree, and related functions to simplify or manipulate finitely presented groups. Focuses on performance/heuristic parameters and correctness caveats.",
+    "subtask_keywords": [
+      "gap",
+      "tietze_transformations",
+      "group_presentation",
+      "presentation_simplification",
+      "computational_group_theory"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "TzSearch minimal match length and hashing strategy",
+        "description": "For a given short relator r1 of length l1, TzSearch determines a minimal match length l (l = l1/2 + 1 if l1 is even, else l = (l1+1)/2), builds a hash list of all subwords of length l occurring in conjugates of r1 or r1^-1, and then compares subwords of length l from long relators r2 against this hash list, performing expensive subword comparisons only when a hash match is found.",
+        "guidance": "This is an efficiency heuristic: only subwords at least the computed minimal length are considered; hashing avoids costly comparisons except on hash hits. Understand that the minimal match length depends on parity of l1 and that the caching/hashing step is central to performance."
+      },
+      {
+        "name": "TzSearch simultaneous handling trade-off (searchSimultaneous)",
+        "description": "TzSearch may handle several short relators simultaneously provided they share the same minimal match length; handling n short relators simultaneously saves n-1 loops over long relators r2 but incurs extra fruitless subword comparisons.",
+        "guidance": "Optimal number of simultaneous short relators depends on the concrete presentation; maximal simultaneous handling is not necessarily best. Use the Tietze option searchSimultaneous to set an upper bound (default 20) to control this trade-off."
+      },
+      {
+        "name": "TzSearchEqual matching and substitution rule",
+        "description": "TzSearchEqual looks for pairs of relators r1 (length l1) and r2 (length l2) such that l1 is even, l1 \u2264 l2, and they coincide in some maximal subword w of length at least l1/2. If length(w) > l1/2 the pair is handled like TzSearch; if length(w) = l1/2 then each copy of w in r2 is substituted by the inverse complement of w in r1.",
+        "guidance": "TzSearchEqual uses searchSimultaneous similarly to TzSearch but does not use saveLimit; its outer loop over relators is executed exactly once. Understand the distinction between the > and = l1/2 cases for correct substitutions."
+      },
+      {
+        "name": "TzFindCyclicJoins criterion for eliminating generators",
+        "description": "TzFindCyclicJoins searches for generator pairs a and b such that (possibly after inversion/conjugation) the relators include the commutator [a,b], a power a^n, and a product a^s b^t with s prime to n; for each such pair it uses the Euclidean algorithm to express a as a power of b and eliminates a.",
+        "guidance": "This introduces new relators (but not new generators) and is intended to detect when two generators generate a common cyclic subgroup; it eliminates a by expressing it as a power of b when conditions (commutator, power, and product with s prime to n) hold."
+      },
+      {
+        "name": "TzSubstitute basic substitution behavior (first form)",
+        "description": "TzSubstitute(P, word) creates a new abstract generator g, adds it to the presentation, and adds the relator g^-1 * word, thereby substituting the given word as a new generator.",
+        "guidance": "This behaves like AddGenerator + AddRelator but differs in that TzSubstitute is tracked as a Tietze transformation and updates saved tracing of generator images/preimages; use when you want transformations to be recorded for tracing."
+      },
+      {
+        "name": "TzSubstitute squarefree-length-2 substitution (second form) and parameters n/eliminate",
+        "description": "TzSubstitute(P[, n[, eliminate]]) (second form) selects the n most frequently occurring squarefree relator subwords of the form g1 g2 (g1 \u2260 g2), picks the last in that sorted list (ab), defines a new generator xi with relator xi^-1 ab, replaces occurrences of ab by xi, and then eliminates a generator based on 'eliminate' (0,1,2). Defaults: n=1, eliminate=0.",
+        "guidance": "Parameter eliminate controls which factor is eliminated: 0 calls TzEliminate (may delete the newly introduced xi), 1 eliminates factor a, 2 eliminates factor b. Choosing eliminate \u2208 {1,2} can cause intermediate increases in total relator length but may be necessary to reach a simpler final presentation. Use TzPrintPairs to inspect frequent pairs before choosing parameters."
+      },
+      {
+        "name": "TzSubstitute effect on image/preimage tracing",
+        "description": "TzSubstitute, when used as a Tietze transformation, will update and save the lists of generator images and preimages used for tracing; by contrast, calling AddGenerator directly will delete these lists and terminate tracing.",
+        "guidance": "If you intend to keep tracing of how original generators map through transformations, prefer TzSubstitute over AddGenerator to avoid losing tracing information."
+      },
+      {
+        "name": "TzSubstitute caution about increasing total relator length",
+        "description": "A call of TzSubstitute with eliminate = 0 must not increase the total length of relators (consequence of design), so sometimes eliminate must be set to 1 or 2 (allowing increase) to enable progress.",
+        "guidance": "Be prepared to explicitly allow intermediate increases in relator total length via eliminate parameter if necessary to obtain a simpler final presentation; inspect progress and use ShallowCopy to save good states to revert if a substitution worsens the presentation."
+      },
+      {
+        "name": "TzSubstituteCyclicJoins criterion",
+        "description": "TzSubstituteCyclicJoins(P) seeks commuting generator pairs a and b whose exponents (least known positive n with a^n relator) are prime to each other; for each such pair it substitutes ab as a new generator and eliminates a and b.",
+        "guidance": "This operation both substitutes a product as a generator and eliminates the original commuting pair when their exponents are coprime, enabling simplification in presence of cyclic joins."
+      },
+      {
+        "name": "Tracing generator images: initialization and limitations",
+        "description": "TzInitGeneratorImages(P) initializes tracing so current generators are 'old generators' and enables (pre)image tracing; tracing is not automatic because words may grow very long and can be reinitialized by calling TzInitGeneratorImages again. A subsequent DecodeTree call deletes and reinitializes images/preimages.",
+        "guidance": "Only request tracing when needed; be aware that some operations (AddGenerator) will terminate tracing and delete lists. Use TzImagesOldGens, TzPreImagesNewGens, OldGeneratorsOfPresentation, and TzPrintGeneratorImages to inspect images/preimages."
+      },
+      {
+        "name": "DecodeTree (decoding tree) procedure correctness preconditions",
+        "description": "DecodeTree eliminates secondary generators from a subgroup presentation built by Modified Todd-Coxeter method by processing the last generator iteratively: if last generator is primary terminate; else substitute via relator if possible, otherwise add its tree definition (not a Tietze transformation), add any involved generators, and eliminate g. The final presentation returned is isomorphic to the subgroup H.",
+        "guidance": "Do not apply Tietze transformations that eliminate generators before calling DecodeTree: such transformations cause GAP to remove the subgroup generators tree and can lead to wrong results. DecodeTree may extend P by non-Tietze generator additions (temporarily changing the presentation), but the final result is isomorphic to H. After DecodeTree you should further simplify using TzGo/TzGoGo. If DecodeTree stops before removing all secondary generators, adjust Tietze option parameters and rerun."
+      },
+      {
+        "name": "DecodeTree interaction with Tietze options",
+        "description": "Tietze option parameters (the TzOptions values of a presentation) apply to DecodeTree as well; inadequate option values may cause DecodeTree to stop before all secondary generators have vanished.",
+        "guidance": "If DecodeTree stops early, change relevant TzOptions (e.g., limits described below) and call DecodeTree again. Be cautious that options control breaking criteria and loop bounds that affect DecodeTree's progress."
+      },
+      {
+        "name": "TzOptions: protected generators",
+        "description": "The TzOptions 'protected' records the first protected generators in a presentation; these are protected from being eliminated by Tietze transformation functions except TzEliminate and TzSubstitute which explicitly specify a generator to be eliminated. Default = 0.",
+        "guidance": "Use 'protected' to prevent elimination of certain generators you want to keep fixed during automated simplification phases."
+      },
+      {
+        "name": "TzOptions: eliminationsLimit as break criterion",
+        "description": "eliminationsLimit caps the number of generators eliminated during the elimination phase of TzGo (ignored by TzEliminate). Default = 100.",
+        "guidance": "Use this to bound elimination work as a safety/break criterion when running TzGo on large presentations."
+      },
+      {
+        "name": "TzOptions: expandLimit to prevent runaway growth",
+        "description": "expandLimit (%): when eliminating more than one generator, the routine saves the starting total relator length and before each elimination checks whether current total length has increased to more than expandLimit percent of original; if so, it stops further eliminations. Default = 150.",
+        "guidance": "Use expandLimit to prevent eliminations that cause excessive growth in relator total length; useful as a conservative stop condition."
+      },
+      {
+        "name": "TzOptions: generatorsLimit",
+        "description": "generatorsLimit causes TzGo to eliminate at most n - generatorsLimit generators when started with n generators (except trivial ones). Default = 0.",
+        "guidance": "Another break criterion to ensure a minimum number of generators remain; set to avoid over-elimination."
+      },
+      {
+        "name": "TzOptions: lengthLimit",
+        "description": "Tietze commands will not eliminate a generator if they cannot exclude the possibility that resulting total relator length would exceed the maximal GAP list length (2^31 - 1) or the user-specified lengthLimit. Default = 2^31 - 1.",
+        "guidance": "Use lengthLimit to guard against operations that could blow memory/representational limits."
+      },
+      {
+        "name": "TzOptions: loopLimit",
+        "description": "loopLimit caps the number of basic steps TzGo will perform (default = infinity).",
+        "guidance": "Set loopLimit to limit runtime/work of TzGo when experimenting or running on large inputs."
+      },
+      {
+        "name": "TzOptions: printLevel verbosity control",
+        "description": "printLevel controls output verbosity for Tietze functions: 0 = no output except errors, 1 = reasonable progress output (default), 2 = more verbose, 3 = internal-detail messages.",
+        "guidance": "Set printLevel according to desired feedback; lower values are quieter for batch runs; higher values useful for debugging heuristics."
+      },
+      {
+        "name": "TzOptions: saveLimit controlling repeated searches",
+        "description": "saveLimit (%): after TzSearch finishes its main loop it checks whether total relator length decreased by at least saveLimit percent; if so, it repeats the search phase instead of returning. Default = 10.",
+        "guidance": "Use saveLimit to trigger repeated search phases when meaningful reductions are achieved; raising it makes repeats less likely, lowering it makes TzSearch more persistent."
+      },
+      {
+        "name": "TzOptions: searchSimultaneous global default",
+        "description": "searchSimultaneous sets the upper bound for the number of short relators TzSearch/TzSearchEqual may handle simultaneously (default = 20).",
+        "guidance": "This global option mirrors the per-call heuristic trade-off described earlier; tune per-presentation because it heavily influences both performance and result quality."
+      },
+      {
+        "name": "TzPrintOptions utility",
+        "description": "TzPrintOptions(P) prints the current values of the Tietze options of presentation P.",
+        "guidance": "Use TzPrintOptions to inspect and verify the option settings for a presentation before running heavy transformations."
+      },
+      {
+        "name": "Use of ShallowCopy to save/restore intermediate presentations",
+        "description": "You can save a copy of the current presentation with ShallowCopy(P) to later restart computation from that state if subsequent substitutions/wrangling make the presentation worse.",
+        "guidance": "When experimenting with TzSubstitute parameters or other heuristics that can make the presentation temporarily worse, save checkpoints with ShallowCopy so you can revert to the best-known state."
+      }
+    ]
+  }
+}

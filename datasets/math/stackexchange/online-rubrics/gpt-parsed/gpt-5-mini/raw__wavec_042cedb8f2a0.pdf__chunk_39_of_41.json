@@ -1,0 +1,96 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 39,
+  "n_chunks": 41,
+  "chunk_chars": 39912,
+  "model": "gpt-5-mini",
+  "elapsed_s": 380.028978250004,
+  "input_tokens": 16960,
+  "output_tokens": 3230,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Magma users and researchers implementing and simulating error-correcting codes",
+    "subtask_short": "simulating_message_transmission",
+    "subtask_description": "Instructions and example code for encoding a string into codewords, simulating noisy transmission (component-wise corruption controlled by a noise parameter), optionally decoding the received words, and converting back to a string in Magma. Includes notes on decoding algorithms (Euclidean vs syndrome) and practical handling of unused/illegal codewords.",
+    "subtask_keywords": [
+      "error-correcting_codes",
+      "magma",
+      "simulation",
+      "bch",
+      "goppa",
+      "decoding"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Euclidean versus syndrome decoding trade-off",
+        "description": "By using Euclidean decoding rather than syndrome decoding, the construction of coset leaders can be avoided. (On the other hand, the coset leaders of a code are stored once they are computed, so it is a once-only time constraint.)",
+        "guidance": "Use Euclidean decoding to avoid the potentially expensive construction of coset leaders and for much faster runtime in examples shown (timings: Euclidean 0.000 vs Syndrome 11.501). However, if syndrome decoding is used the coset leaders need only be computed once and then reused."
+      },
+      {
+        "name": "Final phase of decoding: compute information part",
+        "description": "The final phase in decoding, the computation of the information part of the corrected vector, should be accomplished as demonstrated previously.",
+        "guidance": "After computing the corrected codeword vector, extract/compute its information (message) part according to the code's information space/generator matrix as shown in earlier examples."
+      },
+      {
+        "name": "Euclidean algorithm error-correcting capacity (Goppa code)",
+        "description": "For the Goppa code example with r = 3, the Euclidean algorithm is able to correct r/2 = 1 error.",
+        "guidance": "When selecting/analysing a Goppa code, use r to determine the error-correcting capability of the Euclidean algorithm (as per the example)."
+      },
+      {
+        "name": "Code size requirement for character-by-character ASCII encoding",
+        "description": "To encode the characters with ASCII codes 1 to 127, a code with at least 127 codewords is required.",
+        "guidance": "When encoding characters individually map each symbol to a distinct information-space index; ensure the chosen code's information space (number of distinct codewords used) is at least the size of the alphabet being encoded."
+      },
+      {
+        "name": "Choice of code for character encoding (example guidance)",
+        "description": "The demo chooses a binary BCH code with n = 15 and d = 5, having 128 codewords, so one of the codewords will not be used.",
+        "guidance": "Prefer a code whose number of distinct codewords >= alphabet_size; if the code has extra unused codewords, decide and record how to treat them (unused reserved symbol, etc.)."
+      },
+      {
+        "name": "send function interface semantics",
+        "description": "send(str, noise, decode): str = input string; noise = non-negative number where 0 = perfect transmission, slightly higher values mean some codeword components may be altered, and 1 means every codeword component will be altered; decode = Boolean true iff the Decode algorithm is to be applied. It returns a string of the same length as str which will resemble it depending on noise and decode.",
+        "guidance": "Design simulation functions with clear parameter semantics: a probabilistic noise parameter in [0,1] interpreted as per-component corruption probability, and a decoding flag controlling whether to apply the decoder to the noisy received words."
+      },
+      {
+        "name": "Encode per-character via information-space indices",
+        "description": "For simplicity, the string is encoded character-by-character: enc := [ wds[STC(str[i])] * GM : i in [1..#str] ]; (wds is sequence of information-space vectors returned from InformationSpace).",
+        "guidance": "Implement encoding by mapping each character to an index in the information space, then multiplying (or otherwise converting) to the codeword via the generator matrix. Ensure consistent mapping functions StringToCode/CodeToString are used."
+      },
+      {
+        "name": "Perturbation (noise) model: per-component random alteration",
+        "description": "The perturbate function flips/changes each codeword component independently with probability equal to noise (implemented as if Random(1000)/1000 le noise then v[i] := v[i] + 1).",
+        "guidance": "Simulate channel noise by independently perturbing each coordinate with probability = noise. Document exactly how a perturbation alters a coordinate (e.g., add 1 modulo field characteristic) so results are reproducible."
+      },
+      {
+        "name": "Optional decoding step application",
+        "description": "If decode is true then apply the Decode algorithm to the received vector sequence to obtain corrected codewords, otherwise skip decoding.",
+        "guidance": "Provide an option to run or skip decoding to compare raw noisy outputs vs. decoder-corrected outputs; ensure the Decode call's return values (success flags, corrected words) are handled and checked."
+      },
+      {
+        "name": "Fallback handling for non-codewords / decoder output",
+        "description": "Convert non-codewords to the codeword for 'X' (or another designated fallback). Example: Xwd := wds[STC(\"X\")] * GM; corrB := [ v in C select v else Xwd : v in corr ];",
+        "guidance": "When a received or corrected vector is not a valid codeword (or maps to an index outside the intended symbol set), replace it with a designated placeholder codeword to avoid mapping errors when converting back to characters."
+      },
+      {
+        "name": "Mapping indices back to characters with bounds checking",
+        "description": "Find index-positions for codewords via Index(wds, InfSp!Coordinates(C, wd)), then convert illegal index-positions of unused codewords to the index for 'x' (xindex := STC(\"x\"); decB := [ i le 127 select i else xindex : i in dec ];).",
+        "guidance": "When converting codewords back to symbols, clamp or remap indices outside the allowed range to a safe fallback symbol to ensure the returned string has valid characters and expected length."
+      },
+      {
+        "name": "Returned string length and resemblance properties",
+        "description": "send returns a string of the same length as the input; the closeness of the returned string to the original depends on noise and whether decode was applied.",
+        "guidance": "Tests/examples should demonstrate behavior across noise levels and with/without decoding so users understand how decode improves fidelity and at what noise levels decoding degrades."
+      },
+      {
+        "name": "Practical example-based validation",
+        "description": "Example runs (text sample with noise=0.01 or 0.1, decode true/false) illustrate how low noise + decoding recovers original text, while high noise or no decoding produces many placeholder characters.",
+        "guidance": "Include concrete examples and printed outputs to validate implementation and to let users calibrate acceptable noise ranges for their code/decoder choice."
+      }
+    ]
+  }
+}

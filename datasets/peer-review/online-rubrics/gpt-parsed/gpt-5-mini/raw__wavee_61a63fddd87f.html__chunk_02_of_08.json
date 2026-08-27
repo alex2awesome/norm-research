@@ -1,0 +1,95 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_61a63fddd87f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_61a63fddd87f.html",
+  "chunk_idx": 2,
+  "n_chunks": 8,
+  "chunk_chars": 39996,
+  "model": "gpt-5-mini",
+  "elapsed_s": 34.66678283299916,
+  "input_tokens": 15708,
+  "output_tokens": 3865,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing or analyzing algorithms for conference/online peer-review systems (ML/algorithms/operations-research audience)",
+    "subtask_short": "conference paper-ordering for bidding",
+    "subtask_description": "Designing and evaluating algorithms that choose an ordering of papers to present to arriving reviewers (for bidding/selection) to maximize a combined objective of paper-side utility and reviewer-side utility, conditioned on past bids and similarity scores.",
+    "subtask_keywords": [
+      "peer_review",
+      "paper_ordering",
+      "bidding",
+      "algorithm",
+      "conference_review"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Expected total gain objective",
+        "description": "Maximize the expected combined gain from a reviewer: the sum over papers of expected paper-side gain \u03b3_p(gn\u22121,j + bid) plus \u03bb times the reviewer-side gain \u03b3_r(\u03c0(j), S), with expectation taken over random bids and conditioned on the history.",
+        "guidance": "Formally maximize E[\u2211_j \u03b3_p(gn\u22121,j + b_{n,j}) | H_{n\u22121}] + \u03bb \u2211_j \u03b3_r(\u03c0_n(j), S_{n,j}); use this immediate expected gain as the optimization objective for ordering papers shown to a reviewer. The objective explicitly trades off paper-side benefit (diminishing returns on bids) and reviewer-side benefit via the scalar \u03bb."
+      },
+      {
+        "name": "Paper-side gain properties (\u03b3_p)",
+        "description": "\u03b3_p is a paper-side gain function that is increasing in number of bids and exhibits diminishing returns (concavity). Example used in proofs: \u03b3_p(x) = \u221ax.",
+        "guidance": "Decisions hinge on marginal gains \u0394\u03b3_p(\u00b7) = \u03b3_p(g+1) \u2212 \u03b3_p(g). The diminishing-returns property makes placing items with fewer prior bids earlier potentially more valuable for paper-side gain."
+      },
+      {
+        "name": "Reviewer-side gain properties (\u03b3_r)",
+        "description": "Reviewer-side gain depends on paper position and similarity score; it increases with similarity and typically decreases with worse (later) positions via a position-dependent factor.",
+        "guidance": "In the paper \u03b3_r is decomposed (example) as \u03b3_r(\u03c0, S) = (2S \u2212 1) f_\u03c0(\u03c0). Thus higher similarity and better positions yield higher reviewer-side gain; ordering should account for both."
+      },
+      {
+        "name": "Bidding probability model (f) and decomposition",
+        "description": "The bidding probability f(\u03c0, S) decomposes multiplicatively into a similarity-dependent term and a position-dependent term: f(\u03c0, S) = S \u00b7 f_\u03c0(\u03c0), where f_\u03c0(\u03c0) is decreasing in position (example f_\u03c0(\u03c0) = 1 / log2(\u03c0 + 1)).",
+        "guidance": "This decomposition is used to compute expected paper-side gains and to derive weights for assignment. Position dependence (decreasing f_\u03c0) captures user attention/position bias; similarity scales the baseline probability."
+      },
+      {
+        "name": "Ordering as linear sum assignment (tractable optimization)",
+        "description": "The optimal ordering for a reviewer that maximizes immediate expected gain can be formulated as a linear sum assignment problem: choose x_{j,k} binary indicators (paper j shown at position k) to maximize \u2211_{j,k} w_{j,k} x_{j,k} subject to permutation constraints.",
+        "guidance": "Weights are w_{j,k} = f(k, S_{i,j})(\u03b3_p(g_{i\u22121,j}+1) \u2212 \u03b3_p(g_{i\u22121,j})) + \u03bb \u03b3_r(k, S_{i,j}). Because the assignment constraint matrix is totally unimodular, the integer constraints can be relaxed and solved as an LP to obtain an integral optimal ordering efficiently."
+      },
+      {
+        "name": "Local optimality criterion for SUPER*",
+        "description": "SUPER* selects the paper ordering that maximizes the immediate expected gain conditioned on history (using the assignment formulation). With zero heuristic (h_i,j = 0) this makes SUPER* locally optimal for any arriving reviewer; for the final reviewer SUPER* is optimal.",
+        "guidance": "Implement Algorithm 2: compute weights w_{j,k} (including heuristic if present) and solve the linear assignment LP to obtain ordering. Local optimality means SUPER* maximizes the immediate expected gain given current information, though it may not be globally optimal over future arrivals unless heuristics capture future."
+      },
+      {
+        "name": "Heuristic incorporation (h_{i,j}) and zero-heuristic interpretation",
+        "description": "A heuristic h_{i,j} estimates the expected number of future bids on paper j at arrival of reviewer i. SUPER* uses h_{i,j} in weights: \u03b3_p(g_{i\u22121,j} + h_{i,j} + 1) \u2212 \u03b3_p(g_{i\u22121,j} + h_{i,j}). If h_{i,j} = 0 (zero heuristic), SUPER* optimizes immediate expected gain.",
+        "guidance": "Use non-zero heuristics to incorporate anticipated future information; if no reliable heuristic exists, zero heuristic yields locally optimal immediate decisions. Heuristics allow adapting to changing action sets."
+      },
+      {
+        "name": "Baseline algorithms and their evaluation dimensions (SIM, BID, RAND)",
+        "description": "SIM orders papers by decreasing similarity scores (optimizes reviewer-side gain only); BID orders by current number of bids; RAND orders uniformly at random.",
+        "guidance": "When evaluating or comparing algorithms, analyze both paper-side and reviewer-side components; SIM attains maximal expected reviewer-side gain but can be arbitrarily suboptimal for the combined objective because it ignores prior bid counts and diminishing returns."
+      },
+      {
+        "name": "Use of history H_{i\u22121} in decision making",
+        "description": "History H_{i\u22121} is defined as the information available when reviewer i arrives (previous bids and the orderings shown to previous reviewers). Decisions (orderings) should be conditioned on this history.",
+        "guidance": "All expectations and weight computations (\u03b3_p, f, etc.) are computed conditioned on H_{i\u22121}; treat prior bid counts g_{i\u22121,j} as deterministic given H_{i\u22121} when computing immediate expected gain."
+      },
+      {
+        "name": "Tie-breaking determinism",
+        "description": "To make algorithmic orderings non-random in analysis, assume a deterministic tie-breaking mechanism (e.g., break ties by paper index j < j').",
+        "guidance": "This assumption simplifies theoretical comparison and ensures SUPER* produces a non-random ordering given deterministic ties; implementation may use any consistent tie-breaker."
+      },
+      {
+        "name": "Analytic decomposition for comparison",
+        "description": "For theoretical comparison, decompose expected gain into paper-side and reviewer-side components and compare these per-algorithm under the same history; derive \u03b1_{i,j}-style weights (\u03b1_{n,j} = S_{n,j}(\u0394\u03b3_p) + \u03bb(2S_{n,j} \u2212 1)) to identify ordering structure.",
+        "guidance": "This decomposition lets one reason about optimal orderings as sorting by \u03b1-values because f_\u03c0 is monotone; use such decompositions to construct worst-case instances and to prove suboptimality bounds for baselines."
+      },
+      {
+        "name": "Worst-case instance construction for baseline suboptimality",
+        "description": "To evaluate robustness, construct problem instances where similarity scores are nearly equal but prior bid counts differ markedly; due to diminishing returns, presenting low-bid papers earlier yields better paper-side gains, which SIM (similarity-only) may miss.",
+        "guidance": "Design worst-case instances (e.g., half papers with one prior bid, half with zero; similarity differences tiny) to prove lower bounds on performance gaps between SUPER* and baselines; include both paper-side and reviewer-side contributions when measuring regret."
+      },
+      {
+        "name": "Permutation constraints for valid orderings",
+        "description": "Orderings are permutations: each paper must be assigned to exactly one position and each position must have exactly one paper (constraints \u2211_k x_{j,k} = 1 for all j and \u2211_j x_{j,k} = 1 for all k with x_{j,k} \u2208 {0,1}).",
+        "guidance": "Formulate ordering problems as assignment problems respecting permutation constraints; use LP relaxation justified by total unimodularity to solve efficiently."
+      }
+    ]
+  }
+}

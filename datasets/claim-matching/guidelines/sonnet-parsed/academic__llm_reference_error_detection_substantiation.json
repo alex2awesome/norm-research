@@ -1,0 +1,46 @@
+{
+  "source_file": "/Users/spangher/Projects/stanford-research/norm-research/datasets/claim-matching/guidelines/raw/academic/llm_reference_error_detection_substantiation.md",
+  "domain": "academic",
+  "title": "Detecting Reference Errors in Scientific Literature with Large Language Models",
+  "extracted": {
+    "subtask_short": "LLM judging 3-way statement substantiation",
+    "subtask_description": "Operationalizes quotation-error detection as a clean 3-way substantiation-level classification task (fully/partially/unsubstantiated) for an LLM-as-judge, and ablates how much of the reference text the judge needs to see.",
+    "rubrics_metrics": [
+      {
+        "name": "Citation error vs quotation error",
+        "description": "Citation errors: 'typographical errors in referencing, such as incorrect reference information (e.g., incorrect authors, title, journal, or year)' - bibliographic/formatting mistakes. Quotation errors: 'the situation where a reference fails to support the statement for which it is cited' - a content/support failure; the correct scope for a claim-matching metric.",
+        "guidance": ""
+      },
+      {
+        "name": "Fully substantiated",
+        "description": "'The reference article fully substantiates the relevant part of the statement.'",
+        "guidance": ""
+      },
+      {
+        "name": "Partially substantiated",
+        "description": "'According to the reference article, there is a minor error in the statement, but the error does not invalidate the purpose [of the citation].' The cited source is basically right but doesn't perfectly match every detail of the claim.",
+        "guidance": "Maps closely onto the 'minor error' tier in the medical quotation-accuracy literature."
+      },
+      {
+        "name": "Unsubstantiated (merged contradiction/irrelevance/absence)",
+        "description": "'The reference part does not substantiate any part of the statement. This could be because the statement is contradictory to, unrelated to, or simply missing from the reference article.' Notably, this single label deliberately merges three distinct underlying causes (contradiction, irrelevance, and simple absence of evidence) rather than splitting them, unlike the 8-way biomedical NLP scheme that keeps CONTRADICT, IRRELEVANT, and NOT_SUBSTANTIATE separate.",
+        "guidance": "A design choice/tradeoff worth flagging: 3-way is easier to get high agreement on and easier to prompt an LLM for, but loses the ability to distinguish 'the source disagrees with you' from 'the source just never talks about this.'"
+      },
+      {
+        "name": "Reference-visibility ablation (title / title+abstract / title+abstract+excerpts)",
+        "description": "The prediction task (given a statement and its cited reference, predict whether the pair is fully / partially / unsubstantiated) is tested under three levels of reference visibility: reference title only, reference title + abstract, and reference title + abstract + excerpts (actual passages/snippets from the body of the cited work). Performance is compared across these three conditions.",
+        "guidance": "Operationalizes 'how much of the source do you need to read to correctly judge support' as a natural robustness/ablation axis: does judgment accuracy saturate once excerpts are provided, or does it need full text?"
+      },
+      {
+        "name": "Expert-persona + forced-JSON + required-justification judge prompt",
+        "description": "The model is instructed to act as 'an experienced scientific writer and editor' evaluating whether the reference content supports the claim, and to output a structured JSON object containing (a) the predicted label among the three substantiation categories and (b) a concise explanation justifying the label.",
+        "guidance": "This 'expert persona + forced structured output + required justification' pattern is a reusable prompt template for any LLM-as-judge claim-matching implementation - the justification requirement forces the model to point to the specific textual basis (or absence) for its verdict rather than emitting a bare label."
+      },
+      {
+        "name": "Known-error sourcing from post-publication review platforms",
+        "description": "250 statement-reference pairs were assembled from real-world sources of known citation problems, spanning seven scientific domains: 65.2% from prior citation-verification/quotation-accuracy audit studies, 32.0% from PubPeer comments (post-publication peer review flagging specific citation/quotation problems), 2.8% from corrections/errata published in PubMed.",
+        "guidance": "A useful sourcing strategy: harvest pre-existing, already-adjudicated error reports from post-publication review platforms (PubPeer) and formal correction/errata records, which come with a built-in 'someone already litigated this and it was accepted as an error' quality bar."
+      }
+    ]
+  }
+}

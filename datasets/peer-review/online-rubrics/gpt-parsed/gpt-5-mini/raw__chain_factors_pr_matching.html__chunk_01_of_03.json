@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/chain_factors_pr_matching.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "chain_factors_pr_matching.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 38435,
+  "model": "gpt-5-mini",
+  "elapsed_s": 40.96790937500191,
+  "input_tokens": 16448,
+  "output_tokens": 2751,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning / IR researchers and engineers working on paper\u2013reviewer matching and academic recommendation systems",
+    "subtask_short": "paper-reviewer matching evaluation",
+    "subtask_description": "Designing, pre-training, and evaluating models that match academic submissions to reviewers (paper\u2013reviewer relevance). Covers dataset construction, pre-training objectives for semantic/topic/citation factors, model architecture (instruction- and paper-encoders), negative sampling, and evaluation metrics.",
+    "subtask_keywords": [
+      "paper_reviewer_matching",
+      "recommender_systems",
+      "contrastive_learning",
+      "academic_papers",
+      "evaluation_metrics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Relevance rating scale (0\u20133)",
+        "description": "Annotations use a four-level relevance score: \u201c3\u201d (very relevant), \u201c2\u201d (relevant), \u201c1\u201d (slightly relevant), or \u201c0\u201d (irrelevant).",
+        "guidance": "Used as the ground-truth label for paper\u2013reviewer pairs in multiple datasets (NIPS, SciRepEval, KDD). The scale is the basis for Soft/Hard settings and metric computation."
+      },
+      {
+        "name": "Soft vs Hard relevance settings",
+        "description": "Soft setting: reviewers with a score of \u201c2\u201d or \u201c3\u201d are considered relevant; Hard setting: only reviewers with a score of \u201c3\u201d are viewed as relevant.",
+        "guidance": "Defines binary relevance for evaluation. Different experiments report results under both settings to capture permissive vs strict relevance."
+      },
+      {
+        "name": "Precision at K (P@K) evaluation",
+        "description": "Adopt P@5 and P@10 as evaluation metrics: Soft P@K = average over papers of (# top-K ranked reviewers with score >= 2) / K; Hard P@K = average over papers of (# top-K ranked reviewers with score == 3) / K.",
+        "guidance": "Follow prior work (Mimno and McCallum; Singh et al.). Use these metrics to compare ranking performance across methods and datasets."
+      },
+      {
+        "name": "Dataset diversity and annotation procedure",
+        "description": "Evaluation should use multiple public datasets across domains (e.g., NIPS, SciRepEval, SIGIR, KDD) with documented numbers of papers, reviewers, and annotated (p,r) pairs and annotation procedures.",
+        "guidance": "NIPS: 34 papers, 190 reviewers, 393 annotated pairs by 9 researchers. SciRepEval: combines multiple sources. SIGIR: aspect-based annotations mapped to 0\u20133 via discretized Jaccard similarity. KDD: newly annotated (174 papers, 737 reviewers) by 5 data mining researchers. Use such diversity to test generality."
+      },
+      {
+        "name": "Use of factor-specific pre-training data",
+        "description": "Pre-train instruction-guided paper encoder separately for each factor using appropriate data: Search dataset for semantic factor, MAPLE benchmark for topic factor, and citation triplets for citation factor.",
+        "guidance": "Each factor has a distinct pretraining objective aligned to the notion of relevance for that factor (semantic: query\u2013document clicks; topic: shared fine-grained research fields; citation: citing relationships). See Appendix A.1.1 for more data details."
+      },
+      {
+        "name": "Factor-specific semantic objectives",
+        "description": "For the semantic factor, treat submission p as a query and reviewer-profile paper q as a document; learn g(\u00b7|\u03d5) to maximize the inner product between ad-hoc query and semantically relevant document in vector space.",
+        "guidance": "Uses Search dataset (queries from an academic search engine and click-through derived relevant documents) to form positive pairs for contrastive pre-training."
+      },
+      {
+        "name": "Factor-specific topic objectives",
+        "description": "For the topic factor, train g(\u00b7|\u03d5) to maximize inner product for two papers p and q if they share common research fields (derived from MAPLE with fine-grained fields-of-study).",
+        "guidance": "Construct topically relevant paper pairs using Microsoft Academic Graph tags; MAPLE provides millions of papers with fine-grained field tags."
+      },
+      {
+        "name": "Factor-specific citation objectives",
+        "description": "For the citation factor, train g(\u00b7|\u03d5) to maximize inner product for two papers p and q if p cites q, leveraging large collections of citation triplets (p, q+, q\u2212).",
+        "guidance": "Follow prior work (Cohan et al., Ostendorff et al.) to form positive and negative examples for contrastive pretraining."
+      },
+      {
+        "name": "Contrastive pre-training objective (infoNCE-style)",
+        "description": "Use contrastive loss J = -log( exp(g(p|\u03d5)\u1d40 g(q+|\u03d5)) / (exp(g(p|\u03d5)\u1d40 g(q+|\u03d5)) + \u03a3_t exp(g(p|\u03d5)\u1d40 g(q_t^-|\u03d5))) ) to train Enc_i(\u00b7) and Enc_p(\u00b7) jointly across factors.",
+        "guidance": "Minimize sum_\u03d5 sum_{(p,q^+,q^-_1,...,q^-_T)} J. Samples include one positive q+ and multiple negatives q^-_t."
+      },
+      {
+        "name": "Instruction sampling per training sample",
+        "description": "For each pre-training sample (p, q+, q^-_1,...,q^-_T), randomly pick an instruction i_\u03d5 corresponding to factor \u03d5, and encode it with the instruction encoder Enc_i(\u00b7) to obtain g(\u00b7|\u03d5).",
+        "guidance": "This makes the encoder produce factor-conditioned representations; instructions are used as contexts during paper encoding."
+      },
+      {
+        "name": "Hard negative mining strategy (factor-specific)",
+        "description": "Combine in-batch negatives as easy negatives with factor-specific hard negative selection rules: semantic hard negatives are shown but not clicked given query p; topic hard negatives share venue but no fine-grained field with p; citation hard negatives are papers cited by q+ but not cited by p.",
+        "guidance": "Following Cohan et al., such hard negatives boost contrastive learning performance. Implement both in-batch easy negatives (Karpukhin et al.) and the described factor-aware hard negatives."
+      },
+      {
+        "name": "Shared encoder parameters across factors",
+        "description": "The parameters of the instruction encoder Enc_i(\u00b7) and the paper encoder Enc_p(\u00b7) are shared during training across different factor instances and across the three factors, so the model carries common knowledge from pretraining data of different factors.",
+        "guidance": "Sharing allows parameter efficiency and cross-factor transfer while instruction tokens provide factor specificity."
+      },
+      {
+        "name": "Asymmetric MHA instruction-guided encoding",
+        "description": "Use an asymmetric multi-head attention (MHA_asy) where the paper encoder's MHA attends to the concatenation [H_{i_\u03d5}^{(l)} \u2225 H_p^{(l)}], i.e., instruction representations serve as context for paper encoding, but the paper does not serve as context for instruction encoding.",
+        "guidance": "Formally: MHA_asy(H_p^{(l)}, \u1ebcH_p^{(l)}) uses \u1ebcH_p^{(l)} = H_{i_\u03d5}^{(l)} \u2225 H_p^{(l)} in the attention keys/values. This design keeps instruction semantics stable and makes final paper representation aware of factor \u03d5."
+      },
+      {
+        "name": "Encoder architecture and final representation",
+        "description": "Both Enc_i(\u00b7) and Enc_p(\u00b7) have 12 Transformer layers; the final instruction-guided representation of paper p is the output embedding of its [CLS] token after the last layer: g(p|\u03d5) = h_[CLS]^{(12)}.",
+        "guidance": "Follow Transformer layer operations with LayerNorm, (asymmetric) MHA, and FFN as described in Eqs. (6)\u2013(9)."
+      },
+      {
+        "name": "Evaluation: mapping aspect-level annotations to ratings",
+        "description": "For datasets like SIGIR where papers/reviewers are assigned aspect tags, compute Jaccard similarity between a paper's aspects and a reviewer's aspects and discretize it to map to the 0\u20133 rating scale.",
+        "guidance": "This aligns aspect-based datasets with the 0\u20133 rating convention used across datasets for comparability."
+      },
+      {
+        "name": "Statistical significance reporting",
+        "description": "Report when CoF is significantly better than baselines with p-value thresholds: * for p < 0.05 and ** for p < 0.01.",
+        "guidance": "Use significance markers in tables to indicate methods that are statistically outperformed; bold the highest score."
+      }
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/bb4a741719c4.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 6271,
+  "output_tokens": 3367,
+  "elapsed_s": 2005.1598799168132,
+  "extracted": {
+    "orientation": "stylebook",
+    "intended_audience": "Lean 4 standard library contributors / Lean programmers writing library declarations and theorems",
+    "subtask_short": "lean4 std naming conventions",
+    "subtask_description": "Naming/style guidelines for identifiers (types, data, theorems, structure fields, variables, simp sets, acronyms) in the Lean 4 standard library to make declarations easily discoverable and consistent.",
+    "subtask_keywords": [
+      "lean4",
+      "naming",
+      "standard_library",
+      "style_guide",
+      "theorem_naming"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Make names easily guessable",
+        "description": "The easiest way to access a result in the standard library is to correctly guess the name of the declaration (possibly with the help of identifier autocompletion).",
+        "guidance": "Prefer easily guessable names that are still reasonably short. This improves productivity more than relying on search tools. The guide contains heuristics rather than hard rules; if a suggestion yields nonsense in a particular situation, it's safe to ignore it or suggest an improvement."
+      },
+      {
+        "name": "Casing conventions (Prelude)",
+        "description": "Identifiers use a mix of UpperCamelCase, lowerCamelCase and snake_case, used for types, data, and theorems, respectively.",
+        "guidance": "Types: UpperCamelCase (e.g., List, List.IsPrefix). Data/functions: lowerCamelCase (e.g., List.append, List.isPrefixOf). Theorems: snake_case. Structure fields should be named so that projections have appropriate names."
+      },
+      {
+        "name": "Naming convention for types",
+        "description": "When defining a type (a function whose codomain is Sort u), name it in UpperCamelCase.",
+        "guidance": "Examples: List, Std.Time.Month. Predicates should be prefixed with 'Is' (e.g., List.IsPrefix), except when that is ungrammatical, confusing due to extra data (e.g., List.Pairwise), or when the name is an adjective (e.g., Std.Time.Month.Ordinal.Valid)."
+      },
+      {
+        "name": "Structure fields and projection names",
+        "description": "Structure fields should be named such that the resulting projections have the correct names.",
+        "guidance": "Think about projection names when choosing field names; the guide emphasizes that fields should be named to produce sensible projection identifiers. No strict algorithm is given; use judgment to get natural projection names."
+      },
+      {
+        "name": "Namespace placement and generalized projection notation",
+        "description": "Definitions and theorems relating to a type should almost always be placed in a namespace with the same name as the type, to enable convenient dot/projection notation.",
+        "guidance": "Place list operations/theorems in the List namespace, Std.Time.PlainDate results in Std.Time.PlainDate, etc. Declarations in the root namespace should be rare and typically concern notation-exported typeclass data. When multiple namespaces are involved, place the theorem in the most specific namespace that appears in one of the hypotheses. Consider which dot notations (generalized projections) you want to enable; that can guide where to put a theorem and sometimes justifies duplicating the theorem in multiple namespaces."
+      },
+      {
+        "name": "Root namespace exceptions",
+        "description": "Declarations in the root namespace are acceptable when they are about data/properties exported by notation type classes rather than about a specific implementing type.",
+        "guidance": "Example: beq_iff_eq lives in the root namespace, whereas List.cons_beq_cons belongs in the List namespace. Use root namespace sparingly."
+      },
+      {
+        "name": "Std namespace and internal naming",
+        "description": "New types are usually placed in the Std namespace (and Std/ source directory). Internal declarations should be private or have a name component marking them as internal (preferably 'Internal').",
+        "guidance": "Follow Std/ layout for standard library additions. Use 'private' or include 'Internal' in the name to mark internal declarations."
+      },
+      {
+        "name": "Naming convention for data/functions (lowerCamelCase and suffixes)",
+        "description": "Data (functions whose codomain is Type u rather than Sort u) should be named in lowerCamelCase.",
+        "guidance": "If data is morally fully specified by its type, use the theorem-naming procedure then convert to lowerCamelCase. Use '?' suffix for functions returning Option; use '!' suffix for functions that may panic. Often there are multiple variants of a function (option-returning, panicking, proof-taking) \u2014 indicate that in the name."
+      },
+      {
+        "name": "Theorem naming: choose namespace first",
+        "description": "First decide which namespace the theorem should live in, according to the namespace guidelines.",
+        "guidance": "Namespace choice affects discoverability and whether generalized projection notation is available. This is the first (mechanical) step in the theorem-naming process."
+      },
+      {
+        "name": "Theorem naming: traverse the type as a tree",
+        "description": "Consider the type of the declaration as a tree (function types/applications as inner nodes, leaves are 0-ary functions or bound variables) and build a name by traversing it.",
+        "guidance": "Rules: - For a function type, turn the result type into a name, then all argument types left-to-right, joining with '_of_'. - For a normal function (not infix or projection), put the function name then arguments joined by underscores. - For infix notation, join arguments using the name of the notation separated by underscores. - For a structure projection, proceed as for functions but put the projection name last. - When encountering a name, put it in lower camel case. - Skip bound variables and proofs. - Type class arguments are generally skipped. - When encountering namespace names, concatenate them in lower camel case. An example produced by this algorithm: Std.HashMap.getElem?_eq_optionSome_getElem_of_mem."
+      },
+      {
+        "name": "Theorem naming: shortening heuristics",
+        "description": "After producing a mechanical name, shorten it using context-sensitive heuristics to avoid unwieldy names while keeping uniqueness and clarity.",
+        "guidance": "Heuristics include: omit namespace of functions if clear or current; for infix operators, omit RHS or notation name if clear; omit hypotheses if they are required or appear in the conclusion; prefer shorter names for lemmas you expect/want to be commonly used. However, avoid names that cause confusion (e.g., include 'iff' explicitly for iff lemmas to avoid misuse). Use context and potential ambiguity to decide how much to shorten."
+      },
+      {
+        "name": "Use of special keywords in identifiers",
+        "description": "Certain keywords are conventional in theorem identifiers to indicate common logical shapes or properties.",
+        "guidance": "Common keywords and meanings include: def (unfold a definition; avoid for public APIs), refl/rfl (reflexive theorems, with rfl meaning implicit a), irrefl (irreflexive), symm (symmetric), trans (transitive), antisymm, congr, comm (commutativity), assoc (associativity), distrib (distributivity), self (variable appears multiple times), inj (f a = f b \u2194 a = b), cancel (forms f a = f b \u2192 a = b or g (f a) = a), cancel_iff (same as inj but different left/right conventions), ext (extensionality forms), mono (monotonicity). Use these keywords to make theorem roles clear; examples are listed in the guide."
+      },
+      {
+        "name": "Left/right disambiguation conventions",
+        "description": "Use 'left' and 'right' in names to disambiguate symmetric variants, with heuristics about which side is named.",
+        "guidance": "Heuristic: name the side that is 'more variable' as left/right, but follow conventions for particular keywords (examples include Nat.left_distrib vs Nat.right_distrib, add_left_cancel vs add_right_cancel, and the reversed convention for cancel_iff vs inj). Follow examples provided to match standard-library expectations."
+      },
+      {
+        "name": "Avoid primed-name disambiguation",
+        "description": "Do not disambiguate variants by appending the prime (') character.",
+        "guidance": "Primes are hard to distinguish without looking at types/docs. Prefer descriptive name pairs (e.g., BitVec.sshiftRightNat / BitVec.sshiftRight) instead of shiftright and shiftright'."
+      },
+      {
+        "name": "Acronym casing rules",
+        "description": "Casing rules for acronyms in identifiers depend on acronym length and conventional spelling.",
+        "guidance": "For acronyms of three letters or fewer, keep all letters in the same case as dictated by the convention (e.g., IO, IO.Ref -> IORef). For acronyms four letters or longer, use lower case from the second letter (e.g., Json, JsonRPC). If an acronym is typically spelled with mixed case, preserve that mixed spelling (e.g., Std.Net.IPv4Addr). For usage in theorem names, use lower camel case when appropriate (e.g., ioRef)."
+      },
+      {
+        "name": "Simp set naming",
+        "description": "Simp sets centered around a conversion function should be named source_to_target in snake_case.",
+        "guidance": "Example: a simp set for BitVec.toNat should be named bitvec_to_nat."
+      },
+      {
+        "name": "Variable naming recommendations",
+        "description": "Recommendations for naming local hypotheses, lists, arrays, vectors, indices, sizes, and other common metavariables.",
+        "guidance": "Simple hypotheses: h, h', h\u2081, h\u2082, ... or w for 'witness'. Lists: l, l', l\u2081 or as, bs when lists differ in element type (encouraged). Arrays: xs, ys, zs or as, bs when different element types. Vectors: xs, ys, zs or as, bs (with size n). Use L for list-of-lists, xss for array-of-arrays or vector-of-vectors. Use acc for accumulators in recursive functions. Prefer i, j, k for numerical indices. Use descriptive names (start, stop, lo, hi) when helpful. Use n, m for sizes. Use w for BitVec width."
+      }
+    ]
+  }
+}

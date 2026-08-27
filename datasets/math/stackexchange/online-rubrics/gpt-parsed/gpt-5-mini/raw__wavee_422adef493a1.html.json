@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_422adef493a1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13782,
+  "output_tokens": 2951,
+  "elapsed_s": 1404.8851886668708,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners building/evaluating LLM mathematical reasoning benchmarks and Chain-of-Thought evaluation (ML/NLP researchers)",
+    "subtask_short": "evaluating CoT math reasoning benchmarks",
+    "subtask_description": "Designing and evaluating synthetic chained math reasoning benchmarks (Scheherazade) to measure Chain-of-Thought reasoning in LLMs, and the experimental protocol for comparing models across chain lengths and chaining techniques.",
+    "subtask_keywords": [
+      "chain_of_thought",
+      "math_benchmarks",
+      "benchmark_generation",
+      "llm_evaluation",
+      "forward_backward_chaining"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Benchmark differentiation capability",
+        "description": "Benchmarks should be able to distinguish reasoning capabilities of competing LLMs, even as models approach saturation on existing datasets.",
+        "guidance": "Motivation: existing benchmarks (e.g., GSM8K) have become less discriminative as models reach >94% accuracy. New benchmarks must produce problems that reveal remaining reasoning differentials."
+      },
+      {
+        "name": "Increase complexity via logical chaining",
+        "description": "Create composite problems by logically chaining multiple base benchmark problems together so that solving later problems depends on solving earlier ones (nested dependencies).",
+        "guidance": "Scheherazade chains benchmarks using conditional branching to form nested reasoning tasks; chaining increases nesting and thus reasoning complexity as chain length grows."
+      },
+      {
+        "name": "Forward chaining vs backward chaining distinction",
+        "description": "Forward chaining: problems linked so the composite can be solved sequentially in written order. Backward chaining: problems earlier require context from later problems, forcing reverse reasoning.",
+        "guidance": "Backward chaining introduces added complexity because it forces models to reason in reverse at each step; the paper demonstrates different model behaviours on forward vs backward chains."
+      },
+      {
+        "name": "Randomized branching to prevent memorization",
+        "description": "Introduce conditional branching and randomness between questions so models cannot memorize branch sequences and must reason instead.",
+        "guidance": "Use randomly selected if-then-else branches and randomized choices of r_i constructs between subsequent questions; randomness ensures format memorization is insufficient."
+      },
+      {
+        "name": "Support arbitrary ordering and chain length generalization",
+        "description": "Chaining technique should generalize to any chain length and permit arbitrary permutations of component problems.",
+        "guidance": "Scheherazade allows any permutation of problems and both chaining techniques generalize to any length n; evaluation spans lengths 2 through 10 in the paper."
+      },
+      {
+        "name": "Use of conditional if-then-else structure for chaining",
+        "description": "Chain problems by inserting branching 'if then else' statements linking conclusions of one problem to premises of another.",
+        "guidance": "Template examples: Ac => B1 \u2227 \u00acAc => B'1; concatenation of premises and conclusions constructs the composite textual question."
+      },
+      {
+        "name": "Wrong-branch property (need for wrong conclusions)",
+        "description": "Each base problem must include a wrong conclusion and an alternate first premise so that selecting the wrong branch yields an incorrect conclusion.",
+        "guidance": "For any question Q, Q'1 has the property that Q'1 \u21cf Qc, meaning if the wrong branch is taken the corresponding premise yields an incorrect conclusion; this enables meaningful branching."
+      },
+      {
+        "name": "Preprocessing constraints for base benchmark set",
+        "description": "The starting set of benchmarks must satisfy specific constraints: no pronouns, unique names/variables across benchmarks, and an incorrect conclusion for each problem.",
+        "guidance": "These constraints reduce ambiguity when chaining; some preprocessing can be automated but manual cleanup may be required (limitation noted)."
+      },
+      {
+        "name": "Generation power / combinatoric coverage",
+        "description": "Measure of how many distinct chained problems can be generated from N starting problems and chain lengths l using the technique's randomness and two chaining modes.",
+        "guidance": "Paper gives formula: total number = 2 \u00b7 \u03a3_{l=2}^{?} 2^{l\u22121} \u00b7 N!/(N\u2212l)!. Example: with N=50, technique can generate \u2248 5.64\u00b710^79 different problems."
+      },
+      {
+        "name": "Evaluation sampling protocol (chain lengths and sample sizes)",
+        "description": "Evaluate models across multiple chain lengths and both chaining techniques with sufficiently large random samples per length.",
+        "guidance": "In the paper: for each model (except o1-preview) evaluate 1000 randomly generated forward and 1000 backward problems per length for lengths 2\u201310 (9000 forward+9000 backward total); o1-preview evaluated on 200 per length per technique. This yields robust statistics across lengths and techniques."
+      },
+      {
+        "name": "Primary metrics: raw accuracy and normalized accuracy",
+        "description": "Report raw accuracy (fraction correct) per chain length and chaining technique; also report accuracy normalized to accuracy on length-1 (original) problems.",
+        "guidance": "Normalized accuracy = accuracy_at_length_l / accuracy_at_length_1; normalization highlights relative degradation with chain length and isolates effects beyond base problem difficulty."
+      },
+      {
+        "name": "Interpretation: forward vs backward difficulty patterns",
+        "description": "Benchmark analysis should compare forward and backward chaining trends and note model-specific differences (e.g., some models decline more on backward chains).",
+        "guidance": "Observed: most models decline rapidly on backward chains; o1-preview maintained stronger backward reasoning. Consider model token-prediction nature as an explanation for forward advantage."
+      },
+      {
+        "name": "Error taxonomy for incorrect outputs",
+        "description": "Classify incorrect model outputs into semantic misunderstanding errors, wrong path errors, false negatives, and other.",
+        "guidance": "This taxonomy is used to analyze failure modes; sampling and manual labeling (e.g., 40 incorrect outputs per model per technique) can reveal dominant error types and guide improvements."
+      },
+      {
+        "name": "Semantic misunderstanding errors",
+        "description": "Errors where the model produces an answer indicating a misunderstanding of the question, including misunderstanding conditions or interpreting quantities incorrectly.",
+        "guidance": "Examples: misinterpreting tip calculation (40/1.25 vs 40\u00d71.25) or assuming conditional statements are true and working backwards to fit premises to conclusions."
+      },
+      {
+        "name": "Wrong path errors",
+        "description": "Errors where the model solved an intermediate correctly but then followed the wrong conditional branch, skipped a step, or hallucinated a non-existent alternative path.",
+        "guidance": "Includes hallucinated 'Alternative Exploration' where the model tweaks numbers to fit a desired answer; indicates control-flow tracking problems."
+      },
+      {
+        "name": "False negatives due to answer extraction",
+        "description": "Cases where the evaluation/extraction system fails to detect a correct answer because the model's output format differs or the model refutes a branch instead of explicitly giving the answer.",
+        "guidance": "Paper reports ~3.75% of errors due to false negatives; robust answer extraction/parsing is necessary to avoid underestimating performance."
+      },
+      {
+        "name": "Other and rare failure modes (e.g., infinite loops)",
+        "description": "Capture miscellaneous error types that don't fit taxonomy; note rare model-specific behaviors such as output runaway/infinite-loop style repetitions.",
+        "guidance": "Example: GPT-4o sometimes produced extremely long repeated outputs (~100k characters) effectively hitting output limits; such behaviours should be detected and handled in evaluation harnesses."
+      },
+      {
+        "name": "Sampling-based error analysis procedure",
+        "description": "Perform manual analysis on a random subset of incorrect answers to quantify error categories and better understand failure modes.",
+        "guidance": "Paper sampled 40 incorrect answers per model (20 forward, 20 backward) for manual categorization; such sampling helps reveal dominant error types and model-specific patterns."
+      },
+      {
+        "name": "Design for preventing trivial solutions (avoid format memorization)",
+        "description": "Ensure that chained problems, branching choices, and randomization prevent models from exploiting superficial patterns or memorized sequences.",
+        "guidance": "Use randomized branching, alternate premises/conclusions, and permutations of problem ordering to force genuine reasoning rather than pattern matching."
+      },
+      {
+        "name": "Limitations and preprocessing overhead acknowledgement",
+        "description": "Be explicit about limitations: answer extraction false negatives, preprocessing requirements for base dataset, and potential manual cleanup needed to meet chaining constraints.",
+        "guidance": "State measured impact (e.g., 3.75% false negatives), and document the base-problem constraints (no pronouns, unique names, wrong conclusions) and the consequent overhead when applying the method to new datasets."
+      }
+    ]
+  }
+}

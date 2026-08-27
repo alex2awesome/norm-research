@@ -1,0 +1,159 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/9752aab72e7e.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16950,
+  "output_tokens": 4262,
+  "elapsed_s": 3436.9319846672006,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers developing or evaluating LLMs for patent concept/text generation and patent practitioners interested in AI-assisted drafting",
+    "subtask_short": "LLM-based patent concept generation",
+    "subtask_description": "Designing, fine-tuning, and evaluating large language models to autonomously mine domain knowledge and generate initial patent concepts and patent text (titles, abstracts, claims) using a Knowledge Fine-Tuning (KFT) workflow. Includes data curation (USPTO corpora, knowledge graphs), SFT, RLHF, and multiple automated and human-centered evaluation benchmarks.",
+    "subtask_keywords": [
+      "patents",
+      "llm",
+      "concept_generation",
+      "knowledge_finetuning",
+      "patent_nlp"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Knowledge Fine-Tuning (KFT) workflow",
+        "description": "A workflow that enhances LLM performance in concepts and patents generation by incorporating knowledge injection pre-training (KPT), domain-specific supervised fine-tuning (SFT), and reinforcement learning from human feedback (RLHF).",
+        "guidance": "KFT combines structured knowledge and original text: (1) Knowledge Injection (transform structured triples into text and inject during pre-training), (2) SFT with domain-specific datasets (fine-tune on patent drafting dialogues), and (3) RLHF (align outputs with human knowledge recognition). The paper claims KFT significantly improves downstream patent-writing performance compared to traditional PT + SFT + RLHF."
+      },
+      {
+        "name": "Knowledge extracting (KG construction)",
+        "description": "Automatically extract concept entities and relationships from patent text to build a knowledge graph K with triples (h, r, t) using prompts and an LLM extractor.",
+        "guidance": "Procedure: input general corpus G (USPTO patent texts), use LLM \u03c0\u03b8 with prompts (Appendix A) to produce triplets Ti = argmax(h,r,t) \u03c0\u03b8(h,r,t | gi), aggregate Ti across corpus to obtain K. Intended entity/relation classification follows predefined entity and relation types (see Table 2 & Table 3)."
+      },
+      {
+        "name": "Knowledge injecting (convert triples to natural text and pre-train)",
+        "description": "Transform each structured triple in the extracted knowledge graph into natural language sentences si and use these to form a knowledge corpus S for continued pre-training (knowledge injection).",
+        "guidance": "Conversion uses a prompt (Appendix B). Continued pre-training loss LPT = \u03b1 E_s\u2208S[log \u03c0\u03c7(y|s)] + \u03b2 E_g\u2208G[log \u03c0\u03c7(y|g)], where \u03b1 and \u03b2 weight importance of knowledge corpus S and general corpus G."
+      },
+      {
+        "name": "Knowledge learning (Supervised Fine-Tuning, SFT)",
+        "description": "Align model outputs to specific patent drafting tasks by training on a dialogue dataset Q of (q, a) pairs to reduce differences between outputs and ground-truth labels.",
+        "guidance": "SFT loss LSFT(\u03c7) = E(q,a)\u2208Q[log \u03c0\u03c7(a|q)]. The SFT dialogue dataset in the paper contains 60,000 Q\u2013A pairs for drafting patent titles, abstracts, and claims."
+      },
+      {
+        "name": "Knowledge feedbacking (RLHF with human preference data)",
+        "description": "Refine model outputs through Reinforcement Learning from Human Feedback: collect preference-labeled interactions H = {(q, p, n)}, train a reward model to predict human preferences, and apply PPO to fine-tune the LLM using the reward signal.",
+        "guidance": "Reward model loss LRM = E(q,p,n)\u2208H[log \u03c3(r\u03c1(p|q) - r\u03c1(n|q))]. PPO objective LPPO = E[min(r_t(\u03c7)A_t, clip(r_t(\u03c7),1-\u03b5,1+\u03b5)A_t)] with r_t(\u03c7)=\u03c0\u03c7(a|q)/\u03c0\u03c7_old(a|q). Human feedback dataset described: 2,000 interactions with preferred/non-preferred answers annotated by experienced patent practitioners."
+      },
+      {
+        "name": "USPTO patent text dataset composition",
+        "description": "Pre-training corpus sourced from USPTO patents published between 2021 and 2022, sampled by IPC to ensure industry balance; includes patent titles, abstracts, and claims.",
+        "guidance": "Approximately 20,000 patents collected, with each of the eight IPC sections containing between 2,000 and 4,000 patents to ensure balanced representation across fields A\u2013H. Used for continued pre-training and for building KG and SFT datasets."
+      },
+      {
+        "name": "Patent Knowledge Graph (KG) dataset construction criteria",
+        "description": "KG built from a subset (30%) of USPTO Patent Text Dataset using LLM extraction prompts; resulting KG contains entities and relationships represented as triples (~100,000 entities, ~300,000 relations).",
+        "guidance": "Entities and relationships are identified/classified strictly according to predefined types (see Table 2 entity types and Table 3 relation types). Triples are converted into natural language descriptions for knowledge injecting."
+      },
+      {
+        "name": "SFT dialogue dataset requirements",
+        "description": "Dialogues for supervised fine-tuning should reflect patent drafting scenarios (titles, abstracts, claims).",
+        "guidance": "The paper's SFT dataset contains 60,000 question\u2013answer pairs derived from USPTO patent texts; dataset design should capture drafting tasks to teach the model how to use injected knowledge in context."
+      },
+      {
+        "name": "Human feedback dataset annotation standard",
+        "description": "Human preference annotations used to train the reward model must be provided by experienced patent practitioners to ensure legal and technical quality.",
+        "guidance": "Each query includes two candidate answers (preferred and non-preferred); annotations prioritize answers consistent with human knowledge recognition and legal accuracy. The paper used 2,000 such annotated interactions."
+      },
+      {
+        "name": "ROUGE-1",
+        "description": "Measures overlap between generated text and the 1-gram in the reference text, emphasizing word-level coverage.",
+        "guidance": "Formula provided: ROUGE-1 = (sum_{w\u2208Ref} Count1-gram(w)) / (sum_{w\u2208Ref} Count(w)). Useful to assess word-level coverage vs. reference patent texts."
+      },
+      {
+        "name": "ROUGE-2",
+        "description": "Measures overlap between generated text and the 2-gram in the reference text, capturing phrase-level matches.",
+        "guidance": "Formula provided analogous to ROUGE-1 but for 2-grams. Useful for assessing short-phrase fidelity to reference patent text."
+      },
+      {
+        "name": "ROUGE-L",
+        "description": "Based on longest common subsequence (LCS) to calculate F-measure, reflecting similarity in semantic order and structure between generated and reference text.",
+        "guidance": "Formulas for RLCS, PLCS, FLCS provided using LCS(X,Y), lengths m and n, and \u03b2 to trade precision/recall. Useful for structural similarity."
+      },
+      {
+        "name": "BLEU-4",
+        "description": "Measures n-gram precision (up to 4-grams) with a length penalty to reflect syntactic accuracy and fluency of generated text.",
+        "guidance": "BLEU formula with brevity penalty BP is provided. BLEU-4 is used in the paper to reflect accuracy of phrase matching in generated patent text (paper reports BLEU-4 as an important indicator of syntactic precision)."
+      },
+      {
+        "name": "BERTScore",
+        "description": "A semantic similarity-based evaluation using pre-trained language model embeddings to compute cosine similarity between generated and reference words.",
+        "guidance": "Formula: average over generated tokens of max cosine(E(ti), E(rj)). Used to measure semantic match and domain-terminology understanding (paper reports BERTScore as a primary indicator of patent-writing quality)."
+      },
+      {
+        "name": "IP_Quiz",
+        "description": "A public dataset benchmark designed to evaluate a model\u2019s understanding of IP concepts and regulations via multiple-choice questions.",
+        "guidance": "Model must select the correct answer from candidates; number of correct selections indicates proficiency in IP concept comprehension (sourced from prior benchmark work [25])."
+      },
+      {
+        "name": "IP_Match",
+        "description": "Benchmark to evaluate whether the model understands the invention described in a patent and can accurately distinguish different patents.",
+        "guidance": "Used to assess document-level comprehension and patent-distinction capability (from public benchmark on Hugging Face)."
+      },
+      {
+        "name": "IP_Exam (Patent Bar style multiple-choice)",
+        "description": "Custom benchmark derived from multiple-choice Q&A content used in the U.S. Patent Bar Examination to assess knowledge of IP law principles.",
+        "guidance": "Higher performance indicates capability to understand and apply IP law principles; used to evaluate legal-awareness of the model."
+      },
+      {
+        "name": "MMLU (Massive Multitask Language Understanding)",
+        "description": "A broad benchmark assessing model performance across many tasks and disciplines to gauge general language understanding and robustness.",
+        "guidance": "Higher MMLU scores reflect versatility; included to show model's general capabilities beyond IP domain."
+      },
+      {
+        "name": "Patent writing benchmark (task sampling and prompt design)",
+        "description": "A benchmark specifically evaluating LLMs' ability to write patentable concept texts: 1,000 instances sampled from all eight IPC categories using a designed prompt (Appendix C).",
+        "guidance": "Evaluates title/abstract/claim generation quality across diverse fields; ensures sampling across IPC for coverage of industry domains."
+      },
+      {
+        "name": "Concept Generation Evaluation \u2014 Reasonability (USPTO standards)",
+        "description": "Human/LLM judging whether generated initial concept texts meet the reasonability of patent application and conform to USPTO standards.",
+        "guidance": "Paper used ChatGPT-4 as a judge on 100 randomly selected samples to determine whether generated texts meet reasonability; intended as an automated proxy but recognizes need for legal expert validation."
+      },
+      {
+        "name": "Concept Generation Evaluation \u2014 Innovation (novelty/uniqueness via TechNet)",
+        "description": "Measure innovation of generated patent text by analyzing novelty and uniqueness relative to existing patent databases using TechNet's evaluation method.",
+        "guidance": "Applied after filtering for 'reasonable' texts (USPTO-conforming); higher innovation scores indicate greater novelty relative to patent corpus; paper also uses a rarity/novelty score but notes this is not a substitute for legal patentability analysis."
+      },
+      {
+        "name": "Novelty, legal compliance, and plagiarism risk check",
+        "description": "Qualitative assessment required to evaluate originality, sufficiency of disclosure, compliance with patent laws across jurisdictions, and risk of unintentional plagiarism.",
+        "guidance": "Authors caution that automated rarity/novelty scores do not replace legal assessment by patent attorneys; future work should integrate legal expert evaluations to assess patentability and compliance systematically."
+      },
+      {
+        "name": "Hallucination and domain-coverage risk (applicability to emerging domains)",
+        "description": "Assessment of model reliability in emerging technical domains (quantum computing, BCI, synthetic biology) where training data may be insufficient.",
+        "guidance": "Paper notes PatentGPT (trained on patents 2021\u20132022) may hallucinate or generate technically inaccurate claims in underrepresented or emerging fields; recommends integrating external retrieval or continuous knowledge updates."
+      },
+      {
+        "name": "Alignment with human knowledge recognition (RLHF success criterion)",
+        "description": "Degree to which RLHF-refined outputs align with human preferences and knowledge recognition as measured by reward-model-guided PPO finetuning.",
+        "guidance": "Measured indirectly via downstream evaluation improvements (KPT + SFT + RLHF achieved highest BERTScore and BLEU-4). Requires high-quality human preference annotations by domain experts."
+      },
+      {
+        "name": "Ethical & misuse risk assessment",
+        "description": "Evaluation of potential misuse risks (e.g., enabling excessive/low-quality patent filings, raising barriers for smaller entities) and ethical implications of AI-assisted patent generation.",
+        "guidance": "Authors recommend AI auditing frameworks and engagement with patent offices/policymakers to mitigate misuse and study broader IP system impacts. This is a societal-level evaluation criterion."
+      },
+      {
+        "name": "KG entity type taxonomy",
+        "description": "Entity categories used in the KG: Task/Method, Material, Generic, Definition (and examples in Table 2).",
+        "guidance": "Defines what entity types the extraction model should identify: e.g., Applications/problems to solve (Task), Methods/models/systems (Method), Data/datasets/resources (Material), and General terms/pronouns (Generic). Adherence ensures KG consistency."
+      },
+      {
+        "name": "KG relation type taxonomy",
+        "description": "Relation categories used in the KG: Used-for, Feature-of, Hyponym-of, Part-of, Compare, Conjunction (Table 3).",
+        "guidance": "Each relation has a definition (e.g., Used-for: B is used for A; Feature-of: B belongs to A). Relation typing guides correct triple extraction and downstream conversion into natural language training data."
+      }
+    ]
+  }
+}

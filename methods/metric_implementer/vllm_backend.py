@@ -218,8 +218,13 @@ class OfflineVLLM(_BaseVLLM):
 
     @classmethod
     def _engine(cls, model: str, cfg):
-        if model in _ENGINE_CACHE:
-            return _ENGINE_CACHE[model]
+        # Optional LoRA adapter (tacit_channels part-3 installation-channel experiments). The
+        # cache key must include the adapter path — the engine is a process-global singleton and
+        # a base-model engine cannot serve adapter requests (and vice versa).
+        lora_path = getattr(cfg, "vllm_lora_path", None)
+        cache_key = f"{model}::lora={lora_path}" if lora_path else model
+        if cache_key in _ENGINE_CACHE:
+            return _ENGINE_CACHE[cache_key]
         # sk3 env (matches the repo's 137 canonical recipes): pin HOME to /lfs BEFORE importing
         # vllm/HF (nohup AFS-token safety [[feedback_sk3_afs_tokens]]); disable FlashInfer
         # version check (required across sk3 scripts); MoE-FP8 safety for Qwen.
@@ -263,9 +268,31 @@ class OfflineVLLM(_BaseVLLM):
             kwargs["block_size"] = int(bs)  # FlashInfer head_size-256 bug (gemma-2) needs 32/64
         if os.environ.get("VLLM_ENFORCE_EAGER"):
             kwargs["enforce_eager"] = True  # skip compile/cudagraph (gemma-3 init-hang diagnosis)
+        if "magistral" in str(model).lower():
+            # Magistral ships tekken.json only (no HF tokenizer files); the auto format
+            # path silently wedges before weight load (2026-08-09 diagnosis). Vendor-
+            # recommended mistral-format flags are required.
+            kwargs.update(tokenizer_mode="mistral", config_format="mistral",
+                          load_format="mistral")
+        if lora_path:
+            kwargs["enable_lora"] = True
+            kwargs["max_lora_rank"] = int(getattr(cfg, "vllm_max_lora_rank", 0) or 64)
         eng = LLM(**kwargs)
-        _ENGINE_CACHE[model] = eng
+        _ENGINE_CACHE[cache_key] = eng
         return eng
+
+    def _maybe_lora(self) -> dict:
+        """Extra generate() kwargs for optional LoRA routing (tacit_channels part-3).
+
+        Returns {} when no adapter is configured, keeping every call site below byte-identical
+        to the pre-LoRA behavior — the zero-adapter acceptance test depends on this no-op path.
+        """
+        lora_path = getattr(self.cfg, "vllm_lora_path", None)
+        if not lora_path:
+            return {}
+        from vllm.lora.request import LoRARequest
+        name = getattr(self.cfg, "vllm_lora_name", None) or "tacit_channels_adapter"
+        return {"lora_request": LoRARequest(name, 1, str(lora_path))}
 
     def _flush(self, prompts, system, max_tokens, temperature, seed):
         from vllm import SamplingParams
@@ -293,7 +320,7 @@ class OfflineVLLM(_BaseVLLM):
                   for s in seeds]
         else:
             sp = SamplingParams(temperature=temperature, max_tokens=max_tokens, seed=int(seed))
-        outs = eng.generate(texts, sp)
+        outs = eng.generate(texts, sp, **self._maybe_lora())
         # vLLM preserves input order; map back defensively by request_id if present
         return [o.outputs[0].text if o.outputs else "" for o in outs]
 
@@ -325,7 +352,7 @@ class OfflineVLLM(_BaseVLLM):
                   for s in seeds]
         else:
             sp = SamplingParams(temperature=0.0, max_tokens=1, logprobs=20, seed=int(seed))
-        outs = eng.generate(texts, sp)
+        outs = eng.generate(texts, sp, **self._maybe_lora())
         self.stats.n_calls += 1
         self.stats.n_prompts += len(prompts)
         res = []
@@ -340,6 +367,57 @@ class OfflineVLLM(_BaseVLLM):
                     pneg += math.exp(L.logprob)
             res.append(ppos / (ppos + pneg) if (ppos + pneg) > 0 else float("nan"))
         return res
+
+    def score_binary_gen(self, prompts: List[str], system: Optional[str] = None,
+                         pos: str = "YES", neg: str = "NO", thinking: bool = False,
+                         max_gen_tokens: int = 1024, seed: int = 0,
+                         return_texts: bool = False):
+        """GENERATIVE readout for reasoning-mode executors (3b): render chat template with
+        enable_thinking as requested (tokenizers without the kwarg fall back — R1-style
+        templates think natively), generate, parse the final pos/neg verdict from the
+        post-</think> text. Returns hard 1.0/0.0 with nan on parse-fail; callers must
+        report the nan rate. 10-100x the cost of score_binary — focused slates only.
+        gpt-oss (Harmony): handled — skip_special_tokens=False + final-channel split
+        (validated by ossfix_gptoss120b_gen 2026-08-08, 5/5 probes, nan 0.0).
+        KNOWN-INVALID: phi4-reasoning (template defeats the </think> split); seed-oss
+        closes with </seed:think> — per-model terminators pending integration."""
+        import re as _re
+        from vllm import SamplingParams
+        harmony = "gpt-oss" in str(self.model)
+        eng = self._engine(self.model, self.cfg)
+        tok = eng.get_tokenizer()
+        texts = []
+        for p in prompts:
+            msgs = ([{"role": "system", "content": system}] if system else []) + \
+                   [{"role": "user", "content": p}]
+            try:
+                s = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True,
+                                            enable_thinking=thinking)
+            except TypeError:
+                s = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
+            texts.append(s)
+        sp = SamplingParams(temperature=0.0, max_tokens=max_gen_tokens, seed=int(seed),
+                            **({"skip_special_tokens": False} if harmony else {}))
+        outs = eng.generate(texts, sp,
+                            **(self._maybe_lora() if hasattr(self, "_maybe_lora") else {}))
+        self.stats.n_calls += 1
+        self.stats.n_prompts += len(prompts)
+        res, raw = [], []
+        P, N = pos.upper(), neg.upper()
+        for o in outs:
+            txt = (o.outputs[0].text if o.outputs else "") or ""
+            raw.append(txt)
+            if harmony and "<|channel|>final<|message|>" in txt:
+                tail = txt.rsplit("<|channel|>final<|message|>", 1)[-1]
+            else:
+                tail = txt.rsplit("</think>", 1)[-1]
+            toks = _re.findall(r"[A-Z]+", tail.upper())
+            verdict = next((t for t in toks if t in (P, N)), None)
+            if verdict is None:
+                toks = _re.findall(r"[A-Z]+", txt.upper()[-400:])
+                verdict = next((t for t in reversed(toks) if t in (P, N)), None)
+            res.append(1.0 if verdict == P else 0.0 if verdict == N else float("nan"))
+        return (res, raw) if return_texts else res
 
     def score_binary_constrained(self, prompts: List[str], system: Optional[str] = None,
                                  pos: str = "YES", neg: str = "NO",
@@ -399,7 +477,7 @@ class OfflineVLLM(_BaseVLLM):
             params = [sampling_params(item_seed) for item_seed in seeds]
         else:
             params = sampling_params(int(seed))
-        outputs = eng.generate(texts, params)
+        outputs = eng.generate(texts, params, **self._maybe_lora())
         self.stats.n_calls += 1
         self.stats.n_prompts += len(prompts)
         if len(outputs) != len(prompts):
@@ -494,7 +572,7 @@ class OfflineVLLM(_BaseVLLM):
             params = [sampling_params(item_seed) for item_seed in seeds]
         else:
             params = sampling_params(int(seed))
-        outputs = eng.generate(texts, params)
+        outputs = eng.generate(texts, params, **self._maybe_lora())
         self.stats.n_calls += 1
         self.stats.n_prompts += len(prompts)
         if len(outputs) != len(prompts):

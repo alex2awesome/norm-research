@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_d2b9e2308e9d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_d2b9e2308e9d.pdf",
+  "chunk_idx": 8,
+  "n_chunks": 13,
+  "chunk_chars": 39968,
+  "model": "gpt-5-mini",
+  "elapsed_s": 66.59934874999453,
+  "input_tokens": 11737,
+  "output_tokens": 4511,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "Developers and contributors writing code and documentation for the SageMath project (Sage library/Cython/Python)",
+    "subtask_short": "sage library coding guidelines",
+    "subtask_description": "Coding and documentation standards, conventions, and procedural requirements for contributing code, Cython, and docs to the SageMath codebase. Covers naming, API methods, typing, deprecation, imports, exceptions, preparsing, and interfacing with external libraries.",
+    "subtask_keywords": [
+      "sage",
+      "python",
+      "cython",
+      "developer_guide",
+      "coding_standards"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Document name format",
+        "description": "The <document-name> has the form: lang/name where lang is a two-letter language code, and name is the descriptive name of the document. If the language is not specified, then it defaults to English (en).",
+        "guidance": "Examples: `sage --docbuild tutorial html` and `sage --docbuild en/tutorial html` do the same thing; to build French docs use `sage --docbuild fr/tutorial html`."
+      },
+      {
+        "name": "Syntax highlighting for Cython in ReST",
+        "description": "To write Cython code in a ReST file, precede the code block by `.. CODE-BLOCK:: cython` instead of the usual `::`. Enable syntax-highlighting in a whole file with `.. HIGHLIGHT:: cython`.",
+        "guidance": "Example provided showing Cython declarations. Use the CODE-BLOCK or HIGHLIGHT directives rather than plain literal blocks for Cython."
+      },
+      {
+        "name": "Python language standard",
+        "description": "Follow the time window-based support policy: only use language and library features available in the current minimum supported Python version (as found in pyproject.toml); ensure deprecation warnings issued by Python do not lead to failures in doctests.",
+        "guidance": "Some features must be backported explicitly; check pyproject.toml for the minimum supported version before using features."
+      },
+      {
+        "name": "Use __future__ annotations and backports",
+        "description": "All Sage library code that uses type annotations should include `from __future__ import annotations` and follow PEP 563.",
+        "guidance": "Typing features from newer Python versions should be backported via the typing_extensions package, which the Sage library declares as a dependency."
+      },
+      {
+        "name": "Design to fit Sage structure",
+        "description": "When developing code for Sage, design so your program fits into Sage's structure and class hierarchy rather than starting from scratch.",
+        "guidance": "Example: if you implement elements of a ring, your class should derive from `sage.structure.element.RingElement` instead of building from scratch; think how your code interacts with existing Sage code."
+      },
+      {
+        "name": "Special method naming and visibility",
+        "description": "Functions with leading and trailing double underscores `__XXX__` are Python-predefined; functions with leading and trailing single underscores `_XXX_` are defined for Sage. Single leading underscore means semi-private; double leading underscore is really private.",
+        "guidance": "Sage special methods are typically of the form `_XXX_`. Implement the `_latex_` and `_repr_` methods for every object; other special methods depend on object nature."
+      },
+      {
+        "name": "LaTeX representation method (_latex_)",
+        "description": "Every object x in Sage should support `latex(x)` by defining `_latex_(self)` that returns a LaTeX representation suitable for math mode (do not include opening and closing $\u2019s).",
+        "guidance": "Use `latex(component)` to typeset subcomponents rather than calling their `_latex_` directly; include a docstring and an example that illustrates LaTeX generation; allowed macros include those in amsmath, amssymb, amsfonts, and `sage.misc.latex_macros`. Example template and doctest provided."
+      },
+      {
+        "name": "Print representation method (_repr_)",
+        "description": "For Sage objects (deriving from SageObject), define `_repr_(self)` rather than `__repr__` so users can rename objects to control printing and so objects can print differently depending on context.",
+        "guidance": "Example: Pi class defines `_repr_` returning \"pi\" and `_latex_` returning `\\pi`."
+      },
+      {
+        "name": "Matrix/vector coercion methods (_matrix_ / _vector_)",
+        "description": "Provide a `_matrix_` method for objects that can be coerced to a matrix over a ring R so that the Sage `matrix` function will work; similarly provide `_vector_` where appropriate.",
+        "guidance": "Example `_matrix_(self,R=None)` returning adjacency matrix or changed ring; `_vector_(self,R)` should return `change_ring(R)` for vector-like objects."
+      },
+      {
+        "name": "Sage preparsing conventions",
+        "description": "Sage applies preparsing transformations to interactive input (not to library code) implemented by `preparse()`. It supports special syntax such as `R.<x,y> = QQ[]` and raw literals suffixed by `r`/`R` to avoid preparsing.",
+        "guidance": "Raw literals (e.g., `393939r`) are not preparsed and can be useful for efficiency; when a .sage file is loaded a preparsed foo.sage.py is created with header `This file was *autogenerated*`; explicitly preparse with `sage --preparse foo.sage`."
+      },
+      {
+        "name": "Coercion model goal",
+        "description": "The primary goal of coercion is to transparently perform arithmetic, comparisons, etc. between elements of distinct sets while being strict enough to avoid ambiguity or nonsense.",
+        "guidance": "See Coercion section of the Sage Reference Manual for detailed behavior and examples; design coercions to facilitate natural mathematical inclusions (e.g., integers into rationals)."
+      },
+      {
+        "name": "Mutability policy",
+        "description": "Parent structures (rings, fields, matrix spaces, etc.) should be immutable and globally unique whenever possible.",
+        "guidance": "Immutability ensures properties like generator labels and default coercion precision cannot change; implement global uniqueness using `weakref`, a factory function, and module-scope variables. Some objects (e.g., matrices) may start mutable and become immutable later."
+      },
+      {
+        "name": "__hash__ implementation guidance",
+        "description": "Follow Python's `__hash__` expectations where feasible: objects that compare equal should have the same hash. If a class does not define `__eq__()` it should not define `__hash__()`; if it defines mutable objects and implements `__eq__()` it should not implement `__hash__()`.",
+        "guidance": "Pack components into a tuple and hash the tuple for compound objects. Recognize that Sage cannot always satisfy `a == b ==> hash(a) == hash(b)` due to mathematical complexity; use judgment to create fast hashes that reasonably respect natural inclusions/coercions (examples given like `hash(Mod(2,7)) == 2`)."
+      },
+      {
+        "name": "Exception handling style",
+        "description": "Avoid bare `except:` blocks; catch only specific exceptions listed as a tuple. Methods should raise appropriate exceptions when input cannot be handled.",
+        "guidance": "Raise `TypeError` for unsupported input classes, `ValueError` for unsupported values, `ArithmeticError` for arithmetic failures (ZeroDivisionError when dividing by zero), `NotImplementedError` for unimplemented features, and `RuntimeError` if none apply. Exception strings should describe what went wrong."
+      },
+      {
+        "name": "Integer return value policy",
+        "description": "Many functions should return Sage integers (class `Integer`) rather than Python ints so users can use number-theoretic methods; exceptions exist when Python ints are preferable for performance or compatibility (`__hash__`, `__len__`, `__int__`).",
+        "guidance": "To return a Python int as a Sage Integer use `Integer(i)`; to return a Sage Integer as a Python int use `int(i)`."
+      },
+      {
+        "name": "Importing rules (avoid circular/heavy top-level imports)",
+        "description": "Avoid circular imports and avoid importing large third-party modules at top level. Use more specific local imports where needed, and delay importing heavy modules until use.",
+        "guidance": "If you need precomputed top-level data, use `@cached_function` to initialize on first use rather than at import time. Use `sage.misc.lazy_import` for lazy imports to keep `from sage.all import *` fast. Example showing replacing `import *` with local imports inside functions and using `cached_function`."
+      },
+      {
+        "name": "Static typing and stubs",
+        "description": "The Sage project uses `pyright` for typechecking; add typing information and type stub (`.pyi`) files for Cython modules because Cython types are invisible to static checkers.",
+        "guidance": "Place `.pyi` files next to `.pyx`/`.pxd` in `SAGE_ROOT/src/typings` for third-party libraries lacking typing; upstream typestubs where possible or contribute to typeshed as a fallback. Contributing tools to create typestubs for Cython may be more impactful than writing stubs manually."
+      },
+      {
+        "name": "Deprecation policy and practices",
+        "description": "Backward-incompatible changes should be deprecated: keep old code working and display a message indicating how to update. Deprecated code can only be removed one year after first stable release in which it appeared. Deprecation warnings include the GitHub PR number.",
+        "guidance": "Use decorators and helpers: `rename_keyword` to rename a keyword, `deprecated_function_alias` for function renames, `lazy_import(..., deprecation=PR)` to move objects between modules with deprecation, and `deprecation()` (or `deprecation_cython()` in Cython) to display messages. When renaming a class add alias `OldClass = NewClass` and a comment referencing the PR; show changes in the release notes."
+      },
+      {
+        "name": "Experimental/unstable code labeling",
+        "description": "Mark newly created code as experimental/unstable so it can change without deprecation warnings; experimental code should still be doctested and reviewed.",
+        "guidance": "Use the `experimental` decorator (with PR number) for functions or `@experimental` on `__init__` for classes; when code is stable for some time (suggested ~1 year) you may remove the warning."
+      },
+      {
+        "name": "Handling optional packages",
+        "description": "If a function requires an optional package, it should fail gracefully when the package is not available and give a hint to how to install it.",
+        "guidance": "Recommend suggesting `sage -optional` or `optional_packages()` as ways to inform users which optional packages are available and how to install them."
+      },
+      {
+        "name": "Ways to write and build Cython code in Sage",
+        "description": "Multiple supported workflows: (1) use `%%cython` in a notebook cell (saved, compiled, shared with other cells, links to C program), (2) create a `.spyx` file and `load`/`attach` it, (3) create a `.pyx` and add it to the library and rebuild (`sage -b`).",
+        "guidance": "`%%cython` cells are saved to a file, Cython is run with standard Sage libraries linked, a shared library is loaded, and functions can be imported between `%%cython` cells via `from __main__ import testfunction`. `.spyx` files recompile on load/attach; use type declarations (e.g., `def is2pow(unsigned int n)`) to gain more speed."
+      },
+      {
+        "name": "Attaching/loading .spyx files",
+        "description": "You can create `.spyx` files (Sage Pyrex) and `load` them to compile on the fly; `attach('file.spyx')` will reload and recompile whenever you make changes.",
+        "guidance": "Example `power2.spyx` with `is2pow(n)` given; demonstrates runtime speed improvements compared to pure Python file."
+      },
+      {
+        "name": "Interrupt and signal handling in Cython",
+        "description": "When writing Cython code for Sage, ensure code can be interrupted with CTRL-C; Sage uses the `cysignals` package for this.",
+        "guidance": "Consult `cysignals` documentation for proper usage and to ensure responsiveness to interrupts/signals."
+      },
+      {
+        "name": "Unpickling Cython extension types",
+        "description": "To support pickling/unpickling of Cython extension classes, implement `__reduce__()` which returns a tuple `(f, args, ...)` where `f` is a pure Python function and `f(*args)` reconstructs the object.",
+        "guidance": "Example: `Integer.__reduce__` returns `(sage.rings.integer.make_integer, (self.str(32),))`. The first argument must be a pure Python function \u2014 this is the key trick for pickling extension types."
+      },
+      {
+        "name": "Using external libraries/interfaces (PARI example)",
+        "description": "Prefer the direct C interface to external libraries (e.g., PARI) for performance. When adding new functions to wrapper classes (e.g., `gen`), follow the library manual and wrap calls correctly (use `sig_on()`, `self.new_gen(GEN)`, etc.).",
+        "guidance": "Example walkthrough: implement `def matfrobenius(self, flag=0):` with a docstring and examples; call the PARI C library `matfrobenius` and return via `self.new_gen(matfrobenius(self.g, flag, 0))`. Use `self.new_gen_noclear` if you don't want to clear the PARI stack; consult PARI user's manual and match the included PARI version."
+      }
+    ]
+  }
+}

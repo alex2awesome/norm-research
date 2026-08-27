@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 28,
+  "n_chunks": 38,
+  "chunk_chars": 39960,
+  "model": "gpt-5-mini",
+  "elapsed_s": 402.7105292920023,
+  "input_tokens": 15840,
+  "output_tokens": 7800,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "computational number theorists and PARI/GP users computing with elliptic curves, p-adic heights, and L-functions",
+    "subtask_short": "PARI/GP elliptic_curve routines",
+    "subtask_description": "Documentation of PARI/GP library routines for elliptic curves, p-adic heights, hyperelliptic routines and L-functions: definitions, calling conventions, expected outputs and mathematical normalizations to use when computing invariants and performing numerical experiments.",
+    "subtask_keywords": [
+      "pari_gp",
+      "elliptic_curves",
+      "p-adic",
+      "l-functions",
+      "library_documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Canonical p-adic height normalization (reduction-dependent)",
+        "description": "When E has good ordinary reduction at p or non-split multiplicative reduction, the \u201ccanonical\u201d p-adic height is obtained from ellpadicheight(E,p,n,P) by applying the linear change [1,-s2]^~ where s2 = ellpadics2(E,p,n). When E has split multiplicative reduction (Tate curve), the canonical height is obtained by multiplying ellpadicheight(E,p,n,P) by [1,-s2 + 1/log(q)/u2]~ where [u2,u,q] = Ep.tate and Ep = ellinit(E[1..5], O(p^(n))).",
+        "guidance": "s2 does not depend on P, so compute it once with s2 = ellpadics2(E,p,n) and reuse it. Examples provided: using ellpadics2 then ellpadicheightmatrix* [1,-s2]~ to compute regulators; explicit example with E=\"5077a1\", p=5, n=7. Normalizations chosen to make p-adic BSD statements easy."
+      },
+      {
+        "name": "ellpadicheightmatrix: Gram matrix of cyclotomic p-adic height",
+        "description": "Given a vector Q of points, ellpadicheightmatrix(E,p,n,Q) returns the 'Gram matrix' [F,G] of the cyclotomic p-adic height h_E with respect to the basis (\u03c9,\u03b7) of D = H^1_dR(E) \u2297 Q Q_p to n p-adic digits. If ellpadicheight(E,p,n,Q[i],Q[j]) = [f,g] then F[i,j]=f and G[i,j]=g.",
+        "guidance": "The returned F and G are p-adic integral approximations (examples show lift(F) for readability). To get the canonical Gram matrix use [F,G] * [1,-ellpadics2(E,p,n)]~. Library syntax: ellpadicheightmatrix(GEN E, GEN p, long n, GEN Q)."
+      },
+      {
+        "name": "ellpadiclog: formal logarithm in kernel of reduction",
+        "description": "Given E over K = Q or Q_p and P = [x,y] in the kernel of reduction mod p, let t(P) = -x/y be the formal group parameter; ellpadiclog(E,p,n,P) returns L(t) where L is the formal logarithm attached to the canonical invariant differential satisfying dL = dx/(2y + a1 x + a3).",
+        "guidance": "Useful when P lies in kernel of reduction. Examples: ellpadiclog(E,2,10,P) and computations after finding suitable Q = ellmul(E,P,2). Library syntax: ellpadiclog(GEN E, GEN p, long n, GEN P)."
+      },
+      {
+        "name": "ellpadicregulator: p-adic regulator output and interpretation",
+        "description": "ellpadicregulator(E,p,n,S) returns the regulator R for E/Q and vector S=(S1,...,Sr) with respect to the canonical cyclotomic p-adic height, given to n p-adic digits. For ordinary reduction this is the determinant of the Gram matrix in Q_p; for supersingular reduction R is an element of D = H^1_dR(E) \u2297 Q Q_p (two-dimensional) and the function returns R in the basis (\u03c9, F \u03c9).",
+        "guidance": "The documentation explains how to interpret R via the alternating bilinear form [.,.]_D with [\u03c9,\u03b7]_D=1 and formulas [R,\u03b7]_D = det(h(S_i,S_j)_\u03b7) etc. Use ellpadicregulator(GEN E, GEN p, long n, GEN S). This normalization facilitates p-adic BSD formulations."
+      },
+      {
+        "name": "ellpadics2: slope of unit eigenvector of Frobenius (s2)",
+        "description": "For p>2 and E/Q with ordinary good reduction at p, ellpadics2(E,p,n) returns the slope s2 of the unit eigenvector of ellpadicfrobenius(E,p,n), i.e., the c \u2208 p^{-1}Z_p such that \u03b7 + s2 \u03c9 is an eigenvector for the unit eigenvalue of Frobenius on D_p(E) in the basis (\u03c9,\u03b7=x\u03c9).",
+        "guidance": "s2 equals b2/12 - E2/12 where E2 is the Katz p-adic Eisenstein series; it is the unique c for which the odd solution \u03c3(t)=t+O(t^2) of -d(1/\u03c3 d\u03c3 \u03c9) = (x(t)+c)\u03c9 lies in tZ_p[[t]]. Compute s2 once and reuse when constructing canonical p-adic heights: h(E,p,n,P,s2) = ellpadicheight(E,[p,[1,-s2]],n,P). Library syntax: ellpadics2(GEN E, GEN p, long n)."
+      },
+      {
+        "name": "ellperiods: normalized periods and optional quasi-periods",
+        "description": "ellperiods(w,{flag=0}) returns normalized periods [W1,W2] generating the same lattice as w so that \u03c4=W1/W2 has positive imaginary part and lies in the standard fundamental domain for SL_2(Z). If flag=1 returns [[W1,W2],[\u03b71,\u03b72]] with quasi-periods \u03b7_i satisfying \u03b72 W1 - \u03b71 W2 = 2 i \u03c0.",
+        "guidance": "Output is intended to be used as first argument to ellwp, ellzeta, ellsigma. Quasi-periods are needed by ellzeta and ellsigma only. Library syntax: ellperiods(GEN w, long flag, long prec)."
+      },
+      {
+        "name": "ellpointtoz: map point on E to complex/p-adic parameter z",
+        "description": "Given E/C (C/\u039b) and P on E, ellpointtoz(E,P) computes z modulo the lattice \u039b with P = [\u2118_\u039b(z), \u2118'_\u039b(z)] (Weierstrass parametrization). Returns 0 for point at infinity. Behavior over R, number fields and Q_p depends on embeddings and reduction: for split multiplicative reduction returns \u03c6(P) \u2208 Q_p, for non-split returns a t_POLMOD in the unramified quadratic extension.",
+        "guidance": "For E defined over R and P\u2208E(R) returned z lies in rectangle [0,w1)\u00d7[0,w2) as described. For p-adic Tate curves use E.tate to obtain [u2,u,q] and interpret outputs accordingly. Library syntax: zell(GEN E, GEN P, long prec)."
+      },
+      {
+        "name": "ellratpoints: enumerate affine rational points up to naive height",
+        "description": "ellratpoints(E,h,{flag=0}) returns a vector of affine rational points on integral model E with naive height less than h. If flag=1 stops as soon as a point is found and returns either empty vector or single point.",
+        "guidance": "h can be specified as in hyperellratpoints (see hyperellratpoints for h formats). Example: ellratpoints(E,10) returns all points with naive height <10. Library syntax: ellratpoints(GEN E, GEN h, long flag)."
+      },
+      {
+        "name": "ellrootno: local and global root numbers",
+        "description": "ellrootno(E,{p}) computes the local root number of the L-series at place p (p=0 denotes infinite place). If p is omitted returns the global root number; in that case the curve can be over a number field.",
+        "guidance": "Global root number equals sign of functional equation and conjecturally parity of Mordell-Weil rank. Computation is faster if equation is minimal at p but not required. Library syntax: long ellrootno(GEN E, GEN p = NULL)."
+      },
+      {
+        "name": "ellsea: compute #E(F_q) using SEA with early-exit via tors argument",
+        "description": "ellsea(E,{tors=0}) computes the order of E(F_q) with the SEA algorithm. The tors argument allows early exit: if tors>0, returns 0 as soon as a small prime factor not dividing tors is detected. If tors is negative, similar checks apply to the quadratic twist.",
+        "guidance": "Set tors=1 to insist on prime order, tors=2 to allow a power-of-two cofactor, etc. Use ellsea to speed up searches for almost-prime order curves; for general cardinality use ellcard. Caveats: SEA not implemented for characteristic \u22647 or very small q (q \u2264 523), where ellcard is used; for field cardinality <~250 ellcard may be faster. ellsea does not store result in E. Recomended to install seadata package to speed up computation. Library syntax: ellsea(GEN E, long tors)."
+      },
+      {
+        "name": "ellsearch: locate curves in elldata by name/conductor",
+        "description": "ellsearch(N) finds curves in elldata satisfying constraint N. N can be a string (curve name, isogeny class, conductor), a vector encoding same constraints, or an integer conductor. If N codes a full curve name outputs [N,[a1,a2,a3,a4,a6],G] with coefficients and Z-basis of free part of Mordell-Weil group; otherwise returns vector of matching curves in that format.",
+        "guidance": "Use ellsearchcurve(GEN N) when only complete curve names are accepted. Examples: ellsearch(\"11a3\") or ellsearch([11,0,3]). Library syntax: ellsearch(GEN N)."
+      },
+      {
+        "name": "ellsigma: Weierstrass sigma function and log(\u03c3) determination",
+        "description": "ellsigma(L,{z=x},{flag=0}) computes \u03c3(z,L) of the Weierstrass sigma function attached to lattice L (as given by ellperiods). The product/formula expansion is provided. If flag=1 computes an arbitrary determination of log(\u03c3(z)).",
+        "guidance": "Input L may be [\u03c91,\u03c92] or an ellinit structure (E.omega). Quasi-periods from ellperiods can be given for efficiency. Default series precision used if z omitted. Library syntax: ellsigma(GEN L, GEN z = NULL, long flag, long prec)."
+      },
+      {
+        "name": "ellsub: difference of elliptic-curve points via parameters",
+        "description": "ellsub(E, z1, z2) computes the difference of the points corresponding to parameters z1 and z2 on the elliptic curve E.",
+        "guidance": "Simple wrapper/difference operation; library syntax GEN ellsub(GEN E, GEN z1, GEN z2)."
+      },
+      {
+        "name": "elltamagawa: compute global Tamagawa number including infinity",
+        "description": "elltamagawa(E) returns the global Tamagawa number of curve E (including factor at infinite places).",
+        "guidance": "Example demonstrates computing local factors with elllocalred(e,p) then multiplying them, noting factor at infinity determined by sign of e.disc. Library syntax: GEN elltamagawa(GEN E)."
+      },
+      {
+        "name": "elltaniyama: modular parametrization power series",
+        "description": "elltaniyama(E,{d=seriesprecision}) computes the modular parametrization \u03a6: X_0(N)\u2192E for E/Q (ellinit output), returning [u,v] power series (variable x=exp(2i\u03c0z)) with d terms. Assumes E is a strong Weil curve and Manin constant equals 1.",
+        "guidance": "The pullback of the N\u00e9ron differential equals 2i\u03c0 f(z) dz where f(x)=\u2211_{n>0} ellan(E,n) x^n. Library syntax: GEN elltaniyama(GEN E, long precdl)."
+      },
+      {
+        "name": "elltatepairing: Tate pairing requires m-torsion for P",
+        "description": "elltatepairing(E,P,Q,m) computes the Tate pairing of P and Q on E; P must be of m-torsion.",
+        "guidance": "Library syntax: GEN elltatepairing(GEN E, GEN P, GEN Q, GEN m)."
+      },
+      {
+        "name": "elltors: torsion subgroup format and generators",
+        "description": "elltors(E) returns the torsion subgroup of E as [t, v1, v2] where t is order, v1 describes structure as product of cyclic groups, and v2 gives generators for these cyclic groups. E may be over a number field or finite field.",
+        "guidance": "Example: elltors(ellinit([-1,0])) returns [4,[2,2],[[0,0],[1,0]]] indicating Z/2\u00d7Z/2 with listed generators. Library syntax: GEN elltors(GEN E)."
+      },
+      {
+        "name": "elltwist: quadratic twist construction and usage",
+        "description": "elltwist(E,{P}) returns coefficients [a1,a2,a3,a4,a6] of the twist of elliptic curve E by quadratic extension defined by P (polynomial) or quadpoly(P) when P is integer. Over finite fields P can be omitted to get random non-trivial twist. For number fields, replace by minimal model if exists.",
+        "guidance": "Examples include twist by discriminant -3 and Artin\u2013Schreier twists in characteristic 2. Library syntax: GEN elltwist(GEN E, GEN P = NULL)."
+      },
+      {
+        "name": "ellweilcurve: identify Weil curve and Smith invariants",
+        "description": "ellweilcurve(E,{&ms}) returns [vE,vS] where vE contains minimal models for curves isogenous to E and vS lists Smith invariants for lattices L_E in L_f. The strong Weil curve among isogenous curves is the one with Smith invariants [c,c] (c the Manin constant, conjecturally 1).",
+        "guidance": "If optional ms provided, it should be msfromell(E,0) output; routine allows identification of strong Weil curve. Examples show finding index n with vS[n]==[1,1]. Library syntax: GEN ellweilcurve(GEN E, GEN *ms = NULL)."
+      },
+      {
+        "name": "ellweilpairing: Weil pairing of m-torsion points",
+        "description": "ellweilpairing(E,P,Q,m) computes the Weil pairing of points P and Q of m-torsion on E.",
+        "guidance": "Library syntax: GEN ellweilpairing(GEN E, GEN P, GEN Q, GEN m)."
+      },
+      {
+        "name": "ellwp: Weierstrass \u2118 function and optional derivative",
+        "description": "ellwp(w,{z=x},{flag=0}) computes \u2118(z) attached to lattice w (from ellperiods or ellinit). If flag=1 returns [\u2118(z), \u2118'(z)]. Can also compute series expansion around z=0 and accepts E as input where w=E.omega.",
+        "guidance": "Series expansion via ellwp(E) or ellwp(E, x+O(x^k)). GEN ellwp0 and ellwpseries are also available for different argument types and series outputs. Library syntaxes: GEN ellwp0(GEN w, GEN z = NULL, long flag, long prec) and GEN ellwp(GEN w, GEN z, long prec)."
+      },
+      {
+        "name": "ellxn: division polynomials giving numerator/denominator of [n]P abscissa",
+        "description": "ellxn(E,n,{v=x}) returns [\u03c6_n(P), \u03c8_n(P)^2] polynomials that give numerator and denominator of the x-coordinate of [n]P (in standard notation [n]P = (\u03c6_n \u03c8_n : \u03c9_n : \u03c8_n^3)). The returned pair depends only on v (the abscissa variable).",
+        "guidance": "Useful for algebraic manipulation of multiples. Example shows computing ellxn(E,2,'X) then substituting P[1] to recover x-coordinate of 2P. Library syntax: GEN ellxn(GEN E, long n, long v = -1)."
+      },
+      {
+        "name": "ellzeta: Weierstrass \u03b6 function, quasi-periods and series",
+        "description": "ellzeta(w,{z=x}) computes \u03b6(z,L) attached to lattice w (via ellperiods). Quasi-periods \u03b7_i are obtained as 2 \u03b6(\u03c9_i/2). Series expansion around z=0 is supported.",
+        "guidance": "Quasi-periods useful for values at non-small z. Optional precision and default series precision behavior described. Library syntax: GEN ellzeta(GEN w, GEN z = NULL, long prec)."
+      },
+      {
+        "name": "ellztopoint: map parameter z back to curve point; cases",
+        "description": "ellztopoint(E,z) computes [x,y] on E corresponding to complex or p-adic parameter z (inverse of ellpointtoz). For p-adic multiplicative reduction z is treated as element on Tate curve Q_p^*/q^Z; for complex numbers x=\u2118(z)-b2/12 and y=\u2118'(z)/2 - (a1 x + a3)/2. z in lattice gives point at infinity [0].",
+        "guidance": "Behavior differs for split vs non-split multiplicative reduction (use E.tate). Examples show p-adic output with O(p^n) terms. Library syntax: GEN pointell(GEN E, GEN z, long prec)."
+      },
+      {
+        "name": "genus2red: reduction type and conductor for genus 2 curves (output format and caveats)",
+        "description": "genus2red(PQ,{p}) determines reduction at p>2 of genus 2 curve C/Q given by y^2=P(x) or y^2+Q(x)y=P(x). Returns [N, FaN, T, V] where N is local or global conductor, FaN its factorization, T a minimal integral model y^2=T over Z[1/2], and V describes reduction types at considered primes. If p omitted determines reduction for all odd primes dividing discriminant.",
+        "guidance": "CAVEAT: interface may change; program incomplete for p=2 (may return odd part of conductor only). The V vector format for local p is [p, stable, red], with stable = [type, vecj] and type in {1..7} indicating classification (1: smooth/pot. good; 2: elliptic+node; 3: P^1 with two nodes; 4: union of two P^1 crossing at 3 points; 5: union of two elliptic curves; 6,7: elliptic+P^1 or two singular components). red = [NUtype, neron] uses Namikawa\u2013Ueno symbols and gives N\u00e9ron component group as finite abelian group. Notes explain ordering and normalizations of Kodaira/Namikawa-Ueno symbols. Library syntax: GEN genus2red(GEN PQ, GEN p = NULL)."
+      },
+      {
+        "name": "hyperellcharpoly: Frobenius characteristic polynomial for hyperelliptic curves",
+        "description": "hyperellcharpoly(X) returns characteristic polynomial of Frobenius automorphism for a non-singular hyperelliptic curve X over a finite field, given by P (y^2=P(x)) or [P,Q] (y^2+Qy=P with Q^2+4P squarefree).",
+        "guidance": "This polynomial is the numerator of zeta-function and is useful for point counts and further arithmetic. Library syntax: GEN hyperellcharpoly(GEN X)."
+      },
+      {
+        "name": "hyperellpadicfrobenius: Frobenius on crystalline module for hyperelliptic curves",
+        "description": "hyperellpadicfrobenius(Q,p,n) returns matrix of Frobenius endomorphism \u03d5 on crystalline module D_p(X)=Q_p \u2297 H^1_dR(X/Q) with respect to basis (\u03c9, x\u03c9, ..., x^{g-1}\u03c9), computed to absolute p-adic precision p^n. Requires p \u2265 d and X has good reduction at p (d=deg Q with d=2g+1 or 2g+2).",
+        "guidance": "The characteristic polynomial of \u03d5 equals numerator of zeta-function of reduction of X modulo p. Library syntax: GEN hyperellpadicfrobenius(GEN Q, ulong p, long n)."
+      },
+      {
+        "name": "hyperellratpoints: rational points on hyperelliptic curves up to height with flexible h parameter",
+        "description": "hyperellratpoints(X,h,{flag=0}) returns affine rational points on integral model X of naive height less than h. Flag=1 stops early. X given by P or [P,Q] as in hyperellcharpoly. Parameter h can be integer H (max(|n|,d)<H), or vector [N,D], or [N,[D1,D2]] to restrict numerators and denominators.",
+        "guidance": "This mirrors ellratpoints but for hyperelliptic curves; choose h format depending on search strategy. Library syntax: GEN hyperellratpoints(GEN X, GEN h, long flag)."
+      },
+      {
+        "name": "L-function definition: three required axioms",
+        "description": "An L-function datum (a, a*, A, N, k, \u03b5, r) defines an L-function L(a,s) if it satisfies: (1) Convergence: coefficients a_n have polynomial growth so series converges in some right half-plane; (2) Analytic continuation: L(s) meromorphically continues to C with finitely many poles; (3) Functional equation: there exists integer k, complex \u03b5 (usually |\u03b5|=1) and associated a* giving \u039b(a,k-s)=\u03b5 \u039b(a*,s) for completed \u039b functions.",
+        "guidance": "Do not assume multiplicativity/Euler product. For many number-theory applications a*=a (self-dual) but not required. The implementation stores redundant data to speed computations and expects implied constants in the O() to be small; numerical results are experimental and precision must be increased to verify. The L-function package is for experimentation rather than proofs."
+      },
+      {
+        "name": "Theta function via Mellin inversion and functional equation",
+        "description": "Given an L-function with completed \u039b, define \u03b8(a,t) := (1/2\u03c0i) \u222b_{(c)} t^{-s} \u039b(s) ds (Mellin inversion) and equivalently \u03b8(a,t)=\u2211_n a_n K(n t / N^{1/2}) where K involves \u03b3_A. The functional equation for \u039b translates into \u03b8(a,1/t) - \u03b5 t^k \u03b8(a*,t) = P_\u039b(t) (polynomial from polar part).",
+        "guidance": "\u03b8(t) is analytic in a cone and often easier to compute than L(s); use this to infer missing invariants. Compute K and \u03b8 via lfun package routines; the polar part introduces polynomial/log terms only when poles are present. Use theta routines for efficient numerical evaluation when many values needed."
+      },
+      {
+        "name": "Data structures for L-functions: Lmath, Ldata, Linit and precision considerations",
+        "description": "Three levels: Lmath (mathematical description), Ldata (computational description containing (a,a*,A,k,N,\u03b5,r)), and Linit (Ldata plus precomputations for fast numerical evaluation over a domain and requested accuracy). L-functions routines accept any of these as first argument.",
+        "guidance": "Provide exact components where possible; the implementation assumes implied constants in O() are small. For many evaluations construct an Linit once and reuse; warnings are issued if used outside initialized domain. Precision is specified in bits (realbitprecision) rather than decimal digits\u2014use realbitprecision to control runtimes finely; realprecision increases by 64-bit chunks. The package is intended for experimentation and conjecture formulation, not formal proofs."
+      },
+      {
+        "name": "lfun initialization and use: performance and precision advice",
+        "description": "Construct Linit via lfuninit(Linit\u7bc4,domain) to compute many values efficiently (e.g., zeros, plots). lfuncreate constructs basic Ldata from minimal information. Precision choices strongly affect runtime; most lfun routines request precision in bits.",
+        "guidance": "Example: Z = lfuncreate(1) for Riemann zeta; L = lfuninit(Z,[1/2,0,100]) to evaluate \u03b6(1/2+it) for |t|<100. Reinitialize Linit if used outside its domain (inefficient). Increase realbitprecision to improve accuracy and verify numeric stability."
+      }
+    ]
+  }
+}

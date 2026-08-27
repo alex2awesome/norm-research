@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/rej_47ef5dd82380.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16466,
+  "output_tokens": 3400,
+  "elapsed_s": 1617.468659499893,
+  "extracted": {
+    "orientation": "wiki",
+    "intended_audience": "general readers plus technical practitioners and students interested in streaming media systems, services, and policy",
+    "subtask_short": "streaming_media_systems_design",
+    "subtask_description": "Guidance and descriptive standards for delivering audio/video/text as streaming media over networks, including user-side requirements (bandwidth), protocol and codec choices, scalability techniques, and trade-offs between latency, reliability, and functionality.",
+    "subtask_keywords": [
+      "streaming",
+      "media",
+      "networking",
+      "video_audio",
+      "system_design",
+      "protocols"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of streaming media (real-time delivery vs downloading)",
+        "description": "Streaming media is the method by which multimedia is delivered through a network for playback using a digital media player or media player software; media is transferred in a stream of packets from a server to a client and is rendered in real-time or near real-time; this contrasts with file downloading, where the end-user obtains an entire media file before consuming the content.",
+        "guidance": "Use this distinction to decide delivery method: streaming for immediate playback (live or near-real-time), downloading for full-file transfer prior to playback. The term can also apply to streaming text (e.g., closed captions, real-time text)."
+      },
+      {
+        "name": "Live streaming vs on-demand (true streaming vs progressive download)",
+        "description": "Live streams are generally provided by a method called true streaming: sends information straight to the device without saving it to a local file. On-demand streaming is often provided by progressive download: saves received information to a local file and then plays it from that location.",
+        "guidance": "Choose true streaming for live events where immediate playback is required and progressive download for on-demand content where local caching/storage is acceptable. Note on-demand streams are often saved for extended periods, while live streams are time-limited."
+      },
+      {
+        "name": "Bandwidth recommendations by resolution",
+        "description": "A broadband speed of 2 Mbit/s or more is recommended for streaming standard-definition video, 5 Mbit/s is recommended for high-definition content, and 25 Mbit/s for ultra-high-definition content.",
+        "guidance": "Use these as baseline consumer recommendations when planning encoding profiles and service requirements; account for headroom for concurrent devices and network variability."
+      },
+      {
+        "name": "Storage-size calculation for streamed media",
+        "description": "Storage size in megabytes is equal to length (in seconds) \u00d7 bit rate (in bit/s) / (8 \u00d7 1024 \u00d7 1024).",
+        "guidance": "Use this formula for capacity planning (single user/file). Example provided: one hour at 300 kbit/s requires ~128 MB. Multiply bitrate by concurrent viewers to estimate bandwidth needs for unicast delivery."
+      },
+      {
+        "name": "Concurrent viewer bandwidth planning (unicast vs multicast)",
+        "description": "If a file is stored on a server for on-demand streaming and viewed by 1,000 people at the same time using a Unicast protocol, the requirement is 300 kbit/s \u00d7 1,000 = 300 Mbit/s of bandwidth. Using a multicast protocol the server sends out only a single stream common to all users, which would only use 300 kbit/s of server bandwidth.",
+        "guidance": "Plan server/network capacity with unicast (per-connection) cost in mind; consider multicast where infrastructure permits to greatly reduce server bandwidth, but note multicast may limit VOD features."
+      },
+      {
+        "name": "Compression necessity and codec/format selection",
+        "description": "Practical streaming media was only made possible with advances in data compression due to the impractically high bandwidth requirements of uncompressed media (e.g., raw digital audio PCM ~1.4 Mbit/s, raw SD video ~168 Mbit/s, FHD >1000 Mbit/s). Video and audio streams are compressed using codecs (audio: MP3, Vorbis, AAC, Opus; video: H.264, HEVC, VP8, VP9, AV1) and packaged in containers (MP4, FLV, WebM, ASF, ISMA).",
+        "guidance": "Select codecs and containers to balance quality, latency, computational cost, and device compatibility. Compression profile decisions drive bitrate and thus bandwidth/storage planning."
+      },
+      {
+        "name": "Transport protocol trade-offs (UDP/datagram vs TCP/reliable)",
+        "description": "Datagram protocols (e.g., UDP) send the media stream as small packets without guaranteed delivery; receiving applications must detect loss and recover via error correction. Reliable protocols (e.g., TCP) guarantee correct delivery but stall on loss while retransmitting, causing buffering. RTSP/RTP/RTCP were specifically designed to stream media over networks and are often used with UDP.",
+        "guidance": "Choose UDP/RTP for low-latency streaming where occasional loss is acceptable and application-level recovery is possible. Choose TCP for scenarios where bit-perfect delivery is required (and buffering is acceptable), such as VOD. Consider application needs (latency vs reliability) when selecting transport."
+      },
+      {
+        "name": "Latency and buffering tolerance (interactive vs VOD)",
+        "description": "While buffering delay is acceptable in video-on-demand scenarios, users of interactive applications such as video conferencing will experience a loss of fidelity if the delay caused by buffering exceeds 200 ms.",
+        "guidance": "Design buffering strategies according to application: minimize end-to-end latency (<200 ms target) for interactive use; allow larger buffers for VOD to avoid stalls. Buffer size and retransmission strategy should reflect the interactivity requirements."
+      },
+      {
+        "name": "Adaptive bitrate streaming and HTTP-based delivery",
+        "description": "Technologies such as Apple's HLS, Microsoft's Smooth Streaming, Adobe's HDS and non-proprietary formats such as MPEG-DASH enable adaptive bitrate streaming over HTTP as an alternative to proprietary transport protocols. HTTP adaptive bitrate streaming is based on progressive download but uses very small files/chunks to emulate packet-like delivery.",
+        "guidance": "Use adaptive bitrate (ABR) over HTTP to improve playback resilience under varying network conditions and to leverage CDN infrastructure and standard HTTP caches. Implement multiple bitrate renditions and client-side adaptive logic."
+      },
+      {
+        "name": "Scalability via server clusters, CDNs, and load balancing",
+        "description": "Deploying clusters of streaming servers (regional servers managed by a central server) with copies of media and IP addresses allows use of load balancing and scheduling algorithms to redirect users to nearby regional servers. CDNs use intermediate servers to distribute load; peer-to-peer protocols can also be used to avoid server bottlenecks.",
+        "guidance": "Use CDNs and regional server clusters plus load balancing to scale to large audiences and reduce backbone load. Consider P2P for prerecorded streams to reduce origin costs, but weigh performance, security, quality, and business issues."
+      },
+      {
+        "name": "Multicast vs Unicast functionality trade-offs",
+        "description": "Multicasting broadcasts the same copy to a group of clients and reduces duplicate data streams, but may preclude recipient playback control (VOD functionality); unicast is the norm and provides per-user control but does not scale well for many concurrent viewers.",
+        "guidance": "Select multicast where network infrastructure supports it and live continuous streaming dominates; mitigate multicast's VOD limitations with caching servers, set-top boxes, and buffered media players if playback control is needed."
+      },
+      {
+        "name": "Interaction quality depends on system workload and resource constraints",
+        "description": "The quality of the interaction between servers and users is based on the workload of the streaming service; as more users attempt to access a service the quality may be affected by resource constraints in the service.",
+        "guidance": "Monitor and provision for peak loads; use autoscaling, regional distribution, and congestion-control mechanisms to maintain quality under load."
+      },
+      {
+        "name": "Recording and post-event availability",
+        "description": "Media that is livestreamed can be recorded through certain media players, screen recorders, or via platform VOD systems that automatically record live broadcasts so they can be watched later.",
+        "guidance": "If post-event access is required, ensure platforms/pipelines include recording, storage, and indexing; consider privacy and rights clearance when enabling recordings."
+      },
+      {
+        "name": "Environmental and economic impacts as design considerations",
+        "description": "Streaming has unintended economic and environmental costs (energy use, carbon footprint); media storage and transmission costs remain significant, and increased demand for HD/UHD increases resource use.",
+        "guidance": "Consider energy efficiency, bitrate optimization, caching, and sustainable infrastructure choices when designing streaming services to minimize environmental impact and operating cost."
+      },
+      {
+        "name": "Real-time processing definition for streaming systems",
+        "description": "The most accepted definition of 'real-time' requires that all associated processing or formatting of the data must take place prior to availability of the next sample of each measurement.",
+        "guidance": "Use this strict definition when designing telemetry or real-time streaming systems; ensure processing pipelines meet per-sample deadlines if true real-time behavior is required."
+      }
+    ]
+  }
+}

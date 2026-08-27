@@ -48,7 +48,7 @@ from ..backends import LLMBackend
 from ..recon_channel import mcq_identity_channel, run_metric, _pyes, _sampled_binary
 from ..vllm_backend import make_judge_backend
 from .mine_clusters import r2_groups, r2_children
-from .m_omega_gepa import gepa_discriminative_m_omega
+from .m_omega_gepa import gepa_discriminative_m_omega, unit_recombination_m_omega
 from .orthogonalize import submodular_tail_bound
 from .run_real_test import _load_texts
 
@@ -126,15 +126,23 @@ def run_one(task, bucket, grp, cfg, texts, item_ids, executor, recon, a, use_sam
     raw_pyes = _score_m_omega(executor, body, texts, cfg.max_text_chars, a.temperature, use_sampled)
     raw_std = float(np.nanstd(raw_pyes))
     gepa_info = None
-    if getattr(a, "gepa_m_omega", False) and recon is not None:
+    if (getattr(a, "gepa_m_omega", False) or getattr(a, "momega_v2", False)) and recon is not None:
         # Optimize only on the same declared design split used by run_metric. The resulting prompt is
         # frozen before it is scored on held-out items; otherwise GEPA would consume the replay lockbox.
         split = np.random.default_rng(0).permutation(len(texts))
         design_idx = split[:a.n_train]
         design_texts = [texts[i] for i in design_idx]
-        g = gepa_discriminative_m_omega(executor, recon, body, design_texts, cfg.item_noun,
-                                       rounds=a.gepa_rounds, n_mutations=a.gepa_mutations,
-                                       max_chars=cfg.max_text_chars)
+        if getattr(a, "momega_v2", False):
+            # D2 M_ω v2: official-GEPA winner as init + unit recombination; unit pool seeds with
+            # this metric's certified R1 children (the source with no benchmark analog).
+            g = unit_recombination_m_omega(executor, recon, body, design_texts, cfg.item_noun,
+                                           children=children,
+                                           rounds=a.gepa_rounds, n_mutations=a.gepa_mutations,
+                                           max_chars=cfg.max_text_chars)
+        else:
+            g = gepa_discriminative_m_omega(executor, recon, body, design_texts, cfg.item_noun,
+                                            rounds=a.gepa_rounds, n_mutations=a.gepa_mutations,
+                                            max_chars=cfg.max_text_chars)
         body = g["optimized_prompt"]            # the metric is now the optimized prompt
         pyes = _score_m_omega(
             executor, body, texts, cfg.max_text_chars, a.temperature, use_sampled)
@@ -145,7 +153,9 @@ def run_one(task, bucket, grp, cfg, texts, item_ids, executor, recon, a, use_sam
                      "optimized_prompt": str(g["optimized_prompt"])[:200],
                      # OPT trajectory: GEPA's search toward sup_p R(p) — (round, std, base_rate, discrimination)
                      "opt_trajectory": [(t[0], float(t[2]), float(t[3]), float(t[4]))
-                                        for t in (g.get("trajectory") or [])]}
+                                        for t in (g.get("trajectory") or [])],
+                     # momega-v2 only: unit-pool provenance + compile outcome (None for plain GEPA)
+                     "units": _san(g.get("units"))}
     else:
         pyes = raw_pyes
     m_std, m_mean = float(np.nanstd(pyes)), float(np.nanmean(pyes))
@@ -304,6 +314,11 @@ def main(argv=None):
                          "(CW Show-Tell 0.40→0.49 std); can't rescue std≈0 (no gradient). [free; MCQ experimental]")
     ap.add_argument("--gepa-rounds", type=int, default=3, help="[--gepa-m-omega] GEPA rounds")
     ap.add_argument("--gepa-mutations", type=int, default=4, help="[--gepa-m-omega] mutations/round")
+    ap.add_argument("--momega-v2", action="store_true",
+                    help="M_ω v2 (D2): official-GEPA winner as init + unit recombination; unit "
+                         "pool = this metric's certified R1 children + GEPA trajectory clauses + "
+                         "LLM-suggested facets; no-regret guard => M_ω >= GEPA winner on the "
+                         "design split by construction. Implies the --gepa-m-omega code path.")
     # mcq-mode knobs
     ap.add_argument("--distractor", default="contrastive",
                     choices=["contrastive", "random", "hard", "matched_base_rate", "graded"],

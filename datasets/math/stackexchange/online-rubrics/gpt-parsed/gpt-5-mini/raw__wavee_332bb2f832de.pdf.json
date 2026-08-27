@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_332bb2f832de.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 7200,
+  "output_tokens": 4130,
+  "elapsed_s": 1399.7859923338983,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "TeX / LaTeX users (beginners) who want to create high-quality vector graphics with MetaPost",
+    "subtask_short": "metapost graphics for LaTeX",
+    "subtask_description": "Creating high-quality, scalable vector figures with MetaPost for inclusion in TeX/LaTeX documents, aimed at beginners who need practical guidance on commands, labels, colors, transforms, and inclusion workflows.",
+    "subtask_keywords": [
+      "metapost",
+      "latex",
+      "graphics",
+      "vector",
+      "beginner"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Produce vector EPS graphics for scalability",
+        "description": "Encapsulated PostScript (EPS) graphics are the most common types used because of their scalability; EPS can be scaled to any resolution without loss in quality.",
+        "guidance": "EPS can also be converted to raster formats (PNG, JPEG) or other vector formats (PDF, SVG). Use MetaPost to generate EPS output so figures remain high-quality when scaled."
+      },
+      {
+        "name": "MetaPost source file structure and compilation",
+        "description": "A typical MetaPost source file consists of one or more figures delimited by beginfig(i)...endfig; running mpost foo.mp yields one output file per figure (foo.1 .. foo.n) and a transcript log.",
+        "guidance": "Keep each figure in a beginfig/endfig block; check foo.log for compilation messages. Expect n output files written: foo.1 .. foo.n."
+      },
+      {
+        "name": "Fonts are not embedded in MetaPost EPS output",
+        "description": "These EPS graphics are not self-contained in that fonts used in labels are not embedded into the graphic.",
+        "guidance": "Because fonts aren't embedded, use TeX/LaTeX for typesetting labels (escape to TeX) so labels match document fonts and render correctly when included in LaTeX."
+      },
+      {
+        "name": "Use btex ... etex to typeset labels with TeX/LaTeX",
+        "description": "The btex ... etex block instructs MetaPost to process everything in between using TeX (or LaTeX if configured), enabling high-quality typeset labels inside figures.",
+        "guidance": "For LaTeX processing, include a verbatimtex preamble with '%&latex' and a minimal documentclass, e.g. verbatimtex %&latex \\documentclass{minimal} \\begin{document} etex before your beginfig. Example: label(btex $f(x)=x^2$ etex,(a,b))."
+      },
+      {
+        "name": "Label placement and justification suffixes",
+        "description": "By default label(string,point) centers the label; use suffixes (.lft, .rt, .bot, .top, .llft, .ulft, .lrt, .urt) to align labels relative to the point.",
+        "guidance": "Example: label.top(btex A etex,(0,0)); places A directly above (0,0). Use appropriate suffix for readable, non-overlapping labels."
+      },
+      {
+        "name": "Choose draw vs fill appropriately for paths and closed cycles",
+        "description": "draw is used to draw paths or pictures; fill is used to fill closed paths (cycles).",
+        "guidance": "To draw straight segments: draw z1--z2--z3; to draw smooth B\u00e9zier curves: draw z1..z2..z3;. To fill a closed curve, append --cycle and use fill p withcolor <color>; combine fill and draw to show outlines."
+      },
+      {
+        "name": "Prefer constructing holes by p--reverse q--cycle over fill+unfill for correct transparency",
+        "description": "Using fill p then unfill q can produce improper transparency when placing the figure on a non-white background; instead use fill p--reverse q--cycle withcolor <color>.",
+        "guidance": "Unfill is equivalent to fill q withcolor background (background defaults to white), but p--reverse q--cycle traverses p then the reverse of q and ensures proper transparency on arbitrary backgrounds. Redefining background is possible but the reverse-cycle method is simpler and more robust."
+      },
+      {
+        "name": "Control path tangents and smoothness using dir and brace syntax",
+        "description": "Use dir, {right}, {up}, or {dir \u03b8} attached to path points to force outgoing and incoming directions of the B\u00e9zier curve (e.g., draw z1{right}..z2{dir 45}..{up}z3).",
+        "guidance": "To require different incoming and outgoing directions at a point, use z2{dir \u03b8i}z2{dir \u03b8o} (specify incoming \u03b8i and outgoing \u03b8o). This constrains the B\u00e9zier curve's tangents for precise shapes."
+      },
+      {
+        "name": "Understand path representation as cubic B\u00e9zier curves",
+        "description": "All paths in MetaPost are represented as cubic B\u00e9zier curves (piecewise cubic polynomials), which interpolate points and produce smooth paths; linear segments are a special case.",
+        "guidance": "Fullcircle is a built-in path approximating a circle via B\u00e9zier curves (not true trig circle) but visually indistinguishable; use reverse, cycle, etc., to build complex closed paths."
+      },
+      {
+        "name": "Use pen data type for stroke properties and reuse pens",
+        "description": "The pen data type affects stroke properties; default stroke thickness is 0.5 bp and default unit is 1bp = 1/72 in.",
+        "guidance": "Create and store a pen variable with desired thickness to reuse across multiple stroked paths for consistent line widths in a figure."
+      },
+      {
+        "name": "Store reusable picture elements for animations or repeated drawing",
+        "description": "The picture data type stores an entire picture for later reuse so objects that remain the same across frames need not be redrawn manually.",
+        "guidance": "Use picture variables to hold static components when programmatically generating animation frames or when reusing a subfigure multiple times."
+      },
+      {
+        "name": "Use built-in affine transforms for shifts, rotations, scalings, slants",
+        "description": "MetaPost provides transformations (shift, rotation, horizontal/vertical scale, slant) as building blocks; combine them to produce rotated/scaled copies (e.g., build Figure 1 by rotating a circle multiple times).",
+        "guidance": "Use transform variables and operators to apply consistent transformations; combining transforms programmatically is efficient and precise."
+      },
+      {
+        "name": "Specify colors as (r,g,b) triplets and reuse color variables",
+        "description": "Colors are triplets in the unit cube (r,g,b) with components between 0 and 1; there are five built-in colors (black, white, red, green, blue).",
+        "guidance": "Define a color variable (e.g., bbblue:=(3/5,4/5,1);) if the color is used repeatedly. Use withcolor <color> in fill/draw commands."
+      },
+      {
+        "name": "Arrow drawing: drawarrow and drawdblarrow accept any path",
+        "description": "drawarrow places an arrow head at the end of the path; drawdblarrow places arrow heads at both beginning and end. The path argument need not be straight segments.",
+        "guidance": "You can attach arrows to curved B\u00e9zier paths (e.g., drawarrow z1{right}..z2{dir 45}..{up}z3;) \u2014 arrowheads will be placed following the path's end tangent."
+      },
+      {
+        "name": "When graphing functions: use the graph package or external data generators",
+        "description": "MetaPost's graph package (input graph;) can construct data and plot simple functions; for more complicated functions, generate data externally (MATLAB/Octave/Maple/Mathematica/Gnuplot).",
+        "guidance": "Decide graph size (e.g., begingraph(144bp,89bp);) then use gdraw \"data.d\"; consult the graph package manual for customization commands."
+      },
+      {
+        "name": "Include MetaPost figures in LaTeX with graphicx and handle PDFLaTeX conversion",
+        "description": "Use \\includegraphics{foo.1} with the graphicx package. For PDFLaTeX, use ifpdf and \\DeclareGraphicsRule to convert MetaPost graphics to PDF on-the-fly via mptopdf.",
+        "guidance": "Example preamble: \\usepackage{graphicx} \\usepackage{ifpdf} \\ifpdf \\DeclareGraphicsRule{*}{mps}{*}{} \\fi ; this allows PDFLaTeX to use Hans Hagen's mptopdf because PDFLaTeX cannot process PostScript directly."
+      },
+      {
+        "name": "Use the MetaPost previewer GUI for quick iteration and debugging",
+        "description": "A MetaPost previewer (graphical interface) can generate a single graphic, save output in EPS/PDF formats, save the source, and display the compilation log for debugging.",
+        "guidance": "Use the previewer to quickly test code snippets and inspect the log to fix compilation issues before producing final figures."
+      },
+      {
+        "name": "Know the nine MetaPost data types and use them appropriately",
+        "description": "MetaPost data types: numeric, pair, path, transform, color, string, boolean, picture, and pen \u2014 use them for storing numbers, points, B\u00e9zier paths, transforms, colors, text, booleans, whole pictures, and stroke properties respectively.",
+        "guidance": "Use pair for coordinates (x,y), numeric for scalars, path for B\u00e9zier curves, and string when reusing typeset labels. Structuring data appropriately simplifies code and reuse."
+      },
+      {
+        "name": "Be mindful that MetaPost is a programming language enabling flow control and automation",
+        "description": "MetaPost accommodates data structures and flow control; compilation of source code yields EPS graphics and its programming features allow automating repeated constructs (e.g., building animations without manual frame creation).",
+        "guidance": "Use loops, variables, and stored pictures to programmatically generate families of figures or animation frames; consult the MetaPost manual for advanced constructs."
+      }
+    ]
+  }
+}

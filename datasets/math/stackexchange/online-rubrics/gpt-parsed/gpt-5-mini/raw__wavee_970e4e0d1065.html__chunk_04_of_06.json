@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_970e4e0d1065.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_970e4e0d1065.html",
+  "chunk_idx": 4,
+  "n_chunks": 6,
+  "chunk_chars": 39922,
+  "model": "gpt-5-mini",
+  "elapsed_s": 77.89492720799899,
+  "input_tokens": 10990,
+  "output_tokens": 3570,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI planning researchers, domain/model designers, and planner implementers interested in temporal and metric planning languages",
+    "subtask_short": "pddl2.1 temporal planning language",
+    "subtask_description": "Design principles, syntax and semantic constraints for extending PDDL to support durative actions, continuous change, concurrency, and metric/temporal features in planning domains. Includes modelling recommendations and language requirements that planners and domain authors must follow to produce valid, practically verifiable plans.",
+    "subtask_keywords": [
+      "pddl2.1",
+      "temporal_planning",
+      "durative_actions",
+      "continuous_change",
+      "language_design"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Model durative action end-points as instantaneous transitions",
+        "description": "Consider the end points of durative actions as instantaneous state transitions so that the truth of propositions is reasoned about at points rather than over intervals.",
+        "guidance": "This choice integrates smoothly with classical planning (actions as state transitions). It supports modelling by marking end-points of intervals and allows intervals to be closed-on-left and open-on-right. It aligns with many temporal reasoning researchers' approach and simplifies plan validation compared to full interval-based ontologies."
+      },
+      {
+        "name": "Adopt half-open interval semantics (closed on left, open on right)",
+        "description": "Model actions as instantaneous transitions with effects beginning at the instant of application; intervals of persistence are closed on the left and open on the right.",
+        "guidance": "This avoids the divided-instant problem, ensures truth values are always defined, allows intervals to nest without inconsistency, and makes plan temporal span unambiguous (validation can conclude with state at final action point). It also forces precondition uses to sit at the open end of intervals."
+      },
+      {
+        "name": "No moving targets rule (conservative concurrency restriction)",
+        "description": "Favor a conservative restriction on action compatibility (the 'no moving targets' rule) to support efficient determination of when two actions are incompatible rather than attempting a permissive but hard-to-decide compatibility.",
+        "guidance": "Reject simultaneous application of actions that could lead to inconsistency. This supports efficient executability analysis and avoids undecidability risks present in more expressive logics where inconsistency detection may be undecidable."
+      },
+      {
+        "name": "Plans must not rely on precise simultaneity",
+        "description": "A valid plan must not depend on precise synchronization of actions because no physical executive can measure or initiate actions at arbitrarily fine degrees of temporal accuracy.",
+        "guidance": "If the order or precise simultaneity matters, the executive must sequence the actions. Plans that require precise simultaneity should be considered invalid/unexecutable in realistic settings. Use tolerances for starts of durative actions when modelling situations like the soup-bowl lift."
+      },
+      {
+        "name": "Model concurrency by specifying when actions can overlap and how effects combine",
+        "description": "Account for which actions can be concurrent and describe how concurrent activities interact in their effects on the world.",
+        "guidance": "Use commutative/additive updates for numeric effects so multiple processes affecting the same fluent accumulate. Define incompatibility conditions conservatively so planners can efficiently reject conflicting simultaneous actions."
+      },
+      {
+        "name": "Use continuous durative actions with #t for continuous change",
+        "description": "Represent continuous change by allowing functional-expression updates over the duration of a durative action using the local clock symbol #t.",
+        "guidance": "Continuous effects allow describing contributions of processes to fluent change (e.g., water inflow rates) and enable computation of fluent values at arbitrary points during the interval. Prefer expressing process contributions (amount per #t) rather than claiming per-process rates that would conflict when multiple processes act."
+      },
+      {
+        "name": "Support commutative/additive updates for interacting continuous processes",
+        "description": "When multiple active processes affect the same numeric fluent, their effects should be modelled as commutative (additive) updates so the total effect is the sum of contributions.",
+        "guidance": "This design makes it possible to model, for example, multiple water sources filling a sink by summing their rates; it avoids restarting/retiming processes whenever a new source starts or stops."
+      },
+      {
+        "name": "Recognize limitations of discretized durative actions",
+        "description": "Discretized (step-function) durative actions only provide fluent values at start/end, not during the interval, and thus cannot model complex interacting continuous processes accurately.",
+        "guidance": "Avoid using discretized durative actions when you need access to the true value of a fluent during an action or to model fine-grained interactions between concurrent continuous processes."
+      },
+      {
+        "name": "Allow duration constraints (equalities and inequalities) and mark requirement",
+        "description": "Durative actions can have duration specified as an exact expression or constrained by inequalities; use the :duration-inequalities requirement when employing inequalities.",
+        "guidance": "When durations are not fixed, the duration becomes an implicit parameter that must be supplied in the plan (notation t:(name ...)[d]). Note that using duration inequalities can complicate handling, so it is an explicit language requirement flag."
+      },
+      {
+        "name": "Temporal qualification of durative action conditions",
+        "description": "Durative action conditions can be temporally qualifed with (at start ...), (at end ...), (over <interval> ...), or (over all ...), distinguishing conditions required at start, during, or at end of the action.",
+        "guidance": "Conditions are logically restricted to conjunctions of temporally annotated expressions. Use start/end/all qualifiers to express preconditions and invariants for durative actions."
+      },
+      {
+        "name": "Continuous effect syntax and allowed assignment operators",
+        "description": "Provide continuous effects via assign-op-t forms (increase, decrease, and expressions involving #t); standard assignment operators include assign, increase, decrease, scale-up, scale-down.",
+        "guidance": "Continuous effect expressions may use #t (local elapsed time). The #t-based expression specifies the amount contributed over the period, not just a rate, enabling accumulation across concurrent processes."
+      },
+      {
+        "name": "Represent some events via conditional effects and duration inequalities, but not all",
+        "description": "Some spontaneous events (e.g., flooding when capacity exceeded) can be modelled using conditional effects combined with duration inequalities; however, not all spontaneous events are predictable or representable this way.",
+        "guidance": "For truly spontaneous events, extend the language (pddl+) to represent events explicitly (start-process-stop model) and distinguish actions from events so planner cannot select events intentionally."
+      },
+      {
+        "name": "Start-process-stop model for processes and events (pddl+ extension)",
+        "description": "Break continuous durative actions into instantaneous start and end points and explicit processes; allow start actions to initiate processes and instantaneous transitions or events to end them.",
+        "guidance": "A language extension is needed to distinguish actions from events and to prevent planners from deliberately selecting events. The resulting language (pddl+) increases expressiveness but complicates planning and raises open questions about plan validation complexity."
+      },
+      {
+        "name": "Design semantics derived from STRIPS-like state transitions extended for intervals",
+        "description": "Base semantics on familiar state-transition semantics of STRIPS, extended to interpret invariants over intervals where continuous functions may be active.",
+        "guidance": "This approach allows reuse of classical planning intuition while enabling durative and continuous constructs; be aware that semantics may permit plans that are hard to efficiently validate."
+      },
+      {
+        "name": "Practical verifiability: plan semantics vs plan validation tractability",
+        "description": "Although the semantics may interpret more plans, only plans that meet practical verifiability criteria should be considered for execution; the language designers describe criteria a plan must satisfy to be practically verifiable.",
+        "guidance": "Prefer constructs and domain encodings that allow efficient validation (e.g., avoid features that require solving hard undecidable problems during validation). Use conservative compatibility rules and explicit requirement flags to aid validation."
+      },
+      {
+        "name": "Temporal constraint management for metric time",
+        "description": "Metric time requires more powerful temporal constraint management (e.g., temporal constraint networks and linear constraint solvers) than simple ordering-based planners.",
+        "guidance": "Use established foundations (Dechter, Meiri, Pearl) and temporal constraint managers (e.g., IxTeT, hsts). Linear constraint solvers can handle continuous real-valued time constraints; integer-valued discrete timelines are an alternative embedding for many planning problems."
+      },
+      {
+        "name": "Provide an optional plan metric and total-time variable",
+        "description": "Problem specifications may include an optional metric field indicating an expression to minimize or maximize; introduce total-time variable representing plan execution time.",
+        "guidance": "Planners may ignore the metric, but it offers a way to express optimization goals beyond minimizing number of steps (e.g., minimize total execution time). Anticipate future extensions to metric syntax for greater expressivity."
+      },
+      {
+        "name": "Restrict or avoid local variables in action schemas for validation simplicity",
+        "description": "Local variables within action schemas were omitted from pddl2.1 because ensuring unique instantiation for each such variable is subtle and complicates plan validation.",
+        "guidance": "Avoid relying on local variables in domain encodings intended for widespread use unless validation semantics are well defined; prefer simpler parameterization that yields finite ground action instances."
+      },
+      {
+        "name": "Type and function declaration choices to ensure finite grounding",
+        "description": "Numbers are not an implicit type; numeric extensions are handled through functional expressions. Functions may be declared with types (currently numbers) and finite typing helps ensure only finitely many ground action instances exist.",
+        "guidance": "Restricting types and avoiding implicit numeric typing prevents planners from facing arbitrary numeric choice points during action instantiation and supports tractable grounding."
+      },
+      {
+        "name": "Syntactic requirement flags and BNF-structured domain/problem specifications",
+        "description": "Domain and problem files must follow the specified BNF structure and include :requirements flags (e.g., :durative-actions, :fluents, :duration-inequalities) to indicate used language features.",
+        "guidance": "Use the documented BNF constructs for actions, durative-actions, functions, predicates, types, and problem metrics. The flags inform planners of domain features and help select appropriate parsing/validation strategies."
+      }
+    ]
+  }
+}

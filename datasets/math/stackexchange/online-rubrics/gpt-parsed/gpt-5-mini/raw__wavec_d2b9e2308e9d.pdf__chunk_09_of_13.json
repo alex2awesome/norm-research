@@ -1,0 +1,181 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_d2b9e2308e9d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_d2b9e2308e9d.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 13,
+  "chunk_chars": 39891,
+  "model": "gpt-5-mini",
+  "elapsed_s": 81.1985122920014,
+  "input_tokens": 12923,
+  "output_tokens": 6480,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Developers and contributors to the SageMath project writing code, interfaces, and packaging third-party libraries for Sage",
+    "subtask_short": "coding_and_packaging_for_sage",
+    "subtask_description": "Guidance for implementing Sage code (Python/Cython/C/C++/Fortran) and interfaces to external systems (PARI, GAP, Singular, Octave, etc.), plus rules and procedures for packaging third-party code into Sage.",
+    "subtask_keywords": [
+      "sage",
+      "developer_guide",
+      "interfaces",
+      "packaging",
+      "cython",
+      "python"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pickling extension classes (__reduce__ implementation)",
+        "description": "For unpickling of extension classes you need to write a __reduce__() method which typically returns a tuple (f, args, ...) such that f(*args) returns (a copy of) the original object.",
+        "guidance": "When pickling Cython extension types, the trick is that you must put a pure Python function as the first argument, and that function must return the result of unpickling with the argument in the second tuple as input. All kinds of problems happen if this is not done. Example: return sage.rings.integer.make_integer, (self.str(32),). Includes doctest examples showing loads(dumps(n)) == n."
+      },
+      {
+        "name": "Deprecation policy",
+        "description": "When making a backward-incompatible modification in Sage, the old code should keep working and display a message indicating how it should be updated/written in the future.",
+        "guidance": "Deprecated code can only be removed one year after the first stable release in which it appeared. Each deprecation warning contains the number of the GitHub PR that defines it (example uses deprecation_cython(666, ...))."
+      },
+      {
+        "name": "Use Python for basic structure and interface",
+        "description": "When writing code for Sage, use Python for the basic structure and interface. For speed, efficiency, or convenience, you can implement parts of the code using other languages.",
+        "guidance": "Allowed languages for performance-critical parts include Cython, C/C++, Fortran 95, GAP, Common Lisp, Singular, and PARI/GP. You can also use external programs (Octave, Magma, Mathematica, Maple) if depending on them is acceptable. Prefer using Python for API/structure and other languages only for specific performance or functionality reasons."
+      },
+      {
+        "name": "Prefer PARI C library interface over gp interpreter",
+        "description": "There are two ways to interact with the PARI library from Sage: the gp interpreter interface and the PARI C functions; the PARI C interface is preferred as it is much faster.",
+        "guidance": "When adding PARI functionality, add methods to the gen class (SAGE_ROOT/src/sage/libs/cypari2/gen.pyx) so every PARI object gains the method. Look up the PARI C function signature in the PARI user manual (e.g., GEN matfrobenius(GEN M, long flag, long v = -1)). Note that gp function names may differ from PARI C function names; always check the manual."
+      },
+      {
+        "name": "Use sig_on()/sig_off() and self.new_gen when returning PARI GENs",
+        "description": "When wrapping PARI C calls, use sig_on() before calling PARI and self.new_gen(GEN x) to convert a PARI GEN to a Sage gen and handle stack clearing.",
+        "guidance": "self.new_gen() calls sig_off() and clears the PARI stack; use new_gen_noclear when you want to avoid clearing or calling sig_off(). Example: sig_on(); return self.new_gen(matfrobenius(self.g, flag, 0))."
+      },
+      {
+        "name": "Input validation and API semantics in wrapper methods (example: frobenius_form)",
+        "description": "Wrapper methods should validate inputs and clearly document parameter semantics and return formats.",
+        "guidance": "Example frobenius_form(self, flag=0, var='x'): check self.is_square() and raise ArithmeticError if not square. Document flag meanings: 0 returns Frobenius form, 1 returns elementary divisor polynomials in var, 2 returns [F,B] with basis change B. Provide EXAMPLES:: docstrings and use PARI's matfrobenius under the hood."
+      },
+      {
+        "name": "Prefer libgap (shared library) over pexpect for GAP interfaces",
+        "description": "Wrapping GAP functions can be done via pexpect (pipes) or libgap (shared library); libgap is recommended for efficiency.",
+        "guidance": "Convert inputs into libgap objects using libgap.eval on strings or using libgap.CMD; call methods on libgap objects and convert outputs back to Sage using .sage() or appropriate conversion routines. Example: libgap.function_factory to create SimpleLieAlgebra and then L.RootSystem().CartanMatrix()."
+      },
+      {
+        "name": "Define 'easy' vs 'hard' when wrapping external functions",
+        "description": "A wrapper is 'easy' if there is already a corresponding class in Python/Sage for the output data type; otherwise it is 'hard'.",
+        "guidance": "Examples of 'easy' outputs: vectors over finite fields, polynomials over finite fields, matrices over finite fields, permutation groups or elements, integers\u2014Sage already has classes for these. 'Hard' cases require creating new Python objects (e.g., FreeLieAlgebra, FreeGroup wrappers, or rich character table objects)."
+      },
+      {
+        "name": "Be mindful of interface latency",
+        "description": "Using external programs through interfaces incurs latency (order ~10ms) for sending input and receiving output; shared libraries have much lower latency.",
+        "guidance": "If you need tight-loop calls to external functions, prefer shared-library interfaces (libgap, cypari PARI interface) rather than pexpect-like interfaces. Consider the performance tradeoffs when choosing interface type."
+      },
+      {
+        "name": "Singular interface: degree and translation limitations",
+        "description": "There is no general translation between elements of GF(p^d) in Singular and Sage unless d = 1; restrict some wrappers to d = 1.",
+        "guidance": "For wrapping Singular's NSplaces and related functions, restrict to points of degree one (F of prime order). Document this limitation and raise NotImplementedError for higher-degree fields."
+      },
+      {
+        "name": "Parsing string outputs from external programs when necessary",
+        "description": "If an external tool returns results as formatted strings (e.g., Singular's POINTS output), write robust parsers to convert into Sage-native structures.",
+        "guidance": "Provide a dedicated parsing function (example: points_parser(string_points, F)) that inspects where coordinates appear in the returned string and extracts point tuples; include examples and doctests. Note: an alternative more direct API may exist but may depend on additional interface functions being implemented."
+      },
+      {
+        "name": "Prefer higher-level interface functions when available (tradeoff)",
+        "description": "There may be a more Python-like interface to an external system that simplifies code, but it may depend on specific interface features being implemented in Sage.",
+        "guidance": "The shorter, more readable approach (e.g., singular.NSplaces, singular.extcurve, singular.set_ring, singular.new(POINTS)) is recommended when those interface primitives exist. If not, use the lower-level approach of calling singular.eval and parsing results. Document dependencies on interface implementation."
+      },
+      {
+        "name": "Implement pseudo-tty interfaces by deriving from Expect",
+        "description": "Create pseudo-tty Sage interfaces by subclassing the Expect class to interact asynchronously with command-line programs.",
+        "guidance": "Set attributes when calling Expect.__init__ such as name, prompt, command, server/tmpdir, restart_on_ctrlc, verbose_start, logfile, eval_using_file_cutoff. Implement set(var,value) and get(var) helper methods that call self.eval and check for errors; provide console() to drop into interactive shell. Provide docstrings and examples; ensure I/O is buffered and non-blocking for better performance."
+      },
+      {
+        "name": "Interface method error handling and return parsing",
+        "description": "When wrapping commands via an interface, check for error text in outputs and raise informative exceptions; parse output strings into Python objects carefully.",
+        "guidance": "Example set(var,value) builds a command, calls self.eval(cmd), checks if out.find('error') != -1 and raises TypeError with CODE and Octave ERROR sections. Parsing return values often requires string cleanup (replacements of newlines and brackets) before eval/return."
+      },
+      {
+        "name": "solve_linear_system interface contract (example)",
+        "description": "Interface methods should document input types, validate dimensions, convert to appropriate representations, and return results in documented format.",
+        "guidance": "Example octave.solve_linear_system: require A an m x n matrix over QQ or RR and b an m-vector, raise ValueError if dimensions incompatible, convert b to column vector, convert A and b to octave string representations via sage2octave_matrix_string, call octave.eval('c = a \\ b'), parse returned string into a Python list of numbers, and return evaluated numeric list. Provide EXAMPLES:: in docstring for testing."
+      },
+      {
+        "name": "Packaging command options (sage -i)",
+        "description": "The sage -i <options> <package name>... command installs packages and supports options to control behavior.",
+        "guidance": "Recognized options: -f (install even if same version already installed), -s (do not delete build directory), -c (after installing, run the test suite for the spkg; should override SAGE_CHECK and SAGE_CHECK_PACKAGES), -d (only download the package)."
+      },
+      {
+        "name": "Package type requirements (standard, optional, experimental)",
+        "description": "Packages are classified as standard, optional or experimental with different quality/testing expectations.",
+        "guidance": "Standard packages are built by default and have stringent quality requirements: they should work on all supported platforms. New standard packages should have been optional for a while. Optional packages must also work on all supported platforms and any optional doctests in the Sage library must pass, but they are tested less. Experimental packages have a much lower acceptance bar and can be accepted despite some problems."
+      },
+      {
+        "name": "Package source types and rules (normal, wheel, pip, script, dummy)",
+        "description": "A third-party package in Sage is one of exactly these source types with specific handling rules.",
+        "guidance": "Normal package: tarball from mirrors, version in package-version.txt, can be patched, installed with build/install scripts, Sage records installed version. Wheel: platform-independent wheels only (*-none-any.whl), cannot be patched, version in package-version.txt, no build/install scripts required. Pip: obtained from PyPI via requirements.txt, cannot be patched, installed with pip, by policy no standard package is allowed to be a pip package. Script: not associated with tarball, optional package-version.txt, installation runs spkg-install or spkg-install.in, Sage records installed version. Dummy: only used for recording names of equivalent system packages; no spkg-install and attempts to install will error."
+      },
+      {
+        "name": "Determining package source type precedence",
+        "description": "Rules to determine the package source type automatically from presence of certain files.",
+        "guidance": "If requirements.txt exists \u2192 pip package. Else if checksums.ini exists \u2192 normal or wheel. Else if spkg-install or spkg-install.in exists \u2192 script package. Else \u2192 dummy package."
+      },
+      {
+        "name": "Preserve upstream tarball and document allowed modifications",
+        "description": "The package tarball should be the upstream tarball as distributed, or as close as possible; modifications are allowed only for valid reasons.",
+        "guidance": "Valid reasons to modify the tarball: delete unnecessary files to keep download size manageable, regenerate auto-generated files, or change directory structure if necessary. Actual code must be unmodified; if sources need to change, add patches instead. If tarball is not unmodified, include an spkg-src file documenting how the tarball was generated."
+      },
+      {
+        "name": "Package directory naming and structure",
+        "description": "Third-party package build scripts and associated files live in SAGE_ROOT/build/pkgs/<lowercase project name> with character rules.",
+        "guidance": "The directory name should be the lower-case version of the upstream project name. Non-alphanumeric (and non-underscore) characters should be removed or replaced by underscores (example: FFLAS-FFPACK -> fflas_ffpack). Minimum files for packaging include checksums.ini, dependencies, package-version.txt, spkg-install.in, SPKG.rst, and type. Additional optional files: platform-specific files, patches, spkg-check.in, spkg-configure.m4, spkg-src, trees.txt, etc."
+      },
+      {
+        "name": "spkg-build.in and spkg-install.in template rules",
+        "description": "The spkg-*.in script templates are used to generate executable spkg-build and spkg-install scripts; they must follow templating rules.",
+        "guidance": "Do not include a shebang (#!...) and do not set the executable bit on the *.in files; these are added automatically when generating scripts. The templates should focus on the package-specific build/install steps. If spkg-build.in is missing, spkg-install.in must perform both build and install steps (though separation is encouraged). Optional spkg-preinst.in and spkg-postinst.in templates may be used for pre/post install steps; put modifications to already-installed files into spkg-postinst.in."
+      },
+      {
+        "name": "Top-level rename to src and use of cd src in templates",
+        "description": "When building, the top-level directory inside the tarball is renamed to src before calling spkg-build and spkg-install.",
+        "guidance": "Templates should use cd src instead of cd <tarball-topdir>. This simplifies scripts and avoids hardcoding upstream tarball directory names."
+      },
+      {
+        "name": "Recommended simple build/install commands",
+        "description": "If upstream project installs via configure/make/make install, spkg-build.in and spkg-install.in can be minimal.",
+        "guidance": "Typical content: spkg-build.in -> cd src; sdh_configure; sdh_make. spkg-install.in -> cd src; sdh_make_install. Use helper functions sdh_configure, sdh_make, sdh_make_install. Install documentation conditionally using SAGE_SPKG_INSTALL_DOCS environment variable and sdh_install to $SAGE_SHARE/doc/PACKAGE_NAME."
+      },
+      {
+        "name": "CFLAGS/CXXFLAGS/FCFLAGS defaults and alternatives",
+        "description": "At build time, common compiler flags are set (e.g., -g -O2 -march=native) but alternatives are allowed.",
+        "guidance": "Typical defaults: -g -O2 -march=native. Alternatives: use CFLAGS_NON_NATIVE to avoid -march=native, CFLAGS_O3 to use -O3, or ORIGINAL_CFLAGS to use user-specified flags. Apply similarly to CXXFLAGS, FCFLAGS, F77FLAGS."
+      },
+      {
+        "name": "Template naming and historical notes",
+        "description": "Historically templates were called spkg-build, spkg-install without .in and included shebang; modern policy is different.",
+        "guidance": "Prior to Sage 9.1 the templates lacked .in and prior to Sage 8.1 included shebang and were executable. Current practice is to store non-executable templates ending with .in which are transformed into executable scripts during package build."
+      },
+      {
+        "name": "Python-based build/install script policy",
+        "description": "Build/install scripts may be written in Python but must be organized to run in the appropriate Python environment.",
+        "guidance": "Put Python code in a separate file (e.g., spkg-install.py) and call it from spkg-install.in using exec sage-bootstrap-python spkg-install.py or exec python3 spkg-install.py. Use sage-bootstrap-python only for tasks that must run before Sage's python3 is available; it accepts a wide range of Python versions. Do not use sage-bootstrap-python to run pip or setup.py for any package (use python3 for installing Python packages so libraries are installed in the right place)."
+      },
+      {
+        "name": "SAGE_SUDO usage and install sequencing",
+        "description": "spkg-build and spkg-install execution sequencing and sudo usage are controlled by SAGE_SUDO and presence of spkg-build.in.",
+        "guidance": "If spkg-build.in exists, the generated spkg-build is first called, then $SAGE_SUDO spkg-install is called. Otherwise, only spkg-install is called (without $SAGE_SUDO). Therefore, spkg-install.in should prefix commands that write into the installation hierarchy with $SAGE_SUDO so they will run correctly when SAGE_SUDO is set."
+      },
+      {
+        "name": "spkg-src indicates modified tarball",
+        "description": "An spkg-src file documents generated/modified tarballs indicating the tarball is not an unmodified upstream tarball.",
+        "guidance": "If spkg-src is present, it documents how the tarball was generated (modified upstream tarball or generated from a repository). Prefer not to modify tarballs; when modifications are necessary, document them in spkg-src."
+      },
+      {
+        "name": "Script packages spkg-install execution rules",
+        "description": "For script packages, the spkg-install file must be an executable shell script and is executed directly, not templated.",
+        "guidance": "Script packages are not subject to the .in templating. Their spkg-install must be executable and perform installation steps directly from the build directory."
+      }
+    ]
+  }
+}

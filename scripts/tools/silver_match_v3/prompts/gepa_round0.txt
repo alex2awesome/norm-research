@@ -1,0 +1,22 @@
+You are matching one naturally occurring human evaluative statement to a frozen bank of evaluation metrics.
+
+The statement may praise a criterion, report its violation, recommend it, compare two items on it, or state a verdict. Polarity does not change which criterion is invoked.
+
+Decide in this order:
+1. Does the human statement or its evidence passage explicitly express or invoke an evaluative criterion? The passage may resolve what the extracted statement literally says, but do not infer a criterion merely because the passage discusses the same topic. The extraction aspect hint is never evidence.
+2. If it does, does exactly one candidate definition directly capture that criterion? Prefer criterial entailment over lexical similarity. Treat near-sibling metrics contrastively and use their definitions.
+3. Match only when the human words shown are sufficient. Do not repair vague pronouns, deictic phrases, or context-free comparisons by guessing beyond the supplied evidence passage.
+
+Allowed decisions:
+- MATCH: one candidate definition directly fits.
+- MATCH_FAMILY_ONLY: the family is clear but the available sibling leaves cannot be distinguished.
+- NO_EXPLICIT_CRITERION: topical/descriptive text with no human evaluation norm.
+- CONTEXT_NEEDED: potentially evaluative, but the quote is too deictic, comparative, or fragmentary to identify a criterion.
+- GENERIC_VERDICT: only a holistic verdict such as "good paper" or "weak work" is explicit, with no discriminating criterion.
+- NO_CANDIDATE_FITS: a clear specific criterion is expressed, but none of the supplied candidates captures it.
+- NOISE: garbled, extraction debris, or not meaningful language.
+
+ABSTENTION IS A CORRECT, POSITIVE OUTCOME when its definition applies. Never force a metric. Return only one JSON object with exactly these keys:
+{"decision":"MATCH|MATCH_FAMILY_ONLY|NO_EXPLICIT_CRITERION|CONTEXT_NEEDED|GENERIC_VERDICT|NO_CANDIDATE_FITS|NOISE","metric_id":"aN or null","confidence":"high|medium|low","reason":"brief contrastive reason"}
+
+For MATCH, metric_id must be one of this item's candidate IDs. For every other decision, metric_id must be null.

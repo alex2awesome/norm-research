@@ -1,0 +1,84 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/openreview_subject_areas.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 2919,
+  "output_tokens": 2900,
+  "elapsed_s": 844.9741430408321,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "conference program organizers / venue administrators configuring OpenReview matching (program chairs, area chairs, reviewers, venue admins)",
+    "subtask_short": "subject-area-based assignment setup",
+    "subtask_description": "Configure OpenReview so authors and reviewers select subject areas and the matcher uses Subject_Score edges (in addition to affinity) to assign reviewers to submissions by subject area. Involves editing submission and reviewer forms, creating a score invitation (edges), posting edges, and adding the Subject_Score to the Score Specification for matching.",
+    "subtask_keywords": [
+      "openreview",
+      "assignment",
+      "subject_area",
+      "conference_program",
+      "venue_configuration"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Submission form customization (add subject_area field)",
+        "description": "Add a field to the submission form that will allow authors to select the subject areas for their submission. Example JSON key is \"subject_area\" with description \"Please select one primary Machine Learning subject area.\" and an enum listing values (e.g., Bayesian Inference, Computer Vision, Deep Learning, ...).",
+        "guidance": "If you're allowing authors to select more than one value, change type to \"type\": \"string[]\" and use items instead of enum. Keep the field order and description as appropriate for the venue. Ensure the values (enum list) correspond exactly to the values you will use for reviewer registration to allow accurate matching."
+      },
+      {
+        "name": "Reviewer Registration Form must include same subject_area field and values",
+        "description": "Reviewers must select subject areas of expertise so they can be matched with submissions of the same subject area. Create a Reviewer Registration form and add the same subject_area field and values you added to the submission form.",
+        "guidance": "The Reviewer Registration form can include or exclude other default fields; the critical requirement is that the subject_area values match the submission form so a match can be created. Use the registration responses to obtain reviewer selections for posting edges."
+      },
+      {
+        "name": "Create a Score Invitation to allow posting of edges (Score Invitation)",
+        "description": "Create an invitation that allows the posting of edges which connect submission notes and reviewer profile IDs. These edges represent subject-area scores to be used in matching.",
+        "guidance": "The edge contains four properties: head: the submission note; tail: the reviewer's profile ID; weight: the weight between two entities; label: the subject area in common. Add your venue ID to venue_id in the invitation. You may use the python client to post the invitation or contact OpenReview Support for assistance."
+      },
+      {
+        "name": "Edge properties: head, tail, weight, label",
+        "description": "Edges used for Subject_Score must include the properties head (submission note), tail (reviewer profile ID), weight (numeric weight), and label (the subject area in common).",
+        "guidance": "Set label to the subject area string shared by submission and reviewer. Choose weight to reflect the desired influence of the subject match (commonly 0 or 1 for Subject_Score in the described setup). Ensure head and tail identifiers are the correct note and profile IDs."
+      },
+      {
+        "name": "Posting edges between submissions and reviewers sharing subject area",
+        "description": "Iterate through submissions and post an edge between the submission and every reviewer that shares the matching subject area based on registration responses.",
+        "guidance": "First, obtain reviewer registration entries (their forum responses). The reviewer's profile ID is located in the signature of the response \u2014 use this as the tail key. Use the response content as the value for subject areas. For each shared subject area, post an edge connecting the submission note (head) and the reviewer's profile ID (tail) with appropriate weight and label."
+      },
+      {
+        "name": "Add Subject_Score to the Score Specification in Assignment Configuration",
+        "description": "For Subject_Score edges to be included in matching, add a specification for Subject_Score to the Scores Specification in the Assignment Configuration (i.e., Subject_Score is added to the Scores Specification box).",
+        "guidance": "Including Subject_Score in the Scores Specification ensures the matcher takes those edges into account. Affinity scores can remain included as well; combined configuration determines final aggregated score."
+      },
+      {
+        "name": "Subject_score and affinity score semantics and aggregation",
+        "description": "In the described configuration, affinity scores are decimals ranging from 0 to 1 and the subject score is either 0 or 1. The resulting aggregated scores could then range between 0 and 2.",
+        "guidance": "After matching, check distribution of aggregated scores (e.g., histogram titled \"Distribution of Assignments by Scores\"). The guide suggests an ideal clustering in 1.7\u20132 (high affinity + subject match) and a smaller cluster in 0.7\u20130.9 (high affinity but no subject match). Choose weightings in the Score Specification to produce desired behavior."
+      },
+      {
+        "name": "Matching priority: subject area match can take priority over low affinity",
+        "description": "Matchings with high affinity and matching subject area will be maximized; subject area match will take priority over a low affinity score.",
+        "guidance": "Because Subject_Score is discrete and can be given significant weight, a reviewer with a subject match may be chosen over a reviewer with slightly higher affinity but no subject match. Tune weights appropriately in the Scores Specification to reflect desired priorities."
+      },
+      {
+        "name": "Reasons a matching may not include a subject score / subject match",
+        "description": "A matching may not entirely contain assignments that have a subject score or match for several reasons.",
+        "guidance": "Common reasons include: submissions may be conflicted with many or all reviewers in their designated subject area; reviewers in that subject area might already be saturated and there are no more available assignments, causing the matcher to fall back to affinity score; or insufficient numbers of reviewers selected that subject."
+      },
+      {
+        "name": "Apply same process to Area Chairs by replacing Reviewers with Area Chairs",
+        "description": "This process can also be applied to Area Chairs \u2014 follow the same steps replacing Reviewers with Area Chairs.",
+        "guidance": "Ensure Area Chair registration includes the same subject_area field and post edges connecting submissions to Area Chair profile IDs; add relevant Score_Specification entries so AC assignments consider subject matches."
+      },
+      {
+        "name": "Verify assignments in \"View Statistics\" by score after matching",
+        "description": "After running the Matching with the set configuration, check the assignment distribution in \"View Statistics\" by score when the proposed assignments are complete.",
+        "guidance": "Use the statistics view to confirm that matchings reflect the intended balance of affinity and subject matches (look for expected histogram clustering). If results differ from expectations, adjust score weights, edge postings, or registration fields and rerun matching."
+      },
+      {
+        "name": "Mapping reviewer IDs from registration responses",
+        "description": "When preparing edges, you must extract the reviewer's profile ID from the registration response to use as the tail of the edge.",
+        "guidance": "The reviewer's ID is located in the signature of the registration response. When building the mapping of reviewer_id -> selected_subjects, use the signature as the key so posted edges correctly reference reviewer profiles."
+      }
+    ]
+  }
+}

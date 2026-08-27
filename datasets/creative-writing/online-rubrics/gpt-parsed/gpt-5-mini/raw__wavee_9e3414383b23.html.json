@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_9e3414383b23.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17553,
+  "output_tokens": 3857,
+  "elapsed_s": 1177.279846166959,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP and computational-creativity researchers evaluating LLM and human story generation",
+    "subtask_short": "evaluating short story creativity",
+    "subtask_description": "Framework and metrics for evaluating five-sentence cue-word short stories produced by humans and LLMs, using automated metrics (novelty, surprise, diversity, complexity) and human/LLM judges (experts, non-experts, LLMs).",
+    "subtask_keywords": [
+      "creative_writing",
+      "short_story",
+      "evaluation",
+      "llm",
+      "automated_metrics",
+      "human_judges"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Overall creativity (creativity rating)",
+        "description": "Creativity judgments provided by human experts, non-expert raters, and LLM judges on a Likert-type scale (used as the main outcome variable). The paper treats creativity as a composite construct (creativity correlates highly with originality, surprise, and effectiveness).",
+        "guidance": "For experts: compute composite scores as mean of two expert judges (good-to-excellent inter-rater ICC .62-.90). For non-experts: collect \u22655 ratings and use the median to reduce outlier influence (ICC .43-.71). For LLM judges: compute means for creativity/originality/surprise/effectiveness (ICC .86-.94). Focus analyses on creativity where variables are highly correlated (.83<r<.89 for non-experts; other groups similar)."
+      },
+      {
+        "name": "Novelty",
+        "description": "Novelty is defined as how different an artifact is from other known artifacts in its class. Operationalized using the Karampiperis et al. (2014) novelty metric: the average semantic distance between the dominant terms (lemma- lemmatized content words) of a story versus the average semantic distance of dominant terms across all stories, normalized to [0,2].",
+        "guidance": "Compute D(Sn) (avg pairwise semdis among dominant terms in story Sn) and D(SG) for corpus SG, then Nov(Sn) = 2 * |D(Sn) - D(SG)|. Novelty is reference-based and depends on the chosen reference corpus (limitation noted). Humans scored higher on novelty than models in this study."
+      },
+      {
+        "name": "Surprise (unexpectedness)",
+        "description": "Surprise is the artifact's degree of deviation from what is expected; for stories it is operationalized temporally as the average semantic distances between consecutive fragments (sentences) of a story, normalized to [0,2].",
+        "guidance": "Sur(Sn) = (2/(|F|-1)) * sum_{i=2..|F|} |D(Fi) - D(F_{i-1})| where Fi are fragments (sentences). Use sentence embeddings to compute semantic distances. Humans show greater surprise and greater sentence-to-sentence variation; model stories tend to have monotonous surprise profiles."
+      },
+      {
+        "name": "Lexical diversity (n-gram diversity)",
+        "description": "Lexical diversity measured via n-gram diversity for n in [1..5], defined as the ratio of unique n-grams to total n-grams in a story.",
+        "guidance": "Average n-gram diversity across n=1..5 can be used as an overall lexical-diversity score. Humans consistently exhibit higher lexical diversity (statistically significant). Use this to detect repetition and template-like phrasing in model outputs."
+      },
+      {
+        "name": "Semantic diversity (inverse homogenization)",
+        "description": "Inverse homogenization: semantic diversity measured as the average pairwise semantic distance of a story to all other stories on the same item set: inv_hom(s|t) = (1/(|S_t|-1)) * sum_{s' in S_t \\ s} semdis(s, s'), using semdis = 1 - cosine_similarity of story embeddings.",
+        "guidance": "Compute with sentence/story embeddings (paper uses gte-large). Higher inverse homogenization indicates the story is semantically more distinct from peers. Humans show higher semantic diversity; models tend to share themes (lower inv_hom)."
+      },
+      {
+        "name": "Lexical complexity metrics",
+        "description": "Measures of lexical complexity including number of unique words, average word length, average sentence length, and readability (Flesch reading ease).",
+        "guidance": "Number of unique words was used as the representative lexical-complexity predictor in regressions. Higher lexical complexity (e.g., many unique words, longer sentences) correlates with non-expert and LLM higher creativity ratings but does not necessarily imply semantic creativity; models scored higher on lexical complexity but were often less novel/surprising."
+      },
+      {
+        "name": "Syntactic complexity metrics",
+        "description": "Syntactic complexity measured by POS tag ratios (e.g., nouns, adjectives, pronouns, adverbs), average dependency path length, and average constituency tree depth.",
+        "guidance": "Average constituency tree depth was used as the representative syntactic-complexity predictor in regressions. Average dependency path length captures syntactic embedding/complexity per word/sentence. LLM stories tended to have longer dependency paths and higher constituency depths (more syntactically complex)."
+      },
+      {
+        "name": "Readability (Flesch reading ease)",
+        "description": "Flesch reading ease score as a measure of readability (higher means easier to read).",
+        "guidance": "Include as a lexical-complexity/readability metric: high syntactic/lexical complexity can reduce readability; LLM outputs can be more complex and less readable despite appearing 'creative' to untrained raters."
+      },
+      {
+        "name": "Pronoun/perspective usage",
+        "description": "Measure of narrative perspective via counts/lengths of first-, second-, third-person pronoun usage.",
+        "guidance": "Humans in this dataset wrote almost exclusively in first or second person, whereas models preferred third-person narration \u2014 this is a useful stylistic indicator and can be used as a feature in author-classification."
+      },
+      {
+        "name": "Template/repetition detection (n-gram repetition)",
+        "description": "Detection of repeating multi-word phrases (e.g., frequent 5-grams) that indicate template-like or formulaic storytelling.",
+        "guidance": "Models often repeat phrases/templates ('in the heart of the', 'once upon a time in'), whereas human stories show less phrase repetition. Counting most frequent 5-grams and repetition counts is recommended to quantify template usage."
+      },
+      {
+        "name": "Theme diversity / number of themes (clustering-based theme count)",
+        "description": "Quantify number of distinct themes in an item set by clustering story embeddings (agglomerative clustering with Ward linkage and distance threshold e.g., 0.6) and counting clusters.",
+        "guidance": "Human stories produced significantly more themes per item set. To summarize dominant themes per group, combine stories and use a summarizer (e.g., GPT-4) to label clusters. Useful for assessing semantic breadth beyond pairwise distances."
+      },
+      {
+        "name": "Originality and effectiveness (judge-rated subdimensions)",
+        "description": "Originality (similar to novelty) and effectiveness (value/usefulness/impact of the story) are rated by judges alongside creativity and surprise; these subdimensions are highly correlated with overall creativity.",
+        "guidance": "Collect ratings for originality and effectiveness separately if possible; they can be averaged/used in composite analyses. Experts' intercorrelations justify focusing on creativity, but reporting subdimensions aids interpretability."
+      },
+      {
+        "name": "Human vs AI (Turing-style) judgment",
+        "description": "Judges are asked to classify whether each story was created by a human or an AI (binary classification) to study detectability.",
+        "guidance": "Experts: use mean of two experts (high accuracy ~94% in this study). Non-experts: collect multiple judgments and use median (non-experts ~81% correct). LLM judges: median for human-vs-AI (LLMs ~71% correct). Analyze which features (e.g., lexical complexity, semantic diversity) drive these judgments via self-report or regression."
+      },
+      {
+        "name": "Judge types, rater counts, aggregation and reliability",
+        "description": "Evaluation should use multiple judge types: trained expert judges (quasi-experts/professionals), non-expert crowd raters, and LLM judges; recommended minimum raters per story: 2 experts and 5 non-experts. Aggregation: mean for experts and LLMs (if ICC high), median for non-experts to reduce outlier influence.",
+        "guidance": "Report inter-rater reliability (ICC). Use mean when ICC indicates good-to-excellent agreement (experts/LLMs in this study); use median for non-experts when agreement is lower. Document rater selection criteria (e.g., fluent speakers, demographic info) and blinding (raters unaware of source)."
+      },
+      {
+        "name": "Automated semantic distance computation details",
+        "description": "Semantic distance between texts computed as 1 - cosine_similarity of embeddings; the study uses gte-large sentence embeddings.",
+        "guidance": "Use consistent embedding model across all semantic metrics (diversity, novelty, surprise). Note that embedding choice affects scores; document model and version. Semantic distance underpins inverse homogenization, novelty, surprise computations."
+      },
+      {
+        "name": "Prompt and generation constraints (production-side requirements)",
+        "description": "Task instructions given to both humans and models: write a creative short story containing three given words (items), maximum of five sentences, explicitly avoid the 'boring storyline' (provide an example of typical storyline to avoid). Preprocessing removes stories with <3 or >7 sentences.",
+        "guidance": "For fair comparisons, use identical instructions for humans and models. Enforce length constraints both at generation and preprocessing stages. Provide hints about what counts as uncreative to increase creative effort. Filter out non-adherent submissions."
+      },
+      {
+        "name": "Model decoding settings for creative generation",
+        "description": "Generation decoding parameters used for models in the study: zero-shot prompts with temperature = 0.7 and top_p = 0.95 (settings chosen to favor creative outputs).",
+        "guidance": "When comparing many models, use consistent decoding parameters known to encourage diversity; however, recognize that different decoding/prompt strategies can change outcomes and are a limitation if not exhaustively explored."
+      },
+      {
+        "name": "Predictive regression setup (metric selection for explainability)",
+        "description": "To predict human creativity ratings, construct simple explainable regressions with one representative predictor per automated-metric category (lexical diversity: mean n-gram diversity; semantic diversity: inverse homogenization; novelty; surprise; syntactic complexity: avg constituency tree depth; lexical complexity: number of unique words).",
+        "guidance": "Use these representative features to interpret which automated dimensions drive judge ratings. The paper reports expert ratings are best predicted by semantic diversity, surprise, and lexical diversity; non-experts and LLM judges are driven by lexical complexity."
+      }
+    ]
+  }
+}

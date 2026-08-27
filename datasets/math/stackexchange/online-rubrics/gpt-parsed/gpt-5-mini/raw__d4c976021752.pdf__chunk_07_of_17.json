@@ -1,0 +1,221 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/d4c976021752.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "d4c976021752.pdf",
+  "chunk_idx": 7,
+  "n_chunks": 17,
+  "chunk_chars": 39947,
+  "model": "gpt-5-mini",
+  "elapsed_s": 137.70744420800474,
+  "input_tokens": 13173,
+  "output_tokens": 7055,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users of Isabelle/Isar (theorem provers), proof authors and tool-developers writing structured proofs, proof methods, and proof scripts",
+    "subtask_short": "isar_proof_development",
+    "subtask_description": "Guidance and rules for writing, instantiating, and managing Isar/Isabelle proofs: defining methods, doing case/induction/coinduction, using proof-script commands and tactic-emulation methods, and controlling printed diagnostics. Covers language elements, attributes, and safe/unsafe practices.",
+    "subtask_keywords": [
+      "isabelle",
+      "isar",
+      "proofs",
+      "proof_methods",
+      "theorem_proving",
+      "proof_scripts"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "positional instantiation via of t1 ... tn",
+        "description": "of t1 . . . t n performs positional instantiation of term variables: the terms t1, . . . , tn are substituted for any schematic variables occurring in a theorem from left to right; \u201c_\u201d (underscore) indicates to skip a position. Arguments following a \u201cconcl:\u201d specification refer to positions of the conclusion of a rule.",
+        "guidance": "Optional context of local variables x1 . . . xm may be specified: the instantiated theorem is exported, and these variables become schematic (usually with some shifting of indices). Use underscore to skip positions. Use 'concl:' to target conclusion positions."
+      },
+      {
+        "name": "named instantiation via where x1 = t1 ...",
+        "description": "where x1 = t1 and . . . xn = tn performs named instantiation of schematic type and term variables occurring in a theorem. Schematic variables have to be specified on the left-hand side (e.g. ?x1.3). The question mark may be omitted if the variable name is a plain identifier without index.",
+        "guidance": "Type instantiations are inferred from term instantiations, so explicit type instantiations are seldom necessary. An optional context of local variables for x1...xm can be specified as with 'of'."
+      },
+      {
+        "name": "defining a proof method with method_setup",
+        "description": "method_setup name = text description defines a proof method in the current context. The given text must be an ML expression of type (Proof.context -> Proof.method) context_parser.",
+        "guidance": "Combinators like METHOD and SIMPLE_METHOD (and primed versions for explicit goal addressing) can turn tactic forms into official proof methods. Example method definitions illustrate using Scan.succeed, Attrib.thms >>, and SIMPLE_METHOD\u2019 constructs."
+      },
+      {
+        "name": "use of case command to introduce named local contexts",
+        "description": "The case command provides a shorthand to refer to a local context symbolically: certain proof methods provide an environment of named \u201ccases\u201d of the form c: x1, . . . , xm, \u03d51, . . . , \u03d5n; the effect of \u201ccase c\u201d is then equivalent to \u201cfix x1 . . . xm assume c: \u03d51 . . . \u03d5n\u201d.",
+        "guidance": "Term bindings may be covered, notably ?case for the main conclusion. By default the terminology x1...xm of a case is marked hidden; use explicit form 'case (c y1 ... ym)' to choose local names. Proper use of case does not provide means to peek at current goal state. Goal refinement commands provide named cases goal i for subgoals, but using that requires care due to internal tactical machinery."
+      },
+      {
+        "name": "availability of cases depends on method and rule support",
+        "description": "Proper cases are only available if both the proof method and the rules involved support this.",
+        "guidance": "By using appropriate attributes, case names, conclusions, and parameters may be declared by hand. Variant versions of manually derived rules can be prepared for advanced case analysis."
+      },
+      {
+        "name": "case a: (c x1 ... xm) semantics",
+        "description": "case a: (c x1 . . . x m) invokes a named local context c: x1, . . . , xm, \u03d51, . . . , \u03d5n, as provided by an appropriate proof method. The command abbreviates 'fix x1 . . . x m assume a.c: \u03d51 . . . \u03d5n'. Each local fact is qualified by the prefix a, and all such facts are collectively bound to the name a.",
+        "guidance": "The fact name specification a is optional; default is to reuse c. 'print_cases' prints all local contexts of the current state in Isar notation."
+      },
+      {
+        "name": "case_names attribute",
+        "description": "case_names c1 . . . ck declares names for the local contexts of premises of a theorem; c1, . . . , ck refers to the prefix of the list of premises.",
+        "guidance": "Each ci can be of the form c[h1 . . . hn] where h1..hn are names of the hypotheses in case ci from left to right. Use this to control naming in resulting rules."
+      },
+      {
+        "name": "case_conclusion attribute",
+        "description": "case_conclusion c d1 . . . dk declares names for the conclusions of a named premise c; d1, . . . , dk refers to the prefix of arguments of a logical formula built by nesting a binary connective (e.g. \u2228).",
+        "guidance": "Proof methods like induct/coinduct provide a default name for whole conclusion; naming subformulas is required only when cases split into several sub-cases."
+      },
+      {
+        "name": "params declaration for renaming parameters",
+        "description": "params p1 . . . pm and . . . q1 . . . qn renames the innermost parameters of premises 1, . . . , n of some theorem. An empty list of names may be given to skip positions, leaving parameters unchanged.",
+        "guidance": "Default usage of case rules does not directly expose parameters to the proof context; use params to expose or rename them."
+      },
+      {
+        "name": "consumes declaration for major premises",
+        "description": "consumes n declares the number of 'major premises' of a rule, i.e. the number of facts to be consumed when it is applied by an appropriate proof method. The default value is n = 1. Rules without any consumes declaration are treated as if consumes 0 had been specified.",
+        "guidance": "A negative n is interpreted relative to total number of premises; its absolute value specifies remaining number of premises after subtracting the prefix of major premises. Explicit consumes declarations are only rarely needed; higher-level declarations handle it automatically."
+      },
+      {
+        "name": "cases/induct/induction/coinduct methods interface",
+        "description": "The cases, induct, induction, and coinduct methods provide a uniform interface to common proof techniques over datatypes, inductive predicates (or sets), recursive functions etc. These methods may be specified and instantiated casually and provide named local contexts invoked via 'case'.",
+        "guidance": "The induct method provides additional infrastructure to work with structured statements, avoiding encoding of strengthened inductive statements. Method 'induction' differs from 'induct' only in naming of facts in invoked local contexts."
+      },
+      {
+        "name": "cases insts R behavior and rule selection",
+        "description": "cases insts R applies method 'cases' with an appropriate case-distinction theorem, instantiated to the subjects insts. The rule is determined according to facts and arguments passed (explicit rule R, implicit rule from facts, classical case split, datatype exhaustion, inductive predicate elimination).",
+        "guidance": "Several instantiations may be given, referring to suffixes of premises; within each premise the prefix of variables is instantiated. The (no_simp) option disables pre-simplification of cases."
+      },
+      {
+        "name": "induct/induction instantiation and definitional instantiations",
+        "description": "induct insts R and induction insts R refer to induction rules; instantiations may be definitional: equations x \u2261 t introduce local definitions inserted into the claim and discharged after applying the induction rule. Equalities reappear transformed in inductive cases.",
+        "guidance": "Non-variable instantiation t is shorthand for x \u2261 t where x is fresh; if not intended, enclose t in parentheses. Default equalities are pre-simplified using a set of rules (distinctness/injectivity). Use (no_simp) to disable pre-simplification and induct_simp attribute to add rules."
+      },
+      {
+        "name": "use 'arbitrary:' to generalize variables before induction",
+        "description": "The optional 'arbitrary: x1 . . . xm' specification generalizes variables x1, . . . , xm of the original goal before applying induction, allowing induction hypotheses to be sufficiently general.",
+        "guidance": "You can separate variables by 'and' to generalize in goals other than the first. Combine with definitional instantiations to perform induction over structured expressions."
+      },
+      {
+        "name": "use 'taking:' to provide additional instantiations",
+        "description": "The optional 'taking: t1 . . . tn' specification provides additional instantiations of a prefix of pending variables in the rule.",
+        "guidance": "Useful for schematic induction rules; coinduct similarly may require 'taking:' to specify the bisimulation to use."
+      },
+      {
+        "name": "failure of cases due to unresolved schematics",
+        "description": "Any persisting unresolved schematic variables of the resulting rule will render the corresponding case invalid.",
+        "guidance": "induct and coinduct methods guess further instantiations from the goal; ensure term binding ?case for conclusion is fully specified to be provided."
+      },
+      {
+        "name": "print_cases command",
+        "description": "The print_cases command prints all named cases present in the current proof state.",
+        "guidance": "Use to inspect named local contexts produced by methods."
+      },
+      {
+        "name": "difference between cases and induct regarding context",
+        "description": "Cases and coinduct merely apply a certain rule after instantiation, leaving the context of a structured statement unchanged. The induct method fundamentally replaces the original statement by separate copies corresponding to induction hypotheses and conclusion; the original goal context is no longer available.",
+        "guidance": "In induct proofs, local assumptions introduced by cases are split into IH (induction hypotheses), hyps (rule hypotheses), and prems (goal assumptions), accessible as c.IH, c.hyps and c.prems."
+      },
+      {
+        "name": "fact consumption semantics for methods",
+        "description": "Facts presented to methods are consumed according to the number of 'major premises' of the rule involved (usually 0 for type cases and 1 for predicate/set rules). Remaining facts are inserted into the goal verbatim before applying the rule.",
+        "guidance": "This explains how provided facts affect resulting subgoals and case splitting."
+      },
+      {
+        "name": "declaring and deleting induct/cases/coinduct rules",
+        "description": "The attributes cases, induct, and coinduct declare rules for reasoning about (co)inductive predicates (or sets) and types, using the corresponding methods. Rules may be deleted via the del specification.",
+        "guidance": "Manual rule declarations usually refer to case_names and params to adjust names and parameters; consumes is handled automatically (consumes 0 for type rules, consumes 1 for predicate/set rules)."
+      },
+      {
+        "name": "generalized elimination via consider",
+        "description": "consider (a) x where A x | (b) y where B y | . . . states a rule for case splitting into separate subgoals, such that each case involves new parameters and premises; after the proof, the resulting rule may be used with 'cases' to perform actual case-splitting.",
+        "guidance": "Optional names in parentheses become case names and annotations via case_names. The formal derived form uses have with conditional Pure.intro? premises and an apply (insert a b ...) step."
+      },
+      {
+        "name": "obtain x where A x semantics and export restrictions",
+        "description": "obtain x where A x states a generalized elimination rule with exactly one case. After proof is finished, it is activated for subsequent proof text by augmenting the context via 'fix x assume A x', with provisions to export later results by discharging these assumptions.",
+        "guidance": "Results must not refer to hypothetical parameters (otherwise export fails). In proofs 'that' is the fact name binding local premises. Facts established by obtain cannot be polymorphic; type variables are fixed in the present context."
+      },
+      {
+        "name": "emulating proof scripts with apply and related commands",
+        "description": "apply m applies proof method m in initial position while retaining 'proof (prove)' mode; apply_end m applies a method as if in terminal position (no facts passed and static context of enclosing goal). supply supports fact definitions during goal refinement. done completes a proof script if current goal solved.",
+        "guidance": "Facts are passed to m according to the goal's forward-chain mode and consumed afterwards. apply_end simulates a multi-step tactic script for qed and must not refer to assumptions introduced in the current body. supply is similar to note but for backward mode; use done or '.'/'sorry' to conclude scripts."
+      },
+      {
+        "name": "goal management in scripts: defer, prefer, back",
+        "description": "defer n and prefer n shuffle pending goals: defer moves subgoal n to the end (n=1 default), prefer brings subgoal n to the front. back does back-tracking over the result sequence of the latest proof command.",
+        "guidance": "back is mainly useful for experimentation and interactive exploration and should be avoided in finished proofs."
+      },
+      {
+        "name": "structuring backward refinements with subgoal",
+        "description": "subgoal allows imposing structure on backward refinements by turning the current goal state into a proof context and remaining conclusion, corresponding to fix/assume/show in structured proofs but without explicit text.",
+        "guidance": "Use 'subgoal for x y z' to name a prefix of goal parameters; 'subgoal for ... x y z' names a suffix (use literal '...'). Skip parameter positions with underscore; unspecified names remain internal. 'subgoal premises prems' turns goal premises into assumptions; 'subgoal result' names the resulting fact for reuse. Examples illustrate multi-goal interactions."
+      },
+      {
+        "name": "avoid implicit goal-state references; use subgoal or structured proofs",
+        "description": "Tactic-emulation methods allow direct access to the goal state (numbered addressing and dynamic instantiation), which is normally considered harmful for structured Isar proofs.",
+        "guidance": "Prefer structured proof constructs or subgoal to avoid brittle proofs relying on hidden goal state. If you must use tactic-emulation, be aware of dynamic vs static context interactions."
+      },
+      {
+        "name": "semantics of dynamic instantiations in tactics",
+        "description": "Dynamic instantiations refer to universally quantified parameters of a subgoal (the dynamic context) rather than fixed variables and term abbreviations of a static Isar context.",
+        "guidance": "Tactic-emulation methods admit simultaneous instantiation from dynamic and static contexts; if names occur in both, goal parameters hide locally fixed variables. Schematic variables refer to term abbreviations if present; otherwise they remain schematics to be solved by unification."
+      },
+      {
+        "name": "naming in instantiation left-hand sides",
+        "description": "Variable names occurring on left hand sides of instantiations must be preceded by a question mark if they coincide with a keyword or contain dots.",
+        "guidance": "This is consistent with attribute 'where' usage and avoids parser ambiguities."
+      },
+      {
+        "name": "tactic-emulation methods and their intended use",
+        "description": "Methods named foo_tac emulate traditional tactics and admit direct access to goal state; examples include rule_tac, erule_tac, drule_tac, frule_tac, cut_tac, thin_tac, subgoal_tac, rename_tac, rotate_tac, tactic, raw_tactic.",
+        "guidance": "These emulate ML tactics (e.g., Rule_Insts.res_inst_tac). Use them for tactic-style proof scripts or debugging, but avoid in production structured theories when possible."
+      },
+      {
+        "name": "rule_tac and related resolution behavior",
+        "description": "rule_tac etc. perform resolution of rules with explicit instantiation. Multiple rules may be given only if there is no instantiation; otherwise rule_tac behaves like resolve_tac.",
+        "guidance": "Understand interplay of instantiation and multiple-rule resolution to avoid unexpected behavior."
+      },
+      {
+        "name": "cut_tac semantics",
+        "description": "cut_tac inserts facts into the proof state as assumptions of a subgoal; instantiations may be given as well.",
+        "guidance": "Scope of schematic variables is spread over main goal statement and rule premises are turned into new subgoals. This contrasts with 'insert' which inserts closed rule statements."
+      },
+      {
+        "name": "thin_tac for deleting premises",
+        "description": "thin_tac \u03d5 deletes the specified premise from a subgoal. \u03d5 may contain schematic variables to abbreviate the intended proposition; the first matching subgoal premise will be deleted.",
+        "guidance": "Removing useless premises increases readability and can make search tactics run faster."
+      },
+      {
+        "name": "subgoal_tac for adding propositions as subgoals",
+        "description": "subgoal_tac \u03d51 . . . \u03d5n adds the propositions \u03d51 . . . \u03d5n as local premises to a subgoal, and poses the same as new subgoals (in the original context).",
+        "guidance": "Use to introduce intermediate claims that must be proved separately in the original context."
+      },
+      {
+        "name": "rename_tac and rotate_tac for goal parameter/premise manipulation",
+        "description": "rename_tac x1 . . . xn renames parameters of a goal according to the list (refers to suffix of variables). rotate_tac n rotates the premises of a subgoal by n positions (right-to-left if n positive, left-to-right if n negative; default 1).",
+        "guidance": "Use to adjust the order or names of parameters/premises when needed by tactics or readability."
+      },
+      {
+        "name": "tactic and raw_tactic from ML text",
+        "description": "tactic text produces a proof method from any ML text of type tactic. raw_tactic is similar but presents the goal state in its raw internal form, where simultaneous subgoals appear as conjunction of the logical framework.",
+        "guidance": "tactic can be used to write custom tactics in ML that integrate with proof methods. raw_tactic is useful for debugging complex methods but should not be used in production theories."
+      },
+      {
+        "name": "printing diagnostics: typ/term/prop/thm/prf/full_prf/print_state",
+        "description": "Diagnostic commands assist interactive development by printing internal logical entities in human-readable fashion: typ reads/prints types; term and prop read/type-check/print terms/propositions; thm retrieves theorems; prf displays compact proof term; full_prf displays full proof term; print_state prints the current proof state including facts and goals.",
+        "guidance": "prf/full_prf require proof terms enabled in the logic image (e.g. HOL\u2011Proofs). The commands accept optional print-mode lists to modify output behavior (e.g., thm (\"\") symmetric)."
+      },
+      {
+        "name": "typ \u03c4 :: s type-inference behavior",
+        "description": "typ \u03c4 :: s uses type-inference to determine the most general way to make \u03c4 conform to sort s. Dummy type parameters '_' are assigned to fresh type variables with most general sorts according to type-inference principles.",
+        "guidance": "Use this to check and refine type constraints interactively."
+      },
+      {
+        "name": "print-mode configuration options for detail control",
+        "description": "Configuration options (show_markup, show_consts_markup, show_types, show_sorts, show_consts, show_abbrevs, names_long, names_short, names_unique, eta_contract, goals_limit, show_main_goal, show_hyps, show_tags, show_question_marks) control the detail of information displayed for types, terms, theorems, goals, etc.",
+        "guidance": "show_markup enables direct inlining of markup (type/sort constraints) into printed representations (useful for Prover IDE tooltips). show_consts_markup controls printing of type constraints for term constants and requires show_markup."
+      }
+    ]
+  }
+}

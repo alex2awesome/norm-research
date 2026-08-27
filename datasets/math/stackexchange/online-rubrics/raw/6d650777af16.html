@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en">
+<![endif]-->
+<!--[if (!IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+<meta charset="UTF-8" />
+<title>Explanations of mathematical explanation | Meteuphoric</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://meteuphoric.com/xmlrpc.php" />
+<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=4681'
+					+ '&is_singular=1';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9tZXRldXBob3JpYy5jb20%3D"
+		+ "&wpcomid=8643840"
+		+ "&time=" + Math.floor( Date.now() / 1000 );
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//widgets.wp.com' />
+<link rel="alternate" type="application/rss+xml" title="Meteuphoric &raquo; Feed" href="https://meteuphoric.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Meteuphoric &raquo; Comments Feed" href="https://meteuphoric.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Meteuphoric &raquo; Explanations of mathematical&nbsp;explanation Comments Feed" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??-eJxtzN0KQEAQQOEXssaKcCHPsq1Jy+xPZjavL1JKLr86HTiSsjEIBgGfVaK8uMCwoiRjt8fAOYCPcyZk2JGM4KxSZPmotMwF/B/Jbfh+b1355EfdddWg26av1xMpeTR5&cssminify=yes' type='text/css' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/common.min.css */
+</style>
+<style id="wp-block-library-inline-css-extra">
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+<style id="classic-theme-styles-inline-css">
+.wp-block-button__link{background-color:#32373c;border-radius:9999px;box-shadow:none;color:#fff;font-size:1.125em;padding:calc(.667em + 2px) calc(1.333em + 2px);text-decoration:none}.wp-block-file__button{background:#32373c;color:#fff}.wp-block-accordion-heading{margin:0}.wp-block-accordion-heading__toggle{background-color:inherit!important;color:inherit!important}.wp-block-accordion-heading__toggle:not(:focus-visible){outline:none}.wp-block-accordion-heading__toggle:focus,.wp-block-accordion-heading__toggle:hover{background-color:inherit!important;border:none;box-shadow:none;color:inherit;padding:var(--wp--preset--spacing--20,1em) 0;text-decoration:none}.wp-block-accordion-heading__toggle:focus-visible{outline:auto;outline-offset:0}.wp-block-tab:not(.has-text-color){color:inherit!important}.wp-block-tab:not(.has-background){background-color:inherit!important}.wp-block-tab:focus,.wp-block-tab:hover{text-decoration:none}.wp-block-tab:focus-visible{outline:auto;outline-offset:0}
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/classic.min.css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??-eJx9jcEKg0AMRH+oaVhorR7Eb9E16IpZg8min2889FZ6GYbhPQYPgbhlo2zIBWQtU8qKcdvJd5be0AmmMfW0Ejv2jKoP/K0daZzIXNdvB6PzvyJ+A8MgO6mCJ6fCYLN/6e113IZXU9WfUL/DcgHSTkDo&cssminify=yes' type='text/css' media='all' />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.css?m=1777406400i&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='verbum-gutenberg-css-css' href='https://widgets.wp.com/verbum-block-editor/block-editor.css?ver=1771405207' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/_static/??-eJyFi0EKAjEMAD9kDevKigfxLd0QayRNSpuy+HtXvCiC3mZgBpYS0NRJHfxKmRqUPgNajcJK0PwutMXWNvCnZMVXHZaClr+e3EORnlgbVJrF0ooJ1upNf02JLIhhdDb9kHCRyPW5nvNpOOyH6TiOu+n2AKDtUTE=&cssminify=yes' type='text/css' media='all' />
+<style id="jetpack-global-styles-frontend-style-inline-css">
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+/*# sourceURL=jetpack-global-styles-frontend-style-inline-css */
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-14-1' href='/_static/??-eJyNjcsKAjEMRX/IGgaqgwvxU6TTlDZjmhTTIv69D9yIG3f3wOUcuDUXVXqSDnW4xiOTGKyptxAvHwYbAlVxcDKwEq4JA+L9PUnyNppt4G/RmSTCMogRTCMFdqxZ7Qt+lL2k+owXD5l1Cfw6nOpxmme/837aH9YHfvpKpw==&cssminify=yes' type='text/css' media='all' />
+<script id="jetpack_related-posts-js-extra">
+var related_posts_js_options = {"post_heading":"h4"};
+//# sourceURL=jetpack_related-posts-js-extra
+</script>
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"8643840","postID":"4681","siteURL":"https://meteuphoric.com","xhrURL":"https://meteuphoric.com/wp-admin/admin-ajax.php","nonce":"0d227c72f5","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https://s0.wp.com/wp-content/js/wpcom-proxy-request.js?m=1513050504i&amp;ver=20211021","shortlink":"https://wp.me/pAgEM-1dv","i18n":{"followedText":"New posts from this site will now appear in your \u003Ca href=\"https://wordpress.com/reader\"\u003EReader\u003C/a\u003E","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+//# sourceURL=wpcom-actionbar-placeholder-js-extra
+</script>
+<script id="jetpack-mu-wpcom-settings-js-before">
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https://s0.wp.com/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/"};
+//# sourceURL=jetpack-mu-wpcom-settings-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/mu-plugins/jetpack-plugin/sun/_inc/build/related-posts/related-posts.min.js,/wp-content/js/rlt-proxy.js?m=1755011788j'></script>
+<script id="rlt-proxy-js-after">
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+//# sourceURL=rlt-proxy-js-after
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://meteuphoric.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+<link rel="canonical" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/" />
+<link rel='shortlink' href='https://wp.me/pAgEM-1dv' />
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/?format=json&amp;url=https%3A%2F%2Fmeteuphoric.com%2F2012%2F04%2F16%2Fexplanations-of-mathematical-explanation%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/?format=xml&amp;url=https%3A%2F%2Fmeteuphoric.com%2F2012%2F04%2F16%2Fexplanations-of-mathematical-explanation%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Explanations of mathematical explanation" />
+<meta property="og:url" content="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/" />
+<meta property="og:description" content="I recently read Mathematical Explanation [gated], by Mark Steiner (1978). My summary follows, and my commentary follows that. I am aware that others have written things since 1978 on this topic, bu…" />
+<meta property="article:published_time" content="2012-04-17T02:08:04+00:00" />
+<meta property="article:modified_time" content="2012-04-17T02:08:04+00:00" />
+<meta property="og:site_name" content="Meteuphoric" />
+<meta property="og:image" content="https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=200&#038;ts=1778408655" />
+<meta property="og:image:width" content="200" />
+<meta property="og:image:height" content="200" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom" />
+<meta name="twitter:creator" content="@KatjaGrace" />
+<meta name="twitter:site" content="@KatjaGrace" />
+<meta name="twitter:text:title" content="Explanations of mathematical&nbsp;explanation" />
+<meta name="twitter:image" content="https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=240" />
+<meta name="twitter:card" content="summary" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="shortcut icon" type="image/x-icon" href="https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=32" sizes="16x16" />
+<link rel="icon" type="image/x-icon" href="https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=32" sizes="16x16" />
+<link rel="apple-touch-icon" href="https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=114" />
+<link rel='openid.server' href='https://meteuphoric.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://meteuphoric.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://meteuphoric.com/osd.xml" title="Meteuphoric" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<meta name="theme-color" content="#ffffff" />
+<script type="text/javascript" id="webfont-output">
+  
+  WebFontConfig = {"typekit":{"id":"nua1wdk"}};
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+	})();
+</script><style>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>		<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="description" content="I recently read Mathematical Explanation [gated], by Mark Steiner (1978). My summary follows, and my commentary follows that. I am aware that others have written things since 1978 on this topic, but I don&#039;t have time to read them right now. *** We seem to think there is a distinction between explaining a mathematical fact&hellip;" />
+	<style type="text/css">
+			#site-title a,
+		#site-description {
+			color: #0f4a62 !important;
+		}
+		</style>
+	<style id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-3' href='/_static/??-eJyNzEEKwkAMheELOY0VS3UhHkXazFBSZzLBJBRv7wjduHP3Pnj8sEnAypbYoHiQ7AuxwppMJnzuBnWGBzHC7JRj46z4IjGq7fujrhB3qHqAv8OlRs9JYaO4JFOwKkGqtqX2zulbu5dbP47Haz+cL6f1A4aIQ7c=&cssminify=yes' type='text/css' media='all' />
+
+</head>
+
+<body class="wp-singular post-template-default single single-post postid-4681 single-format-standard custom-background wp-theme-pubcoraline customizer-styles-applied three-column content-sidebar-sidebar jetpack-reblog-enabled">
+<div id="container" class="hfeed contain">
+	<div id="header">
+		<div id="masthead" role="banner">
+						<div id="site-title">
+				<span>
+					<a href="https://meteuphoric.com/" title="Meteuphoric" rel="home">Meteuphoric</a>
+				</span>
+			</div>
+			<div id="site-description"></div>
+		</div><!-- #masthead -->
+
+		<div id="access" role="navigation">
+		  			<div class="skip-link screen-reader-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+						<div class="menu-header"><ul id="menu-pages" class="menu"><li id="menu-item-2108" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2108"><a href="https://meteuphoric.wordpress.com/">Home</a></li>
+<li id="menu-item-5041" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-5041"><a href="http://katjagrace.com/">About</a></li>
+<li id="menu-item-2177" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2177"><a href="https://meteuphoric.wordpress.com/?random" title="from your perspective">Random</a></li>
+<li id="menu-item-1698" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1698"><a href="https://meteuphoric.com/anthropic-principles/" title="Have you taken into account that you exist?">Anthropic principles</a></li>
+<li id="menu-item-3372" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3372"><a href="https://meteuphoric.com/opinion/">Opinions</a></li>
+</ul></div>		</div><!-- #access -->
+
+		<div id="branding">
+						<a href="https://meteuphoric.com/">
+									<img src="https://meteuphoric.com/wp-content/uploads/2010/08/cropped-signaling74.jpg" width="990" height="180" alt="" />
+							</a>
+					</div><!-- #branding -->
+	</div><!-- #header -->
+
+	<div id="content-box">
+
+<div id="content-container">
+	<div id="content" role="main">
+
+	
+		<div id="nav-above" class="navigation">
+			<div class="nav-previous"><a href="https://meteuphoric.com/2012/04/02/mountain-view-meetup/" rel="prev"><span class="meta-nav">&larr;</span> Mountain View Meetup</a></div>
+			<div class="nav-next"><a href="https://meteuphoric.com/2012/04/22/too-obvious-to-say/" rel="next">Too obvious to&nbsp;say <span class="meta-nav">&rarr;</span></a></div>
+		</div><!-- #nav-above -->
+
+		<div id="post-4681" class="post-4681 post type-post status-publish format-standard hentry category-5584">
+
+			
+			<h1 class="entry-title">Explanations of mathematical&nbsp;explanation</h1>
+							<div class="entry-meta">
+					<span class="meta-prep meta-prep-author">Posted on</span> <a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/" title="10:08 pm" rel="bookmark"><span class="entry-date">April 16, 2012</span></a> <span class="comments-link"><span class="meta-sep">|</span> <a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comments">13 Comments</a></span>
+									</div><!-- .entry-meta -->
+			
+			<div class="entry-content">
+				<p>I recently read Mathematical Explanation [<a href="https://springerlink3.metapress.com/content/hv436t3qx3516631/resource-secured/?target=fulltext.pdf&amp;sid=3uxe32nk5jlh5b22mw4bwsf2&amp;sh=www.springerlink.com">gated</a>], by Mark Steiner (1978). My summary follows, and my commentary follows that. I am aware that others have written things since 1978 on this topic, but I don&#8217;t have time to read them right now.</p>
+<p>***</p>
+<p>We seem to think there is a distinction between explaining a mathematical fact and merely demonstrating it to be the case. We have proofs that do both things, and perhaps a sliding scale of explanatoriness between them. One big question then is what makes a proof actually explain the thing it proves? Or at least what makes it seem that way to us?</p>
+<p>One suggestion has been the level of generality or abstractness. Perhaps if we show a particular fact follows from some much bigger theory, the fact feels more explained. But then consider this fact:</p>
+<p>1+2+3+&#8230;+n = n(n+1)/2</p>
+<p>There is an inductive proof of this:</p>
+<p>S(1) = 1(1+1)/2 = 1</p>
+<p>S(n+1) = S(n) + (n + 1) = n(n+1)/2 + 2(n+1)/2 = (n + 1)(n+2)/2</p>
+<p>This is not taken to be very explanatory. Whereas this is:</p>
+<p>O O O O <span style="color:#ff0000;">O</span><br />
+O O O <span style="color:#ff0000;">O O</span><br />
+O O <span style="color:#ff0000;">O O O </span><br />
+O <span style="color:#ff0000;">O O O O</span></p>
+<p>[the black circles make a triangle of 1+2+3+4. Any such triangle can be made into a rectangle of area n x (n+1) with another identical triangle. So the triangle is half of n(n+1).]</p>
+<p>It seems the latter is if anything less general, yet it seems a much better explanation (I remember learning it this way as a preteen in book about fun math magic). There are other examples.</p>
+<p>This case and others, suggest being able to visualize a proof is key to its seeming to be an explanation. Steiner discards this immediately as being too subjective, and claims there are also counterexamples.</p>
+<p>He also quickly dismisses a third hypothesis that others have forwarded: that a proof is explanatory if it could have been used to discover the fact, rather than just to verify it. His counterexample is the Eulerian identity, which I shan’t go into here. I take it this hypothesis isn’t very plausible anyway, since often we discover a fact first then hope to explain it better.</p>
+<p>Steiner offers his own theory: that a proof is explanatory if it makes use of a ‘characterizing property’ of an entity that is mentioned in the theorem. ‘Characterizing properties’ characterize an entity relative to other entities in some similar family. For instance, 18 might be characterized as 2*3*3, since other numbers don’t have that property. 18 might also be characterized as being one more than 17, or in a huge number of other ways.</p>
+<p>If I understand, the idea is that if we are clear on how a result depends on a particular characterizing property, we will feel that the result has been explained. If we don’t see how something unique about the entities in question ‘caused’ the outcome, the outcome seems arbitrary. He explains further that this means we can see that if we change the properties of the entity, perhaps swapping out 18 for 20, we would get a different result.</p>
+<p>Steiner explains how the many proofs he has presented that we have considered explanatory do in fact depend on characterizing properties, thus considers his theory to be quite supported.</p>
+<p>Perhaps I misunderstand this notion of ‘characterizing properties’. It seems to me that of course all proofs depend on properties specific to the entities they are about (relative to whatever entities the proof is not about). So to distinguish the explanatory proofs, Steiner needs a narrower notion of a characterizing property. For instance, a property that is particularly saliently related to the entity in question. Or he needs to claim that explanatoriness requires the observer to actually notice or understand the connection between the explanatory property and the outcome. In which case the explanatoriness of a proof would be a function of the observer’s psychology as well as the proof. Any proof would be perfectly explanatory if the reader followed it carefully enough.</p>
+<p>At any rate, he doesn’t seem to be thinking of either of those things (though again I may be misunderstanding just what he is claiming at the end here). He rather claims that the various proofs he examines do in fact rely on properties that characterize the entities involved. The class seemed to agree with me here.</p>
+<p>My tentative theory of when we feel something has been explained, which goes for scientific explanations as well as mathematical ones, is as follows. We feel like we understand a bunch of things that we are very familiar with: chunks of matter moving through space and knocking into each other, liquids, shapes, basic agenthood, that sort of thing.</p>
+<p>Anything that happens that only involves these things acting in their usual ways doesn’t feel like it needs any extra explanation. It is obvious. To ‘explain’ less familiar things, we can do one of two things. We can frame them in terms of something we already intuitively grasp in the above way. This is what is usually called an explanation. For instance we can think of electricity as being like water, or of the first n integers as being like bits of a triangle. Or of the mysterious murder being like a waitress putting poison in the soup. Alternatively we can just keep interacting with the entity in question until we become familiar with it’s properties, and then we think them obvious and not requiring explanation. For instance I no longer feel like I need an explanation for x^2 making a parabola shape, because I’m so familiar with it.</p>
+<p>This arguably fits with many of the characteristics we have noted are associated with explanatoriness. Instances of generalizations that we understand feel explanatory. Pictures tend to be explanatory, especially diagrams with simple shapes. We feel like we could have discovered a thing ourselves if it follows from behavior of entities we can manipulate intuitively.</p>
+<p>While this seems to me a decent characterization of what feels explanatory, I can&#8217;t see that it is a particularly useful category outside of psychology, for instance for use in saying what it is that science is meant to be doing. Something like unification seems more apt there, but that&#8217;s a topic for another time.</p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-facebook"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-facebook-4681"
+				class="share-facebook sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=facebook"
+				target="_blank"
+				aria-labelledby="sharing-facebook-4681"
+				>
+				<span id="sharing-facebook-4681" hidden>Share on Facebook (Opens in new window)</span>
+				<span>Facebook</span>
+			</a></li><li class="share-twitter"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-twitter-4681"
+				class="share-twitter sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=twitter"
+				target="_blank"
+				aria-labelledby="sharing-twitter-4681"
+				>
+				<span id="sharing-twitter-4681" hidden>Share on X (Opens in new window)</span>
+				<span>X</span>
+			</a></li><li class="share-reddit"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-reddit-4681"
+				class="share-reddit sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=reddit"
+				target="_blank"
+				aria-labelledby="sharing-reddit-4681"
+				>
+				<span id="sharing-reddit-4681" hidden>Share on Reddit (Opens in new window)</span>
+				<span>Reddit</span>
+			</a></li><li class="share-tumblr"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-tumblr-4681"
+				class="share-tumblr sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=tumblr"
+				target="_blank"
+				aria-labelledby="sharing-tumblr-4681"
+				>
+				<span id="sharing-tumblr-4681" hidden>Share on Tumblr (Opens in new window)</span>
+				<span>Tumblr</span>
+			</a></li><li class="share-jetpack-whatsapp"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-whatsapp-4681"
+				class="share-jetpack-whatsapp sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=jetpack-whatsapp"
+				target="_blank"
+				aria-labelledby="sharing-whatsapp-4681"
+				>
+				<span id="sharing-whatsapp-4681" hidden>Share on WhatsApp (Opens in new window)</span>
+				<span>WhatsApp</span>
+			</a></li><li class="share-pinterest"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-pinterest-4681"
+				class="share-pinterest sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=pinterest"
+				target="_blank"
+				aria-labelledby="sharing-pinterest-4681"
+				>
+				<span id="sharing-pinterest-4681" hidden>Share on Pinterest (Opens in new window)</span>
+				<span>Pinterest</span>
+			</a></li><li class="share-print"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-print-4681"
+				class="share-print sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#print?share=print"
+				target="_blank"
+				aria-labelledby="sharing-print-4681"
+				>
+				<span id="sharing-print-4681" hidden>Print (Opens in new window)</span>
+				<span>Print</span>
+			</a></li><li class="share-telegram"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-telegram-4681"
+				class="share-telegram sd-button share-icon no-text"
+				href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=telegram"
+				target="_blank"
+				aria-labelledby="sharing-telegram-4681"
+				>
+				<span id="sharing-telegram-4681" hidden>Share on Telegram (Opens in new window)</span>
+				<span>Telegram</span>
+			</a></li><li class="share-email"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-email-4681"
+				class="share-email sd-button share-icon no-text"
+				href="mailto:?subject=%5BShared%20Post%5D%20Explanations%20of%20mathematical%20explanation&#038;body=https%3A%2F%2Fmeteuphoric.com%2F2012%2F04%2F16%2Fexplanations-of-mathematical-explanation%2F&#038;share=email"
+				target="_blank"
+				aria-labelledby="sharing-email-4681"
+				data-email-share-error-title="Do you have email set up?" data-email-share-error-text="If you&#039;re having problems sharing via email, you might not have email set up for your browser. You may need to create a new email yourself." data-email-share-nonce="e575e6afd4" data-email-share-track-url="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?share=email">
+				<span id="sharing-email-4681" hidden>Email a link to a friend (Opens in new window)</span>
+				<span>Email</span>
+			</a></li><li class="share-end"></li></ul></div></div></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div></div>							</div><!-- .entry-content -->
+
+			<div class="entry-info">
+							This entry was posted in <a href="https://meteuphoric.com/category/1/" rel="category tag">1</a>. Bookmark the <a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/" title="Permalink to Explanations of mathematical&nbsp;explanation" rel="bookmark">permalink</a>.							</div><!-- .entry-info -->
+		</div><!-- #post-## -->
+
+		<div id="nav-below" class="navigation">
+			<div class="nav-previous"><a href="https://meteuphoric.com/2012/04/02/mountain-view-meetup/" rel="prev"><span class="meta-nav">&larr;</span> Mountain View Meetup</a></div>
+			<div class="nav-next"><a href="https://meteuphoric.com/2012/04/22/too-obvious-to-say/" rel="next">Too obvious to&nbsp;say <span class="meta-nav">&rarr;</span></a></div>
+		</div><!-- #nav-below -->
+
+		
+<div id="comments">
+
+	
+			<h3 id="comments-title">
+			13 responses to &ldquo;<span>Explanations of mathematical&nbsp;explanation</span>&rdquo;		</h3>
+
+		
+		<ol class="commentlist">
+				<li class="comment even thread-even depth-1" id="li-comment-3028">
+		<div id="comment-3028">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='r&#039;s avatar' src='https://1.gravatar.com/avatar/d29dbb850f1d099550c4c95aa87cda1bee11b36d4e2de206f09d09a225ec97fb?s=48&#038;d=identicon&#038;r=G' srcset='https://1.gravatar.com/avatar/d29dbb850f1d099550c4c95aa87cda1bee11b36d4e2de206f09d09a225ec97fb?s=48&#038;d=identicon&#038;r=G 1x, https://1.gravatar.com/avatar/d29dbb850f1d099550c4c95aa87cda1bee11b36d4e2de206f09d09a225ec97fb?s=72&#038;d=identicon&#038;r=G 1.5x, https://1.gravatar.com/avatar/d29dbb850f1d099550c4c95aa87cda1bee11b36d4e2de206f09d09a225ec97fb?s=96&#038;d=identicon&#038;r=G 2x, https://1.gravatar.com/avatar/d29dbb850f1d099550c4c95aa87cda1bee11b36d4e2de206f09d09a225ec97fb?s=144&#038;d=identicon&#038;r=G 3x, https://1.gravatar.com/avatar/d29dbb850f1d099550c4c95aa87cda1bee11b36d4e2de206f09d09a225ec97fb?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' decoding='async' />
+			<cite class="fn">r</cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3028">
+				April 16, 2012 at 10:24 pm</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3028#respond" data-commentid="3028" data-postid="4681" data-belowelement="comment-3028" data-respondelement="respond" data-replyto="Reply to r" aria-label="Reply to r">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>I think the explanations that feel the most explanatory are the ones we encounter closest in time to our coming into an understanding of that topic, or ones we come up with just after.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3028"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3030">
+		<div id="comment-3030">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Paul Gowder&#039;s avatar' src='https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' decoding='async' />
+			<cite class="fn"><a href="http://uncommon-priors.com" class="url" rel="ugc external nofollow">Paul Gowder</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3030">
+				April 17, 2012 at 2:02 am</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3030#respond" data-commentid="3030" data-postid="4681" data-belowelement="comment-3030" data-respondelement="respond" data-replyto="Reply to Paul Gowder" aria-label="Reply to Paul Gowder">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>Wait a minute, doesn&#8217;t the second step of the inductive proof just assume the theorem to be proven?   Or is my rusty algebra missing something?  How do we get S(n) + (n + 1) = n(n+1)/2 + 2(n+1)/2 without assuming the theorem?</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3030"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3031">
+		<div id="comment-3031">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Jordan Rastrick&#039;s avatar' src='https://graph.facebook.com/1169478990/picture?type=large' srcset='https://graph.facebook.com/1169478990/picture?type=large 1x, https://graph.facebook.com/1169478990/picture?type=large 1.5x, https://graph.facebook.com/1169478990/picture?type=large 2x, https://graph.facebook.com/1169478990/picture?type=large 3x, https://graph.facebook.com/1169478990/picture?type=large 4x' class='avatar avatar-48' height='48' width='48' decoding='async' />
+			<cite class="fn"><a href="http://www.facebook.com/jordan.rastrick" class="url" rel="ugc external nofollow">Jordan Rastrick</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3031">
+				April 17, 2012 at 4:42 am</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3031#respond" data-commentid="3031" data-postid="4681" data-belowelement="comment-3031" data-respondelement="respond" data-replyto="Reply to Jordan Rastrick" aria-label="Reply to Jordan Rastrick">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>Paul, inductive proofs always assume the proposition holds for the inductive step. Induction looks like:</p>
+<p>* Prove S(K) where K is some starting number (typically, 1)<br />
+* Prove that S(N) implies S(N+1)<br />
+This is the step that assumes the proposition holds, but the reasoning is not circular: since its only trying to demonstrate that if it holds for N, then it holds for N+1. Assuming P is generally taken for granted when trying to show P implies Q.</p>
+<p>After this, then axiomatically the proposition holds for all integers greater than or equal to K.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3031"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment odd alt depth-2" id="li-comment-3035">
+		<div id="comment-3035">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Paul Gowder&#039;s avatar' src='https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/6496b4af3691a0fbd86c85c18573aa2b93dde16a94ca442b3af01559a782d5b9?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn"><a href="http://uncommon-priors.com" class="url" rel="ugc external nofollow">Paul Gowder</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3035">
+				April 17, 2012 at 11:04 am</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3035#respond" data-commentid="3035" data-postid="4681" data-belowelement="comment-3035" data-respondelement="respond" data-replyto="Reply to Paul Gowder" aria-label="Reply to Paul Gowder">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>Right, but the step I&#8217;m looking at also looks to me like it assumes S(n+1)=(n+1)(n+2)/2.  That is, it assumes the truth of the proposition for the general case, not just for the case of S(n).  But I&#8217;m probably misreading it.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3035"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	<ul class="children">
+	<li class="comment even depth-3" id="li-comment-3039">
+		<div id="comment-3039">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Doug S.&#039;s avatar' src='https://0.gravatar.com/avatar/008f044e350c29f1ad37cc63abf7059683ad7661745f5945939a060dec21e9a0?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/008f044e350c29f1ad37cc63abf7059683ad7661745f5945939a060dec21e9a0?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/008f044e350c29f1ad37cc63abf7059683ad7661745f5945939a060dec21e9a0?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/008f044e350c29f1ad37cc63abf7059683ad7661745f5945939a060dec21e9a0?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/008f044e350c29f1ad37cc63abf7059683ad7661745f5945939a060dec21e9a0?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/008f044e350c29f1ad37cc63abf7059683ad7661745f5945939a060dec21e9a0?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn">Doug S.</cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3039">
+				April 18, 2012 at 1:37 am</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3039#respond" data-commentid="3039" data-postid="4681" data-belowelement="comment-3039" data-respondelement="respond" data-replyto="Reply to Doug S." aria-label="Reply to Doug S.">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>S(n+1) = S(n) + (n+1) [definition of S(n)]<br />
+S(n) = n(n+1)/2 [inductive assumption]<br />
+S(n+1) = n(n+1)/2 + (n+1) [substitution]<br />
+S(n+1) = (n(n+1)+ 2(n+1))/2 [common denominator]<br />
+S(n+1) = (n+1)(n+2)/2 [factoring]</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3039"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3032">
+		<div id="comment-3032">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='tjic (@tjic)&#039;s avatar' src='https://i0.wp.com/a0.twimg.com/profile_images/1687121627/tjic_smoker_normal.jpg?resize=48%2C48&#038;ssl=1' srcset='https://i0.wp.com/a0.twimg.com/profile_images/1687121627/tjic_smoker_normal.jpg?resize=48%2C48&#038;ssl=1 1x, https://i0.wp.com/a0.twimg.com/profile_images/1687121627/tjic_smoker_normal.jpg?resize=72%2C72&#038;ssl=1 1.5x, https://i0.wp.com/a0.twimg.com/profile_images/1687121627/tjic_smoker_normal.jpg?resize=96%2C96&#038;ssl=1 2x, https://i0.wp.com/a0.twimg.com/profile_images/1687121627/tjic_smoker_normal.jpg?resize=144%2C144&#038;ssl=1 3x, https://i0.wp.com/a0.twimg.com/profile_images/1687121627/tjic_smoker_normal.jpg?resize=192%2C192&#038;ssl=1 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn"><a href="http://twitter.com/tjic" class="url" rel="ugc external nofollow">tjic (@tjic)</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3032">
+				April 17, 2012 at 7:54 am</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3032#respond" data-commentid="3032" data-postid="4681" data-belowelement="comment-3032" data-respondelement="respond" data-replyto="Reply to tjic (@tjic)" aria-label="Reply to tjic (@tjic)">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>I agree with your theory; it matches something I&#8217;ve long thought: that (a) any mathematical proof is effectively a tautology [ x = something that is equal to x = something else that is equal to X = a third thing that is equal to x, therefore x = x ] (b) &#8220;explanation&#8221; is a concept that only makes sense given a model of human [ as opposed to a general thinking engine ].</p>
+<p>I first came across the model that the human brain is not a general purpose computer, but in fact has specialized &#8220;coprocessors&#8221; that are optimized for things like biology, social relations, counting the number of bears that enter a cave and then leave it, etc. via Steven Pinker almost 20 years ago (Language Instinct ch 13).</p>
+<p>That insight (although obvious in retrospect it was new to me at the time &#8211; perhaps a statement about the prevailing orthodoxy re the plasticity of the human mind and human culture of the day) made me realize that the word &#8220;explanation&#8221; really means &#8220;a tautology that chains back to some concept that we&#8217;re hardwired to find &#8220;obvious&#8221;.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3032"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-erichiii even thread-even depth-1" id="li-comment-3036">
+		<div id="comment-3036">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Brain Molecule Marketing - Brain Science for Senior Leaders&#039;s avatar' src='https://0.gravatar.com/avatar/9a87ea39bf6d19a28ce0e96293281f639d510fa10f7c050a6021e6307f6afe1a?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/9a87ea39bf6d19a28ce0e96293281f639d510fa10f7c050a6021e6307f6afe1a?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/9a87ea39bf6d19a28ce0e96293281f639d510fa10f7c050a6021e6307f6afe1a?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/9a87ea39bf6d19a28ce0e96293281f639d510fa10f7c050a6021e6307f6afe1a?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/9a87ea39bf6d19a28ce0e96293281f639d510fa10f7c050a6021e6307f6afe1a?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/9a87ea39bf6d19a28ce0e96293281f639d510fa10f7c050a6021e6307f6afe1a?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn"><a href="http://brain4biz.wordpress.com" class="url" rel="ugc external nofollow">Rich and Co.</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3036">
+				April 17, 2012 at 11:51 am</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3036#respond" data-commentid="3036" data-postid="4681" data-belowelement="comment-3036" data-respondelement="respond" data-replyto="Reply to Rich and Co." aria-label="Reply to Rich and Co.">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>Few things:<br />
+&#8211;  Prediction (data) seems the main value and goal.  The reset seem local word play.<br />
+&#8211;  There is no such thing as &#8220;science&#8221; or the scientific methodology independent of specific studies and sets of data.  &#8220;Science&#8221; is a rhetorical straw man.<br />
+&#8211;  Animal studies should slove these matters.  Human knowledge wouldn&#8217;t seem any different from other mammals.  Language and consiousness appear trivial and of little information value.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3036"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3037">
+		<div id="comment-3037">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Henrico Otto&#039;s avatar' src='https://1.gravatar.com/avatar/ae9ff100bf3132caee5774e260a58f1631e032eec5e43ee56da4edfe49968a9a?s=48&#038;d=identicon&#038;r=G' srcset='https://1.gravatar.com/avatar/ae9ff100bf3132caee5774e260a58f1631e032eec5e43ee56da4edfe49968a9a?s=48&#038;d=identicon&#038;r=G 1x, https://1.gravatar.com/avatar/ae9ff100bf3132caee5774e260a58f1631e032eec5e43ee56da4edfe49968a9a?s=72&#038;d=identicon&#038;r=G 1.5x, https://1.gravatar.com/avatar/ae9ff100bf3132caee5774e260a58f1631e032eec5e43ee56da4edfe49968a9a?s=96&#038;d=identicon&#038;r=G 2x, https://1.gravatar.com/avatar/ae9ff100bf3132caee5774e260a58f1631e032eec5e43ee56da4edfe49968a9a?s=144&#038;d=identicon&#038;r=G 3x, https://1.gravatar.com/avatar/ae9ff100bf3132caee5774e260a58f1631e032eec5e43ee56da4edfe49968a9a?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn">Henrico Otto</cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3037">
+				April 17, 2012 at 1:19 pm</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3037#respond" data-commentid="3037" data-postid="4681" data-belowelement="comment-3037" data-respondelement="respond" data-replyto="Reply to Henrico Otto" aria-label="Reply to Henrico Otto">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>Proofs and Refutations by Imre Lakatos has a nice treatment of these issues.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3037"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3038">
+		<div id="comment-3038">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Greg Muller&#039;s avatar' src='https://0.gravatar.com/avatar/c05bf1225219b7fc89b6df786418e06dc34a461424c136a4ecccdc468810019c?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/c05bf1225219b7fc89b6df786418e06dc34a461424c136a4ecccdc468810019c?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/c05bf1225219b7fc89b6df786418e06dc34a461424c136a4ecccdc468810019c?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/c05bf1225219b7fc89b6df786418e06dc34a461424c136a4ecccdc468810019c?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/c05bf1225219b7fc89b6df786418e06dc34a461424c136a4ecccdc468810019c?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/c05bf1225219b7fc89b6df786418e06dc34a461424c136a4ecccdc468810019c?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn"><a href="https://www.math.lsu.edu/~gmuller/" class="url" rel="ugc external nofollow">Greg Muller</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3038">
+				April 17, 2012 at 3:05 pm</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3038#respond" data-commentid="3038" data-postid="4681" data-belowelement="comment-3038" data-respondelement="respond" data-replyto="Reply to Greg Muller" aria-label="Reply to Greg Muller">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>I have noticed a subjective difference between types of proofs, which may be interpreted as a measure of how well the result is `explained&#8217;.  The central question is, after having read and understood the proof, do counterexamples seem *impossible* or merely *prohibited*?</p>
+<p>Some results have proofs which are so natural and inevitable that, after having seen the proof, it becomes impossible to imagine the existence of a counterexample. By this I mean, the brain regards the idea of a counterexample as an absurdity, and cannot entertain such a thing even in the abstract.  These results are rarely cited when used; rather, they are incorporated into the mathematician&#8217;s understanding of the object at hand.  Simple proofs and visual proofs often have this quality   Examples (for me, individual results may vary):<br />
+ 1) If xy=0, then either x=0 or y=0.<br />
+ 2) A triangle is determined (up to congruence) by the lengths of its sides.<br />
+ 3) Any finite group of prime order is commutative.<br />
+ 4) The proof of the Pythagorean Theorem in which a square of size c is placed inside a square of size a+b in two different ways.</p>
+<p>Otherwise, a result seems to only prohibit the existence of a counterexample; that is, one could imagine them existing in the abstract, but the result assures us that this is not the case.  Proofs by contradiction, classification, multiple cases or the axiom of choice often feel this way.  Examples (again, for me):<br />
+ 1) the infinitude of primes<br />
+ 2) (Cantor&#8217;s diagonal theorem) the impossibility of a bijection between Z (the integers) and R (the reals)<br />
+ 3) there are 2 groups of order 6 (up to isomorphism)<br />
+ 4) Euclid&#8217;s original proof of the Pythagorean Theorem</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3038"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3042">
+		<div id="comment-3042">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Stephen R. Diamond&#039;s avatar' src='https://1.gravatar.com/avatar/189c98518c2ba5d2e968b0742f8d749dc02ae37db3b91406895d54c57fe86e7b?s=48&#038;d=identicon&#038;r=G' srcset='https://1.gravatar.com/avatar/189c98518c2ba5d2e968b0742f8d749dc02ae37db3b91406895d54c57fe86e7b?s=48&#038;d=identicon&#038;r=G 1x, https://1.gravatar.com/avatar/189c98518c2ba5d2e968b0742f8d749dc02ae37db3b91406895d54c57fe86e7b?s=72&#038;d=identicon&#038;r=G 1.5x, https://1.gravatar.com/avatar/189c98518c2ba5d2e968b0742f8d749dc02ae37db3b91406895d54c57fe86e7b?s=96&#038;d=identicon&#038;r=G 2x, https://1.gravatar.com/avatar/189c98518c2ba5d2e968b0742f8d749dc02ae37db3b91406895d54c57fe86e7b?s=144&#038;d=identicon&#038;r=G 3x, https://1.gravatar.com/avatar/189c98518c2ba5d2e968b0742f8d749dc02ae37db3b91406895d54c57fe86e7b?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn"><a href="http://juridicalcoherence.blogspot.com" class="url" rel="ugc external nofollow">Stephen R. Diamond</a></cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3042">
+				April 18, 2012 at 11:12 pm</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3042#respond" data-commentid="3042" data-postid="4681" data-belowelement="comment-3042" data-respondelement="respond" data-replyto="Reply to Stephen R. Diamond" aria-label="Reply to Stephen R. Diamond">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>This question seems to belong to psychology. For one thing, who&#8217;s to say people find the same things explanatory? Shouldn&#8217;t we try to learn to find explanatory what is explanatory, rather than try to produce explanations that feel right?</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3042"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-3044">
+		<div id="comment-3044">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='Sigivald&#039;s avatar' src='https://0.gravatar.com/avatar/9ae612cff89660635935da1d491c7bb632d37cb9126c2ab0e7299fb0c90a8aa5?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/9ae612cff89660635935da1d491c7bb632d37cb9126c2ab0e7299fb0c90a8aa5?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/9ae612cff89660635935da1d491c7bb632d37cb9126c2ab0e7299fb0c90a8aa5?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/9ae612cff89660635935da1d491c7bb632d37cb9126c2ab0e7299fb0c90a8aa5?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/9ae612cff89660635935da1d491c7bb632d37cb9126c2ab0e7299fb0c90a8aa5?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/9ae612cff89660635935da1d491c7bb632d37cb9126c2ab0e7299fb0c90a8aa5?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn">Sigivald</cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3044">
+				April 19, 2012 at 4:50 pm</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3044#respond" data-commentid="3044" data-postid="4681" data-belowelement="comment-3044" data-respondelement="respond" data-replyto="Reply to Sigivald" aria-label="Reply to Sigivald">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p><i>explanatoriness </i><br />
+Explanationality?</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3044"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-3103">
+		<div id="comment-3103">
+		<div class="comment-author vcard">
+			<img referrerpolicy="no-referrer" alt='silver price&#039;s avatar' src='https://0.gravatar.com/avatar/3f95ea752a828b6765225db81f416bcb94c448a484f0280b50173e242a25a3bc?s=48&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/3f95ea752a828b6765225db81f416bcb94c448a484f0280b50173e242a25a3bc?s=48&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/3f95ea752a828b6765225db81f416bcb94c448a484f0280b50173e242a25a3bc?s=72&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/3f95ea752a828b6765225db81f416bcb94c448a484f0280b50173e242a25a3bc?s=96&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/3f95ea752a828b6765225db81f416bcb94c448a484f0280b50173e242a25a3bc?s=144&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/3f95ea752a828b6765225db81f416bcb94c448a484f0280b50173e242a25a3bc?s=192&#038;d=identicon&#038;r=G 4x' class='avatar avatar-48' height='48' width='48' loading='lazy' decoding='async' />
+			<cite class="fn">silver price</cite>
+
+			<span class="comment-meta commentmetadata">
+				|
+				<a href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3103">
+				May 9, 2012 at 8:58 pm</a>
+					|
+					<a rel="nofollow" class="comment-reply-link" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/?replytocom=3103#respond" data-commentid="3103" data-postid="4681" data-belowelement="comment-3103" data-respondelement="respond" data-replyto="Reply to silver price" aria-label="Reply to silver price">Reply</a>								</span><!-- .comment-meta .commentmetadata -->
+		</div><!-- .comment-author .vcard -->
+		
+		<div class="comment-body"><p>The argument from introspection is a much more interesting argument, since it tries to appeal to the direct experience of everyman. But the argument is deeply suspect, in that it assumes that our faculty of inner observation or introspection reveals things as they really are in their innermost nature. This assumption is suspect because we already know that our other forms of observation &#8212; sight, hearing, touch, and so on &#8212; do no such thing. The red surface of an apple does not look like a matrix of molecules reflecting photons at certain critical wave-lengths, but that is what it is. The sound of a flute does not sound like a sinusoidal compression wave train in the atmosphere, but that is what it is. The warmth of the summer air does not feel like the mean kinetic energy of millions of tiny molecules, but that is what it is. If one&#8217;s pains and hopes and beliefs do not introspectively seem like electrochemical states in a neural network, that may be only because our faculty of introspection, like our other senses, is not sufficiently penetrating to reveal such hidden details. Which is just what one would expect anyway. The argument from introspection is therefore entirely without force, unless we can somehow argue that the faculty of introspection is quite different from all other forms of observation.</p>
+<div class="cs-rating pd-rating" id="pd_rating_holder_2506895_comm_3103"></div></div>
+
+	</div><!-- #comment-##  -->
+
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href="http://www.thespamlist.net/2012/05/13/explanations-of-mathematical-explanation/" class="url" rel="ugc external nofollow">The Spamlist! &raquo; Explanations of mathematical explanation</a></p>
+	</li><!-- #comment-## -->
+		</ol>
+
+		
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Comment! <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2012/04/16/explanations-of-mathematical-explanation/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://meteuphoric.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+
+
+<div class="comment-form__verbum transparent"></div><div class="verbum-form-meta"><input type='hidden' name='comment_post_ID' value='4681' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+
+			<input type="hidden" name="highlander_comment_nonce" id="highlander_comment_nonce" value="29565ae90c" />
+			<input type="hidden" name="verbum_show_subscription_modal" value="" /></div><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="bbb98c5da7" /></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="74"/><script>
+document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+</script>
+</p></form>	</div><!-- #respond -->
+	<p class="akismet_comment_form_privacy_notice">This site uses Akismet to reduce spam. <a href="https://akismet.com/privacy/" target="_blank" rel="nofollow noopener">Learn how your comment data is processed.</a></p>
+</div><!-- #comments -->
+	
+	</div><!-- #content -->
+</div><!-- #content-container -->
+
+
+				<div id="main-sidebars">
+
+		
+		<div id="feature" class="widget-area" role="complementary">
+			<ul class="xoxo">
+				<li id="text-3" class="widget-container widget_text">			<div class="textwidget"><p>This is Katja Grace’s blog. It is about the idiosyncratic class of things Katja considers to be on the frontier of important and interesting. Empirically, it tends to be about human behavior, social institutions and rules, anthropic reasoning, personal experimentation and improvement, philanthropy, and the prospect of machines becoming as interesting as humans. Katja is responsible for omissions as well as actions, and aspires to save the world at some point.</p>
+<p>If you like this blog, but wish it was about mundane perspectives and &#8216;travel&#8217; instead of matters of lasting importance, try <a href="https://worldlypositions.tumblr.com/">Worldly Positions</a>. If you want both of those things and more, with fewer errors from automatic crossposting, see <a href="http://worldspiritsockpuppet.com/">world spirit sock puppet.</a> (Everything here is now crossposted from there.)</p>
+</div>
+		</li>			</ul>
+		</div><!-- #feature.widget-area -->
+
+		
+		
+		<div id="primary" class="widget-area" role="complementary">
+					<ul class="xoxo">
+
+			
+		<li id="recent-posts-2" class="widget-container widget_recent_entries">
+		<h3 class="widget-title">Recent posts</h3>
+		<ul>
+											<li>
+					<a href="https://meteuphoric.com/2026/05/02/games-that-change-your-mind/">Games that change your&nbsp;mind</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/05/02/understand-why-ai-is-a-doom-risk-in-39-captivating-minutes/">Understand why AI is a doom-risk in 39 captivating&nbsp;minutes</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/05/01/11-ways-to-be-less-deferential/">11 ways to be less&nbsp;deferential</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/talking-to-journalists/">Talking to journalists</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/is-there-an-acceptable-way-to-store-clothes/">Is there an acceptable way to store&nbsp;clothes?</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/orgs-unreasonable-boyfriend-as-service/">Orgs: unreasonable boyfriend as&nbsp;service</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/when-will-ai-surpass-us-at-being-limited/">When will AI surpass us at being&nbsp;limited?</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/missing-markets-in-executive-function/">Missing markets in executive&nbsp;function</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/the-salad-market-mystery/">The salad market&nbsp;mystery</a>
+									</li>
+											<li>
+					<a href="https://meteuphoric.com/2026/04/30/ai-risk-was-not-invested-by-ai-ceos-to-hype-their-companies/">AI risk was not invested by AI CEOs to hype their&nbsp;companies</a>
+									</li>
+					</ul>
+
+		</li><li id="search-5" class="widget-container widget_search"><h3 class="widget-title">Search</h3><form role="search" method="get" id="searchform" class="searchform" action="https://meteuphoric.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></li><li id="text-7" class="widget-container widget_text">			<div class="textwidget"></div>
+		</li><li id="text-8" class="widget-container widget_text">			<div class="textwidget"></div>
+		</li>			</ul>
+		</div><!-- #primary .widget-area -->
+
+				<div id="secondary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+			<li id="gravatar-3" class="widget-container widget_gravatar"><h3 class="widget-title">Katja Grace</h3><p><a href="http://katjagrace.com"><img referrerpolicy="no-referrer" alt='Unknown&#039;s avatar' src='https://1.gravatar.com/avatar/d9ee7753c9f89a8b6ccb0c5409bf50f8806e067caed836f58630e423652acc98?s=128&#038;d=identicon&#038;r=G' srcset='https://1.gravatar.com/avatar/d9ee7753c9f89a8b6ccb0c5409bf50f8806e067caed836f58630e423652acc98?s=128&#038;d=identicon&#038;r=G 1x, https://1.gravatar.com/avatar/d9ee7753c9f89a8b6ccb0c5409bf50f8806e067caed836f58630e423652acc98?s=192&#038;d=identicon&#038;r=G 1.5x, https://1.gravatar.com/avatar/d9ee7753c9f89a8b6ccb0c5409bf50f8806e067caed836f58630e423652acc98?s=256&#038;d=identicon&#038;r=G 2x, https://1.gravatar.com/avatar/d9ee7753c9f89a8b6ccb0c5409bf50f8806e067caed836f58630e423652acc98?s=384&#038;d=identicon&#038;r=G 3x, https://1.gravatar.com/avatar/d9ee7753c9f89a8b6ccb0c5409bf50f8806e067caed836f58630e423652acc98?s=512&#038;d=identicon&#038;r=G 4x' class='avatar avatar-128 grav-widget-center' height='128' width='128' loading='lazy' decoding='async'  style="display: block; margin: 0 auto;" /></a></p>
+</li><li id="text-6" class="widget-container widget_text">			<div class="textwidget"></div>
+		</li>			</ul>
+		</div><!-- #secondary .widget-area -->
+		
+		</div><!-- #main-sidebars -->	</div><!-- #content-box -->
+
+	<div id="footer" role="contentinfo">
+		
+<div id="footer-widget-area" role="complementary">
+
+	<div id="first" class="widget-area">
+		<ul class="xoxo">
+			<li id="pd_top_rated-4" class="widget-container top_rated"><h3 class="widget-title">Top Rated</h3><div id="pd_top_rated_holder" class="pd_top_rated_holder_posts"></div><script language="javascript" src="https://polldaddy.com/js/rating/top-rated.js"></script><script language="javascript" type="text/javascript">PDRTJS_TOP = new PDRTJS_RATING_TOP( 632891, 4330044, 2506895, '111', 5 );PDRTJS_TOP.get_top( 'posts', '0' );</script></li><li id="blog_subscription-3" class="widget-container widget_blog_subscription jetpack_subscription_widget"><h3 class="widget-title"><label for="subscribe-field">Email Subscription</label></h3>
+
+			<div class="wp-block-jetpack-subscriptions__container">
+			<form
+				action="https://subscribe.wordpress.com"
+				method="post"
+				accept-charset="utf-8"
+				data-blog="8643840"
+				data-post_access_level="everybody"
+				id="subscribe-blog"
+			>
+				<p>Enter your email address to subscribe to this blog and receive notifications of new posts by email.</p>
+				<p id="subscribe-email">
+					<label
+						id="subscribe-field-label"
+						for="subscribe-field"
+						class="screen-reader-text"
+					>
+						Email Address:					</label>
+
+					<input
+							type="email"
+							name="email"
+							autocomplete="email"
+							
+							style="width: 95%; padding: 1px 10px"
+							placeholder="Email Address"
+							value=""
+							id="subscribe-field"
+							required
+						/>				</p>
+
+				<p id="subscribe-submit"
+									>
+					<input type="hidden" name="action" value="subscribe"/>
+					<input type="hidden" name="blog_id" value="8643840"/>
+					<input type="hidden" name="source" value="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/"/>
+					<input type="hidden" name="sub-type" value="widget"/>
+					<input type="hidden" name="redirect_fragment" value="subscribe-blog"/>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="511a8b785c" />					<button type="submit"
+													class="wp-block-button__link"
+																	>
+						Sign me up!					</button>
+				</p>
+			</form>
+							<div class="wp-block-jetpack-subscriptions__subscount">
+					Join 289 other subscribers				</div>
+						</div>
+			
+</li><li id="rss_links-3" class="widget-container widget_rss_links"><h3 class="widget-title">Subscribe:</h3><p class="size-medium"><a class="feed-image-link" href="https://meteuphoric.com/feed/" title="Subscribe to Posts"><img src="https://meteuphoric.com/i/rss/blue-medium.png" alt="RSS Feed" /></a>&nbsp;<a href="https://meteuphoric.com/feed/" title="Subscribe to Posts">RSS - Posts</a></p><p class="size-medium"><a class="feed-image-link" href="https://meteuphoric.com/comments/feed/" title="Subscribe to Comments"><img src="https://meteuphoric.com/i/rss/blue-medium.png" alt="RSS Feed" /></a>&nbsp;<a href="https://meteuphoric.com/comments/feed/" title="Subscribe to Comments">RSS - Comments</a></p>
+</li><li id="top-posts-2" class="widget-container widget_top-posts"><h3 class="widget-title">Popular now:</h3><ul><li><a href="https://meteuphoric.com/2010/04/30/why-is-bad-teaching-attached-to-uni-certification/" class="bump-view" data-bump-view="tp">Why is bad teaching attached to uni certification?</a></li><li><a href="https://meteuphoric.com/2012/02/24/defense-theory-of-diversified-giving/" class="bump-view" data-bump-view="tp">Defense theory of diversified giving</a></li><li><a href="https://meteuphoric.com/2017/12/28/why-did-everything-take-so-long/" class="bump-view" data-bump-view="tp">Why did everything take so long?</a></li></ul></li><li id="search-2" class="widget-container widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://meteuphoric.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></li>		</ul>
+	</div><!-- #first .widget-area -->
+
+	<div id="second" class="widget-area">
+		<ul class="xoxo">
+			<li id="blog-stats-2" class="widget-container widget_blog-stats"><h3 class="widget-title"> </h3>		<ul>
+			<li>693,702 similar experiences have been had</li>
+		</ul>
+		</li><li id="archives-3" class="widget-container widget_archive"><h3 class="widget-title">Archives</h3>		<label class="screen-reader-text" for="archives-dropdown-3">Archives</label>
+		<select id="archives-dropdown-3" name="archive-dropdown">
+			
+			<option value="">Select Month</option>
+				<option value='https://meteuphoric.com/2026/05/'> May 2026 </option>
+	<option value='https://meteuphoric.com/2026/04/'> April 2026 </option>
+	<option value='https://meteuphoric.com/2025/06/'> June 2025 </option>
+	<option value='https://meteuphoric.com/2025/05/'> May 2025 </option>
+	<option value='https://meteuphoric.com/2024/06/'> June 2024 </option>
+	<option value='https://meteuphoric.com/2024/05/'> May 2024 </option>
+	<option value='https://meteuphoric.com/2024/04/'> April 2024 </option>
+	<option value='https://meteuphoric.com/2024/03/'> March 2024 </option>
+	<option value='https://meteuphoric.com/2024/02/'> February 2024 </option>
+	<option value='https://meteuphoric.com/2024/01/'> January 2024 </option>
+	<option value='https://meteuphoric.com/2023/05/'> May 2023 </option>
+	<option value='https://meteuphoric.com/2023/01/'> January 2023 </option>
+	<option value='https://meteuphoric.com/2022/12/'> December 2022 </option>
+	<option value='https://meteuphoric.com/2022/10/'> October 2022 </option>
+	<option value='https://meteuphoric.com/2022/09/'> September 2022 </option>
+	<option value='https://meteuphoric.com/2022/08/'> August 2022 </option>
+	<option value='https://meteuphoric.com/2022/02/'> February 2022 </option>
+	<option value='https://meteuphoric.com/2021/07/'> July 2021 </option>
+	<option value='https://meteuphoric.com/2021/02/'> February 2021 </option>
+	<option value='https://meteuphoric.com/2021/01/'> January 2021 </option>
+	<option value='https://meteuphoric.com/2020/12/'> December 2020 </option>
+	<option value='https://meteuphoric.com/2020/11/'> November 2020 </option>
+	<option value='https://meteuphoric.com/2020/10/'> October 2020 </option>
+	<option value='https://meteuphoric.com/2019/11/'> November 2019 </option>
+	<option value='https://meteuphoric.com/2019/10/'> October 2019 </option>
+	<option value='https://meteuphoric.com/2018/12/'> December 2018 </option>
+	<option value='https://meteuphoric.com/2018/07/'> July 2018 </option>
+	<option value='https://meteuphoric.com/2018/05/'> May 2018 </option>
+	<option value='https://meteuphoric.com/2018/04/'> April 2018 </option>
+	<option value='https://meteuphoric.com/2018/03/'> March 2018 </option>
+	<option value='https://meteuphoric.com/2018/02/'> February 2018 </option>
+	<option value='https://meteuphoric.com/2017/12/'> December 2017 </option>
+	<option value='https://meteuphoric.com/2017/10/'> October 2017 </option>
+	<option value='https://meteuphoric.com/2017/09/'> September 2017 </option>
+	<option value='https://meteuphoric.com/2017/08/'> August 2017 </option>
+	<option value='https://meteuphoric.com/2017/07/'> July 2017 </option>
+	<option value='https://meteuphoric.com/2017/06/'> June 2017 </option>
+	<option value='https://meteuphoric.com/2017/03/'> March 2017 </option>
+	<option value='https://meteuphoric.com/2017/02/'> February 2017 </option>
+	<option value='https://meteuphoric.com/2017/01/'> January 2017 </option>
+	<option value='https://meteuphoric.com/2016/12/'> December 2016 </option>
+	<option value='https://meteuphoric.com/2016/11/'> November 2016 </option>
+	<option value='https://meteuphoric.com/2016/09/'> September 2016 </option>
+	<option value='https://meteuphoric.com/2016/07/'> July 2016 </option>
+	<option value='https://meteuphoric.com/2016/06/'> June 2016 </option>
+	<option value='https://meteuphoric.com/2016/04/'> April 2016 </option>
+	<option value='https://meteuphoric.com/2015/12/'> December 2015 </option>
+	<option value='https://meteuphoric.com/2015/11/'> November 2015 </option>
+	<option value='https://meteuphoric.com/2015/10/'> October 2015 </option>
+	<option value='https://meteuphoric.com/2015/09/'> September 2015 </option>
+	<option value='https://meteuphoric.com/2015/05/'> May 2015 </option>
+	<option value='https://meteuphoric.com/2015/04/'> April 2015 </option>
+	<option value='https://meteuphoric.com/2015/03/'> March 2015 </option>
+	<option value='https://meteuphoric.com/2015/02/'> February 2015 </option>
+	<option value='https://meteuphoric.com/2014/11/'> November 2014 </option>
+	<option value='https://meteuphoric.com/2014/10/'> October 2014 </option>
+	<option value='https://meteuphoric.com/2014/09/'> September 2014 </option>
+	<option value='https://meteuphoric.com/2014/08/'> August 2014 </option>
+	<option value='https://meteuphoric.com/2014/07/'> July 2014 </option>
+	<option value='https://meteuphoric.com/2014/06/'> June 2014 </option>
+	<option value='https://meteuphoric.com/2014/05/'> May 2014 </option>
+	<option value='https://meteuphoric.com/2014/03/'> March 2014 </option>
+	<option value='https://meteuphoric.com/2014/02/'> February 2014 </option>
+	<option value='https://meteuphoric.com/2014/01/'> January 2014 </option>
+	<option value='https://meteuphoric.com/2013/12/'> December 2013 </option>
+	<option value='https://meteuphoric.com/2013/11/'> November 2013 </option>
+	<option value='https://meteuphoric.com/2013/10/'> October 2013 </option>
+	<option value='https://meteuphoric.com/2013/08/'> August 2013 </option>
+	<option value='https://meteuphoric.com/2013/07/'> July 2013 </option>
+	<option value='https://meteuphoric.com/2013/06/'> June 2013 </option>
+	<option value='https://meteuphoric.com/2013/04/'> April 2013 </option>
+	<option value='https://meteuphoric.com/2013/03/'> March 2013 </option>
+	<option value='https://meteuphoric.com/2013/02/'> February 2013 </option>
+	<option value='https://meteuphoric.com/2012/07/'> July 2012 </option>
+	<option value='https://meteuphoric.com/2012/06/'> June 2012 </option>
+	<option value='https://meteuphoric.com/2012/05/'> May 2012 </option>
+	<option value='https://meteuphoric.com/2012/04/'> April 2012 </option>
+	<option value='https://meteuphoric.com/2012/03/'> March 2012 </option>
+	<option value='https://meteuphoric.com/2012/02/'> February 2012 </option>
+	<option value='https://meteuphoric.com/2011/12/'> December 2011 </option>
+	<option value='https://meteuphoric.com/2011/11/'> November 2011 </option>
+	<option value='https://meteuphoric.com/2011/10/'> October 2011 </option>
+	<option value='https://meteuphoric.com/2011/09/'> September 2011 </option>
+	<option value='https://meteuphoric.com/2011/08/'> August 2011 </option>
+	<option value='https://meteuphoric.com/2011/07/'> July 2011 </option>
+	<option value='https://meteuphoric.com/2011/06/'> June 2011 </option>
+	<option value='https://meteuphoric.com/2011/05/'> May 2011 </option>
+	<option value='https://meteuphoric.com/2011/04/'> April 2011 </option>
+	<option value='https://meteuphoric.com/2011/03/'> March 2011 </option>
+	<option value='https://meteuphoric.com/2011/02/'> February 2011 </option>
+	<option value='https://meteuphoric.com/2011/01/'> January 2011 </option>
+	<option value='https://meteuphoric.com/2010/12/'> December 2010 </option>
+	<option value='https://meteuphoric.com/2010/11/'> November 2010 </option>
+	<option value='https://meteuphoric.com/2010/10/'> October 2010 </option>
+	<option value='https://meteuphoric.com/2010/09/'> September 2010 </option>
+	<option value='https://meteuphoric.com/2010/08/'> August 2010 </option>
+	<option value='https://meteuphoric.com/2010/07/'> July 2010 </option>
+	<option value='https://meteuphoric.com/2010/06/'> June 2010 </option>
+	<option value='https://meteuphoric.com/2010/05/'> May 2010 </option>
+	<option value='https://meteuphoric.com/2010/04/'> April 2010 </option>
+	<option value='https://meteuphoric.com/2010/03/'> March 2010 </option>
+	<option value='https://meteuphoric.com/2010/02/'> February 2010 </option>
+	<option value='https://meteuphoric.com/2010/01/'> January 2010 </option>
+	<option value='https://meteuphoric.com/2009/12/'> December 2009 </option>
+	<option value='https://meteuphoric.com/2009/11/'> November 2009 </option>
+	<option value='https://meteuphoric.com/2009/10/'> October 2009 </option>
+	<option value='https://meteuphoric.com/2009/09/'> September 2009 </option>
+	<option value='https://meteuphoric.com/2009/08/'> August 2009 </option>
+	<option value='https://meteuphoric.com/2009/07/'> July 2009 </option>
+	<option value='https://meteuphoric.com/2009/06/'> June 2009 </option>
+	<option value='https://meteuphoric.com/2009/04/'> April 2009 </option>
+	<option value='https://meteuphoric.com/2009/03/'> March 2009 </option>
+	<option value='https://meteuphoric.com/2009/01/'> January 2009 </option>
+	<option value='https://meteuphoric.com/2008/11/'> November 2008 </option>
+	<option value='https://meteuphoric.com/2008/10/'> October 2008 </option>
+	<option value='https://meteuphoric.com/2008/09/'> September 2008 </option>
+	<option value='https://meteuphoric.com/2008/08/'> August 2008 </option>
+	<option value='https://meteuphoric.com/2008/05/'> May 2008 </option>
+	<option value='https://meteuphoric.com/2008/04/'> April 2008 </option>
+	<option value='https://meteuphoric.com/2008/03/'> March 2008 </option>
+	<option value='https://meteuphoric.com/2007/11/'> November 2007 </option>
+	<option value='https://meteuphoric.com/2007/10/'> October 2007 </option>
+	<option value='https://meteuphoric.com/2007/09/'> September 2007 </option>
+	<option value='https://meteuphoric.com/2007/08/'> August 2007 </option>
+	<option value='https://meteuphoric.com/2007/07/'> July 2007 </option>
+
+		</select>
+
+			<script>
+( ( dropdownId ) => {
+	const dropdown = document.getElementById( dropdownId );
+	function onSelectChange() {
+		setTimeout( () => {
+			if ( 'escape' === dropdown.dataset.lastkey ) {
+				return;
+			}
+			if ( dropdown.value ) {
+				document.location.href = dropdown.value;
+			}
+		}, 250 );
+	}
+	function onKeyUp( event ) {
+		if ( 'Escape' === event.key ) {
+			dropdown.dataset.lastkey = 'escape';
+		} else {
+			delete dropdown.dataset.lastkey;
+		}
+	}
+	function onClick() {
+		delete dropdown.dataset.lastkey;
+	}
+	dropdown.addEventListener( 'keyup', onKeyUp );
+	dropdown.addEventListener( 'click', onClick );
+	dropdown.addEventListener( 'change', onSelectChange );
+})( "archives-dropdown-3" );
+
+//# sourceURL=WP_Widget_Archives%3A%3Awidget
+</script>
+</li><li id="text-9" class="widget-container widget_text"><h3 class="widget-title">Recommended:</h3>			<div class="textwidget"><a href="https://meteuphoric.wordpress.com/2010/01/02/perfect-principles-are-for-bargaining/" target="_blank" rel="noopener">Perfect principles are for bargaining</a>
+
+
+<a href="https://meteuphoric.wordpress.com/2010/03/23/sia-doomsday-the-filter-is-ahead/" target="_blank" rel="noopener">SIA doomsday: The filter is ahead</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/03/23/sia-doomsday-the-filter-is-ahead/" target="_blank" rel="noopener"></a>
+
+<a href="https://meteuphoric.wordpress.com/2010/04/23/systems-and-stories/" target="_blank" rel="noopener">Systems and stories</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/08/12/abortion-views-sexist/" target="_blank" rel="noopener">Are abortion views sexist?</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/08/24/value-for-money-kills/" target="_blank" rel="noopener">Value for money kills?</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/11/02/anthropic-principles-agree-on-bigger-future-filters/" target="_blank" rel="noopener">Anthropic principles agree on bigger future filters</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/08/13/mistakes-with-nonexistent-people/" target="_blank" rel="noopener">Mistakes with nonexistent people</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/10/16/how-far-can-ai-jump/" target="_blank" rel="noopener">How far can AI jump?</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/05/05/experiences-are-friends/" target="_blank" rel="noopener">Experiences are friends</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/09/13/i-dont-clean-because-the-house-is-never-dirty/" target="_blank" rel="noopener">I don't clean because the house is never dirty</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/05/16/explanatory-normality-fallacy/" target="_blank" rel="noopener">Explanatory normality fallacy</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/04/30/why-is-bad-teaching-attached-to-uni-certification/" target="_blank" rel="noopener">Why is bad teaching attached to uni certification?</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/10/17/does-stopping-prejudice-spread-prejudice/" target="_blank" rel="noopener">How does raising awareness stop prejudice?</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/11/10/know-thyself-vs-know-one-another/" target="_blank" rel="noopener">Know thyself vs. know one another</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/08/24/why-is-medical-advice-all-caution-and-no-info/" target="_blank" rel="noopener">Why is medical advice all caution and no info?</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/11/11/sia-says-ai-is-no-big%c2%a0threat/" target="_blank" rel="noopener">SIA says AI is no big threat</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/08/11/discrimination-less-is-more/" target="_blank" rel="noopener">Discrimination: less is more</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/11/07/externalizing-between-conformers/" target="_blank" rel="noopener">Externalizing between conformers</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/10/09/poverty-does-not-respond-to-incentives/" target="_blank" rel="noopener">Poverty does not respond to incentives</a>
+
+<a href="https://meteuphoric.wordpress.com/2010/08/15/statistical-discrimination-is-externality-deliniation/" target="_blank" rel="noopener">Statistical discrimination is externality deliniation</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/11/27/why-evaluate-everything-asap/" target="_blank" rel="noopener">Why evaluate everything ASAP?</a>
+
+<a href="https://meteuphoric.wordpress.com/2009/11/15/respond-to-flying-like-dying/" target="_blank" rel="noopener">Respond to flying like dying?</a></div>
+		</li>		</ul>
+	</div><!-- #second .widget-area -->
+
+	<div id="third" class="widget-area">
+		<ul class="xoxo">
+			<li id="recent-comments-2" class="widget-container widget_recent_comments"><h3 class="widget-title">Recent Comments</h3>				<table class="recentcommentsavatar" cellspacing="0" cellpadding="0" border="0">
+					<tr><td title="Tim Freeman" class="recentcommentsavatartop" style="height:16px; width:16px;"><img referrerpolicy="no-referrer" alt='Tim Freeman&#039;s avatar' src='https://0.gravatar.com/avatar/c72e45ffb4f7d36d851d849da8638f3a6dd2e3db00bf2afc303ac9e7ac9214b6?s=16&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/c72e45ffb4f7d36d851d849da8638f3a6dd2e3db00bf2afc303ac9e7ac9214b6?s=16&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/c72e45ffb4f7d36d851d849da8638f3a6dd2e3db00bf2afc303ac9e7ac9214b6?s=24&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/c72e45ffb4f7d36d851d849da8638f3a6dd2e3db00bf2afc303ac9e7ac9214b6?s=32&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/c72e45ffb4f7d36d851d849da8638f3a6dd2e3db00bf2afc303ac9e7ac9214b6?s=48&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/c72e45ffb4f7d36d851d849da8638f3a6dd2e3db00bf2afc303ac9e7ac9214b6?s=64&#038;d=identicon&#038;r=G 4x' class='avatar avatar-16' height='16' width='16' loading='lazy' decoding='async' /></td><td class="recentcommentstexttop" style="">Tim Freeman on <a href="https://meteuphoric.com/2026/05/02/games-that-change-your-mind/#comment-76751">Games that change your&nbsp;mi&hellip;</a></td></tr><tr><td title="elityre" class="recentcommentsavatarend" style="height:16px; width:16px;"><a href="http://elityre.com" rel="nofollow"><img referrerpolicy="no-referrer" alt='elityre&#039;s avatar' src='https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=16&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=16&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=24&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=32&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=48&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=64&#038;d=identicon&#038;r=G 4x' class='avatar avatar-16' height='16' width='16' loading='lazy' decoding='async' /></a></td><td class="recentcommentstextend" style=""><a href="http://elityre.com" rel="nofollow">elityre</a> on <a href="https://meteuphoric.com/2025/06/01/association-taxes-are-collusion-subsidies-2/#comment-76748">Association taxes are collusio&hellip;</a></td></tr><tr><td title="elityre" class="recentcommentsavatarend" style="height:16px; width:16px;"><a href="http://elityre.com" rel="nofollow"><img referrerpolicy="no-referrer" alt='elityre&#039;s avatar' src='https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=16&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=16&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=24&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=32&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=48&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/64b57cf206fd6543faf7c36664128e40b6281e8f8533eac294db4177950b6726?s=64&#038;d=identicon&#038;r=G 4x' class='avatar avatar-16' height='16' width='16' loading='lazy' decoding='async' /></a></td><td class="recentcommentstextend" style=""><a href="http://elityre.com" rel="nofollow">elityre</a> on <a href="https://meteuphoric.com/2025/06/01/association-taxes-are-collusion-subsidies-2/#comment-76747">Association taxes are collusio&hellip;</a></td></tr><tr><td title="philgetz" class="recentcommentsavatarend" style="height:16px; width:16px;"><img referrerpolicy="no-referrer" alt='philgetz&#039;s avatar' src='https://0.gravatar.com/avatar/c831588a2e34722f6b5cb66aafb3a377b89a129306616a489b321fd2046a2905?s=16&#038;d=identicon&#038;r=G' srcset='https://0.gravatar.com/avatar/c831588a2e34722f6b5cb66aafb3a377b89a129306616a489b321fd2046a2905?s=16&#038;d=identicon&#038;r=G 1x, https://0.gravatar.com/avatar/c831588a2e34722f6b5cb66aafb3a377b89a129306616a489b321fd2046a2905?s=24&#038;d=identicon&#038;r=G 1.5x, https://0.gravatar.com/avatar/c831588a2e34722f6b5cb66aafb3a377b89a129306616a489b321fd2046a2905?s=32&#038;d=identicon&#038;r=G 2x, https://0.gravatar.com/avatar/c831588a2e34722f6b5cb66aafb3a377b89a129306616a489b321fd2046a2905?s=48&#038;d=identicon&#038;r=G 3x, https://0.gravatar.com/avatar/c831588a2e34722f6b5cb66aafb3a377b89a129306616a489b321fd2046a2905?s=64&#038;d=identicon&#038;r=G 4x' class='avatar avatar-16' height='16' width='16' loading='lazy' decoding='async' /></td><td class="recentcommentstextend" style="">philgetz on <a href="https://meteuphoric.com/2017/01/09/want-like-want-want/#comment-76746">Want like want&nbsp;want</a></td></tr><tr><td title="Kwon Links &#8211; Collected Links" class="recentcommentsavatarend" style="height:16px; width:16px;"><a href="https://klmlinks.wordpress.com/2025/05/05/kwon-links/" rel="nofollow"><img referrerpolicy="no-referrer" alt='Unknown&#039;s avatar' src='https://secure.gravatar.com/blavatar/ad7928c963b20c9bd3255a8f53802d6316c46899f64648e56e9ca12f259819a1?s=16' srcset='https://secure.gravatar.com/blavatar/ad7928c963b20c9bd3255a8f53802d6316c46899f64648e56e9ca12f259819a1?s=16 1x, https://secure.gravatar.com/blavatar/ad7928c963b20c9bd3255a8f53802d6316c46899f64648e56e9ca12f259819a1?s=24 1.5x, https://secure.gravatar.com/blavatar/ad7928c963b20c9bd3255a8f53802d6316c46899f64648e56e9ca12f259819a1?s=32 2x, https://secure.gravatar.com/blavatar/ad7928c963b20c9bd3255a8f53802d6316c46899f64648e56e9ca12f259819a1?s=48 3x, https://secure.gravatar.com/blavatar/ad7928c963b20c9bd3255a8f53802d6316c46899f64648e56e9ca12f259819a1?s=64 4x' class='avatar avatar-16' height='16' width='16' loading='lazy' decoding='async' /></a></td><td class="recentcommentstextend" style=""><a href="https://klmlinks.wordpress.com/2025/05/05/kwon-links/" rel="nofollow">Kwon Links &#8211; C&hellip;</a> on <a href="https://meteuphoric.com/2014/03/25/how-to-trade-money-and-time/#comment-76743">How to trade money and&nbsp;ti&hellip;</a></td></tr>				</table>
+				</li><li id="linkcat-1356" class="widget-container widget_links"><h3 class="widget-title">Blogroll</h3>
+	<ul class='xoxo blogroll'>
+<li><a href="http://www.aleph.se/andart/">Anders Sandberg</a></li>
+<li><a href="http://benjaminrosshoffman.com/">Compass Rose</a></li>
+<li><a href="http://daviddfriedman.blogspot.com/">David Friedman</a></li>
+<li><a href="http://www.econlog.econlib.org">Econlog</a></li>
+<li><a href="http://grognor.blogspot.com/">Grognor</a></li>
+<li><a href="http://www.lesswrong.com">Less Wrong</a></li>
+<li><a href="http://www.marginalrevolution.com">Marginal Revolution</a></li>
+<li><a href="http://www.nickbostrom.com/">Nick Bostrom</a></li>
+<li><a href="http://overcomingbias.com">Overcoming Bias</a></li>
+<li><a href="http://rationalaltruist.com/">Paul Christiano</a></li>
+<li><a href="http://sideways-view.com">Paul Christiano more</a></li>
+<li><a href="http://hanson.gmu.edu/home.html">Robin Hanson&#039;s homepage</a></li>
+<li><a href="http://slatestarcodex.com/">Slate Star Codex</a></li>
+
+	</ul>
+</li>
+<li id="meta-2" class="widget-container widget_meta"><h3 class="widget-title">Meta</h3>
+		<ul>
+			<li><a class="click-register" href="https://wordpress.com/start?ref=wplogin">Create account</a></li>			<li><a href="https://meteuphoric.wordpress.com/wp-login.php">Log in</a></li>
+			<li><a href="https://meteuphoric.com/feed/">Entries feed</a></li>
+			<li><a href="https://meteuphoric.com/comments/feed/">Comments feed</a></li>
+
+			<li><a href="https://wordpress.com/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.com</a></li>
+		</ul>
+
+		</li>		</ul>
+	</div><!-- #third .widget-area -->
+
+	<div id="fourth" class="widget-area">
+		<ul class="xoxo">
+			<li id="wp_tag_cloud-2" class="widget-container wp_widget_tag_cloud"><h3 class="widget-title">What it&#8217;s about</h3><a href="https://meteuphoric.com/tag/abortion/" class="tag-cloud-link tag-link-13538 tag-link-position-1" style="font-size: 8pt;" aria-label="abortion (1 item)">abortion</a>
+<a href="https://meteuphoric.com/tag/advertising/" class="tag-cloud-link tag-link-521 tag-link-position-2" style="font-size: 15.69014084507pt;" aria-label="advertising (11 items)">advertising</a>
+<a href="https://meteuphoric.com/tag/ai/" class="tag-cloud-link tag-link-14067 tag-link-position-3" style="font-size: 15.69014084507pt;" aria-label="AI (11 items)">AI</a>
+<a href="https://meteuphoric.com/tag/altruism/" class="tag-cloud-link tag-link-280141 tag-link-position-4" style="font-size: 15.295774647887pt;" aria-label="altruism (10 items)">altruism</a>
+<a href="https://meteuphoric.com/tag/animal-welfare/" class="tag-cloud-link tag-link-132885 tag-link-position-5" style="font-size: 8pt;" aria-label="animal welfare (1 item)">animal welfare</a>
+<a href="https://meteuphoric.com/tag/anthropics/" class="tag-cloud-link tag-link-33239112 tag-link-position-6" style="font-size: 16.676056338028pt;" aria-label="Anthropics (14 items)">Anthropics</a>
+<a href="https://meteuphoric.com/tag/bias/" class="tag-cloud-link tag-link-103515 tag-link-position-7" style="font-size: 11.943661971831pt;" aria-label="bias (4 items)">bias</a>
+<a href="https://meteuphoric.com/tag/certification/" class="tag-cloud-link tag-link-11198 tag-link-position-8" style="font-size: 8pt;" aria-label="certification (1 item)">certification</a>
+<a href="https://meteuphoric.com/tag/cognition/" class="tag-cloud-link tag-link-8129 tag-link-position-9" style="font-size: 9.7746478873239pt;" aria-label="cognition (2 items)">cognition</a>
+<a href="https://meteuphoric.com/tag/cognitive-bias/" class="tag-cloud-link tag-link-542970 tag-link-position-10" style="font-size: 9.7746478873239pt;" aria-label="cognitive bias (2 items)">cognitive bias</a>
+<a href="https://meteuphoric.com/tag/conceptual-possibility/" class="tag-cloud-link tag-link-40256799 tag-link-position-11" style="font-size: 9.7746478873239pt;" aria-label="conceptual possibility (2 items)">conceptual possibility</a>
+<a href="https://meteuphoric.com/tag/consciousness/" class="tag-cloud-link tag-link-22609 tag-link-position-12" style="font-size: 9.7746478873239pt;" aria-label="consciousness (2 items)">consciousness</a>
+<a href="https://meteuphoric.com/tag/consistency/" class="tag-cloud-link tag-link-236592 tag-link-position-13" style="font-size: 17.169014084507pt;" aria-label="consistency (16 items)">consistency</a>
+<a href="https://meteuphoric.com/tag/construal-level-theory/" class="tag-cloud-link tag-link-4791686 tag-link-position-14" style="font-size: 10.957746478873pt;" aria-label="construal level theory (3 items)">construal level theory</a>
+<a href="https://meteuphoric.com/tag/coordination/" class="tag-cloud-link tag-link-93128 tag-link-position-15" style="font-size: 10.957746478873pt;" aria-label="coordination (3 items)">coordination</a>
+<a href="https://meteuphoric.com/tag/current-events/" class="tag-cloud-link tag-link-1304 tag-link-position-16" style="font-size: 9.7746478873239pt;" aria-label="current events (2 items)">current events</a>
+<a href="https://meteuphoric.com/tag/death/" class="tag-cloud-link tag-link-8437 tag-link-position-17" style="font-size: 9.7746478873239pt;" aria-label="death (2 items)">death</a>
+<a href="https://meteuphoric.com/tag/determinism/" class="tag-cloud-link tag-link-20113 tag-link-position-18" style="font-size: 9.7746478873239pt;" aria-label="determinism (2 items)">determinism</a>
+<a href="https://meteuphoric.com/tag/discrimination/" class="tag-cloud-link tag-link-113093 tag-link-position-19" style="font-size: 14.901408450704pt;" aria-label="discrimination (9 items)">discrimination</a>
+<a href="https://meteuphoric.com/tag/economics/" class="tag-cloud-link tag-link-657 tag-link-position-20" style="font-size: 17.661971830986pt;" aria-label="economics (18 items)">economics</a>
+<a href="https://meteuphoric.com/tag/emotions/" class="tag-cloud-link tag-link-8668 tag-link-position-21" style="font-size: 10.957746478873pt;" aria-label="emotions (3 items)">emotions</a>
+<a href="https://meteuphoric.com/tag/environment/" class="tag-cloud-link tag-link-184 tag-link-position-22" style="font-size: 9.7746478873239pt;" aria-label="environment (2 items)">environment</a>
+<a href="https://meteuphoric.com/tag/equality/" class="tag-cloud-link tag-link-47506 tag-link-position-23" style="font-size: 9.7746478873239pt;" aria-label="equality (2 items)">equality</a>
+<a href="https://meteuphoric.com/tag/ethics/" class="tag-cloud-link tag-link-8289 tag-link-position-24" style="font-size: 20.521126760563pt;" aria-label="ethics (36 items)">ethics</a>
+<a href="https://meteuphoric.com/tag/existentialism/" class="tag-cloud-link tag-link-11509 tag-link-position-25" style="font-size: 9.7746478873239pt;" aria-label="existentialism (2 items)">existentialism</a>
+<a href="https://meteuphoric.com/tag/existential-risk/" class="tag-cloud-link tag-link-232842 tag-link-position-26" style="font-size: 12.732394366197pt;" aria-label="existential risk (5 items)">existential risk</a>
+<a href="https://meteuphoric.com/tag/fiction/" class="tag-cloud-link tag-link-1747 tag-link-position-27" style="font-size: 10.957746478873pt;" aria-label="fiction (3 items)">fiction</a>
+<a href="https://meteuphoric.com/tag/freedom/" class="tag-cloud-link tag-link-5648 tag-link-position-28" style="font-size: 11.943661971831pt;" aria-label="freedom (4 items)">freedom</a>
+<a href="https://meteuphoric.com/tag/free-will/" class="tag-cloud-link tag-link-21986 tag-link-position-29" style="font-size: 10.957746478873pt;" aria-label="Free will (3 items)">Free will</a>
+<a href="https://meteuphoric.com/tag/free-will-2/" class="tag-cloud-link tag-link-34996049 tag-link-position-30" style="font-size: 10.957746478873pt;" aria-label="free will (3 items)">free will</a>
+<a href="https://meteuphoric.com/tag/future/" class="tag-cloud-link tag-link-2850 tag-link-position-31" style="font-size: 14.901408450704pt;" aria-label="future (9 items)">future</a>
+<a href="https://meteuphoric.com/tag/gender/" class="tag-cloud-link tag-link-27915 tag-link-position-32" style="font-size: 14.901408450704pt;" aria-label="gender (9 items)">gender</a>
+<a href="https://meteuphoric.com/tag/god/" class="tag-cloud-link tag-link-7816 tag-link-position-33" style="font-size: 10.957746478873pt;" aria-label="God (3 items)">God</a>
+<a href="https://meteuphoric.com/tag/great-filter/" class="tag-cloud-link tag-link-8582315 tag-link-position-34" style="font-size: 11.943661971831pt;" aria-label="great filter (4 items)">great filter</a>
+<a href="https://meteuphoric.com/tag/health/" class="tag-cloud-link tag-link-337 tag-link-position-35" style="font-size: 10.957746478873pt;" aria-label="health (3 items)">health</a>
+<a href="https://meteuphoric.com/tag/how-to-think/" class="tag-cloud-link tag-link-507185 tag-link-position-36" style="font-size: 14.901408450704pt;" aria-label="how to think (9 items)">how to think</a>
+<a href="https://meteuphoric.com/tag/human-nature/" class="tag-cloud-link tag-link-10949 tag-link-position-37" style="font-size: 13.422535211268pt;" aria-label="human nature (6 items)">human nature</a>
+<a href="https://meteuphoric.com/tag/identity/" class="tag-cloud-link tag-link-10679 tag-link-position-38" style="font-size: 15.295774647887pt;" aria-label="identity (10 items)">identity</a>
+<a href="https://meteuphoric.com/tag/inconsistency/" class="tag-cloud-link tag-link-1202778 tag-link-position-39" style="font-size: 9.7746478873239pt;" aria-label="inconsistency (2 items)">inconsistency</a>
+<a href="https://meteuphoric.com/tag/institutions/" class="tag-cloud-link tag-link-118871 tag-link-position-40" style="font-size: 9.7746478873239pt;" aria-label="institutions (2 items)">institutions</a>
+<a href="https://meteuphoric.com/tag/language/" class="tag-cloud-link tag-link-1934 tag-link-position-41" style="font-size: 13.915492957746pt;" aria-label="language (7 items)">language</a>
+<a href="https://meteuphoric.com/tag/markets/" class="tag-cloud-link tag-link-11636 tag-link-position-42" style="font-size: 14.901408450704pt;" aria-label="markets (9 items)">markets</a>
+<a href="https://meteuphoric.com/tag/mating/" class="tag-cloud-link tag-link-312869 tag-link-position-43" style="font-size: 14.901408450704pt;" aria-label="mating (9 items)">mating</a>
+<a href="https://meteuphoric.com/tag/metaphor/" class="tag-cloud-link tag-link-25010 tag-link-position-44" style="font-size: 12.732394366197pt;" aria-label="metaphor (5 items)">metaphor</a>
+<a href="https://meteuphoric.com/tag/moral-intuition/" class="tag-cloud-link tag-link-4096092 tag-link-position-45" style="font-size: 17.859154929577pt;" aria-label="moral intuition (19 items)">moral intuition</a>
+<a href="https://meteuphoric.com/tag/near-vs-far/" class="tag-cloud-link tag-link-29791298 tag-link-position-46" style="font-size: 8pt;" aria-label="near vs. far (1 item)">near vs. far</a>
+<a href="https://meteuphoric.com/tag/obvious/" class="tag-cloud-link tag-link-155306 tag-link-position-47" style="font-size: 10.957746478873pt;" aria-label="obvious (3 items)">obvious</a>
+<a href="https://meteuphoric.com/tag/philosophy/" class="tag-cloud-link tag-link-1868 tag-link-position-48" style="font-size: 18.845070422535pt;" aria-label="philosophy (24 items)">philosophy</a>
+<a href="https://meteuphoric.com/tag/physical-attractiveness/" class="tag-cloud-link tag-link-4199020 tag-link-position-49" style="font-size: 12.732394366197pt;" aria-label="physical attractiveness (5 items)">physical attractiveness</a>
+<a href="https://meteuphoric.com/tag/policy/" class="tag-cloud-link tag-link-13217 tag-link-position-50" style="font-size: 16.87323943662pt;" aria-label="policy (15 items)">policy</a>
+<a href="https://meteuphoric.com/tag/politics/" class="tag-cloud-link tag-link-398 tag-link-position-51" style="font-size: 11.943661971831pt;" aria-label="politics (4 items)">politics</a>
+<a href="https://meteuphoric.com/tag/population/" class="tag-cloud-link tag-link-132985 tag-link-position-52" style="font-size: 9.7746478873239pt;" aria-label="population (2 items)">population</a>
+<a href="https://meteuphoric.com/tag/potential-people/" class="tag-cloud-link tag-link-23972114 tag-link-position-53" style="font-size: 15.69014084507pt;" aria-label="potential people (11 items)">potential people</a>
+<a href="https://meteuphoric.com/tag/poverty/" class="tag-cloud-link tag-link-9379 tag-link-position-54" style="font-size: 11.943661971831pt;" aria-label="poverty (4 items)">poverty</a>
+<a href="https://meteuphoric.com/tag/practical-advice/" class="tag-cloud-link tag-link-315547 tag-link-position-55" style="font-size: 18.253521126761pt;" aria-label="practical advice (21 items)">practical advice</a>
+<a href="https://meteuphoric.com/tag/probability/" class="tag-cloud-link tag-link-10451 tag-link-position-56" style="font-size: 9.7746478873239pt;" aria-label="probability (2 items)">probability</a>
+<a href="https://meteuphoric.com/tag/psychology/" class="tag-cloud-link tag-link-4909 tag-link-position-57" style="font-size: 22pt;" aria-label="psychology (52 items)">psychology</a>
+<a href="https://meteuphoric.com/tag/rationality/" class="tag-cloud-link tag-link-15394 tag-link-position-58" style="font-size: 10.957746478873pt;" aria-label="rationality (3 items)">rationality</a>
+<a href="https://meteuphoric.com/tag/recent-research/" class="tag-cloud-link tag-link-301775 tag-link-position-59" style="font-size: 9.7746478873239pt;" aria-label="recent research (2 items)">recent research</a>
+<a href="https://meteuphoric.com/tag/religion/" class="tag-cloud-link tag-link-116 tag-link-position-60" style="font-size: 9.7746478873239pt;" aria-label="religion (2 items)">religion</a>
+<a href="https://meteuphoric.com/tag/reputation/" class="tag-cloud-link tag-link-118543 tag-link-position-61" style="font-size: 10.957746478873pt;" aria-label="reputation (3 items)">reputation</a>
+<a href="https://meteuphoric.com/tag/science/" class="tag-cloud-link tag-link-173 tag-link-position-62" style="font-size: 9.7746478873239pt;" aria-label="science (2 items)">science</a>
+<a href="https://meteuphoric.com/tag/selection-effect/" class="tag-cloud-link tag-link-18078168 tag-link-position-63" style="font-size: 15.295774647887pt;" aria-label="Selection effect (10 items)">Selection effect</a>
+<a href="https://meteuphoric.com/tag/signaling/" class="tag-cloud-link tag-link-2482585 tag-link-position-64" style="font-size: 18.845070422535pt;" aria-label="signaling (24 items)">signaling</a>
+<a href="https://meteuphoric.com/tag/singularity/" class="tag-cloud-link tag-link-2031 tag-link-position-65" style="font-size: 9.7746478873239pt;" aria-label="singularity (2 items)">singularity</a>
+<a href="https://meteuphoric.com/tag/sociology/" class="tag-cloud-link tag-link-599 tag-link-position-66" style="font-size: 20.915492957746pt;" aria-label="sociology (40 items)">sociology</a>
+<a href="https://meteuphoric.com/tag/status/" class="tag-cloud-link tag-link-577 tag-link-position-67" style="font-size: 13.915492957746pt;" aria-label="status (7 items)">status</a>
+<a href="https://meteuphoric.com/tag/trade/" class="tag-cloud-link tag-link-1595 tag-link-position-68" style="font-size: 13.422535211268pt;" aria-label="trade (6 items)">trade</a>
+<a href="https://meteuphoric.com/tag/unconscious/" class="tag-cloud-link tag-link-50484 tag-link-position-69" style="font-size: 11.943661971831pt;" aria-label="unconscious (4 items)">unconscious</a>
+<a href="https://meteuphoric.com/tag/utilitarianism/" class="tag-cloud-link tag-link-49008 tag-link-position-70" style="font-size: 8pt;" aria-label="utilitarianism (1 item)">utilitarianism</a>
+<a href="https://meteuphoric.com/tag/value/" class="tag-cloud-link tag-link-6636 tag-link-position-71" style="font-size: 15.295774647887pt;" aria-label="value (10 items)">value</a>
+<a href="https://meteuphoric.com/tag/values/" class="tag-cloud-link tag-link-14387 tag-link-position-72" style="font-size: 16.87323943662pt;" aria-label="values (15 items)">values</a>
+<a href="https://meteuphoric.com/tag/wealth-redistribution/" class="tag-cloud-link tag-link-1243045 tag-link-position-73" style="font-size: 10.957746478873pt;" aria-label="wealth redistribution (3 items)">wealth redistribution</a>
+<a href="https://meteuphoric.com/tag/woroni/" class="tag-cloud-link tag-link-23188611 tag-link-position-74" style="font-size: 10.957746478873pt;" aria-label="Woroni (3 items)">Woroni</a>
+<a href="https://meteuphoric.com/tag/wrongness/" class="tag-cloud-link tag-link-270216 tag-link-position-75" style="font-size: 10.957746478873pt;" aria-label="wrongness (3 items)">wrongness</a></li>		</ul>
+	</div><!-- #fourth .widget-area -->
+
+</div><!-- #footer-widget-area -->
+		<div id="colophon">
+			<span class="generator-link"><a href="https://wordpress.com/?ref=footer_blog" rel="nofollow">Blog at WordPress.com.</a></span>
+					</div><!-- #colophon -->
+	</div><!-- #footer -->
+
+</div><!-- #container -->
+
+<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/files/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/pub/coraline/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="grofiles-cards-js" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202619d1133547e8a1f2801609f51cef12522abe7f6647d869e9fbc974fe356a37e613"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+//# sourceURL=wpgroho-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	<div class="grofile-hash-map-dd652d78d6fad7a7dea9936495e438f2">
+	</div>
+	<div class="grofile-hash-map-a5990ea1928ad47ec4fc3b7998607178">
+	</div>
+	<div class="grofile-hash-map-fed5ad0adc63c0ec95edbc02c5258617">
+	</div>
+	<div class="grofile-hash-map-27e2e15e1c4001b387b6791a0b394979">
+	</div>
+	<div class="grofile-hash-map-9ee271148f17f4bb4d803a15b5870d32">
+	</div>
+	<div class="grofile-hash-map-2015e4ad6ecdbe34453585f5a3573c8e">
+	</div>
+	<div class="grofile-hash-map-0fd1ccd2539af0abc09b35a88b80f248">
+	</div>
+	<div class="grofile-hash-map-d4e3bfb04f9f6340562c3711bbb41e02">
+	</div>
+	<div class="grofile-hash-map-f26939f398e5b2e21ea353b06370c426">
+	</div>
+	<div class="grofile-hash-map-486abfd9f11a3a2d179092f209815ca2">
+	</div>
+	<div class="grofile-hash-map-4d4cb1b5310b61bd94d8da428913a72d">
+	</div>
+	<div class="grofile-hash-map-c7b0fbdcbe5a30852c0083bc510cd2b0">
+	</div>
+	<div class="grofile-hash-map-9a72df48fc8872a0ad556887ea99c907">
+	</div>
+	<div class="grofile-hash-map-7c3bf3f8b99db1f70c72859fd397e0b2">
+	</div>
+	<div class="grofile-hash-map-300209f54b96ba37fb5b6aecda14443c">
+	</div>
+	</div>
+		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-pub-coraline actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-comment" href="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comments">
+							<svg class="gridicon gridicons-comment" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M12 16l-5 5v-5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-7z"/></g></svg>							<span>Comment						</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://meteuphoric.com">
+				<img loading='lazy' alt='' src='https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png' srcset='https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=75&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1.5x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=100&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 2x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=150&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 3x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=200&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 4x' class='avatar avatar-50' height='50' width='50' />				Meteuphoric			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 286 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="8643840" />
+										<input type="hidden" name="source" value="https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="511a8b785c" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fmeteuphoric.com%252F2012%252F04%252F16%252Fexplanations-of-mathematical-explanation%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="https://meteuphoric.com">
+				<img loading='lazy' alt='' src='https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png' srcset='https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=75&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1.5x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=100&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 2x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=150&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 3x, https://secure.gravatar.com/blavatar/bc1425750daec886d2d4574b82209d67aa621e6f4907b5aa4a3d774351ead495?s=200&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 4x' class='avatar avatar-50' height='50' width='50' />				Meteuphoric			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fmeteuphoric.com%252F2012%252F04%252F16%252Fexplanations-of-mathematical-explanation%252F">Log in</a></li>
+																<li class="actnbr-shortlink">
+										<a href="https://wp.me/pAgEM-1dv">
+											<span class="actnbr-shortlink__text">Copy shortlink</span>
+											<span class="actnbr-shortlink__icon"><svg class="gridicon gridicons-checkmark" height="16" width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M9 19.414l-6.707-6.707 1.414-1.414L9 16.586 20.293 5.293l1.414 1.414"/></g></svg></span>
+										</a>
+									</li>
+																<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/blogs/8643840/posts/4681">
+										View post in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+	
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/":4681};
+	</script>
+						
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/likes/queuehandler.js?m=1741961244i'></script>
+<script id="wp-hooks-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/hooks/index.min.js?m=1778170586i&#038;ver=7496969728ca0f95732d"></script>
+<script id="wp-i18n-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/i18n/index.min.js?m=1778170586i&#038;ver=125448662852c5e18937"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="verbum-settings-js-before">
+window.VerbumComments = {"Log in or provide your name and email to leave a reply.":"Log in or provide your name and email to leave a reply.","Log in or provide your name and email to leave a comment.":"Log in or provide your name and email to leave a comment.","Receive web and mobile notifications for posts on this site.":"Receive web and mobile notifications for posts on this site.","Name":"Name","Email (address never made public)":"Email (address never made public)","Website (optional)":"Website (optional)","Leave a reply. (log in optional)":"Leave a reply. (log in optional)","Leave a comment. (log in optional)":"Leave a comment. (log in optional)","Log in to leave a reply.":"Log in to leave a reply.","Log in to leave a comment.":"Log in to leave a comment.","Logged in via %s":"Logged in via %s","Log out":"Log out","Email":"Email","(Address never made public)":"(Address never made public)","Instantly":"Instantly","Daily":"Daily","Reply":"Reply","Comment":"Comment","WordPress":"WordPress","Weekly":"Weekly","Notify me of new posts":"Notify me of new posts","Email me new posts":"Email me new posts","Email me new comments":"Email me new comments","Cancel":"Cancel","Write a comment...":"Write a comment...","Write a reply...":"Write a reply...","Website":"Website","Optional":"Optional","We'll keep you in the loop!":"We'll keep you in the loop!","Loading your comment...":"Loading your comment...","Discover more from":"Discover more from Meteuphoric","Subscribe now to keep reading and get access to the full archive.":"Subscribe now to keep reading and get access to the full archive.","Continue reading":"Continue reading","Never miss a beat!":"Never miss a beat!","Interested in getting blog post updates? Simply click the button below to stay in the loop!":"Interested in getting blog post updates? Simply click the button below to stay in the loop!","Enter your email address":"Enter your email address","Subscribe":"Subscribe","Comment sent successfully":"Comment sent successfully","Save my name, email, and website in this browser for the next time I comment.":"Save my name, email, and website in this browser for the next time I comment.","hovercardi18n":{"Edit your profile \u2192":"Edit your profile \u2192","View profile \u2192":"View profile \u2192","Contact":"Contact","Send money":"Send money","Gravatar not found.":"Gravatar not found.","This profile is private.":"This profile is private.","Too Many Requests.":"Too Many Requests.","Internal Server Error.":"Internal Server Error.","Sorry, we are unable to load this Gravatar profile.":"Sorry, we are unable to load this Gravatar profile."},"siteId":8643840,"postId":4681,"mustLogIn":false,"requireNameEmail":true,"commentRegistration":false,"connectURL":"https://meteuphoric.wordpress.com/public.api/connect/?action=request\u0026domain=meteuphoric.com","logoutURL":"https://meteuphoric.wordpress.com/wp-login.php?action=logout\u0026_wpnonce=9959f1b468","homeURL":"https://meteuphoric.com/","subscribeToBlog":true,"subscribeToComment":true,"isJetpackCommentsLoggedIn":false,"jetpackUsername":"","jetpackUserId":0,"jetpackSignature":"","jetpackAvatar":"https://0.gravatar.com/avatar/?s=96\u0026amp;d=identicon\u0026amp;r=G","enableBlocks":true,"enableSubscriptionModal":true,"currentLocale":"en","isJetpackComments":false,"allowedBlocks":["core/paragraph","core/list","core/code","core/list-item","core/quote","core/image","core/embed","core/quote","core/code"],"embedNonce":"97b07cb0c6","verbumBundleUrl":"/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/features/verbum-comments/dist/index.js","isRTL":false,"vbeCacheBuster":1771405207,"iframeUniqueId":0,"colorScheme":false}
+//# sourceURL=verbum-settings-js-before
+</script>
+<script data-wp-strategy="defer" defer id="verbum-dynamic-loader-js" src="/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/assets/dynamic-loader.js?m=1772522099i&#038;minify=false&#038;ver=8b5296f9195db92c42e4"></script>
+<script id="sharing-js-js-extra">
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+//# sourceURL=sharing-js-js-extra
+</script>
+<script id="jetpack-script-data-js-before">
+window.JetpackScriptData = {"site":{"host":"wpcom","is_wpcom_platform":true}};
+//# sourceURL=jetpack-script-data-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJyNkNsOgjAMhl/IUYhBvDE+CqnbxMFOWTsJb++CSLwy3jX/of1SmKMwXtqsNMFIIINz2rNIOtqlcsZXIx2ghGTwXAxwWUSbB+NLXHNEOYkizbEUNwMo+4/XP7VXIQFmDg6ZjdxbSKSZ4JaNVbtIMpnIQiHjj8M4GXKaxbGqoS/0u3BPa1j9Af3Fuq54c9ADk1ao1LKOxg/bD67u0nRdezo3bd2ML1Dnc1s='></script>
+<script id="sharing-js-js-after">
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-facebook' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-facebook' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-twitter' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-twitter' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-tumblr' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-tumblr' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtumblr', 'menubar=1,resizable=1,width=450,height=450' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-telegram' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-telegram' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtelegram', 'menubar=1,resizable=1,width=450,height=450' );
+						return false;
+					}
+				} );
+			} )();
+//# sourceURL=sharing-js-js-after
+</script>
+<script id="crowdsignal-rating-js-before">
+<!--//--><![CDATA[//><!--
+PDRTJS_settings_2506895_comm_3028={"id":2506895,"unique_id":"wp-comment-3028","title":"I%20think%20the%20explanations%20that%20feel%20the%20most%20explanatory%20are%20the%20ones%20we%20encounter%20closest%20in%20time%20to%20our%20coming%20into%20an%20understanding%20of%20that%20topic%2C%20or%20ones%20we%20come%20up%20with%20just%20after....","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3028","item_id":"_comm_3028"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3028 == 'undefined' ){PDRTJS_2506895_comm_3028 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3028 );}}PDRTJS_settings_2506895_comm_3030={"id":2506895,"unique_id":"wp-comment-3030","title":"Wait%20a%20minute%2C%20doesn%26%23039%3Bt%20the%20second%20step%20of%20the%20inductive%20proof%20just%20assume%20the%20theorem%20to%20be%20proven%3F%20%20%20Or%20is%20my%20rusty%20algebra%20missing%20something%3F%20%20How%20do%20we%20get%20S%28n%29%20%2B%20%28n%20%2B%201%29%20%3D%20n%28n%2B1%29%2F2%20%2B%202%28n%2B1%29%2F2...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3030","item_id":"_comm_3030"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3030 == 'undefined' ){PDRTJS_2506895_comm_3030 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3030 );}}PDRTJS_settings_2506895_comm_3031={"id":2506895,"unique_id":"wp-comment-3031","title":"Paul%2C%20inductive%20proofs%20always%20assume%20the%20proposition%20holds%20for%20the%20inductive%20step.%20Induction%20looks%20like%3A%2A%20Prove%20S%28K%29%20where%20K%20is%20some%20starting%20number%20%28typically%2C%201%29%2A%20Prove%20that%20S%28N%29%20implies%20S%28N%2B1%29...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3031","item_id":"_comm_3031"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3031 == 'undefined' ){PDRTJS_2506895_comm_3031 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3031 );}}PDRTJS_settings_2506895_comm_3035={"id":2506895,"unique_id":"wp-comment-3035","title":"Right%2C%20but%20the%20step%20I%26%23039%3Bm%20looking%20at%20also%20looks%20to%20me%20like%20it%20assumes%20S%28n%2B1%29%3D%28n%2B1%29%28n%2B2%29%2F2.%20%20That%20is%2C%20it%20assumes%20the%20truth%20of%20the%20proposition%20for%20the%20general%20case%2C%20not%20just%20for%20the%20case%20of%20S%28n%29.%20%20Bu...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3035","item_id":"_comm_3035"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3035 == 'undefined' ){PDRTJS_2506895_comm_3035 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3035 );}}PDRTJS_settings_2506895_comm_3039={"id":2506895,"unique_id":"wp-comment-3039","title":"S%28n%2B1%29%20%3D%20S%28n%29%20%2B%20%28n%2B1%29%20%26%23091%3Bdefinition%20of%20S%28n%29%26%23093%3BS%28n%29%20%3D%20n%28n%2B1%29%2F2%20%26%23091%3Binductive%20assumption%26%23093%3BS%28n%2B1%29%20%3D%20n%28n%2B1%29%2F2%20%2B%20%28n%2B1%29%20%26%23091%3Bsubstitution%26%23093%3BS%28n%2B1%29%20%3D%20%28n%28n%2B1%29%2B%202%28n%2B1%29%29%2F2%20%26%23091%3Bcommon%20denominator%26%23093%3BS%28n%2B1%29%20%3D%20%28n%2B1%29%28n%2B2%29%2F2%20%26%23091%3Bfact...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3039","item_id":"_comm_3039"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3039 == 'undefined' ){PDRTJS_2506895_comm_3039 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3039 );}}PDRTJS_settings_2506895_comm_3032={"id":2506895,"unique_id":"wp-comment-3032","title":"I%20agree%20with%20your%20theory%3B%20it%20matches%20something%20I%26%23039%3Bve%20long%20thought%3A%20that%20%28a%29%20any%20mathematical%20proof%20is%20effectively%20a%20tautology%20%26%23091%3B%20x%20%3D%20something%20that%20is%20equal%20to%20x%20%3D%20something%20else%20that%20is%20equal%20to%20X...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3032","item_id":"_comm_3032"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3032 == 'undefined' ){PDRTJS_2506895_comm_3032 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3032 );}}PDRTJS_settings_2506895_comm_3036={"id":2506895,"unique_id":"wp-comment-3036","title":"Few%20things%3A-%20%20Prediction%20%28data%29%20seems%20the%20main%20value%20and%20goal.%20%20The%20reset%20seem%20local%20word%20play.-%20%20There%20is%20no%20such%20thing%20as%20%26quot%3Bscience%26quot%3B%20or%20the%20scientific%20methodology%20independent%20of%20specific%20studies...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3036","item_id":"_comm_3036"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3036 == 'undefined' ){PDRTJS_2506895_comm_3036 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3036 );}}PDRTJS_settings_2506895_comm_3037={"id":2506895,"unique_id":"wp-comment-3037","title":"Proofs%20and%20Refutations%20by%20Imre%20Lakatos%20has%20a%20nice%20treatment%20of%20these%20issues....","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3037","item_id":"_comm_3037"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3037 == 'undefined' ){PDRTJS_2506895_comm_3037 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3037 );}}PDRTJS_settings_2506895_comm_3038={"id":2506895,"unique_id":"wp-comment-3038","title":"I%20have%20noticed%20a%20subjective%20difference%20between%20types%20of%20proofs%2C%20which%20may%20be%20interpreted%20as%20a%20measure%20of%20how%20well%20the%20result%20is%20%60explained%26%23039%3B.%20%20The%20central%20question%20is%2C%20after%20having%20read%20and%20unders...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3038","item_id":"_comm_3038"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3038 == 'undefined' ){PDRTJS_2506895_comm_3038 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3038 );}}PDRTJS_settings_2506895_comm_3042={"id":2506895,"unique_id":"wp-comment-3042","title":"This%20question%20seems%20to%20belong%20to%20psychology.%20For%20one%20thing%2C%20who%26%23039%3Bs%20to%20say%20people%20find%20the%20same%20things%20explanatory%3F%20Shouldn%26%23039%3Bt%20we%20try%20to%20learn%20to%20find%20explanatory%20what%20is%20explanatory%2C%20rather%20than%20tr...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3042","item_id":"_comm_3042"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3042 == 'undefined' ){PDRTJS_2506895_comm_3042 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3042 );}}PDRTJS_settings_2506895_comm_3044={"id":2506895,"unique_id":"wp-comment-3044","title":"%26lt%3BI%26gt%3Bexplanatoriness%20%26lt%3B%2Fi%26gt%3BExplanationality%3F...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3044","item_id":"_comm_3044"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3044 == 'undefined' ){PDRTJS_2506895_comm_3044 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3044 );}}PDRTJS_settings_2506895_comm_3103={"id":2506895,"unique_id":"wp-comment-3103","title":"The%20argument%20from%20introspection%20is%20a%20much%20more%20interesting%20argument%2C%20since%20it%20tries%20to%20appeal%20to%20the%20direct%20experience%20of%20everyman.%20But%20the%20argument%20is%20deeply%20suspect%2C%20in%20that%20it%20assumes%20that%20our...","permalink":"https://meteuphoric.com/2012/04/16/explanations-of-mathematical-explanation/#comment-3103","item_id":"_comm_3103"}; if ( typeof PDRTJS_RATING !== 'undefined' ){if ( typeof PDRTJS_2506895_comm_3103 == 'undefined' ){PDRTJS_2506895_comm_3103 = new PDRTJS_RATING( PDRTJS_settings_2506895_comm_3103 );}}
+//--><!]]>
+//# sourceURL=crowdsignal-rating-js-before
+</script>
+<script id="crowdsignal-rating-js" src="https://polldaddy.com/js/rating/rating.js?ver=15.9-a.0"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/","ext":".png","svgUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?m=1764078722i&ver=7.0-RC2-62280"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
+</script>
+<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'8643840','blog_tz':'-7','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+		// Prevent sending pageview tracking from WP-Admin pages.
+		_stq.push(['view', {'blog':'8643840','v':'wpcom','tz':'-7','user_id':'0','post':'4681','subd':'meteuphoric'}]);
+		_stq.push(['extra', {'crypt':'UE5tW3cvZGQ9cDN0NktwVkl5dT1+U3BPT1lLM2FDWG10MjkyYU14M3pTejlQVTJNa21+d0gzNz9QanlhYXdDR3N1RVZ8aXh5YXpkUE1FeDBWSD9KbEFjRlZUMkpTK0gzVVtpfldTcUVNV3ptaU54VURScl1aTnxkJixCdW9xciVWZytjRVpnQn5JTzNQVFk4TVtFS2VyaFtxSm1nUlV4OEwvNFA4REF0M1VKVGR8RlAlK1pIeEZQYm1lbnUlTnB3WXhFPzNOQVdMeUl1YUJzVmJEcWdlRWxtdUVjRy8tT3Z4YVlueEk9Nm9JbmJOVStSZEh0cmp1YyVrUzROd09fOTYxR0tJaXRBUjQmSk5qUGMwJXB0dm1aYzkmOWcsaEtbK2M9N1M/SCVZa0xhOA=='}]);
+_stq.push([ 'clickTrackerInit', '8643840', '4681' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="America/Los_Angeles" data-custom-props="{&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;pub\/coraline&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202619"></script> 	
+<script>
+(function() {
+	'use strict';
+
+	const fetches = {};
+	const promises = {};
+	const urls = {
+		'wp-polyfill': '/wp-includes/js/dist/vendor/wp-polyfill.min.js?m=1775575011i&ver=3.15.0',
+		'verbum': '/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.js?m=1777406400i&minify=false&ver=daa565a7d230e522cf9c'
+	};
+	const loaders = {
+		'verbum': () => {
+			fetchExternalScript('wp-polyfill');
+			fetchExternalScript('verbum');
+			promises['wp-polyfill'] = promises['wp-polyfill'] || loadWPScript('wp-polyfill');
+			promises['verbum'] = promises['verbum'] || promises['wp-polyfill'].then( () => loadWPScript('verbum') );
+			return promises['verbum'];
+		},
+		
+	};
+	const scriptExtras = {
+		
+	};
+
+	window.WP_Enqueue_Dynamic_Script = {
+		loadScript: (handle) => {
+			if (!loaders[handle]) {
+				console.error('WP_Enqueue_Dynamic_Script: unregistered script `' + handle + '`.');
+			}
+			return loaders[handle]();
+		}
+	};
+
+	function fetchExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		fetches[handle] = fetches[handle] || fetch(urls[handle], { mode: 'no-cors' });
+		return fetches[handle];
+	}
+
+	function runExtraScript(handle, type, index) {
+		const id = 'wp-enqueue-dynamic-script:' + handle + ':' + type + ':' + (index + 1);
+		const template = document.getElementById(id);
+		if (!template) {
+			return Promise.reject();
+		}
+
+		const script = document.createElement( 'script' );
+		script.innerHTML = template.innerHTML;
+		document.body.appendChild( script );
+		return Promise.resolve();
+	}
+
+	function loadExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		return fetches[handle].then(() => {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement('script');
+				script.onload = () => resolve();
+				script.onerror = (e) => reject(e);
+				script.src = urls[handle];
+				document.body.appendChild(script);
+			});
+		});
+	}
+
+	function loadExtra(handle, pos) {
+		const count = (scriptExtras[handle] && scriptExtras[handle][pos]) || 0;
+		let promise = Promise.resolve();
+
+		for (let i = 0; i < count; i++) {
+			promise = promise.then(() => runExtraScript(handle, pos, i));
+		}
+
+		return promise;
+	}
+
+	function loadWPScript(handle) {
+		// Core loads scripts in this order. See: https://github.com/WordPress/WordPress/blob/a59eb9d39c4fcba834b70c9e8dfd64feeec10ba6/wp-includes/class-wp-scripts.php#L428.
+		return loadExtra(handle, 'translations')
+			.then(() => loadExtra(handle, 'before'))
+			.then(() => loadExternalScript(handle))
+			.then(() => loadExtra(handle, 'after'));
+	}
+} )();
+</script>
+</body>
+</html>
