@@ -7,8 +7,10 @@ v2 vocabulary.  It deliberately keeps two questions separate:
 * articulability: can a prompt/LLM program implement the articulated relation?
 * verifiability: can executable code issue a replayable, scoped certificate?
 
-Reconstruction/isomorphism is agreement with the frozen reference, not a synonym for
-either axis.
+Reconstruction is agreement with the frozen reference.  Isomorphism is the stronger joint
+property of construct, input-representation, executed-program, and reference-instrument
+fidelity; reference agreement alone does not establish it.  Neither term is a synonym for
+either channel axis.
 Executable code may disagree with the reference and still earn the stronger, narrowly
 scoped ``CONSTRUCTIVE_EXTENSION`` verdict, but only when a code-native certificate
 adjudicates the disagreement.  Correlation alone can never establish that verdict.
@@ -21,7 +23,7 @@ is not evidence that the relation is tacit.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from typing import Any, Mapping, Sequence
 
@@ -109,9 +111,11 @@ class AxisEvidence:
 class ReconstructionEvidence:
     """Evidence needed to classify one criterion/sub-relation.
 
-    ``reference_isomorphism`` asks whether the candidate reconstructs the frozen LLM
-    judgement. ``construct_fidelity`` asks whether its executed path satisfies the frozen
-    relation contract.  ``verified_reference_disagreement`` is intentionally demanding:
+    ``reference_isomorphism`` is a retained legacy field name: it records only whether
+    the candidate reconstructs the frozen LLM judgement.  It is exposed canonically as
+    ``reference_reconstruction`` below and cannot by itself license an isomorphism claim.
+    Isomorphism additionally requires construct, input, executed-program, and reference-
+    instrument fidelity.  ``verified_reference_disagreement`` is intentionally demanding:
     it may be true only when a code-native certificate (e.g. execution, symbolic proof,
     typed graph invariant) directly adjudicates cases on which code and the LLM reference
     disagree.
@@ -126,6 +130,21 @@ class ReconstructionEvidence:
     reference_isomorphism: AxisEvidence
     construct_fidelity: AxisEvidence
     reference_target: str = "frozen_llm_judgement"
+    input_fidelity: AxisEvidence = field(
+        default_factory=lambda: AxisEvidence(
+            Status.UNAVAILABLE, note="not separately established"
+        )
+    )
+    program_fidelity: AxisEvidence = field(
+        default_factory=lambda: AxisEvidence(
+            Status.UNAVAILABLE, note="not separately established"
+        )
+    )
+    reference_instrument_fidelity: AxisEvidence = field(
+        default_factory=lambda: AxisEvidence(
+            Status.UNAVAILABLE, note="not separately established"
+        )
+    )
     pipeline_status: PipelineStatus = PipelineStatus.CANDIDATE
     selection_mode: SelectionMode = SelectionMode.PREDECLARED
     verified_reference_disagreement: bool = False
@@ -134,6 +153,10 @@ class ReconstructionEvidence:
 
     def __post_init__(self) -> None:
         if self.verified_reference_disagreement:
+            if self.reference_reconstruction.status is not Status.FAIL:
+                raise ValueError(
+                    "verified reference disagreement requires reference reconstruction FAIL"
+                )
             if self.verifiability.status is not Status.PASS:
                 raise ValueError(
                     "verified reference disagreement requires verifiability PASS"
@@ -142,13 +165,46 @@ class ReconstructionEvidence:
                 raise ValueError(
                     "verified reference disagreement requires construct-fidelity PASS"
                 )
+            for name, axis in (
+                ("input-fidelity", self.input_fidelity),
+                ("program-fidelity", self.program_fidelity),
+                ("reference-instrument-fidelity", self.reference_instrument_fidelity),
+            ):
+                if axis.status is not Status.PASS:
+                    raise ValueError(
+                        f"verified reference disagreement requires {name} PASS"
+                    )
             if not self.verifier_certificate:
                 raise ValueError(
                     "verified reference disagreement requires a replayable certificate"
                 )
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        record = asdict(self)
+        # Keep the constructor field for compatibility with frozen Python callers, but
+        # never emit the legacy name: agreement with a reference is reconstruction, not
+        # by itself an isomorphism result.
+        record["reference_reconstruction"] = record.pop("reference_isomorphism")
+        return record
+
+    @property
+    def reference_reconstruction(self) -> AxisEvidence:
+        """Canonical name for the legacy ``reference_isomorphism`` field."""
+        return self.reference_isomorphism
+
+    @property
+    def isomorphism_established(self) -> bool:
+        """Whether reconstruction plus all four fidelity checks pass."""
+        return all(
+            axis.status is Status.PASS
+            for axis in (
+                self.reference_reconstruction,
+                self.construct_fidelity,
+                self.input_fidelity,
+                self.program_fidelity,
+                self.reference_instrument_fidelity,
+            )
+        )
 
 
 @dataclass(frozen=True)
@@ -177,7 +233,10 @@ class SubrelationEvidence:
             raise ValueError("sub-relation weight must lie in [0, 1]")
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        record = asdict(self)
+        evidence = record["evidence"]
+        evidence["reference_reconstruction"] = evidence.pop("reference_isomorphism")
+        return record
 
 
 @dataclass(frozen=True)
@@ -210,7 +269,13 @@ class CriterionDecomposition:
             raise ValueError("aggregation_rule must be non-empty when supplied")
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        record = asdict(self)
+        for row in record["subrelations"]:
+            evidence = row["evidence"]
+            evidence["reference_reconstruction"] = evidence.pop(
+                "reference_isomorphism"
+            )
+        return record
 
 
 def build_decomposition(
@@ -255,13 +320,13 @@ def classify(evidence: ReconstructionEvidence) -> Outcome:
     """Classify without converting missing evidence into success or failure.
 
     Ordering matters: a construct-invalid proxy cannot be rescued by reference agreement,
-    and a certified verifier-dominant disagreement is not mislabeled as poor isomorphism.
+    and a certified verifier-dominant disagreement is not mislabeled as poor reconstruction.
     """
 
     a = evidence.articulability.status
     v = evidence.verifiability.status
     h = evidence.hybrid.status
-    iso = evidence.reference_isomorphism.status
+    reconstruction = evidence.reference_reconstruction.status
     fidelity = evidence.construct_fidelity.status
 
     if fidelity is Status.FAIL:
@@ -273,13 +338,15 @@ def classify(evidence: ReconstructionEvidence) -> Outcome:
     if fidelity is Status.UNAVAILABLE:
         return Outcome.UNRESOLVED
 
-    if iso is Status.FAIL and (a is Status.PASS or v is Status.PASS or h is Status.PASS):
+    if reconstruction is Status.FAIL and (
+        a is Status.PASS or v is Status.PASS or h is Status.PASS
+    ):
         return Outcome.REFERENCE_DIVERGENCE
 
     # Channel implementation can be established even when no frozen-reference comparison
     # exists.  Keeping it visible is the point of separating articulability/verifiability
-    # from isomorphism; ``UNAVAILABLE`` must not erase a positive channel witness.
-    if iso is Status.UNAVAILABLE:
+    # from reference reconstruction; ``UNAVAILABLE`` must not erase a positive channel witness.
+    if reconstruction is Status.UNAVAILABLE:
         if a is Status.PASS and v is Status.PASS:
             return Outcome.DUAL_IMPLEMENTATION
         if a is Status.PASS:
@@ -287,7 +354,7 @@ def classify(evidence: ReconstructionEvidence) -> Outcome:
         if v is Status.PASS:
             return Outcome.VERIFIABLE_ONLY
 
-    if iso is Status.PASS:
+    if reconstruction is Status.PASS:
         if a is Status.PASS and v is Status.PASS:
             return Outcome.DUAL_RECONSTRUCTION
         if a is Status.PASS and v is not Status.PASS:
@@ -324,8 +391,12 @@ def claim_permissions(evidence: ReconstructionEvidence) -> dict[str, Any]:
         "may_claim_code_verifiability": (
             fidelity_ok and evidence.verifiability.status is Status.PASS
         ),
+        "may_claim_reconstruction_agreement": (
+            fidelity_ok and evidence.reference_reconstruction.status is Status.PASS
+        ),
+        "may_claim_isomorphism": evidence.isomorphism_established,
         "may_claim_isomorphic_reconstruction": (
-            fidelity_ok and evidence.reference_isomorphism.status is Status.PASS
+            evidence.isomorphism_established
         ),
         "may_claim_constructive_extension": (
             outcome is Outcome.CONSTRUCTIVE_EXTENSION
@@ -358,9 +429,28 @@ def validate_record(record: Mapping[str, Any]) -> ReconstructionEvidence:
         articulability=axis("articulability"),
         verifiability=axis("verifiability"),
         hybrid=axis("hybrid"),
-        reference_isomorphism=axis("reference_isomorphism"),
+        reference_isomorphism=axis(
+            "reference_reconstruction"
+            if "reference_reconstruction" in record
+            else "reference_isomorphism"
+        ),
         construct_fidelity=axis("construct_fidelity"),
         reference_target=str(record.get("reference_target", "frozen_llm_judgement")),
+        input_fidelity=(
+            axis("input_fidelity")
+            if "input_fidelity" in record
+            else AxisEvidence(Status.UNAVAILABLE, note="not separately established")
+        ),
+        program_fidelity=(
+            axis("program_fidelity")
+            if "program_fidelity" in record
+            else AxisEvidence(Status.UNAVAILABLE, note="not separately established")
+        ),
+        reference_instrument_fidelity=(
+            axis("reference_instrument_fidelity")
+            if "reference_instrument_fidelity" in record
+            else AxisEvidence(Status.UNAVAILABLE, note="not separately established")
+        ),
         pipeline_status=PipelineStatus(record.get("pipeline_status", "candidate")),
         selection_mode=SelectionMode(record.get("selection_mode", "predeclared")),
         verified_reference_disagreement=bool(

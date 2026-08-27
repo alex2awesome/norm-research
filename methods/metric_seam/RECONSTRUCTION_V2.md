@@ -7,7 +7,7 @@ frozen and are treated as exploratory or retrospective-replay artifacts.
 
 - **Articulability** is prompt-based. It measures whether a prompt/LLM program can implement
   the articulated criterion or sub-relation. Agreement with the frozen LLM judgement is
-  evaluated separately as reconstruction/isomorphism.
+  evaluated separately as reconstruction; isomorphism requires additional fidelity checks.
 - **Verifiability** is code-based. It requires an executable, replayable, scoped certificate
   such as a symbolic derivation, program execution, type/flow invariant, date computation,
   or claim-dependency trace.
@@ -15,11 +15,14 @@ frozen and are treated as exploratory or retrospective-replay artifacts.
   channels can each be evaluated for reconstruction.
 - **Isomorphism** is fidelity between the construct, input representation, executed program
   path, and frozen reference judgement. It is an evaluation property, not a synonym for
-  articulability or verifiability.
+  articulability or verifiability. The typed record now requires separate construct, input,
+  program, and reference-instrument fidelity passes in addition to reference reconstruction;
+  missing fidelity evidence defaults to unavailable and cannot silently license the claim.
 - **Constructive extension** is a narrow verifier-dominant disagreement: code fails to
   reconstruct some LLM judgements but supplies a valid code-native certificate that directly
-  adjudicates those cases. A higher correlation, lower error, or plausible explanation alone
-  is not enough.
+  adjudicates those cases. The typed guard additionally requires the same input, frozen
+  executed program, and frozen reference instrument to be established before this label is
+  available. A higher correlation, lower error, or plausible explanation alone is not enough.
 
 ## Constructive asymmetry (the Collins test)
 
@@ -38,6 +41,13 @@ articulable (and, separately here, verifiable) than to show that it is tacit. Po
 have finite witnesses. A tacitness claim would require ruling out open-ended future prompts,
 programs, representations, and capabilities, which this experiment does not attempt.
 
+The same asymmetry applies inside a verifier. A detected relation event can be a finite,
+relation-local witness even when the parser sees only part of an input. By contrast, “no event
+exists” is a completeness claim: non-detection licenses an absence certificate only when the
+relevant input and parse are complete. Truncation, unsupported files, orphaned fragments, or
+parse errors must turn an apparent absence into abstention. Positive-event coverage and
+verified-absence coverage are therefore separate readouts.
+
 The historical term “ground truth” may continue to appear in frozen artifacts. In v2 reports,
 use **frozen LLM reference** for those scores. Code-native certificates are reported on a
 separate plane rather than substituted as a new supervised target.
@@ -47,7 +57,8 @@ separate plane rather than substituted as a new supervised target.
 Every relation reports both planes even when one is unavailable:
 
 1. **Reference plane:** held-out agreement with the frozen LLM reference. This is the
-   isomorphic-reconstruction readout.
+   reconstruction-agreement readout; it contributes to, but does not alone establish,
+   isomorphism.
 2. **Certificate plane:** success, coverage, abstention, and counterexamples for the
    executable verifier.
 

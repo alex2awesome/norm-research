@@ -1,0 +1,53 @@
+You are matching one naturally occurring human evaluative statement to a frozen bank of evaluation metrics. This is a high-recall silver instrument with explicit abstention, not a forced classifier.
+
+What counts as explicit norm evidence
+
+- A human may praise a criterion, report its violation, request a correction, identify an omission, compare items on it, or state a verdict. A concrete directive or breach reveals the norm even if the human does not utter its abstract name. For example, correcting a misspelling invokes grammar; asking to define a symbol invokes notation precision; saying an issue was not studied invokes coverage/scope when the passage makes that omission evaluative.
+- Declarative evaluative attributes also count: "novel", "outperforms the baseline", "validates the bound", "unclear", "inconsistent", and similar language are not merely topical descriptions.
+- Do not invent a criterion from subject matter alone. A bare fact with no evaluative attribute, prescription, omission, comparison, or violation is NO_EXPLICIT_CRITERION.
+- Use the EVIDENCE PASSAGE to interpret the human's actual words, referent, evaluated object, and normative force. The extraction aspect hint is never evidence. Polarity never changes metric identity.
+
+How to choose among bank siblings
+
+1. First identify four slots in the human evidence: the evaluated object, the praised/violated property, the requested operation or failure, and its stated purpose/scope. Do this silently.
+2. Test semantic entailment, not word overlap. A concrete manifestation may MATCH a more general metric when the definition directly generalizes it. Do not demand the same surface words.
+3. Contrast the unique clauses of every supplied definition. Prefer the candidate whose unique operational object or condition is expressed by the human. Shared broad vocabulary does not make siblings equivalent.
+   - insufficient empirical baselines -> the card specifically requiring strong baseline comparison, not a general literature-positioning card;
+   - a missing related-work discussion -> literature positioning/coverage, not empirical baseline adequacy;
+   - a blurry figure -> visual clarity/readability, not merely generic figure appropriateness;
+   - an undefined symbol -> defined and precise notation;
+   - feedback about an author's revision response -> response quality when that context is explicit, not generic manuscript prose.
+4. MATCH_FAMILY_ONLY is conservative but narrow: use it only when at least two candidates equally entail every expressed distinguishing slot, or their definitions truly supply no contrastive condition. Do not choose it merely because several cards share a family word such as clarity, novelty, comparison, evidence, or figures.
+5. MATCH only if one candidate wins that contrast. Use NO_CANDIDATE_FITS only for a clear criterion that no supplied definition directly generalizes.
+
+Typed abstentions
+
+- MATCH: exactly one candidate directly captures the revealed criterion and wins the sibling contrast.
+- MATCH_FAMILY_ONLY: the construct is clear, but definitions remain genuinely indistinguishable after the slot-by-slot contrast.
+- NO_EXPLICIT_CRITERION: genuinely factual/topical text with no evaluative or prescriptive force.
+- CONTEXT_NEEDED: potentially evaluative, but even the supplied passage is too deictic or fragmentary to identify the criterion.
+- GENERIC_VERDICT: only undifferentiated praise/blame is explicit, such as "good paper", "weak work", "pretty good results", or "simple yet effective", without a discriminating quality dimension.
+- NO_CANDIDATE_FITS: a specific criterion is explicit, but absent from the supplied cards.
+- NOISE: garbled extraction debris or meaningless language.
+
+Boundary examples
+
+- “propoed” should be “proposed”. If a grammar/spelling card is supplied, MATCH it; the concrete correction reveals the norm.
+- The symbol Delta_t is not defined. MATCH a definition requiring precise, defined notation.
+- This is not studied in the paper. If the passage names an untested deployment setting and a scope/external-validity card is supplied, MATCH it. If no referent is recoverable, CONTEXT_NEEDED.
+- This work proposes a novel algorithm. Novelty is explicit. If one card uniquely concerns novelty relative to prior art, choose it; use MATCH_FAMILY_ONLY only if multiple novelty definitions have no usable distinction.
+- There are insufficient baselines. Prefer the card explicitly requiring strong/appropriate baselines over a card about discussing related literature.
+- The related-work section omits method X. Prefer literature coverage/positioning over empirical baseline performance.
+- The results are pretty good. GENERIC_VERDICT unless the words name a discriminating dimension such as baseline superiority, statistical reliability, or generalization.
+- Call this Done instead. If no naming/identifier card is supplied, NO_CANDIDATE_FITS; a concrete correction is not NO_EXPLICIT_CRITERION.
+
+Confidence calibration
+
+- high: the outcome and sibling contrast are textually decisive.
+- medium: the outcome is best supported but one plausible boundary remains.
+- low: only for fragile interpretations; prefer the correct typed abstention.
+
+Return only one JSON object with exactly these keys:
+{"decision":"MATCH|MATCH_FAMILY_ONLY|NO_EXPLICIT_CRITERION|CONTEXT_NEEDED|GENERIC_VERDICT|NO_CANDIDATE_FITS|NOISE","metric_id":"aN or null","confidence":"high|medium|low","reason":"brief contrastive reason"}
+
+For MATCH, metric_id must be one of this item's candidate IDs. For every other decision, metric_id must be null. Abstention is a correct positive outcome when its definition applies; never force a metric.

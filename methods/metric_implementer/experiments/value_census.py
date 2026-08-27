@@ -180,6 +180,107 @@ def submodular_value(sigs: np.ndarray, labels: np.ndarray, M_i: np.ndarray, *, t
 
 
 # --------------------------------------------------------------------------------------------
+# EXCHANGEABLE joint-value rarefaction — the design-valid repair of the greedy V_best curve
+# --------------------------------------------------------------------------------------------
+
+def _oof_ce_grouped(X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None,
+                    *, n_splits: int = 5) -> float:
+    """OOF cross-entropy CE(y|X) in bits, like ``orthogonalize._oof_ce`` but with GROUP-disjoint
+    folds. ``groups`` = original probe index: under a probe bootstrap (resampling WITH replacement)
+    duplicated probes would otherwise land in both train and test folds and leak the label —
+    inflating every replicate's value. Group folds keep all copies of a probe on one side."""
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import GroupKFold, StratifiedKFold
+
+    X = np.asarray(X, float)
+    y = np.asarray(y, int)
+    if X.ndim == 1:
+        X = X[:, None]
+    n = len(y)
+    oof = np.full(n, np.nan)
+    if groups is None:
+        splits = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=0).split(X, y)
+    else:
+        g = np.asarray(groups)
+        splits = GroupKFold(n_splits=min(n_splits, len(set(g.tolist())))).split(X, y, groups=g)
+    for tr, te in splits:
+        if X.shape[1] == 0 or np.unique(y[tr]).size < 2:
+            oof[te] = float(np.mean(y[tr]))
+        else:
+            lr = LogisticRegression(C=1.0, max_iter=2000)
+            lr.fit(X[tr], y[tr])
+            oof[te] = lr.predict_proba(X[te])[:, 1]
+    p = np.clip(oof, 1e-12, 1.0 - 1e-12)
+    return float(-np.mean(y * np.log2(p) + (1 - y) * np.log2(1 - p)))
+
+
+def joint_value_bits(y: np.ndarray, X: np.ndarray, *, groups: Optional[np.ndarray] = None) -> float:
+    """Surrogate JOINT value I_V(y ; X) = H(y) − OOF-CE(y|X), bits, clamped ≥ 0. This is
+    V-information w.r.t. the logistic predictive family ⇒ an honest LOWER bound on the Shannon joint
+    MI (any model's CE ≥ H(y|X); OOF keeps it out-of-sample), so a ceiling read off this curve is a
+    lower bound on the true recoverable ceiling, bracketed above by H(y)."""
+    y = np.asarray(y, int)
+    if np.unique(y).size < 2:
+        return 0.0
+    h = float(vinfo._h_bits(float(y.mean())))
+    return float(max(0.0, h - _oof_ce_grouped(X, y, groups)))
+
+
+def exchangeable_joint_value(sp_bin: np.ndarray, labels: np.ndarray, M_i: np.ndarray, *,
+                             n_points: int = 10, n_subsets: int = 30, seed: int = 0,
+                             probe_idx: Optional[np.ndarray] = None) -> dict:
+    """E[V_joint(m)] — the EXCHANGEABLE (random-subset) JOINT-value rarefaction, the design-valid
+    repair of the greedy ``submodular_value`` curve.
+
+    For each m in a log grid, draw ``n_subsets`` UNIFORM m-subsets of criteria (sampling without
+    replacement from the frozen pool — exchangeable by design, the same maneuver as classical
+    rarefaction), collapse each subset to its captured species, and measure the subset's JOINT
+    (redundancy-discounted) value ``joint_value_bits``. Also records S(m) = captured-species count on
+    the SAME subsets, so the value and discovery curves are PAIRED draw-for-draw (enabling the
+    distribution-free front-loading statistic without any functional form).
+
+    What this fixes vs the greedy curve: greedy best-first is an optimizer trajectory — it saturates
+    even at zero redundancy, has no sampling interpretation, and admits no honest CI. Here the
+    x-axis is a genuine sampling process, so E[V(m)] is a well-defined finite-population estimand
+    and a probe bootstrap (pass ``probe_idx`` = resampled probe indices; group-disjoint folds guard
+    the duplicate-leakage) gives a REAL sampling CI, conditional on the mined pool. What it cannot
+    fix: extrapolation BEYOND the pool (adaptive mining ⇒ needs an i.i.d. audit anchor; IW is
+    provably invalid for missing mass).
+
+    ``sp_bin`` (n_probes, n_species) from ``_species_bin_signatures``; ``labels`` per-criterion
+    species ids aligned with the pool order; ``M_i`` the metric's own verdict (never Y)."""
+    labels = np.asarray(labels)
+    M = np.asarray(M_i, int)
+    species = sorted(set(int(l) for l in labels))
+    col = {s: i for i, s in enumerate(species)}
+    N = len(labels)
+    if probe_idx is None:
+        y, B, groups = M, sp_bin, np.arange(len(M))
+    else:
+        probe_idx = np.asarray(probe_idx, int)
+        y, B, groups = M[probe_idx], sp_bin[probe_idx], probe_idx
+    rng = np.random.default_rng(seed)
+    m_grid = np.unique(np.geomspace(1, N, n_points).astype(int))
+    V = np.zeros((len(m_grid), n_subsets))
+    S = np.zeros_like(V)
+    cache: Dict[frozenset, float] = {}                        # m=N (and repeats) hit one column set
+    for i, m in enumerate(m_grid):
+        for r in range(n_subsets):
+            idx = rng.choice(N, size=int(m), replace=False)
+            cols = frozenset(col[int(l)] for l in labels[idx])
+            S[i, r] = len(cols)
+            if cols not in cache:
+                cache[cols] = joint_value_bits(y, B[:, sorted(cols)], groups=groups)
+            V[i, r] = cache[cols]
+    return {"m": m_grid.tolist(), "V_mean": V.mean(1).tolist(), "S_mean": S.mean(1).tolist(),
+            "V_draws": V, "S_draws": S, "n_species_total": len(species),
+            "H_Mi_bits": (float(vinfo._h_bits(float(y.mean()))) if np.unique(y).size > 1 else 0.0),
+            "estimand_note": ("exchangeable-by-design (uniform subsets w/o replacement); "
+                              "conditional on the mined pool; joint value = logistic V-information "
+                              "lower bound on Shannon joint MI")}
+
+
+# --------------------------------------------------------------------------------------------
 # behavioral redundancy trace — the I(M_i ; new | Ω) overlap measure (continuous "recapture")
 # --------------------------------------------------------------------------------------------
 

@@ -1,0 +1,184 @@
+# -*- coding: utf-8 -*-
+"""p901_h0 -- hybrid metric channel for 'Quantitative support'.
+
+Pure-code channel (no LLM fields).  Rationale from train residuals: the
+judge behaves like a naive numeric-density rater -- it rewards raw digit
+richness even when the digits are phone numbers, addresses, video
+durations, or archive counts (d00104, d04760, d00520 all judged 1.0),
+while the v0 baseline hard-strips contact digits and therefore
+under-scores exactly those documents.  Conversely the judge punishes a
+few isolated figures inside a long qualitative document (d04606 judged
+0.0 despite '$100M'), so per-word density plus SPREAD across the
+document carries the signal, not keyword presence.
+
+Predicate: typed weighted counts of numeric evidence (currency /
+percent / magnitude / measurement counted high; dates, times, ordinals
+medium; phone- and address-like digits kept but DOWN-WEIGHTED instead of
+stripped; only URLs, e-mails, hex ids and elision markers removed as
+true non-signal), turned into a per-100-words density and squashed
+through a saturating exponential, blended with the fraction of text
+chunks that contain any digit (coverage/spread).
+"""
+
+import re
+import math
+
+LLM_FIELDS = {}
+
+# --------------------------------------------------------------------------
+# Fallback mojibake repair (used only if ops.normalize is unavailable).
+_AC = chr(0x00E2)
+_MOJI_PREFIX = _AC + chr(0x20AC)
+_MOJIBAKE = [
+    (_MOJI_PREFIX + chr(0x0153), '"'),
+    (_MOJI_PREFIX + chr(0x009D), '"'),
+    (_MOJI_PREFIX + chr(0x2122), "'"),
+    (_MOJI_PREFIX + chr(0x02DC), "'"),
+    (_MOJI_PREFIX + chr(0x201C), "-"),
+    (_MOJI_PREFIX + chr(0x201D), "-"),
+    (_MOJI_PREFIX + chr(0x00A6), "..."),
+    (_MOJI_PREFIX, '"'),
+    (chr(0x00C2), ""),
+    (chr(0x00A0), " "),
+]
+
+# --------------------------------------------------------------------------
+# True non-signal: digits inside URLs / e-mails / hex ids / elision markers
+# are markup noise, not figures a reader would perceive.
+_STRIP_RES = [
+    re.compile(r"https?://\S+|www\.\S+", re.IGNORECASE),
+    re.compile(r"\S+@\S+\.\S+"),
+    re.compile(r"\b(?=[0-9a-f]*[a-f])[0-9a-f]{8,}\b", re.IGNORECASE),  # hex ids (needs a letter)
+    re.compile(r"\[\.\.\.\]"),
+]
+
+_MONTHS = (r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|"
+           r"Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|"
+           r"Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)")
+
+_UNITS = (r"(?:units?|shares?|employees?|customers?|users?|members?|"
+          r"subscribers?|patients?|students?|volunteers?|people|jobs?|"
+          r"stores?|locations?|branches?|offices?|projects?|hours?|"
+          r"minutes?|seconds?|countries|states|cities|markets?|"
+          r"acres?|hectares?|"
+          r"square\s+(?:feet|meters?|metres?|miles?)|sq\.?\s?ft\.?|"
+          r"miles?|kilometers?|km\b|meters?|metres?|feet|ft\b|inches|"
+          r"tons?|tonnes?|pounds?|lbs?|kg\b|mm\b|cm\b|mwh?\b|gwh?\b|kwh?\b|"
+          r"barrels?|gallons?|liters?|litres?|basis\s+points?|"
+          r"percentage\s+points?)")
+
+_CURRENCY_SYM = "[$" + chr(0x20AC) + chr(0x00A3) + chr(0x00A5) + "]"
+_MAGNITUDE = r"(?:million|billion|trillion|thousand|bn|mn|m\b|k\b|crore|lakh)"
+_NUM = r"\d[\d,]*(?:\.\d+)?"
+
+# (name, compiled regex, weight) -- matched in order, spans blanked out so
+# each numeric span is counted exactly once at its highest-value reading.
+_PATTERNS = [
+    ("currency", re.compile(
+        _CURRENCY_SYM + r"\s?" + _NUM + r"(?:\s?" + _MAGNITUDE + r")?|"
+        r"\b" + _NUM + r"\s?" + _MAGNITUDE +
+        r"?\s?(?:dollars?|euros?|pounds?|kroner|yen|cents?)\b",
+        re.IGNORECASE), 2.6),
+    ("percent", re.compile(
+        r"\b" + _NUM + r"\s?(?:%|percent|per\s?cent)", re.IGNORECASE), 2.6),
+    ("magnitude", re.compile(
+        r"\b" + _NUM + r"\s?" + _MAGNITUDE + r"\b", re.IGNORECASE), 2.2),
+    ("measurement", re.compile(
+        r"\b" + _NUM + r"\s?" + _UNITS, re.IGNORECASE), 2.2),
+    ("time", re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b"), 1.2),
+    ("date", re.compile(
+        r"\b" + _MONTHS + r"\.?\s+\d{1,2}(?:\s?,\s?\d{4})?\b|"
+        r"\b\d{1,2}\s+" + _MONTHS + r"\.?(?:\s+\d{4})?\b|"
+        r"\b" + _MONTHS + r"\.?\s+\d{4}\b|"
+        r"\b\d{1,2}/\d{1,2}/\d{2,4}\b|\b\d{4}-\d{2}-\d{2}\b",
+        re.IGNORECASE), 0.7),
+    ("range", re.compile(
+        r"\b\d[\d,]*\s?(?:-|" + chr(0x2013) + r"|to)\s?\d[\d,]*\b"), 1.0),
+    ("phone", re.compile(
+        r"\+\d[\d\s().-]{5,14}\d|\b\d{3}[-.]\d{3}[-.]\d{4}\b|"
+        r"\(\d{3}\)\s?\d{3}[-.\s]?\d{4}"), 0.6),
+    ("grouped", re.compile(r"\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b"), 2.0),
+    ("decimal", re.compile(r"\b\d+\.\d+\b"), 1.5),
+    ("ordinal", re.compile(r"\b\d+(?:st|nd|rd|th)\b", re.IGNORECASE), 0.8),
+    ("year", re.compile(r"\b(?:19|20)\d{2}\b"), 0.4),
+    ("bare", re.compile(r"\b\d{2,}\b"), 0.8),
+    ("digit", re.compile(r"\b\d\b"), 0.3),
+]
+
+_WORD_RE = re.compile(r"[A-Za-z]{2,}")
+_CHUNK_MIN_CHARS = 25
+_DIGIT_RE = re.compile(r"\d")
+
+# Squash calibration: density d (weighted count per 100 words)
+#   d ~ 0.5 -> ~0.15 ; d ~ 1.5 -> ~0.39 ; d ~ 3 -> ~0.63 ; d >= 8 -> ~0.93+
+_D0 = 3.0
+_COV_SAT = 0.6
+_W_DENSITY = 0.8
+_W_COVER = 0.2
+
+
+def _fallback_normalize(text):
+    for bad, good in _MOJIBAKE:
+        text = text.replace(bad, good)
+    return text
+
+
+def _chunks(text):
+    """Split into sentence/line-ish chunks for the coverage signal."""
+    parts = re.split(r"[\n\r]+|(?<=[.!?])\s+", text)
+    return [p for p in parts if len(p.strip()) >= _CHUNK_MIN_CHARS]
+
+
+def score(text, extracted, ops):
+    try:
+        if not text or not text.strip():
+            return 0.0
+        try:
+            t = ops.normalize(text)
+            if not isinstance(t, str) or not t.strip():
+                t = _fallback_normalize(text)
+        except Exception:
+            t = _fallback_normalize(text)
+
+        for rx in _STRIP_RES:
+            t = rx.sub(" ", t)
+
+        n_words = len(_WORD_RE.findall(t))
+        if n_words < 20:
+            # Too little prose to judge density on; digits-only fragments
+            # should not explode.
+            n_words = 20
+
+        # Coverage BEFORE blanking numeric spans.
+        chunks = _chunks(t)
+        if chunks:
+            covered = sum(1 for c in chunks if _DIGIT_RE.search(c))
+            cov = covered / float(len(chunks))
+        else:
+            cov = 1.0 if _DIGIT_RE.search(t) else 0.0
+
+        # Typed weighted counts; blank each matched span so a token is
+        # counted once at its highest-value reading.
+        total_w = 0.0
+        for _name, rx, w in _PATTERNS:
+            matches = list(rx.finditer(t))
+            if not matches:
+                continue
+            total_w += w * len(matches)
+            out = []
+            prev = 0
+            for m in matches:
+                out.append(t[prev:m.start()])
+                out.append(" " * (m.end() - m.start()))
+                prev = m.end()
+            out.append(t[prev:])
+            t = "".join(out)
+
+        density = 100.0 * total_w / float(n_words)
+        sat_density = 1.0 - math.exp(-density / _D0)
+        cov_sat = min(1.0, cov / _COV_SAT)
+
+        val = _W_DENSITY * sat_density + _W_COVER * cov_sat
+        return max(0.0, min(1.0, val))
+    except Exception:
+        return 0.5

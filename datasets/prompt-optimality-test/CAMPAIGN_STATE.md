@@ -30,7 +30,11 @@
       sensitivity is BENCHMARK-DEPENDENT — HB190/HB191
 - [ ] hotpot GEPA@16,700 (TRUE match, gpu2) — decides whether +.235/.104 survives at M_ω's own spend
 - [ ] ifbench GEPA@2,400 (gpu5) — decides the most fragile star (+.040)
-- [ ] NOT DONE, disclose as unmatched: aime, livebench, pupa budget arms
+- [x] livebench TRUE match DONE (HB209/HB210, 2026-08-20): GEPA@18,708 landed + same-session
+      4-cand k=5 re-mint. Row of record: GEPA(truematch) .6945 / Merge .6857 / MIPROv2 .6612 /
+      M_ω .7102; Δ +.0157 [−.0101,+.0431] signs +22/−20/=84 → **TIE by CI** (frozen rule).
+- [ ] in flight: aime isocompute6870 (sk1, ~13d), ifbench truematch23300 (sk1, ~6d); pupa
+      truematch29526 frozen mid-run w/ GLM window (~Aug 20)
 - [ ] Paper edits pending user sign-off: kill every "2,400"; add budget column w/ ACTUAL spend;
       scope "matches or exceeds on all six" to the 600-call operating point; per-benchmark budget
       curves (benchmarks disagree); advisor recommends retitle + certificate-first reframe
@@ -75,10 +79,10 @@ Same-session paired, k≥3, bootstrap on mean item-level delta. **Nothing single
 | bench | M_ω vs GEPA | status |
 |---|---|---|
 | hotpot | **+.235** [+.192,+.281] uniform session (also beats Merge +.246***, MIPROv2 +.207***) | WIN — GEPA shipped the SEED here |
-| livebench | +.006 [−.015,+.028] p=.297 uniform session (GEPA .699 / M_ω .705) | NO SEPARATION — old +.092*** was a LOAD ARTIFACT (HB168); never re-quote |
-| hover | **+.086** [+.063,+.110] canonical uniform session (vs Merge +.040**; MIPROv2 not measured) | WIN — earlier session +.100 now the footnote |
+| livebench | **TRUE-MATCH row of record (HB210, 2026-08-20, fp 01:32:58Z vllm 0.25.1):** GEPA@18,708 .6945 / Merge .6857 / MIPROv2 .6612 / M_ω .7102; Δ +.0157 [−.0101,+.0431] +22/−20/=84 | **TIE by CI** (frozen HB209 rule). Supersedes the .699/.705 +.006 row (0.16.0-era); old +.092*** was a LOAD ARTIFACT (HB168); never re-quote either |
+| hover | **TRUE-MATCH row of record (HB212, 2026-08-20, fp 07:01:05Z vllm 0.25.1):** GEPA@10,110 .497 / Merge .515 / MIPROv2 .487 / M_ω .567; Δ **+.0707 [+.0433,+.0987]** +83/−36/=181; vs Merge +.052 | **WIN survives true match** — Merge "---" cell filled same-session; 08-08 cells (.503/.494/.569) and July merge (.5247/.5167) superseded, never splice |
 | aime | +.007 [−.020,+.033] uniform session | NO SEPARATION (print policy HB162: range +.007..+.091 across sessions, never headline +.091) |
-| ifbench | **+.040** [+.012,+.069] p=.0029 uniform session | WIN (session-sensitive: earlier session +.020 n.s.; both reported, HB165) |
+| ifbench | **TRUE-MATCH row of record (HB215, 2026-08-25, fp 07:48:51Z vllm 0.25.1):** GEPA@23,300 .417 / Merge .419 / MIPROv2 .382 / M_ω .442; Δ **+.0252 [−.0027,+.0534]** +77/−61/=156 | **TIE at equal call** — the +.040** win did NOT survive true-match (HB165 session-sensitivity vindicated); 07-28 cells superseded, never splice |
 | pupa | −.001 [−.032,+.031] | TIE, final |
 
 **W = 3 of 6 (hotpot, hover, ifbench); aime + livebench no-separation (uniform sessions); pupa tie.**

@@ -118,7 +118,7 @@ values below the ceiling.
 
 ## Results
 
-**Kept-box reproduction.** 14 of 16 cells reproduce their published `VA_nl` *and* `VAT_nl` to within 1e-4 on the kept box (mirror cells on the mac, the scale-up-wave-C / mirror-2 cells on sk3) — the two-box design recovered the ledger exactly. Two cells fail on **both** boxes and are flagged in `box_choice`: `press_verdict` (its ledger was produced under scikit-learn 1.9.0 on Darwin-arm64; neither available box is that combination — kept sk3, |Δ VA_nl| .0015) and `code_v3` (kept the closer box; its canonical readout is within-repo, and its pooled row is marked ‖ = POOLED_DO_NOT_QUOTE in the master ledger too). Neither flag touches the T₀ comparisons, which are all computed **within one run on shared folds**.
+**Kept-box reproduction.** **15 of 16 cells reproduce their published `VA_nl` *and* `VAT_nl` to within 1e-4 on the kept box** (mirror cells on the mac, the scale-up-wave-C / mirror-2 cells on sk3) — the two-box design recovered the ledger exactly. One cell fails on **both** boxes and is flagged in `box_choice`: `press_verdict`, whose ledger was produced under scikit-learn 1.9.0 on Darwin-arm64, a combination neither available box provides (kept sk3, |Δ VA_nl| .0015). That flag does not touch the T₀ comparisons, which are all computed **within one run on shared folds**.
 
 | field | cell | n_E | T₀ | T | VA_nl | VAT₀_nl | VAT_nl | (VAT₀−VA) est [CI] P | (VAT−VAT₀) est [CI] P | (T₀−T) est [CI] P |
 |---|---|---:|---:|---:|---:|---:|---:|---|---|---|
@@ -136,7 +136,7 @@ values below the ceiling.
 | Math | `mathse_accepted_verdict` | 2600 | .4957 | .6439 | .5737 | .5736 | .6196 | −.0024 [−.0109,+.0059] 0.29 | +.0443 [+.0241,+.0642] 1.00 | −.1482 [−.1765,−.1203] 0.00 |
 | Math | `mathse_vote_score` | 2326 | .4992 | .6538 | .6107 | .6130 | .6558 | +.0005 [−.0075,+.0078] 0.55 | +.0433 [+.0258,+.0609] 1.00 | −.1546 [−.1793,−.1291] 0.00 |
 | Math | `aops_curation` | 5202 | .5727 | .7806 | .7705 | .7685 | .7851 | −.0010 [−.0039,+.0022] 0.28 | +.0171 [+.0063,+.0279] 1.00 | −.2079 [−.2409,−.1737] 0.00 |
-| Software code | `code_v3` ‖ | 11452 | .5153 | .6933 | .7043 | .7031 | .7537 | −.0095 [−.0189,−.0012] 0.01 | +.0545 [+.0319,+.0833] 1.00 | −.1781 [−.2698,−.0744] 0.00 |
+| Software code | `code_v3` ‖ | 11452 | .5153 | .6933 | .6932 | .6957 | .7449 | −.0021 [−.0099,+.0054] 0.31 | +.0462 [+.0214,+.0751] 1.00 | −.1781 [−.2698,−.0744] 0.00 |
 | Journalism/press | `press_verdict` | 605 | .4935 | .7744 | .6795 | .6713 | .7459 | +.0019 [−.0138,+.0215] 0.60 | +.0807 [+.0472,+.1296] 1.00 | −.2809 [−.3551,−.1724] 0.00 |
 
 ‖ = `POOLED_DO_NOT_QUOTE` (carried over from the master ledger).
@@ -160,7 +160,7 @@ values below the ceiling.
 | `mathse_accepted_verdict` | −.0001 | +.0460 | -0% | no | sk3 |
 | `mathse_vote_score` | +.0023 | +.0451 | +5% | no | sk3 |
 | `aops_curation` | −.0020 | +.0146 | -13% | no | sk3 |
-| `code_v3` | −.0012 | +.0494 | -2% | no | mac |
+| `code_v3` | +.0025 | +.0517 | +5% | no | sk3 |
 | `press_verdict` | −.0082 | +.0664 | -12% | no | sk3 |
 
 ### Cross-cutting read
@@ -175,21 +175,20 @@ values below the ceiling.
    simply does not know what these communities reward.
 
 2. **Fusion without training is worth essentially nothing.** VAT₀ − VA_nl spans
-   **−.0095 to +.0374**, median **+.0003**. It is positive at P≥.95 on exactly **one**
-   cell (`cap_finalist` +.0374 [+.0126,+.0616] P=1.00; `nc_agree` +.0195 P=.95 is the
-   only other one at threshold) and **significantly negative on one** (`code_v3`
-   −.0095 [−.0189,−.0012] P=.01 — adding a chance-level column to the bank actively
-   costs you). On the other 14 the CI straddles zero. Contrast VAT − VAT₀, which is
-   positive at P≥.95 on **13/16** and P=1.00 on 11.
+   **−.0082 to +.0091**, median **+.0002**. It clears P≥.95 on exactly **two** cells
+   (`cap_finalist` +.0374 [+.0126,+.0616] P=1.00 and `nc_agree` +.0195 [−.0032,+.0409]
+   P=.95, the latter with a CI straddling zero) and is **significantly negative on
+   none**. On the other 14 the CI straddles zero. Contrast VAT − VAT₀, which is
+   positive at P≥.95 on **12/16** and P=1.00 on 11.
 
 3. **So the fused gain is bought by label-training, not by the LLM prior.** Across the
    16 cells the untrained share of the fusion gain (VAT₀−VA)/(VAT−VA) has median
-   **≈0%**; it is under 10% on 12 cells and negative on 8. The single real exception is
-   `cap_finalist` at **+34%** — and that is the cell whose documents are one-line
-   captions, i.e. the one place where "is this a good contest entry?" is answerable
-   from generic prior alone. `cap_crowd`, the *same corpus* under a crowd-median rather
-   than an editor label, gets **−18%**: the prior helps pick what an editor would
-   shortlist, not what the crowd voted up.
+   **≈0%**; it is under 10% on **15 of 16** cells and negative on 8. The single real
+   exception is `cap_finalist` at **+34%** — and that is the cell whose documents are
+   one-line captions, i.e. the one place where "is this a good contest entry?" is
+   answerable from generic prior alone. `cap_crowd`, the *same corpus* under a
+   crowd-median rather than an editor label, gets **−18%**: the prior helps pick what an
+   editor would shortlist, not what the crowd voted up.
 
 4. **This is a clean falsification of the "the dense arm is just an LLM reading the
    text" reading of Δ_beyond.** Every cell's Δ_beyond (T − VA_nl) survives with the

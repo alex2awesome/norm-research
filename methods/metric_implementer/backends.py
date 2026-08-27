@@ -33,6 +33,10 @@ BACKENDS: Dict[str, Dict[str, str]] = {
     # This is the strong-model path for GEPA reviser + reconstruction (prompt-optimality real-test).
     "zai_anthropic": {"url": "https://api.z.ai/api/anthropic/v1/messages",
                       "key": "~/.z-ai-api-key.txt", "format": "anthropic"},
+    # OpenAI direct (SALT-lab key on sk3) — added 2026-08-12 as a diverse proposer family after
+    # OpenRouter went 402 (out of credits). Proposer-only use; judging stays on local executors.
+    "openai": {"url": "https://api.openai.com/v1/chat/completions",
+               "key": "~/.openai-salt-lab-key.txt", "format": "openai"},
 }
 
 # Back-compat shims (old imports / callers may reference these names).

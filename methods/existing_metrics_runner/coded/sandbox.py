@@ -93,22 +93,31 @@ def parse_diff_added_by_file(diff_text: str) -> Dict[str, str]:
     if idx == -1:
         return {}
     out: Dict[str, List[str]] = {}
-    try:
-        diffs = whatthepatch.parse_patch(diff_text[idx:])
-    except Exception:
-        return {}
-    for d in diffs:
-        if d is None:
+    # ``whatthepatch.parse_patch`` is lazy: malformed/binary blocks can raise
+    # while iterating, outside a try around generator construction.  Parse each
+    # file block independently so a binary attachment cannot discard valid text
+    # hunks elsewhere in the same PR.
+    chunks = diff_text[idx:].split("\ndiff --git ")
+    blocks = [chunks[0], *("diff --git " + chunk for chunk in chunks[1:])]
+    for block in blocks:
+        if "\nGIT binary patch\n" in block or "\nBinary files " in block:
             continue
-        path = (d.header.new_path or d.header.old_path or "")
-        if path.startswith("b/"):
-            path = path[2:]
-        if not path or path == "/dev/null":
+        try:
+            diffs = list(whatthepatch.parse_patch(block))
+        except Exception:
             continue
-        added = [ch.line for ch in (d.changes or [])
-                 if ch.old is None and ch.new is not None and ch.line is not None]
-        if added:
-            out.setdefault(path, []).extend(added)
+        for d in diffs:
+            if d is None:
+                continue
+            path = (d.header.new_path or d.header.old_path or "")
+            if path.startswith("b/"):
+                path = path[2:]
+            if not path or path == "/dev/null":
+                continue
+            added = [ch.line for ch in (d.changes or [])
+                     if ch.old is None and ch.new is not None and ch.line is not None]
+            if added:
+                out.setdefault(path, []).extend(added)
     return {f: "\n".join(ls) for f, ls in out.items() if ls}
 
 

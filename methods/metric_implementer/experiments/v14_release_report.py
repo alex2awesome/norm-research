@@ -11,6 +11,7 @@ import pandas as pd
 
 from .v14_panel_design import canonical_sha256
 from .v14_value_bound import validate_state_tables
+from .v14_scoring_lanes import assert_release_rows_are_cert
 
 
 RELEASE_SCHEMA = "cr3-v14-release-report-v1"
@@ -30,6 +31,10 @@ def audit_release(root: str | Path, *, expected_metrics: int = 35) -> dict:
     frame = pd.read_parquet(source / "results.parquet")
     expected_rows = int(expected_metrics) * 2 * 3
     failures = []
+    try:
+        assert_release_rows_are_cert(frame)
+    except ValueError as exc:
+        failures.append(str(exc))
     if len(frame) != expected_rows:
         failures.append(f"results has {len(frame)} rows; expected {expected_rows}")
     identity = ["metric_key", "instrument", "channel", "arm"]
@@ -78,10 +83,14 @@ def audit_release(root: str | Path, *, expected_metrics: int = 35) -> dict:
         if table_path.is_file():
             with np.load(table_path, allow_pickle=False) as state:
                 try:
-                    validate_state_tables(state["raw_lift"], state["clipped_value"])
                     shape = np.asarray(state["raw_lift"]).shape
                     if len(shape) != 2 or shape[0] != 50 or shape[1] not in {64, 256}:
                         failures.append(f"state table is not exhaustive 50x64/256: {table_path}")
+                    else:
+                        validate_state_tables(
+                            state["raw_lift"], state["clipped_value"],
+                            panel_size=6 if shape[1] == 64 else 8,
+                        )
                 except Exception as exc:
                     failures.append(f"invalid state table {table_path}: {exc}")
         if prompt_path.is_file():

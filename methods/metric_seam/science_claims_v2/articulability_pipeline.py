@@ -5,7 +5,9 @@ This module deliberately contains no model client. ``prepare`` emits an auditabl
 provider-neutral request bundle; an independent API process may execute it and return
 bound responses. ``ingest`` refuses unbound, mismatched, duplicate, or ungrounded
 responses. ``evaluate`` compares prompt and code witnesses without treating either as
-ground truth. Dataset labels are never accessed.
+ground truth. The trusted loader deserializes each source row, then immediately projects
+it to ``paper_id + abstract + body``; label keys/values are never indexed, retained,
+rendered, or used by this instrument.
 """
 
 from __future__ import annotations
@@ -378,6 +380,89 @@ def _validate_grounded_witness(
         raise ValueError(f"{context} uses an abstract sentence as body evidence")
 
 
+def _validate_strong_relation_certificate(
+    witness: dict[str, Any], *, context: str
+) -> None:
+    """Enforce the frozen prompt's *strong certificate* semantics.
+
+    Verbatim source grounding is necessary but not sufficient.  The prompt of
+    record says that only exact numeric or comparative relations are strong
+    certificates.  In particular, a qualitative relation with no quantities and
+    no comparison object cannot become a certificate merely because its text is a
+    literal source span.
+
+    This guard deliberately validates the model's typed witness rather than
+    re-judging the science.  It requires an auditable numeric/comparison payload
+    and coherent bookkeeping; it does not treat either the prompt or code output
+    as external ground truth.
+    """
+    shape = _witness_shape(witness)
+    claim = shape.get("claim")
+    evidence = shape.get("evidence")
+    checks = shape.get("checks")
+    if not isinstance(claim, dict) or not isinstance(evidence, dict):
+        raise ValueError(f"{context} claim/evidence must be objects")
+    if not isinstance(checks, dict):
+        raise ValueError(f"{context} checks must be an object")
+
+    relation = claim.get("relation")
+    if relation not in {"numeric", "comparative"}:
+        raise ValueError(f"{context} relation must be numeric or comparative")
+
+    claim_quantities = claim.get("quantities")
+    evidence_quantities = evidence.get("quantities")
+    if not isinstance(claim_quantities, list) or not isinstance(evidence_quantities, list):
+        raise ValueError(f"{context} quantities must be lists")
+    quantity_matches = checks.get("quantity_matches")
+    quantity_required = checks.get("quantity_required")
+    for name, value in (
+        ("quantity_matches", quantity_matches),
+        ("quantity_required", quantity_required),
+    ):
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            raise ValueError(f"{context} {name} must be a nonnegative integer")
+    if quantity_matches > quantity_required:
+        raise ValueError(f"{context} quantity_matches exceeds quantity_required")
+
+    claim_comparison = claim.get("comparison")
+    evidence_comparison = evidence.get("comparison")
+    comparison_present = isinstance(claim_comparison, dict) and isinstance(
+        evidence_comparison, dict
+    )
+    if (claim_comparison is None) != (evidence_comparison is None):
+        raise ValueError(f"{context} comparison payload is present on only one side")
+    if claim_comparison is not None and not comparison_present:
+        raise ValueError(f"{context} comparison payloads must be objects or null")
+
+    numeric_present = bool(claim_quantities) and bool(evidence_quantities)
+    if numeric_present:
+        if quantity_required <= 0 or quantity_matches != quantity_required:
+            raise ValueError(f"{context} numeric quantities are not exactly matched")
+    elif quantity_required != 0 or quantity_matches != 0:
+        raise ValueError(f"{context} quantity bookkeeping has no quantity payload")
+
+    if relation == "numeric" and not numeric_present:
+        raise ValueError(f"{context} numeric certificate has no quantity relation")
+    if relation == "comparative" and not comparison_present:
+        raise ValueError(f"{context} comparative certificate has no comparison relation")
+
+    decision = witness.get("decision")
+    relation_state = checks.get("relation_state")
+    if decision == "supported":
+        allowed_states = {"aligned", "not_required"} if numeric_present else {"aligned"}
+        if relation_state not in allowed_states:
+            raise ValueError(f"{context} supported relation_state is not aligned")
+    elif decision == "contradicted":
+        if not comparison_present:
+            raise ValueError(f"{context} contradicted certificate needs a comparison relation")
+        if relation_state not in {
+            "aligned_reversed", "reversed_roles", "direction_mismatch"
+        }:
+            raise ValueError(f"{context} contradicted relation_state is not a reversal")
+    else:
+        raise ValueError(f"{context} strong certificate has invalid decision")
+
+
 def _validate_response(response: dict[str, Any], request_row: dict[str, Any]) -> dict[str, Any]:
     required = ("paper_id", "status", "reason", "claim_count", "certificate_count",
                 "evidence_link_count", "certificates", "evidence_links", "matches", "graph")
@@ -421,6 +506,7 @@ def _validate_response(response: dict[str, Any], request_row: dict[str, Any]) ->
             cert, canonical_abstract=canonical_abstract, canonical_body=canonical_body,
             context="certificate"
         )
+        _validate_strong_relation_certificate(cert, context="certificate")
     for link in response["evidence_links"]:
         if not isinstance(link, dict) or link.get("decision") != "evidence_link":
             raise ValueError("invalid evidence-link decision")
@@ -444,6 +530,8 @@ def _validate_response(response: dict[str, Any], request_row: dict[str, Any]) ->
                 match, canonical_abstract=canonical_abstract, canonical_body=canonical_body,
                 context="match"
             )
+        if witness_kind == "relation_certificate":
+            _validate_strong_relation_certificate(match, context="match")
     return response
 
 
@@ -722,9 +810,25 @@ def evaluate(bundle: Path, normalized_path: Path, code_path: Path | None,
             prompt_evidence_links += len(p_l)
             code_evidence_links += len(c_l)
             matched_evidence_links += _maximum_witness_matches(p_l, c_l)
+        informative_presence_papers = both + prompt_only + code_only
+        non_estimating_reasons: list[str] = []
+        if len(shared) < 2:
+            non_estimating_reasons.append("fewer_than_two_shared_papers")
+        if informative_presence_papers == 0:
+            non_estimating_reasons.append("no_shared_paper_has_a_strong_certificate")
         comparison = {
-            "status": "descriptive_unsupervised_reconstruction_comparison",
-            "interpretation": "The prompt and code channels are comparators, not ground truth; unmatched witnesses are divergence, not error or overperformance.",
+            "status": (
+                "non_estimating_descriptive_comparison"
+                if non_estimating_reasons
+                else "descriptive_unsupervised_reconstruction_comparison"
+            ),
+            "estimating": not non_estimating_reasons,
+            "non_estimating_reasons": non_estimating_reasons,
+            "interpretation": (
+                "The prompt and code channels are comparators, not ground truth; unmatched "
+                "witnesses are divergence, not error or overperformance. Agreement fractions "
+                "from a non-estimating support are bookkeeping only and must not be promoted."
+            ),
             "shared_papers": len(shared),
             "status_exact_agreement": _safe_ratio(status_exact, len(shared)),
             "certificate_presence_agreement": _safe_ratio(presence_exact, len(shared)),
@@ -814,13 +918,24 @@ def evaluate(bundle: Path, normalized_path: Path, code_path: Path | None,
             "reasoning tokens (hidden reasoning text was not retained)"
         )
     overlap_line = "- Witness overlap: `not run`"
-    if comparison["status"] == "descriptive_unsupervised_reconstruction_comparison":
+    if comparison["status"] in {
+        "descriptive_unsupervised_reconstruction_comparison",
+        "non_estimating_descriptive_comparison",
+    }:
+        estimating_note = ""
+        if not comparison["estimating"]:
+            estimating_note = (
+                "\n- Estimating support: `no` ("
+                + ", ".join(comparison["non_estimating_reasons"])
+                + "); agreement fractions are bookkeeping only"
+            )
         overlap_line = (
             f"- Strong-certificate overlap: {comparison['matched_witnesses']} matched / "
             f"{comparison['prompt_witnesses']} prompt / {comparison['code_witnesses']} code\n"
             f"- Weaker evidence-link overlap: {comparison['matched_evidence_links']} matched / "
             f"{comparison['prompt_evidence_links']} prompt / "
             f"{comparison['code_evidence_links']} code"
+            f"{estimating_note}"
         )
     report_path.write_text(f"""# Science prompt-articulability same-input evaluation
 

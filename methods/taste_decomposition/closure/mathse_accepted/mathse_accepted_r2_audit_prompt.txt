@@ -1,0 +1,127 @@
+You are auditing a pool of scoring criteria that were written by other
+models. Your job is a ROUTING decision, made blind: you are NOT told who wrote each
+criterion or what it was written for.
+
+For each criterion, decide:
+
+  "quality_relevant" -- the criterion measures a property that a careful expert would
+      count as genuine evidence about whether the person who ASKED the question marked this answer as the accepted one -- a single asker's choice among the answers to their OWN question. It is about the substance of
+      what is being communicated, the evidence behind it, and the content of the item.
+
+  "incidental" -- the criterion measures something that may well PREDICT how the item
+      fares but is not itself whether the person who ASKED the question marked this answer as the accepted one -- a single asker's choice among the answers to their OWN question: length or verbosity, typography, punctuation
+      or capitalisation habits, formatting and trailing furniture, boilerplate or
+      template phrasing, community/venue style markers, subject-matter or topic markers,
+      temporal tells, orthographic habits, or a textual fingerprint of some upstream
+      circumstance of the item's production (who wrote it, with what practice or
+      following, when, where in the run of entries).
+
+The corpus is: answers to mathematics questions on math.StackExchange, each shown with the (truncated) question it answers. Each item is a answer.
+
+SECOND JUDGEMENT, only for criteria you label "incidental". Some incidental channels have
+an upstream cause that plausibly ALSO produces genuinely better work (for example, a
+practised entrant may both be favoured for irrelevant reasons AND actually write better
+entries). Return `mixed`: true when you think the upstream cause plausibly produces real
+whether the person who ASKED the question marked this answer as the accepted one -- a single asker's choice among the answers to their OWN question too, false when the channel looks like pure nuisance. For criteria you label
+"quality_relevant", return mixed=false.
+
+Judge each criterion ON ITS OWN TEXT. Do not try to guess which pool it came from, and
+do not let the ORDER of the list influence you.
+
+CRITERIA:
+
+[X01] Bounded personal question answered in the asker's register
+Composite. Judge (a) whether the QUESTION is a bounded, asker-specific one — a computation to finish, a notation to decode, an attempt to check, a small counting or algebra exercise — as opposed to a broad, community-interest or research-level prompt; and (b) whether the answer is pitched at the level the asker is plainly working at. 10 = bounded personal question, answered squarely at the asker's level with no machinery beyond what the asker could follow. 5 = one of the two conditions holds. 0 = a broad scholarly prompt answered as a contribution to the literature, with the answer aimed at expert readers generally rather than at the person who asked.
+
+[X02] Visible revision markers
+From 0 to 10, how many visible signs of post-hoc revision appear (e.g., 'EDIT', 'Edit:', 'after a long calculation', 'I just read your last post')? Judge extent only; do not judge whether editing is good or bad.
+
+[X03] Sheer bulk and display-mathematics density
+Score 0-10 for the EXTENT of textual bulk and displayed-equation density, judged on volume alone: total length, number of separate display-math blocks and multi-line aligned environments, number of paragraph breaks, and presence of multi-stage derivation chains. 0 = one or two sentences with at most one displayed line; 10 = many screens of prose interleaved with a dozen or more display blocks. Count volume only, exactly as a word- and equation-counter would. Do NOT judge whether the length is warranted, whether the derivation is complete, or whether the answer is thorough.
+
+[X04] Answer length
+Score 0-10 for how long the answer is. 10 = very long, many paragraphs; 5 = a few paragraphs; 0 = one or two lines. Judge extent only -- do not consider whether the length is warranted, whether the answer is thorough, or whether anything in it is correct.
+
+[X05] Author personality / conversational asides
+0-10: rate how much informal, conversational, or humorous personal voice appears in the prose -- exclamations, jokes, emoticons, self-deprecating asides, a personal sign-off name, or direct colloquial address to the reader (e.g., 'Well, jolly gosh!', '^_^', 'Cheers! -Shahar', 'I hope this was helpful'). 0 = strictly impersonal, formal register throughout; 10 = pervasive informal/conversational personal voice. Do not judge whether the informality is charming or unprofessional -- score only how much of it is present.
+
+[X06] Notation and logical discipline
+Score 10 when symbols, types, indices, quantifiers, and implication directions remain consistently defined; score 0 when notation or typing errors make the reasoning ambiguous or invalid.
+
+[X07] External-resource citation and tool appeals
+Score 0-10 for the EXTENT to which the answer routes authority outside itself: hyperlinks or URLs, named databases and their identifiers (OEIS sequence numbers), computer-algebra appeals ('confirmed by Wolfram Alpha', 'try using WolframAlpha'), numbered theorem citations to named textbooks ('theorem 12.29 of Rudin's Functional Analysis'), formal bibliography entries with journals and DOIs, named editions of books, pointers to lecture notes, and 'see this link / this post'. 0 = wholly self-contained with no outward pointer; 10 = the substance is largely a set of pointers plus a formal reference list. Score the extent of outward pointing only. Do NOT judge whether the citations are authoritative, relevant, or well formatted.
+
+[X08] Reproducible next steps
+Score 10 when the answer gives ordered, executable steps from the premises to the result; score 0 when it only confirms correctness, gestures toward a method, or says which tool to use.
+
+[X09] Edge-case coverage
+Score 10 when the answer explicitly identifies relevant domains, exceptional cases, and boundary behavior; score 0 when it silently assumes the generic case or mishandles a case that changes the result.
+
+[X10] Hint register and deliberate incompleteness
+Score 0-10 for the EXTENT to which the text presents itself as a partial nudge rather than a completed derivation: literal 'Hint:' labels, 'this may get you started', 'now you can solve for x', 'I'll leave the last step to you', a named theorem or trick offered without carrying it through, or a proof deliberately hidden/withheld. 0 = fully worked from premise to conclusion with nothing left to the reader; 10 = the text is nothing but a pointer or a single suggested tool. Score the extent of the hint register only. Do NOT judge whether withholding the full solution is pedagogically good or bad, and do not judge whether the hint is correct.
+
+[X11] Named participants, @handles and priority acknowledgements
+Score 0-10 for the EXTENT to which the text names or tags other people in the thread or beyond it: @-handles, first names or usernames of other answerers and commenters, 'the OP' as a term of art, credit assignments ('as suggested by X', 'X got there first', 'expanding on a comment by X', 'with the help of a colleague'), and appeals to a named authority who reviewed the work. 0 = no person is named or tagged anywhere; 10 = several named participants are addressed or credited throughout. Score naming density only. Do NOT judge whether the credit is generous, deserved, or well placed.
+
+[X12] Second-person address with an executable next step
+Score how directly the answer speaks to the asker and hands them something to do. 10 = sustained second-person address plus a concrete instruction the asker can execute immediately ('Now you can solve for x using inverse trigonometric functions'; 'Apply Menelaus in triangles ABD, CBF, ...'; 'You try one: what is 9:51 divided by two?'). 5 = occasional second-person but no actionable step. 0 = entirely impersonal third-person exposition addressed to no one in particular.
+
+[X13] Structure-revealing representation
+Score 10 when the answer chooses a transformation, model, diagram, or decomposition that makes the relevant invariant visible; score 0 when added formalism obscures rather than exposes the governing structure.
+
+[X14] Concrete instantiation: specific numbers, examples, or visuals
+Score 10 if the answer uses concrete numerical examples, diagrams, tables, or visual representations to make abstract ideas tangible. Score 0 if the answer is entirely abstract with no specific instantiation.
+
+[X15] Elementary-exercise versus research-register vocabulary
+Score 0-10 for the EXTENT to which the vocabulary and objects in the text belong to advanced or specialist mathematics rather than to routine early-coursework computation. Low scores: arithmetic, factors and divisors, basic differentiation and integration by substitution, elementary trigonometric identities, simple summation identities, textbook probability counting. High scores: named advanced machinery and specialist notation (Galois groups, cyclotomic fields, forcing and generic filters, Poincare-Hopf, Bell polynomials and Faa di Bruno, Jacobi theta functions, spectral theorem on Hilbert space, cardinal arithmetic with $2^{\mathfrak c}$). Score the register of the subject matter only. Do NOT judge difficulty as merit, and do NOT judge whether the answer handles its material well.
+
+[X16] Confident, unhedged register
+Score 0-10 for how unhedged the prose is: absence of 'I think', 'perhaps', 'it seems', 'I might be wrong', 'someone correct me', question marks addressed to the reader, and apologetic asides. 10 = flatly declarative throughout; 0 = hedged in almost every sentence. Score the register only; do not judge whether the confidence is warranted.
+
+[X17] Prior-answer dependence
+On a 0–10 scale, rate how much the answer explicitly presupposes, supplements, corrects, or contrasts with earlier answers or comments; judge only visible wording, not whether this is good.
+
+[X18] Discovery narration paired with respect for the asker
+Composite of two interacting properties. First, narration: does the author think aloud, marking the moment an idea arrives, inviting the reader to look at an equation, exclaiming at a step. Second, stance: is the narration directed at bringing the asker along or at showing that the problem was beneath the author. 10 = strong narration in a companionable stance, walking through the discovery and inviting the asker to try one. 5 = flat exposition with no narration and no disparagement. 0 = strong narration in a dismissive stance, where the thinking-aloud exists to dramatise how easy the author finds it.
+
+[X19] Identifies and diagnoses the asker's specific error or confusion
+Score 10 if the answer pinpoints exactly where the asker's reasoning went wrong and explains the fix. Score 0 if it provides a correct solution without diagnosing what the asker was missing.
+
+[X20] Final line restates the exact target expression asked for
+Score 10 if the answer's last displayed result explicitly mirrors the specific expression, number, or option format requested in the question (e.g. the question asks to show X=Y and the final line literally states X=Y, or the question is multiple-choice and the answer names the option letter). Score 0 if the answer's conclusion is generic and never ties back to the exact form the question asked for.
+
+[X21] Era-specific conventions
+Score 0-10 for the extent to which the text exhibits platform-era conventions such as legacy notation, older markup habits, username references, edit conventions, or period-specific tool vocabulary; judge only visible vintage markers, not whether they are good.
+
+[X22] Hint that names the exact tool and its exact point of application
+Score the quality of the answer as a hint, applying this only where the answer deliberately withholds the full derivation. 10 = the withheld derivation is replaced by a precise, immediately usable pointer: the named theorem and the specific objects to apply it to, or a first line of algebra that visibly opens the problem, or a hint with the full proof supplied in a spoiler beneath it. 3 = a vague nudge that names a topic but not a move. 0 = the answer gives no hint and no derivation, or the hint would not let a competent reader proceed. Score 5 if the answer is a full derivation, i.e. the criterion does not apply.
+
+[X23] Answers the question that was actually asked
+Score 0-10 for whether the answer delivers the thing the question requested -- a proof where a proof was asked for, a counterexample where one was asked for, a closed form where one was asked for -- rather than a related result, a reformulation, or a different question the responder found more interesting. 10 = exactly the requested deliverable; 0 = a substitute the asker did not ask for.
+
+[X24] Confidence without hedging or self-deprecation
+Score 10 if the answer is presented as a definitive, assured response to the question. Score 0 if the answer hedges with phrases like 'this might work,' 'I think,' or explicitly disclaims itself as not really an answer.
+
+[X25] Substance in the first two lines versus long preamble
+Score how quickly the answer reaches the load-bearing content. 10 = the first sentence already contains the decisive object: the verdict, the counterexample, the key identity, the definition asked for. 5 = one short orienting sentence before the substance. 0 = several paragraphs of framing, meta-commentary about the answer's own provenance, or scene-setting before anything decisive appears.
+
+[X26] Elementary question closed completely in a handful of lines
+Composite. Score high only when both halves hold: the question is elementary or narrowly computational, AND the answer carries it to a fully determined final object with every step shown and nothing left dangling. 10 = both, e.g. a chain of exponent rules ending at a single power, or a sum of n copies of a term evaluated to na, or a factorisation ending at a specific numeric total. 5 = elementary question but with a gap or an unjustified jump. 0 = either the question is not elementary, or the answer leaves the final object undetermined.
+
+[X27] Markup density
+Score 0–10 for how much the answer uses dense display mathematics, custom macros, colored notation, boxed arrays, diagrams, headings, or other elaborate markup; do not judge whether the feature is good.
+
+[X28] Generalizes the method beyond the specific numbers
+Score 0-10 for how far the answer makes its method portable: it says which features of this problem the argument actually used, so a reader could run the same argument on a different instance, rather than only pushing this instance's particular numbers through to an answer. 10 = the general principle is stated and its range of use is clear; 0 = the answer is a bare computation for these numbers only.
+
+[X29] Proportionality of method
+Score 10 when the amount of detail and mathematical machinery is proportionate to the task while preserving the essential logic; score 0 when the answer is bloated or so compressed that key reasoning disappears.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"verdicts": [
+  {"id": "<the id shown>", "label": "quality_relevant" or "incidental",
+    "mixed": true or false, "confidence": "high"/"medium"/"low",
+    "justification": "<one sentence>"},
+  ... one entry per criterion, same ids ...
+]}

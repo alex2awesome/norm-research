@@ -5742,3 +5742,292 @@ sk1 NUL-corrupted ablation_battery.py restored; laptop pulling the boxes' newer
 paperexact_arms.py; 167 sk3-only metric files pulled into repo; ENVIRONMENTS.md manifest
 added with env-freeze rule (envs are instruments: pinned, documented, never modified
 mid-campaign — sk2 server env = envs/vllm0251).
+
+## HB205 — PUPA 4-candidate re-mint CERTIFIED (2026-08-11, sk1) — criterion 1 CLOSED
+
+Box-change DISCLOSED: sk2 GPUs occupied 3+ days by other users -> mint moved to sk1 GPU7
+(port 8214, own fresh server, ./.venv vllm 0.25.1 = same pin as sk2 env). Single uniform
+session, fingerprint 2026-08-11T20:46:52Z skampere1.stanford.edu, k=5 passes, 221 items,
+all four candidates scored back-to-back on the same idle server; GLM judge via
+ZAI_KEY_FILE. Server killed clean (rc=0, EngineCore reaped).
+
+| candidate | mean (k=5) |
+|---|---|
+| GEPA official (seed) | .9062 |
+| M_omega unitrecomb_v8failmine | .8985 |
+| MIPROv2 (miprov2sk1) | .8831 |
+| GEPA+Merge (mergesk1) | .8442 |
+
+Paired 20k bootstraps on item-level deltas (M_omega vs):
+- GEPA seed:  -.0077 [-.0215,+.0066] n.s. — STATISTICAL TIE; items +43/-62/=116
+- MIPROv2:    +.0153 [-.0039,+.0344] n.s.
+- GEPA+Merge: +.0543 [+.0351,+.0737] *
+
+ROW OF RECORD (Table 1 PUPA): GEPA .906 / M_omega .899 / Delta -.008 n.s. (supersedes the
+old cross-session .883/.882/-.001; absolute levels moved because the fresh idle-server
+session scores higher — same lesson as the livebench load-dependence entry). W=3/6
+UNCHANGED; never-worse claim PRESERVED (CI spans 0). Phrasing: "ties on PUPA"; never
+"loses on PUPA"; keep the GEPA-shipped-seed caveat as elsewhere.
+
+CRITERION 1 STATUS: with hover re-minted at call-parity (HB204) and this PUPA mint, all
+six benchmark rows now stand on same-session k=5 certified rescores. Criterion 1 CLOSED
+— all six goal criteria now closed or landed per their preregistered outcomes.
+
+## HB206 (2026-08-12) — Table 1 LaTeX landed (paper-2 commit)
+HB204 hover row + HB205 PUPA row of record are now IN the paper (paper-2 main.tex,
+commit "Table 1: land certified re-mint rows"): HoVer .503/---/.494/.569/+.066***;
+PUPA .906/.844/.883/.899/-.008 n.s. (caption carries the tie CI, matched-budget
+robustness note, and the sk1 box-change disclosure). Old .471/.557/+.086 and
+.883/.882/-.001 cells are gone from the draft. All six rows in the paper now match
+the certified same-session k=5 ledger.
+
+## HB207 (2026-08-14) — FULL CALL-PARITY SLATE: last two non-GLM arms LAUNCHED (user directive)
+
+User: "run GEPA for equal amounts of compute" (NB ledger phrasing ban: quote as EQUAL-CALL
+matching per benchmark, never "equal compute" — token accounting is hotpot-scoped, HB199 §1).
+State walked before launching: hotpot @16,700 DONE (HB195, +.0693; +2 seeds HB199), hover
+@10,110 DONE (HB200/204 branch A), ifbench @2,400 DONE-scoped (2/2 seeds ship-the-seed),
+aime @6,870 IN FLIGHT (prereg HB199 §2, lane alive sk1 GPU3). NEW LAUNCHES (sk1, own
+servers, arm_lane_sk1.sh): ifbench official @23,300 TRUE match tag truematch23300 (GPU4
+port 8215, 09:25Z) + livebench official @18,708 tag truematch18708 (GPU5 port 8216, 09:28Z;
+sk1 GPUs 0-3 busy w/ other users — optimization-phase load noise disclosed; row-of-record
+comes from the same-session re-mint per HB200-addendum §3 regardless). Launch bug caught:
+compound `cd && nohup A & nohup B &` puts the cd inside job A — lane B relaunched with
+absolute path. sk2 FULL (8/8 GPUs other users) — not touched; sk3 not needed (sk1 had 4
+free GPUs; user's sync-to-sk3 authorization noted for future overflow).
+REMAINING for the complete slate: pupa @29,526 = GLM-judge arm, est. 60-90M tokens ≈ the
+ENTIRE weekly Lite window — HELD FOR USER QUOTA DECISION (options: burn this window / wait
+for next window / accept pupa as disclosed-unmatched w/ the tie already certified at .906
+vs .899). Post-landing requirement per session-of-record rule: fresh same-session k=5
+re-mints (ifbench 4-cand, livebench 4-cand, aime 3-cand per prereg).
+
+## HB208 (2026-08-16) — PUPA truematch29526 arm: optimization state SAVED, final scoring DIED (GLM window)
+Arm ran ~19h then mass dspy per-example errors at 21:13 PT -> "Execution cancelled";
+ARTIFACT MISSING (no result.json). gepa_logs state PRESERVED at
+runs_paperexact/pupa/Qwen3-8B/official_truematch29526/ -> RESUMABLE. Cause consistent w/
+GLM weekly-window exhaustion (pupa judge = GLM; window deliberately burned per user
+2026-08-14, shared w/ the glm52 matched trial). ACTION deferred to next weekly window
+(~2026-08-20): relaunch same tag (state resumes), then the 4-candidate same-session
+re-mint per session-of-record rule. aime/ifbench/livebench parity arms still RUNNING
+(logs current). PUPA row stands as certified tie (.906/.899) with "GLM-window" disclosure
+until then.
+
+## HB209 (2026-08-19) — LIVEBENCH truematch18708 LANDED; 4-candidate re-mint LAUNCHED (prereg frozen before results)
+
+**Landing.** `official_truematch18708` completed 2026-08-19T06:42:01Z (lane started 08-14T09:28Z,
+~4d21h; sk1 GPU5 port 8216). Artifact `runs_paperexact/livebench/Qwen3-8B/official_truematch18708/
+result.json`: `regression_flag: false`, n_test=126, test_passes=5, budget_calls=18,708,
+**seed_test .7709 -> best_test .76124** (arm's own session; NEVER quote next to certified numbers).
+At the true-matched budget the official GEPA arm did not beat its own seed (-.0097 in-session).
+vLLM shut down clean at 23:42 local; sk1 GPU5 released. aime `isocompute6870` (13d00h) and ifbench
+`truematch23300` (5d15h) still RUNNING, logs current.
+
+**Instrument re-verification (done before launching).** The certified LiveBench row's provenance
+was reconstructed from artifacts, not memory: the four `rescore_k3.jsonl` blocks carrying
+fingerprint `2026-07-28T16:41:49Z` (skampere2, port 8180, vllm 0.16.0) are `official`,
+`official_merge_t1fill`, `mipro_t1fill`, `unitrecomb`, and their k=5 means reproduce Table 1
+exactly: **.6989 / .6877 / .6767 / .7048** vs printed .699 / .688 / .677 / .705. This fixes the
+M_ω LiveBench cell of record as sk2 `unitrecomb` (budget 12,000) and confirms the 4-slot set.
+
+**PREREG (frozen before any new score exists).** Re-mint = the SAME four slots with the GEPA cell
+replaced by the true-matched arm: `official_truematch18708` + `official_merge_t1fill` +
+`mipro_t1fill` + `unitrecomb`, all scored back-to-back in ONE invocation (one server, one
+fingerprint), k=5, on sk2 GPU6 port 8240. CLI matched to the 07-28 fingerprint verbatim
+(max_tokens 8000, temperature .6, top_p .95, top_k 20, eval_threads 32, cache off,
+max_model_len 32768). Deliberate instrument difference DISCLOSED: serve env is
+`envs/vllm0251` (vllm **0.25.1**, the pinned sk2 serve env) vs 0.16.0 in July — absolute levels
+may move as they did for PUPA (HB205); the PAIRED within-session deltas are what the row quotes.
+`official_truematch18708/{result.json,proposals.jsonl}` copied sk1 -> sk2 (via laptop relay; KB-scale
+text, not weights) and verified intact on arrival (budget 18708, seed .7709, best .76124,
+predict 3,655 ch).
+
+**Decision rule, frozen:** row of record = this session's four k=5 means; M_ω delta vs the
+true-matched GEPA cell via 20k paired bootstraps on item-level deltas, reported with its CI and
+sign counts whatever the sign. If M_ω - GEPA(truematch) CI spans 0 the LiveBench row is a TIE
+(current printed cell is +.006, already a tie); a negative point estimate is reported as such and
+the "never worse" claim is restated against the CI, not the point estimate. The old `official`
+cell leaves the row (superseded, not deleted); its number is never spliced beside the new ones.
+
+## HB210 (2026-08-20) — LIVEBENCH RE-MINT LANDED: row of record minted, verdict TIE
+
+The HB209 re-mint completed clean: lane `logs/lb_remint_k5_20260819.log` ends `[REMINT] rc=0`,
+server (pid 3059440 + EngineCore 3066419) torn down by explicit PID; all four
+`rescore_k3.jsonl` blocks share fingerprint **2026-08-20T01:32:58Z** (skampere2, port 8240,
+vllm **0.25.1**, Qwen3-8B, k=5, n=126). Runtime ~2h19m for 4 candidates x 5 passes x 126 items.
+
+**LiveBench row of record (same-session k=5 means):**
+
+| GEPA (truematch18708) | GEPA+Merge | MIPROv2 | M_omega (unitrecomb) | Delta |
+|---|---|---|---|---|
+| .6945 | .6857 | .6612 | .7102 | +.016 (TIE by CI) |
+
+**Frozen decision rule applied:** M_omega − GEPA(truematch) paired on 126 item-level k=5 means:
+mean delta **+.0157**, 20k paired bootstrap 95% CI **[−.0101, +.0431]**, signs +22/−20/=84
+(seed 20260820, `scratchpad lb_row_of_record.py`, run on sk2). CI spans 0 → **LiveBench is a
+TIE**, exactly as the pre-registered rule anticipated ("current printed cell is +.006, already a
+tie"). "Never worse" claim restated against the CI: lower bound −.010.
+
+Instrument notes (disclose, don't hide): absolute levels moved vs the 0.16.0-era omnibus in both
+directions (unitrecomb .7048→.7102, mipro .6767→.6612, merge .6877→.6857) — confirms the
+paired-within-session-only discipline. The old `official` .6989 cell is SUPERSEDED (its candidate
+was replaced by the true-matched one); never splice July numbers beside these. The landing-run
+raw `best_test .76124` remains on the never-quote list (own-session, not same-session-of-record).
+
+Table-1 edit EXECUTED (user directed, 2026-08-20): LiveBench row now reads
+`.695 / .686 / .661 / .710 / +.016` (GEPA .69452 rounds to .695; Δ from unrounded means, matching
+the PUPA-row convention), prose tie-list updated +.006→+.016, and the caption now discloses the
+equal-call GEPA arms on HoVer (10,110 calls) and LiveBench (18,708 calls). Remaining parity arms:
+aime isocompute6870 + ifbench truematch23300 (both alive on sk1, state advanced 2026-08-19+);
+pupa truematch29526 frozen w/ GLM window (~Aug 20).
+
+## HB211 (2026-08-20) — PREREG: hover 4-candidate same-session re-mint (fills the Merge "---")
+
+User asked to populate the HoVer GEPA+Merge cell (printed "---" in tab:main-results). Artifact
+audit shows why it is empty: the row of record is the 2026-08-08T08:10:03Z uniform session
+(official_truematch10110 .5027 -> printed .503; mipro_miprov2sk1 .4940 -> .494; unitrecomb_stair
+.5687 -> .569; delta +.0660 -> +.066), and `official_merge_gepamerge` was NOT scored in that
+session — its latest k=5 blocks are 2026-07-27 (.5247) and 2026-07-28 (.5167), foreign
+fingerprints. Splicing either into the 08-08 row violates the session-of-record rule, so the only
+way to fill the cell is to re-mint the whole row.
+
+**Prereg (frozen before any new score exists):**
+- One session, sk2 GPU6 port 8241, vllm0251 env (0.25.1), Qwen3-8B, FLASH_ATTN pin, k=5, n=300,
+  CLI matched to the livebench re-mint (max_tokens 8000, t .6, top_p .95, top_k 20, threads 32,
+  cache off, max_model_len 32768). Candidates, in one rescore_k3.py invocation:
+  official_truematch10110, official_merge_gepamerge, mipro_miprov2sk1, unitrecomb_stair.
+  All four best_candidate payloads verified non-empty (6,017 / 7,757 / 1,841 / 9,506 chars).
+- Decision rule (mirrors HB209): row of record = this session's four k=5 means. M_omega delta vs
+  GEPA(truematch10110) via 20k paired bootstrap on 300 item-level k=5 deltas, reported with CI
+  and sign counts whatever the sign. The current row is a WIN (+.066***): if the fresh CI
+  excludes 0 the win stands at the new numbers; if it spans 0, HoVer becomes a TIE and the
+  "outperforms on three benchmarks" prose must be revised — reported either way, no re-rolls.
+  Merge cell = its same-session k=5 mean, whatever it is. The 08-08 cells are then SUPERSEDED
+  (not deleted); July merge numbers (.5247/.5167) are never spliced or quoted beside the new row.
+- Instrument disclosure: serve env 0.25.1; the 08-08 session's absolute levels may not reproduce
+  (livebench precedent: mipro .6767 -> .6612 across instruments). Paired within-session deltas
+  are the quantity of record.
+
+## HB212 (2026-08-20) — HOVER RE-MINT LANDED: Merge cell filled, WIN survives
+
+HB211 re-mint completed clean (lane rc=0, ~1h37m, server torn down by explicit PID). All four
+blocks share fingerprint **2026-08-20T07:01:05Z** (skampere2 gpu6 port 8241, vllm 0.25.1,
+Qwen3-8B, k=5, n=300).
+
+**HoVer row of record:** GEPA(truematch10110) **.49666** / GEPA+Merge **.51532** / MIPROv2
+**.48666** / M_omega(unitrecomb_stair) **.56732** → printed `.497 / .515 / .487 / .567 / +.071***`.
+
+**Frozen decision rule applied:** M_omega − GEPA(truematch) mean delta **+.0707**, 20k paired
+bootstrap 95% CI **[+.0433, +.0987]**, signs +83/−36/=181 (seed 20260820) → CI excludes 0, WIN
+stands (SE≈.014, z≈5.0, p≈1e-6, *** justified). The formerly-empty Merge cell = .515 (same
+session, no splicing); M_omega − Merge = +.052. Levels moved slightly vs the 08-08 instrument
+(GEPA .5027→.4967, mipro .4940→.4867, M_omega .5687→.5673) — 08-08 cells SUPERSEDED, never
+spliced; July merge numbers (.5247/.5167) stay on the never-quote list.
+
+Table 1 + prose updated same turn (user directed the cell fill): HoVer row `.497/.515/.487/.567/
++.071***`, prose "+.066" → "+.071". Scoreboard now: 3 wins (hotpot, hover, ifbench) / 3 CI-ties
+(livebench, aime, pupa) — every cell in Table 1 now from a same-session k=5 row of record, no
+"---" and no † remaining on hover/livebench.
+
+## HB213 (2026-08-21) — GLM WINDOW REOPENED; PUPA truematch29526 RESUMED
+
+Window evidence: glm52_trial_c_results.jsonl grew 20,900 -> 20,973 (mtime 2026-08-21 12:53) —
+the sk3 patient runner resumed on its own (never restarted, per rule). PUPA arm relaunched per
+HB208 action: same tag `truematch29526` (dspy.GEPA resumes from preserved gepa_logs at
+5,775/29,526 rollouts), sk1 GPU7 SQUEEZE variant (GPU7 had 48.2GB free, shared with another
+user's job; util 0.45, port 8218, ZAI_KEY_FILE exported; no busy-abort per standing stacking
+permission) — lane pupa_resume_sk1.sh, PID 225662, log logs/arm_truematch29526.log. Note the
+remaining ~23.7k rollouts likely exhaust this GLM week again -> expect another freeze + resume
+cycle; artifact-gated, no intervention on freeze. On landing: 4-candidate same-session re-mint
+per session-of-record rule (prereg first, HB209/HB211 pattern).
+
+## HB214 (2026-08-25) — IFBENCH truematch23300 LANDED; 4-candidate re-mint PREREG (frozen before results)
+
+**Landing.** `official_truematch23300` completed 2026-08-25T07:25:25Z (~10d16h on sk1 GPU4 port
+8215). Artifact: regression_flag false, n_test=294, test_passes=5, budget_calls=23,300,
+seed_test .40752 -> best_test .41704 (arm's own session, +.0095 — NEVER quote beside certified
+numbers). Shipped best_candidate is 138 chars — small but real (consistent with HB132: four
+optimizers barely move on ifbench). At the true-matched budget GEPA gained +.0095 over its seed.
+
+**Instrument re-verification (artifacts, not memory).** The printed ifbench row
+`.403 / .411 / .383 / .443 / +.040**` reproduces EXACTLY from the four rescore_k3.jsonl blocks
+sharing fingerprint **2026-07-28T14:46:11Z**: official .4031 / official_merge_t1fill .4106 /
+mipro_t1fill .3834 / unitrecomb_v6ctx32k .4432 (delta +.0401). M_omega's ifbench cell of record
+= `unitrecomb_v6ctx32k`.
+
+**Prereg (frozen before any new score exists).** Same-session 4-candidate k=5 re-mint on sk2,
+one server, one rescore_k3.py invocation, CLI matched to the row-of-record protocol (max_tokens
+8000, t .6, top_p .95, top_k 20, threads 32, cache off, max_model_len 32768, vllm0251 env with
+FLASH_ATTN pin): official_truematch23300, official_merge_t1fill, mipro_t1fill,
+unitrecomb_v6ctx32k. Decision rule (mirrors HB209/HB211): row of record = this session's four
+k=5 means; M_omega delta vs GEPA(truematch23300) via 20k paired bootstrap on 294 item-level k=5
+deltas, CI + sign counts reported whatever the sign. Current row is a WIN (+.040**, p=.0029,
+session-sensitive per HB165): if the fresh CI excludes 0 the win stands at the new numbers; if
+it spans 0, IFBench downgrades to a TIE and the "outperforms on three benchmarks" prose drops to
+two — reported either way, no re-rolls. The 07-28 cells are then SUPERSEDED (not deleted).
+Instrument disclosure: serve env 0.25.1 vs the July instrument; paired within-session deltas are
+the quantity of record.
+
+## HB215 (2026-08-25) — IFBENCH RE-MINT LANDED: WIN DOWNGRADES TO TIE at equal call
+
+HB214 re-mint completed clean (rc=0, ~1h38m, sk2 gpu7 port 8243, fingerprint
+**2026-08-25T07:48:51Z**, vllm 0.25.1, k=5, n=294, all four candidates one invocation).
+
+**IFBench row of record:** GEPA(truematch23300) **.41670** / Merge **.41942** / MIPROv2
+**.38164** / M_omega(v6ctx32k) **.44186** → printed `.417 / .419 / .382 / .442 / +.025`.
+
+**Frozen decision rule applied:** M_omega − GEPA(truematch) mean delta **+.0252**, 20k paired
+bootstrap 95% CI **[−.0027, +.0534]**, signs +77/−61/=156 (seed 20260825). CI spans 0 →
+**TIE**; per the prereg the +.040** win does NOT survive equal-call matching and the
+"outperforms on three benchmarks" prose drops to TWO (hotpot, hover). Consistent with HB165's
+session-sensitivity warning for this row and with the landing's own +.0095-over-seed. The
+07-28T14:46 cells are SUPERSEDED (never spliced); "never worse" claim intact (CI lower −.003).
+
+Table 1 + prose updated same turn (standing fill directive): row `.417/.419/.382/.442/+.025`
+(bold and stars removed), prose now "two benchmarks... ties the other four", caption equal-call
+clause extended to IFBench (23,300 calls). Scoreboard: **2 wins (hotpot, hover) / 4 CI-ties
+(ifbench, livebench, aime, pupa)** at equal call; never worse anywhere. Remaining arms: aime
+isocompute6870, pupa truematch29526.
+
+## HB216 (2026-08-26) — PUPA truematch29526: ENOSPC crash at 99%, STATE RECOVERED; re-mint PREREG
+
+**Crash.** pupa GEPA equal-call arm (truematch29526, sk1) died 2026-08-26 ~21:17Z at
+29,166/29,526 rollouts (98.8% of budget): `OSError: Errno 28 No space left on device` during
+`gepa_state.save` — /lfs/skampere1/0 transiently full (1.9T free again by 22:40Z). The
+`open("wb")` truncated the state file before the write failed, leaving a 1.45MB partial pickle;
+no result.json was written.
+
+**Recovery (forgiving unpickler, byte-level).** A tolerant pickle VM over the truncated stream
+recovered the state-dict pairs still pending on the parse stack: `program_candidates` (224/224,
+both components) and `prog_candidate_val_subscores` (224/224, all 111 valset tasks each) are
+COMPLETE; only `full_program_trace` (per-iteration debug trace) was lost to the truncation.
+854 GEPA iterations. Best candidate by mean valset score = **idx 133, val .8973** (baseline
+idx 0 = .7579). Artifacts: `runs_paperexact/pupa/Qwen3-8B/official_truematch29526/
+{recovered_best.json, recovered_all_candidates.json}` + synthesized `result.json`
+(best_candidate = recovered idx 133; provenance field marks the recovery; best_test null —
+test score comes ONLY from the re-mint session).
+
+**Caveats declared up front:** (a) GEPA consumed 29,166 of 29,526 matched calls (−1.2%);
+equal-call claim quoted as "~equal call (98.8%, ENOSPC-truncated)". (b) Selection uses mean
+valset score over the recovered subscores — same selection rule as the shipped result.json path.
+
+**PREREG — same-session 4-candidate k=5 re-mint (sk2, HB209/HB211/HB214 pattern).** One
+`rescore_k3.py pupa` invocation, fresh sk2 server (vllm0251, FLASH_ATTN pin), candidates:
+official_truematch29526 (recovered), official_merge_mergesk1, mipro_miprov2sk1,
+unitrecomb_v8failmine (M_omega of record, budget 30000). Decision rule (frozen): row of record
+= this session's four k=5 means; M_omega delta vs GEPA(truematch29526) via 20k paired bootstrap
+on 221 item-level k=5 deltas (seed 20260826), CI + sign counts reported whatever the sign.
+Current pupa row is a TIE (−.008): if the fresh CI spans 0 the TIE stands at the new numbers;
+if it excludes 0 in either direction, the row and scoreboard update accordingly — reported
+either way, no re-rolls. M_omega − Merge delta also reported. Landing-side raw numbers are
+never quoted beside the certified row.
+
+**HB216 amendment (2026-08-26 ~23:50Z) — re-mint attempt 1 ABORTED, GLM window exhausted.**
+The pupa metric judge is GLM-wired (known since HB154: pupa cells unrunnable without the GLM
+subscription window). Attempt 1 (fp 2026-08-26T21:52:32Z) began spewing GLM error 1113
+"Insufficient balance" on metric calls — weekly window exhausted mid-session. Killed by explicit
+PID (wrapper 605452 → rescore 611198 → server 605460 + EngineCore 606564; gpu7 back to 0 MiB);
+the partial rescore_k3.jsonl (fingerprint block only, zero item scores) quarantined as
+`rescore_k3.POISONED_glm1113_20260826.jsonl` — NEVER quote that fingerprint. No scores were
+observed → no outcome-conditioning; the HB216 prereg stands unchanged. Re-run
+`pupa_remint_sk2.sh` unmodified when the GLM week reopens (~Aug 28); that session's fingerprint
+becomes the row of record.

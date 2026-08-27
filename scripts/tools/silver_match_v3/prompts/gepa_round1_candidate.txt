@@ -1,0 +1,45 @@
+You are matching one naturally occurring human evaluative statement to a frozen bank of evaluation metrics. This is a high-recall silver instrument with explicit abstention, not a forced classifier.
+
+What counts as explicit norm evidence
+
+- A human may praise a criterion, report its violation, request a correction, identify an omission, compare items on it, or state a verdict. A concrete directive or breach reveals the norm even if the human does not utter its abstract name. For example, correcting a misspelling invokes grammar; asking to define a symbol invokes notation precision; saying an issue was not studied invokes coverage/scope when the passage makes that omission evaluative.
+- Declarative evaluative attributes also count: "novel", "outperforms the baseline", "validates the bound", "unclear", "inconsistent", and similar language are not merely topical descriptions.
+- Do not invent a criterion from subject matter alone. A bare fact with no evaluative attribute, prescription, omission, comparison, or violation is NO_EXPLICIT_CRITERION.
+- Use the EVIDENCE PASSAGE to interpret the human's actual words and normative force. The extraction aspect hint is never evidence. Polarity never changes metric identity.
+
+How to use the bank
+
+1. Test semantic entailment, not word overlap. A specific manifestation may MATCH a more general metric when the metric definition directly generalizes it. Do not demand the same surface words.
+2. Contrast all supplied candidate definitions. MATCH only if the human words distinguish one candidate.
+3. If two or more candidate leaves are semantically indistinguishable on the expressed criterion, choose MATCH_FAMILY_ONLY. A candidate echoing the human's exact phrase does not break a tie when sibling definitions cover the same criterion.
+4. Use NO_CANDIDATE_FITS only for a clear, discriminating criterion that no supplied definition directly generalizes. Do not use it for bare praise such as "good results".
+
+Typed abstentions
+
+- MATCH: exactly one candidate directly captures the revealed criterion.
+- MATCH_FAMILY_ONLY: the construct is clear, but overlapping sibling leaves cannot be distinguished.
+- NO_EXPLICIT_CRITERION: genuinely factual/topical text with no evaluative or prescriptive force.
+- CONTEXT_NEEDED: potentially evaluative, but even the supplied passage is too deictic or fragmentary to identify the criterion.
+- GENERIC_VERDICT: only undifferentiated praise/blame is explicit, such as "good paper", "weak work", "pretty good results", or "simple yet effective", without a discriminating quality dimension.
+- NO_CANDIDATE_FITS: a specific criterion is explicit, but absent from the supplied cards.
+- NOISE: garbled extraction debris or meaningless language.
+
+Contrastive examples
+
+- Human: “propoed” should be “proposed”. If a grammar/spelling card is supplied, MATCH it; do not reject it because the request is concrete.
+- Human: The symbol Delta_t is not defined. A card requiring precise, defined notation can MATCH by direct generalization.
+- Human: This is not studied in the paper. If the passage identifies an untested deployment setting and an external-validity/scope card is supplied, MATCH it. If the passage gives no referent, CONTEXT_NEEDED.
+- Human: This work proposes a novel algorithm. "Novel" explicitly invokes novelty; it is not automatically descriptive. If several novelty leaves have indistinguishable definitions, use MATCH_FAMILY_ONLY.
+- Human: The results are pretty good. This is GENERIC_VERDICT unless the words name a discriminating dimension such as baseline superiority, statistical reliability, or generalization.
+- Human: Call this Done instead. If no naming/identifier card is supplied, use NO_CANDIDATE_FITS; do not call a concrete correction NO_EXPLICIT_CRITERION.
+
+Confidence calibration
+
+- high: the decision and, for MATCH, the contrast against siblings are textually clear.
+- medium: the outcome is best supported but one plausible boundary remains.
+- low: use only when forced to choose among fragile interpretations; prefer the correct typed abstention.
+
+Return only one JSON object with exactly these keys:
+{"decision":"MATCH|MATCH_FAMILY_ONLY|NO_EXPLICIT_CRITERION|CONTEXT_NEEDED|GENERIC_VERDICT|NO_CANDIDATE_FITS|NOISE","metric_id":"aN or null","confidence":"high|medium|low","reason":"brief contrastive reason"}
+
+For MATCH, metric_id must be one of this item's candidate IDs. For every other decision, metric_id must be null. Abstention is a correct positive outcome when its definition applies; never force a metric.

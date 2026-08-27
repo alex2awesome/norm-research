@@ -1,0 +1,122 @@
+{
+  "schema_version": "silver-match-v3-cross-encoder-alltask-policy-v1",
+  "policy_revision": "task-local-strong-exact-v2",
+  "status": "FROZEN_BEFORE_FRESH_DEV_IDENTITIES_PREDICTIONS_OR_LABELS",
+  "frozen_at": "2026-07-13T01:02:00-07:00",
+  "scope": [
+    "code-review"
+  ],
+  "failed_predecessor": {
+    "selection_sha256": "1c7f50bfb44c6521bd8014a55b87e8396c01e55ff89bcb98c7dc9805c186285d",
+    "status": "NO_AUTOMATIC_CE_MATCH_PATH",
+    "production_scoring_performed": false
+  },
+  "fresh_dev_plan": {
+    "count": 300,
+    "selection_seed": 478105791,
+    "seed_derivation": "base16(first_8_hex(failed_predecessor.selection_sha256))",
+    "seed_search_allowed": false,
+    "required_upstream_split": "train",
+    "source_group_is_split_unit": true,
+    "minimum_per_corpus": 60,
+    "exclude_every_prior_train_dev_prompt_gepa_resolver_audit_and_analysis_group": true,
+    "truth_hidden_until_identity_freeze": true
+  },
+  "role_contract": {
+    "train": "Strong exact MATCH or explicit typed nonmatch rows only, after excluding all fresh-dev source groups. The consumed old select60 may enter train only after fresh-dev identities freeze.",
+    "dev": "Exactly the newly frozen 300-row source-disjoint panel after independent full-bank labeling and resolution.",
+    "test": "Unavailable to training and model selection.",
+    "blind": "Uniform final-production match and false-abstention audits only.",
+    "split_unit": "canonical source_group",
+    "cross_role_source_group_overlap_allowed": false,
+    "weak_forced_top3_as_positive_supervision_allowed": false,
+    "mi_or_outcome_fields_allowed": false
+  },
+  "labeling_contract": {
+    "full_bank_visible_to_each_labeler": true,
+    "pass_a": "Gemma exact decision+leaf with frozen prompt and original metric order.",
+    "pass_b": "Independent Gemma exact decision+leaf with a distinct deterministic metric order.",
+    "resolver": "Independent strong resolver sees only exact decision or leaf disagreements after both passes are sealed.",
+    "adjudicator_prompt_gepa_may_use_dev_truth_before_final_dev_freeze": false,
+    "accepted_match_requires_current_bank_leaf": true
+  },
+  "base_model": {
+    "path": "/lfs/skampere2/0/alexspan/norm-research-silver-v3/models/bge-reranker-base-2cfc18c9415c912f9d8155881c133215df768a70",
+    "snapshot_revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+    "file_sha256": {
+      "config.json": "289adf7ada1eb6b4afa7589a48a032d45a076cf2e46dcdb3b4cabc33be14f708",
+      "model.safetensors": "ced967c45fd1902eb92716c9ceeca7c95a936770ea9db611f5a841b926e33fbd",
+      "sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+      "special_tokens_map.json": "d5469a60db23249c7f8945013d78df30b44b6bf686c6bb4740f4223f77b1b535",
+      "tokenizer.json": "9eb652ac4e40cc093272bbbe0f55d521cf67570060227109b5cdc20945a4489e",
+      "tokenizer_config.json": "a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b"
+    }
+  },
+  "implementation": {
+    "train_cross_encoder_path": "scripts/tools/silver_match_v3/train_cross_encoder.py",
+    "train_cross_encoder_sha256": "a014b80329c087c6be5687fbe89e92d1ef3cb0128033ce6272a5269bd3fd7523",
+    "select_cross_encoder_variants_path": "scripts/tools/silver_match_v3/select_cross_encoder_variants.py",
+    "select_cross_encoder_variants_sha256": "6e3488b6bdd350d66fce36c73568e68ceddb8648b8e50b63a4a608756024724a",
+    "freeze_cross_encoder_queue_path": "scripts/tools/silver_match_v3/freeze_cross_encoder_queue.py",
+    "freeze_cross_encoder_queue_sha256": "52a5187f6fffa860dd6321701b05c408244bdc2054855f626c323a80b97796eb",
+    "filter_strong_ce_supervision_path": "scripts/tools/silver_match_v3/filter_strong_ce_supervision.py",
+    "filter_strong_ce_supervision_sha256": "f383b472c1efa723c09a235d74897087da884c1fd9d7cb5a1d5d6e96def775bd",
+    "freeze_clean_gepa_panel_sha256": "f4cb5b893226ec748e38d4132281ea8dc7e24254cb8626055fc6d50f75fba82b"
+  },
+  "fixed_training": {
+    "epochs": 3,
+    "batch_size": 32,
+    "eval_batch_size": 512,
+    "max_length": 512,
+    "warmup_ratio": 0.1,
+    "negatives_per_positive": 4,
+    "negatives_per_abstain": 4,
+    "strong_positive_repeats": 2,
+    "weak_forced_top3_positive_repeats": 0,
+    "candidate_depth": 50,
+    "task_specific_model": true
+  },
+  "predeclared_variants": [
+    {
+      "name": "seed95117-lr5e6",
+      "seed": 95117,
+      "learning_rate": 0.000005
+    },
+    {
+      "name": "seed95123-lr5e6",
+      "seed": 95123,
+      "learning_rate": 0.000005
+    },
+    {
+      "name": "seed95129-lr1e5",
+      "seed": 95129,
+      "learning_rate": 0.00001
+    }
+  ],
+  "dev_gate": {
+    "minimum_exact_match_precision": 0.9,
+    "minimum_exact_match_precision_wilson_95_lower": 0.8,
+    "minimum_retained_predictions": 30,
+    "minimum_exact_f_beta_0_5_gain_over_frozen_base": 0.01,
+    "thresholds_selected_on": "dev_only",
+    "thresholds_may_be_lowered_after_observation": false,
+    "oracle_feasibility_must_pass_before_training": true
+  },
+  "variant_selection_order": [
+    "eligible_before_ineligible",
+    "higher_exact_match_precision_wilson_95_lower",
+    "higher_exact_f_beta_0_5",
+    "higher_exact_match_precision",
+    "higher_exact_match_recall",
+    "lexicographically_smaller_variant_name"
+  ],
+  "production_contract": {
+    "automatic_ce_proposal_requires_two_independently_trained_eligible_variants": true,
+    "automatic_ce_proposal_requires_same_exact_metric_id": true,
+    "automatic_ce_proposal_requires_each_variant_to_pass_its_frozen_score_and_margin_gate": true,
+    "all_other_rows_flow_to_llm_or_full_bank_rescue": true,
+    "typed_abstention_cannot_be_inferred_from_ce_score_alone": true,
+    "uniform_blind_final_match_precision_audit_required": true,
+    "uniform_blind_false_abstention_audit_required": true
+  }
+}

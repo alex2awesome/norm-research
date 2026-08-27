@@ -1,0 +1,74 @@
+{
+  "schema_version": "science-articulability-addressed-prompt-v1",
+  "status": "frozen_prepared_not_run",
+  "purpose": "Prompt-side semantic claim/evidence selection over the same paper_id+abstract+body surface, with deterministic source addressing and hydration delegated to code.",
+  "input_allowlist": [
+    "paper_id",
+    "abstract",
+    "body"
+  ],
+  "external_knowledge": "forbidden",
+  "max_claims": 5,
+  "system_prompt": "You are a document-local scientific claim-to-evidence auditor. Use only the supplied ADDRESSED ABSTRACT and ADDRESSED BODY sentences. Select at most five result-bearing abstract sentences and, when relevant, one distinct body sentence for each. Return sentence IDs and typed relation judgments only: never copy or paraphrase source text into the response. A supported or contradicted relation is a within-document witness, not external scientific truth. Only numeric or comparative relations may receive supported/contradicted decisions. Theory, empirical-artifact, or qualitative matches are evidence_link rather than semantic certificates. Use insufficient when relevant text does not certify a relation. Return an empty selections list when no defensible claim can be selected. Do not reuse a claim sentence or evidence sentence. Abstain rather than guess. Return only JSON matching the frozen schema.",
+  "decision_semantics": {
+    "supported": "A distinct addressed body sentence reproduces the selected abstract sentence's numeric or comparative relation; quantities/units and comparison entity roles, direction, and baseline agree whenever applicable.",
+    "contradicted": "A distinct addressed body sentence addresses the same comparative entities/baseline but reverses comparison direction or entity roles.",
+    "evidence_link": "A distinct addressed body sentence contains relation-relevant evidence, proof, experiment, or qualitative result markers but does not establish an exact numeric/comparative relation certificate.",
+    "insufficient": "The selected abstract sentence is result-bearing, but no addressed body sentence certifies support or contradiction without guessing. evidence_sentence_id may be null.",
+    "abstain": "Represented by an empty selections list: no defensible result-bearing abstract sentence can be selected from the supplied representation."
+  },
+  "typed_relation_semantics": {
+    "relation": [
+      "comparative",
+      "numeric",
+      "theoretical",
+      "empirical",
+      "qualitative"
+    ],
+    "quantity_state": [
+      "aligned",
+      "mismatch",
+      "missing",
+      "not_required"
+    ],
+    "comparison_state": [
+      "aligned",
+      "reversed_roles",
+      "direction_mismatch",
+      "baseline_mismatch",
+      "missing",
+      "not_required"
+    ],
+    "evidence_kind": [
+      "numeric_relation",
+      "comparative_relation",
+      "theory_marker",
+      "empirical_artifact",
+      "qualitative_link",
+      "none"
+    ],
+    "quantity_count": "Nonnegative integer count of claim quantities whose values/units were compared with the addressed evidence; must be positive for a numeric certificate.",
+    "comparison_present": "Boolean indicating that the selected pair expresses a directed comparison with identifiable entity/baseline roles; must be true for a comparative certificate."
+  },
+  "output_schema": {
+    "paper_id": "string copied from PAPER_ID",
+    "selections": [
+      {
+        "claim_sentence_id": "A-prefixed sentence ID",
+        "evidence_sentence_id": "B-prefixed sentence ID or null",
+        "decision": "supported | contradicted | evidence_link | insufficient",
+        "relation": "comparative | numeric | theoretical | empirical | qualitative",
+        "quantity_state": "aligned | mismatch | missing | not_required",
+        "comparison_state": "aligned | reversed_roles | direction_mismatch | baseline_mismatch | missing | not_required",
+        "evidence_kind": "numeric_relation | comparative_relation | theory_marker | empirical_artifact | qualitative_link | none",
+        "quantity_count": "nonnegative integer",
+        "comparison_present": "boolean"
+      }
+    ]
+  },
+  "notes": [
+    "Source text is present in the prompt but forbidden in the response; code resolves valid addresses to exact bound source spans.",
+    "Counts, aggregate status, graph bookkeeping, offsets, and hydrated text are computed by code rather than requested from the model.",
+    "No acceptance label, supervised anchor, external scientific source, or code-verifier output is available to the prompt compiler."
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "schema": "metric-seam.projected-relation-contract.v1",
+  "task": "code_review",
+  "criterion_id": "a407",
+  "name": "Name expressiveness (information density)",
+  "articulated_construct": "Beyond casing and blacklist checks, identifier names should carry phrase-level information through their morphemes and vocabulary, should be specific enough for the scope in which they operate, and should avoid terse or filler surfaces such as x, tmp, or data when those surfaces erase distinctions needed by readers.",
+  "axes": {
+    "articulability": "A prompt-based implementation can interpret whether a name fits the surrounding program concept.",
+    "verifiability": "A code-based implementation can measure identifier surfaces, lexical scopes, declarations, uses, collisions, and shadowing.",
+    "isomorphism": "Both implementations must operate on the same ctext diff and the same articulated construct; agreement is assessed separately from either channel's capability."
+  },
+  "representation": {
+    "input": "sanitized_ctext unified diff",
+    "visible_code": "added lines recoverable from the diff",
+    "sanitizer": "metric-seam.credential-value-sanitizer.v1",
+    "representation_policy": "Every future prompt, code, TRAIN, and heldout path must apply the exact same frozen sanitizer before consuming ctext.",
+    "comparison_policy": "Rows changed by sanitization are ineligible for correlation against a historical reference produced from raw ctext. A fresh prompt comparator over the same sanitized_ctext remains eligible.",
+    "not_available": [
+      "repository checkout",
+      "unchanged declarations and uses outside diff context",
+      "runtime binding behavior",
+      "execution outcomes",
+      "reference values"
+    ]
+  },
+  "projected_relations": [
+    {
+      "relation_id": "scope_weighted_specificity",
+      "channel": "code_projectable",
+      "executable_evidence": [
+        "path and enclosing lexical scopes",
+        "scope depth and line span",
+        "declaration kind and visibility surface when syntax exposes it",
+        "resolved use count and lexical reach within the added fragment"
+      ],
+      "interpretive_boundary": "The appropriate amount of specificity and any eventual scope weights are not frozen in this preparation."
+    },
+    {
+      "relation_id": "identifier_morpheme_information_density",
+      "channel": "code_projectable",
+      "executable_evidence": [
+        "snake-case, camel-case, acronym, and digit morpheme segmentation",
+        "surface length",
+        "morpheme count and repetition",
+        "local vocabulary diversity"
+      ],
+      "interpretive_boundary": "Lexical diversity is evidence about surface information, not proof that the information is relevant or correct."
+    },
+    {
+      "relation_id": "placeholder_avoidance",
+      "channel": "hybrid_frontier",
+      "executable_evidence": [
+        "exact conventional placeholder surfaces such as x, tmp, data, value, item, and obj",
+        "scope span and resolved-use evidence for the same declaration"
+      ],
+      "interpretive_boundary": "Short conventional names can be appropriate in tiny mathematical, iterator, callback, or receiver scopes; contextual appropriateness remains unresolved."
+    },
+    {
+      "relation_id": "declaration_use_consistency",
+      "channel": "code_projectable",
+      "executable_evidence": [
+        "scope-qualified declaration identities",
+        "nearest-lexical-scope declaration-to-use edges",
+        "unresolved lexical uses",
+        "declarations with no resolved uses in visible added code"
+      ],
+      "interpretive_boundary": "Fragment-local unresolved or unused status may be caused by unchanged code outside the diff."
+    },
+    {
+      "relation_id": "collision_and_shadowing",
+      "channel": "hybrid_frontier",
+      "executable_evidence": [
+        "multiple declaration events for the same name in one qualified scope",
+        "a nested declaration sharing a name with an ancestor declaration",
+        "ambiguity of same-scope lexical resolution"
+      ],
+      "interpretive_boundary": "The relations are mechanically detectable, but whether a collision or shadow is harmful is language- and context-dependent."
+    },
+    {
+      "relation_id": "semantic_context_fit",
+      "channel": "prompt_side_unresolved",
+      "executable_evidence": [],
+      "interpretive_boundary": "Determining whether a name denotes the right domain concept, communicates intent, or is misleading requires semantic interpretation not supplied by the structural capability."
+    }
+  ],
+  "capability_contract": {
+    "operation": "declaration_use_graph(ctext)",
+    "qualified_identity": "path::enclosing_scope_kind:name::identifier_name",
+    "fact_only": true,
+    "criterion_specific_aggregation_frozen": false,
+    "semantic_context_fit_claimed": false
+  },
+  "synthetic_contrast_probes": [
+    {
+      "probe_id": "broad_scope_specificity",
+      "positive": "module-level retry_count used by several branches",
+      "negative": "module-level x used by the same branches",
+      "relation": "scope_weighted_specificity"
+    },
+    {
+      "probe_id": "tiny_scope_placeholder_exception",
+      "positive": "x as a one-expression mathematical lambda parameter",
+      "negative": "x as a long-lived service configuration object",
+      "relation": "placeholder_avoidance",
+      "expected_boundary": "Code can expose scope; semantic appropriateness remains hybrid."
+    },
+    {
+      "probe_id": "declaration_use_rename",
+      "positive": "declaration and all visible uses renamed together",
+      "negative": "declaration renamed while a visible lexical use retains the old surface",
+      "relation": "declaration_use_consistency"
+    },
+    {
+      "probe_id": "class_scope_separation",
+      "positive": "two classes each declare a method-local status name under distinct qualified scopes",
+      "negative": "two declarations of status in the same qualified scope",
+      "relation": "collision_and_shadowing"
+    }
+  ],
+  "claim_boundary": "This contract projects articulated sub-relations into executable evidence. It does not freeze an a407 candidate, establish isomorphism, or treat failed reconstruction as evidence of tacitness."
+}

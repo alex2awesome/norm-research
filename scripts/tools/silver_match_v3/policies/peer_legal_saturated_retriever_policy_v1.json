@@ -1,0 +1,83 @@
+{
+  "schema_version": "silver-match-v3-saturated-retriever-promotion-policy-v1",
+  "created_at": "2026-07-12T13:09:00-07:00",
+  "policy_name": "saturated_r50_noninferiority_depth_gain",
+  "scope": {
+    "tasks": [
+      "peer-review",
+      "legal-outcome-prediction"
+    ],
+    "task_local_only": true,
+    "external_source_disjoint_dev_only": true,
+    "frozen_test_must_remain_untouched_until_promotion_seals": true
+  },
+  "within_train_epoch_selection": {
+    "policy": "depth_lexicographic",
+    "order": [
+      "recall_at_50_non_degradation",
+      "mrr",
+      "recall_at_30",
+      "recall_at_16",
+      "successively_lower_depths"
+    ],
+    "authority": "diagnostic_epoch_selection_only_not_promotion"
+  },
+  "external_dev_gate": {
+    "paired_item_identity_required": true,
+    "minimum_paired_n": 25,
+    "one_sided_alpha": 0.05,
+    "bootstrap_method": "paired_percentile_one_sided",
+    "bootstrap_repetitions": 20000,
+    "bootstrap_seed": 947311,
+    "noninferiority_margin": 0.05,
+    "required_checks": [
+      "observed_recall_at_50_delta_gte_0",
+      "recall_at_50_one_sided_lower_bound_gte_minus_0.05",
+      "observed_recall_at_80_delta_gte_0",
+      "recall_at_80_one_sided_lower_bound_gte_minus_0.05",
+      "mrr_point_delta_gt_0_and_one_sided_lower_bound_gt_0",
+      "at_least_one_of_recall_at_16_or_recall_at_30_has_point_delta_gt_0_and_one_sided_lower_bound_gt_0"
+    ],
+    "failure_action": "retain_frozen_pretrained_base_fusion",
+    "partial_passes_do_not_promote": true
+  },
+  "task_inputs": {
+    "peer-review": {
+      "external_dev_labels": {
+        "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/teacher_sets_common_manual/peer-review/external_dev.jsonl",
+        "sha256": "3c6bfdc74545dbea0150210f87ba03d07f3d2941ba749bd9664514cf646953b9",
+        "match_n": 26
+      },
+      "frozen_provisional_base_fusion": {
+        "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/external_eval/fusion/peer-review.nemotron-base.dev.json",
+        "sha256": "ecbeee7ebeff450a7049d1981cd536cb63e730429b257264dcdfe203408197f2",
+        "recall_at_50": 1.0,
+        "recall_at_80": 1.0,
+        "recall_at_30": 0.8461538461538461,
+        "recall_at_16": 0.6923076923076923,
+        "mrr": 0.30491678002401296
+      }
+    },
+    "legal-outcome-prediction": {
+      "external_dev_labels": {
+        "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/teacher_sets_common_manual/legal-outcome-prediction/external_dev.jsonl",
+        "sha256": "9fbf5332758147a9b5704370892e9a4b2f8918841e0592611183361d61fdabf3",
+        "match_n": 30
+      },
+      "frozen_provisional_base_fusion": {
+        "path": "/lfs/skampere3/0/alexspan/models/silver_match_v3_nemotron_lora_20260712_r3_context/external_eval/fusion/legal-outcome-prediction.nemotron-base.dev.json",
+        "sha256": "0ed6bf594d628578d0a0cd44b9c7f87314dadf272e5101505adf27b2158b010a",
+        "recall_at_50": 1.0,
+        "recall_at_80": 1.0,
+        "recall_at_30": 0.8333333333333334,
+        "recall_at_16": 0.6333333333333333,
+        "mrr": 0.3500635446680906
+      }
+    }
+  },
+  "caveats": [
+    "The human exact-MATCH external dev panels are small and R50-saturated.",
+    "Paired percentile bounds are conditional on these frozen source-disjoint panels and may have low power.",
+    "A low-power or ambiguous result fails closed to the frozen pretrained base fusion."
+  ]
+}

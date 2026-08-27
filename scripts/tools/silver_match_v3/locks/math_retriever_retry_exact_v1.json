@@ -1,0 +1,70 @@
+{
+  "schema_version": "silver-match-v3-math-retriever-retry-predeclaration-v1",
+  "status": "FROZEN_BEFORE_TRAINING_OR_EXTERNAL_DEV_SCORING",
+  "frozen_at": "2026-07-13T00:24:00-07:00",
+  "task": "math-stackexchange",
+  "purpose": "One task-specific Nemotron-8B LoRA retry using genuinely new exact multi-pass truth plus prior strong human-only upstream-train labels.",
+  "inputs": {
+    "canonical_manifest_sha256": "b614e345a07123f9fe79d9521351886107476d34cf2b09daa50efce71dc1356f",
+    "bank_source_sha256": "600c00cafb28a32f44518a35e2e598abf92e526ec024cc4df43224d8626726c2",
+    "teacher_train": {
+      "count": 230,
+      "source_groups": 230,
+      "metric_coverage": 62,
+      "sha256": "4449d1fbeeb78ff70514f15061d3948c271d89e2a2bd563d8e82c6ce3ba58f0a",
+      "meta_sha256": "8685634debcbc346d7812696d942d65aca32a2136b0e008ce992be7017968225"
+    },
+    "teacher_bridge_report_sha256": "7e3d8e21d276fc8b21df379b5594cc266d758651e8dcf283436a0d10cb055aee",
+    "external_dev_test_labels_sha256": "dd55345fdcc9befb1b67a7b78e055a4b2e4f168b6f2de5b00e8b8907249867a3",
+    "teacher_dev_or_test_source_group_overlap": 0
+  },
+  "base_model": {
+    "name": "nvidia/llama-embed-nemotron-8b",
+    "snapshot_revision": "aa3b43a495a9b280d1bdb716da37c54bb495d630",
+    "source_config_sha256": "6d054fe332166b48f583a04ef15fe181c75d85d3fe3196f9274f00df51a5b68e",
+    "source_tokenizer_sha256": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+    "relocation_rule": "Every dereferenced snapshot file must match the source inventory before launch."
+  },
+  "trainer": {
+    "implementation": "scripts/tools/silver_match_v3/train_nemotron_lora.py",
+    "sha256": "1d5885b1367377f1b901998231e95a343e6b473e764dc098bef62bc14f904d5d"
+  },
+  "variant": {
+    "name": "math-exact-r1-lr5e5-e5-seed1729",
+    "epochs": 5,
+    "batch_size": 8,
+    "gradient_accumulation_steps": 4,
+    "eval_batch_size": 32,
+    "max_seq_length": 512,
+    "learning_rate": 0.00005,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "margin": 0.15,
+    "hard_negative_pool": 32,
+    "negatives_per_positive": 6,
+    "lora_rank": 32,
+    "lora_alpha": 64,
+    "lora_dropout": 0.05,
+    "seed": 1729,
+    "split_seed": 73129,
+    "train_percent": 80,
+    "dev_percent": 10,
+    "selection_k": 50,
+    "epoch_selection_policy": "depth_lexicographic"
+  },
+  "promotion": {
+    "internal_selection": "Epoch 0 is the exact base baseline; internal source-group dev selects an epoch depth-lexicographically without opening external labels.",
+    "external_selection_split": "dev_only",
+    "minimum_exact_recall_at_50_gain": 0.03,
+    "exact_recall_at_80_may_decrease": false,
+    "failed_or_tied_gate_action": "retain frozen unadapted Nemotron and its dev-selected fusion",
+    "external_test_may_be_opened_before_selection_is_frozen": false
+  },
+  "prohibitions": {
+    "weak_or_forced_labels": false,
+    "nonmatch_labels_as_positive_retriever_targets": false,
+    "select_or_test_rows_in_gradient": false,
+    "mi_or_outcome_fields": false,
+    "post_result_hyperparameter_changes": false
+  }
+}

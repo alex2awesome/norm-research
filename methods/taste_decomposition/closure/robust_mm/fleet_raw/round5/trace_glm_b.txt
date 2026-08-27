@@ -1,0 +1,108 @@
+1.  **Understand the Goal**: The user wants 15 NEW quality-relevant criteria for machine learning conference paper abstracts. These criteria should explain the disagreement between a dense model (end-to-end reader) and a scorecard model (explicit checklist). The criteria must be scorable 0-10 from the abstract text alone, label-blind (no accept/reject references), and distinct. They must be grounded in the provided dataset (cite at least 2 row IDs).
+
+2.  **Analyze the Dataset (60 abstracts)**:
+    *   Dense High / Card Low (e.g., R03, R04, R05, R08, R09, R10, R11, R14, R15, R18, R19, R21, R22, R28, R29, R30, R31, R32, R33, R34, R39, R40, R42, R43, R47, R48, R49, R51, R56, R60):
+        *   Tend to be very methodologically precise, clearly articulating *why* a specific problem is hard and *how* the proposed method solves it precisely. (R03, R04, R15)
+        *   Provide clear theoretical insights or novel conceptual framing. (R05, R31, R32, R42)
+        *   State clear quantitative improvements or specific empirical claims that sound verifiable. (R03, R14, R22)
+        *   Often connect to real-world, scientific, or highly impactful domains with practical success (Cryo-EM, infant learning, program repair, planetary rovers). (R09, R15, R34, R43)
+    *   Dense Low / Card High (e.g., R01, R02, R06, R07, R12, R13, R16, R17, R20, R23, R24, R25, R26, R27, R35, R36, R37, R38, R41, R44, R45, R46, R50, R52, R53, R54, R55, R57, R58, R59):
+        *   Tend to be highly incremental, e.g., tweaking a hyperparameter (R02), modifying a known framework (R23, R26, R45), or proposing a new dataset/benchmark (R13, R25, R38, R41, R54, R59).
+        *   Often sound very "buzzword-compliant" but lack a core conceptual novelty. (R01, R20, R24, R35, R36, R37, R44, R57, R58)
+        *   Can be "first to apply X to Y" but lack deep methodological insight. (R25, R35, R52, R54)
+        *   Overuse of adjectives like "novel," "innovative," "extensive," "state-of-the-art" without specific technical mechanisms. (R12, R13, R23, R41, R59)
+
+3.  **Brainstorm Criteria based on Dense vs. Card patterns**:
+    *   *Dense High / Card Low* characteristics:
+        *   Mechanism clarity: Explains *how* the method works, not just *what* it does.
+        *   Theoretical grounding: Mentions mathematical or conceptual proofs/properties.
+        *   Quantitative specificity: Exact numbers for resource savings or improvements.
+        *   Novel conceptual framework: Reframes the problem.
+        *   Real-world validation: Links the ML method to physical/scientific reality effectively.
+    *   *Dense Low / Card High* characteristics:
+        *   Superficial framing: Buzzwords masking a simple tweak.
+        *   Pure engineering/benchmarking: "We created a dataset/benchmark."
+        *   Hyperparameter search: Empirical tweaking without theoretical backing.
+        *   Over-claiming: "State-of-the-art" or "significant" without exact numbers.
+        *   "First to do X": Pure novelty of application without methodological advance.
+
+4.  **Develop 15 Distinct Criteria**:
+    *   *C01: Mechanistic Precision over Buzzwords*. Dense High (R03, R14) explains the exact mathematical/mechanistic change (e.g., random masking of past tokens). Dense Low (R20, R24) uses vague terms ("novel mapping", "semantic field subspace"). Score 0 for vague, 10 for explicit mechanism.
+    *   *C02: Problem Reframing / Conceptual Novelty*. Dense High (R04, R42) reframes the problem (e.g., probabilistic vs deterministic eval, traveling observer). Dense Low (R02, R23) just addresses a standard problem with a minor tweak. 10 for new framing, 0 for standard problem.
+    *   *C03: Theoretical Insight Articulation*. Dense High (R05, R32, R31) mentions theoretical guarantees or proofs. Dense Low (R36, R46) claims theory but sounds disconnected or derivative. 10 for clear, central theoretical contribution, 0 for purely empirical.
+    *   *C04: Avoidance of Unsubstantiated Superlatives*. Dense High (R11, R28) states concrete gains. Dense Low (R01, R55, R59) overuses "novel," "comprehensive," "state-of-the-art" extensively. 10 for restrained, evidence-backed claims, 0 for hype-driven adjectives.
+    *   *C05: Beyond "First to Apply" (Methodological vs. Application Novelty)*. Dense High (R10, R21) discovers a new property (shallow CLIP features, variational paralinguistics). Dense Low (R25, R52, R54) just applies NN to a new domain (Medical sequences, biomechanics, mobile networks). 10 for core ML advance, 0 for purely application/domain transfer.
+    *   *C06: Resource/Efficiency Trade-off Specificity*. Dense High (R03, R22, R56) gives exact FLOP/memory savings (e.g., 20-33% fewer FLOPs). Dense Low (R06) mentions overhead but lacks deep architectural integration. 10 for precise, clear trade-offs, 0 for vague claims.
+    *   *C07: Scientific/Physical Domain Integration*. Dense High (R34, R39, R43) tightly couples ML with the scientific problem (Cryo-EM priors, planetary rovers). Dense Low (R12, R41, R59) uses domains as an excuse for an ML paper without deep domain-specific ML innovation. 10 for deep domain-ML coupling, 0 for "benchmark in a new domain."
+    *   *C08: Clarity of Failure Mode in Prior Work*. Dense High (R15, R48) identifies exactly why prior work fails (e.g., enumerative approach lacks joint training). Dense Low (R16, R26) vaguely says prior work is "data inefficient" or "unstable". 10 for precise diagnosis of a flaw, 0 for vague "existing methods have limitations."
+    *   *C09: Actionable Insight / Takeaway Beyond the Method*. Dense High (R04, R29) provides a generalizable finding (e.g., deterministic eval fails, benchmarks can be heavily compressed). Dense Low (R45, R46) just presents a specific algorithm without broad takeaway. 10 for broad paradigm-shifting takeaway, 0 for narrow isolated result.
+    *   *C10: Empirical Quantification of Improvement*. Dense High (R14, R60) provides exact improvement numbers (55.7 to 59.2, 35.44 BLEU). Dense Low (R23, R27) says "state-of-the-art" or "consistently outperforms" without specific delta metrics in the abstract. 10 for exact deltas, 0 for vague "significant improvements".
+    *   *C11: Avoidance of Pure Benchmark / Dataset Packaging*. Dense High (R08, R30) focuses on model capability. Dense Low (R13, R38, R59) creates a new benchmark/dataset as the primary contribution, which is easier to "card high" but "dense low" because it lacks methodological depth. 10 for methodological focus, 0 for pure dataset curation.
+    *   *C12: Synergy of Multiple Techniques*. Dense High (R11, R22, R31) carefully combines ideas (MoE + demos, rank reduction + finetuning, graph-based + branch-and-cut) with clear synergy. Dense Low (R35, R37) awkwardly stitches together buzzwords (subgoal + diffusion, LoRA modules). 10 for principled synthesis, 0 for "kitchen sink" approach.
+    *   *C13: Generality of the Proposed Principle*. Dense High (R05, R42) proposes a general principle applicable beyond the specific task (non-stationary kernels, traveling observer). Dense Low (R02, R17) is hyper-specific to one narrow sub-problem (bootstrap rate in RF, stitching in SL). 10 for highly general principle, 0 for highly narrow trick.
+    *   *C14: Architectural/Algorithmic Parsimony (Simplicity)*. Dense High (R47, R56) achieves results via simple, elegant modifications (evolutionary algorithm, sub-path skipping). Dense Low (R44, R58) introduces complex multi-stage pipelines (progressive auto-regression, hierarchical token chain) that seem engineered rather than principled. 10 for elegant simplicity, 0 for unnecessary complexity.
+    *   *C15: Reproducibility Signaling*. Dense High (R03, R40) describes standard setups cleanly (BERT, UL2, standard datasets). Dense Low (R24, R54) mentions "placeholder" or "anonymous" or requires complex setup without clear baseline. Wait, R02 has "placeholder", R20 has anonymous link. Let's focus on the *exactness* of the experimental setup description. Actually, a better one: *Problem Abstraction / Formalization Quality*. Dense High (R04, R28, R31) formalizes the problem mathematically (probabilistic guarantees, Pref-RMAB, graph-based exact method). Dense Low (R12, R38, R59) describes the problem purely in natural language without formal rigor. 10 for high formalization, 0 for purely narrative.
+
+5.  **Refine and Format Criteria (0-10 Scale, Clear High/Low, Distinct)**:
+    *   *C01: Mechanistic Transparency*. High: Exact mechanism described. Low: Vague buzzwords. (R03, R14 vs R20, R24).
+    *   *C02: Conceptual Problem Reframing*. High: Reframes the problem. Low: Applies a tweak to an existing formulation. (R04, R42 vs R02, R23).
+    *   *C03: Diagnostic Precision of Prior Flaws*. High: Identifies exact technical flaw in prior work. Low: Vague "prior work has limitations". (R15, R48 vs R16, R26).
+    *   *C04: Formal/Probabilistic Foundation*. High: Connects method to formal math/probability. Low: Purely heuristic. (R05, R31 vs R36, R46). *Wait, R36 and R46 claim theory but dense is low. Let's adjust.* High: Theory is well-integrated and sounds rigorous (R31, R32). Low: Abstract lacks formal grounding (R12, R59). Let's call it *Theoretical Depth & Integration*.
+    *   *C05: Quantitative Improvement Specificity*. High: Exact deltas given (e.g., 55.7 to 59.2). Low: "Outperforms state-of-the-art." (R14, R60 vs R23, R27).
+    *   *C06: Elegance of Algorithmic Solution*. High: Simple, unifying principle. Low: Convoluted, multi-module pipeline. (R47, R56 vs R44, R58).
+    *   *C07: Methodological vs. Domain Novelty*. High: Novel ML method. Low: Novel application/benchmark. (R10, R21 vs R25, R54).
+    *   *C08: Takeaway Generalizability*. High: Broad insight for the field. Low: Narrow, isolated result. (R04, R29 vs R02, R17).
+    *   *C09: Efficiency-Cost Trade-off Articulation*. High: Explicit metrics for cost vs gain. Low: Claims speed/memory gains without concrete trade-offs. (R03, R22 vs R06, R46).
+    *   *C10: Restrained Use of Hype Adjectives*. High: Factual, objective tone. Low: Overuse of "novel", "comprehensive", "state-of-the-art". (R11, R28 vs R01, R55).
+    *   *C11: Avoidance of "Kitchen-Sink" Synergies*. High: Principled combination. Low: Random combination of unrelated concepts. (R22, R31 vs R35, R37).
+    *   *C12: Depth of Domain-ML Integration*. High: Deeply leverages domain knowledge. Low: Uses domain only to frame a generic ML problem. (R34, R39 vs R12, R41).
+    *   *C13: Rigorous Baseline Specification*. High: Names specific, standard baselines. Low: Vague "previous methods" or "state-of-the-art baselines". (R08, R19 vs R23, R45).
+    *   *C14: Information-Theoretic or Loss Function Novelty*. High: Defines a new objective/loss. Low: Uses off-the-shelf losses. (R04, R40 vs R26, R57). Let's broaden to *Core Objective Novelty*.
+    *   *C15: Clear Statement of Limitations/Boundaries*. High: Specifies exactly what the method can/cannot do. Low: Claims universal applicability. Wait, abstracts rarely state limitations. Let's use *Empirical Verifiability of Claims*. High: Claims that are strictly testable. Low: Subjective claims ("produces more natural speech"). (R15, R28 vs R41, R52).
+
+6.  **Double Check Requirements**:
+    *   Exactly 15 criteria.
+    *   Distinct ideas.
+    *   Grounded in slice (cite >= 2 row ids).
+    *   Label-blind (no accept/reject).
+    *   Scorable 0-10 with clear high/low.
+    *   No rephrasing the same idea.
+    *   JSON format.
+
+7.  **Drafting the JSON Entries (Checking IDs and descriptions)**:
+
+    *   **C01**: Mechanistic Transparency. High: Exact mathematical/architectural mechanism. Low: Vague descriptors. Refs: Dense high R03, R14 vs Dense low R20, R24.
+    *   **C02**: Diagnostic Precision of Prior Flaws. High: Pinpoints exact failure mode. Low: "Existing methods lack X". Refs: Dense high R15, R48 vs Dense low R16, R26.
+    *   **C03**: Conceptual Problem Reframing. High: Introduces a new paradigm/perspective. Low: Standard formulation + minor tweak. Refs: Dense high R04, R42 vs Dense low R02, R23.
+    *   **C04**: Quantitative Specificity of Gains. High: Provides exact numerical improvements. Low: "Significant" or "SOTA" without numbers. Refs: Dense high R14, R60 vs Dense low R27, R55.
+    *   **C05**: Methodological vs. Application Novelty. High: Advances core ML algorithms. Low: Creates a benchmark or applies NN to a new field. Refs: Dense high R10, R21 vs Dense low R25, R54.
+    *   **C06**: Elegance of Algorithmic Parsimony. High: Achieves results via simple, unifying changes. Low: Convoluted, multi-stage pipelines. Refs: Dense high R47, R56 vs Dense low R44, R58.
+    *   **C07**: Restrained Use of Subjective Adjectives. High: Objective tone. Low: Overuse of "novel", "comprehensive", "innovative". Refs: Dense high R28, R32 vs Dense low R01, R59.
+    *   **C08**: Trade-off Articulation. High: Clear cost/benefit (e.g., memory vs compute). Low: Claims improvements without acknowledging/exploring costs. Refs: Dense high R03, R22 vs Dense low R06, R46.
+    *   **C09**: Theoretical-Algorithmic Integration. High: Theory directly motivates the algorithm design. Low: Theory mentioned as an afterthought or disjoint add-on. Refs: Dense high R05, R31 vs Dense low R36, R46.
+    *   **C10**: Actionable Generalizable Insight. High: Extracts a principle useful beyond the specific paper. Low: Finding applies only to a hyper-specific setup. Refs: Dense high R04, R29 vs Dense low R17, R35.
+    *   **C11**: Specificity of Baseline Comparisons. High: Explicitly names the models/methods compared against. Low: "Compared to previous methods" or "state-of-the-art baselines". Refs: Dense high R08, R19 vs Dense low R23, R45.
+    *   **C12**: Depth of Domain Knowledge Integration. High: Embeds physical/scientific priors into the model. Low: Uses a scientific domain as a backdrop without domain-specific ML. Refs: Dense high R34, R39 vs Dense low R12, R41.
+    *   **C13**: Objective Function / Loss Formulation Clarity. High: Specifies how the model is actually trained/optimized. Low: Focuses entirely on architecture or data, ignoring the objective. Refs: Dense high R04, R40 vs Dense low R20, R57.
+    *   **C14**: Non-Trivial Synergy of Components. High: Combines components to solve an emergent conflict. Low: Stitches together buzzwords (e.g., Diffusion + RL) without clear necessity. Refs: Dense high R11, R22 vs Dense low R35, R37.
+    *   **C15**: Verifiability of Empirical Claims. High: Claims are strictly measurable (e.g., BLEU, F1, MAE). Low: Relies on subjective evaluations ("more natural", "better generalization"). Refs: Dense high R15, R28 vs Dense low R41, R52.
+
+8.  **Refine Definitions and Formatting**:
+    *   Ensure each 10 and 0 description is crisp.
+    *   Check exactly 15.
+    *   Make sure rationale cites specific rows and explains the dense/card dynamic.
+
+    *Self-Correction during drafting*:
+    C09 (Theory) needs to distinguish *why* dense high likes it and dense low doesn't. Dense low papers (R36, R46) claim theory but it feels bolted-on or purely formal (RKHS, Eckart-Young). Dense high (R05, R31) uses theory to design the algorithm (neural network kernel design, graph-based global solver). I will specify this.
+    C13 (Objective): Dense low (R20, R57) talks about semantic fields and robustness without mentioning the optimization goal. Dense high (R04, R40) specifies entropy optimization or weakly supervised objectives. Let's adjust to *Optimization Objective Articulation*.
+    C14 (Synergy): R35 (diffusion + theorem proving), R37 (LoRA + composability) are dense low. R11 (MoE + demos), R22 (Rank reduction + personalization) are dense high. Let's name it *Principled vs. Opportunistic Technique Combination*.
+
+9.  **Final Review against Constraints**:
+    *   15 criteria? Yes.
+    *   0-10 scorable? Yes.
+    *   Label-blind? Yes.
+    *   No hedging? Yes.
+    *   Grounded with >=2 row IDs? Yes.
+    *   JSON format exactly? Yes.
+
+10. **Generate Output**. (Proceed to write JSON).

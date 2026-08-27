@@ -1,0 +1,127 @@
+You are auditing a pool of scoring criteria that were written by other
+models. Your job is a ROUTING decision, made blind: you are NOT told who wrote each
+criterion or what it was written for.
+
+For each criterion, decide:
+
+  "quality_relevant" -- the criterion measures a property that a careful expert would
+      count as genuine evidence about research quality. It is about the comic idea, the
+      craft, the wording choices, the content of the item.
+
+  "incidental" -- the criterion measures something that may well PREDICT how the item
+      fares but is not itself research quality: length or verbosity, typography, punctuation
+      or capitalisation habits, formatting and trailing furniture, boilerplate or
+      template phrasing, community/venue style markers, subject-matter or topic markers,
+      temporal tells, orthographic habits, or a textual fingerprint of some upstream
+      circumstance of the item's production (who wrote it, with what practice or
+      following, when, where in the run of entries).
+
+The corpus is: abstracts of machine-learning conference paper submissions. Each item is a abstract.
+
+SECOND JUDGEMENT, only for criteria you label "incidental". Some incidental channels have
+an upstream cause that plausibly ALSO produces genuinely better work (for example, a
+practised entrant may both be favoured for irrelevant reasons AND actually write better
+entries). Return `mixed`: true when you think the upstream cause plausibly produces real
+research quality too, false when the channel looks like pure nuisance. For criteria you label
+"quality_relevant", return mixed=false.
+
+Judge each criterion ON ITS OWN TEXT. Do not try to guess which pool it came from, and
+do not let the ORDER of the list influence you.
+
+CRITERIA:
+
+[X01] Claims a previously infeasible capability vs incremental benchmark bump
+Score 10 if the abstract claims to make feasible something previously infeasible or unexplored (explicit 'for the first time', 'has remained unexplored', a new capability class). Score 0 if the claim is an incremental accuracy/efficiency improvement on an already-standard, saturated benchmark with no claim of newly-enabled capability.
+
+[X02] One decisive result vs scattered multi-benchmark deltas
+Score 10 if the abstract centers on one (or a small number of) decisive, targeted test(s) of the central claim. Score 0 if the abstract lists many small percentage/parameter deltas across many datasets/tasks with no single result standing out as decisive -- a 'kitchen sink' of incremental wins.
+
+[X03] Acronym and Method Branding Density
+Rate the extent to which the abstract introduces and repeatedly uses a specific, capitalized acronym or branded name for its proposed method (e.g., 'SNAS', 'PWAN'). 0 means no acronym is used; 10 means the method is heavily branded and repeatedly referenced by its acronym. Do not judge whether the acronym is catchy or good.
+
+[X04] Quantified improvement claims stated with units
+Rate 0-10 the extent to which the abstract states numeric performance figures with explicit units or metric names: percentage accuracy deltas, FID, mIoU, box/mask AP, ROUGE, MAE, nats per image, parameter counts, FLOPs, speed multipliers, 'orders of magnitude'. 0 = no such number anywhere; 5 = one or two figures on a single metric; 10 = many figures spread over several metrics, tasks or datasets. Count occurrences and prominence only. Do NOT assess whether the numbers are large, whether the gains are meaningful, whether the comparison is fair, or whether the measurement was done well.
+
+[X05] Formal claims quantified, with the conditions they hold under
+Score the precision of any theoretical statement. 10: rates, sizes or complexities are given explicitly along with the setting they hold in, so a reader could in principle contradict them (coreset of size O(m + poly(k/eps)) constructible in near-linear time; at most O~(d^2 H^5 / eps^2) trajectories within H deployments under a linear MDP with feature dimension d; complexity reduced from O(C^2 L^5) to O(C L^3 log L) while remaining strictly equivariant). 5: a named theorem or property with partial conditions. 0: theory vocabulary with no content the reader can restate: 'we give theoretical proof that our method is stable and non-dissipative', 'produces lower-variance gradient estimates', with no assumptions, no rate, no comparison point. Score 0 also when there is no formal claim.
+
+[X06] Dense inline mathematical notation
+Score the extent to which the abstract contains inline mathematical symbols, Greek letters, or equations. 0 means no mathematical notation, 10 means the text is heavily saturated with equations and symbols. Do not judge the quality or correctness of the math, only the extent of its presence.
+
+[X07] Explicit code/model-release disclosure sentence
+Rate 0-10 how explicitly the text announces that code, data, or pretrained models will be or are made publicly available (e.g. a sentence naming a repository or stating that code/models are available). 0 = no such statement; 10 = a prominent, explicit release statement. Do not judge whether release is actually good practice or whether the paper is high quality; score only the presence/prominence of the disclosure sentence.
+
+[X08] Extent of coverage listing and breadth-signalling phrasing
+Score 0-10 by counting or estimating two things together and nothing else. First, the number of coverage items listed: datasets, benchmarks, tasks, domains, languages, model architectures, model sizes, baselines, or experimental settings, whether named individually or given as a count such as twelve benchmarks or six languages. Second, the number of occurrences of breadth-signalling phrasing, such as extensive experiments, comprehensive evaluation, a wide range of, across diverse, large-scale, multilingual, cross-domain, cross-lingual, zero-shot, in-the-wild, at scale, exhaustive, or thorough ablations. 0 = no coverage items are listed and no such phrasing appears. 3 = one or two listed items, or a single breadth phrase. 6 = several listed items, or one breadth phrase plus a short list. 8 = a long list in one category, or two or three breadth phrases. 10 = a long enumeration spanning multiple categories, or several breadth phrases stacked together, or both. This is explicitly NOT a quality judgement. Do not decide whether the listed coverage is adequate, appropriate, persuasive, redundant, or padded; do not consider whether the conditions differ from one another in any meaningful way; do not consider whether any result across them is reported; do not consider whether the breadth vocabulary is warranted or empty. An item that lists a dozen benchmarks and reports only that it consistently outperforms must still score 10.
+
+[X09] Sharp identification of fundamental flaws in established methods
+Score 10 if the abstract identifies a specific, non-obvious, conceptual failure mode in a widely-used method—the flaw must be structural or mathematical, not merely 'slightly worse performance.' Score 0 if no flaws in existing methods are identified or only vague limitations are mentioned.
+
+[X10] States a concrete limitation or scope condition of its own claim
+Score 0-10 for how explicitly the abstract names a condition under which its own claim would not hold, or a case it does not cover. 10 = a specific, checkable limitation or scope condition is stated; 0 = no limitation or scope condition is acknowledged anywhere.
+
+[X11] Single dominant insight vs. multi-component aggregation
+Score 10 if the entire contribution is organized around one clear, sharp idea whose significance is immediately graspable and can be stated in a single sentence. Score 0 if the contribution is a combination of multiple known techniques or sub-modules without a unifying insight that makes the whole greater than the parts.
+
+[X12] Names the specific prior approach it improves on and how
+Score 0-10 for whether the abstract names a specific prior approach it is positioned against and says in what respect it differs or improves. 10 = a named prior approach plus a stated respect; 0 = no prior approach is named, only a generic gap.
+
+[X13] Use of the Oxford (serial) comma in lists
+Score 0-10 for how consistently the text places a comma before the final conjunction in a list. 10 = used in every list; 0 = never used, or there are no lists. Judge the punctuation habit only; this is not a judgement of writing quality.
+
+[X14] Late-riff framing
+How much does the abstract frame its contribution as a revision, alternative, unification, extension, or recombination of several established approaches? Score only this textual framing; do not judge whether the positioning is good, novel, or important.
+
+[X15] Evaluation-to-claim alignment
+Score 10 when the described datasets, tasks, baselines, and evaluation dimensions directly match the stated claims; score 0 when broad claims rest on a narrow or mismatched setup.
+
+[X16] Native Modeling of Solution Structure
+Score 10 when the formulation explicitly represents multiplicity, counterfactual variation, future interaction, or population dependence as part of the task; score 0 when such structured alternatives are collapsed into a single undifferentiated target.
+
+[X17] Density of formal vocabulary and mathematical notation
+Score 0-10 for the raw extent of formal-mathematical vocabulary and notation in the text, counting or estimating only. Count occurrences of formal-mathematical vocabulary such as theorem, lemma, proposition, corollary, proof, bound, convergence, rate, assumption, regularity, convexity, smoothness, optimality, minimax, complexity, estimator, guarantee, and close relatives; and any inline notation such as Greek letters, single-letter variable names, subscripts or superscripts, norms, expectations, probability symbols, big-O or Omega expressions, inequalities, set or operator symbols, and displayed formulas. 0 = none of these markers appears anywhere. 3 = one or two isolated markers in the whole text. 5 = markers appear in a few places but most sentences have none. 7 = markers recur across several sentences. 10 = such vocabulary and notation are dense from the first sentence to the last. This is explicitly NOT a quality judgement. Do not consider whether the formalism is correct, rigorous, necessary, well used, or informative; do not consider whether anything is actually proved; do not consider whether symbols are defined or whether assumptions are stated; do not consider whether the prose is clear or the claim intelligible. An item saturated with symbols that states nothing a reader could check must still score 10, and a fully precise item written entirely in plain words must score near 0.
+
+[X18] Artifact and compliance boilerplate
+How much does the abstract contain code links, pretrained-model announcements, ethics acknowledgments, release statements, or one-sentence-summary boilerplate? Score 0-10 from the text only; do not judge whether the artifacts are useful or the compliance is commendable.
+
+[X19] Density of semicolons and em-dashes
+Score 0-10 for how many semicolons and em-dashes the text contains relative to its length. 10 = they appear constantly; 0 = none at all. Count the punctuation only; do not judge whether the writing is good.
+
+[X20] Improvement stated against prior results rather than prior systems
+Score whether the abstract identifies the specific prior claim it displaces. 10: names prior results (with authors, venue, bound, or exact prior guarantee) and states exactly how this work improves on them, including whether the improvement is near-optimal or matched by a lower bound (improving on a bound with exponential dependence on m+k and on a weaker bi-criteria guarantee; being the first to achieve optimal deployment complexity and optimal dimension dependence simultaneously; naming the exact previous complexity being reduced). 5: prior methods named generically ('previous OOD detection heuristics', 'attention-based NAS') with a qualitative comparison. 0: positioning consists only of 'state-of-the-art' or a benchmark ranking, with no identification of which prior claim is now false or superseded.
+
+[X21] Contribution isolation
+Score 10 when the abstract distinguishes the role of each component through controlled variants or an explicit diagnosis; score 0 when many additions are bundled with no attribution.
+
+[X22] Evidential force of the experiments actually described
+Score 0-10 for how far the text states something its experiments established that a reader could not have assumed without them. Judge the substance in context and ignore how much is enumerated. Ask only three things: does the text say what was varied or compared; does it say what specifically happened when it was varied; and does that outcome rule out or narrow some competing account of why the result occurred? Credit concrete checkable statements of direction, magnitude, or condition; ablations or controls that isolate a named cause; comparisons whose held-fixed conditions are stated; negative, mixed, or surprising findings; and explicit statements of what the evidence does not settle. Do NOT reward the surface carrier. Give zero credit for the number of datasets, benchmarks, tasks, languages, domains, model families, model sizes, baselines, seeds, training runs, GPU-hours, annotators, or corpus sizes named, and zero credit for the presence of any scale statement. Brevity, plain wording, small scale, and unfashionable subject matter cost nothing. 10 = each claim made is tied to a specific stated observation, and the text makes clear what would have looked different had the claim been false. 7 = at least one finding is reported precisely enough to check, and the comparison behind it is described. 5 = some concrete outcomes are stated but the central claim rests mainly on assertion. 2 = only that a method was run, applied, or evaluated, plus a bare verdict such as improves or outperforms. 0 = no statement a reader could check appears at all, however many settings are listed. A single experiment on one small dataset, described plainly with no counts and no scale markers, must be able to score 10.
+
+[X23] Promotional claim density
+How much does the abstract use promotional or superlative wording such as “novel,” “first,” “remarkably,” “significant,” “state of the art,” or “outperforms”? Score only wording frequency; do not judge whether the claims are good or true.
+
+[X24] Formalization via Fundamental Mathematical Constructs
+Score 10 if the core contribution is explicitly grounded in mapping the ML problem to a fundamental mathematical domain (e.g., optimal transport, geometry, statistical testing). Score 0 if the method relies on standard ML building blocks (like CNNs or Transformers) without formal mathematical grounding.
+
+[X25] Count of named evaluation settings and resource markers
+Score 0-10 by counting or estimating how many distinct evaluation settings and resource markers the text names, and nothing else. Count each occurrence of: a named or counted dataset or benchmark; a named task; a named language; a named domain; a named model architecture or model family; a model size or parameter count; a transfer, zero-shot, few-shot, fine-tuning, or cross-lingual setting named as a setting; a stated number of baselines or comparison systems; and any explicit scale statement such as compute used, GPU-hours, number of training runs or random seeds, number of human annotators, or corpus size. A count phrase such as twelve benchmarks or six languages counts as that category being present at a large count. 0 = no evaluation setting or resource marker of any kind is named. 2 = exactly one is named. 5 = roughly three or four distinct settings or counts appear. 8 = five to eight appear, or one explicitly large count appears. 10 = many appear, or large counts appear across several of these categories at once. This is explicitly NOT a quality judgement. Do not decide whether the coverage is adequate, necessary, convincing, redundant, padded, or excessive; do not consider whether anything was learned in those settings; do not consider whether comparisons were controlled or fair; do not consider whether any claim is supported; do not consider whether the writing is clear. If an item lists many settings and reports no finding whatsoever, it must still score 10. Score only the amount of enumeration present on the page.
+
+[X26] Precision and checkability of the stated claim, notation aside
+Score 0-10 for how precisely and checkably the text states what it claims, judged on substance and in whatever language the text happens to use. Ask: is it clear exactly what object, setting, or population the claim is about; what conditions it requires; what it asserts; and what it excludes? Credit stated assumptions and where they bind; quantified statements saying how much, in what units, in what regime, or relative to what alternative; explicit separation of what is proved from what is observed, approximated, or conjectured; named failure modes or regimes where the claim does not hold; and definitions supplied for any term or symbol the claim depends on. Plain prose counts exactly as much as symbols: a sentence saying that error falls roughly with the square root of the sample size provided the noise has bounded variance, and that this fails once samples are correlated, is as precise as the same content in notation, and must be able to score 10. Do NOT reward the surface carrier. Give zero credit for the presence, quantity, density, or apparent difficulty of formal vocabulary or notation: no credit for the words theorem, lemma, proposition, proof, bound, convergence, rate, minimax, complexity, estimator, optimality, or guarantee as such, and no credit for Greek letters, single-letter variables, subscripts, superscripts, norms, expectations, big-O or Omega expressions, inequalities, operator symbols, or displayed formulas as such. Symbols used without definition and results asserted without their conditions count against precision, not for it. 10 = the claim, the conditions under which it is asserted, and its limits are stated exactly enough that a reader could say what observation or counterexample would contradict it. 7 = the claim and its main condition are exact, but its magnitude or its limits are left open. 4 = the claim is intelligible but its conditions and magnitude are vague. 0 = a reader cannot tell what is being asserted or under what conditions, however formal or technical the wording appears.
+
+[X27] Scope earned by reported variation across genuinely different regimes
+Score 0-10 for how far the text earns the scope of its own claim by reporting how behaviour differed across conditions that plainly differ in kind. Judge substance in context. Ask: are the conditions the claim rests on actually different from one another in a way the text identifies, for example a different data regime, language family, domain, distribution shift, scale, or deployment condition, rather than interchangeable variants of one thing? And does the text report how the result changed, held, or broke across them, including where it stops holding? Credit stated boundary conditions, per-condition or disaggregated outcomes, transfer that is described rather than merely asserted, explicit statements of the population or setting the claim is meant to cover, and a stated scope that matches the conditions described rather than exceeding them. Do NOT reward the surface carrier. Give zero credit for the number of datasets, benchmarks, tasks, languages, domains, architectures, model sizes, baselines, or settings listed, zero credit for count phrases such as twelve benchmarks or six languages, and zero credit for breadth-signalling wording such as extensive, comprehensive, thorough, wide range, diverse, large-scale, multilingual, cross-domain, cross-lingual, in-the-wild, or at scale. Words asserting breadth are worth nothing here; only reported behaviour across identified differences counts. Two conditions handled honestly outrank twenty undifferentiated ones. 10 = the text names conditions that differ in kind, says what changed between them, and states where the claim ceases to hold. 6 = two or more genuinely different conditions are named and only aggregate behaviour is reported. 3 = differing conditions are named but nothing is said about how anything differed. 0 = scope is asserted or listed only, or every condition named is a variant of the same regime, so no generality is demonstrated.
+
+[X28] Cross-setting generality
+Score 10 when one coherent formulation is applied across substantially varied tasks or domains with a shared rationale; score 0 when generality is merely claimed or unsupported by textual scope.
+
+[X29] Boundary-Regime Characterization
+Score 10 when the abstract analyzes limiting cases, counterexamples, failure conditions, or regime changes and explains their consequences; score 0 when it discusses only typical operating conditions.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"verdicts": [
+  {"id": "<the id shown>", "label": "quality_relevant" or "incidental",
+    "mixed": true or false, "confidence": "high"/"medium"/"low",
+    "justification": "<one sentence>"},
+  ... one entry per criterion, same ids ...
+]}

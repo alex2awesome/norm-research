@@ -1,0 +1,126 @@
+You are auditing a pool of scoring criteria that were written by other
+models. Your job is a ROUTING decision, made blind: you are NOT told who wrote each
+criterion or what it was written for.
+
+For each criterion, decide:
+
+  "quality_relevant" -- the criterion measures a property that a careful expert would
+      count as genuine evidence about research quality. It is about the substance, the
+      reasoning, the evidence, the craft, or the content of the item.
+
+  "incidental" -- the criterion measures something that may well PREDICT how the item
+      fares but is not itself research quality: length or verbosity, formatting or layout,
+      boilerplate or template phrasing, community/venue style markers, subject-matter
+      or topic markers, temporal tells, orthographic habits, or a textual fingerprint of
+      some upstream circumstance of the item's production (who made it, with what
+      resources, when, with what help).
+
+The corpus is: abstracts of machine-learning conference paper submissions. Each item is a abstract.
+
+SECOND JUDGEMENT, only for criteria you label "incidental". Some incidental channels have
+an upstream cause that plausibly ALSO produces genuinely better work (for example, a
+well-resourced producer may both be favoured for irrelevant reasons AND actually do
+better work). Return `mixed`: true when you think the upstream cause plausibly produces
+real research quality too, false when the channel looks like pure nuisance. For criteria you
+label "quality_relevant", return mixed=false.
+
+Judge each criterion ON ITS OWN TEXT. Do not try to guess which pool it came from, and
+do not let the ORDER of the list influence you.
+
+CRITERIA:
+
+[X01] Grandiose opening framing vs narrow delivered contribution
+Score 0-10 on the GAP between how sweeping/important the abstract's opening sentence claims the problem area to be, and how narrow/specific the actual technical contribution delivered later in the abstract turns out to be. A 10 = a sweeping opening claim ('one of the primary open questions in AI', 'bridging two fields') followed by a narrow, specific technical fix. A 0 = the opening framing is modest and proportionate to the actual scope of the contribution delivered.
+
+[X02] Formal-theory signaling
+Score 0-10 for how much the abstract uses theorem, proof, bound, convergence, asymptotic, or formal mathematical-guarantee language; judge only extent, not correctness or importance.
+
+[X03] Structural Inductive-Bias Fit
+Score 10 when domain structure, symmetry, constraints, or relational geometry is mapped to a specific architectural or objective choice and the preserved information is explained; score 0 when a fashionable mechanism is used without structural justification.
+
+[X04] Reasoning given for why the approach should work
+Score 0-10 for whether the item supplies a reason or mechanism for why what it proposes should work, rather than only asserting that it does. 10 = an explicit causal or conceptual account; 0 = bare assertion with no reasoning.
+
+[X05] Contribution attribution
+Give 10 when the abstract describes ablations or controlled contrasts that isolate individual components, losses, or design choices; give 0 when no component-level contrast is described and attribution is impossible from the text.
+
+[X06] Judgability from printed text alone, no title recognition
+Score 0-10 on whether the item text itself (title + abstract body) contains enough substantive description of motivation, method, and results to be judged on its own, without needing to recognize the paper from its title. A 10 = the abstract body fully describes what was done and found in prose. A 0 = the abstract body is missing or is a content-free stub (title only, or a placeholder), such that any score would have to rely on recognizing the paper rather than reading its content.
+
+[X07] Assumption discipline
+Give 10 when the abstract states assumptions and boundary conditions precisely and distinguishes what holds in each regime; give 0 when claims sound universal while conditions remain unstated.
+
+[X08] Acronym and method-name density
+Score 0-10 for how much the abstract introduces named methods, abbreviations, and component labels; judge only extent, not whether the naming is useful or technically good.
+
+[X09] Use of the Oxford (serial) comma
+Score 0-10 for how consistently the text uses a comma before the final conjunction in a list. 10 = used in every list; 0 = never used or no lists present. Judge punctuation habit only; this is not a judgement of writing quality.
+
+[X10] Code/data release statement presence
+Score 0-10 how explicitly the abstract states that code, data, or trained models will be or are being released (e.g., a repository URL, 'code is available at...', 'we release our implementation'). 0 = no release statement of any kind; 10 = an explicit, specific release statement naming a repository. Do not judge whether releasing code says anything about the work's quality -- score only whether the statement is textually present.
+
+[X11] Ambiguity Awareness
+Score 10 when the work recognizes multiple valid explanations, solutions, or latent rewards and designs its objective or inference procedure accordingly; score 0 when it assumes an unjustified unique target.
+
+[X12] Artifact-availability cues
+Rate from 0 to 10 how much the abstract advertises code, pretrained models, datasets, repositories, or reproducibility artifacts; judge the presence of availability statements only, not whether the artifacts are useful or the research is sound.
+
+[X13] Headline rests on an idea rather than on a leaderboard position
+Score what the abstract's central claim would reduce to if the numbers were removed. A 10: a statable proposition survives - something is true, something is unnecessary, something works for this reason. A 5: an idea and a ranking claim share the load. A 0: nothing survives - the claim is exhausted by breadth and rank ('a large-scale protocol comprising N baselines, M search spaces and K datasets; we achieve new state-of-the-art'), so that the paper's identity is its position on a table. Breadth of evaluation is not penalized in itself; it is penalized when it is the whole of the claim.
+
+[X14] Formalism density
+Rate from 0 to 10 how much the abstract contains theorem, proof, bound, assumption, equation, or mathematically formal terminology; judge formalism extent only, not rigor, correctness, or research value.
+
+[X15] Count of numerals and digit characters in the text
+Score 0-10 for how many numerals and digit characters the text contains relative to its length. 10 = digits everywhere; 0 = no digits at all. Count characters only; do not judge whether the numbers are meaningful or whether their presence is good.
+
+[X16] Abstract length
+Rate from 0 (very brief) to 10 (very long) how much text, sentence count, and elaboration the abstract contains; judge extent only, not whether the additional detail is good or useful.
+
+[X17] Claim-aligned validation
+Give 10 when the validation setup directly varies the phenomenon the paper addresses and includes a relevant control or comparison; give 0 when evaluation is only generic benchmarking unrelated to the proposed mechanism.
+
+[X18] Editorial polish
+Score 0-10 for the extent of fluent grammar, consistent terminology, smooth transitions, and carefully standardized prose; judge only textual polish, not research quality.
+
+[X19] Trend/hype-keyword density
+Score 0-10 how many currently-fashionable subfield buzzwords appear in the abstract (e.g., 'GPT', 'in-context learning', 'diffusion', 'Transformer', 'large language model', 'foundation model'). 0 = no such terms appear; 10 = the abstract is dense with such terms throughout. Do not judge whether the use of these terms is warranted, accurate, or central to the contribution -- score only the raw presence of this vocabulary.
+
+[X20] Enumerated contribution scaffolding and numbered-pitfall templates
+Score 0-10 for how much explicit enumeration scaffolding the text uses: phrases like 'our contributions are three-fold', 'two common pitfalls: (1) ... (2) ...', 'First, ... Second, ... Third, ... Fourth, ...', 'We address this in two ways', numbered or lettered lists of problems or components. 0 = no enumeration language at all; 3 = a single ordinal marker used in passing; 6 = one clearly enumerated two-item list; 8 = an explicit contribution count plus an enumerated walkthrough; 10 = the whole abstract is organised as a numbered walkthrough of three or more items with an announced count. Score the presence and prominence of the enumeration template only. You must NOT judge whether the abstract is well organised, whether the enumerated contributions are real, or whether this structure aids the reader.
+
+[X21] Explicit statement of the limitation or failure regime
+Score 0-10 for how explicitly the item names a condition under which its own claim would not hold, or a case it does not cover. 10 = a specific, checkable limitation is stated; 0 = no limitation or scope condition is acknowledged anywhere.
+
+[X22] Scarcity Leverage
+Score 10 when the method explicitly exploits sparse data, limited interaction, scarce viewpoints, or tight computation through a reusable structural advantage; score 0 when it assumes abundant resources or merely reports generic efficiency.
+
+[X23] Mechanistic Explanatory Depth
+Score 10 when the abstract gives a causal account of why the method addresses the stated failure and derives testable implications; score 0 when it merely introduces components and asserts usefulness.
+
+[X24] Operational Specificity
+Score 10 when the abstract specifies the essential mechanism, assumptions, data conditions, and evaluation setup well enough to reconstruct the contribution; score 0 when it consists mainly of slogans or unnamed architectural additions.
+
+[X25] Theory-Practice Coupling
+Score 10 when the analysis directly constrains, explains, or predicts the behavior of the proposed method; score 0 when theory is detached from the method or offers only generic guarantees.
+
+[X26] Evaluation breadth
+Rate from 0 to 10 how much the abstract claims coverage across multiple datasets, languages, domains, tasks, architectures, or transfer settings; judge breadth of described coverage only, not whether it is adequate or convincing.
+
+[X27] Long-range information preservation
+Give 10 when the abstract gives an explicit route for accessing information across many layers, hops, scales, or time steps and explains why it remains stable; give 0 when dependencies are only asserted or handled by adding depth.
+
+[X28] Economy of mechanism relative to size of the consequence
+Score the ratio between how little the method asks and how much it claims. A 10: a mechanism statable in one clause (prune activations at random and rescale; freeze the classifier up to a scale; use a single modified diffusion kernel) paired with a consequence that is large, qualitative, or surprising. A 5: moderate machinery, moderate payoff. A 0: an elaborate apparatus - several new losses, encodings, hypernetworks, schedules, regularizers - whose stated payoff is a benchmark improvement of ordinary size. Penalize expensive-for-what-it-buys; reward cheap-for-what-it-buys. This is about the ratio, not about simplicity or ambition alone.
+
+[X29] New reusable dataset or benchmark contributed alongside method
+Score 0-10 on whether the abstract explicitly states that the paper contributes a NEW reusable dataset, benchmark, or testbed to the community (not just a method evaluated on existing data). A 10 = the abstract explicitly states a new dataset/benchmark is created and released. A 0 = the paper evaluates purely on existing benchmarks/datasets with no new data/resource contribution mentioned.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"verdicts": [
+  {"id": "<the id shown>", "label": "quality_relevant" or "incidental",
+    "mixed": true or false, "confidence": "high"/"medium"/"low",
+    "justification": "<one sentence>"},
+  ... one entry per criterion, same ids ...
+]}

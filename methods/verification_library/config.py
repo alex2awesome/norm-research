@@ -1,5 +1,6 @@
 """Configuration for the verification library discovery algorithm."""
 
+import os
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
@@ -23,7 +24,9 @@ class VerificationLibraryConfig:
     temperature_program: float = 0.7
 
     # LLM — refactoring (few calls, quality matters)
-    refactoring_model: str = "claude-sonnet-4-20250514"
+    # env-overridable pointer: `export SONNET_MODEL=claude-sonnet-5` to switch (default unchanged).
+    refactoring_model: str = field(
+        default_factory=lambda: os.environ.get("SONNET_MODEL", "claude-sonnet-4-20250514"))
     refactoring_base_url: str = ""  # empty = Anthropic native API
     refactoring_concurrency: int = 5
     max_tokens_refactor: int = 8192

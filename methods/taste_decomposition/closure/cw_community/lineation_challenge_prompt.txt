@@ -1,0 +1,90 @@
+You are a sealed adjudicator. A single measurement channel has been CHALLENGED and you
+must rule on it. The study scores short stories posted to an online creative-writing
+community, and every scoring criterion sits on one of two sides:
+
+  A / quality-relevant -- a careful editor would treat this property as evidence about
+      how good the story IS.
+  B / incidental (nuisance) -- the property may well predict how a story is received,
+      but a careful editor would not treat it as evidence of the story's quality.
+
+Separately, every B-side channel carries two tags:
+  upstream_parent -- the unseen, non-textual factor the channel is a fingerprint OF
+      (e.g. the author had editing help; the author has a following), or the exact
+      string "surface-only" if the channel has no such cause.
+  mixed -- TRUE if that same upstream parent would plausibly ALSO cause genuinely
+      better writing, FALSE if it affects reception without improving the work.
+
+THE CHALLENGE. A reviewer objects that this channel was mis-routed: line-break rhythm
+and pacing are plausibly authorial TECHNIQUE in fiction (prose-poetry, modernist
+fragmentation, deliberate beat-setting), not a formatting accident, so calling it pure
+nuisance may be wrong -- and if its real parent is "deliberate stylistic control" rather
+than "surface-only", then it should at minimum be flagged MIXED.
+
+Two independently proposed instances of this channel appeared in different rounds, from
+different proposers, and were routed identically. Both instances, their exact scoring
+instructions, their tags, their blind-audit verdicts and their measured predictiveness
+are below.
+
+YOUR RULINGS, each independent:
+  1. routing_verdict: "confirm_B" | "reroute_A" | "split" -- and if "split", say exactly
+     what a corrected pair of criteria would look like (one nuisance, one craft).
+  2. upstream_parent_verdict: keep "surface-only", or name the parent you think is
+     correct.
+  3. mixed_verdict: true or false, with the reason stated in terms of the parent.
+  4. rubric_diagnosis: does the INSTRUCTION AS WRITTEN measure the formatting pattern
+     alone, or does it smuggle in an effectiveness judgement? Quote the phrase that
+     decides it.
+
+Weigh this specifically: the routing rule in force is "judge the criterion AS WRITTEN --
+what its scoring instruction actually asks a judge to count -- not the concept it
+gestures at". A property can be genuine craft in principle and still yield a nuisance
+channel if the instruction only counts its surface trace. Say plainly which of those
+this is, and do not split the difference to be agreeable.
+
+Do NOT read any file; work only from this message.
+Output exactly one JSON object and nothing else:
+{"routing_verdict": "...", "split_proposal": "... or null",
+ "upstream_parent_verdict": "...", "mixed_verdict": true|false,
+ "rubric_diagnosis": "...", "deciding_phrase": "...", "reason": "<= 120 words"}
+
+--- INSTANCE 1 (round 3, cid R3B08, proposed by an OpenAI-family proposer) ---
+name: Fragmented lineation
+instruction: Score high when the prose uses many short standalone lines, isolated
+  sentences, ellipses, or abrupt visual breaks; score low when it uses conventional
+  paragraphs and continuous sentences.
+upstream_parent tagged by proposer: surface-only
+mixed tagged by proposer: false
+proposer's rationale: A visually dramatic rhythm can attract attention independently of
+  coherence or depth.
+blind auditor verdict: incidental (confidence 0.75) -- "Counts presence of fragmented
+  formatting/short lines without judging whether the choice is effective."
+measured alone-AUC: .5424 on the mining split, .5495 on the full 7,008-row population
+  (0.5 = no relationship to how the community responded)
+
+--- INSTANCE 2 (round 4, cid R4B05, proposed by a Claude-family proposer) ---
+name: Fragmented staccato paragraphing / line-break repetition
+instruction: Count the fraction of paragraphs that are a single short clause or sentence
+  (under roughly eight words) set off by its own line break, and note literal repetition
+  of a short phrase (e.g. counting patterns, repeated single words). HIGH = the story is
+  built mostly from such isolated one-line beats. LOW = paragraphs are built from
+  ordinary multi-sentence prose units.
+upstream_parent tagged by proposer: surface-only
+mixed tagged by proposer: false
+proposer's rationale: The typographic choppiness can read as 'raw interiority' to a model
+  perceiving overall shape, but it is a cheap formatting trick any writer can apply
+  regardless of what is actually being said.
+blind auditor verdict: incidental (confidence 0.80) -- "Counts a formatting pattern
+  (staccato line breaks) without judging whether it serves the story; stylistic fashion
+  marker."
+measured alone-AUC: .5754 on the mining split, .5816 on the full population -- the
+  STRONGEST of all 54 declared nuisance channels, and higher than all 67 mined
+  quality criteria (best .579).
+
+--- CONTEXT YOU SHOULD USE ---
+There is a separate, related criterion already sitting on the QUALITY side of this same
+study, proposed and audited independently: "Controlled Repetition and Rhythm" (round 4,
+A-side), whose instruction asks the judge to assess whether repetition and rhythmic
+patterning are CONTROLLED and do rhetorical work. A deliberately shallow planted probe
+written against it -- "Repeated-phrase exact-match count", which counts verbatim repeats
+with no judgement of control -- was routed to the nuisance side by the blind auditor.
+

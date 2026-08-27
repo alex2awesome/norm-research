@@ -1,0 +1,83 @@
+{
+  "cell": "nc_agree",
+  "direction": "1_mirror",
+  "n_E": 1009,
+  "pos_rate_E": 0.6501486620416254,
+  "n_groups_E": 498,
+  "arms": {
+    "layer1_bank": {
+      "arm": "layer1_bank",
+      "family": "clean_once",
+      "n_features_VA": 169,
+      "n_features_VA_prescreen": 225,
+      "T_E": 0.6034275029365025,
+      "VA_lin_E": 0.6122391694880122,
+      "VA_nl_E_seeds": [
+        0.547692254542942,
+        0.5854349478338976,
+        0.5548953223243281
+      ],
+      "VA_nl_E_mean": 0.5626741749003893,
+      "VA_nl_E_spread": 0.03774269329095559,
+      "VAT_lin_E": 0.61888084709459,
+      "VAT_nl_E_seeds": [
+        0.5807408622953084,
+        0.5753601533890694,
+        0.5576504525668486
+      ],
+      "VAT_nl_E_mean": 0.5712504894170755,
+      "VAT_nl_E_spread": 0.02309040972845977,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.0330486077523664,
+        "ci95": [
+          0.00764735462906174,
+          0.06189964105310604
+        ],
+        "p_gt_0": 0.9955,
+        "n_boot_used": 2000,
+        "n_groups": 498
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.022686640641194078,
+        "ci95": [
+          -0.09071019957589405,
+          0.046425330094191225
+        ],
+        "p_gt_0": 0.302,
+        "n_boot_used": 2000,
+        "n_groups": 498
+      }
+    }
+  },
+  "population": "dense-held-out rows of the nc_agree Layer-1 matrix (dense_split in {eval,test}); maps_batch1/cells.py adapter",
+  "n_features_raw": {
+    "V": 27,
+    "A": 198
+  },
+  "per_split_T": {
+    "eval": {
+      "n": 505,
+      "T": 0.5659999317918287
+    },
+    "test": {
+      "n": 504,
+      "T": 0.6410584197254132
+    }
+  },
+  "runtime_sec": 1478.6578590869904,
+  "alignment_check": {
+    "note": "This script never reads any precomputed *_va_nl_oof_*.npy file (grep-verified). Every VA_nl/VAT_nl OOF array is computed FRESH in-process, within run_arm()/fit_arm(), from V/A/y/groups/dense arrays that are constructed together (same function, same iteration order) for every cell -- so the 'bank item_ids order vs join/population order' landmine (mismatched precomputed OOF vs population row order) cannot occur here structurally. Cross-file joins (where the dense-prob CSV is a separate file from the bank population) are explicitly assert-checked at load time (see cross_file_join_asserts); adapter-based cells (nc_outcome, nc_agree, peer_curation, peer_revealed, hashtagwars_verdict) never join across files at all (single function call builds every array in lockstep). External validation: T_E computed here matches the independently-computed samerows registry auc_dense_heldout/eval/test figures (separate code path, rescore_dense_same_rows.py-family scripts) to 4 decimal places in every cell where a reference exists -- see t_e_vs_registry below.",
+    "cross_file_join_asserts": [
+      "single adapter call (maps_batch1/cells.py load('nc_agree')); same as nc_outcome"
+    ],
+    "t_e_vs_registry_pooled": {
+      "computed": 0.6034275029365025,
+      "registry_auc_dense_heldout": 0.6034275029365025
+    },
+    "t_e_vs_registry_eval_test": {
+      "pooled": 0.6034275029365025,
+      "eval": 0.566,
+      "test": 0.639
+    }
+  }
+}

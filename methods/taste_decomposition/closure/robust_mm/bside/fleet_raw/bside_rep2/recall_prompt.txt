@@ -1,0 +1,227 @@
+You are a BLIND adjudicator in a controlled measurement.
+
+Below are 50 CANDIDATE channels (ids K01..K50) that a panel of writers proposed
+while hunting for SUSPECTED-SPURIOUS scoring channels for machine-learning paper
+abstracts (features that might predict how an abstract fares WITHOUT being a mark of
+quality -- surface style, formatting, topic, or an upstream factor's textual
+fingerprint), and 12 TARGET channels (ids T01..T12) drawn from a separate,
+earlier census of declared-nuisance channels for the same corpus.
+
+For EACH target, decide whether any candidate names the SAME underlying channel --
+i.e. a judge scoring an abstract on the target would be scoring essentially the same
+surface/upstream property as a judge scoring it on that candidate.
+
+Calibration, and it matters:
+  * Phrasing will differ -- the targets and candidates were written by different
+    panels at different times. Judge the underlying property being scored, NOT the
+    exact wording.
+  * Do NOT accept mere topical adjacency. If the candidate is clearly broader and
+    merely contains the target as one sub-case, or narrower and covers only a
+    fragment of it, or shares a surface topic while scoring a different property --
+    that is NOT a match.
+  * A match means substitutable in practice: swapping one for the other as a scoring
+    instruction would produce nearly the same per-abstract scores.
+  * Some targets will have NO match. Reporting no match is a perfectly good answer and
+    is expected for a substantial share of them. Do not force matches.
+
+OUTPUT. Emit exactly one JSON object and nothing else -- no markdown fences, no
+commentary:
+
+{"results": [
+  {"target": "T01",
+   "match": true or false,
+   "candidate_ids": ["K07", ...],   // every candidate you judge to be the same channel; [] if none
+   "confidence": "high" or "low",
+   "why": "<one sentence>"},
+  ... one entry for every target T01..T12 ...
+]}
+
+=== CANDIDATES ===
+
+K01. High-stakes application framing
+     Rate 0–10 for language invoking safety, security, clinical use, road danger, scientific discovery, societal impact, or real-world deployment; judge only framing extent, not importance or quality.
+
+K02. Source-format artifacts
+     On a 0-10 scale, rate how much visible LaTeX commands, equations, italics, bold markup, footnotes, URLs, or placeholder delimiters appear; judge only extent, and do not judge whether this feature is good or bad.
+
+K03. Confident leaderboard record-claim with unintroduced baseline names
+     On a 0-10 scale, rate how much the abstract asserts a new state-of-the-art or record result on a named public benchmark/leaderboard using confident, unhedged language ('sets a new record', 'achieves state-of-the-art'), while referring to specific prior models or benchmark names as if the reader already knows them, without introducing or explaining them. Score only the presence of this confident, insider framing; do not judge whether the record claim is actually true or important.
+
+K04. Non-idiomatic / dis-fluent English phrasing markers
+     On a 0-10 scale, rate how much the abstract contains phrasing that a fluent academic-English reader would find slightly non-idiomatic or awkward (unusual article/preposition use, atypical connective words, uncommon collocations), independent of technical content. Score only the extent of such phrasing markers; do not judge whether the underlying research idea is good or bad, and do not use grammatical smoothness as a proxy for competence.
+
+K05. Abstract length and elaboration
+     Rate 0–10 for the amount of text, clause nesting, and explanatory elaboration present; judge extent only, not whether length is good and not research quality.
+
+K06. Templated Transition and Signposting Phrases
+     Score the extent to which the abstract relies on standard, formulaic academic transitions and signposting phrases (e.g., 'To address this issue', 'Specifically,', 'Extensive experiments demonstrate', 'State-of-the-art', 'In this paper, we propose'). 0 means no formulaic phrases, 10 means heavy reliance on them. Do not judge whether this is good.
+
+K07. Self-described warning/whistleblower framing about risk or safety
+     On a 0-10 scale, rate how much the abstract explicitly frames its own findings as a warning, caution, or exposure of risk/vulnerability to the community (language like 'acts as a whistleblower,' 'emphasizes the need for caution,' 'highlights vulnerabilities,' or similar alarm-raising framing about safety/security implications). Score only the presence of this self-framing; do not judge whether the underlying safety concern is real or significant.
+
+K08. Decimal-precision numeric result density
+     On a 0-10 scale, rate how much of the abstract's claimed results are expressed as precise numeric figures with two or more decimal places or exact percentages/ratios (e.g., '81.88%', '1.897x10^-3', '15~30x'), as opposed to results described only in qualitative or rounded terms. Score only how much fine-grained numeric precision appears in the text; do not judge whether the reported numbers indicate good or bad performance, or whether the precision is warranted.
+
+K09. Generic Field-Importance Opening Platitudes
+     Score how much the abstract opens with a sweeping, obvious statement about the importance of its subfield that reads like a generic problem statement (e.g., 'X is crucial for...', 'X has attracted much attention'). 0 means it dives straight into specifics, 10 means it opens with a generic platitude. Do not judge whether the platitude is true.
+
+K10. Pioneering 'first-to-do-X' framing vs. named-single-antecedent refinement framing
+     On a 0-10 scale, rate where the abstract's framing falls on this spectrum: a LOW score (0) means the text presents itself as one of the first, most obvious responses to a broad opportunity, using words like 'first,' 'novel,' 'we introduce' without naming one single specific prior method it is directly extending; a HIGH score (10) means the text presents itself as a late, already-informed refinement that names one specific prior method/paper and explains precisely what limitation of that specific antecedent it fixes. Score only where the framing falls on this spectrum; do not judge whether the paper is actually early or late in reality, and do not judge which framing produced better research.
+
+K11. Recency anchoring
+     Rate 0–10 for explicit references to recent, emerging, current, or latest work and newly released model or benchmark names; judge temporal-marking extent only, not topical importance or quality.
+
+K12. Template scaffolding: enumerated connectives and uniform cadence
+     Score 0-10 for the EXTENT of visible drafting scaffolding: explicit enumeration of contributions ('Firstly... Secondly', 'first... then... finally', '(1)... (2)... (3)'), a dense chain of formal discourse connectives ('Specifically', 'Moreover', 'Furthermore', 'Additionally', 'To address these issues', 'In this work'), a two-component method presented as exactly two symmetrically described parts, tricolon phrasing, near-uniform sentence lengths, and recurring intensifier boilerplate ('comprehensive', 'extensive experiments', 'consistently outperforms', 'significant improvements'). 0 = the abstract moves without enumeration or formulaic connectives; 10 = nearly every sentence is hinged on a connective or list marker and the intensifier boilerplate recurs. Score the scaffolding only. You must NOT judge whether the organization aids comprehension, and you must NOT reward or penalize clarity.
+
+K13. Fashionable topic markers
+     On a 0-10 scale, rate how much the abstract uses currently prominent field labels such as foundation model, agent, alignment, multimodal, generative AI, or large language model; judge only extent, and do not judge whether this feature is good or bad.
+
+K14. Coined acronym branding
+     Rate 0–10 for the presence and prominence of newly coined capitalized names for methods, datasets, frameworks, or components, including acronym expansions; judge naming extent only, not memorability or quality.
+
+K15. Late-arrival riff: patching named incumbents in a crowded line
+     Score 0-10 for the EXTENT to which the abstract positions itself as an increment on an already-crowded line of prior attempts, rather than as an opening move on a fresh problem. High-scoring fingerprints: naming a specific prior method and extending or repairing it; phrases of the form 'previous methods attempted X, however'; describing the existing literature as a set of variants; conceding that the obvious approaches are taken and claiming the remaining gap; the contribution being an added mechanism, stage, or regularizer bolted onto a named predecessor. Low-scoring fingerprints: the problem is introduced as barely explored or newly posed, with few or no named incumbents to displace. 0 = reads as one of the first, most obvious readings of its problem; 10 = reads as a late entry written by someone who has already seen the obvious takes taken. Score the positioning only. You must NOT judge whether incremental or foundational work is more valuable.
+
+K16. Deadline-crunch tells: promissory artifacts and preliminary results
+     Score 0-10 for the EXTENT of promissory or unfinished-artifact language: code or data promised in the future tense ('will be made publicly available', 'will be open-sourced upon acceptance/publication'), conditional release tied to a later event, unresolved placeholders or bare 'anonymized' where a link belongs, and results hedged as early, preliminary, initial, or a first pass. Contrast with present-tense availability ('code is available at <link>', 'available on Zenodo and GitHub'). 0 = every artifact is described as already existing and reachable, and no result is hedged as preliminary; 10 = all artifacts are future-tense or placeholder and results are explicitly labelled early or preliminary. Score the tense and completeness of these statements only. You must NOT judge whether releasing code is good practice, and you must NOT judge whether preliminary results are acceptable.
+
+K17. Abstract length and detail
+     On a 0-10 scale, rate how much text volume, paragraphing, and methodological detail are present; judge only extent, and do not judge whether this feature is good or bad.
+
+K18. Appeals to Mathematical Theory
+     Score how much the text explicitly invokes formal mathematical theory, proofs, or theorems to justify its claims (e.g., 'We provide theoretical guarantees', 'Eckart-Young-Mirsky theorem'). 0 means no mention of theory, 10 means heavy reliance. Do not judge if the theory is correct.
+
+K19. Anonymized code-repository or 'released upon acceptance' promise
+     On a 0-10 scale, rate how strongly the abstract text contains an anonymized code/data hosting reference (e.g., an anonymous.4open.science-style URL, or the word 'anonymous'/'anonymized' attached to a repository) or an explicit promise that code/data 'will be released' or 'made available upon acceptance/publication.' Score only the presence and prominence of this specific textual convention; do not judge whether releasing code is good practice or whether the promise is credible.
+
+K20. System-branding: coined acronym density and typographic stylization
+     Score 0-10 for the EXTENT to which the abstract brands its contribution with coined names: count how many capitalized system/method/dataset names are minted (e.g. one-off names, backronyms whose letters are pulled out of a phrase, hyphenated compound names, names typographically stylized with bold or letter-level markup), how early the first coined name appears, and how many times coined names are repeated. 0 = no coined name at all, the method is described only in ordinary technical words; 10 = three or more coined names, introduced in the first two sentences and repeated throughout, at least one of them a stylized backronym. Score naming behaviour only. You must NOT judge whether the names are apt, memorable, clever, or gimmicky, and you must NOT consider whether the underlying method sounds substantial.
+
+K21. Density of generic templated abstract-writing transition phrases
+     On a 0-10 scale, rate how much the abstract relies on generic, interchangeable template transitions that could be dropped into almost any machine-learning paper (e.g., 'To address this issue, we propose...', 'Extensive experiments demonstrate...', 'Our approach significantly outperforms...', 'Experimental results show that...'), as opposed to sentences with content specific to this particular contribution. Score only the density of such generic template phrasing; do not judge whether the paper's actual contribution is significant.
+
+K22. Prior-work anchoring
+     On a 0-10 scale, rate how much the abstract names prior systems, canonical benchmarks, historical methods, or explicit baselines and lineage; judge only extent, and do not judge whether this feature is good or bad.
+
+K23. First-Person Plural Action Count
+     Score how frequently the abstract uses first-person plural actions to describe its process (e.g., 'We propose', 'We introduce', 'We present', 'We curate'). 0 means no such phrases, 10 means an extremely high frequency. Do not judge if this writing style is good.
+
+K24. Named System or Acronym Prominence
+     Score the extent to which the abstract introduces and emphasizes a specific, capitalized system name or catchy acronym for its method (e.g., 'LoraHub', 'SAFARI', 'MONeT'). 0 means no named system, 10 means the text revolves around the name. Do not judge if the name is clever.
+
+K25. Length, clause complexity and paragraph bulk
+     Score 0-10 for the EXTENT of sheer textual bulk and syntactic heaviness: approximate word count, number of paragraphs or visual blocks, average sentence length, depth of subordinate clauses, and density of parenthetical asides and em-dash insertions. 0 = a short, plainly-built abstract of roughly 100-140 words in one block with mostly simple sentences; 10 = a very long abstract (400+ words) or multiple blocks, built from long multi-clause sentences with stacked qualifiers. Measure size and structural heaviness only. You must NOT judge whether the length is appropriate, whether the abstract is verbose or well-edited, and you must NOT reward thoroughness.
+
+K26. Contemporary Buzzword Concentration
+     Score how saturated the abstract is with highly contemporary, trending acronyms and model names (e.g., LLM, GPT-4o, LoRA, CLIP, Diffusion, PaLM). 0 means no trending buzzwords, 10 means extremely dense with them. Do not judge if the topic is good.
+
+K27. Numeric result density
+     On a 0-10 scale, rate how much the abstract contains exact percentages, decimals, benchmark counts, dataset counts, speed figures, or comparative numerical results; judge only extent, and do not judge whether this feature is good or bad.
+
+K28. Revision seams and residue
+     On a 0-10 scale, rate how much the abstract contains literal placeholders, unresolved naming, inconsistent terminology, abrupt joins, or other visible editing residue; judge only extent, and do not judge whether this feature is good or bad.
+
+K29. Era vocabulary: which cycle in the run of submission rounds
+     Score 0-10 for how LATE in the field's timeline the abstract's vocabulary and reference points place it, judged only from the words on the page. Low scores for earlier-era markers: CIFAR-10/MNIST/Reuters/ImageNet top-1 error, BLEU and WMT/IWSLT year tags, BERT/RoBERTa/GPT-3 as the newest model named, convolutional or spectral or bandit framing with no generative-model vocabulary. High scores for later-era markers: multimodal LLM / MLLM, LoRA and parameter-efficient adaptation, jailbreak, value alignment, agents and tool use, flow matching, diffusion, chain-of-thought, anonymized-repo culture. 0 = the text reads as belonging to the earliest rounds represented here; 10 = it reads as belonging to the most recent. Score the temporal fingerprint only. You must NOT treat recency or datedness as better or worse, and you must NOT judge whether the topic is important.
+
+K30. Benchmark/Dataset Introduction Framing
+     Score the extent to which the abstract positions its main contribution as introducing a new benchmark, dataset, or evaluation suite rather than a new algorithm. 0 means it strictly proposes a method, 10 means it primarily introduces a benchmark/dataset. Do not judge whether benchmarks are valuable.
+
+K31. Primary framing as a new benchmark/dataset/resource rather than a new method
+     On a 0-10 scale, rate how much the abstract frames its main contribution as introducing a new dataset, benchmark, environment suite, or evaluation resource for the community to use, as opposed to introducing a new model/algorithm/method. Score only the extent of resource-contribution framing (e.g., mentions of curating data, releasing a benchmark, providing baselines for others to build on); do not judge whether the resource is useful or well-constructed.
+
+K32. Scale and resource signaling
+     Rate 0–10 for textual signals of breadth or resources, including many datasets, models, languages, tasks, participants, modalities, domains, or public infrastructure; judge only the amount of signaling, not its value.
+
+K33. Inline math/LaTeX notation density
+     On a 0-10 scale, rate how densely the abstract text uses inline mathematical notation and markup (subscripted variables, named norm/penalty symbols, emphasis-markup commands, Greek letters) relative to plain prose. Score only the density of such notation; do not judge whether the mathematical content is correct or valuable.
+
+K34. Polished academic fluency
+     On a 0-10 scale, rate how much the prose exhibits highly smoothed transitions, idiomatic academic phrasing, consistent terminology, and syntactic regularity; judge only extent, and do not judge whether this feature is good or bad.
+
+K35. Audience-facing peroration and community-impact rhetoric
+     Score 0-10 for the EXTENT of outward-facing mission or impact rhetoric addressed to a community rather than describing results: closing or framing sentences that promise to empower, inspire, or enable researchers and practitioners; forward-looking flourishes such as 'paving the way', 'opens new avenues', 'shedding light on', 'a foundation for future work', 'we hope to advance'; self-description of the paper's social role (a call to caution, a warning to the community); and appeals to broad societal or scientific stakes not measured in the experiments. 0 = the abstract ends on its results with no address to a community and no forward-looking flourish; 10 = mission framing opens and closes the abstract and recurs in between. Score the presence and prominence of this rhetoric only. You must NOT judge whether the stated impact is plausible or whether the ambition is warranted.
+
+K36. Quantified-result density
+     Rate 0–10 for the number and concentration of exact numerical values, percentages, benchmark metrics, and quantitative comparisons; judge extent only, not whether the results are impressive or valid.
+
+K37. Technical compression density
+     Rate 0–10 for the density of specialized terminology, abbreviations, notation, and compressed technical noun phrases; judge only visible extent, not usefulness or quality.
+
+K38. Negative Framing of Prior Work
+     Score the extent to which the abstract explicitly criticizes or highlights the limitations of prior work using negative framing (e.g., 'lack interpretability', 'restrictive assumption', 'inevitably raise a critical research question'). 0 means no negative framing, 10 means highly critical. Do not judge if the criticism is valid.
+
+K39. Public-release rhetoric
+     On a 0-10 scale, rate how much the abstract emphasizes code, data, demos, APIs, public availability, practitioner use, or broad societal and application impact; judge only extent, and do not judge whether this feature is good or bad.
+
+K40. Crowded-literature positioning
+     Rate 0–10 for explicit mapping of many prior approaches, limitations, subproblems, or claimed firsts, suggesting a late-stage synthesis of an already crowded topic; judge only the textual cues, not novelty or quality.
+
+K41. Acronym and branding density
+     On a 0-10 scale, rate how much the abstract uses named methods, acronyms, camel-case labels, and branded component names; judge only extent, and do not judge whether this feature is good or bad.
+
+K42. Submission-format residue
+     Rate 0–10 for visible markup, LaTeX commands, URLs, footnotes, placeholders, anonymization remnants, unusual spacing, or other template artifacts; judge only their presence, not whether the formatting is good.
+
+K43. Explicit Reproducibility and Code Pledges
+     Score how much the abstract explicitly promises that code, data, or models are open-sourced or will be released upon acceptance (e.g., 'Code is available at...', 'Our code will be made publicly available upon acceptance'). 0 means no mention, 10 means a strong, explicit pledge. Do not judge if open-sourcing is good.
+
+K44. Raw LaTeX markup and hard-wrap artifacts left in text
+     Score 0-10 for the EXTENT of un-rendered source-file residue visible in the abstract text: LaTeX commands and escapes (\url, \emph, \textsf, \textit, \footnote, escaped \% and \_), inline math delimiters used for ordinary symbols ($>$, $\leq$, $32\times$), markdown emphasis markers (**bold**), literal placeholder tokens, mid-word hyphenation from a PDF line break, one-sentence-per-line layout, and stray leading indentation. 0 = clean running prose with no such residue; 10 = residue is pervasive and appears in most sentences. Count only the presence and frequency of these artifacts. You must NOT judge whether the artifacts are good, bad, sloppy, or professional, and you must NOT let the content of the surrounding sentences influence the number.
+
+K45. Compute-scale and frontier-resource fingerprint
+     Score 0-10 for the EXTENT to which the text displays access to large or proprietary resources: named frontier or industrial models used as the object or engine of the work, pretraining or full-model training rather than fine-tuning, FLOP budgets or wall-clock savings on large runs, evaluation sweeps over thousands of models or tens of thousands of items, large curated data collections, or paid human evaluation panels. 0 = experiments described at a scale any small group could run on public benchmarks; 10 = the work visibly required frontier-scale models, data, or annotation budgets. Score the visible scale markers only. You must NOT judge whether large-scale experiments are more convincing, and you must NOT speculate about who the authors are.
+
+K46. Prompt-obvious framing
+     On a 0-10 scale, rate how much the abstract follows an immediately recognizable pattern of stating a familiar limitation, introducing a direct named fix, and closing with conventional experiments; judge only extent, and do not judge whether this feature is good or bad.
+
+K47. Elevated-thesaurus academic register and non-idiomatic phrasing
+     Score 0-10 for the EXTENT of formal, thesaurus-elevated, or non-idiomatic academic register: words such as 'nonetheless', 'endeavor', 'commendable', 'prevailing', 'intricate', 'efficacy', 'whilst', 'thereby', 'aforementioned', 'plethora'; nominalized constructions where a plain verb would do ('the maximization of the objective', 'through the integration of'); slightly off collocations or article usage; and ceremonious connectives opening consecutive sentences. 0 = plain, idiomatic, conversational technical English; 10 = sustained elevated or non-idiomatic register across most sentences. Score register only. You must NOT judge whether the writing is good, clear, fluent, or awkward, and you must NOT infer anything about the authors.
+
+K48. Visible LaTeX Formatting Artifacts
+     Score the extent to which the text contains raw LaTeX markup or artifacts that were not compiled to plain text (e.g., \textit{}, \textsf{}, \url{}, $...$, ~, \%). 0 means completely clean plain text, 10 means heavily cluttered with raw markup. Do not judge if this is good or bad.
+
+K49. Bolded backronym-style method-name spelling
+     On a 0-10 scale, rate how much the abstract visually spells out a coined method name by bolding, italicizing, or otherwise typographically marking the letters within a longer phrase that form the acronym (e.g., marking the letters C-O-M-M inside 'CLIP and DINO with Multi-level Merging'). Score only the presence/extent of this typographic acronym-spelling device; do not judge whether the coined name itself is clever or appropriate.
+
+K50. Promotional claim language
+     Rate 0–10 for the frequency and intensity of terms such as novel, first, significant, comprehensive, superior, promising, or state-of-the-art; judge wording extent only, not whether the claims are justified or good.
+
+=== TARGETS ===
+
+T01. Belief-change — the output is a changed understanding rather than a delivered artifact
+     Score 0-10 on whether the main thing a reader takes away is a revised belief about how something works, as opposed to a tool, model, or dataset they can now use. Both are legitimate contributions; score only which one the abstract is offering.
+
+T02. Explicit count-signalling of experimental scale
+     Score 0-10 for how much the abstract advertises the COUNT of its experiments — 'extensive experiments on six benchmarks', 'four datasets', 'across three tasks', 'comprehensive evaluations'. Score the advertising of counts only, not the actual breadth of the evaluation.
+
+T03. Magnitude of the engineering or data resource the work required
+     Score 0-10 on how much construction effort the abstract evidences — corpora built, systems trained at multiple scales, pipelines assembled, annotations collected — judged from what is described as having been made, not from claims about importance.
+
+T04. Multiplicative speedup notation
+     Score 0-10 by how many multiplicative performance figures the abstract states — '3.04x', '91 times', '5 to 10 times faster', 'orders of magnitude'. Count the notation only; do not judge whether the speedup is real, fairly measured, or worth its cost.
+
+T05. Membership in the learning-theory / optimization subfield
+     Score 0-10 for how far the abstract belongs to the learning-theory, optimization, or statistical-guarantees cluster — convergence rates, regret bounds, complexity results, estimator analysis. Score topic membership only; work of any quality in any other subfield scores 0.
+
+T06. Passive-voice density
+     Score 0-10 for how much of the abstract is written in the passive voice ('it is shown that', 'experiments were conducted', 'the model is trained') rather than the active voice. Score the grammatical construction only.
+
+T07. A public repository URL appears in the abstract
+     Score 0-10 for whether the abstract contains a real, public code or data link — a repository URL or hosted project address. Score 0 when there is no link. This is about a live public link, not about anonymised submission placeholders or promises to release later.
+
+T08. Density of promotional superlatives and hype vocabulary
+     Score 0-10 for how heavily the abstract uses promotional vocabulary — remarkable, impressive, striking, significant, substantial, superior, novel, state-of-the-art, comprehensive, extensive. Count the promotional register, not whether the claims are true.
+
+T09. Branded method name or acronym
+     Score 0-10 for how strongly the work brands itself with a coined capitalised name or acronym for its method, system, dataset, or benchmark, and repeats that name through the abstract. Score the branding practice only.
+
+T10. Scare-quoted or coined terms in quotation marks
+     Score 0-10 for how much the abstract puts terms in quotation marks to coin, hedge, or distance itself from them — 'false negatives', 'tabula rasa', 'middle way'. Score the quotation habit only.
+
+T11. Anonymized-repository or release-on-acceptance code boilerplate
+     Score 0-10 by how prominently the abstract carries submission-time artifact boilerplate: an anonymised repository link (for example an anonymous code-hosting URL or a placeholder), or a promise that code or data will be released later or upon publication. Score 0 when no such statement appears; score by presence and prominence of the boilerplate, not by whether sharing is a good practice.
+
+T12. "Framework" as the contribution noun
+     Score 0-10 for how much the abstract labels its own contribution a framework, paradigm, pipeline, or scheme rather than naming a concrete object such as an algorithm, model, dataset, bound, or result. Score the choice of noun only.

@@ -1474,3 +1474,590 @@ other users' training) and the 3h fixed-backend battery still hit its cap at the
 init line. Backend mistral-flags fix is committed (correct + keeps the door open);
 executor stays OUT of all slates; GPU7 verified clean. Not load-bearing: reasoning
 program closed with 4 families.
+
+## Bundled advisor verdict (2026-08-09 ~10:20) — WEAKENING of the 7/203 claim + phrasing law
+
+**Load-bearing correction (weakens a887a5c):** the both-receiver winner SET is at
+chance — marginal rates P(content>=.05) are .202 (qwen) and .153 (gptoss), predicting
+6.3 joint hits under independence; observed 7; permutation p=.44. The set of 7 must
+never be presented as a replicated set, and the 6-metric table is not re-quotable
+without this disclosure. What survives: (i) continuous content components correlate
+across receivers r~=.20 (n=203, p~=.005) — the honest set-level claim; (ii) "Taste and
+timing on traumatic/charged subjects" is INDIVIDUALLY quotable (joint ~5.1 sigma/
+4.4 sigma); Profanity/edginess is suggestive-only; the other five are not quotable.
+**Framing trap:** content != winning — Taste-and-timing fun−def is −.050 at qwen (its
+definition sits at .990 ceiling). BAN "examples beat definitions on these metrics" for
+content winners; REQUIRED: "examples demonstrably carry construct-specific content (vs
+placebo) — mostly WITHOUT beating the definition."
+
+**Other rulings:** (a) BAN "calibration-need x content" as a formula (no interaction
+test; two receivers = two points) — required statement: construct-nonspecific
+calibration term with receiver-dependent SIGN (+.06*/−.13*) plus a small content term
+detectable at one receiver. (c) math = corroborating-only: REQUIRED "humor (29
+constructs); corroborated in math (7 constructs, 4 planted; small-sample)"; BAN
+"(humor+math)" as co-equal or "across domains"; never conflate the .619 anchor pass
+(code truth) with harvest cells (dossier refs). (d) NEVER merge the two ledgers: 70B
+ledger = fun−def wins, slate-level label-sensitivity (no mm arm); cross-receiver
+ledger = fun−mm content, mostly without fun−def wins; one merged "metrics where
+examples help" list is BANNED. Gestalt theme = consistent-with 1c-v2 Noah weak-form,
+not a tested categorization. (b-theme) "social-norm boundary" = HYPOTHESIS until the
+blinded-categorization rank test runs (all 203 names categorized blind to scores, then
+rank-test continuous content vs category; CPU-only — QUEUED via Codex blind judge per
+standing rule). No retractions on the mm-control resolution, math landing, or
+magistral park.
+
+**Advisor safe summary (program-level):** "Optimized exemplar sets beat definitions
+only at the receivers that selected them; at frontier receivers their apparent
+advantage is construct-nonspecific calibration; exemplar content is real but thin
+(r~=.20 cross-receiver), with one construct — taste/timing on charged material —
+carrying large, receiver-robust content that still does not overtake a strong
+definition."
+
+## Norm-boundary theme: blinded categorization rank test PASSED (2026-08-09 ~10:45)
+
+Codex companion down (exit 137 on fresh threads too) → blinded judge = FRESH Sonnet
+subagent (zero session context, names-only input). Categories over all 203 names:
+30 norm-boundary / 114 mechanics / 59 other
+(outputs/osl_multi_local/metric_categories_blind_v1.json). Advisor-specified test:
+one-sided rank-permutation (100k) of CONTINUOUS content components (fun−mm) for
+norm-boundary vs rest:
+
+| leg | nb median vs rest | p | LOO (drop Taste-and-timing) |
+|---|---|---|---|
+| qwen25-72b | +.0320 vs .0000 | .0059 | .0116 (robust) |
+| gpt-oss-120b | +.0089 vs −.0036 | .0474 | .0799 (marginal) |
+| avg of receivers | +.0222 vs .0000 | .0095 | .0180 (robust) |
+
+**Status upgrade: "norm-boundary constructs carry more exemplar content" is now a
+SUPPORTED FINDING** (blind categories, continuous components, LOO-robust at qwen and
+combined; gptoss leg marginal without the top construct — disclose). Mechanics and
+other medians are exactly ~0 on all legs. Phrasing: content-not-winning framing still
+applies; theme claims cite this test, never the p=.44 winner-set. Taste-and-timing
+confirmed norm-boundary under blind assignment.
+
+## De-censoring run: verdict = DISCLOSED, with a principled reason (2026-08-10 ~13:30)
+
+The 69-metric deep-censored tail (top_minus_mid>.02 in ALL 3 families; supersedes the
+retracted ~235 OLS-tail) scored on gpt-oss-120b (gen readout, GPU6, 69/69, then 67
+with valid refs). Result: gpt-oss recovers LESS than every local top rung — vs
+llama70b/qwen25-72b −.296* each (both are ref voters, adjacency-inflated), vs the
+clean non-voter qwen3-32b **−.1343* [−.1624,−.1064]**, pos .15; only 5/67 individual
+ceiling breaks >=+.05 (Setting-as-active-engine +.102, Category/market-fit +.092,
+Setting-as-thematic-agent +.081, Constructive-sequential-proofs +.076,
+Incongruity-mechanics +.050). Instrument check: NOT the gpt-oss def-collapse artifact
+(med frac_yes .331, 7.2% degenerate — healthy variance, low ref agreement = the gemma
+signature).
+
+**Criterion-4 verdict (the goal's "de-censored by a stronger listener OR explicitly
+disclosed"):** the tail CANNOT be de-censored against a local-dialect reference — the
+crowd ref's two voters are the same families whose ladders the tail is still climbing,
+so any outside listener is structurally disadvantaged; gpt-oss's
+variance-without-ref-agreement on these constructs is the listener-indexed thesis
+applied to the reference itself. VERDICT ROW: "asymptote unknown; not de-censorable
+under the local-dialect reference; 5 individual ceiling-breaks stand as existence
+proofs that some tail constructs keep gaining beyond local ladders." Never phrase as
+"the tail is inarticulable" or "gpt-oss is weaker." Task #22 CLOSED as
+measured+disclosed. Artifacts: mbar_decensor_gptoss.npz, decensor_harvest_v1.json,
+decensor_tail_v1.json (+ laptop mirrors).
+
+## Channel x scale exhibit v2 (criterion 2 fold-in, 2026-08-11 ~14:15)
+
+Built LOCALLY from the story data pack (outputs/analyses/channel_scale_v2/). Bank-scale
+(humor 284, LOO references — voter rungs scored vs the OTHER voter after the v1 pass
+exposed voter-vs-own-consensus degeneracy [recovery=1.0 by construction; that pass was
+discarded before recording]): rubric-channel recovery climbs .50 -> .70-.73 across the
+qwen family with per-category paired CIs (mechanics +.1962* / norm-boundary +.2278* /
+other +.2173* top-vs-bottom). NEW: norm-boundary constructs climb SLOWER at small-mid
+capacity (7b .601 vs mechanics .756) and catch up by 72b — the rubric channel needs
+more capacity for norm constructs, rhyming with their exemplar-content profile.
+Bank channel ordering at llama70b (v3 holdout, n=203): def-name +.1343*, examples-name
++.0530*, examples-def -.0813*; plus the certified examples cells at qwen72b/gptoss.
+Coverage disclosures recorded in-artifact: explanation/dossier + thinking = slate-only;
+"units" = no construct-side scored channel (4.1 decomposition is definitional);
+name-at-bank = llama70b holdout only. Criterion-2 status: per-class bank curves with
+CI'd headline cells DELIVERED under these disclosures.
+
+## Verdict/remedy table v1 (criterion 4, 2026-08-11 ~14:30)
+
+Every construct in the 1,032-row universe (family_verdict_join; the goal text's "1,270"
+was an older bank tally — universe difference disclosed) now carries a remedy verdict
+with an evidence trail (outputs/analyses/verdict_table_v1/, thresholds in-artifact):
+
+| remedy | n | share | grounds |
+|---|---|---|---|
+| dialect-matched-listener | 620 | 60.1% | family-dependent gains or undecensorable tail |
+| works-as-stated / none-needed | 362 | 35.1% | plateaued at every family top (ceiling reached) |
+| better-demonstration | 45 | 4.4% | certified exemplar content (fun−mm >= +.05) |
+| stronger-listener | 5 | 0.5% | frontier ceiling break on the still-gaining tail |
+
+Disclosures: demonstration remedy is humor-instrumented only (other tasks' zeros =
+not-measured, not absence); "better-statement" never fires as a distinct rule (its
+evidence base — def-weakness gating — overlaps better-demonstration; folded, stated);
+nothing-certified = 0 because family-dependence covers the residual. The 60% dialect
+share IS the listener-indexed thesis in table form. Criterion-4 status: every-construct
+verdict row DELIVERED (deep-censored tail explicitly disclosed via the de-censor
+verdict; 5 stronger-listener rows are the existence proofs).
+
+## Criterion-6 reliability filter + frontier spot-check (2026-08-11 ~15:00)
+
+The 362 plateaued-everywhere constructs screened for reference reliability
+(voter-agreement >= .70, kept items >= 150, top NON-VOTER local recovery >= .65;
+outputs/analyses/reliability_filter_v1/). The plateau set SPLITS THREE WAYS:
+
+| subset | n | share of 1,032 | reading |
+|---|---|---|---|
+| RELIABLE plateau (high recovery, ceiling reached) | 130 | 12.6% | articulable-and-done: transmission succeeded, capability adds nothing more |
+| plateau at LOW recovery (<.65 at best local non-voter) | 189 | 18.3% | the LOW-CEILING-EVERYWHERE set: flat in all families AND never well-transmitted locally — the paper's plateau-everywhere thesis set |
+| reference-unreliable (voter agreement <.70) | 43 | 4.2% | no claim certified |
+
+Frontier spot-check (humor reliable-plateaus ∩ gpt-oss definition rows, no new
+scoring): 37/40 consistent (frontier <= local top + .05); 3 contradictions logged in
+the artifact — quote 130 as "≈130, 3 frontier-contested".
+
+The closing-claim quantification (criterion 6) is now: ~12.6% articulable-and-done,
+~18.3% low-ceiling-everywhere (inside the user's predicted 10-20% band for
+plateauing-everywhere), 60.1% listener-family-relative (verdict table), remainder
+still-gaining/unreliable — with the hive-mind control (46% ≈ 51%) and base-rate-
+controlled family ownership (ratios .77-.95 ≈ independence) already on file. The
+verdict table's works-as-stated row inherits this split (12.6 + 18.3 + 4.2).
+Criterion-6 analysis debt: CLEAR.
+
+## Criterion-5: frozen rung assignments + P1-P3 scored (2026-08-11 ~15:45)
+
+Rung rule fixed BEFORE computing any correlate (outputs/analyses/ladder_p123_v1/,
+rule in artifact): R1-name 169 / R2-statement 497 / R3-demonstration 1 /
+R4-listener-bound 163 / R5-low-ceiling 202.
+
+**Prereg outcomes (frozen 2026-08-06):**
+- P1 (concreteness decreases down rungs): **FAILS** — Spearman rho=+.068 (wrong sign,
+  p=.03); rung means non-monotone (2.72 / 2.63 / — / 2.72 / 2.76).
+- P2 (beyond-text share increases down rungs): **FAILS** — rho=−.044 n.s.; beyond-text
+  share is HIGHEST at R1-name (.142).
+- P3: **untestable** — the demonstration rung is nearly EMPTY (n=1): under the frozen
+  rule, constructs with certified example content almost always ALSO have a strong
+  definition (the content≠winning finding, resurfacing structurally): demonstration is
+  an ADDITIVE/remedial channel, not a primary articulation rung.
+
+**Verdict = the prereg's third landing zone, verbatim: "the operational ladder does not
+reduce to lexical abstractness" — publishable as such, and thematically load-bearing:
+the transmission ceiling is a property of the construct–listener PAIR, not of how
+abstract the construct's words are. No abstractness language in core results.** The
+R3-empty observation is reported as its own finding (examples never carry a construct
+alone at bank scale; they repair or refine statements).
+Criterion-5 status: EXECUTED per prereg (assignments frozen first; predictions scored;
+landing zone recorded). All analysis criteria (2,4,5,6) now DELIVERED.
+
+## P1 exploratory rerun + silver-validation program (user directives 2026-08-11 evening)
+
+**P1 rerun (EXPLORATORY; frozen P1 verdict unchanged):** lemmatized + full function-word
+removal (median matched words 19→22, 1032/1032 usable): Spearman rho=+.092 (p=.003) —
+sharpening the instrument STRENGTHENS the wrong-sign trend; rung means 2.71-2.84 (flat
+band). P1's failure is robust to the coverage/lemmatization criticisms. Match-quality
+audit on file: 80% median match rate; top matched words are the rubric-writing register
+(avoid/use/clear/clarity/audience/structure) — all rungs share one instructional
+dialect; that is WHY wording concreteness cannot separate them.
+
+**Silver-label validation program (user-corrected framing):** silver labels come from
+the matching cascade over unstructured community discussion (26 corpora) + LLM
+extraction — the selection filters are DISCUSSION FREQUENCY and MATCHER
+RECOGNIZABILITY, not community codification (my earlier phrasing over-claimed;
+corrected). Approved responses: #1 coverage audit + #3 sparsity-correlation (task #31,
+CPU) and #4 synthetic-construct calibration frontier (task #30 = 1e, plan approved:
+60 constructs / 3 novelty tiers incl. anti-conventional T3, matched-complexity real
+controls, dual truth-vs-reference readout, predictions to freeze before scoring).
+Consequence-prediction validation (#2) explicitly scoped OUT to another paper.
+
+**M_omega-vs-frozen-arms clarification (for the record, after user challenge):** the
+ladder/P2 cells rest on FROZEN frontier-authored articulations (encoder-iteration arm
+was declined at design time); per-construct optimized articulations exist alongside
+(M_omega reconstruction objects; flip-selected sets) and are quoted ONLY with their
+optimization-artifact controls — the flip-at-frontier mm result (optimizer harvested
+pure calibration, zero content) is the demonstrated instance of why.
+
+## P1 rerun AUDITED (user challenge, 2026-08-11): within-task INVERSION, not mere flatness
+
+Audit 1 (lemmatizer): 78.5% exact / 17.3% rule / 4.2% unmatched; high-frequency rule
+resolutions all correct; named errors (themes->them, uses->us, primes->prim,
+slides->slid) = <1% of tokens, negligible for group means.
+Audit 2 (composition/Simpson's): within-task Spearman(rung, concreteness) is POSITIVE
+in 4/5 tasks — humor +.264***, math +.397***, peer +.287**, CW +.114*, news +.010 n.s.
+— all stronger than the pooled +.092 because the BETWEEN-task trend runs negative
+(deeper-rung tasks use slightly less concrete vocabulary), diluting the pool. So the
+pooled wrong-sign result is NOT a composition artifact; composition was hiding a
+stronger within-domain inversion.
+
+CORRECTED CLAIM (supersedes "essentially flat"): within domains, harder-to-transmit
+constructs are worded significantly MORE concretely. P1 fails with an inversion, not a
+null. Post-hoc interpretation (flagged): transmission-resistant constructs are often
+about concrete surface qualities (timing/delivery/imagery) whose decision rule is the
+tacit part, while abstract-sounding constructs carry conventionalized rules — same
+lesson as P2. Exploratory status (instrument sharpened post-hoc) unchanged; frozen-P1
+verdict (prediction fails) unchanged.
+
+## Notebook Part B: paper replicas + OSL-week exhibits + §4 re-org proposal (2026-08-11 evening)
+
+User directive: ground the week's OSL tasks and their insights for a §4 re-organization;
+update the articulation notebook with replicas of all paper plots plus the new exhibits.
+
+Delivered in notebooks/2026-08-10__articulation-story-4.1-4.3.ipynb (now 28 cells):
+- B.1 replicas from the same data the TikZ generators consume: osl-regimes verdict counts
+  match the paper EXACTLY (rising 884 / reaches 321 / bounded 65 / noisy 77 excl);
+  supervised Qwen3 ladder (hotpot+hover, init vs mean-draws); types6 nested merge +
+  coarse truth-condition axis + regime-by-domain; change-types parsed back out of the
+  AUTO-GENERATED gen_change_types.tex (paper-exact: decompression 51/49 def/expl, GEPA
+  77 score-anchors, M_omega 47 checking-steps) because the label scratchpad files are
+  gone; Tables 1-2 as dataframes with the PUPA re-mint status inline.
+- B.2 one exhibit per new instrument: family census, reliability screen + remedy table,
+  de-censor scatter, frontier-limit CI panel (both receivers, voter caveat), channel x
+  scale curves + headline cells, examples two-receiver ledger + norm-boundary
+  concentration, MI census degeneracy/H(pred), frozen rungs + P1 forest + P2 by rung.
+- P1 forest cell REIMPLEMENTS the audited instrument in-notebook (Brysbaert copied into
+  the data pack as analyses/brysbaert_concreteness.csv); reproduction check vs committed
+  values: humor +.264 (exact), math +.408 vs +.397, peer +.299 vs +.287, CW +.109 vs
+  +.114, news +.021 vs +.010, pooled +.091 vs +.092 — same signs, same significance
+  pattern; reference values printed alongside in the cell.
+- B.3 = the §4 re-org proposal (6 subsections: instrument / listener-relative verdicts /
+  which ceilings are real / frontier does not de-censor / channel x capability / every
+  construct a verdict), with an explicit kept/demoted ledger: bounded community&identity
+  signature STRENGTHENED (two independent instruments converge); single-family regime
+  counts demoted to per-family descriptions; extrapolated rising ceilings replaced by
+  the de-censor measurement. Table-2 MI-silver validity anchor UNTOUCHED (stays in §3).
+
+## Codability extension wave + notebook v5 iteration (2026-08-11 night)
+
+**Codability extension EXECUTED (user "run it now")**: 315 metrics / 1,260 units across the
+3 uncovered domains, 6 blind Sonnet crews, ALL anchors 6/6, 100% metric coverage vs defs
+(defs built from outputs/hierarchy/<task>_general_r2_expanded.json — verified as the same
+canonical source as the 5-task wave via humor 284/284 exact match). Unit-level MECHANICAL:
+press_releases 28.6% (902 units) / notice_and_comment 34.0% (332) / patents 38.5% (26) —
+procedural domains land high as predicted (vs humor 4%/CW 6%). Universe now 1,347 metrics
+/ 4,718 units / 8 domains. Files: code_metrics/{defs,unit_codability}_{press_releases,
+notice_and_comment,patents}.json.
+
+**Notebook v5 (user iteration)**: 4.2c re-axised to battery z (OpenCompass-validated);
+4.2d + illustrative before->after snippets; 4.2E mechanism note (gpt-oss = decoder
+collapse -> anchoring, NOT longer thinking); E-b/E-c simplified w/ reading guides;
+**E-c print-line direction error CORRECTED** (v4 said "demonstration succeeds where
+restatement fails" — wrong way round; certified claim is gate opens / gap never closes,
+i.e. exemplars never reach definition parity on planted); 4.3 upper-bound establishment
+text (fitted L profile-CI + planted capability-selected reference); 4.3b top-of-range
+gain panel (rising med > 0, others ~0 — the tail IS visible); coarse-axis derivation
+note; 4.3d/e redrawn single-message; reading-guide markdown before every 4.3 exhibit.
+4.1b now dual join: staircase groups (5 tasks) + OSL verdicts (8 domains) — both NULL
+(codability ⊥ scaling verdict).
+
+**HTML companion published** (artifact 34eaa18a): 18 humor constructs where examples beat
+definition >= .05 — definition arm beside the actual labeled exemplar texts (probe
+universe verified: humor silver texts 60:360, 300 probes, panel-dim match; probes
+exported from sk3 via _load_texts and staged to analyses/humor_probes_60_360.json).
+
+## Channel-emergence-by-z readout + norm-boundary categorization extension launched (2026-08-11 late)
+
+**Emergence table** (32-slate arms x 10 local receivers, frontier-dossier consensus ref,
+paired 20k CIs; outputs/analyses/group_contrasts_v1/channel_emergence_by_z_v1.json):
+- dossier CONTENT (doss - mismatched-doss): -.006* @1B, ~0 @3B-class, EMERGES +.10-.12*
+  @7-8B, then monotone +.183* @14B, +.244* @32B, +.290*/+.252* @70B/72B. The ability to
+  extract construct-specific content from a full articulation turns on at z~1.6 and
+  never saturates in the local range.
+- ANCHOR (mismatched-doss - def): grows MORE negative with z (-.03 -> -.19*): stronger
+  receivers are more misled by wrong-construct text = they genuinely read it.
+- expl-def: pays only at 32B+ (+.033-.058*); NEGATIVE at qwen25-3b/gemma2-27b (more
+  text hurts small receivers).
+- def-name: modest everywhere (+.01-.06); name-abs rises .505 -> .752.
+- ex-def: negative at every local rung except llama70b (+.042*, the selector).
+- gemma2-27b row: battery-z INVALID for this model (composite-item chance collapse,
+  documented exclusion) — read its row by size class, not z.
+
+**Norm-boundary categorization extension LAUNCHED** (user approved): 1,144 unlabeled
+metrics + 30 hidden humor overlap names (consistency check vs metric_categories_blind_v1)
+in 6 names-only blind chunks; same category semantics; wave 1 (c1-c3) running.
+
+## Norm-boundary categorization v2 (full universe) + RISING test verdict (2026-08-12)
+
+Extension merged: metric_categories_blind_v2.json — 1,347 metrics (832 mechanics /
+370 other / 145 norm-boundary); v1's 203 humor labels kept verbatim; 30-name hidden
+overlap consistency 28/30 (.93) between the independent blind judges.
+
+**Full-universe norm-boundary -> RISING test (100k one-sided perm):**
+- humor: P(RISING|nb)=.805 vs .380 rest, diff +.425, p<1e-5 (n_nb=41; STRENGTHENS the
+  v1 cell — extension added 11 more blind nb names and the effect held)
+- POOLED 8 domains: .734 vs .692, p=.19 — DOES NOT GENERALIZE pooled
+- news -.03 / peer -.13 / press -.06: null-to-reversed
+- Structural reading (not a conclusion): outside humor the banks are RISING-dominated
+  (base .70-.79; deep censoring), so verdict variance is compressed — the humor cell is
+  the only bank with enough REACHES mass (base RISING .38) for the contrast to breathe.
+  The claim of record stays HUMOR-SCOPED: "norm-boundary constructs keep gaining with
+  capability where craft-mechanics constructs finish early" — now at n=41 blind labels.
+
+**1B side answer (planted probe)**: llama1b PLANTED-definition recovery = .509 (chance)
+vs .613 @3B, .726 @8B, .805 @70B. At 1B even verbatim mechanical rules are inert — the
+receiver is not learning from ANY channel; its .53 real-def cell is lexical-prior
+residue, not rule-following. Order of emergence: execute-verbatim-rules 1B->3B;
+extract-content-from-articulation 7-8B; explanation>definition 32B+.
+
+## SCOPE RULING: coding material moves OUT of paper #2 -> METRIC-SEAM paper (user, 2026-08-12)
+
+User direction after the round-trip program buildout: stuffing metric-seam + coded
+metrics into paper #2 is too much; the coding piece is a distraction from #2's charge.
+Disposition:
+- Paper #2 keeps Collins routes (1) better string [channel grid/decompression/examples]
+  and (3) better listener [scaling/limits program] in depth; route (2) formal string
+  becomes ONE forward-referencing sentence — Fig 9 (code-iso), Table 3 (compile cliff),
+  and the F spectrum figure all MOVE OUT of #2.
+- Destination = the METRIC-SEAM paper (its own existing track: notes/2026-07-03__
+  metric-seam-paper-roadmap.md + v2 + section draft). NOT paper-1 (metric-codability =
+  the terms/lexicon paper; lexical codability != behavioral codability — do not conflate).
+- Seam paper additionally receives from this week: 8-domain unit codability taxonomy,
+  judged-vs-compiled correlation (rho .41, technical-register inflation), planted-
+  equivalence decomposition (mechanical-but-thick), the code round-trip instrument
+  (methods/metric_seam/roundtrip/, scripted+repeatable), GEPA-on-program lane (official
+  gepa engine), hybrid-executor continuum idea + the FROZEN component-level prediction
+  (round-trip fidelity per component tracks the Table-3 compile cliff — registered
+  BEFORE any hybrid scoring), and the boundary charter (fully-coded 0/176 at metric
+  reliability / effectively-coded 13.6% lenient ~2% strict / code-articulable ~25% t0;
+  one-sided decidability; text-locality as separate axis).
+- In-flight lanes: compile trials t1+t2 COMPLETE (all chunks full count); harness run
+  banked under the seam ledger. GEPA pilot + hybrid leg + planted full-loop HELD as
+  seam-paper charter items. No paper-#2 text edits until user directs.
+
+### 2026-08-12 — SCOPE RULING EXECUTED: paper #5 created, seam material moved
+- User: paper #2 will NOT focus on formal strings; keeps prompt scaling + scaling laws.
+  Codability-perp-scaling covariate paragraph: user ruled "don't need this anywhere."
+  4.1 census does not fold into #2; planted-equivalence stays only as 4.3's yardstick
+  validation.
+- NEW: latex/paper-5__metric-seam/ (own git repo like papers 1-4; Overleaf remote to be
+  wired when user names the paper). ICLR 2026 format. Contains: coded-isomorphism
+  section moved VERBATIM from #2 (fig:code-iso + fig:seam-spectrum + tab:seam-mech,
+  opening sentence rewired), generators gen_fig_code_iso.py / gen_fig_seam_spectrum.py,
+  removed_unit_types_appendix.tex.bak, stub sections for round-trip + boundary charter,
+  header comment = full banked-results charter w/ artifact paths. Compiles clean, all
+  refs resolve. Commit ccc66f6 (paper-5 repo).
+- Paper #2 (commit f32c033, paper-2 repo, NOT pushed to Overleaf): abstract now TWO
+  criteria; intro condition (2) = one forward-referencing sentence; outline bullet
+  removed; body coded-iso section replaced by one-sentence forward reference. Compiles
+  clean, zero undefined refs.
+
+### 2026-08-12 — E-CERT VERDICT-SLICE CAMPAIGN: selection + predictions FROZEN (pre-launch)
+User directive: "please launch more metrics for e-cert." Design = run the full
+epsilon-certifiability loop (unit mining -> audit -> submodular assembly -> capture-
+recapture missing-value ceiling) on a verdict-stratified slice, as a SECOND INSTRUMENT
+on the articulation boundary (feeds #27 four-instruments-one-boundary).
+
+SELECTION (frozen, outputs/analyses/ecert_verdict_slice_v1.json, 195 metrics):
+- Cell A: ALL 65 pooled-BOUNDED (humor 41 / news 13 / peer 9 / CW 2).
+- Cell B: 65 of 337 plateaued-everywhere (within-family instrument; A excluded),
+  stable-hash sample md5('ecert-slice-v1:task:name') ascending.
+- Cell C: 65 of 69 rising-everywhere, same hash rule.
+
+PREDICTIONS (FROZEN before any e-cert scoring; readouts threshold-free rank stats,
+paired bootstrap on medians; report C(R(Omega)) recovery per standing rule):
+- P1: cells A+B exhaust their unit mass — achieved value ~= calibrated ceiling; missing-
+  mass fraction ranks LOWER than cell C (the plateau is not search shortfall).
+- P2: cell C shows unexhausted missing mass — ceiling sits above achieved value by a
+  margin exceeding A/B (the rise has certified headroom left).
+- P3: within the exhausted cells, A exhausts at LOWER absolute value than B (bounded =
+  genuine low ceiling; plateaued-everywhere contains high plateaus).
+- Falsifier worth stating: if A shows LARGE unexhausted mass, the BOUNDED verdict is
+  challenged (plateau could be search shortfall) — report either way.
+
+DISCIPLINE: results reported ALONGSIDE the frozen-arm curves with optimization-artifact
+controls, never replacing them (design-conditional rule; flip-at-frontier lesson).
+Metrics never label-aware; anchor tests every judging batch; sk3 only, 1 GPU, GPUs 1-2
+off-limits. LAUNCH PENDING: harness + input-format identification (scout in flight);
+cost estimate to be recorded here before the run starts.
+
+### 2026-08-12 — E-CERT SLICE: smoke-1 caught empty capture stream; proposer families REPLACED (disclosed)
+Smoke-1 (2 humor metrics) VALIDATED THE GATE DESIGN: npz written and chain exited 0, but
+artifact inspection showed tags = {children} ONLY — zero free-gen rows = NO capture-recapture
+stream = the frozen P1/P2 predictions would have been unmeasurable. Root causes (surfaced by
+direct backend probes from sk3, errors were swallowed by generate() retries):
+- OpenRouter HTTP 402 Payment Required (credits exhausted) — kills qwen/llama/haiku proposer
+  families. USER ACTION if canonical 4-family set is wanted back: top up OpenRouter.
+- GLM HTTP 429 — key-resolver prefers ~/.z-ai-api-key-alexander-spangher.txt (DEAD account per
+  reference_glm_subscription_api); fix = ZAI_KEY_FILE pinned to the LIVE ~/.z-ai-api-key.txt.
+REPLACEMENT (disclosed instrument change): proposer families = glm-4.7 (zai_anthropic, live
+key) + gpt-4.1-mini (NEW 'openai' backend entry, sk3 SALT-lab key; gpt-5-mini rejected 400 on
+classic max_tokens param). 2-family CRC floor. The 272-bank itself used 3xGLM-4.7 (catalog),
+so family sets already vary across banks; within-slice cell comparisons (the frozen
+predictions) use one fixed family set and are unaffected; cross-bank LEVEL comparisons vs the
+272-bank get a family-set caveat. Proposer quota cost: ~555 GLM calls (~0.4M tok, trivial vs
+87M/wk) + ~555 gpt-4.1-mini calls (cents). Smoke-1 children-only npz QUARANTINED to
+outputs/ecert_slice_v1/quarantine_children_only/ on sk3 (skip-existing would have frozen them
+thin forever). Smoke-2 relaunched with the fixed families.
+
+### 2026-08-12 (later) — CANONICAL 4-FAMILY INSTRUMENT RESTORED; 2-fam humor lane quarantined
+User topped up OpenRouter (new key ~/.openrouter-api-key-2.txt laptop -> deployed as sk3
+~/.openrouter-api-key.txt, old key kept .bak-20260812); all three OpenRouter families probe
+live (qwen-2.5-72b / llama-3.3-70b / haiku-4.5) + glm-4.7 on the live ZAI key = canonical
+DEFAULT_FAMILIES restored. DECISION: instrument must be ONE fixed family set across cells
+(cell composition correlates with task; humor-heavy cell A mined 2-fam while other cells
+4-fam would confound family-set with cell) -> chain STOPPED clean (wrapper 1744571 ->
+python 1815768 -> EngineCore 1815897, explicit PIDs; nntruong's EngineCore untouched;
+GPU 5 verified 0 MiB), 74 humor 2-fam banks + smoke pair QUARANTINED to
+outputs/ecert_slice_v1/twofam_v1/ (kept as a family-set-sensitivity arm: same 74 metrics
+mined under both family sets = free instrument-robustness comparison). Full 185 re-mine
+launching with canonical 4 families after smoke-3 validates 4-family tags.
+
+### 2026-08-12 (night) — FULL 185-METRIC CHAIN LAUNCHED, canonical 4-family, GPU-0 co-tenancy
+Smoke-3 (GPU 5) failed twice: engine-init race vs a competing allocation, then EngineCore
+died 16:26 and the driver HUNG 6.4h silent (caught after fleet-wide network blip; wedged
+tree killed by explicit PIDs 1869266->1869267->1869282). GPU 5 since claimed by the other
+agent's train_reward_model.py (not touched). No idle allowed GPU -> launcher gained
+FORCE_GPU + VLLM_GPU_MEM_UTIL override (one knob, disclosed): co-tenant on GPU 0 at util
+0.5 (~89GB alongside sibling tenants). Smoke-4 GREEN: 2 humor banks with children + 15
+glm + 15 qwen + 15 llama + 15 haiku each, 0 failures, ~5 min. FULL CHAIN LAUNCHED
+22:58 PT (wrapper pid 2261199, log ecert_slice_v1_gpu0.log, monitor armed): humor 74 ->
+CW 48 -> news 25 -> math 23 -> peer 15, ~2.5min/metric incl. 4 API families -> ETA
+~7-8h (API latency dominates vs the 2-fam morning rate). Task #32 in_progress.
+
+### 2026-08-14 — DIRECT F1/AUC vs mention-y + DISAGREEMENT ERROR ANALYSIS (user-directed)
+F1(M_omega, y_pos) computed on all instance-level joins (artifact notebooks/data/
+silver_v2_20260711/f1_direct_20260814.json): median F1@.5 = peer .099 / crx .035 / cw .048 /
+pr .044 / humor .011 at prevalence .01-.06 (F1 ~ 2-3x the base-rate chance level; AUC .52-.60).
+NEVER headline F1 here: threshold-dependence + partial-observation y structurally deflate it.
+ERROR ANALYSIS (12 disagreement samples read manually, 3 peer metrics): judge right 9/12.
+Cell judge-YES/y=0: 6/6 label MISSES (property prominently in text, no reviewer commented).
+Cell judge-NO/y=1 VERIFIED via join polarity rows: 2/4 = genuine reviewer-vs-reviewer
+disagreement (same doc+aspect carries HIGH-conf NEG mention + pos mention; y=1 rode the pos),
+2/4 = scope mismatch (judge scores ~abstract-length text, reviewers judged full paper).
+CORPUS-WIDE: of 15,828 (doc,aspect) pairs with a real mention, 59.1% are NEG-only, 34.0%
+pos-only, 5.3% both -> peer-review mentions are predominantly CRITIQUES; the positive-only
+y keeps a minority slice. Feeds the Table-2-design defense footnote + task #31.
+GLM-5.2 MATCHED TRIAL RUNNING (methods/metric_implementer/experiments/glm52_matched_trial.py,
+chain on sk3, phases A 14.4K + C ~15K calls, max-tokens 1024 after think-trap smoke): matched
+prompt-judge mention-AUC vs July grid (8B .574 / GLM-unmatched .529).
+
+### 2026-08-14 — PREREG (FROZEN before compute): Tier-1 label-hygiene dose-response, peer mention-AUC
+Instrument FIXED: frozen 8B judge scores (peer_p_scores.json); ONLY labels vary. Distinct from
+the exploratory ysplit_sweep (post-hoc positive-split selection vs MI-rho): this preregisters a
+monotone-AUC prediction and adds the NEGATIVES axis.
+- Positive tiers (nested): P0 canonical peer_y_pos / P1 high-confidence pos mentions only /
+  P2 = P1 minus (doc,aspect) pairs also carrying neg or mixed mention / P3 = P2 with >=2
+  distinct reviews positively mentioning (corroborated).
+- Negative tiers (nested): N0 all non-positive docs / N1 attentive: doc has >=2 reviews each
+  w/ >=1 real mention AND >=5 total real mentions of OTHER aspects / N2 same w/ >=10.
+- Readout per cell: per-metric AUC (>=10 pos, >=30 neg), median+mean over metrics, n_metrics.
+- FROZEN PREDICTIONS: median AUC non-decreasing P0->P3 at fixed N; non-decreasing N0->N2 at
+  fixed P. Test statistic = the monotone pattern itself (sign pattern over the nested grid);
+  no post-hoc split selection. FALSIFIER: flat or decreasing => filters are cosmetic; the
+  "label noise explains low AUC" story may NOT be quoted as corrected. Report either way.
+
+### 2026-08-14 — TIER-1 RESULT: prereg SPLIT VERDICT (negatives axis confirmed-small; positive hygiene REFUTED)
+Grid run as preregistered (tier1_label_hygiene.py; artifact tier1_label_hygiene_result.json,
+copy notebooks/data/silver_v2_20260711/). Full-set medians: P0 .587 -> P1 .547 -> P2 .537
+(n_met 48/29/26; P3 corroboration leaves n=1 metric — prevalence too sparse, cell VOID).
+COMPOSITION-CONTROLLED (26-metric intersection, paired):
+- N-axis CONFIRMED, small: attentive negatives raise AUC at every P (P0 .5530->.5558,
+  P1 .5313->.5436, P2 .5372->.5466; +.003-.012).
+- P-axis REFUTED: high-confidence-only DROPS AUC (P0 .5530 -> P1 .5313 median; paired
+  P1>P0 on 10/26 metrics); no-contradiction (P2) does not recover. Extraction confidence
+  is evidently not label correctness (medium-conf brief-praise mentions were good labels).
+PER FROZEN FALSIFIER: the "removable label noise explains the low mention-AUC" story may
+NOT be quoted as corrected — positive-side hygiene does not lift agreement. Live remaining
+hypotheses, in test order: Tier-2 scope fix (full-paper scoring), then Tier-3 certified
+arbiter. The ~.55-.60 observed band stands as the honest floor with only ~+.01 recoverable
+from the negatives axis.
+
+### 2026-08-15 — TIER-3 PRELIM + WAVE-2 (purify-better + resample, user-directed)
+PRELIM (1,201 v1 verdicts; anchor preview 46/50=92%): stratified-sample AUC vs ARBITER-purified
+labels: peer .87 (!!) vs .503 mention-sanity — but y0->applies flip 83% leaves only 40 pure
+negatives; cw .56 / humor .59 / crx .62 / pr .35 (INVERTED — PR judge anti-correlates w/
+arbiter; PR was the null channel everywhere; scrutinize before quoting any PR number).
+TWO v1 PROTOCOL DEFECTS FOUND: (1) extension tasks went out with EMPTY definition fields;
+(2) crx items carried BARE metric ids as criterion (no form0 rubrics in its manifest) —
+crx v1 verdicts INVALID, void. cw a{N} confirmed = hierarchy group N (form0 = one leaf);
+proper construct = merged_name+merged_description; crx = code-review bank order (verified
+132/133 names in matches choices).
+WAVE-2 LAUNCHED (t3_batches_w2, 352 batches, 2,110 items, 2,078 w/ definitions): v2redo
+1,080 (all extension items re-arbitrated w/ proper constructs) + v2new 498 (to 400/task) +
+v2negtop 500 (peer y=0 top-up for pure-negative class) + 32 fresh sealed anchors. v1-vs-v2
+agreement on redo items = free arbiter-reliability measurement. Analysis on landing:
+certification gate -> confident-only (score<=2|>=8) + all-verdict variants -> purified AUC
+per task w/ CIs -> corpus-reweighted confusion matrices.
+
+### 2026-08-15 — OBJECTIVE-COMPARISON Tier A: all passes landed except eval inputs
+S1 pools frozen (197 metrics: peer 49/humor 99/pr 26/cw 23, probe substrate, form-sensitivity
+computed). Defpass probes DONE (Gemma-4, 4 tasks, 8 min). Critic pass DONE (qwen-72b
+OpenRouter, 29,550/29,550 after 3 mop-up passes for transient 400s). SELECTION FINAL:
+m_recon + m_fb + m_desc for all 197; same-form agreement recon-vs-critic 59/197 (30%) —
+objectives disagree on 70% of metrics. Corpus defpass (m_desc eval scores) running GPU0.
+Eval waits on wave-2 purified labels. Artifacts outputs/objective_comparison_v1/ on sk3.
+
+### 2026-08-15 — E-CERT SLICE HARVEST: PREREG NULLS (all three predictions), campaign CLOSED
+harvest_v1.json (sk3 outputs/ecert_slice_v1/; committed script ecert_slice_harvest.py
+re-derives the /tmp post-processors: HB138 median split, HB142 spacing ceiling, HB145
+calibration). 185/185 banks ok+mapped, 0 degenerate. Cells: A n=63 achieved .817 gap .040 /
+B n=62 .800 .043 / C n=60 .852 .037. P1/P2 gap(C)-gap(A+B) = -.0033 [-.0134,+.0000] (null,
+marginally reversed); P3 achieved(A)-achieved(B) = +.0167 [-.0100,+.0467] (null); falsifier
+(large A gap) did NOT fire. DESCRIPTIVE READING (no verdict): certified prompt-mass
+exhaustion does NOT differ across OSL verdict classes at this budget — echoes codability-
+perp-verdict. RESOLUTION CAVEAT (mandatory when quoting): between-cell diffs sit at the
+spacing estimator's quantization floor (~.003 at N~70 prompts/300 probes; 272-bank ran
+N~640) — quote as "no agreement detected at this budget", never "disagreement proven".
+Task #32 CLOSED. Feeds #27 as a negative/underpowered cell.
+
+### 2026-08-15 — WAVE-2 CONVERGENCE: tier-3 table FINAL; tier-A first cut + two structural findings
+CERTIFICATION: wave-1 anchors 50/54 (93%), wave-2 30/32 (94%) — both certified. v1-v2
+agreement on 1,080 re-arbitrated items = 54%: construct specification (leaf-name vs
+merged-name+definition) flips ~half the arbiter verdicts — wording-sensitivity of the
+LABEL instrument itself (thematic echo of paper-#1 register result; y* is spec-relative).
+TIER-3 FINAL (canonical judge vs purified y*, confident labels): peer .933 (n=614) /
+cw .815 (163) / pr .686 (226) / humor .631 (272) / crx .668 (163). PR v1 "inversion"
+(.35) was a construct-mismatch artifact — GONE under proper specs. vs mention-AUC floor
+.52-.60: LABEL NOISE WAS THE BINDING CONSTRAINT on every task. Task #33 CLOSED.
+TIER-A FIRST CUT (n=19 two-class confident metrics; canonical __-1 form excluded from
+optimized arms after a self-selection bug — i_binary(M_i, canonical)=1.0 trivially):
+recon-fb null (mean -.036, wins 12/17); recon-desc -.070 [-.122,-.026] desc wins;
+moderator null. ORACLE BRACKET DECODES IT: median oracle .995 / m_desc .990 / random
+.836; oracle>desc only 9/19 -> (1) the paraphrase pools have NO headroom above the
+definition; (2) SPEC-ALIGNMENT CIRCULARITY: y* was arbitrated from name+definition —
+the SAME text m_desc prompts with — so the desc arm carries a structural alignment
+advantage on arbiter labels (user's Section-3 worry, now concretely instantiated on the
+label side). Tier-A CANNOT adjudicate the objectives with paraphrase pools + spec-derived
+y*. CONSEQUENCES for Tier B: (a) candidate generation must produce genuinely NEW forms
+(not paraphrases); (b) y* design needs a spec-independence arm (e.g., exemplar-grounded
+arbiter specs, or triangulation w/ attentive-negative mention-y) before the draft
+sentence's numbers can be minted. Peer is one-sided (even resampled negatives arbitrate
+positive at 83%+) — peer supports pooled but not per-metric arm AUCs.
+
+### 3b EXECUTION LOG (2026-08-21)
+
+- **Gen-readout smoke PASSED (qwen3-8b, 60 prompts x 3 modes, sk3 gpu1)**: nan 0.0 all readouts;
+  gen-nothink vs logprob agreement **1.000** (readout swap validated); think traces mean 1,581 /
+  max 2,819 chars, 0% truncated; no think-tag leak in nothink. think-vs-nothink flip rate .15 —
+  NOT read directionally (prereg). Artifact: sk3 outputs/osl_multi/gen_smoke_qwen3-8b_v1.json.
+- Spawn-wedge fix: gen_readout_smoke.py + gen_think_panel.py lacked __main__ guards → EngineCore
+  init death under VLLM_WORKER_MULTIPROC_METHOD=spawn. Guarded, synced to sk3.
+- **Qwen3 toggle ladder LAUNCHED** (lane gen_think_ladder_sk3.sh, PID 1670678): rungs 1.7b/4b/8b/
+  14b/32b, both modes, sequential, one GPU at a time, per-rung free-memory gate (excludes GPUs
+  3+7 per user directive), squeeze-in utils .14-.55. Artifacts land as
+  outputs/osl_multi/mbar_zxagen_{nothink,think}_humor_{exec}.npz; log logs/gen_think_ladder.log.
+- **CORRECTION (same day): the Qwen3 toggle ladder was ALREADY RUN 2026-08-06/07** by an earlier
+  session — mbar_zxagen_{nothink,think}_{task}_{qwen3-1.7b..32b}.npz exist for humor, creative
+  writing, math AND peer review; humor also has r1-qwen-14b/32b + qwen25-14b/32b comparators +
+  phi4-reasoning + gpt-oss-120b(think). The relaunched ladder skip-guarded to zero work (no
+  double-run). Remaining plan-scope gap = r1-llama-8b <-> llama8b, phi4 (instruct side),
+  glm-z1-32b (weights present incl. GLM-Z1) — **completion lane LAUNCHED** (gen_think_pairs_sk3.sh,
+  PID 1690019, log logs/gen_think_pairs.log, same skip-guards + GPU gates).
+- NEXT after completion lane: 3b harvest analysis — think−nothink delta per metric class across
+  the toggle ladder (contested-class concentration prediction, task #26 prereg), matched-pair
+  deltas with family-conditional readouts, R1-native "nothink" semantics eyeball FIRST.
+
+### 3b HARVEST v1 (2026-08-21, DESCRIPTIVE ONLY — artifact sk3 outputs/osl_multi/harvest_3b_gen_v1.json)
+
+- **Completion lane landed clean**: r1-llama-8b, llama8b, phi4, glm-z1-32b all rc=0, nan ≤ .2%.
+  Full 3b slate now on disk: qwen3 toggle x4 tasks + 8 humor matched-pair/frontier executors.
+- **INSTRUMENT FACT 1 — thinking flag is a NO-OP outside qwen3**: llama8b, phi4,
+  phi4-reasoning, glm-z1-32b, qwen25-14b/32b, r1-* produce BYTE-IDENTICAL means in both modes
+  (delta exactly +.000) — their chat templates ignore enable_thinking. Only qwen3 rungs have a
+  real toggle. Pair contrasts remain valid as native-mode comparisons; "think vs nothink"
+  language must be qwen3-only.
+- **INSTRUMENT FACT 2 — these are YES-RATE levels, not accuracy**: harvest v1 deltas are raw
+  hard-verdict means with no reference key; e.g. phi4-reasoning~phi4 "+.66-+.80" is a yes-rate
+  calibration gap, NOT a quality gap. The prereg readout (think-gains concentrate on contested
+  classes?) requires the zxa harvest tooling against references — queued as the real analysis.
+- Distribution check: 29/59 panels flagged (mostly ≥1 constant rubric); worst = qwen3-1.7b
+  nothink creative-writing (mean .97, 8/11 rubrics constant) — known small-model degeneracy;
+  1.7B think-mode deltas are large-negative everywhere (think breakdown at 1.7B, descriptive).
+- Cosmetic: harvest v1 mis-splits task names with underscores (creative|writing_...) — keys
+  self-consistent, fix in v2.

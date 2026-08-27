@@ -607,3 +607,36 @@ appeal, not of the article.
 | raw label channel | `datasets/news-homepages/twitter_engagement/tweet_engagement.jsonl` (sk3) |
 
 All sk3 paths are under `/lfs/skampere3/0/alexspan/norm-research/`.
+
+## 2026-08-20 — POPULATION v2 (second tweetapi drain cycle)
+Aug-2026 quota drained 2026-08-20 (100,035 requests, +24,408 URLs; raw channel
+now 76,520 rows; frontier walked back to 2025-10-09). Extended population built
+to `datasets/journalism-tweets/va_v2/` on sk3 — **v1 (`va/`) untouched** (the
+closure TERMINAL ruling was made on v1; v2 is an extension, not a replacement):
+
+| | v1 | v2 |
+|---|---|---|
+| rows | 31,129 | **46,456** (+49%) |
+| groups (outlet×day) | 508 | **784** |
+| days | 2025-12-14→2026-04-10 | **2025-10-09**→2026-04-10 |
+| splits (stable-hash, grouped) | 24,903/3,114/3,112 | 37,170/4,634/4,652 |
+
+Same y (within-group sum_likes median split), same gates, same bank plan.
+PENDING: Gemma-4-31B bank scoring of the v2-only rows — blocked on GPU
+availability (sk3 fully occupied by co-tenants; **GPU 7 off-limits per user
+2026-08-20**, see gpu_ledger). Watcher armed to flag a free slot on GPU 0/5/6.
+Next monthly quota reset (~2026-09-17) can extend further toward 2022.
+
+### 2026-08-20 — v2-DELTA A-BANK SCORED (GPU 6, ~35 min)
+`outputs/va_gemma_banks_journalism_tweets_v2delta/` on sk3: 7 shards, 15,327
+rows × 14 criteria (delta = v2 minus v1 by row_id; wrapper
+`datasets/journalism-tweets/run_v2delta.py` — shared scorer untouched).
+- NA per shard .323–.342 — matches v1's .336–.349 → judge behavior unchanged
+  on the new rows (no guided-JSON collapse; per-shard distribution checked).
+- K=50 anchor battery: **pos-vs-neg AUC .6466 — identical to the v1
+  certification** (deterministic same-seed anchors re-scored; PASS). Scrambled
+  leg .364 carries the SAME known entity-survival defect as v1 (documented
+  2026-08-08; repaired variant = battery_repaired.py; not a new failure).
+- v2 cell matrix = v1 shards ∪ delta shards keyed by row_id
+  (46,456 rows / 784 groups fully instrumented). GPU 6 claimed + RELEASED in
+  gpu_ledger; GPU 7 untouched throughout.
