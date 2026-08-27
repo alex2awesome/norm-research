@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/polishing_pr_arxiv_html.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15903,
+  "output_tokens": 3808,
+  "elapsed_s": 918.6213506669737,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference/journal program chairs and editors, peer reviewers, policy-makers, and researchers studying AI-text detection in peer review",
+    "subtask_short": "detecting AI use in peer reviews",
+    "subtask_description": "Evaluation of methods, datasets, metrics, and policy implications for detecting LLM involvement in scientific peer reviews, and guidance for permissible LLM 'polishing' workflows. Focuses on empirical assessment of detectors and on what enforcement of policies would require.",
+    "subtask_keywords": [
+      "peer_review",
+      "ai_detection",
+      "polishing",
+      "llm",
+      "academic_policies"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Polishing-only policy allowed use",
+        "description": "Policies that allow reviewers to use LLMs only for paraphrasing and grammar correction of their reviews, and where the core arguments and content of the review must be human-written (e.g., EMNLP 2025: \u201cit is acceptable to use LLMs for paraphrasing, grammatical checks and proof-reading, but not for the content of the (meta-)reviews.\u201d).",
+        "guidance": "Defines the only acceptable LLM use as polishing (grammar, flow, clarity) without introducing new technical content or changing core arguments. The paper treats H-AI (Human-written AI-polished) as the permitted use under these policies and designs prompts/safeguards to preserve content."
+      },
+      {
+        "name": "No-LLM-use policy",
+        "description": "A policy that completely prohibits use of LLMs by reviewers (e.g., ICML 2025).",
+        "guidance": "Under a blanket ban, any detectable AI involvement (including polishing or mixed authorship) would be considered a violation. The paper discusses enforcement tradeoffs: detectors may miss some violations (false negatives) and thus such policies can leave many violations undetected."
+      },
+      {
+        "name": "Levels of human-AI collaboration (classification taxonomy)",
+        "description": "Five explicit levels used to model reviewer-LMM interaction: (1) AI-generated with Basic Prompts (AI-BP), (2) AI-generated with Elaborate Prompts (AI-EP), (3) AI-generated with Human Input (AI-HI), (4) Human-written AI-polished (H-AI), and (5) Completely Human (H).",
+        "guidance": "Each level is precisely defined by the inputs given to the LLM (e.g., paper + guidelines for AI-BP; paper+best-practices for AI-EP; human keypoints for AI-HI; only human review for H-AI). Use this taxonomy to label ground truth and to compute detector performance per level."
+      },
+      {
+        "name": "Humanized (adversarial) paraphrasing as attack",
+        "description": "Adversarial paraphrasing/humanization of AI-generated text (e.g., using commercial tools such as Undetectable AI) intended to evade detectors; applied to AI-BP and H-AI reviews to simulate evasion.",
+        "guidance": "Inclusion of humanized examples simulates real-world attempts to evade detection and increases the difficulty of detection. Evaluations must include such adversarially paraphrased examples to reflect plausible attacks."
+      },
+      {
+        "name": "True Positive Rate (TPR) and False Positive Rate (FPR) reporting",
+        "description": "Report fraction of reviews predicted as AI-generated at each level: TPR for AI* (AI-BP/AI-EP/AI-HI) reviews and FPR for H* (H-AI/H) reviews. For detectors with three-class outputs, conservative reporting treats only 'AI' as positive and collapses 'Mixed' with 'Human' to minimize FPR.",
+        "guidance": "Use calibration sets and consistent class-mapping when computing TPR/FPR. Also present confusion matrices and label distributions rather than only collapsed rates to show 'Mixed' behavior."
+      },
+      {
+        "name": "Calibration using a human-written set and thresholding",
+        "description": "For scalar-scoring zero-shot detectors, choose detection thresholds using a calibration set of human-written reviews (NeurIPS 2013-2015 in this work) with the thresholds set to ensure 0% FPR on the calibration set.",
+        "guidance": "Calibration simulates operational deployment where past human reviews are used to set conservative decision thresholds. Evaluate on held-out conferences/years (post-2016) to measure generalization. Note that 0% FPR on calibration can still yield non-zero FPR in deployment."
+      },
+      {
+        "name": "Three-class detector labels and conservative enforcement strategy",
+        "description": "Commercial detectors (Pangram, GPTZero) provide labels 'AI', 'Mixed', 'Human'. A conservative enforcement approach is to penalize only 'AI' labels and treat 'Mixed' as 'Human' to minimize false positives on policy-compliant reviews.",
+        "guidance": "Reporting should include both conservative metrics (collapsing Mixed with Human) and full confusion matrices. Even under the conservative mapping, non-trivial percentages of H-AI reviews can be flagged as 'AI' (e.g., 3.1% Pangram, 3.4% GPTZero in hard subset)."
+      },
+      {
+        "name": "Perplexity/surprisal-based / zero-shot detectors and context conditioning",
+        "description": "Zero-shot detectors that rely on perplexity or surprisal-based metrics (LogLikelihood, DetectGPT, Fast-DetectGPT, Binoculars) can be augmented by conditioning likelihood calculations on the paper manuscript (e.g., Abstract/Intro/Conclusion).",
+        "guidance": "Conditioning on paper context yields measurable increases in TPR for some detectors but often increases FPR on H-AI reviews; even with context, TPRs on hard (modern-model) subsets remain insufficient for reliable enforcement."
+      },
+      {
+        "name": "Similarity to AI-generated reference reviews",
+        "description": "Generate multiple AI-written reference reviews for the manuscript and use similarity between a candidate review and these references (cosine embedding similarity, soft n-gram match, soft keypoint match) as a detection signal.",
+        "guidance": "Aggregate similarity distributions show monotonic shifts between AI-BP\u2192H but overlap substantially; per-review predictions are unreliable (non-negligible misclassification of H-AI and even H). Classifiers trained on similarity features still yield unacceptable FPR on H-AI and H reviews."
+      },
+      {
+        "name": "Supervised detection using stylometric and transformer features",
+        "description": "Train supervised classifiers using stylometric features (lexical diversity, POS percentages, readability metrics, etc.) and transformer-based dense embeddings on in-domain data of reviews spanning AI involvement levels.",
+        "guidance": "While supervised methods can perform well in-domain, they fail to generalize to reviews produced by LLMs not seen during training; stylometric features and dense embeddings do not reliably separate mixed authorship from fully AI-generated content in the wild."
+      },
+      {
+        "name": "Dataset grounding: use pre-2020 human reviews for clean ground truth",
+        "description": "Use pre-ChatGPT-era reviews (PeerRead, pre-2020) to ensure human-written ground truth for calibration/evaluation and to reduce contamination from LLM training data.",
+        "guidance": "Carefully select calibration and evaluation splits (e.g., NeurIPS 2013-2015 for calibration, post-2016 for evaluation) ensuring no overlap. Acknowledge residual contamination risk and interpret proprietary-detector performance as potentially optimistic if contamination exists."
+      },
+      {
+        "name": "Prompt-design and post-processing safeguards for H-AI polishing",
+        "description": "To limit an LLM's role to polishing only, the paper prescribes prompt safeguards: (1) do not attach the paper manuscript, (2) include explicit instruction to preserve technical content/meaning, and (3) avoid specifying generous word limits; plus post-processing filter: discard polished outputs longer than 1.25\u00d7 the original length.",
+        "guidance": "These three prompt properties were observed to cause LLMs to introduce new technical content. Use explicit content-preservation instructions and length filtering to reduce risk of introducing new content and of being flagged by detectors."
+      },
+      {
+        "name": "Post-polish verification for new-content introduction",
+        "description": "Use an LLM-as-judge (or other automated/manual checks) to flag whether polished reviews introduce new technical content relative to the original human review.",
+        "guidance": "Systematic checking correlates well with detectors' tendency to flag polished reviews; reviewers should verify polished outputs before submission to ensure no inadvertent content addition."
+      },
+      {
+        "name": "Operational false-positive rate requirements relative to scale",
+        "description": "Policy enforcement must consider scale: even small FPRs cause many wrongful accusations (example: NeurIPS scale: 0.1% FPR \u2192 75 wrongful accusations; 3% FPR \u2192 2,250 wrongful accusations).",
+        "guidance": "Set acceptable FPR targets orders of magnitude lower than typical detector FPRs when deploying at conference scale. If detectors cannot meet extremely low FPRs on H-AI/H reviews, Polishing-only policies are effectively unenforceable."
+      },
+      {
+        "name": "Detailed reporting standards for detector evaluation",
+        "description": "Report per-level TPR/FPR, confusion matrices (AI/Mixed/Human), per-LLM breakdowns of FPR on H-AI (e.g., Pangram\u2019s FPR by LLM), easy vs hard subset performance, and effects of conditioning on paper context.",
+        "guidance": "Provide full distributions and per-model/per-prompt analyses to reveal where detectors fail. Highlight limitations such as drop in zero-shot detector performance on hard subsets and increases in FPR when conditioning on paper context."
+      },
+      {
+        "name": "Practical guidance for reviewers using LLMs to polish drafts",
+        "description": "Actionable recommendations: phrase prompts carefully with explicit instructions to not include new content, do not upload the submitted paper when polishing, and verify the polished output before submission.",
+        "guidance": "These steps reduce the chance that LLMs will add new technical content and reduce the risk of being misclassified as fully AI-generated. The paper shows that prompts that attach the paper, omit content-preservation instructions, or specify large word limits correlate with more new-content additions and higher detector flags."
+      }
+    ]
+  }
+}

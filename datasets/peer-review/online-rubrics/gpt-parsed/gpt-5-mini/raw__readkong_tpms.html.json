@@ -1,0 +1,169 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/readkong_tpms.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12787,
+  "output_tokens": 3386,
+  "elapsed_s": 941.803084625164,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference organizers, machine-learning researchers, and developers of paper-reviewer matching systems",
+    "subtask_short": "paper-reviewer assignment system design",
+    "subtask_description": "Designing, implementing, and evaluating an automated conference paper\u2013reviewer matching system (TPMS) that estimates reviewer expertise and produces reviewer assignments under conference constraints.",
+    "subtask_keywords": [
+      "paper_matching",
+      "reviewer_assignment",
+      "conference_management",
+      "machine_learning",
+      "tpms"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Reviewer expertise estimation per paper",
+        "description": "Determine reviewers\u2019 expertise with respect to each submission (i.e., evaluate the expertise of every reviewer with respect to each submission).",
+        "guidance": "Use reviewers\u2019 previous publications (reviewer archive) and submitted papers to build representations and compute scores; scores are used to rank candidate reviewers and drive elicitation and matching."
+      },
+      {
+        "name": "Matching constraints: reviews per paper (Rtarget)",
+        "description": "Each paper must be reviewed by a certain number of reviewers (Rtarget).",
+        "guidance": "Enforce as a hard constraint in the assignment optimization (e.g., sum_r y_rp = Rtarget for all p)."
+      },
+      {
+        "name": "Matching constraints: reviewer load limit (Pmax)",
+        "description": "Each reviewer has a limit on the number of papers they can review (Pmax).",
+        "guidance": "Enforce as a hard constraint in the assignment optimization (e.g., sum_p y_rp \u2264 Pmax for all r) to balance load."
+      },
+      {
+        "name": "Avoid conflicts-of-interest and global constraints",
+        "description": "Global constraints such as conflicts of interest must be respected when assigning reviewers to papers.",
+        "guidance": "Integrate conflict information into the matching problem so assignments that violate COI are forbidden."
+      },
+      {
+        "name": "Assignment utility maximization objective",
+        "description": "Optimize assignments by maximizing total reviewer\u2013paper utility: maximize \u03a3_{r,p} s_rp * y_rp where s_rp is reviewer expertise score and y_rp is assignment indicator.",
+        "guidance": "Use this linear objective as the primary optimization; other non-linear utility variants have been explored (Charlin et al., 2011)."
+      },
+      {
+        "name": "Use of reviewer bids vs. self-assessed scores",
+        "description": "Distinguish between reviewers\u2019 bids (interest) and self-assessed expertise scores (expertise); prefer expertise scores to estimate suitability.",
+        "guidance": "TPMS uses self-assessed scores to predict missing scores and may combine bids and scores in supervised models; bids represent interest, scores represent expertise."
+      },
+      {
+        "name": "Initial (unsupervised) scoring from archives",
+        "description": "Compute initial scores from reviewer archives and submissions without elicited scores (e.g., language-model dot product or topic representations).",
+        "guidance": "These initial scores can be computed before submission deadlines and used to guide active elicitation and early matching."
+      },
+      {
+        "name": "Language Model similarity (word-LM)",
+        "description": "Predict a reviewer\u2019s score as the dot product between a reviewer\u2019s archive representation and a submission representation using normalized word counts (srp = f(Ar) f(Pp)\u2032).",
+        "guidance": "Use Dirichlet smoothing for reviewer normalized counts; consider normalizing scores by paper length to avoid bias toward short papers; alternatives include KL-divergence."
+      },
+      {
+        "name": "Topic-space representation (LDA / topic-LM)",
+        "description": "Represent archives and submissions in topic space (LDA) and compute expertise scores using topic distributions.",
+        "guidance": "Learning topics can abstract away stylistic noise; TPMS used 30 topics for experiments; topic-LM often separates a top few reviewers more clearly than word-LM."
+      },
+      {
+        "name": "Supervised score prediction (per-reviewer regressions)",
+        "description": "Train separate linear regression models per reviewer to predict scores from submission features: srp = \u03b8_r f(Pp)\u2032.",
+        "guidance": "Works well when many elicited scores per reviewer are available; can be trained online; regularization and feature choices matter."
+      },
+      {
+        "name": "Parameter sharing across reviewers (LR-shared)",
+        "description": "Allow parameter sharing between users and papers to handle reviewers with few or no observed scores: srp = b + b_r + (\u03b8 + \u03b8_p) f(Pp)\u2032 + (\u03c9 + \u03c9_r) g(Ar)\u2032.",
+        "guidance": "Shared parameters (\u03b8, \u03c9) capture global feature weights; per-reviewer and per-paper terms capture idiosyncrasies; tune regularizers so shared parameters are learned robustly."
+      },
+      {
+        "name": "Collaborative filtering baseline (PMF)",
+        "description": "Use probabilistic matrix factorization (PMF) to model scores as low-rank dot products (srp = \u03b8_r \u03c9_p\u2032) without side information.",
+        "guidance": "PMF performs poorly in cold-start regimes; remains an interesting baseline; tune rank and use gradient-based training."
+      },
+      {
+        "name": "Handling cold-start reviewers",
+        "description": "Models must handle reviewers with very few or zero observed scores.",
+        "guidance": "Use parameter sharing, side-information from archives, and global models; re-use archives across conferences where possible."
+      },
+      {
+        "name": "Active expertise elicitation guided by uncertainty",
+        "description": "Guide score elicitation (queries to reviewers) using model uncertainty/utility (e.g., query reviewer-paper pairs with high informativeness).",
+        "guidance": "TPMS used inverse entropy of the distribution across area chairs per paper to pick papers for elicitation; adapt number of elicited scores per user via matching constraints."
+      },
+      {
+        "name": "Elicitation bias awareness (scores not missing at random)",
+        "description": "Recognize that elicited scores will be biased by the matching constraints (i.e., not missing at random) because queries target assignments the system expects.",
+        "guidance": "This bias is acceptable for assignment tasks (informative queries), but should be acknowledged when evaluating models; consider methods robust to MNAR."
+      },
+      {
+        "name": "Normalization of scores by paper length",
+        "description": "Normalize predicted scores by submission length to avoid systematic biases (shorter papers tending to receive higher similarity scores).",
+        "guidance": "If using dot-product between bag-of-words representations, normalization helps produce fairer ranked lists and comparability across submissions."
+      },
+      {
+        "name": "Dirichlet smoothing for archive word counts",
+        "description": "Smooth reviewer archive word counts using a Dirichlet prior to better handle rare words in the language model.",
+        "guidance": "Use f(Ar_w) = (N_Ar / (N_Ar + \u03bc)) * (|w_Ar| / N_Ar) + (\u03bc / (N_Ar + \u03bc)) * (|w| / N) with suitable \u03bc."
+      },
+      {
+        "name": "Evaluating initial-score quality with ranking metrics (NDCG)",
+        "description": "Compare top-ranked reviewer lists from different initial scoring methods using ranking metrics like NDCG@k.",
+        "guidance": "TPMS compared word-LM vs topic-LM by measuring average NDCG@5 and NDCG@10 across datasets (high NDCG indicates similar rankings)."
+      },
+      {
+        "name": "Evaluating score-prediction with RMSE",
+        "description": "Measure the accuracy of predicted expertise scores against elicited ground truth using RMSE.",
+        "guidance": "Use cross-validation (e.g., 5-fold), tune hyperparameters on validation fold; report means and standard errors; compare LR, LR-shared, PMF and constant baselines."
+      },
+      {
+        "name": "Evaluate assignment quality indirectly via score prediction and in-vivo experiments",
+        "description": "Because ground-truth optimal assignments are unavailable, evaluate system effectiveness via (a) score-prediction performance, (b) ranking similarity, and (c) in-vivo experiments within conferences.",
+        "guidance": "In-vivo experiments (e.g., showing ranked lists to reviewers and polling interface usefulness) provide practical assessment but may include biases from the ranking method used to present lists."
+      },
+      {
+        "name": "Produce personalized ranked lists for program committee members",
+        "description": "Provide area chairs and reviewers with ranked candidate lists to help select reviewers and prioritize papers.",
+        "guidance": "Use predicted scores to sort reviewers per paper; area chairs may vet these lists or use them to guide assignments."
+      },
+      {
+        "name": "Software integration with conference management (CMT) via SWORD/APP",
+        "description": "Integrate with conference management systems (e.g., Microsoft CMT) through an API using standard protocols such as SWORD/Atom Publishing Protocol for exchanging submissions, reviewer info, and elicited scores.",
+        "guidance": "TPMS communicates via SWORD messages: deposit documents, send reviewer metadata and bids, and return computed scores; integration reduces organizer burden but requires engineering."
+      },
+      {
+        "name": "Automated reviewer archive harvesting and reviewer interface",
+        "description": "Support harvesting reviewers\u2019 published papers automatically (URLs, Google Scholar crawling) and allow reviewers to upload PDFs to build their archives.",
+        "guidance": "Providing easy archive population reduces manual effort; conference organizers can also populate archives on reviewers\u2019 behalf."
+      },
+      {
+        "name": "Scalability and time constraints",
+        "description": "System must produce assignments within tight conference time windows (a couple of days after submission deadline) and scale to thousands of submissions and hundreds of reviewers.",
+        "guidance": "Compute initial expertise before submission deadlines where possible; automate pipeline (crawler, feature extraction, model training) and optimize matching performance."
+      },
+      {
+        "name": "Reuse of reviewer archives (and possibly scores) across conferences",
+        "description": "Re-use previously harvested reviewer archives across multiple conferences; consider re-using elicited scores as part of reviewer profiles.",
+        "guidance": "A central system can leverage cross-conference data to improve cold-start handling and reduce per-conference setup cost; consider privacy and consent."
+      },
+      {
+        "name": "Data anonymization and data release practices",
+        "description": "Properly anonymize and consider releasing gathered data to support reproducible research while protecting reviewers\u2019 privacy.",
+        "guidance": "Anonymize reviewer identities and sensitive metadata before public release; obtain necessary permissions from conferences and reviewers where applicable."
+      },
+      {
+        "name": "Improve integration and reduce per-conference tailoring cost",
+        "description": "Minimize per-conference manual tailoring by offering a base system that can be extended with minimal help, or by keeping a centrally hosted system that conferences can use.",
+        "guidance": "Trade-offs: local downloads reduce dependencies but increase organizer work; a hosted system simplifies use and enables data reuse."
+      },
+      {
+        "name": "Active elicitation trade-offs and elicitation budget",
+        "description": "Design elicitation strategies that choose which reviewer\u2013paper pairs to query, balancing number of queries per reviewer and overall information gain.",
+        "guidance": "Adapt the number of queries per user according to matching constraints and use uncertainty measures (e.g., inverse entropy) to pick informative queries; practical experiments used two elicitation rounds."
+      },
+      {
+        "name": "Model selection and validation procedures",
+        "description": "Use cross-validation splits, hyper-parameter tuning, and appropriate training algorithms (VW, BFGS, gradient descent) to select and validate models.",
+        "guidance": "Split datasets (e.g., 5-fold), tune on validation fold(s), and compare multiple candidate models (LR, LR-shared, PMF) reporting RMSE and other metrics with error bars."
+      }
+    ]
+  }
+}

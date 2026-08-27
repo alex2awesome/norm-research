@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peerreview4all_jmlr.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17020,
+  "output_tokens": 4103,
+  "elapsed_s": 879.2162660418544,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "program chairs, conference organizers, peer-review system designers, and researchers working on automated paper\u2013reviewer assignment algorithms",
+    "subtask_short": "reviewer-paper assignment algorithm",
+    "subtask_description": "Designing and evaluating automated algorithms to assign conference papers to reviewers subject to per-paper and per-reviewer load constraints, optimizing fairness and statistical accuracy of accept/reject decisions.",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "conference",
+      "fairness",
+      "statistical_accuracy"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Max-min fairness (\u0393S)",
+        "description": "\"The fairness of assignment is the minimum sum similarity across all papers; we call an assignment fair if it maximizes the fairness.\" Formally, \u0393S(A) = min_{j\u2208[m]} sum_{i\u2208RA(j)} sij.",
+        "guidance": "Objective: maximize the review-quality of the most disadvantaged paper so that no paper is discriminated against. Measures per-paper quality as the sum of similarities of assigned reviewers. Example and rationale: optimizing global sum can leave some papers with very low sum similarity; max-min fairness avoids that by improving the worst-off paper. The algorithm aims to provide guarantees (multiplicative approximation) for this objective and to then fix assignments lexicographically (worst-off, second worst-off, ...) to avoid bottlenecks."
+      },
+      {
+        "name": "Cumulative similarity objective (GS)",
+        "description": "\"An assignment objective ... is to maximize the cumulative similarity over all papers.\" Formally, GS(A) = sum_{j=1}^m sum_{i\u2208RA(j)} sij.",
+        "guidance": "This is the TPMS / common practice objective. Guidance warns that maximizing GS may discriminate against some papers (especially non-mainstream ones) because improving already-strong papers can dominate the sum objective. Use of GS favors overall aggregate similarity but can produce unfair assignments."
+      },
+      {
+        "name": "Generalized fairness via monotone transform f (\u0393S_f)",
+        "description": "\"Aim to maximize \u0393_S^f(A) = min_{j\u2208[m]} sum_{i\u2208RA(j)} f(s_{ij}) for some monotonically increasing f : [0,1] \u2192 [0,\u221e].\"",
+        "guidance": "Allows different interpretations of similarity (e.g., thresholding: f(s)=I{s>\u03b6}). Choice of f models what constitutes a 'good' reviewer for a paper (e.g., treating strong reviewers specially). Equivalent to pre-transforming similarities but makes policy choice explicit. The algorithm and analysis are expressed with this general f; f can even map to \u221e for perfect reviewers."
+      },
+      {
+        "name": "Per-paper and per-reviewer load constraints (\u03bb and \u00b5)",
+        "description": "\"Each reviewer can review a limited number of papers. We let \u00b5 denote the maximum number of papers that any reviewer is willing to review. Each paper must be reviewed by \u03bb distinct reviewers. In order to ensure this setting is feasible, we assume that n\u00b5 \u2265 m\u03bb.\"",
+        "guidance": "Feasible assignments must respect these hard constraints. Algorithmic constructions (flow network) explicitly encode capacities for reviewer loads (\u00b5(i)) and per-paper requirements (\u03bb or \u03ba in subroutines). Practical guidance: \u03bb typically small (2\u20136); ensure feasibility before attempting assignment."
+      },
+      {
+        "name": "Similarity matrix quality and usage (S as black box)",
+        "description": "\"The PC has access to a similarity matrix S = {s_{ij}} \u2208 [0,1]^{n\u00d7m} ... These similarities are representative of the envisaged quality of the respective reviews: a higher similarity ... indicates a higher competence of that reviewer in reviewing that paper. We do not discuss the design of such similarities, but often they are provided by existing systems.\"",
+        "guidance": "Treat similarity computation as an upstream black box; assignment procedures assume higher s_{ij} \u2192 better review. Similarities may come from text matching (TPMS), bids, bibliographic graphs, topic models, authority measures, etc. Choice and calibration of S crucially affects assignment outcomes; different similarity semantics motivate different f transforms."
+      },
+      {
+        "name": "Ensure at least one sufficiently expert reviewer (threshold coverage)",
+        "description": "From Hartvigsen et al. (1999): \"necessitate every paper to have at least one reviewer with expertise higher than certain threshold, and then maximize the value of that threshold.\"",
+        "guidance": "Policy aiming to guarantee a baseline competence per paper. Paper notes limitation: satisfying this only for one reviewer per paper can still allow unfairness among remaining reviewers. Use as a partial remedy but prefer stronger objectives (max-min sum) when multiple reviewers per paper."
+      },
+      {
+        "name": "Statistical accuracy of acceptance decisions (top-k recovery)",
+        "description": "\"Our statistical accuracy objective is to ensure correct recovery of the papers that should be accepted.\" The PC's goal is to recover the true top-k papers T*_k; acceptance is based on an estimator \u03b8 operating on reviewer scores.",
+        "guidance": "Measure: probability of recovering T*_k (or Hamming-error-tolerant variant). Accepting top-k is noisy due to reviewer noise and subjectivity; assignment should improve the probability P{T_k = T*_k} or minimize P{DH(T_k, T*_k) > 2t} for a tolerance t. Analysis uses minimax risk to quantify guarantees under models of reviewer scoring."
+      },
+      {
+        "name": "Hamming error tolerance and loss metric",
+        "description": "Define Hamming distance DH(M1,M2) = card( (M1 \u222a M2) \\ (M1 \u2229 M2) ). The PC may target minimizing P{DH(T_k, T*_k) > 2t} for tolerance t \u2208 {0,...,k\u22121}.",
+        "guidance": "Provides a relaxed notion of success in top-k recovery. Useful when exact recovery is infeasible; allows designing assignments that bound expected misclassification under noise."
+      },
+      {
+        "name": "Objective-score statistical model",
+        "description": "Use a model assuming existence of some true objective score for every paper; reviewers report noisy estimates of this true score (cites Ge et al., McGlohon et al., Dai et al.).",
+        "guidance": "Under this model the paper provides a sharp minimax analysis of the risk of incorrect accept/reject decisions and shows PeerReview4All is near-optimal. Guidance: if reviewers are judging an objective latent quality, average-type aggregation may be appropriate; assignment should allocate competent reviewers to maximize signal-to-noise for top-k recovery."
+      },
+      {
+        "name": "Subjective-score statistical model",
+        "description": "Model capturing subjective opinions of reviewers: paper evaluations are typically subjective; authors propose a novel subjective-score model to capture this.",
+        "guidance": "Analyzed via minimax framework to provide guarantees under subjectivity. Guidance: design assignment to be robust to reviewer subjectivity\u2014diversify perspectives, increase fairness to lessen impact of outlier opinions."
+      },
+      {
+        "name": "Coverage / topic diversity (\u03c9(A))",
+        "description": "\"The appropriate measure of coverage is a number of distinct topics of the paper covered, summed across all papers.\" \u03c9(A) = sum_j card( \u222a_{i\u2208RA(j)} T(i) \u2229 T(j) ) (informal description in paper).",
+        "guidance": "Objective: maximize distinct topics covered by assigned reviewers to ensure breadth and topic-match diversity. Long et al.'s submodular greedy gives constant-factor approx but may sacrifice fairness or exact \u03bb reviews per paper. The paper suggests combining coverage heuristics with the fairness-focused flow to balance coverage and fairness (e.g., use greedy within tie-breaking)."
+      },
+      {
+        "name": "Avoid LP relaxation/rounding pitfalls (preserve integrality and fairness)",
+        "description": "Observation that ILPR (integer linear programming relaxation + rounding) can produce vacuous guarantees and lead to unfair assignments because LP relaxation may split reviewers and rounding destroys guarantees.",
+        "guidance": "Prefer algorithms (like PeerReview4All) based on incremental max-flow that maintain integer flows and avoid problematic rounding. Be cautious when using LP relaxations; test worst-case behavior on pathological similarity matrices."
+      },
+      {
+        "name": "Algorithmic guarantee: multiplicative approximation independent of m, n",
+        "description": "PeerReview4All achieves an approximation guarantee that depends only on \u03bb (number of reviewers per paper) as 1/\u03bb (multiplicative factor), unlike other approaches whose guarantees degrade with number of papers m.",
+        "guidance": "Desirable theoretical property: approximation factor independent of total problem size. Use when scalability and uniform guarantees across conferences of different sizes matter. The algorithm also adapts to similarity structure and sometimes yields exact optimal solutions."
+      },
+      {
+        "name": "Lexicographic (multi-step) fairness (fix worst-off iteratively)",
+        "description": "After optimizing the outcome for the most worst-off paper and fixing the assignment for that paper, the algorithm finds the most fair assignment for the next worst-off paper and proceeds until each paper is fixed.",
+        "guidance": "This ensures not only max-min fairness for the worst paper but also improves fairness across the rank of disadvantaged papers, preventing later bottlenecks. Use when one wants stronger per-paper fairness beyond just the minimum."
+      },
+      {
+        "name": "Flow-network incremental construction and edge-addition in decreasing similarity",
+        "description": "Subroutine builds a 4-layer flow network (source \u2192 reviewers \u2192 papers \u2192 sink), adds reviewer\u2192paper edges one-by-one in decreasing order of similarity until a max-flow of size |M|\u03ba is achievable, then extracts integer assignment from the flow.",
+        "guidance": "Practical steps: encode reviewer capacities and per-paper capacities; edges between reviewer and paper have capacity 1 and cost equal to similarity; test max-flow after each edge addition. This ensures that the minimum similarity in assignment is maximized. Tie-breaking among multiple max-flows can be arbitrary or guided (max-cost). The integer capacities guarantee polynomial-time integer flows."
+      },
+      {
+        "name": "Candidate-\u03ba construction and selection among \u03bb candidates",
+        "description": "For every integer \u03ba \u2208 [\u03bb], try to assign each paper to \u03ba reviewers with maximum possible similarities (via subroutine), then complement with (\u03bb\u2212\u03ba) additional reviewers; obtain \u03bb candidate assignments and pick the one with highest fairness.",
+        "guidance": "This multi-\u03ba approach caters to different structural properties of similarities and helps the algorithm adapt; implementers should compute candidates for all \u03ba and select best fairness outcome."
+      },
+      {
+        "name": "Per-paper exact reviewer count guarantee",
+        "description": "Algorithm ensures each paper is assigned exactly \u03bb reviewers (subroutine ensures assignment each paper in M with \u03ba reviewers; outer algorithm complements to \u03bb and final assignment respects \u03bb).",
+        "guidance": "Important operational requirement for conferences: use procedures that guarantee exact per-paper review counts rather than heuristics that may leave some papers with fewer than \u03bb reviews (a noted drawback of some greedy coverage algorithms)."
+      },
+      {
+        "name": "Tie-breaking to improve coverage (hybrid tie-break heuristic)",
+        "description": "In Step 6 of the subroutine, if multiple max-flows exist, choose one arbitrarily or use heuristics such as max-flow with max cost; paper suggests using Long et al.'s greedy coverage algorithm restricted to candidate edges and then computing max-flow with modified costs to encourage topic coverage while preserving fairness guarantees.",
+        "guidance": "Combines fairness guarantees with coverage goals: run coverage greedy on added edges, set chosen edges' cost to 1 (others 0), compute max-cost max-flow, fix those reviewer-paper pairs. This modification preserves main guarantees while improving topic coverage and avoiding sacrificing papers to maximize global coverage."
+      },
+      {
+        "name": "Design experiments to objectively compare assignments despite no ground truth",
+        "description": "\"We designed and conducted an experiment on the Amazon Mechanical Turk crowdsourcing platform to objectively compare the performance of different reviewer-assignment algorithms. The design ... circumvents the challenge posed by the absence of a ground truth in peer-review.\"",
+        "guidance": "When evaluating assignment algorithms empirically, create experimental setups (e.g., crowd tasks) that approximate objective ground truth or surrogate signals to compare accuracy across algorithms. Also evaluate on synthetic data and reconstructed real similarity matrices to corroborate theoretical guarantees."
+      },
+      {
+        "name": "Robustness to reviewer bias, miscalibration, and subjectivity",
+        "description": "Recognize issues like bias, miscalibration, and subjectivity in reviewer scores (cites). Assignment algorithms should account for these statistical aspects in analysis and design.",
+        "guidance": "Design assignments and aggregation/estimation procedures that are robust to different reviewer behaviors (bias, miscalibration). The paper analyzes both objective and subjective score models and shows PeerReview4All yields near-optimal statistical accuracy under these models. Consider calibration or aggregation techniques in downstream estimator \u03b8."
+      },
+      {
+        "name": "Avoid discriminating against interdisciplinary/non-mainstream submissions",
+        "description": "Motivation/criterion: Non-mainstream or interdisciplinary works face higher difficulty due to fewer competent peers; assignment should not discriminate against such works.",
+        "guidance": "By maximizing per-paper sum similarity (or via thresholded f), ensure even papers with few specialized reviewers get as competent reviewers as possible. Consider mechanisms (fairness objective, coverage diversification) to allocate scarce expertise without sacrificing other papers' guarantee unduly."
+      }
+    ]
+  }
+}

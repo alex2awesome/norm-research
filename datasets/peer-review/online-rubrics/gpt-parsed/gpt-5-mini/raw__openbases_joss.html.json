@@ -1,0 +1,80 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/openbases_joss.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 4230,
+  "output_tokens": 2474,
+  "elapsed_s": 835.8679675001185,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "authors preparing a Journal of Open Source Software (JOSS) paper using GitHub and CircleCI (developers packaging paper.md and paper.bib for submission)",
+    "subtask_short": "JOSS submission preparation",
+    "subtask_description": "Instructions and checklist for preparing, validating, and optionally deploying a JOSS submission using a GitHub repository and CircleCI; focuses on required files, CI configuration, validation steps, and deployment prerequisites. Targets authors who will produce paper.md and paper.bib and want automated validation and PDF preview.",
+    "subtask_keywords": [
+      "joss",
+      "submission",
+      "github",
+      "circleci",
+      "paper_markdown",
+      "openbases"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Paper file layout",
+        "description": "The submission must include a folder named `paper` containing a `paper.md` and a matching `paper.bib`.",
+        "guidance": "Repository should have structure: paper/ paper.md paper.bib. An example paper is provided in the paper folder. This is the canonical location the CI workflow expects."
+      },
+      {
+        "name": "Programmatic validation of paper.md and paper.bib",
+        "description": "The template validates `paper.md` and `paper.bib` for programmatic properties such as length and formatting.",
+        "guidance": "Validation is automated in CI and checks machine-verifiable items (e.g., formatting, bibliography structure, length). The template will NOT check 'human' elements like whether your summary is complete."
+      },
+      {
+        "name": "Use JOSS/whedon templates",
+        "description": "The paper must use the JOSS template served by `whedon`.",
+        "guidance": "This repository uses the JOSS template; the build will render the paper with JOSS templates. Ensure the paper content conforms to the template expectations (the example in `paper/` shows the expected format)."
+      },
+      {
+        "name": "PDF generation with JOSS branding",
+        "description": "The CI build will generate a PDF using the JOSS templates and logo.",
+        "guidance": "CircleCI job builds a PDF using the JOSS templates and logo so you can preview the final rendered submission. The template also supports alternate builder containers (e.g., openbases/openbases-pdf) if you want local rendering."
+      },
+      {
+        "name": "Required CI configuration files",
+        "description": "To run builds and validation in CircleCI, include a `.circleci/config.yml` (and optionally `.circleci/template.html` for GitHub Pages deployment).",
+        "guidance": "The hidden folder `.circleci/config.yml` contains the workflow steps for clone, validation, build, and optional deploy. You only need `.circleci/config.yml` and `.circleci/template.html` for the CI integration to work."
+      },
+      {
+        "name": "CI workflow steps",
+        "description": "The CircleCI workflow should perform: clone of the repository, validation of `paper.md` and `paper.bib` (per the template criteria), build the PDF, and optionally push to GitHub Pages.",
+        "guidance": "The provided `.circleci/config.yml` implements these steps by default. You can edit the config to change behavior, add tests, filters, or additional deployment steps."
+      },
+      {
+        "name": "GitHub Pages deployment prerequisites (machine user & deploy key)",
+        "description": "If you want to push the rendered PDF back to GitHub Pages, you must create a machine user with write access and provide a deploy key with write permissions to CircleCI.",
+        "guidance": "Steps: create a second GitHub account (machine user) with a different email, add it as a collaborator with push access, accept the invitation, log into CircleCI as the machine user, 'Follow Project', then in Project Settings -> 'Checkout SSH keys' click 'Authorize with GitHub' and add the machine user's SSH key ('Add user key'). CircleCI generates read-only deploy keys by default; you need this machine user key so CircleCI can push."
+      },
+      {
+        "name": "CircleCI environment variables",
+        "description": "Set required environment variables in CircleCI project settings: `GITHUB_USER`, `GITHUB_EMAIL`, `OPENBASES_VALIDATE_ARGS`, and `OPENBASES_PAPER_ARGS`.",
+        "guidance": "`GITHUB_USER` and `GITHUB_EMAIL` should be the machine user's GitHub account. `OPENBASES_VALIDATE_ARGS` passes additional arguments to openbases validation (ob-validate). `OPENBASES_PAPER_ARGS` defines extra argument pairs to pass into the openbases/openbases-pdf container entrypoint; these are interpolated into the entrypoint command."
+      },
+      {
+        "name": "Local validation using openbases Docker images",
+        "description": "You can run validations locally using the `openbases/openbases` Docker image, and generate PDFs locally with `openbases/openbases-pdf`.",
+        "guidance": "Using the Docker images avoids needing CI for validation. The `openbases/openbases-pdf` builder can also be used to render PDFs locally if you want to preview without CI. The `openbases/builder-pdf` repo provides a template that uses a different icon instead of the JOSS logo."
+      },
+      {
+        "name": "Customization of build and template",
+        "description": "You may customize the CircleCI config and `template.html` used for rendering; the CircleCI configuration file and template are fully editable.",
+        "guidance": "Customizations can range from trivial text changes to adding steps or filters in the workflow. `template.html` is populated with environment variables and can be modified or replaced to change the rendered HTML/PDF. For pull requests, configure CircleCI filters if you want different behavior."
+      },
+      {
+        "name": "Limitations of the template (what it does not do)",
+        "description": "The template will not submit the paper to JOSS on your behalf and will not verify subjective/human aspects of the submission (e.g., completeness of summary).",
+        "guidance": "Authors must still submit the validated PDF through JOSS's submission process. The template focuses on machine-checkable aspects (formatting, bibliographic validity, length) and CI-driven build/deploy functionality."
+      }
+    ]
+  }
+}

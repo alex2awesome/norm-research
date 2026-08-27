@@ -1,0 +1,162 @@
+[
+{
+"review_id": "icml_rqOlUTnKWh_r1",
+"paper_id": "icml_rqOlUTnKWh",
+"review_text": "The paper presents an RL framework for discovering analytical Lyapunov functions for nonlinear dynamical systems. The proposed approach trains a symbolic transformer from scratch. The transformer generates candidate Lyapunov functions in a symbolic form, which is then refined and verified via a combination of global optimization (using SHGO), risk-seeking policy gradient updates, and genetic programming (GP) as expert guidance. The authors compared their approach with two other tools over a series of benchmarks."
+},
+{
+"review_id": "icml_rqOlUTnKWh_r2",
+"paper_id": "icml_rqOlUTnKWh",
+"review_text": "1. Similarly to other lines of work, authors train a new model for a single nonlinear dynamical system. \n2. Key innovation lies on the symbolic formulation of the problem: instead of training a fixed model M (which would serve as the Lyapunov candidate) as per previous line of work, they work with symbolic transformer. \n3. They employ an RL loop to discover local Lyapunov candidates. A good component introduced by authors is the SHGO algorithm.\n4. The most real-world result is the fact that (a) the paper is not constrained by dimensions, (b) they discovered new local Lyapunov functions."
+},
+{
+"review_id": "icml_rqOlUTnKWh_r3",
+"paper_id": "icml_rqOlUTnKWh",
+"review_text": "This paper proposes to use transformers and reinforcement learning (RL) to construct local analytical Lyapunov functions for high-dimensional non-polynomial systems. The proposed framework consists of three components: 1) a symbolic transformer to generate candidate Lyapunov functions; 2) a numerical verifier for finding counterexamples; and 3) a risk-seeking policy gradient algorithm to optimize the symbolic transformer based on the Lyapunov risk. Furthermore, to improve the training efficiency, a genetic programming component is also included in the training framework. Experimental results on dynamical systems with up to 10 dimensions show that the proposed algorithm successfully found the analytical Lyapunov function in most cases, and even discovered new Lyapunov functions for the 2-bus lossy system.\n\n## update after rebuttal\n\nThe rebuttal addresses my concerns, and I think the paper can benefit from the additional results provided in the rebuttal. I have also read other reviewers' comments and the authors' responses. The comments on the scalability of the SOS methods raised by Reviewer uz6L were also my concerns on the additional experimental results, but I think the authors' reply is fair. Overall, I think this is a good paper that provides valid insights on learning-based Lyapunov function discovery. I have increased my score."
+},
+{
+"review_id": "icml_NEfIaE4BI5_r0",
+"paper_id": "icml_NEfIaE4BI5",
+"review_text": "This work studies the problem of private partition selection, giving two new, highly parallelizable algorithms for privately outputting as large a subset of the union of user datasets as possible under the constraints of user-level privacy (MAD and MAD2R). They prove that their algorithms satisfies approximate differential privacy and argue utility through a \u201cstochastic dominance\u201d theorem, showing that \nany elements of the union output by a simple reference algorithm with probability greater than some threshold will also be output with good (but possibly lower) probability by MAD\nAny elements of the union output by the simple reference algorithm with probability below that threshold will be output by MAD with probability at least as high. \n\nThey empirically evaluate the performance of their algorithms on Higgs, IMDb, Reddit, Finance, Wiki, Twitter, Amazon, Clueweb, and Common Crawl datasets, comparing their utility to similarly parallelizable baselines as well as sequential (but higher utility) algorithms."
+},
+{
+"review_id": "icml_NEfIaE4BI5_r1",
+"paper_id": "icml_NEfIaE4BI5",
+"review_text": "The paper deals with the problem of differentially private set union.\nEach user holds a subset of items from an unbounded universe, and the goal is to output as many items from the union of all the users' sets while maintaining user-level privacy.\nUseful intuition for the problem is that items held by a single user should not be output, whereas items held by many users are fine to output, motivating weighting-based algorithms.\nSuch algorithms work in the following way: 1) each user contributes a weight vector over the items they hold, 2) all weights are summed together centrally, 3) each item is privately checked to be above a threshold, 4) item above the threshold are released.\n\nThe processes in which these weights are derived from users' sets distinguishes these algorithms.\nOne approach is to greedily produce weights by sequentially interacting with each user and letting their weight update depend on every past weight update (Gopi et al., 2020; Carvalho et al., 2022).\nThis approach produces good results, but is not apt for massively parallel computation.\n\nA more scalable approach is to interact with each user in rounds.\nThe first such scalable algorithm was uniform weighting (Korolova et al., 2009) where each user's items contribute uniformly to the weight, and this was performed for one round.\nLater DP-SIPS (Swanberg et al., 2023) made the amendment of splitting the privacy budget over multiple rounds, and running uniform weighting in each round.\nItems selected in preceding rounds got removed in future rounds, and finally the union of the private unions from each individual round is released.\n\nThis paper improves on the uniform weighting procedure.\nSimplified, they show that it is possible to make it adaptive (Algorithm 2, MAD).\nAfter running uniform weighting, they truncate weights $w(i) \\geq \\tau$, where $\\tau$ is a parameter, to $\\tau$, and re-route these weights back to users, proportionally to how much they contributed.\nThe intuition is that items with large weights are likely to exceed the private threshold check, so by re-allocating weight to other items (if that is possible to do at no cost in privacy) we can expect to be able to release more items.\nThe authors show that, indeed, this re-routing is possible to perform without increasing the sensitivity of the procedure (Lemma 4.1 and Lemma 4.2), and that it stochastically dominates uniform weighting (Theorem 1.2).\n\nThey also consider a biased 2-round version of MAD (Algorithm 5, MAD2R), where the weights of items not released in the first round are re-used for the second round.\nEssentially, items with very low weights in the first round are removed from the second round (because they are unlikely to be output, and so the weight can be better spent elsewhere), and items with very large weight are biased to not overshoot the threshold by as much (also allowing for shifting weights around).\n\nThe paper supports the theoretical results with empirical work (Section 5, Table 1).\nThe authors demonstrate that their single and 2-round algorithms (MAD and MAD2R) improve on existing parallel algorithms for all shown datasets.\nSequential algorithms consistently outperform the parallel algorithms, which makes sense and is well-explained.\n\n## update after rebuttal\n\nI find that the authors have adequately addressed questions raised by the reviewers, and I appreciate the additional experiments they have run in support of their rebuttal. For my own questions, the privacy budget split for DP-SIPS and the source of the improvement for MAD2R is now clearer to me. I have upgraded my score."
+},
+{
+"review_id": "icml_NEfIaE4BI5_r2",
+"paper_id": "icml_NEfIaE4BI5",
+"review_text": "This paper studies private partition selection (or set union) under the constraint of differential privacy (DP). Here, they consider user-level DP (UDP), where each user is allowed to contribute multiple points to the dataset. It provides both theoretical and experimental results to to show that their work improves on the prior work. Also, there is more computational efficiency in this work owing to being able to parallelize the algorithm. This is the first paper that is able to achieve both utility and the ability to be parallelized at the same time. They test on 9 different datasets, including on those used in recent prior work. It provides two algorithm, $MAD$ and $MAD2R$, where the latter is a multi-round version of the former, and provides better guarantees, as well. The techniques rely on weighting and reweighting the items privately in order to recover items closer to the tail ends of the dataset."
+},
+{
+"review_id": "icml_NEfIaE4BI5_r3",
+"paper_id": "icml_NEfIaE4BI5",
+"review_text": "This work focuses on differentially private partition selection problem, which is very crucial for many underlying applications like NLP. In this problem, the system would like to extract the data as much as possible it can do from users while preserving users\u2019 privacy. It proposes an adaptive and non-uniform weighting algorithm (MAD) with ability of parallelization to tackle the problem. In addition, it also proposes MAD2R to maximize the output in the second round of mad."
+},
+{
+"review_id": "icml_FgttKcRbQO_r0",
+"paper_id": "icml_FgttKcRbQO",
+"review_text": "The paper presents a recursive enumeration algorithm (EKM) for solving the K-medoids problem exactly. The proposed method guarantees global optimality and runs in worst-case O(NK+1) time. Its main contribution is a formal derivation of the algorithm using algebraic programming techniques, including a shortcut fusion method for recursive combination generation. The authors compare the EKM algorithm with both state-of-the-art branch-and-bound (BnB) methods (e.g., Ren et al.) and classical heuristics (such as PAM and CLARANS) over several datasets."
+},
+{
+"review_id": "icml_FgttKcRbQO_r1",
+"paper_id": "icml_FgttKcRbQO",
+"review_text": "The paper presents EKM, a divide-and-conquer algorithm designed to solve the k-medoids problem exactly. Their algorithm guarantees globally optimal solutions in the worst-case $O(N^{k+1})$ time complexity. \n\nThey compare EKM against approximate algorithms and a state-of-the-art branch-and-bound (BnB) algorithm, showing that their method is faster while also guaranteeing correctness."
+},
+{
+"review_id": "icml_FgttKcRbQO_r2",
+"paper_id": "icml_FgttKcRbQO",
+"review_text": "The k-medoid problem is to find a subset C of k points from a set X of n points in R^d such that the sum of distances of every point in X to its closest point in C is minimised. The exhaustive search algorithm for this problem goes over all possible size-k subsets of X. This has a running time of $O(|X|^{k+1})$. This paper suggests a recursive way to generate all possible subsets of X, and hence, the algorithm's running time matches that of the exhaustive search algorithm. Experiments are conducted on real datasets, and results are compared with the previous Branch-and-bound methods that give approximate solutions."
+},
+{
+"review_id": "icml_bXilZCSueG_r0",
+"paper_id": "icml_bXilZCSueG",
+"review_text": "This paper introduces 4d Tensor-Var, a framework for performing data assimilation with learnable features. Building upon CME to parameterize the state space model, the authors propose two versions of constructing the features space."
+},
+{
+"review_id": "icml_bXilZCSueG_r1",
+"paper_id": "icml_bXilZCSueG",
+"review_text": "This paper proposes Tensor-Var, a framework combining kernel conditional mean embedding (CME) with 4D-Var to linearize nonlinear dynamics and enable convex optimization in a learned feature space. It addresses the high computational costs and theoretical limitations of traditional 4D-Var and deep learning hybrids. Tensor-Var incorporates deep features (DFs) for scalability and provides theoretical guarantees for consistent assimilation. Experiments on chaotic systems and global weather prediction show Tensor-Var achieves higher accuracy and a 10- to 20-fold speedup over conventional and DL hybrid 4D-Var methods, offering an efficient and theoretically sound approach for data assimilation.\n\n## Update after rebuttal\nI appreciate the authors' thorough efforts in addressing my feedback. The explanations and revisions have resolved my concerns, and I maintain my current evaluation of weak accept."
+},
+{
+"review_id": "icml_bXilZCSueG_r2",
+"paper_id": "icml_bXilZCSueG",
+"review_text": "This paper discusses Four-Dimensional Variational Data Assimilation (4D-Var), which is widely used in weather forecasting and dynamic system state estimation. Traditional methods struggle to properly model the nonlinear relationships between observational data and numerical models. The authors propose a novel approach that leverages Kernel Conditional Mean Embedding (CME) to linearize 4D-Var, transforming the nonlinear optimization problem into a convex optimization problem, thereby reducing the computational cost of optimization. Additionally, by incorporating past observational data, the proposed method enables robust estimation even in missing observations. Furthermore, the use of Deep Features (DFs) enhances scalability. Through experiments on two benchmark systems, as well as data assimilation experiments using global Numerical Weather Prediction (NWP) data and satellite observational data, the authors demonstrate that the proposed method achieves lower computational cost and reduced error compared to conventional 4D-Var methods.\n\n## update after rebuttal\n\nThank you for the detailed response. I find the integration with AI-based forecasting models particularly interesting. I also appreciate the addition of the comparison method. Overall, I believe the contribution is significant, so I will keep my evaluation as it is. I mistakenly posted my comment in the Official Comment section. My apologies."
+},
+{
+"review_id": "icml_bXilZCSueG_r3",
+"paper_id": "icml_bXilZCSueG",
+"review_text": "The paper introduces Tensor-Var, a novel framework for variational data assimilation, which integrates kernel conditional mean embedding (CME) with four-dimensional variational assimilation (4D-Var). Traditional 4D-Var methods are computationally expensive and struggle with nonlinear dynamics and imperfect state-observation mappings. Tensor-Var addresses these challenges by linearizing nonlinear dynamics in a learned feature space, making the optimization convex while ensuring theoretical guarantees for consistent assimilation results.\n\nTo enhance scalability, the framework incorporates deep features (DFs) learned via neural networks, allowing it to handle large-scale problems efficiently. Experiments on chaotic systems and global weather prediction demonstrate that Tensor-Var significantly outperforms conventional and deep learning (DL)-based 4D-Var methods in accuracy while achieving a 10- to 20-fold speedup."
+},
+{
+"review_id": "icml_4OszSYdsgO_r0",
+"paper_id": "icml_4OszSYdsgO",
+"review_text": "The paper \"Attention-Level Speculation\" introduces ALSpec, a novel parallelism paradigm designed to accelerate transformer-based LLM inference by overlapping self-attention computations with subsequent non-attention operations (e.g., feed-forward layers). Key contributions include the core idea of self-attention outputs using approximations (e.g., attention sink on first/last tokens) and verifies them in parallel. If the approximation error is within a threshold (controlled by hyperparameter $\u03bb$), subsequent operations proceed early; otherwise, they fall back to exact attention results.\nAchieves 1.65\u00d7 end-to-end decode latency reduction at 128K context length with 87.5% speculation hit rate, outperforming tensor/data parallelism scaling limits. Maintains baseline correctness on reasoning (GSM8K), math (MATH), and retrieval tasks by dynamically rejecting harmful approximations. Reduces attention latency overhead by 5\u00d7 via overlapping computations, validated on Tenstorrent NPUs.\nKey Insight involve static approximations (e.g., fixed sparse attention) fail on tasks requiring global context (e.g., topic shifts in multi-step reasoning). ALSpec adapts layer- and token-specifically, accepting approximations in 50\u201390% of layers without quality loss.Combines with tensor parallelism, showing continued scaling where pure tensor parallelism plateaus (e.g., 8 devices)."
+},
+{
+"review_id": "icml_4OszSYdsgO_r1",
+"paper_id": "icml_4OszSYdsgO",
+"review_text": "The paper introduces attention-level speculative parallelism (ALSpec), a dynamic method for approximating self-attention in large language models. ALSpec computes an approximate attention output  and decides whether to accept the approximation. It uses a specialized flash decode kernel and SGDC with priority gating to overlap expensive attention and feed-forward operations. Experimental results on Llama 3.1 8B model using Tenstorrent NPU devices show significant reductions in latency (up to 5\u00d7 in attention overhead at long contexts) and improved throughput (about 1.65\u00d7 speedup at high speculation hit rates) compared to traditional tensor parallelism approaches.\n\n## update after rebuttal\nThe author's response addressed my concerns, leading me to raise my rating from 3 to 4."
+},
+{
+"review_id": "icml_4OszSYdsgO_r2",
+"paper_id": "icml_4OszSYdsgO",
+"review_text": "LLM is resource-intensive, and serving LLMs is difficult. Model parallelism is bottlenecked by communication, when the communication bandwidth is low, and data parallelism is great at throughput but not good as inference latency. Approximate attention is robust at instruction-following and knowledge retrieval tasks but not good at context-heavy tasks and complex reasoning tasks. The paper uses approximate attention as a way to speed up self-attention in a speculative decoding way but at the per-layer level. In the setup introduced in the paper, it uses two NPU per execution/shard, where one is main, another one is speculative. The main thread will execute their in-house attention kernel that does StreamingLLM attention and the full attention at the same time, the StreamingLLM finishes first, and kick start the FFN computation on the speculative thread, which is on a different NPU. When the full attention finishes, it uses a threshold to check whether the StreamingLLM attention output is close to the full attention. If true, the main thread now becomes the speculative thread, and vice versa. If not, it will continue generate following the original path. \nThe takeaway is that compared with a 8 cards tensor parallelism, \nthe upper bound in efficiency of the method is 4 cards StreamingLLM tensor parallelism. \nThe lower bound in efficiency of the method is 4 cards full-attention tensor parallelism. \nBecause of the hit-rate and lower overhead of communication, the system is shown to beat the tensor parallelism in efficiency, while also preserve the serving efficiency."
+},
+{
+"review_id": "icml_uqCfoVXb67_r0",
+"paper_id": "icml_uqCfoVXb67",
+"review_text": "This paper proposed a diffusion-based method for image restoration problems, e.g., super-resolution, deraining, and inpainting. Given a dataset of corrupted and clean image pairs, the goal is to construct a diffusion model that at inference generates clean images given corrupted images. The proposed method is based on stochastic optimal control (SOC), which re-frames the problem as an optimization over the drift of diffusion models. Such an SOC reformulation introduces a tunable hyper-parameter ($\\gamma$) and recovers prior Doob-h-transform's based diffusion models as $\\gamma$ approaches infinity. It is shown empirically that a rather large but finite $\\gamma$ (~e7) improves performance."
+},
+{
+"review_id": "icml_uqCfoVXb67_r1",
+"paper_id": "icml_uqCfoVXb67",
+"review_text": "This paper proposes a framework that unifies and extends various diffusion bridge methods by way of stochastic optimal control. In the case of linear dynamics, they derive a computationally tractable method, which can be thought of as a regularization of previous methods by the introduction of a new hyperparameter.  Implementing this change requires only a minimal modification to existing code. They show that, by tuning this new hyperparameter, improved performance can be achieved in a number of benchmark examples.\n\n## update after rebuttal\nMy assessment has not changed substantially. I have maintained my score at 4: Accept\n\nIn addition, earlier I posted a followup discussion regarding the proof of Prop. 4.3 under an incorrect heading, so the authors were unable to see it. I believe it would further improve the paper if the following was addressed, though it would not change my score either way:\n\n I do still believe that  Proposition 4.3 is much more elementary than it is made out to be. Below is a more detailed version of the comment in my original review,  on which the authors could base a revised elementary proof.\n\nStarting with the $\\gamma=\\infty$ case, the optimal control $u_{t,\\infty}^*$ must lead to $x_T^{u_\\infty^*}=x_T$, else the cost is infinite, and therefore\n\n$J(u_{t,\\infty}^*,\\infty)=\\int_0^T\\frac{1}{2}\\|u_{t,\\infty}^*\\|^2_2dt$\n\nNow looking at the finite $\\gamma$ case, we can bound the minimum by the value at the control $u_{t,\\infty}^*$:\n\n$J(u_{t,\\gamma}^*,\\gamma)=\\min_u\\{\\int_0^T \\frac{1}{2}\\|u_t\\|^2_2dt+\\frac{\\gamma}{2}\\|x_T^{u}-x_T\\|\\} \\leq \\int_0^T \\frac{1}{2}\\|u_{t,\\infty}^*\\|^2_2dt+\\frac{\\gamma}{2}\\|x_T^{u_\\infty^*}-x_T\\|$\n\nThe SDE determining $x_t$ doesn't depend on $\\gamma$, hence in the above expression we still have $x_T^{u_\\infty^*}=x_T$.  Therefore we arrive at\n\n$J(u_{t,\\gamma}^*,\\gamma)\\leq  \\int_0^T \\frac{1}{2}\\|u_{t,\\infty}^*\\|^2_2dt=J(u_{t,\\infty}^*,\\infty)$"
+},
+{
+"review_id": "icml_uqCfoVXb67_r2",
+"paper_id": "icml_uqCfoVXb67",
+"review_text": "This paper introduces UniDB, a diffusion bridge model framework that utilizes\nStochastic Optimal Control (SOC) for process optimization, providing an ana\u0002lytical solution for the optimal controller. UniDB generalizes existing diffusion\nbridge models by showing that Doob\u2019s h-transform is a special case where the\npenalty coefficient \u03b3 tends to infinity. By adjusting the trade-off between control\ncosts and terminal penalties, UniDB improves image detail and quality while\nmaintaining compatibility with existing models. Experimental results demon\u0002strate its effectiveness in image restoration tasks.\n\n## update after rebuttal\nI have carefully read the rebuttal and would like to maintain my original score."
+},
+{
+"review_id": "icml_uqCfoVXb67_r3",
+"paper_id": "icml_uqCfoVXb67",
+"review_text": "This paper proposes a unified framework, UniDB, of diffusion bridge models based on Stochastic Optimal Control. This framework enhances the quality and detail of generated images by balancing control cost and terminal penalty."
+},
+{
+"review_id": "icml_mgJkeqc685_r0",
+"paper_id": "icml_mgJkeqc685",
+"review_text": "This work considers the problem of coordination in multi-agent systems. It proposes to construct hypergraphs (i.e., graphs with n-ary rather than binary relations) based on agent histories and using a graph convolution technique over this structure. This is motivated by the fact that agents need to form groups for solving tasks and change between groups dynamically. For the hypergraph construction step, the authors propose an approximate spectral clustering technique and prove certain properties regarding its convergence and solution quality. The features obtained through the convolution are used as additional inputs for Q-networks and policy networks alongside histories / actions. The authors demonstrate that the approach generally obtains better performance than a suite of CTDE and communication-enhanced MARL techniques for a variety of benchmarks."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "icml_mgJkeqc685_r1",
+"paper_id": "icml_mgJkeqc685",
+"review_text": "This paper proposes a multi-agent reinforcement learning framework based on dynamic spectral clustering and hypergraph coordination network, aiming to address the challenges of dynamic relationship modeling and efficient information exchange in complex collaborative tasks."
+},
+{
+"review_id": "icml_mgJkeqc685_r2",
+"paper_id": "icml_mgJkeqc685",
+"review_text": "The paper presents a novel framework that combines dynamic spectral clustering with hypergraph neural networks to address the multi-agent coordination problem in Multi-Agent Reinforcement Learning. The framework performs spectral clustering on agents\u2019 state histories , dynamically constructing and updating the hypergraph structure. It enhances information processing through a hypergraph convolutional network and incorporates an attention mechanism to improve the selective processing of information. This architecture is also applicable to both value-based and policy-based paradigms.  The paper claims that this method outperforms state-of-the-art MARL approaches in sample efficiency and final performance across multiple tasks.\n\n\n## Update after Rebuttal\n\nI appreciate the authors\u2019 response and their efforts to address the raised concerns. However, key issues related to the experimental section remain unresolved. The authors evaluate their method on only three scenarios from the SMAC benchmark. Given the limitation, I am maintaining my current score, which already reflects the highest assessment I can reasonably provide under the current circumstances."
+},
+{
+"review_id": "icml_mgJkeqc685_r3",
+"paper_id": "icml_mgJkeqc685",
+"review_text": "The paper proposes a new method to learn higher-order coordination patterns between agents, based on a spectral clustering algorithm and a hyper-graph convolutional network. Agents are coherently grouped together, with such groups changing only when a certain threshold is hit, with the HGCN then combining their information to provide an additional learning signal that can be used in both value-based and policy-based algorithms. Experimental results show improved performances and better sample efficiency against SOTA baselines on a diverse set of cooperative problems."
+},
+{
+"review_id": "icml_soLNj4l2EL_r0",
+"paper_id": "icml_soLNj4l2EL",
+"review_text": "This work focuses on mitigating mis-calibration of LLM during SFT by incorporating label smoothing. It argues that label smoothing helps reduce model overconfidence by promoting equality among logits while enhancing learned feature embeddings. Through empirical experiments, this work demonstrates the effectiveness of label smoothing. Additionally, it designs custom kernels to enable label smoothing with significant memory and throughput improvements, without compromising performance."
+},
+{
+"review_id": "icml_soLNj4l2EL_r1",
+"paper_id": "icml_soLNj4l2EL",
+"review_text": "In this work the authors examine the effect of Instruction tuning on LLM calibration, i.e. when the model says it is 70% sure about a prediction does it actually get it right ~70% of the time? They find that majority of available LLMs are reasonably well calibrated, but once Instruction tuning is applied, they tend to become miscalibrated and end up overconfident in their predictions.\n\nPrevious work has used label smoothing during instruction tuning as a way to reduce miscalibration. This work aims to explain why and identify settings, like when a large vocabulary is used, where label smoothing is not expected to help.\n\nThey include theoretical results, such as how things like model and vocabulary size establish lower bounds on entropy and how that relates to calibration.\n\nAdditionally, the develop and benchmark a new method for calculating logits and loss for large vocabularies while supporting label smoothing."
+},
+{
+"review_id": "icml_soLNj4l2EL_r2",
+"paper_id": "icml_soLNj4l2EL",
+"review_text": "The authors proposed using label smoothing to improve language model calibration for supervised fine-tuning. They demonstrate through theoretical analysis and experiments that label smoothing is effective, though computation is heavy for large vocabulary LLMs. They also propose a memory-efficient algorithm without sacrificing much accuracy."
+},
+{
+"review_id": "icml_soLNj4l2EL_r3",
+"paper_id": "icml_soLNj4l2EL",
+"review_text": "The paper studies calibration in LLMs after SFT stage. They mention that SFT leads to some significant degradation in the calibration performance of LLM due to the lack of diversity in learned feature embeddings. To address this, they propose to use label smoothing during SFT stage for better calibration. They provide some theoretical justification on the rationale of using label smoothing by relating them with minimizing the logit distance, and is somehow equivalent to the MAP estimation of the softmax predictions. They also provide more ablations on the effectiveness of label smoothing, and pointed out that label smoothing might not work for models with larger vocab and small hidden dim size, due to limited capacity and lack of \"concentration\" behavior. To practically implement the label smoothing on models with large vocab, they also introduces a novel, memory-efficient GPU kernel implemented in Triton, with optimized memory usage and improved throughput."
+},
+{
+"review_id": "icml_rLM4qDBJKA_r0",
+"paper_id": "icml_rLM4qDBJKA",
+"review_text": "The authors develop a a feature-centric theory of transfer learning, based on their insight that transferability is a property of the learned\nfeature space and not only of the source and target datasets.\nThe theory is developed for a deep linear networks and analytically characterizes the transferability phase diagram as a\nfunction of the target dataset size and the feature space overlap. \nThe authors report a few insights based on their theoretical analysis, and demonstrate potential applicability in two-layer ReLU networks"
+}
+]

@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_61a63fddd87f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17781,
+  "output_tokens": 4184,
+  "elapsed_s": 1195.78639183403,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing peer-review bidding/order-display systems (conference program chairs, algorithm designers, recommender-system researchers)",
+    "subtask_short": "optimizing paper ordering for bidding",
+    "subtask_description": "Designing and evaluating algorithms that decide the ordering of papers shown to sequentially arriving reviewers during the bidding stage of conference peer review, trading off per-paper coverage (number of bids) and per-reviewer relevance/satisfaction.",
+    "subtask_keywords": [
+      "peer_review",
+      "bidding",
+      "paper_ordering",
+      "conference",
+      "learning_to_rank",
+      "algorithm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Paper-side gain (\u03b3_p)",
+        "description": "A paper-side gain function \u03b3p: R_{\u22650} \u2192 R_{\u22650} that maps the final number of bids on a paper to a nonnegative utility; the total paper-side gain is G_p = \u03a3_j \u03b3p(g_j).",
+        "guidance": "\u03b3p is assumed to be non-decreasing and concave to capture improved gain with more bids and diminishing returns. Examples: \u03b3p(x)=\u221ax (smooth, increasing, diminishing returns) and \u03b3p(x)=min(1, x/r) (emphasizes having at least r bids per paper). The choice of \u03b3p encodes the program's desiderata for per-paper coverage and can emphasize thresholds (e.g., at least r bids)."
+      },
+      {
+        "name": "Reviewer-side gain (\u03b3_r)",
+        "description": "A reviewer-side gain function \u03b3r: [d]\u00d7[0,1] \u2192 R_{\u22650} that scores showing paper j at position \u03c0 to reviewer i given similarity S_{i,j}; total reviewer-side gain is G_r = \u03a3_i \u03a3_j \u03b3r(\u03c0_i(j), S_{i,j}).",
+        "guidance": "\u03b3r must be non-increasing in the position (earlier positions yield higher gain) and non-decreasing in similarity. Example: Discounted Cumulative Gain (DCG) style \u03b3r(\u03c0,S) = (2^{S} - 1) / log2(\u03c0+1) (the paper uses a DCG-style running example). Choose \u03b3r to capture reviewer satisfaction from seeing relevant papers early; it penalizes showing irrelevant items up-front which can cause opt-out or disengagement."
+      },
+      {
+        "name": "Overall gain function and trade-off parameter (G = G_p + \u03bb G_r)",
+        "description": "Combine paper-side and reviewer-side objectives with a trade-off parameter \u03bb \u2265 0 chosen by program chairs: G = G_p + \u03bb G_r. The goal is to maximize expected overall gain E[G].",
+        "guidance": "\u03bb encodes the relative importance of reviewer satisfaction vs. per-paper coverage. Program chairs select \u03bb to reflect policy; experiments and theory analyze sensitivity to \u03bb."
+      },
+      {
+        "name": "Reviewer bidding model (f) \u2014 position-biased click model",
+        "description": "Model the probability that reviewer i bids on paper j shown at position \u03c0 as a (given) function f(\u03c0, S_{i,j}), with bids modeled as independent Bernoulli random variables with mean p_{i,j} = f(\u03c0, S_{i,j}).",
+        "guidance": "f is assumed non-increasing in position (captures primacy/position bias) and non-decreasing in similarity (higher relevance \u2192 higher bid probability). Example: f(\u03c0,S)=S / log2(\u03c0+1) (position-biased, relevance-proportional). The model borrows from position-based click models; independence and Bernoulli assumptions are simplifications but standard in analysis. The algorithm and objective maximize expected gains under this model."
+      },
+      {
+        "name": "Primacy effect / position bias",
+        "description": "Empirical and modeled effect that items shown earlier are more likely to be bid/clicked; reviewers are more likely to bid on top-of-list papers.",
+        "guidance": "Designs must explicitly account for primacy effects because ordering strongly affects bid distribution. Failure to account for primacy can leave many papers under-bid or cause reviewer disengagement if irrelevant items are shown early."
+      },
+      {
+        "name": "Monotonicity and concavity constraints on component functions",
+        "description": "Structural assumptions required for the framework: \u03b3p is non-decreasing and concave; \u03b3r is non-increasing in position and non-decreasing in similarity; f is non-increasing in position and non-decreasing in similarity.",
+        "guidance": "These properties are used in proofs and algorithmic reductions (e.g., concavity captures diminishing returns, monotonicity ensures sensible ordering incentives). When specifying gains or bid models, ensure these monotonicity/concavity conditions hold or adapt the theory/algorithms accordingly."
+      },
+      {
+        "name": "Heuristic for future bids (h_i): zero and mean heuristics",
+        "description": "SUPER* takes as input a heuristic h_i \u2208 [0, n\u2212i+1]^d estimating expected future bids per paper after reviewer i; two examples are the zero heuristic (h_i = 0) and the mean heuristic (h_i,j = (1/d) \u03a3_{positions j'} f(j', S_{i',j}) averaged over future reviewers).",
+        "guidance": "Heuristics encode expected future bids to make locally optimal choices that consider unseen future arrivals; zero heuristic ignores future, mean heuristic approximates random future orderings. Choice of heuristic affects performance when paper-side gain is non-linear; SUPER* is locally optimal with zero heuristic for immediate gain and uses heuristics to guide decisions for general steps."
+      },
+      {
+        "name": "Optimization objective: maximize expected overall gain",
+        "description": "Algorithms must maximize the expected overall gain E[G_p + \u03bb G_r], where the expectation is over randomness in reviewer bids and any algorithmic randomness.",
+        "guidance": "This is the formal objective for policy design. Implementations compute or approximate the expectation using the bidding model f and any heuristic for future bids, then choose permutations to maximize expected gain (SUPER* solves a per-reviewer optimization incorporating current bids and heuristic future bids)."
+      },
+      {
+        "name": "Local optimality / immediate reviewer gain maximization",
+        "description": "A desired/required property: the ordering shown to the current reviewer should maximize the expected immediate gain from that reviewer conditioned on past history.",
+        "guidance": "SUPER* is proven (Theorem 1 / Corollary 1) to maximize expected immediate gain for the final reviewer (and for any reviewer with zero heuristic). Local optimality is a key desideratum because decisions must be made online with incomplete future information. Algorithms lacking local optimality (e.g., common baselines) can be provably suboptimal."
+      },
+      {
+        "name": "Global optimality / near-optimality under structure (linear \u03b3_p or community model)",
+        "description": "Global optimality across the entire sequence is desirable; in particular, SUPER* is globally optimal when \u03b3p is linear and is shown to be near-optimal under a community model for similarities (structured, noisy block-diagonal matrices).",
+        "guidance": "If paper-side gain is linear the multi-reviewer problem decouples and SUPER* is globally optimal for any heuristic. For real-world similarity matrices exhibiting community structure (e.g., ICLR 2018), SUPER* can be proven near-optimal; choose models/parameters consistent with these assumptions when seeking global guarantees."
+      },
+      {
+        "name": "Baselines and anti-patterns (RAND, SIM, BID / fixed ordering)",
+        "description": "Common baseline ordering heuristics: RAND \u2014 random permutation per reviewer; SIM \u2014 order by decreasing similarity for that reviewer; BID \u2014 order by increasing number of bids received so far (ties by similarity). These heuristics are standard but can be considerably suboptimal.",
+        "guidance": "The paper proves worst-case additive suboptimality lower bounds for these baselines under plausible gain/bidding choices (Theorem 2). Treat fixed ordering or similarity-only ordering as anti-patterns if the goal includes equitable per-paper coverage and reviewer satisfaction; compare new algorithms against these baselines."
+      },
+      {
+        "name": "Decomposable model for computational efficiency",
+        "description": "A structural model class that admits faster computation: assume f(\u03c0,S) = f_\u03c0(\u03c0) f_S(S) with f_\u03c0 non-increasing and f_S non-decreasing, and \u03b3r(\u03c0,S)=f_\u03c0(\u03c0) \u03b3^S_r(S) with \u03b3^S_r non-decreasing; then the per-reviewer optimization reduces to sorting by weights \u03b1_{i,j}.",
+        "guidance": "For this decomposable class (which includes DCG-like \u03b3r and f(\u03c0,S)=S/log2(\u03c0+1)), the optimal per-reviewer ordering can be obtained by sorting \u03b1_{i,j} = f_S(S_{i,j})\u00b7\u0394\u03b3p + \u03bb\u00b7\u03b3^S_r(S_{i,j}), giving an O(d log d) per-reviewer algorithm (Algorithm 3). Use this decomposition when runtime is critical and model assumptions hold."
+      },
+      {
+        "name": "Computational complexity / implementability requirements",
+        "description": "Per-reviewer computational cost targets and algorithmic tractability considerations: general SUPER* solves a linear assignment and runs in O(d^3) per reviewer; for the decomposable model it runs in O(d log d).",
+        "guidance": "When designing production systems, account for the per-reviewer complexity and prefer the decomposable model or efficient heuristics if d is large. The general optimization is reduced to a linear program with totally unimodular constraints so LP solvers can find exact integer solutions."
+      },
+      {
+        "name": "Operational modeling assumptions",
+        "description": "Process assumptions underlying the framework: there are d papers and n reviewers; reviewers arrive sequentially once each; bids are binary (existence of a bid) and independent Bernoulli conditioned on position and similarity; the similarity matrix S_{i,j} is given.",
+        "guidance": "These simplifying assumptions (single pass per reviewer, binary bids, known similarities, independence) are used for theoretical analysis and algorithm design. The paper empirically checks robustness to violations (e.g., out-of-order arrivals, repeated visits) but practitioners should validate assumptions for their deployment."
+      },
+      {
+        "name": "Practical performance and robustness desiderata",
+        "description": "Practical targets for algorithm performance and behavior: substantially reduce the number of papers with fewer than requisite bids while maintaining reviewer satisfaction; be robust to model mismatches and real-world complexities.",
+        "guidance": "Empirical results report SUPER* reduces papers with fewer-than-requisite bids by 50\u201375% on ICLR 2018 data versus baselines, while maintaining individual reviewer satisfaction. When judging algorithms, measure both per-paper coverage and reviewer-side metrics, and test robustness to noisy similarities, reviewer noncompliance, and other real-world effects."
+      },
+      {
+        "name": "Optimization formulation and LP reduction (totally unimodular constraint set)",
+        "description": "The per-reviewer optimization over permutations can be reformulated as an integer linear program whose constraint matrix is totally unimodular, so the LP relaxation yields an integer optimal solution.",
+        "guidance": "This mathematical property underlies Algorithm 2: computing weights w_{j,k} and solving a linear assignment LP yields exact optimal permutations for the per-reviewer problem. Use LP-based solvers or the Hungarian algorithm for the assignment when exactness is required and the model does not admit the faster decomposable solution."
+      }
+    ]
+  }
+}

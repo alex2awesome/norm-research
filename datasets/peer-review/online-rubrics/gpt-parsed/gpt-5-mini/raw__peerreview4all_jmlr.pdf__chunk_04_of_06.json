@@ -1,0 +1,126 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peerreview4all_jmlr.pdf",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "peerreview4all_jmlr.pdf",
+  "chunk_idx": 4,
+  "n_chunks": 6,
+  "chunk_chars": 39896,
+  "model": "gpt-5-mini",
+  "elapsed_s": 50.5951194579975,
+  "input_tokens": 14794,
+  "output_tokens": 3939,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing or analyzing conference peer-review assignment algorithms (machine learning / theoretical CS / statistics audience); conference program chairs and implementers of assignment systems",
+    "subtask_short": "peer-review assignment evaluation",
+    "subtask_description": "Designing and evaluating algorithms that assign reviewers to conference papers, with emphasis on fairness (max-min), accuracy of final accept/reject/ranking decisions, computational cost, and topic coverage. Includes theoretical approximation and statistical guarantees and practical heuristics.",
+    "subtask_keywords": [
+      "peer_review",
+      "assignment",
+      "fairness",
+      "similarity_matching",
+      "conference_review",
+      "algorithm_analysis"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Paper and reviewer load constraints",
+        "description": "Each paper must be assigned exactly \u03bb reviewers and each reviewer may review at most \u00b5 papers (feasibility constraints on assignments).",
+        "guidance": "All assignment algorithms and theoretical guarantees are stated under these constraints; integer feasible assignments must respect these load limits. Implementations and proofs (e.g., max-flow formulations) are built around these constraints."
+      },
+      {
+        "name": "Similarity-based assignment quality (sum-of-similarities objective / TPMS)",
+        "description": "Assignment quality often measured as the sum (or sum per paper) of similarities between papers and their assigned reviewers (objective (2) / TPMS approach).",
+        "guidance": "Optimizing global sum-of-similarities (TPMS) is a common baseline but can be highly suboptimal for fairness: the paper gives explicit similarity matrices where TPMS yields zero fairness while fair assignments achieve non-zero fairness. Use with caution when fairness is desired."
+      },
+      {
+        "name": "Max-min fairness metric \u0393_S(A)",
+        "description": "Fairness is measured as the minimum (over papers) of the total similarity score of reviewers assigned to that paper (the paper-level sum-of-similarities min objective).",
+        "guidance": "This is the central fairness desideratum in the paper. Algorithms are evaluated by their achieved \u0393_S(A) relative to the optimal hard-fair assignment (AHARD). Theoretical approximation ratios are stated with respect to this metric."
+      },
+      {
+        "name": "Hard-fair optimal assignment (AHARD)",
+        "description": "The assignment that maximizes the min per-paper total similarity (the true max-min optimal assignment used as a benchmark).",
+        "guidance": "AHARD serves as the optimal fairness benchmark. It can be computationally expensive; approximation algorithms (e.g., PeerReview4All) are compared to AHARD via approximation factors."
+      },
+      {
+        "name": "PeerReview4All algorithm and its approximation guarantee (APR4A)",
+        "description": "An algorithm (PeerReview4All / APR4A) designed to produce assignments with guaranteed max-min fairness approximations; provable approximation factor is 1/\u03bb (i.e., APR4A achieves at least 1/\u03bb of AHARD in worst-case).",
+        "guidance": "Algorithm is iterative (Subroutine 1) using max-flow on layered graphs; it admits stopping after first iteration with some guarantees. Practical tie-breaking heuristics (e.g., for topic coverage) can be applied without breaking guarantees. Examples show APR4A often outperforms other baselines (ILPR, TPMS)."
+      },
+      {
+        "name": "ILPR algorithm failure modes (LP relaxation + rounding)",
+        "description": "ILPR (fractional LP for fairness followed by rounding) can produce integral assignments with zero fairness even when fractional fairness is high.",
+        "guidance": "Construction (block similarity matrices) demonstrates rounding can force some papers to be assigned reviewers with zero similarity. Rounding guarantees (only assigning reviewers with positive fractional mass) can still yield bad integral solutions; beware in implementations."
+      },
+      {
+        "name": "1/\u03bb tightness examples",
+        "description": "There exist similarity matrix constructions where PeerReview4All's approximation ratio approaches 1/\u03bb (examples provided, e.g., Table 7 and the \u03bb=1/2 demonstration).",
+        "guidance": "These examples show the theoretical approximation bound is tight up to small constants; practitioners should be aware that worst-case instances exist even if typical instances perform better."
+      },
+      {
+        "name": "Topic coverage objective \u03c9(A)",
+        "description": "An alternative/auxiliary objective measuring total distinct research topics of papers covered by assigned reviewers: \u03c9(A) = sum_over_papers card(union of reviewers' topics for that paper).",
+        "guidance": "Topic coverage is submodular; greedy algorithms (Long et al. 2013) give constant-factor approximations for maximizing \u03c9(A) under relaxed constraints. However, directly optimizing \u03c9(A) may harm per-paper fairness and can produce assignments with fewer than \u03bb reviewers per paper. The paper suggests integrating coverage heuristics into PeerReview4All's tie-breaking to maintain fairness while improving coverage."
+      },
+      {
+        "name": "Greedy coverage algorithm pitfalls and integration heuristic",
+        "description": "Greedy maximization of topic coverage may (i) sacrifice coverage for some papers to improve global coverage and (ii) yield assignments with fewer than \u03bb reviewers per paper.",
+        "guidance": "To use coverage benefits without losing guarantees: restrict greedy choices to high-similarity edges added by Subroutine 1, set chosen edges' costs to 1 and others to 0, then compute max-flow with maximum cost to produce a feasible assignment of exactly \u03bb reviewers per paper. This preserves PeerReview4All guarantees while encouraging coverage."
+      },
+      {
+        "name": "Fairness beyond the worst-off (Corollary 2 and iterative improvements)",
+        "description": "Corollary 2: iterative application of the algorithm can improve fairness not only for the worst-off paper but for subsequent worst-off papers; bounds (8) describe how fairness for top-r worst-off papers behaves after p iterations.",
+        "guidance": "Stopping the algorithm early (after p iterations) preserves bounds for the first p worst-off papers but not for papers beyond p. Use full iterations to guarantee fairness across more papers; early stopping trades runtime for guarantees."
+      },
+      {
+        "name": "Computational complexity and practical optimizations",
+        "description": "Na\u00efve PeerReview4All requires O(\u03bb m^2 n) max-flow iterations; using Orlin's algorithm and binary search reduces complexity (e.g., to O(\u03bb(m+n)m^2 n) or with binary search O(\u03bb(m+n)m^2 n) with smaller constants).",
+        "guidance": "Implementations should replace general max-flow with faster specialized solvers (Orlin) and use binary search on added edges to reduce max-flow runs. The first-iteration assignment already provides the main guarantees and can be used under time constraints."
+      },
+      {
+        "name": "Statistical goal: accurate recovery of top-k papers (accept/reject decision metric)",
+        "description": "Statistical objective is to recover the set of top-k papers T*_k (or ranking) from noisy reviewer scores, with bounded number of errors t (DH distance \u2264 2t or probabilistic guarantees on misranking).",
+        "guidance": "The paper provides upper bounds (concentration inequalities) showing that under certain S-classes and noise models the averaging or MLE estimators recover T*_k with high probability, and lower bounds (via Fano) showing impossibility when signal-to-noise is too small. Design of assignment affects statistical power: fairness and allocation of 'strong' reviewers to certain papers change KL divergences between instances."
+      },
+      {
+        "name": "Estimators and variance models (\u03b8_MEAN and \u03b8_MLE)",
+        "description": "Two estimators are analyzed: the averaging estimator (\u03b8_MEAN_j = average of reviewers' scores for paper j) and the MLE (\u03b8_MLE), with distributions specified (Gaussian models) and per-paper variances depending on assigned reviewers' variances.",
+        "guidance": "Theoretical bounds for ranking recovery are stated in terms of estimator variances (\u03c3\u0304_j^2) and similarities; for subjective-score models the induced ranking depends on the assignment, and analysis adjusts variance upper bounds accordingly (see equations (39)-(40)). Choose an estimator consistent with noise assumptions and incorporate reviewer variances in assignment evaluation."
+      },
+      {
+        "name": "Similarity-matrix class constructions for theoretical analysis (S_\u03ba(v))",
+        "description": "Define similarity matrices where each paper has exactly \u03ba reviewers with non-zero similarity v (S \u2208 S_\u03ba(v)); used to build worst-case instances for lower bounds and to control the number of 'strong' reviewers per paper.",
+        "guidance": "Such constructions are central in lower bound proofs (Fano-based): they enable counting how many strong-reviewer-influenced columns differ across instances and thus bound KL divergences. When designing experiments, consider similar controlled S matrices to stress-test algorithms."
+      },
+      {
+        "name": "Use of KL divergence and Fano's inequality for lower bounds",
+        "description": "Impossibility / lower bound proofs proceed by constructing many problem instances whose reviewer-score distributions have small pairwise KL divergence; Fano's inequality then yields a lower bound on probability of misidentifying the instance (hence on error in selecting top-k).",
+        "guidance": "Proof technique details: count differing columns, compute per-column KL between Gaussian distributions with shifted means/variances, sum across columns and assignments; control via parameters \u03b4, h(v), h(0), \u03bb, \u03ba, t, and choice of codewords (Levenshtein-based) to ensure sufficient separation in set-of-top-k but small KL."
+      },
+      {
+        "name": "Design trade-off: optimizing global objective vs. worst-off fairness",
+        "description": "Optimizing global sum-of-similarities or topic-coverage may conflict with improving fairness for the worst-off papers; algorithms should trade-off global utility and per-paper fairness based on desired guarantees.",
+        "guidance": "PeerReview4All focuses on worst-off fairness (max-min), while TPMS focuses on global sum. The paper recommends integrating coverage heuristics in tie-breaking rather than replacing fairness-oriented objectives, to maintain guarantees while improving secondary metrics."
+      },
+      {
+        "name": "Practical heuristic: enforce pre-selected high-similarity reviewers then maximize coverage",
+        "description": "In Subroutine 1, pre-select high-similarity reviewer-paper pairs (via flow network additions) and then run a coverage heuristic restricted to these pairs, followed by max-flow with costs set to favor chosen pairs.",
+        "guidance": "This heuristic retains PeerReview4All theoretical guarantees (since it only modifies tie-breaking among max-flows) while improving topic coverage. It also overcomes the greedy-coverage issue of assigning fewer than \u03bb reviewers by final max-flow enforcement."
+      },
+      {
+        "name": "Empirical evaluation metric reporting (simulations and tables)",
+        "description": "Compare algorithms by reporting \u0393_S (fairness) values across constructed similarity matrices and parameters (\u03bb values), using tables and example instances to illustrate worst-case and typical performance.",
+        "guidance": "Use controlled constructions (e.g., block matrices from Propositions 11 and 12) to demonstrate failure modes of baselines (TPMS, ILPR) and strengths of PeerReview4All. Report approximation ratios and absolute fairness values for different \u03bb to illustrate tightness of bounds."
+      },
+      {
+        "name": "Open problems and extensions as evaluation criteria",
+        "description": "Criteria for future work include: (i) finding polynomial-time algorithms with better worst-case approximation than 1/\u03bb, (ii) finer adaptive behavior bounds beyond (7a), (iii) extending fairness notions (including group fairness), (iv) joint active assessment of similarities and assignment.",
+        "guidance": "When evaluating or extending assignment systems, measure improvements along these axes: provable approximation factors, adaptivity to instance structure, fairness across groups, and methods that jointly learn similarity while assigning (possibly with feedback loops)."
+      }
+    ]
+  }
+}

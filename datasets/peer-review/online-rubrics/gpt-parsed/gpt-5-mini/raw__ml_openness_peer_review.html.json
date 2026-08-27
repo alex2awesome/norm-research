@@ -1,0 +1,95 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/ml_openness_peer_review.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15746,
+  "output_tokens": 4003,
+  "elapsed_s": 814.456710957922,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine-learning researchers, conference program chairs, and peer-review researchers studying open peer-review policies and review-quality measurement",
+    "subtask_short": "ml open peer-review evaluation",
+    "subtask_description": "Empirical evaluation of open vs closed peer-review policies in ML conferences via a respondent survey and automated/human annotation of review quality using three metrics (correctness, completeness, substantiation). Includes definitions of open-review regimes and detailed annotation prompts/procedures.",
+    "subtask_keywords": [
+      "peer_review",
+      "open_review",
+      "ml",
+      "review_quality",
+      "survey",
+      "annotation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Closed (reviewing policy)",
+        "description": "All reviews for a particular paper are visible only to the author, the reviewers assigned to that paper, and the meta-reviewer(s) assigned to that paper. Manuscripts are not released to the public, other than the camera-ready copies of accepted papers. Public commenting is never allowed.",
+        "guidance": "Used as one of three canonical reviewing systems in the study for comparison against partially and fully open policies. Example: ICML used this model until 2025."
+      },
+      {
+        "name": "Partially open (reviewing policy)",
+        "description": "Reviews for accepted manuscripts are released to the public after the conference notification deadline, along with the accepted manuscripts themselves. Rejected manuscripts and their reviews are not released by default, though authors of rejected manuscripts may opt in to releasing them. The public may comment non-anonymously on public manuscripts and reviews after the notification deadline.",
+        "guidance": "Used in analysis as the intermediate policy; example: NeurIPS uses this model. Authors may opt-in to release rejected manuscripts; public commenting allowed after notification."
+      },
+      {
+        "name": "Fully open (reviewing policy)",
+        "description": "Reviews for all manuscripts are released to the public after the review submission deadline. All manuscripts are released upon submission, and rejected manuscripts remain visible. The public may comment anonymously or non-anonymously (they decide) on public manuscripts and reviews after their release.",
+        "guidance": "Used as the fully-open baseline in comparisons; example: ICLR. Important policy consequences include resubmission bias concerns, effects on submission behavior, and public commenting modalities."
+      },
+      {
+        "name": "Correctness metric (for review quality)",
+        "description": "Identify objective segments in the review that speak about the contents of the paper (sentences or spans expressing reviewer interpretation). For each such segment, check the paper (and replies) to determine whether the reviewer\u2019s interpretation is correct; if incorrect, provide reasoning and evidence showing the mismatch.",
+        "guidance": "Procedure detail: (1) extract objective segments, (2) verify against manuscript text, (3) use author replies/common replies to determine whether an originally missing experiment/claim was later added (if so, treat original review comment as correct), (4) if incorrect, provide reasoning for incorrectness; format expected: list of tuples (segment, reasoning_if_incorrect) with empty string if correct. This prompt is used both for LLM and human annotation. Do not mark ambiguity as incorrect if the author is ambiguous."
+      },
+      {
+        "name": "Completeness metric (for review quality)",
+        "description": "Make a list of all claims made in the paper (the paper\u2019s contributions). For each claim, check whether the review covers that claim (i.e., indicates the reviewer noticed it and its implications). Mark covered=1, not covered=0.",
+        "guidance": "Procedure: (1) extract all paper claims, (2) for each claim search the review for coverage, (3) return [(<claim>, 0 or 1), ...]. This metric measures coverage of central contributions by the review; used in LLM and human annotator workflows."
+      },
+      {
+        "name": "Substantiation metric (for review quality)",
+        "description": "For each negative evaluative segment identified in the review, determine whether it has been well-substantiated: i.e., whether the review contains appropriate evidence using examples from the paper to elaborate on the negative evaluative segment.",
+        "guidance": "Rules and notes: (a) check the entire review for substantiation \u2014 the supporting text may be far from the evaluative segment; (b) if the segment is self-substantiated (the evidence is within the same span), mark it as self-substantiated and reproduce the segment as the substantiation; (c) prescriptive suggestions (editorial/conceptual suggestions) are typically self-substantiated; (d) questions/requests/clarifications about specific aspects are normally self-substantiated unless extremely vague; (e) if not substantiated, provide the segment along with 'Not substantiated' (or empty substantiation string per output format); (f) when computing review-level substantiation rate, set the rate to 1.0 when a review contains zero negative evaluative claims (standard from prior work)."
+      },
+      {
+        "name": "Identification of negative evaluative segments",
+        "description": "Negative evaluative segments are subjective statements that reflect the reviewer\u2019s evaluation of the paper (criticisms, negative judgments, requests for improvement, tone indicating negative evaluation). The paper treats the notion broadly and includes questions/requests/suggestions that have a negative tone as negative evaluative segments.",
+        "guidance": "Be aware that the authors\u2019 operationalization here is broader than some datasets (e.g., SubstanReview) and includes many more spans such as low-tone questions or prescriptive suggestions. Annotators/LLMs should therefore expect and tag a wider set of negative evaluative phrases; however, avoid conflating substantiation spans with the evaluative segment itself when scoring metrics."
+      },
+      {
+        "name": "Span alignment and word-level scoring (precision/recall/F1)",
+        "description": "Map model-extracted claims and substantiations back to original review text and align them to spans tolerant to punctuation/spacing/line-break hyphenation. Compute micro-averaged word-level precision, recall, and F1 for (i) negative evaluative claims and (ii) their substantiation.",
+        "guidance": "Use a context-aware matcher that tolerates minor textual mismatches so credit is given only when the model finds the right words in the right place (same span), not just anywhere in the review. This is how model performance on identification tasks is quantified."
+      },
+      {
+        "name": "Krippendorff\u2019s alpha for segmentation agreement",
+        "description": "Evaluate agreement between model (or annotator) and dataset segmentations by tagging every word as one of three categories: claim, substantiation, or neither. Compute Krippendorff\u2019s alpha to measure word-level agreement above chance.",
+        "guidance": "Preprocess text to handle real-world messiness (line-breaks, hyphenation, inconsistent whitespace) and map phrases back to original review text before computing Do and De for alpha. Alpha summarizes whether the model puts tags in the same places as the dataset."
+      },
+      {
+        "name": "Review-level correlation metrics (substantiation rate correlations)",
+        "description": "For a review-level summary, compute the substantiation score per review as the fraction of negative evaluative claims that are substantiated. Across reviews compute Pearson\u2019s r and Spearman\u2019s \u03c1 between model and dataset rates to assess how well the model ranks or linearly agrees with ground truth.",
+        "guidance": "Follow prior practice to set the substantiation rate to 1.0 for reviews with zero negative evaluative claims to avoid division-by-zero and to reflect that absence of negative claims implies nothing to substantiate. Use both Pearson and Spearman to capture linear correlation and rank correlation respectively."
+      },
+      {
+        "name": "Statistical testing for venue comparisons",
+        "description": "To compare review-quality metrics between two venues, run a two-sided Fisher permutation test on the absolute mean difference of the metric between venues, pooling scores and repeatedly shuffling labels while keeping group sizes fixed.",
+        "guidance": "Compute permutation p-value with +1 finite-sample correction: p = (#{Tperm >= Tobs} + 1)/(#permutations + 1). Correct for multiple testing across metrics using Holm\u2013Bonferroni step-down thresholds (\u03b1/3, \u03b1/2, \u03b1 for three tests with \u03b1=0.05). Use large number of permutations (10,000 used in the paper)."
+      },
+      {
+        "name": "Annotation protocols and quality assurance",
+        "description": "When benchmarking LLM evaluations against human annotations: provide annotators with the same instructions as the LLM (extract objective segments/claims/negative claims and mark correctness/completeness/substantiation). Compute inter-evaluator correlations (Pearson\u2019s r and Spearman\u2019s \u03c1) and compare mean differences across venues as sanity checks.",
+        "guidance": "Sample reviews from both venues for human annotation; expect variability and small sample sensitivity (outliers can dominate correlations when sample size is small). Use the same metric definitions and per-review procedures to make LLM vs human comparisons fair."
+      },
+      {
+        "name": "Use of LLMs to extract evaluative structure (practical notes)",
+        "description": "LLMs can be used to extract negative evaluative claims and their substantiations from reviews; in practice models may extract many more negative evaluative segments than curated datasets because the paper\u2019s operationalization is broader.",
+        "guidance": "Expect high recall and lower precision compared to prior models/datasets. Manually inspect cases where LLM marks claims as substantiated but dataset does not; consider that LLM may be correct in some of those disagreements. Use benchmark datasets (e.g., SubstanReview) where possible to quantify performance and understand failure modes."
+      },
+      {
+        "name": "Survey-derived evaluation dimensions for open review policies",
+        "description": "Dimensions to assess open reviewing policies include perceived benefits (improving public understanding, educating novice reviewers, making decision process fairer, incentivizing higher-quality reviews) and perceived challenges (resubmission bias, fear of de-anonymization, noisy/abusive public comments).",
+        "guidance": "When designing or evaluating open-review policies, measure community support for release of reviews/manuscripts/comments, the prevalence and importance of resubmission bias, the fraction of reviewers fearing de-anonymization, and trade-offs regarding AI (deterrence of AI slop submissions/reviews vs acceptance of high-quality submissions). The paper reports aggregated survey statistics and free-response themes to quantify these dimensions."
+      }
+    ]
+  }
+}

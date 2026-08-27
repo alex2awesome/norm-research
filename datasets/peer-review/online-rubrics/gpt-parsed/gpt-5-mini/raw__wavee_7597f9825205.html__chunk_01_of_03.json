@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_7597f9825205.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_7597f9825205.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39754,
+  "model": "gpt-5-mini",
+  "elapsed_s": 26.90733129200089,
+  "input_tokens": 11744,
+  "output_tokens": 3202,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/ML researchers, peer-review system designers, and conference organizers studying LLM-assisted reviewing",
+    "subtask_short": "LLM-assisted peer review evaluation",
+    "subtask_description": "Evaluating and generating peer reviews using large language models (LLMs), including prompt design, multi-aspect scoring, robustness to textual adversarial attacks, and human/evaluation metrics for review quality and detectability. Focus is on automated review generation and measuring attack effectiveness and review similarity to humans.",
+    "subtask_keywords": [
+      "peer_review",
+      "llm",
+      "review_generation",
+      "adversarial_attacks",
+      "evaluation_metrics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Aspect tagging schema for reviews",
+        "description": "Tag sentences with explicit aspect labels at the start of each sequence (tags types: [NONE], [SUMMARY], [MOTIVATION POSITIVE], [MOTIVATION NEGATIVE], [SUBSTANCE POSITIVE], [SUBSTANCE NEGATIVE], [ORIGINALITY POSITIVE], [ORIGINALITY NEGATIVE], [SOUNDNESS POSITIVE], [SOUNDNESS NEGATIVE], [CLARITY POSITIVE], [CLARITY NEGATIVE], [REPLICABILITY POSITIVE], [REPLICABILITY NEGATIVE], [MEANINGFUL COMPARISON POSITIVE], [MEANINGFUL COMPARISON NEGATIVE]).",
+        "guidance": "Place tags at the beginning of each sentence/sequence to ensure fine-grained analysis and differentiation of review components; include both positive and negative aspects. The prompt explicitly requires using these tags to produce structured, aspect-aware reviews."
+      },
+      {
+        "name": "Multi-aspect scoring dimensions",
+        "description": "Require numeric scores for multiple evaluation aspects: OVERALL, SUBSTANCE, APPROPRIATENESS, MEANINGFUL COMPARISON, SOUNDNESS CORRECTNESS, ORIGINALITY, CLARITY, IMPACT.",
+        "guidance": "Scores should be integers from 1 to 10 (higher means better). The model must output these scores in a formatted block (example given). Each score must be accompanied by a brief explanation (less than 30 tokens per aspect) to provide concise justification."
+      },
+      {
+        "name": "Prompt constraints on review generation",
+        "description": "Enforce output constraints in the prompt: include both positive and negative aspects; total output should not surpass 500 tokens; follow strict example output format.",
+        "guidance": "These constraints aim to (1) encourage balanced feedback to avoid overly positive reviews and (2) keep reviews concise and consistent for reproducibility. The prompt template demonstrates how to present sections and requires following a provided example output strictly."
+      },
+      {
+        "name": "Aspect Coverage (ACOV) as review-completeness metric",
+        "description": "Aspect Coverage (ACOV) measures how many target aspects are covered by the generated review (reported in Table 6).",
+        "guidance": "Higher ACOV indicates better coverage of required review aspects. Use ACOV alongside semantic-similarity metrics to evaluate comprehensiveness."
+      },
+      {
+        "name": "Similarity-based automatic evaluation metrics (ROUGE, BERTScore)",
+        "description": "Use ROUGE-1/2/L and BERTScore to quantify similarity between LLM-generated reviews and human-written reviews.",
+        "guidance": "Report R-1, R-2, R-L and BERTScore; interpret them alongside human judgments since high lexical/semantic similarity does not guarantee perceived usefulness or critical depth."
+      },
+      {
+        "name": "Human-perceived review quality criteria (usefulness, coherence, perceived value)",
+        "description": "Human evaluation should rate LLM-generated reviews on qualities humans care about: usefulness, coherence, and perceived value (beyond automatic overlap metrics).",
+        "guidance": "Automatic metrics may favor fluency but miss usefulness; include controlled human studies (e.g., with master/PhD students in DL/NLP) to assess these dimensions, and design tasks for ranking quality and detecting stealthy attacks."
+      },
+      {
+        "name": "Adversarial attack components",
+        "description": "Textual adversarial attacks are composed of four components: (1) Goal Function \u2014 objective to maximize (e.g., score shift), (2) Constraints \u2014 preserve resemblance/semantic similarity, (3) Transformation \u2014 methods for altering text (character edits, synonym replacement, style transfer), (4) Search Method \u2014 how candidate perturbations are explored (greedy, beam, brute-force).",
+        "guidance": "Design attacks by selecting these components; many used attacks (DeepWordBug, PuncAttack, TextFooler, BERT-Attack, StyleAdv) follow this formulation. Constraints often follow PromptBench settings (e.g., max candidate = 15 for some attacks). Search methods used: greedy with word importance ranking for many methods; brute-force for StyleAdv (sentence-level)."
+      },
+      {
+        "name": "Granularity of adversarial perturbations (character/word/sentence)",
+        "description": "Attacks operate at character-level, word-level, or sentence-level granularity, each with distinct effects on modification magnitude and detectability.",
+        "guidance": "Character-level (e.g., DeepWordBug, PuncAttack) introduces minimal changes (modification rates <1%) but can disrupt models; word-level (TextFooler, BERT-Attack) changes ~7\u201314% and preserves high semantic similarity; sentence-level (StyleAdv) has much higher modification rates (>100%) and lower semantic similarity but is more detectable. Choose granularity depending on stealth vs impact trade-offs."
+      },
+      {
+        "name": "Modification Rate (metric for perturbation magnitude)",
+        "description": "Modification Rate measures the extent of perturbation between original and adversarial text at the character level: \u2206char(s_clean,s_adv) / ((|s_clean|+|s_adv|)/2).",
+        "guidance": "Use this normalized character-level metric to quantify how much surface form changes; reported values distinguish character, word, and sentence attacks in experiments (Table 4)."
+      },
+      {
+        "name": "Semantic Similarity for adversarial examples (BERTScore)",
+        "description": "Measure how closely adversarial text preserves original semantics using BERTScore.",
+        "guidance": "High BERTScore (close to 1.0) indicates near-perfect semantic preservation despite surface edits; pair with Modification Rate to understand stealthiness vs semantic fidelity."
+      },
+      {
+        "name": "Attack effectiveness and impact metrics",
+        "description": "Evaluate attacks using Attack Success Rate (ASR), average score shift, average change in number of positive/negative tags, and average number of model queries.",
+        "guidance": "ASR quantifies fraction of successful attacks; report avg score shift to quantify magnitude of induced rating change; #Pos/#Neg tag shifts reveal biasing toward favorable tags; #Queries indicates cost of attack. Present per-model breakdowns to compare robustness across models."
+      },
+      {
+        "name": "LCS-based splitting for alignment and targeted injection",
+        "description": "Use Longest Common Subsequence (LCS) algorithm at different granularities (character/word/sentence) to find modifiable subsequences between clean and review content for targeted perturbation injection.",
+        "guidance": "Character-level LCS allows fine-grained precise changes; word-level ensures modifications align with whole words; for sentence-level, extend word-level matches bidirectionally to capture full sentences. This supports constructing perturbations that preserve coherence while targeting vulnerable subsequences."
+      },
+      {
+        "name": "Robust prompt engineering to encourage discriminative reviews",
+        "description": "Prompts should explicitly instruct LLMs to include both positive and negative aspects, tag sentences by aspect, assign multi-aspect scores, and provide short explanations \u2014 to avoid uniformly favorable outputs and improve critical depth.",
+        "guidance": "Example prompt uses explicit phrasing: 'Make sure to include both positive and negative aspects.' and enforces tagging and scoring format. Robust prompting is a mitigation direction to reduce overly optimistic default assessments by LLMs."
+      },
+      {
+        "name": "Model configuration guidance for review generation",
+        "description": "Model generation settings used in experiments: temperature set to 0.3, maximum generated tokens set to 2048 for detailed reviews; closed- and open-source model choices listed (GPT-4o, GPT-4o-mini, Llama-3.3-70B, Mistral-small-3.1).",
+        "guidance": "Temperatures and token limits chosen to balance creativity, coherence, and practical length constraints. Reported hardware/memory requirements for running open models (e.g., Llama-3.3-70B ~140GB memory via vLLM)."
+      },
+      {
+        "name": "Limitations & generalizability caveat for LLM evaluation",
+        "description": "Explicitly acknowledge limitations: evaluations cover a subset of models and attack types; findings may not generalize to other LLMs, more sophisticated/adaptive attacks, or other peer review workflow aspects (reviewer-author interaction, integration into workflows).",
+        "guidance": "State these limitations when presenting results and avoid overgeneralizing conclusions. Recommend future work to broaden model/attack scope and study interactive/integration aspects."
+      },
+      {
+        "name": "Ethical and operational safeguards for using LLMs in peer review",
+        "description": "Ethical requirements: maintain human oversight for final decisions, rigorously test and mitigate biases (position, verbosity, self-enhancement), conduct adversarial testing in controlled environments with clear improvement goals, and avoid relying solely on AI-text detectors which can be fragile.",
+        "guidance": "Human reviewers remain responsible for final reviews; implement bias testing and mitigation; use detectors only as complementary measures; be cautious about marginalizing non-native English speakers when using detection/automation; document ethical compliance of experiments."
+      }
+    ]
+  }
+}

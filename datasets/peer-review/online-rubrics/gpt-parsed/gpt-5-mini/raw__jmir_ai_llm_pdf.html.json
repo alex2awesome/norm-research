@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/jmir_ai_llm_pdf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18451,
+  "output_tokens": 3799,
+  "elapsed_s": 756.631068082992,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners studying LLMs and scholarly peer review (AI researchers, journal editors, bibliometrics and publishing policy researchers)",
+    "subtask_short": "LLM peer-review evaluation",
+    "subtask_description": "Algorithm-validation study evaluating open-source LLMs for the task of assigning transplantation manuscripts to journal quartiles and assessing affiliation bias; compares prompting strategies, temperatures, runtimes, and fairness metrics. The goal is to measure LLM decision accuracy, fairness, runtime/resource cost, and practical suitability for roles in the peer-review pipeline.",
+    "subtask_keywords": [
+      "llm",
+      "peer_review",
+      "journal_quartile_prediction",
+      "prompt_engineering",
+      "fairness_evaluation",
+      "ragg"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Exact match accuracy",
+        "description": "Completely correct predictions of journal quartiles (model prediction exactly equals the paper's true quartile).",
+        "guidance": "Used as a primary performance metric to evaluate whether an LLM can make fully correct editorial decisions; reported peak exact-match accuracy in this study was 0.35 (RAG, temperature 0.5). Considered insufficient for autonomous review given low absolute values (eg, maximum 35%)."
+      },
+      {
+        "name": "Loose match accuracy",
+        "description": "A prediction within 1 quartile of the paper\u2019s true quartile is considered correct (eg, predicting Q2 for a true Q1 counts as correct).",
+        "guidance": "Captures near-miss predictions and reflects LLMs' tendency toward centrist allocations; used alongside exact match because LLMs often produce passable but not exact decisions. Reported loose-match accuracy reached 0.775 (RAG, temperature 0.5). Beware that high loose-match may reflect centrist bias rather than true discrimination."
+      },
+      {
+        "name": "Quartile-specific accuracy (Q1\u2013Q4 breakdowns)",
+        "description": "Accuracy computed separately for each target quartile (Q1, Q2, Q3, Q4) to assess whether models favor particular tiers.",
+        "guidance": "Enables detection of skewed behavior (eg, overprediction of Q2 and Q3 and avoidance of extremes). In the study, models frequently assigned manuscripts to Q2 and Q3 while avoiding Q1 and Q4. Use quartile breakdowns to inspect systematic miscalibration across tiers."
+      },
+      {
+        "name": "Runtime",
+        "description": "Time taken by a model to generate the decision, measured in seconds (per run/paper or averaged across runs).",
+        "guidance": "Compared across LLMs and prompting strategies to assess practical deployability. Example findings: Mistral had lowest average runtime (~1246 s) and Qwen 2.5 had the greatest (~7248 s). Consider runtime trade-offs against accuracy when selecting models for operational use."
+      },
+      {
+        "name": "Computing resource use / Model size",
+        "description": "Resource and capacity indicators such as model parameter counts (eg, 7B, 70B) and implied compute cost.",
+        "guidance": "Used to weigh cost-efficiency: smaller models may be more practical if accuracy is comparable. Example: Mistral-7B combined the highest exact-match accuracy with the lowest runtime and smallest size, suggesting resource-efficient performance is possible. Report and compare parameter counts and compute consumption alongside accuracy."
+      },
+      {
+        "name": "Prompt engineering strategy",
+        "description": "Evaluation dimension consisting of prompting methods: zero-shot prompting, few-shot prompting, tree of thoughts (ToT) prompting, and retrieval-augmented generation (RAG).",
+        "guidance": "Each strategy is assessed for accuracy, runtime, and decision distribution. Key observations: RAG (with temp 0.5) yielded highest exact and loose match accuracies and greater diversity in predictions; RAG was the only strategy capable of ingesting full papers. ToT drastically decreased runtime but biased decisions toward Q2 (100% Q2 accuracy in one config), suggesting its intermediate-reasoning steps can induce conservative/neutral outputs. Few-shot prompting sometimes worsened performance (one configuration performed worse than random). Zero-shot had longest runtime and overpredicted Q1 in some settings. Evaluate prompt strategy both for performance and for its systematic effects on decision distribution."
+      },
+      {
+        "name": "Temperature (sampling) hyperparameter",
+        "description": "The temperature setting controlling response randomness, tested at 0, 0.1, 0.5, and 1.0.",
+        "guidance": "Temperature tuning is treated as an evaluation axis: higher temperature increases diversity, lower temperature increases predictability. The study performed a grid search; a moderate temperature (0.5) struck the best balance and achieved the best accuracies. Guidance: tune temperature for the review task\u2014too low may produce dogmatic outputs, too high may induce hallucinations."
+      },
+      {
+        "name": "Input length / context capability (ability to ingest full paper)",
+        "description": "Whether the method can process full manuscripts (full text) versus being limited to abstracts due to token limits.",
+        "guidance": "This is a practical criterion affecting assessment fidelity. RAG was the only method capable of ingesting full papers (via retrieval), while other methods were restricted to abstracts; this likely contributed to RAG\u2019s superior performance. When evaluating LLMs for peer review, prefer configurations that enable full-text context or otherwise account for truncated inputs."
+      },
+      {
+        "name": "Fairness \u2014 affiliation bias evaluation",
+        "description": "Assessment of whether model predictions are associated with presented author affiliation prestige by evaluating each paper under three affiliation conditions: none, prestigious affiliation, and less-prestigious affiliation.",
+        "guidance": "Operationalized via contingency analysis comparing quartile predictions across affiliation conditions. In this study, none of the LLMs showed strong affiliation bias overall, though Gemma 2 (P=.08) and Qwen 2.5 (P=.054) approached significance. Use controlled affiliation manipulations to probe biases and report sensitivity."
+      },
+      {
+        "name": "Statistical testing and effect-size interpretation",
+        "description": "Use of chi-square test for independence to test association between affiliation and predicted quartile; effect-size quantified with Cramer V and 95% CIs computed by nonparametric bootstrapping (5000 resamples); adjusted Pearson residuals used to identify over/underrepresentation.",
+        "guidance": "Declare significance at \u03b1 = .05. Consider adjusted Pearson residuals with absolute value > 1.96 as statistically significant; compute combined residuals for interpretability (eg, Q1+Q2 vs Q3+Q4). Report both P values and effect sizes (Cramer V) with bootstrap CIs to avoid overreliance on P values for practical importance."
+      },
+      {
+        "name": "Adjusted Pearson residuals (contingency-table diagnostics)",
+        "description": "Cell-level diagnostics showing overrepresentation (positive residual) or underrepresentation (negative residual) of predictions relative to expected frequencies.",
+        "guidance": "Used to identify which quartiles and affiliation conditions drive any observed associations. Residuals with |value| > 1.96 are considered statistically significant. The paper reports specific residual patterns (eg, Gemma overpredicted Q4 when given no affiliation; Qwen overpredicted Q1 given no affiliation). Use this to interpret directionality of biases beyond binary significance testing."
+      },
+      {
+        "name": "Model preference / 'personality' (systematic allocation profile)",
+        "description": "Qualitative/quantitative characterization of each LLM\u2019s stable tendencies in assigning papers to particular quartiles (eg, Llama 3.3 preferring Q2, Gemma preferring Q3).",
+        "guidance": "Treat these stable preferences as an evaluative dimension because they can introduce systematic error if a model is used in deployment. Report distribution plots and consider audit/monitoring if employing models operationally."
+      },
+      {
+        "name": "Output consistency and stability",
+        "description": "Assessment of variability across multiple trials and the known instability of LLM outputs (hallucinations, inconsistent factual content) even with identical prompts.",
+        "guidance": "Recommend running multiple trials per model/prompt configuration to account for stochasticity and to estimate variability. The paper suggests the need for multiple trials and monitoring to ensure observed patterns are robust across runs."
+      },
+      {
+        "name": "Practical role suitability and human oversight requirement",
+        "description": "Assessment of whether LLM outputs are reliable enough for autonomous editorial decisions versus supportive roles.",
+        "guidance": "The study concludes current open-source LLMs are not reliable enough to replace human peer reviewers. Recommended uses are limited-support roles: preliminary triage, flagging methodological red flags, assembling structured digests, and other high-recall assistant tasks \u2014 all with 'nonnegotiable human supervision' to ensure correct judgment and editorial decisions."
+      },
+      {
+        "name": "Ground-truth and dataset design considerations",
+        "description": "Use of journal quartiles as a practical, reproducible proxy for article-level quality and the implications of that choice.",
+        "guidance": "Recognize limitations: quartiles imperfectly represent article-level quality and may bias models toward venue-specific stylistic cues. The paper recommends richer outcome labels (eg, include 'not publishable', reviewer scores, editorial decisions) and inclusion of preprints/rejected manuscripts for more realistic evaluation. Design datasets to reflect the intended deployment scenario."
+      }
+    ]
+  }
+}

@@ -1,0 +1,162 @@
+[
+{
+"review_id": "icml_I0Ux2nAN6u_r2",
+"paper_id": "icml_I0Ux2nAN6u",
+"review_text": "The paper presents QuEST, a quantization-aware training (QAT) method that enables training LLMs with extremely low-precision weights and activations (both down to 1-bit). The key contributions are: (1) Hadamard normalization with MSE-optimal fitting for quantization, and (2) a trust gradient estimator that minimizes the difference between quantized and full-precision gradients. The method claims to achieve Pareto-competitive performance with FP16 while using 4-bit or lower precision.\n\n## update after rebuttal\n\nAfter reviewing the authors' rebuttal, I maintain my weak reject recommendation. While the authors made efforts to address several concerns, limitations remain:\n\n1. Scale and Evaluation:\n- The authors' testing remains limited to relatively small models (up to 800M parameters, with a mentioned 1.2B test). While they claim to be working on 3B, this still falls short of demonstrating effectiveness at production-relevant scales (7B+).\n- The authors did not address my concern about performance on reasoning tasks like GSM8k or AIME, only showing basic zero-shot evaluations on simpler tasks like HellaSwag.\n\n2. QAT vs PTQ Comparison:\n- The authors' comparison with PTQ methods at small scales (800M) is methodologically questionable, as PTQ methods typically show better performance with increased model scale due to greater parameter redundancy.\n- While they provided some results from QuaRot at 70B scale, this comparison doesn't fully address the fundamental differences between QAT and PTQ at scale.\n- Most concerning is the computational cost: modern PTQ methods can quantize 70B models in about an hour on a single A100, while the authors quote 1600 A100 hours for just training an 800M model with QuEST, and estimate 40,000 hours for a 3B model. This huge difference in resource requirements makes QuEST far less competitive compared to a PTQ+SFT flow in practical scenarios.\n\n3. Technical Novelty:\n- The use of Hadamard Transform (HT) for improving gradient flow isn't as novel as presented - though not directly equivalent, similar techniques appeared in FAT from 4 years ago.\n- QuaRot, a well known PTQ scheme, also uses Hadamard transform in both weights and activations. Thus I won't see Hadamard transform as a fundamental novelty in QuEST.\n\n4. Broader Impact:\n- Without demonstrating effectiveness on larger models and more challenging tasks (especially reasoning tasks), the practical impact of this work remains uncertain.\n- The authors' rebuttal suggests that reasoning tasks are \"outside the reach of 1B-parameter models without explicit instruction fine-tuning,\" but this sidesteps the important question of how their method performs after fine-tuning.\n\nWhile the paper presents some interesting technical contributions, these fundamental limitations in scale, evaluation breadth, novelty, and especially the prohibitive computational requirements make it difficult to recommend for acceptance at ICML. The work would benefit from more comprehensive large-scale evaluations, clearer differentiation from existing approaches, and better justification for its high computational costs versus existing PTQ solutions.\n\n## Additional post-rebuttal comments\n\nAfter further examining the materials, I would like to bring up two further issues which I believe will become viewable to the authors for improving their work:\n\n### 1. Mischaracterization of FAT vs. QuEST\n\nThe authors claim their use of Hadamard Transform (HT) is new & fundamentally different from FAT, but this is not accurate. While there are implementation differences, both methods transform weight representations through frequency domains to improve quantization:\n\n- In FAT (Fig. 3 and Supplementary Section 2.2), gradient flow explicitly passes through the Fourier domain during backpropagation with \u2202Wt/\u2202W being a function of frequency components\n- Similarly, QuEST employs the Hadamard domain for gradient flow, and their \"trust estimator\" also operates in this transformed space\n- Both approaches use masking technique and both aim to achieve the same goal: improving gradient estimation by leveraging frequency-based transformations\n\nThe core innovation of \"transforming to a more quantization-friendly domain\" is shared between these approaches, though applied in different contexts.\n\n### 2. Critical limitations in practical applicability\n\nThe authors are encouraged to check out the recent \"Quantization Hurts Reasoning\" paper (https://arxiv.org/abs/2504.04823) which demonstrates why evaluating reasoning capability at low bitwidth is crucial for modern LLMs. This paper shows:\n\n- Severe degradation in complex reasoning tasks (e.g., AIME) when quantizing below 8 bits\n- Larger models (32B-70B) fare significantly better than smaller ones under aggressive quantization\n- Models' origins (distilled vs. RL-trained) substantially impact quantization tolerance\n\nQuEST's failure to demonstrate effectiveness beyond toy-scale models (800M-1.2B) leaves its practicality questionable for the most important use case: enabling efficient inference of large reasoning models (7B+). The computational cost of QuEST training (40,000 GPU hours estimated for just a 3B model) presents a prohibitive barrier to practical adoption.\n\nThis makes QuEST's contribution largely theoretical rather than practical, especially when PTQ methods can quantize 70B models in hours (my experience is <1hr) with acceptable reasoning performance degradation."
+},
+{
+"review_id": "icml_Hp53p5AU7X_r0",
+"paper_id": "icml_Hp53p5AU7X",
+"review_text": "This paper addresses the challenge of efficiently computing Nash equilibria (NE) in normal-form games (NFGs) via non-convex optimization. Prior work, notably by Gemp et al. (2024), proposed an unbiased loss function for this purpose but encountered high variance, which hindered convergence. To overcome this, the authors introduce a novel surrogate loss function - the Nash Advantage Loss (NAL) - which remains unbiased and exhibits significantly lower variance. Empirical results indicate that minimizing NAL yields much faster convergence rates than existing methods. Extensive experiments conducted on eight different NFGs validate the efficacy of the proposed approach, including comparisons across various optimizers and network structures."
+},
+{
+"review_id": "icml_Hp53p5AU7X_r1",
+"paper_id": "icml_Hp53p5AU7X",
+"review_text": "The authors tackle the problem of NE computation in general-sum multiplayer NFGs, which is known to be a computational hard problem. They build on the work of Gemp et al. (2024) to come up with a novel approach involving a surrogate loss function they call Nash Advantage Loss. They show that NAL is unbiased and that its variance is lower compared to other surrogate loss functions. They provide empirical evidence to support these claims.\n\nPost-rebuttal\nWhile the authors' response was helpful, I do think that it would be valuable to see the exposition regarding the stop-gradient incorporated into the paper, in particular, a precise mathematical definition. While the references are helpful, given that it is a key notion in the paper, it should be defined at the beginning of the paper before the approach is explained in more detail. I will maintain my score."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "icml_Hp53p5AU7X_r2",
+"paper_id": "icml_Hp53p5AU7X",
+"review_text": "This paper studies computing Nash equilibria (NE) in normal-form games using non-convex stochastic optimization techniques from machine learning. The existing unbiased loss function for approximating NE has high variance, which degrades the convergence rate. To address this, the authors propose a novel surrogate loss function named Nash Advantage Loss (NAL). NAL is theoretically proven to be unbiased and has a significantly lower variance than the existing unbiased loss function. Experimental results on eight normal-form games show that the algorithm minimizing NAL converges much faster and has a lower variance in estimated loss values compared to other algorithms."
+},
+{
+"review_id": "icml_Hp53p5AU7X_r3",
+"paper_id": "icml_Hp53p5AU7X",
+"review_text": "This paper proposes NAL, a loss function that is unbiased and has lower variance compared with the only unbiased loss function proposed in Gemp et al. (2024). The paper conducts theoretical and empirical justifications to show that NAL theoretically and empirically exhibits lower variance and thus accelerates convergence."
+},
+{
+"review_id": "icml_a7qFlPOTix_r0",
+"paper_id": "icml_a7qFlPOTix",
+"review_text": "The paper proposed a LMM + tool-using style framework for structured image understanding. Specifically, the framework provides tools to edit the original image and either highlight the important region or remove irrelavent region. Results show that this framework generally improves LMMs zero-shot performance on understanding tables, charts, etc. The paper additionally show that using the framework to curate SFT data provides better supervision signal for these tasks.\n\n## Update after rebuttal\nThe rebuttal provides additional infomation, I am keeping my already positive evaluation"
+},
+{
+"review_id": "icml_a7qFlPOTix_r1",
+"paper_id": "icml_a7qFlPOTix",
+"review_text": "This paper focuses on the structured image tasks, using the Python codes to edit the input image as the \"visual thought\" and the modified image can be more focused on the target information of the question, which benefits the accuracy of the answer."
+},
+{
+"review_id": "icml_a7qFlPOTix_r2",
+"paper_id": "icml_a7qFlPOTix",
+"review_text": "This paper proposes ReFocus, a visual reasoning framework that enhances structured image understanding with editing on the input image. Specifically, ReFocus iteratively highlights some columns and rows in the tabular problems, masks the other information, and draws bounding boxes on the information that needs attention on. Experimental results show that the proposed method ReFocus yields consistent performance gain across various tasks.\n\n## Update after rebuttal\nThe rebuttal addresses most of my concerns about calling the model \"chain-of-thought\", inference time comparison, etc. One remaining issue that I have is the potential insights in the proposed method that I find hard to evaluate on. The proposed method still seems to be some prompt engineering plus some simple tricks, for me as a person mainly working on general computer vision. Editing something by highlighting [1] to improve performance is also not a brand new technique in computer vision. However, due to my limited knowledge on structured image understanding, I want to request for AC and other reviewers' expertise on this field to tell me whether the proposed method is insightful enough to be accepted to ICML, or it is just some simple tricks and prompt engineering. Therefore, I want to flag this potential issue for AC to confirm the novelty and insight in the proposed method before this paper gets accepted.\n\n[1] Shtedritski et al. What does CLIP know about a red circle? Visual prompt engineering for VLMs. ICCV 2023."
+},
+{
+"review_id": "icml_a7qFlPOTix_r3",
+"paper_id": "icml_a7qFlPOTix",
+"review_text": "This paper introduces a visual editing method where authors proposed a range of tools (i.e., python functions) that vision language models can use to edit the image (e.g., highlight, draw box, mask out) to better focus on the structured visual content corresponding to the text query. Experiments show that this process improves model performance on certain tabular and chart understanding tasks, and authors show that open-weight vision language models can also benefit from this process by being finetuned on data that involves tool calling that leads to the correct answer.\n\n## update after rebuttal\nI would like to thank the authors for their rebuttal and thoughtful follow-up addressing my concerns and questions. I have carefully re-evaluated the manuscript, particularly Section 5, and respectfully disagree with the authors\u2019 claim that their method demonstrates the ability of models to generate novel functions for visual editing at test time (which was the core of my initial question). In my view, providing function definitions as part of the prompt, or generating answers in the same structured format as used during training (e.g., `<image> <question> <thought1> <ReFocus bounding box> <thought2> <answer>`), does not constitute novel test-time function generation. Rather, it reflects learned behavior from training patterns, not evidence of the model inventing new visual editing logic on its own. Because authors did not show that models can generate novel visual editing functions, the answer to the follow-up question \"can models make good use of these self-generated functions to edit the image and improve their performance\" remains unclear. \n\nThat said, I do agree with the authors that the proposed prompting approach is effective, and that fine-tuning models with rejection-sampled visual CoT data distilled from trajectories does lead to improved performance. However, I still remain hesitant in considering the work to be above the bar for a conference paper due to the limited scope and a relative lack of novel technical contributions."
+},
+{
+"review_id": "icml_NBi8mjNebT_r0",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "The paper introduces causal differential networks (CDN), a supervised method designed to identify which variables (eg. genes) were directly targeted by biological perturbations (genetic knockouts or chemical treatments) using gene expression data from single-cell transcriptomics experiments. CDN integrates a causal graph inference model (based on the SEA model architecture) and a differential perturbation classifier into a joint end-to-end framework. The causal graph inference module estimates causal graphs from observational and perturbed conditions separately; a subsequent attention-based differential module identifies intervention targets by comparing inferred causal graphs and related statistics (eg. mean, covariance, correlation).\n\nCDN employs a Transformer-based architecture with specialized axial attention layers to handle graph data in a permutation-invariant manner, allowing scalability and robustness. Training involves pre-training on synthetic causal graphs and fine-tuning on real single-cell transcriptomics data. CDN was tested on five genetic perturbation datasets (perturb-seq) and two chemical perturbation datasets (sci-plex). The model is shown to outperform sota causal discovery and deep-learning baselines on real genetic perturbations and showed reasonable success in the more challenging chemical perturbation setting.\n\nThe main findings demonstrate that CDN achieves better identification accuracy than prior methods, generalizes well to unseen cell lines with minimal drop in performance, and handles both hard (knockouts) and soft (scaling) interventions effectively. The paper provides a good experimental evaluation on real and synthetic data to validate CDN's performance."
+},
+{
+"review_id": "icml_NBi8mjNebT_r1",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "This paper proposes two modules for predicting true perturbation targets of cell perturbation datasets. Firstly, a causal structure learner is pre-trained on synthetic data in an attempt to recover causal graph representation from both observational and interventional dataset. Then, a differential network is trained on both synthetic data and downstream real-world cellular data to predict the intervention targets."
+},
+{
+"review_id": "icml_NBi8mjNebT_r2",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "The paper proposes a new method called causal differential networks (CDN) for identifying variables responsible for biological perturbations (e.g. drug targets) from pairs of observational and interventional datasets. The main idea involves first inferring noisy causal graphs from data, and then learning a mapping from these causal graphs to the set of variables subjected to intervention. The authors demonstrate that CDN significantly outperforms existing methods across seven single-cell transcriptomics datasets and synthetic benchmarks."
+},
+{
+"review_id": "icml_NBi8mjNebT_r3",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "This paper introduces Causal Differential Networks (CDN), a method to identify which variables in a biological system are directly perturbed between observational and interventional conditions. The authors frame the problem in terms of causal discovery: they first learn approximate causal graphs from each condition, then use an attention-based neural network to detect which nodes have shifted causal mechanisms, thus identifying the perturbation targets. The pipeline is trained end-to-end in an amortized fashion using both simulated and real single-cell transcriptomics data.\nExperimental results suggest that this approach achieves superior accuracy in identifying causal perturbation targets compared to the baselines, both on large-scale real datasets of genetic and chemical perturbations and on carefully controlled synthetic datasets."
+},
+{
+"review_id": "icml_NBi8mjNebT_r4",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "Identifying targets that induce cell state transitions has numerous implications in advancing targeted drug discovery and biological research. Authors propose causal differential networks (CDN), an attention-based framework independent of biological priors to identify targets of an intervention given a pair of observational and interventional datasets. The CDN framework is comprised of two modules \u2013 (1) a causal structure learner that predicts causal graphs that could have produced each dataset and (2) a differential network classifier that predicts targets of an intervention from the causal graphs \u2013 that are jointly trained via a supervised amortized framework. The paper benchmarks CDN on 7 real transcriptomic datasets containing genetic (Perturb-seq) and chemical (Sci-Plex) perturbations and shows that CDN outperforms the state-of-the-art perturbation modeling methods for both seen and unseen cell lines. Experiments on synthetic datasets show that CDN outperforms existing causal discovery methods on predicting intervention targets. Overall, the paper presents a data-driven framework to identify perturbation targets, a task that can help elucidate large-scale perturbation experiments, causal targets, and targeted drug discovery."
+},
+{
+"review_id": "icml_NBi8mjNebT_r5",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "The authors focus on the problem of identifying direct targets of intervention in single-cell perturbation data. The proposed method, Causal Differential Network (CDN), first extracts causal networks behind unperturbed and perturbed data. These networks are then compared using an axial attention-based classifier to determine which nodes (genes) are direct targets of the intervention. The method was evaluated on multiple single-cell sequencing screens involving gene and drug perturbations, as well as synthetic datasets."
+},
+{
+"review_id": "icml_NBi8mjNebT_r6",
+"paper_id": "icml_NBi8mjNebT",
+"review_text": "The authors considered the problem of identifying the target of interventions from merely observational/interventional data. In some biological applications, there might be thousands of variables in the system and few samples are available per intervention. The authors utilized an amortized approach (which has been explored for the task of causal discovery in the literature of causality) to detect the target of interventions. In particular, a network called causal structure learner is trained to return the causal graph from the observed data. Then, a differential network is considered where the graph obtained from observational data and the one from the interventional data are passed to an attention-based classifier to detect which nodes are intervened on. Both the causal structure learner network and the differential network are trained jointly with amortized data collected from different causal models and interventions. The experimental results showed that the proposed method performs better than previous work.\n\n### Update after rebuttal\nI have read the reviews and the rebuttal. In my view, the proposed approach remains quite heuristic and lacks theoretical grounding. That said, the experimental results are promising. Overall, I still recommend a weak reject, though I acknowledge it could be accepted."
+},
+{
+"review_id": "icml_BY3SSEVcjV_r0",
+"paper_id": "icml_BY3SSEVcjV",
+"review_text": "This paper introduces Heterogeneous Label Shift (HLS), a problem where cross-modal knowledge transfer must address simultaneous heterogeneous feature spaces and shifted label distributions. The work presents a theoretical error decomposition, proposes a bound minimization framework (HLSAN), and validates it empirically on cross-modal classification tasks. Key contributions include formalizing HLS, deriving theoretical guarantees, and demonstrating superior performance over baseline methods."
+},
+{
+"review_id": "icml_BY3SSEVcjV_r1",
+"paper_id": "icml_BY3SSEVcjV",
+"review_text": "The paper introduces a new Heterogeneous Label Shift (HLS) method to tackle heterogeneous label shift. After analyzing the impact of feature spaces and label shift, the authors propose a new error bound. They show, with experiments on 2 real-life datasets, the efficiency of their method for multi-modal data."
+},
+{
+"review_id": "icml_BY3SSEVcjV_r2",
+"paper_id": "icml_BY3SSEVcjV",
+"review_text": "The paper introduces the concept of Heterogeneous Label Shift to address cross-modal knowledge transfer challenges, where both feature heterogeneity and shifted label distributions affect model performance. It presents an error decomposition theorem and a bound minimization framework that tackle these issues. Extensive experiments validate the effectiveness of this approach."
+},
+{
+"review_id": "icml_BY3SSEVcjV_r3",
+"paper_id": "icml_BY3SSEVcjV",
+"review_text": "This paper introduces Heterogeneous Label Shift (HLS), a novel challenge in cross-modal knowledge transfer where both feature spaces and label distributions differ. It presents a new error decomposition theorem and a bound minimization framework to separately tackle feature heterogeneity and label shift. The authors propose HLSAN, an adversarial deep learning algorithm that aligns feature spaces, estimates label shifts, and improves target domain classification. Experiments show HLSAN outperforms existing methods, validating its theoretical and practical effectiveness."
+},
+{
+"review_id": "icml_7QFmZ7i7sr_r0",
+"paper_id": "icml_7QFmZ7i7sr",
+"review_text": "The paper introduces a method called GPEN for Subgraph Representation Learning. It proposes the construction of a hierarchical tree to compute the Global Position Encoding (GPE) and introduces Boundary-aware Convolution (BWC) and tree-based Optional Tree Perturbation (OTP). These strategies aim to address two major challenges in graph representation learning: capturing structural relationships between distant nodes and preventing excessive aggregation of global structural information."
+},
+{
+"review_id": "icml_7QFmZ7i7sr_r1",
+"paper_id": "icml_7QFmZ7i7sr",
+"review_text": "This paper presents GPEN (Global Position Encoding Network), a novel approach for subgraph representation learning that addresses the limitation of existing methods which primarily focus on local neighborhood structures while overlooking global structural information. GPEN implements two key modules: (1) global position encoding, which leverages hierarchical tree structure to encode each node's global position, enabling the capture of structural relationships between distant nodes; and (2) boundary-aware convolution, which computes difference vectors between nodes to control information flow, selectively integrating global structural information while maintaining the unique structural patterns of each subgraph. Experiments show that GPEN achieves competitive or superior performance compared to state-of-the-art methods on eight public datasets."
+},
+{
+"review_id": "icml_7QFmZ7i7sr_r2",
+"paper_id": "icml_7QFmZ7i7sr",
+"review_text": "This paper presents GPEN, a novel method for subgraph representation learning that addresses two key challenges: capturing structural relationships between distant nodes and preventing excessive aggregation of global structural information."
+},
+{
+"review_id": "icml_7QFmZ7i7sr_r3",
+"paper_id": "icml_7QFmZ7i7sr",
+"review_text": "The paper introduces GPEN (Global Position Encoding Network), a novel algorithm for subgraph representation learning. The algorithm addresses the task of predicting labels for subgraphs within a large input graph, given a set of labeled subgraphs. GPEN innovates by moving beyond the limitations of existing methods that primarily focus on local neighborhood structures. It achieves this by incorporating global structural information through a novel tree-based global position encoding for each node. This encoding is combined with a boundary-aware convolution module and an optional tree perturbation technique. The authors support their approach with both empirical evaluations demonstrating effectiveness and theoretical analyses to justify the method."
+},
+{
+"review_id": "icml_2KlxjR6lsd_r0",
+"paper_id": "icml_2KlxjR6lsd",
+"review_text": "In the paper  _Mastering Multiple-Expert Routing: Realizable-Consistency and Strong Guarantees for Learning to Defer_, authors propose surrogate losses for learning to defer that satisfy the following oints: realizable H-consistency, H-consistency bounds, and Bayes consistency\nfor both single-stage and two-stage learning scenarios. The authors mathematically prove that their claims and compare their proposed solution to some baselines for a few common datasets."
+},
+{
+"review_id": "icml_2KlxjR6lsd_r1",
+"paper_id": "icml_2KlxjR6lsd",
+"review_text": "This work introduces a family of surrogate losses functions for the learning to defer. The authors discussed methods for achieving H-consistent loss for single-stage deferral, and H-consistency and Bayes consistency for two-/multi-expert scenarios. The authors propose to surrogate the undifferentiable indicator functions in classic learning to defer losses with a family of comp-sum losses (a general case of the loss proposed by Sontag et al. [1]). The authors then discuss the the realizable H-consistency and H-consistency bounds for special cases of comp-sum losses for single-stage multi-expert deferral and two-stage multiple-expert deferrals. The authors then discuss the assumptions with which H-consistency bounds can be achieved. The empirical performance of the proposed family of surrogate loss are evaluated four public datasets.The proposed method yields improved system accuracy compared to existing works.\n\n[1] Consistent Estimators for Learning to Defer to an Expert\n\n## update after rebuttal\n\nI would like to thank the authors for the clarifications. While I am still not fully convinced on the realism of problem setting, I would like to increase the score in light of the contributions over existing learning to defer works."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "icml_2KlxjR6lsd_r2",
+"paper_id": "icml_2KlxjR6lsd",
+"review_text": "This paper studies 1. single-stage multiple-expert deferral, which is the deferral problem where the learner has the option to predict or defer the prediction to one of pre-defined experts, and 2. two-stage multiple-expert deferral, which assumes a label predictor have been learned in first stage and the learner select one from a set of pre-defined experts. The authors proposed realizable H-consistent surrogate loss for single stage and realizable H-consistent surrogate loss, H-consistency bounds surrogate loss for two stages. The properties of surrogate loss are proposed in a line of previous work."
+},
+{
+"review_id": "icml_2KlxjR6lsd_r3",
+"paper_id": "icml_2KlxjR6lsd",
+"review_text": "The paper presents a novel surrogate loss for both single-stage and two-stage learning to defer. The authors show several theoretical guarantees, including $H$-consistency, Bayes consistency and $H$-consistency bounds for both the single and multiple expert settings.\nEmpirical results showcase the effectiveness of the approach.\n\n\n### Update after the Rebuttal\n\nI am satisfied with the authors' answers. I keep my positive score."
+},
+{
+"review_id": "icml_qut63YypaD_r0",
+"paper_id": "icml_qut63YypaD",
+"review_text": "This paper focuses on the alignment performance w.r.t. data difficulties. The central claim is that the difficult data points exceeds model capabilities, and therefore harm the alignment results.\n\nTo start with, it is crucial to define the difficulty measure, authors use \"learned step\" as a metric to quantify data difficulty, and find that this variable keeps to be similar across different runs on different data split and shuffle. However, this metric requires evaluation every gradient update, which is time consuming. Authors propose to use validation loss as a proxy metric and show its strong correlation with learned step.\n\nBy using proxy metric, data is ordered by its difficulty, which is given by trained reference models, and authors keep $\\tau$% top easiest data to sequentially train DPO models.\n\nResults  show that SelectDPO is superior to DPO and other variants on chat tasks. Abalation studies on reference models , $\\tau$% and weak-to-strong curriculum fultill the analysis of SelectDPO"
+},
+{
+"review_id": "icml_qut63YypaD_r1",
+"paper_id": "icml_qut63YypaD",
+"review_text": "This paper investigates the impact of difficult samples in DPO settings and finds that overly difficult examples can be detrimental to LLM alignment. Following the curriculum learning (CL) pattern, which organizes examples from easy to difficult, the authors propose Selective DPO. This method utilizes the original DPO loss (referred to as validation loss) as an alternative to the typical metric in CL, the learned step, as a measure of difficulty. The empirical results highlight the effectiveness of Selective DPO, revealing that using only half of the Ultrafeedback examples can achieve better performance compared to using all the data."
+}
+]

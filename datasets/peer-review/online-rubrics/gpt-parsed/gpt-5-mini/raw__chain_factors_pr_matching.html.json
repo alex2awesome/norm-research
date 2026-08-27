@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/chain_factors_pr_matching.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 21978,
+  "output_tokens": 4957,
+  "elapsed_s": 543.873129124986,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on automated paper-reviewer matching, scientific text mining, and conference peer-review systems",
+    "subtask_short": "paper-reviewer matching for conferences",
+    "subtask_description": "Designing and evaluating automated paper-reviewer matching systems that rank candidate reviewers for submissions by modeling semantic, topic, and citation signals and combining them (zero-shot) using instruction-tuned PLMs and a coarse-to-fine chaining strategy.",
+    "subtask_keywords": [
+      "paper_reviewer_matching",
+      "peer_review",
+      "scientific_text_mining",
+      "semantic_topic_citation",
+      "instruction_tuning"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Semantic Factor",
+        "description": "\u201cTaking the submission p as a query, if the papers most semantically relevant to the query are written by a reviewer r, then r should be qualified to review p.\u201d Used historically via bag-of-words/tf\u2013idf or vector-space retrieval approaches (e.g., TPMS).",
+        "guidance": "Use semantic relevance as a coarse retrieval signal to filter out totally irrelevant reviewers (e.g., treat paper p as a query and compute dot-product similarity between p and candidate papers). Practical implementations include tf\u2013idf or contextual embeddings; in the CoF pipeline semantic retrieval is used to find a small top subset (e.g., top 1%) of candidate papers for the next step. Do not rely on semantic signals alone \u2014 they are the coarsest filter and can miss fine-grained topical or citation-specific expertise."
+      },
+      {
+        "name": "Topic Factor",
+        "description": "\u201cIf a reviewer r\u2019s previous papers share many fine-grained research topics with the submission p, then r is assumed to be an expert reviewer of p.\u201d Topic modeling / field-of-study representations are used to capture these fine-grained themes.",
+        "guidance": "Represent papers/reviewers in a fine-grained field-of-study space (not coarse author-selected topics like 'Text Mining'). Two papers should be considered topic-relevant only if they share fine-grained fields (the paper uses 'share at least one field at Layer 3 or deeper' in CS-Journal). Topic relevance is a stronger signal than coarse semantic similarity but should follow semantic filtering in a coarse-to-fine pipeline. Topic models (e.g., Author-Persona-Topic) or PLM-based topic-aware embeddings can be used."
+      },
+      {
+        "name": "Citation Factor",
+        "description": "\u201cAuthors of the papers cited by the submission p are more likely to be expert reviewers of p.\u201d Citation links between papers are exploited (e.g., via citation-enhanced PLMs such as SPECTER and SciNCL).",
+        "guidance": "Treat citation links as a strong signal of expertise, especially after semantic and topic alignment. Use citation-informed pretraining (contrastive or citation-prediction triplets) to learn citation-aware embeddings. Be cautious: citation alone can be a weak indicator if the citing paper and cited paper do not share research fields (e.g., one cites the other for a released model or tool rather than shared task). Thus citation is best used after confirming topical relatedness."
+      },
+      {
+        "name": "Chain-of-Factors (coarse-to-fine) Matching",
+        "description": "Chain the three factors in a step-by-step manner: semantic \u2192 topic \u2192 citation, using each factor progressively to filter and refine candidate papers and reviewers. Semantic relevance filters broadly, topic relevance refines to fine-grained fields, and citation reinforces true close-task/dataset links.",
+        "guidance": "Implement matching as staged retrieval: (1) compute semantic-aware similarities between submission p and all candidate reviewer papers and keep top-ranked (e.g., top 1%) as Q_S; (2) compute topic-aware similarities over Q_S and keep top-ranked as Q_{S\u2192T}; (3) compute citation-aware similarities over Q_{S\u2192T}; finally aggregate paper-level scores to reviewer-level scores. The paper formalizes this with f_semantic(p,q), f_topic(p,q), f_citation(p,q) and aggregates as f(p,r)=\u2211_{q\u2208Q_r \u2229 Q_{S\u2192T}}(f_semantic+f_topic+f_citation). The chained strategy (S\u2192T\u2192S+T+C) is recommended over directly relying only on citation (S\u2192T\u2192C)."
+      },
+      {
+        "name": "Unified instruction-tuned encoder (joint multi-factor pretraining)",
+        "description": "Pre-train a single contextualized language model shared across semantic, topic, and citation factors and instruction-tune it so it learns factor-aware paper representations.",
+        "guidance": "Pretrain one encoder to jointly consider the three factors so shared knowledge improves each factor's performance. Use factor-specific instructions prepended to paper text (e.g., 'Retrieve a scientific paper that is relevant to the query.' for semantic; 'Find a pair of papers that one paper shares similar scientific topic classes with the other' for topic; 'Retrieve a scientific paper that is cited by the query.' for citation). Instruction tuning enables factor-aware embeddings and better zero-shot generalization across factors."
+      },
+      {
+        "name": "Instruction-guided paper encoding architecture",
+        "description": "Encode factor instructions and paper text jointly: an instruction encoder produces instruction representations and a paper encoder ingests these representations as context (via asymmetric multi-head attention) to yield factor-aware embeddings g(p | \u03d5).",
+        "guidance": "Use an instruction encoder (e.g., 12-layer Transformer) and a paper encoder with the same depth; concatenate instruction-layer outputs with paper-layer inputs and use asymmetric MHA so paper tokens attend to instruction context. This architectural choice is recommended to make embeddings sensitive to the factor-specified retrieval objective."
+      },
+      {
+        "name": "Pre-training data per factor (dataset selection for supervision)",
+        "description": "Use factor-specific pretraining datasets: search/click data for semantic (SciRepEval), labeled fields-of-study for topic (CS-Journal from MAPLE), and citation triplets for citation (citation prediction triplets).",
+        "guidance": "Semantic: SciRepEval search with ~528K queries; treat documents as relevant if non-zero click score and use other listed documents as hard negatives. Topic: CS-Journal (~410K papers) with >15K fine-grained fields organized hierarchically; treat two papers as relevant if they share at least one field at Layer 3 or deeper. Citation: citation prediction triplets (~819K triplets) where p cites q^+, q^+ cites q^-, but p does not cite q^- \u2014 use as citation supervision. Choosing clear, factor-aligned datasets yields better factor-aware pretraining."
+      },
+      {
+        "name": "Zero-shot learning assumption for f(p,r)",
+        "description": "No direct supervision of the paper-reviewer relevance function f(p,r) is assumed; the model should be derived in a zero-shot setting by learning from other available tasks/data.",
+        "guidance": "Design pretraining and instruction-tuning so that the encoder generalizes to scoring paper-reviewer pairs without explicit f(p,r) labels. Use multi-task instruction-guided pretraining (semantic/topic/citation tasks) and then apply the chained inference to produce reviewer rankings in zero-shot."
+      },
+      {
+        "name": "Input availability & publication profile assumptions",
+        "description": "Assume each submission p has text information (title and abstract) available and each reviewer r has a publication profile Q_r (a set of prior papers with their text).",
+        "guidance": "Publication profiles may be subsets (e.g., papers from last 10 years or only top-tier venues). Ensure the system can operate when only title+abstract are available; when publication profiles are large, restrict to reasonable subsets (recent or top-tier papers) to control computation and noise."
+      },
+      {
+        "name": "Aggregation from paper-paper relevance to paper-reviewer relevance",
+        "description": "Aggregate paper-paper relevance scores (between submission p and individual papers q in a reviewer\u2019s profile) to form a reviewer-level score f(p,r).",
+        "guidance": "CoF aggregates by summing factor-wise paper-paper scores over the reviewer\u2019s papers that survive earlier chaining steps: f(p,r)=\u2211_{q\u2208Q_r \u2229 Q_{S\u2192T}}(f_semantic+f_topic+f_citation). For baseline PLM comparisons, average of top-3 paper-paper values is used to map to paper-reviewer relevance. Choose aggregation consistent with your retrieval/assignment pipeline and consider top-k aggregation heuristics."
+      },
+      {
+        "name": "Annotation & evaluation scheme for relevance labels (KDD dataset)",
+        "description": "Human annotation of (paper, selected reviewer) pairs using a '0'-'3' relevance scheme; final score is the average rating from annotators rounded to the nearest integer.",
+        "guidance": "Sample candidate reviewers (e.g., 20 per paper), exclude conflicts of interest (authors and recent collaborators), bias selection to include reviewers with higher TPMS scores to avoid entirely irrelevant sets, and have multiple annotators (CoF used 5) independently rate each pair. Remove papers with no reviewer \u22652 or with unjudgable pairs. Use resulting discrete labels for evaluation (CoF reports distribution statistics per paper)."
+      },
+      {
+        "name": "Candidate reviewer selection constraints (dataset construction)",
+        "description": "Rules to select candidate reviewers for annotation/evaluation (example used for the KDD dataset): (1) published at least 1 KDD paper during 2018\u20132020; (2) published at least 3 papers in 'top conferences'.",
+        "guidance": "When constructing evaluation sets, apply pragmatic constraints to ensure candidate reviewers are plausible. For KDD, the authors included all of a candidate reviewer's papers published in 2019 or earlier in their publication profile. Also ensure conflict-of-interest removal and that at least some annotators consider reviewers relevant (filter out unusable submissions)."
+      },
+      {
+        "name": "Use of hard negatives and contrastive learning in pretraining",
+        "description": "During pretraining, construct for each training sample one hard negative and combine it with easy in-batch negatives to perform contrastive learning.",
+        "guidance": "Training with hard negatives plus in-batch negatives improves embedding discrimination across factors. Implementation details in CoF: maximum instruction/paper token lengths (32/256), 20 training epochs, AdamW optimizer with specified betas and weight decay, batch size 32, peak learning rate 3e-4. Use these practices as a baseline for reproducing or adapting the approach."
+      },
+      {
+        "name": "Fine-grained field-of-study requirement for topic relevance",
+        "description": "Coarse topics selected by authors at submission time (e.g., 'Text Mining') are too coarse; matching requires fine-grained topics (e.g., 'Community Question Answering').",
+        "guidance": "Design topic representations that capture fine-grained subfields (multi-layer hierarchies, layer 3+ used by the authors). Inferring fine-grained fields from text is preferable to relying solely on author-selected high-level topics."
+      },
+      {
+        "name": "Mutual benefit of jointly modeling multiple factors",
+        "description": "The semantic, topic, and citation factors are correlated and mutually beneficial; jointly learning them can improve performance in each factor compared to learning them independently.",
+        "guidance": "Prefer multi-task pretraining and architectures that share parameters across factor tasks (with factor-specific instructions) so that shared knowledge is exploited while preserving factor-specific abilities. Empirically validate via ablation: joint modeling and chaining should outperform single-factor or naive fusion baselines."
+      },
+      {
+        "name": "Consideration of assignment constraints separate from matching score learning",
+        "description": "Learning the relevance function f(p,r) is distinct from the downstream combinatorial assignment problem that enforces constraints (e.g., max papers per reviewer, min reviews per paper, fairness).",
+        "guidance": "Focus on producing accurate relevance scores first; downstream assignment should incorporate constraints using combinatorial optimization solvers (this work concentrates on relevance learning and not on assignment). When integrating into a full system, ensure f(p,r) is compatible with the assignment module's expected input (scores, confidences, rankings)."
+      }
+    ]
+  }
+}

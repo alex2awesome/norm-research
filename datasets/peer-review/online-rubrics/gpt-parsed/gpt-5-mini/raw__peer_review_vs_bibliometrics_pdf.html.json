@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peer_review_vs_bibliometrics_pdf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 19580,
+  "output_tokens": 3384,
+  "elapsed_s": 866.5907290419564,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "scientometricians, research evaluators, science policy makers, and academics designing or studying research assessment methods",
+    "subtask_short": "predicting scholarly impact of publications",
+    "subtask_description": "Compare and validate methods (peer review vs bibliometrics) for predicting long-term scholarly impact of publications using an empirical dataset (Italian VTR 2001-2003). The paper operationalizes bibliometric indicators, constructs a benchmark (late citations), and quantifies agreement with peer review via statistical concordance measures.",
+    "subtask_keywords": [
+      "peer_review",
+      "bibliometrics",
+      "scientometrics",
+      "research_evaluation",
+      "citations",
+      "impact_prediction"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Benchmark for long-term scholarly impact (late citations)",
+        "description": "Use late citation counts (January 2018) with a citation time window minimum 14 years and maximum 17 years as a robust proxy of total/long-term scholarly impact.",
+        "guidance": "Late citation counting (min 14 yrs; max 17 yrs) is considered a good proxy for long-term impact and serves as the benchmark against which predictive methods (peer review and early bibliometric indicators) are compared. Retrieve late citations from a bibliographic repository (here: WoS / CWTS WOSKB)."
+      },
+      {
+        "name": "Early bibliometric indicator: weighted combination of normalized citations and journal impact factor",
+        "description": "Measure each publication\u2019s early citation-based impact (at 1, 2, and 3 years after publication) as a weighted combination of normalized citations and the hosting journal\u2019s normalized impact factor.",
+        "guidance": "Define normalized citations and normalized IF relative to average values for publications in the same year and WoS subject category (SC). Compute scholarly impact SI_i,k,t = b0_t + b1_t * x_i + b2_t * y_{t,i}, where x_i and y_{t,i} are the normalized IF and normalized citations respectively, and parameters b_t are chosen to best predict future impact (use empirically derived parameters, e.g., from Abramo et al. 2019). Weights differ across citation time windows and SCs. Do not extend early-window analysis beyond three years when timeliness is required."
+      },
+      {
+        "name": "Mapping bibliometric percentile ranks to merit classes (VTR classes)",
+        "description": "Classify publications into four merit classes based on their bibliometric percentile rank within same year and SC: Percentile \u226580 \u2192 Excellent (E)=1; 60\u2264percentile<80 \u2192 Good (G)=0.8; 40\u2264percentile<60 \u2192 Acceptable (A)=0.6; percentile<40 \u2192 Limited (L)=0.2.",
+        "guidance": "Compute percentile ranks by comparing each publication to all world publications in the same year and SC. This mapping creates bibliometric scores directly comparable to the VTR peer review 4-point scale, enabling contingency tables and agreement measures."
+      },
+      {
+        "name": "Normalization by WoS subject category and publication year",
+        "description": "Normalize citations and journal impact factors relative to the average for publications of the same publication year and WoS subject category (SC).",
+        "guidance": "Normalized indicators (citations and IF) control for field- and year-specific citation practices. Classification by SC and aggregation to disciplinary areas (DA) is essential for valid comparisons and for computing percentile ranks within homogeneous populations."
+      },
+      {
+        "name": "Use of Cohen\u2019s weighted kappa (kw) with linear weights to measure agreement",
+        "description": "Measure agreement between predictive scores (peer review and bibliometric predictions) and the benchmark using Cohen\u2019s weighted kappa with linear weights (0; 0.33; 0.67; 1).",
+        "guidance": "Linear weights treat a one-class disagreement (adjacent classes: E vs G, G vs A, A vs L) as one-third (0.33) of the maximal disagreement (E vs L). Interpret kw per Fleiss et al. (2003): poor if kw \u2264 0.40; fair-to-good if 0.40 < kw \u2264 0.75; excellent if kw > 0.75. Report statistical significance, standard error, Z, and p-values."
+      },
+      {
+        "name": "Use of Lin\u2019s concordance correlation coefficient (\u03c1c) to assess concordance",
+        "description": "Use Lin\u2019s concordance correlation coefficient to measure how closely predictive measurements (PR, BS_1Y, BS_2Y, BS_3Y) agree with the benchmark (BS_2018).",
+        "guidance": "\u03c1c ranges from -1 to 1, with perfect concordance at 1; it cannot exceed the absolute value of Pearson\u2019s correlation. Use \u03c1c to validate and complement kappa results, and consider strength-of-agreement criteria (e.g., McBride 2005) where applicable."
+      },
+      {
+        "name": "Stratification by disciplinary area and citation time window",
+        "description": "Analyze agreement and predictive power stratified by disciplinary area (DA) and by citation time window (1, 2, 3 years) to identify field- and age-specific performance of methods.",
+        "guidance": "Stratification helps determine whether bibliometrics or peer review performs better in particular fields or after certain time lags, informing operational decisions for large-scale assessments (e.g., when to use bibliometrics alone vs informed peer review)."
+      },
+      {
+        "name": "Data matching and inclusion/exclusion criteria for the evaluation dataset",
+        "description": "Match submitted research products to WoS-indexed publications and exclude records outside publication years, without impact factor, or with duplicate/multiple submissions receiving different scores; use the resulting cleaned dataset for analysis.",
+        "guidance": "Carefully match VTR-evaluated products to WoS records. Exclude publications with dates outside the target period (2001-2003), those lacking IF, and duplicates submitted by co-authors to different panels (to avoid ambiguous scores). Document final sample size and representativeness relative to the population."
+      },
+      {
+        "name": "Institutional rating aggregation formula (VTR rating calculation)",
+        "description": "Compute an organization\u2019s rating as the average of merit-class scores across its submitted products: Rating_i = (\u2211E_i + 0.8\u2211G_i + 0.6\u2211A_i + 0.2\u2211L_i) / P_i.",
+        "guidance": "This is the VTR method for aggregating product-level merit classes into an institutional-level score. Use this formula to translate product classifications into organizational performance measures for ranking and policy decisions."
+      },
+      {
+        "name": "Choice of weight scheme for disagreement severity in kappa",
+        "description": "Adopt linear weights (0; 0.33; 0.67; 1) for weighted kappa so that adjacent-class disagreements are penalized less than maximal disagreements.",
+        "guidance": "Explain rationale for linear vs quadratic weighting. Linear weights make a one-class disagreement one-third as severe as the maximal (E vs L) disagreement. Choice of weights affects kw magnitude and interpretation."
+      },
+      {
+        "name": "Conceptual distinction: peer review assesses 'quality' vs bibliometrics measures 'scholarly impact'",
+        "description": "Acknowledge that peer reviewers typically assess publication 'quality' (how well research is done, originality, rigor), whereas citation-based indicators purport to measure scholarly impact (influence on later scientific advancement); equivalence between the two is disputed.",
+        "guidance": "Define 'quality' per Martin & Irvine (1983) and note its subjectivity. Recognize differing theoretical positions (normative vs social constructivist views of citing behavior) and ISO quality-management framing (quality = degree to which inherent characteristics fulfill a requirement). Frame the study explicitly to assess predictive power for scholarly impact, not all dimensions of quality."
+      },
+      {
+        "name": "Awareness and documentation of peer review limitations and biases",
+        "description": "Recognize peer review vulnerabilities: subjectivity, difficulty selecting appropriate experts, inability to contextualize older work, conflicts of interest, favoritism toward famous scholars, failure to recognize specialized qualitative aspects, internal panel disagreement.",
+        "guidance": "Document potential sources of distortion (social proximity, reviewer selection, journal reputation effects) and consider how these may bias peer-review scores when comparing to bibliometric benchmarks. Use empirical checks (e.g., over/underestimation patterns) to diagnose biases."
+      },
+      {
+        "name": "Awareness and documentation of bibliometrics limitations and manipulation risks",
+        "description": "Acknowledge bibliometric weaknesses: inability to cover non-indexed outputs, questions about citations as certification of merit, susceptibility to manipulation (self-citation, reciprocal citation rings, editor-driven citations), delayed recognition phenomena, and inability to capture non-scholarly/ societal/technological impacts.",
+        "guidance": "Interpret bibliometric indicators cautiously, control for self-citation where possible, and note that bibliometrics measures scholarly impact specifically. Consider combining indicators or using informed peer review for outputs not covered by bibliographic databases."
+      },
+      {
+        "name": "Operational trade-off criterion: accuracy versus timeliness",
+        "description": "Explicitly weigh the trade-off between accuracy (longer citation windows give more accurate bibliometric predictions) and timeliness (decision makers often require rapid assessments).",
+        "guidance": "Use early bibliometric windows (1\u20133 years) when timeliness is critical, recognizing reduced predictive accuracy; extend citation windows to improve predictive power. Use stratified analyses to determine minimal citation window needed for desired concordance in each disciplinary area."
+      },
+      {
+        "name": "Percentile-rank benchmarking against world publications in same year and SC",
+        "description": "For each publication, compute percentile rank among all world publications in the same publication year and WoS subject category to enable fair comparison and mapping to merit classes.",
+        "guidance": "Retrieve WoS indicators for all world publications in target years and SCs (here via CWTS WOSKB). Percentile ranks correct for differences in citation densities across fields and years and underpin the bibliometric-to-VTR-class assignment."
+      }
+    ]
+  }
+}

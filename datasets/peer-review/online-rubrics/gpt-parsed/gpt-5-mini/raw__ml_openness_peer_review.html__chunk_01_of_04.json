@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/ml_openness_peer_review.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "ml_openness_peer_review.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39735,
+  "model": "gpt-5-mini",
+  "elapsed_s": 33.38236445900111,
+  "input_tokens": 10567,
+  "output_tokens": 3850,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference organizers, peer-review researchers, and members of the machine learning research community (authors, reviewers, area chairs) interested in open vs closed peer review policies",
+    "subtask_short": "open_peer_review_evaluation",
+    "subtask_description": "Evaluating the effects and quality of peer review under different openness policies (closed, partially open, fully open) and measuring review quality using defined metrics (substantiation, correctness, completeness).",
+    "subtask_keywords": [
+      "peer_review",
+      "open_review",
+      "conference_policies",
+      "review_quality",
+      "ml_research"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Substantiation (review quality)",
+        "description": "Measure of how well each evaluative (especially negative) statement in a review is supported with evidence and examples from the paper.",
+        "guidance": "Identify evaluative segments in the review and filter to negative evaluative segments (criticisms). Combine segments that cover the same aspect to avoid double-counting. A segment is well-substantiated if it contains appropriate evidence/examples from the paper or is self-substantiated (doesn't require explicit support). Prescriptive statements (requests/suggestions/questions) are treated as negative evaluative and are usually counted as substantiated unless accompanied by criticism. The substantiation score = fraction of substantiated negative evaluative segments. Example anti-pattern: 'The mathematical derivations are hard to follow' without pointing to specific equations or places is unsubstantiated."
+      },
+      {
+        "name": "Correctness (review quality)",
+        "description": "Fraction of objective segments (claims about the paper's content or reviewer\u2019s understanding) that are factually correct when compared to the paper and author responses.",
+        "guidance": "First identify objective segments in the review (those verifiable from the paper). Verify each segment against the paper; if the latest paper version contains an item the reviewer says is missing, consult author responses (e.g., 'we have added experiment X') to determine whether the reviewer was factually correct at the time of review. The correctness score = fraction of objective segments judged factually correct. Be aware that author updates between review and the version available to analysts can confound judgments if author responses are not considered."
+      },
+      {
+        "name": "Completeness (review quality)",
+        "description": "Fraction of the paper's claims/contributions that are mentioned in some form in the review, indicating whether the reviewer covered the paper's contributions.",
+        "guidance": "Define 'claim' as a contribution or output of the paper. Extract a list of claims from the paper and check whether each claim is covered in the review (coverage in any form is sufficient). Exclude the review's summary/abstract box (often verbatim or rephrased abstract) to avoid inflating completeness. The completeness score = fraction of claims covered. Note: a review need not detail every claim, but must at least show awareness of it."
+      },
+      {
+        "name": "Combine same-aspect evaluative segments",
+        "description": "When counting negative evaluative segments, group segments that cover the same criticism/aspect so counts reflect distinct criticisms rather than repeated mentions.",
+        "guidance": "This reduces overcounting when a reviewer repeats the same criticism in different parts of the review. Perform a deduplication step prior to computing substantiation and negative-segment counts."
+      },
+      {
+        "name": "Exclude summary box when measuring completeness",
+        "description": "Do not use the review summary section when measuring completeness because reviewers sometimes paste or rephrase the paper abstract there, which would artificially inflate completeness scores.",
+        "guidance": "When passing the review to an evaluator (human or LLM), omit the summary/abstract field for completeness checks; focus on the body where the reviewer demonstrates independent attention to claims."
+      },
+      {
+        "name": "Use author responses to adjudicate factual correctness",
+        "description": "When a reviewer asserts an experiment/feature is missing but the paper (available to analysts) includes it, use author responses to determine whether the reviewer was correct at the time of reviewing (authors may have added items in response to review).",
+        "guidance": "Pass author replies (both those to the review and general replies) along with the paper to the evaluator so statements like 'we have added experiment X' can be used to mark the reviewer's original statement as correct if appropriate."
+      },
+      {
+        "name": "Operational score definitions (substantiation/correctness/completeness)",
+        "description": "Formal scoring rules used in analysis: substantiation = fraction of substantiated negative evaluative segments; correctness = fraction of objective segments correct; completeness = fraction of paper claims mentioned.",
+        "guidance": "These definitions should be applied consistently across datasets and include clear rules for segment identification, deduplication, and use of auxiliary material (author responses)."
+      },
+      {
+        "name": "Venue and sample selection criteria for empirical comparison",
+        "description": "Requirements for selecting conferences/years to compare review quality between open and (partially) closed settings.",
+        "guidance": "Choose venues that: take place in similar time frames (to avoid temporal shifts), have similar review forms (so form differences don't confound results), have review processes completed before major LLM launches (to avoid AI contamination), and have publicly available reviews. Prefer accepted papers when one venue only reliably releases accepted reviews to avoid selection bias."
+      },
+      {
+        "name": "Avoid AI contamination in review quality analyses",
+        "description": "Exclude or control for reviews that may be AI-generated to ensure the analysis reflects human review quality.",
+        "guidance": "Prefer review periods before widespread LLM availability, or apply (imperfect) detection methods and robustness checks. Acknowledge limits of AI-detection tools and the potential for false positives/negatives."
+      },
+      {
+        "name": "Statistical testing and multiple-comparison correction",
+        "description": "Use rigorous statistical tests and control family-wise error when comparing metrics across venues.",
+        "guidance": "Example: two-sided Fisher permutation tests with a large number of permutations and Holm-Bonferroni correction for \u03b1 = 0.05 when testing multiple metrics (substantiation, correctness, completeness). Report means, confidence intervals, p-values, and corrected significance decisions."
+      },
+      {
+        "name": "Fairness of decision process (policy impact)",
+        "description": "Whether open (partial or full) reviewing policies result in a decision process perceived as more or less fair compared to closed policies.",
+        "guidance": "Measure via direct survey/question prompts comparing perceived fairness; collect free-response rationales (transparency equated with fairness; concerns include persistent low-effort or fraudulent reviews attached to papers and disproportionate harms to less-prestigious researchers). Consider both aggregate percentages and qualitative themes."
+      },
+      {
+        "name": "Effect of de-anonymization fear on reviewer candor",
+        "description": "Assess whether fear of being de-anonymized causes reviewers to modify their level of criticism (increase or decrease).",
+        "guidance": "Survey respondents' self-reported behavior: those strongly fearful are likelier to change their criticism level (more likely to reduce criticism). Consider this as a behavioral cost of openness when designing policies."
+      },
+      {
+        "name": "Open reviewing may compel extra experiments (discussion-phase workload)",
+        "description": "Evaluate whether open reviewing causes authors to perform additional, perhaps unnecessary, analyses or experiments during the discussion phase.",
+        "guidance": "Ask authors whether openness compelled extra work. Distinguish effects of openness from effects of discussion-phase design (e.g., asynchronous multi-round discussion causing more work). Consider limiting rounds to reduce workload."
+      },
+      {
+        "name": "Submission deterrence vs deterrence of low-quality (AI slop)",
+        "description": "Trade-off between deterring low-quality/AI-generated submissions by releasing rejected manuscripts and risking deterring legitimate submissions.",
+        "guidance": "Survey options should capture preferences (e.g., prefer deterring slop even if losing some legitimate submissions vs prefer retaining legitimate submissions). Quantify proportions preferring each and report that many respondents weakly prefer deterring slop."
+      },
+      {
+        "name": "Resubmission bias as a primary negative impact",
+        "description": "Concern that publicly released rejected submissions and their reviews cause future reviewers to negatively bias resubmitted work, harming authors' chances.",
+        "guidance": "Treat mitigation of resubmission bias as a high-priority policy objective; capture evidence in free responses and ranking exercises (often ranked most important). Consider policy design (opt-in release of rejected papers, anonymization options) to reduce this harm."
+      },
+      {
+        "name": "Public commenting and visibility-policy choices",
+        "description": "Design axes for future conferences: visibility of submissions (closed/partially open/fully open), visibility of anonymized reviews (closed/partially open/fully open), and policy on public commenting (closed/partially open/fully open).",
+        "guidance": "Offer concrete options (examples: only authors & assigned reviewers; anonymized reviews released with accepted submissions with author opt-in for rejected submissions; anonymized reviews released for all submissions). Collect both forced-choice and 'other' text responses. Note observed community preferences (majority want some openness; many prefer partially-open approaches)."
+      },
+      {
+        "name": "Design of the discussion/rebuttal phase",
+        "description": "Structure the discussion phase to limit excessive workload and reduce stress: number of rounds, synchronous vs asynchronous interaction, obligations for reviewer responses.",
+        "guidance": "Many respondents favor limiting to a single round rather than unlimited replies; ensure mechanisms exist for reviewers to respond to authors\u2019 comments and updates during the discussion phase."
+      },
+      {
+        "name": "Reviewer accountability and incentives",
+        "description": "Mechanisms to improve accountability of reviewers and provide incentives to write higher-quality reviews.",
+        "guidance": "Survey free responses commonly ask for better accountability systems and reviewer incentives. Policy options may include transparency of reviewer names (with trade-offs), public review records, recognition, or meta-reviewer oversight."
+      },
+      {
+        "name": "Who should see official LLM-generated reviews?",
+        "description": "Policy dimension assessing support for conferences providing official, labeled LLM-generated reviews and specifying which stakeholders should have access (meta-reviewers, authors, reviewers, public).",
+        "guidance": "Collect multi-select preferences; note ~56% do not support LLM reviews in the surveyed population, and among supporters meta-reviewers and authors are the most-commonly selected audiences."
+      },
+      {
+        "name": "Use of qualitative coding and free-response thematic analysis",
+        "description": "When surveying opinions on peer-review policies, perform qualitative coding of free responses to surface common themes (support/opposition, accountability, discussion-phase complaints, LLM concerns, workload, incentives, resubmission bias).",
+        "guidance": "Report top themes with counts (e.g., number supporting open review, number requesting accountability). Use these themes to supplement quantitative measures and to inform nuanced policy recommendations."
+      }
+    ]
+  }
+}

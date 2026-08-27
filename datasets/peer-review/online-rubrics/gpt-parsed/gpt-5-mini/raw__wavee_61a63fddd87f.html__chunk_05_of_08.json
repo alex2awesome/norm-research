@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_61a63fddd87f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_61a63fddd87f.html",
+  "chunk_idx": 5,
+  "n_chunks": 8,
+  "chunk_chars": 39978,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.66890699999931,
+  "input_tokens": 14854,
+  "output_tokens": 4534,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and graduate students in algorithms/theoretical machine learning studying peer-review assignment mechanisms",
+    "subtask_short": "evaluating reviewer-assignment algorithms",
+    "subtask_description": "Analysis and comparison of algorithms (SUPER*, SIM, RAND, BID) for ordering papers shown to reviewers under community-style similarity models (noiseless and noisy). Focus is on expected paper-side gain, expected reviewer-side gain, and combined objective trade-offs.",
+    "subtask_keywords": [
+      "peer_review",
+      "assignment_algorithms",
+      "paper_side_gain",
+      "reviewer_side_gain",
+      "noisy_community_model"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Combined objective (paper-side + \u03bb \u00b7 reviewer-side)",
+        "description": "The optimization objective is the expected total gain: the sum of the expected paper-side gain and \u03bb times the expected reviewer-side gain (G_p + \u03bb G_r). Algorithms are evaluated by this combined expected gain and by additive gaps relative to OPT.",
+        "guidance": "Trade-off parameter \u03bb controls relative importance. All suboptimality results compare expected combined gains (or separate components) of baselines to OPT or SUPER*; proofs derive lower bounds on OPT \u2212 algorithm in terms of mq and \u03bbmq/log2(2mq) for parameter ranges m \u2265 2, q \u2265 2, \u03bb \u2265 0."
+      },
+      {
+        "name": "Paper-side gain metric (\u03b3_p)",
+        "description": "Paper-side gain from a paper with g bids is \u03b3_p(g) (in this work \u03b3_p(g)=\u221ag), a concave (diminishing-returns) function of number of bids.",
+        "guidance": "Because \u03b3_p is concave, evenly distributing bids across papers maximizes paper-side gain; thus optimal paper-side gain equals mq under the community-model assumptions. Lemma 10 is used to bound expected \u03b3_p for randomized algorithms via expectations over binomial counts."
+      },
+      {
+        "name": "Reviewer-side gain metric (\u03b3_r)",
+        "description": "Reviewer-side gain \u03b3_r( position, similarity ) is decreasing in the position a paper is shown and increasing in the similarity score Si,j; e.g., \u03b3^\u03c0_r(x)=1/log2(x+1) is used for position-based decay.",
+        "guidance": "Immediate reviewer-side gain for a reviewer is maximized by showing papers in decreasing order of similarity. Differences of \u03b3_r between positions (bounded below by quantities scaling ~1/log2(2\u00b7mq)) are critical in lower-bound proofs (see Lemma 9)."
+      },
+      {
+        "name": "Bidding behavior (bidding function f)",
+        "description": "The bidding function is such that only the paper shown in the highest position may be bid on, and only if its similarity exceeds a threshold (Si,j > s/2). Consequently, each reviewer bids on at most one paper almost surely.",
+        "guidance": "This structural property (only top-position can get a bid and thresholding by similarity) drives the algorithmic design: to elicit a bid from a reviewer, an algorithm must place a block-diagonal (high-similarity) paper first. Lemmas 11\u201313 formalize that in the noisy community model block-diagonal papers are bid almost surely when shown first, and off-diagonal papers are almost never bid."
+      },
+      {
+        "name": "Immediate paper-side maximization rule",
+        "description": "For a given reviewer, the immediate expected paper-side gain term (\u03b3_p(g+1)-\u03b3_p(g)) is decreasing in g, so to maximize immediate paper-side gain the algorithm should show in the top position a paper (on the reviewer's block diagonal) that currently has the minimum number of bids.",
+        "guidance": "This rule motivates SUPER* with zero heuristic: place a block-diagonal paper with fewest bids first to gain the largest marginal increase in \u03b3_p, while the rest of ordering can be chosen to control reviewer-side loss."
+      },
+      {
+        "name": "Immediate reviewer-side maximization rule",
+        "description": "Immediate reviewer-side gain for a reviewer is maximized by ordering papers in decreasing similarity scores (highest similarity first).",
+        "guidance": "Since \u03b3_r increases with similarity and decreases with position, a pure reviewer-side optimizer (SIM) orders by similarity. SUPER* must balance this with paper-side considerations."
+      },
+      {
+        "name": "SUPER* with zero heuristic policy (design criterion)",
+        "description": "SUPER* with zero heuristic shows for each reviewer the paper on that reviewer's block diagonal that currently has the fewest bids in the highest position, followed by remaining papers in decreasing similarity order.",
+        "guidance": "This policy simultaneously maximizes immediate paper-side marginal gain (by choosing minimum-bid block-diagonal paper first) and keeps reviewer-side gain near-optimal (block-diagonal papers have substantially larger similarity than off-diagonal ones under the model). Under the noisy community model this yields expected paper-side gain mq (optimal) and near-optimal reviewer-side gain (Properties 1\u20133)."
+      },
+      {
+        "name": "SIM (similarity-ordering) policy criterion",
+        "description": "SIM presents papers to each reviewer in strictly decreasing order of similarity scores, thereby maximizing reviewer-side immediate gain but ignoring current bid counts.",
+        "guidance": "SIM can be highly suboptimal for paper-side gain under the (noisy) community model because it may repeatedly place the same high-similarity paper first even if it already has many bids. Analysis shows for block-structured classes the probability a particular block-diagonal paper is first is 1/q, so its number of first-position exposures is Binomial(q,1/q), and Lemma 10 bounds the resulting expected \u03b3_p."
+      },
+      {
+        "name": "RAND (random-ordering) policy criterion",
+        "description": "RAND selects a uniformly random permutation of papers for each reviewer (or a random global ordering).",
+        "guidance": "RAND fails to systematically expose block-diagonal papers in top positions, so many reviewers will not be induced to bid; expected paper-side gain for RAND is bounded (via binomial/expectation arguments and Lemma 10) by a constant fraction of mq (specifically \u2264 ((6+\u221a2)/16)\u00b7mq in this derivation), giving an additive suboptimality of order mq."
+      },
+      {
+        "name": "BID heuristic policy (bid-seeking ordering) \u2014 suboptimality criterion",
+        "description": "BID-type policies (those that attempt to order to solicit bids, as defined earlier in the paper) can still be suboptimal: for the noiseless community model BID is shown to be suboptimal by an additive factor scaling like c\u00b7\u03bb\u00b7m\u00b7q / log2(2\u00b7m\u00b7q).",
+        "guidance": "Proofs bounding BID's deficit use lower bounds on reviewer-side gain differences (Lemma 9) and careful counting of papers with zero prior bids; the log2(\u00b7) term arises from the \u03b3^\u03c0_r position-decay form."
+      },
+      {
+        "name": "Suboptimality gap as evaluation metric",
+        "description": "Algorithms are evaluated by additive gaps between OPT (or SUPER*) and the algorithm in expected combined gain: e.g., OPT \u2212 RAND \u2265 c\u00b7m\u00b7q or OPT \u2212 BID \u2265 c\u00b7\u03bb\u00b7m\u00b7q / log2(2\u00b7m\u00b7q) for constants c > 0 and parameter ranges m \u2265 2, q \u2265 2, \u03bb \u2265 0.",
+        "guidance": "These additive lower bounds (existence of constant c) constitute the notion of 'significantly suboptimal' used throughout the proofs. Separate components (paper-side or reviewer-side) may be compared as intermediate steps."
+      },
+      {
+        "name": "Noisy community model structural assumptions",
+        "description": "Similarity matrix is formed by picking a noiseless community-model matrix S^(0) with block-diagonal s and off-diagonal 0, then adding bounded noise \u03bd_{i,j} uniformly from (0, \u03be) with \u03be small relative to s so that (i) if (i,j) is block-diagonal then Si,j > s/2, (ii) if off-diagonal then Si,j < s/2.",
+        "guidance": "These assumptions (quantified via s = (1+\u03bb)^{-1} e^{-e\u00b7m\u00b7q} and small \u03be) ensure Lemmas 11\u201313: block-diagonal papers are almost surely bid when shown first, off-diagonal papers are almost never bid, and block-diagonal similarities dominate off-diagonal similarities. All algorithmic comparisons rely critically on these conditions."
+      },
+      {
+        "name": "Use of probabilistic expectation bounds (Lemma 10)",
+        "description": "Bounding E[\u221aK] where K ~ Binomial(n,p) by a closed-form expression (used because \u03b3_p is \u221a\u00b7) to derive explicit bounds on expected paper-side gain of randomized/structured policies.",
+        "guidance": "Lemma 10 provides an explicit upper bound on the expectation of \u221a(Binomial(n,p)) that is applied with n = q and p = 1/mq or p = 1/q to obtain the constants appearing in the SIM and RAND paper-side analyses."
+      },
+      {
+        "name": "Lower bounds on reviewer-position decay differences (Lemma 9)",
+        "description": "Lower bound on \u03b3^\u03c0_r(q) \u2212 \u03b3^\u03c0_r(mq/4 + 2) for \u03b3^\u03c0_r(x)=1/log2(x+1): there exists a positive constant scaling like 1/log2(2\u00b7m\u00b7q) that lower-bounds this difference for m,q \u2265 2.",
+        "guidance": "This bound is used to show that moving a high-similarity paper ahead of many others produces a non-negligible reviewer-side gain, which in turn quantifies the cost (in reviewer-side terms) of prioritizing paper-side gains. It is a technical ingredient in the BID suboptimality proof."
+      }
+    ]
+  }
+}

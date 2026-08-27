@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/lawrence_neurips_experiment.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "lawrence_neurips_experiment.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39869,
+  "model": "gpt-5-mini",
+  "elapsed_s": 37.77690191700094,
+  "input_tokens": 12334,
+  "output_tokens": 4020,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "conference_program_chairs, peer_review_researchers, and organizers analyzing reviewer behaviour (e.g., NeurIPS chairs / data analysts)",
+    "subtask_short": "conference_peer_review_analysis",
+    "subtask_description": "Analysis and diagnostics for conference peer-review processes: measuring decision consistency, calibrating reviewers, estimating accept probabilities, and studying effects (late reviews, duplicates, long-term impact). Implements Bayesian/Gaussian-process models, Monte Carlo simulation, and sanity-check plots for program chairs and review-system analysts.",
+    "subtask_keywords": [
+      "peer_review",
+      "conference",
+      "reviewer_calibration",
+      "accept_probability",
+      "program_chairs"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Consistent/inconsistent decision probabilities",
+        "description": "Probability mass on three outcomes for each paper pair: 'consistent accept', 'inconsistent decision', and 'consistent reject' computed from observed counts.",
+        "guidance": "Compute posterior mean and variance using a Dirichlet posterior on counts (example code posterior_mean_var). Report means with error bars (e.g. +/- 2*sqrt(variance)). Compare observed probabilities to a 'random conference' baseline (e.g., computed analytically for given accept rate). Use Monte Carlo if needed to estimate uncertainty."
+      },
+      {
+        "name": "Accept precision, reject precision, agreed accept rate",
+        "description": "Definitions computed from posterior samples: accept precision = 2*p_accept_consistent / (2*p_accept_consistent + p_inconsistent), reject precision similarly, and agreed accept rate = p_accept_consistent/(p_accept_consistent+p_reject_consistent).",
+        "guidance": "Sampling from the Dirichlet posterior (sample_precisions) and computing these ratios by Monte Carlo provides expected values and variances (report mean +/- 2*std). Note ratio distributions are complex; prefer Monte Carlo. Compare to random-committee values to assess significance."
+      },
+      {
+        "name": "Reviewer calibration model (additive decomposition)",
+        "description": "Model each review score y_{i,j} as y_{i,j} = f_i + b_j + \u03b5_{i,j}, where f_i = objective paper quality, b_j = reviewer offset (bias), and \u03b5_{i,j} = reviewer-specific noise.",
+        "guidance": "Assume distributions: \u03b5_{i,j} ~ N(0, \u03c3^2), f_i ~ N(\u03bc, \u03b1_f), b_j ~ N(0, \u03b1_b). This reduces parameters to \u03bc, \u03c3^2, \u03b1_f, \u03b1_b. Reparameterize into \u03b1_f and normalized ratios hat_\u03b1_b = \u03b1_b/\u03b1_f and hat_\u03c3^2 = \u03c3^2/\u03b1_f to make \u03b1_f well-determined and explore the two ratios on a grid, optimizing \u03b1_f by a fixed-point equation."
+      },
+      {
+        "name": "Parameter estimation by maximum likelihood and reparameterization",
+        "description": "Optimize the model likelihood to estimate parameters. Negative log likelihood takes the form depending on \u03b1_f and the scaled covariance; \u03b1_f can be solved by \u03b1_f = (1/|y|) y^T Khat^{-1} y.",
+        "guidance": "Use grid search over the two normalized variance ratios (offset/signal and noise/signal), optimize \u03b1_f for each grid point, and evaluate likelihood. If reviewer-paper groups are disconnected, exploit structure for faster inversion. For large review sets (~6000 reviews) \u03b1_f will be well-determined; remain cautious about reviewers with few reviews."
+      },
+      {
+        "name": "Constructing covariance functions for calibration",
+        "description": "Covariance between review scores is k((i,j),(k,l)) = \u03b4_{i,k} \u03b1_f + \u03b4_{j,l} \u03b1_b + \u03b4_{i,k}\u03b4_{j,l} \u03c3^2, or equivalently \u03b1_f*(\u03b4_{i,k} + \u03b4_{j,l} hat_\u03b1_b + \u03b4_{i,k}\u03b4_{j,l} hat_\u03c3^2).",
+        "guidance": "Implement kernels via one-hot encodings: K_f = X1 X1^T for papers, K_b = \u03b1_b * X2 X2^T for reviewers, and K = K_f + K_b + \u03c3^2 I. Can use GPy for convenience or construct explicit matrices and use PD inversion utilities (e.g., GPy.util.linalg.pdinv)."
+      },
+      {
+        "name": "Bias-corrected (calibrated) quality score prediction",
+        "description": "Compute posterior mean and covariance of bias-adjusted paper scores s (with bias removed). K_s = K_f + \u03c3^2 I and s_mean = K_s * \u03b1 + \u03bc where \u03b1 = K^{-1} y.",
+        "guidance": "Use the posterior to obtain calibrated per-paper scores and their covariances. These produce bias-corrected estimates for downstream ranking and probability-of-accept computations."
+      },
+      {
+        "name": "Monte Carlo sampling to estimate probability of acceptance",
+        "description": "Sample jointly from the posterior of calibrated paper scores, rank papers per sample, accept the top N, and compute each paper's accept probability as the fraction of samples in which it was accepted.",
+        "guidance": "Run many samples (e.g., 1000) to estimate accept probabilities and their uncertainty. Use sampled rankings to produce histograms, error bars, and compare to 'random committee' baselines. Adjust sample count for precision and computational cost."
+      },
+      {
+        "name": "Definition of 'grey area' for debated papers",
+        "description": "Grey area = set of papers whose Monte Carlo-estimated accept probability lies between lower and upper thresholds (example lower = 0.1, upper = 0.9).",
+        "guidance": "These are the papers likely to be most debated in teleconferences between program chairs and area chairs. Choose thresholds to control how many papers enter the grey area; report number in grey area and inspect their attributes."
+      },
+      {
+        "name": "Reviewer bias estimation and export",
+        "description": "Estimate per-reviewer mean bias (reviewer_bias) and std (reviewer_bias_std) from K_b and its posterior covariance, and export a bias table for use in systems (e.g., CMT).",
+        "guidance": "Compute b = K_b * \u03b1 and covb = \u03b1_f*(K_b - K_b * Kinv * K_b). Average per-reviewer using X2 mapping. Export in the format required by the conference management tool; include columns like Quality Score, Impact Score placeholder, Confidence."
+      },
+      {
+        "name": "Sanity-check visualizations for calibration",
+        "description": "Use histograms and scatter plots to inspect calibrated reviewer scores, reviewer-bias adjustments, raw score vs calibrated score, and distribution of accept probabilities.",
+        "guidance": "Plot calibrated reviewer scores histogram, reviewer_bias histogram, scatter plots of raw_score vs log-odds(prob_accept) and calibrated vs original scores. Save figures and inspect for anomalies (multi-modality, skew, outliers)."
+      },
+      {
+        "name": "Monte Carlo conference simulation for consistency vs subjectivity",
+        "description": "Simulate conferences where each paper score = objective + subjectivity noise to study how the subjectivity_portion and accept_rate affect consistency (fraction of same papers accepted across two independent committees).",
+        "guidance": "Run many simulated trials (e.g., 100k) across a grid of accept_rates and subjectivity_portion values. For each simulation compute consistent_accepts and report as proportion and compare to random baseline to show gains due to scoring system or accept rate choices."
+      },
+      {
+        "name": "Reviewer counts per paper (coverage requirement)",
+        "description": "Track number of reviews per paper over time; target is that almost all papers have three reviews before rebuttal.",
+        "guidance": "Compute counts per paper across review timeline, plot mean/median/min/max, and plot number of papers with fewer than 3 reviews as a function of time. Use these diagnostics to manage reviewer assignment and chasing policies."
+      },
+      {
+        "name": "Effect of late reviews on quality-related measures",
+        "description": "Compare early vs late reviews on metrics: confidence, quality (10-point scale), impact (binary 1/2), and review length.",
+        "guidance": "Use moving-window averages (e.g., 4-day window), compute means and standard errors, and perform t-tests to assess significance (report p-values). Example findings: late reviews are less confident, shorter (~100 words), but may give slightly higher quality scores; impact differences may be non-significant."
+      },
+      {
+        "name": "Statistical testing and uncertainty quantification",
+        "description": "Use t-tests for comparing means, bootstrap for estimating uncertainty in correlations, and compute 95% confidence intervals from standard error of the mean where appropriate.",
+        "guidance": "Report p-values (example p=0.048% for confidence difference) and error bars (e.g., +/- 2*sqrt(var) for Monte Carlo estimates). When computing correlations over time, bootstrap resampling helps obtain confidence bands."
+      },
+      {
+        "name": "Correlation of duplicate papers as a reliability measure",
+        "description": "For papers submitted twice to different reviewer committees, compute correlation coefficients for average quality, calibrated quality, impact, and confidence across duplicate pairs to measure inter-committee reliability.",
+        "guidance": "Identify duplicate pairs (e.g., by matching titles), compute per-pair averages, calculate correlations and bootstrap to estimate uncertainty; plot correlations over time and assess how late reviews affect these correlations."
+      },
+      {
+        "name": "Laplace smoothing of accept probabilities before joining",
+        "description": "Apply a small Laplace smoothing to probabilistic accept estimates before merging into downstream tables to avoid exact 0/1 probabilities.",
+        "guidance": "Example: (prob_accept + 0.0002) / 1.001. This prevents issues when taking logs or combining probabilities and hedges against finite-sample extremes."
+      },
+      {
+        "name": "Differential privacy in visualizations",
+        "description": "When plotting individual paper scores vs citations, add differentially private noise to points to reduce re-identification risk while computing correlations on raw data before adding noise.",
+        "guidance": "Correlations should be computed on raw data, but figures can use noise-perturbed points for privacy. Document that correlation numbers were computed before the noise."
+      },
+      {
+        "name": "Impact analysis and selection-bias caution",
+        "description": "Correlate calibrated quality or impact scores with long-term citation counts (e.g., log10(1 + citations)), but analyze accepted and rejected sets separately to account for selection effects.",
+        "guidance": "Join decisions with citation databases (e.g., Semantic Scholar), plot accepted vs rejected groups separately, and interpret correlations carefully because conference acceptance/publication may itself raise citations. Use cached citation data and be mindful of API throttling when fetching."
+      },
+      {
+        "name": "Modeling choices and priors sensitivity",
+        "description": "Be explicit about prior choices (e.g., uninformative Dirichlet) and consider whether priors should encode structural knowledge (e.g., that independent committees should not collude).",
+        "guidance": "Recognize trade-offs: using simple uninformative priors yields a sensitivity analysis of randomized experiments, while richer priors allow modeling the decision process but require more assumptions. Use sensitivity checks to see how inferences change with different priors."
+      },
+      {
+        "name": "Data-preparation and feature construction for calibration",
+        "description": "Tokenize PaperID and Email to construct one-hot design matrices X1 (papers) and X2 (reviewers), mean-center scores y, and set proper indexing for matrix operations.",
+        "guidance": "Ensure columns of X1/X2 are sorted in a stable order, construct y as reviews.Quality - mu, and use these matrices to form covariance kernels. Keep track of mapping between indices and paper/reviewer identifiers for later joins and exports."
+      }
+    ]
+  }
+}

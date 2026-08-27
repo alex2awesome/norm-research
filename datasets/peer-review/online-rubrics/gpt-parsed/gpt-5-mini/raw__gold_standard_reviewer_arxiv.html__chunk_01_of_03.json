@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/gold_standard_reviewer_arxiv.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "gold_standard_reviewer_arxiv.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39766,
+  "model": "gpt-5-mini",
+  "elapsed_s": 27.68382254199969,
+  "input_tokens": 11763,
+  "output_tokens": 3041,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference organizers, peer-review researchers, and practitioners building reviewer-paper matching algorithms",
+    "subtask_short": "paper-reviewer matching evaluation",
+    "subtask_description": "Guidelines and evaluation criteria for constructing a dataset of reviewer expertise and for comparing algorithms that compute reviewer-paper similarity (paper representations, reviewer profile choices, pooling methods, evaluation metrics, and statistical procedures).",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "similarity_computation",
+      "dataset",
+      "algorithm_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pooling methods for aggregating profile scores",
+        "description": "Aggregate similarity scores between a submitted paper and each paper in a reviewer's profile into a single similarity measure using pooling methods such as maximum, mean, or a percentile (e.g., 75th percentile).",
+        "guidance": "Common pooling methods: max and mean. Jhih-Yi et al. (2024) suggest using a percentile (such as the 75th percentile) to improve robustness against fraudulent behavior; the paper evaluates max, mean, and 75th-percentile pooling in Specter2 and reports that max pooling delivers the best performance while the 75th percentile performs nearly as well."
+      },
+      {
+        "name": "Paper representation choices",
+        "description": "Choose a representation of paper content for similarity-computation algorithms from: (i) title only, (ii) title and abstract, (iii) full text.",
+        "guidance": "Option (ii) title+abstract is often used in real conferences and supported by most algorithms; richer representations (abstracts, full text) can improve accuracy but increase computational cost. Empirical findings: abstracts substantially improve over titles (~0.07 loss improvement) and full text provides additional (~0.03) improvement for TPMS."
+      },
+      {
+        "name": "Reviewer profile construction (which papers to include)",
+        "description": "Decide which papers to include in reviewers' profiles (e.g., the k most recent papers). In experiments, reviewer profiles were constructed using the 20 most recent papers from Semantic Scholar (include all if fewer than 20).",
+        "guidance": "Order papers by publication year and break ties uniformly at random. The choice of profile size affects information vs. relevance trade-offs: too few recent papers may miss information; too many older papers may add noise. Empirically, loss curves plateau once profiles include 8 or more most recent papers; practical recommendation: instruct reviewers to include ~10 representative papers (roughly 1-3 years of publications for active researchers)."
+      },
+      {
+        "name": "Use of full text when supported",
+        "description": "When algorithms can operate on full texts (e.g., TPMS), include full text to improve similarity estimation.",
+        "guidance": "TPMS benefits from full texts and can close the gap with embedding-based methods that cannot use full text. Full text yields additional improvement beyond title+abstract and is instrumental for improving performance on both easy and hard triplets."
+      },
+      {
+        "name": "Choice of baseline and interpreting performance deltas",
+        "description": "Use a simple baseline algorithm (TPMS chosen here) as a comparator; report \u2206 = algorithm_loss \u2212 TPMS_loss (positive means worse than TPMS, negative means better).",
+        "guidance": "TPMS was selected as a baseline for simplicity and because it can use full text. Present both absolute loss and 95% CI for loss, and 95% CI for \u2206 to quantify relative performance; note that overlapping confidence intervals may limit decisive comparisons."
+      },
+      {
+        "name": "Loss metric that weights errors by expertise gap",
+        "description": "Use a loss metric that assigns smaller penalties to errors on pairs with similar reviewer expertise and larger penalties to errors on well-separated pairs (see Section 5).",
+        "guidance": "This loss aggregates performance into a single number but may obscure the types of mistakes; hence supplement with stratified evaluations (easy/hard triplets). Lower loss values are better. Construct 95% CIs (bootstrap) to quantify uncertainty."
+      },
+      {
+        "name": "Easy versus hard stratification (triplet selection)",
+        "description": "Stratify evaluations by triplet difficulty: 'easy' triplets where a reviewer reported high expertise (\u22654) on one paper and low expertise (\u22642) on another; 'hard' triplets where the reviewer reported high expertise (\u22654) on both papers but the expertise values differ.",
+        "guidance": "Easy triplets test distinguishing high vs low expertise (important to avoid assigning irrelevant papers). Hard triplets test fine-grained distinctions among high-expertise papers (important to assign most suitable reviewers). Evaluate accuracy separately on these groups to understand algorithm strengths and weaknesses."
+      },
+      {
+        "name": "Accuracy on triplet ordering",
+        "description": "For each triplet (reviewer r, papers p1, p2), compare the ordering predicted by an algorithm to the expertise-induced ordering and compute accuracy as the fraction of triplets correctly resolved (0\u20131, larger is better).",
+        "guidance": "Report accuracy with 95% confidence intervals for each algorithm and regime (title+abstract, full text, etc.). Use this alongside loss to characterize performance on easy and hard cases."
+      },
+      {
+        "name": "Statistical evaluation procedures and uncertainty quantification",
+        "description": "Average out randomness in reviewer profile construction and quantify uncertainty in pointwise performance estimates using bootstrapping to create 95% confidence intervals.",
+        "guidance": "Repeat profile construction and similarity prediction multiple times (10 in main experiments; 5 in some TPMS sweeps). To compute 95% CIs for loss, sample participants with replacement 1,000 times and recompute losses on the bootstrapped reviewer pool. For computational savings, reuse constructed profiles when profile-construction randomness is negligible."
+      },
+      {
+        "name": "Paper inclusion criteria for the dataset / survey",
+        "description": "Survey participants should report 5\u201310 papers in their broad research area that they read reasonably recently; reported papers should not be authored by the participant and should be freely available online (preferably arXiv).",
+        "guidance": "Suggestions to participants: choose some pairs that are well-separated and some that are close in expertise; avoid ties in ratings; include less famous or tricky examples to diversify the dataset; aim for at least 5 papers and up to 10."
+      },
+      {
+        "name": "Expertise rating scale and meaning",
+        "description": "Collect reviewer self-assessed expertise on a granular scale (example: 1.0 to 5.0 with intermediate steps: 1.0 = not qualified; 2.0 = can review some aspects but not reliably; 3.0 = adequate but substantial part outside expertise; 4.0 = background in most aspects with minor gaps; 5.0 = background necessary to evaluate all aspects).",
+        "guidance": "Use the scale to create triplets and compute loss/accuracy metrics; avoid ties when possible to produce richer training/evaluation signals."
+      },
+      {
+        "name": "Remove non-freely-available items from evaluations",
+        "description": "Restrict evaluations to papers whose PDFs are freely available; remove papers that are not freely available online from the dataset.",
+        "guidance": "This ensures algorithms have access to the same information as human annotators and avoids missing data in representation-dependent methods."
+      },
+      {
+        "name": "Modeling choice trade-offs and reporting",
+        "description": "Explicitly state and evaluate modeling choices that conference organizers face: paper representation (title/abstract/full text) and reviewer profile size, since these choices affect accuracy and computational cost.",
+        "guidance": "Report experiments varying these parameters (e.g., profile length 1\u201320 and three content regimes) and summarize findings (e.g., abstracts yield large gains over titles; full text helps further; performance plateaus after ~8 profile papers). Consider computation vs accuracy trade-offs when recommending production settings."
+      },
+      {
+        "name": "Domain-transfer caution for pretrained algorithms",
+        "description": "Be cautious applying algorithms trained in one domain (e.g., ACL abstracts) to another domain (e.g., general ML) due to distribution shift.",
+        "guidance": "The ACL algorithm was trained on computational-linguistics abstracts and may suffer distribution shift when applied outside that domain; nevertheless, it can be used without additional fine-tuning but results should be interpreted accordingly."
+      },
+      {
+        "name": "Compare to trivial baseline to verify usefulness of content",
+        "description": "Include a Trivial baseline to check that algorithms meaningfully leverage paper content (e.g., trivial baseline has much higher loss).",
+        "guidance": "All considered non-trivial algorithms substantially outperform the Trivial baseline in these experiments, confirming content is useful for expertise evaluation."
+      },
+      {
+        "name": "Report and interpret confidence-interval overlap and dataset size limitations",
+        "description": "When confidence intervals for algorithm performance overlap, acknowledge that larger datasets are needed for finer-grained comparisons.",
+        "guidance": "Explicitly state limitations due to dataset size and sampling bias (e.g., uneven participant affiliations), and recommend continued data collection and replication with diverse methodologies."
+      }
+    ]
+  }
+}

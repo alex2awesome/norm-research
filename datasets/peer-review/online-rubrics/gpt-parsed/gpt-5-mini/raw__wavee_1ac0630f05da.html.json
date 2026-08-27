@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_1ac0630f05da.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 21105,
+  "output_tokens": 4712,
+  "elapsed_s": 1180.8786011249758,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on peer-review systems, conference program chairs, and anomaly-detection algorithm designers",
+    "subtask_short": "collusion detection from paper bids",
+    "subtask_description": "Detecting reviewer-author collusion rings in conference peer review using paper bidding and authorship data; empirically evaluating detection algorithms and measuring how successful colluders can be at manipulating assignments. Focuses on graph-based formulations, sweeping colluder size and bid-density, and evaluation on realistic bidding datasets.",
+    "subtask_keywords": [
+      "peer_review",
+      "collusion_detection",
+      "paper_bidding",
+      "conference_review",
+      "graph_anomaly_detection"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Detection scope: use only bidding and authorship data",
+        "description": "Consider collusion-detection methods that attempt to detect collusion using only the paper bidding and authorship data (i.e., the data that directly reflects the strategic bidding of colluders). Text-similarities T(r,p) are not used for detection in the analysis.",
+        "guidance": "This restriction matches many real-world investigations that begin with bidding data. The paper notes that leveraging additional metadata (e.g., reviewer-paper text-similarity scores or reviewer publication history) could improve detection but is outside the scope of the present experiments."
+      },
+      {
+        "name": "Avoid false positives / respect reputational harm",
+        "description": "Careful deployment of detection algorithms must avoid false positives: honest reviewers and authors being falsely identified as colluders.",
+        "guidance": "False positives are a serious danger in scientific peer review; thus, a detection method must show that its outputs are unlikely to match density/size patterns found among honest reviewers. The analysis therefore characterizes the space of honest-reviewer groups to understand potential false-positive rates."
+      },
+      {
+        "name": "Unipartite (reviewer-to-reviewer) graph representation",
+        "description": "Represent bids as a unipartite, directed graph where each vertex corresponds to a reviewer and the graph contains a directed edge (r1, r2) iff reviewer r1 bid on at least one paper authored by reviewer r2.",
+        "guidance": "This representation naturally captures reciprocal behavior expected of a collusion ring. It is used to define edge density among reviewer groups and to detect dense reviewer-to-reviewer subgraphs (rings)."
+      },
+      {
+        "name": "Bipartite (reviewer-paper) graph representation",
+        "description": "Represent bids as a bipartite graph with vertices for reviewers and papers and edges for positive bids between reviewers and papers.",
+        "guidance": "This alternative formulation captures direct reviewer-paper bidding density and is analyzed separately (G2). Different notions of density arise from the bipartite formulation and may affect detectability."
+      },
+      {
+        "name": "Edge density (unipartite) as detection dimension",
+        "description": "For a subset S of reviewers, define the edge density \u03b3_S as the fraction of possible directed reviewer-to-reviewer edges present within S.",
+        "guidance": "Density (\u03b3) together with group size (k) parameterize potential collusion behavior. Detection aims to identify groups with unusually large (k, \u03b3) relative to honest reviewer groups."
+      },
+      {
+        "name": "Bid density (bipartite) as detection dimension",
+        "description": "For the bipartite graph formulation, quantify the density of bids between reviewers in a group and the papers they authored (a bipartite analogue of edge density).",
+        "guidance": "Because the bipartite graph includes reviewer-paper edges directly, the notion of density used for detection and for measuring colluder behavior is adapted accordingly (and analyzed in Section 5)."
+      },
+      {
+        "name": "Sweep colluder size and density (k, \u03b3)",
+        "description": "Evaluate detectability across a wide range of parameterized colluding groups by varying the group size k and a density parameter \u03b3 (attack strength).",
+        "guidance": "Denser bidding corresponds to a stronger attack but may be easier to detect; experiments systematically sweep (k, \u03b3) to map detectability frontiers."
+      },
+      {
+        "name": "Characterize honest-reviewer groups (Q1)",
+        "description": "For each (k, \u03b3), count or heuristically find groups of honest reviewers of size k with edge (or bid) density at least \u03b3 to identify the region where honest groups already exist.",
+        "guidance": "If honest-reviewer groups exist at some (k, \u03b3), a colluding group with the same parameters cannot be identified as suspicious with high confidence based on bidding alone. The paper uses exact backtracking search where feasible and greedy peeling heuristics for larger k; some exact counts are infeasible and lower-bounded."
+      },
+      {
+        "name": "Do not require algorithm to know colluder group size",
+        "description": "Detection algorithms should not require explicitly specifying the size of the output subset.",
+        "guidance": "Program chairs typically have no evidence about colluder group size; algorithms must implicitly balance size and density when scoring candidate groups."
+      },
+      {
+        "name": "Consider multiple notions of subgraph density",
+        "description": "Algorithms should be based on different notions of subgraph density that implicitly balance size and edge density in different ways.",
+        "guidance": "Testing multiple density notions increases the chance of finding an algorithm that detects colluders across diverse behaviors; the paper evaluates several representative approaches."
+      },
+      {
+        "name": "Evaluation metric: Jaccard similarity between detected set and ground truth",
+        "description": "Measure detection performance as the Jaccard similarity between the true set of colluders M and the algorithm output set (mean and standard error across trials).",
+        "guidance": "Higher Jaccard indicates better overlap. The paper reports that even in strong attacks (10 colluders bidding on all colluders' papers), the best algorithm had only ~31% average Jaccard overlap."
+      },
+      {
+        "name": "Evaluation metric: colluder-to-colluder assignment success",
+        "description": "Measure how successful colluders are at achieving assignment to papers authored by other colluders (e.g., fraction of colluder-authored papers assigned to at least one colluder reviewer, or fraction of those papers assigned to colluders overall).",
+        "guidance": "Quantifies practical impact of collusion even when undetected; reported examples include undetected colluders achieving assignment to up to 30% (AAMAS) and 24% (S2ORC) of colluder-authored papers."
+      },
+      {
+        "name": "Evaluation metric: fraction of colluders getting \u22651 colluder review",
+        "description": "Measure the proportion of colluders who obtain at least one of their papers reviewed by another colluder while avoiding detection.",
+        "guidance": "Reported rates include 54% and 35% in the two datasets; this measures how many colluders can obtain direct reciprocal reviewing even when detection algorithms fail."
+      },
+      {
+        "name": "Collusion injection model (simulation of attacks)",
+        "description": "Simulate colluding groups by selecting k reviewers and modifying their bids (adding/removing elements of M\u00d7P to/from B) to reach a target density \u03b3; the strongest attack adds bids between all reviewers in M and all papers authored by other reviewers in M and removes other bids by colluders.",
+        "guidance": "Because real colluder behavior is unknown, experiments sweep these parameters and inject edges uniformly at random until the required density is reached, repeating trials to estimate mean performance."
+      },
+      {
+        "name": "Densest-Subgraph Discovery (DSD) objective",
+        "description": "Output subset S that maximizes f(S) = |E1[S]| / |S| (subgraph with highest average degree).",
+        "guidance": "Implemented via the LP-based exact algorithm from Charikar (2000). This is a standard dense-subgraph objective generalized to the directed reviewer graph by counting edges in both directions."
+      },
+      {
+        "name": "Optimal Quasi-Clique (OQC) / edge-surplus objective",
+        "description": "For parameter \u03b1\u2208[0,1], output subset S that maximizes f(S) = |E1[S]| \u2212 2\u03b1 * (function of |S|).",
+        "guidance": "This 'edge surplus' objective rewards edges exceeding an \u03b1-random baseline. The paper implements OQC-Greedy and OQC-Local (following Tsourakakis et al., 2013) and sets \u03b1 = 1/3 as recommended."
+      },
+      {
+        "name": "TellTail anomaly-score objective",
+        "description": "Score subsets by 'adjusted mass' = |E[S]| \u2212 expected number of edges if edges are rewired randomly (preserving degrees), then fit a Generalized Pareto distribution to compute a significance score.",
+        "guidance": "TellTail is data-driven and accounts for background sparsity; since it operates on undirected graphs, the directed bidding graph is converted to an undirected graph of mutual edges before applying TellTail."
+      },
+      {
+        "name": "Assignment model to quantify impact of bids",
+        "description": "Compute reviewer-paper similarity scores S(r,p) (in experiments S includes bid influence) and compute a paper assignment maximizing total similarity subject to constraints: each paper assigned to exactly 3 reviewers, each reviewer assigned at most 6 papers, and no reviewer-paper conflict pairs assigned.",
+        "guidance": "Assignment computed via min-cost flow or LP. This model measures how bidding manipulation translates into actual reviewer assignments and thus potential review-manipulation impact."
+      },
+      {
+        "name": "Bid model and notation",
+        "description": "Simplified binary bidding model: bids are positive or neutral; the bid set B \u2282 R\u00d7P contains pairs where reviewers bid positively; conflicts C include authorships A and B\u2229C = \u2205.",
+        "guidance": "Binary bids simplify analysis; allowing multiple levels would only give colluders more flexibility. The paper reconstructs or synthetically generates bids/similarities for datasets as needed."
+      },
+      {
+        "name": "Text-similarity score use and validation",
+        "description": "While text-similarities T(r,p) are not used for detection, they are used in computing assignment similarity S(r,p) in experiments. AAMAS uses synthetically generated T validated against Stelmakh et al.; S2ORC includes TPMS-computed T.",
+        "guidance": "Realistic T helps simulate realistic assignments; the paper adjusts distributions to match empirical statistics (e.g., percent of triples where T ranks expertise correctly)."
+      },
+      {
+        "name": "Heuristic and exact search for honest-group enumeration",
+        "description": "Use exact backtracking search to count honest-reviewer groups for small k where feasible; use greedy peeling heuristic to find dense groups for larger k where exact enumeration is infeasible.",
+        "guidance": "Exact counts are worst-case exponential in k and some cells timed out (\u226524 hours) producing lower bounds; greedy peeling produces a frontier of (k,\u03b3) where at least one honest group exists."
+      },
+      {
+        "name": "Evaluation framework: three research questions (Q1-Q3)",
+        "description": "Q1: For what values of size and density do honest groups already exist? Q2: For what values can injected colluders be accurately detected by existing algorithms? Q3: At each size/density, how successful are colluders at achieving their desired paper assignments?",
+        "guidance": "This tripartite framework structures the empirical analysis and ensures both detection performance and practical impact are measured relative to honest baselines."
+      }
+    ]
+  }
+}

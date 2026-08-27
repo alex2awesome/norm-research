@@ -1,0 +1,121 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/consensus_scientific_review_arxiv.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "consensus_scientific_review_arxiv.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39995,
+  "model": "gpt-5-mini",
+  "elapsed_s": 63.64099524999983,
+  "input_tokens": 11705,
+  "output_tokens": 4285,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, meta-researchers, and journal editors studying peer review processes (particularly in neuroscience and scientometrics)",
+    "subtask_short": "peer review of manuscripts",
+    "subtask_description": "Analysis and measurement of peer review decisions for neuroscience manuscripts submitted to PLOS ONE (2011\u20132012), with emphasis on co-authorship connections, inter-rater disagreement, measurement choices, and regression-based inference about bias.",
+    "subtask_keywords": [
+      "peer_review",
+      "plos_one",
+      "neuroscience",
+      "coauthorship_network",
+      "inter_rater_reliability",
+      "meta_research"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "PLOS ONE publication criterion: scientific validity only",
+        "description": "PLOS ONE\u2019s evaluation is validity-focused: the journal operates \u201cwithout any subjective selection criteria of their published output beyond scientific validity.\u201d It welcomes submissions conventional publishers may reject because they are not novel or significant enough, including negative results and replications.",
+        "guidance": "Any submission meeting PLOS ONE's standards of scientific validity can be published; the journal is published entirely online (no space limits) and accepts a large fraction of submissions (\u224870% in the studied period). This design is intended to prioritize scientific validity and reduce incentives for nepotistic reviewing."
+      },
+      {
+        "name": "Reviewer recommendation categories",
+        "description": "Reviewers were instructed to provide a written report and assign the manuscript one of four recommendations: \u201cAccept,\u201d \u201cMinor revision,\u201d \u201cMajor revision,\u201d and \u201cReject.\u201d",
+        "guidance": "For analysis recommendations were recoded numerically to 4.0 (Accept), 3.0 (Minor revision), 2.0 (Major revision), and 1.0 (Reject). These categorical choices are the canonical decision scale used in modeling and IRR computations."
+      },
+      {
+        "name": "Single-blind review policy (observed feature)",
+        "description": "PLOS ONE\u2019s review process is single-blind: reviewers observe the identities and affiliations of the authors.",
+        "guidance": "Comparative studies of single- versus double-blind review show inconsistent results; it is unclear to what extent single-blind status affects reviewer bias in this dataset. The paper treats single-blind as a contextual feature rather than a controlled intervention."
+      },
+      {
+        "name": "Inter-rater reliability metric: Krippendorff\u2019s alpha",
+        "description": "Krippendorff\u2019s alpha was used as the index of inter-rater reliability because it allows for ordinal ratings, a variable number of reviewers per manuscript, and measures agreement above the level expected from random decisions.",
+        "guidance": "Alpha interpretation: 1.00 denotes perfect agreement; 0.00 denotes no statistical relation between manuscript and ratings (the worst-case of 'coders do not understand... or examine unequal units of analysis'). The rating scale is treated as ordinal so adjacent-category disagreements are penalized less than distant ones."
+      },
+      {
+        "name": "Ordinal treatment of rating scale",
+        "description": "The rating scale is treated as ordinal, which penalizes disagreements on adjacent rating categories less than distant ones.",
+        "guidance": "Example: two reviewers who assess a manuscript as \u201cAccept\u201d and \u201cMinor revisions\u201d are assumed to have less disagreement than if they evaluated it as \u201cAccept\u201d and \u201cReject.\u201d This ordinal treatment underlies the use of Krippendorff\u2019s alpha and weighted Kappa."
+      },
+      {
+        "name": "Aggregation of multiple reviewer\u2013author co-authorship distances: minimum distance",
+        "description": "To aggregate multiple co-authorship distances between a reviewer and the several authors of a manuscript, the study takes the minimum distance (closest co-authorship between a reviewer and any of a manuscript\u2019s authors).",
+        "guidance": "Rationale: lab-based research is common in neuroscience and a reviewer may have a close tie to the principal investigator even if distant from junior co-authors; minimum distance best captures the reviewer\u2013manuscript connection (e.g., PI personifies lab output). Alternative aggregations (mean, max, mode) were considered less appropriate for this context."
+      },
+      {
+        "name": "Recoding of long co-authorship distances to '3+'",
+        "description": "Because Scopus-based network construction was partial and distances of length 4 or higher are likely artificially high, ties measured as length 4 or greater are relabeled as '3+' and distances >3 are recoded as 3.0.",
+        "guidance": "Interpret measured distances carefully: ties of length 1\u20133 are reliable given the data; 3+ reflects uncertainty about true path lengths in the complete network."
+      },
+      {
+        "name": "Use of Scopus h-index and network degree as prominence/seniority controls",
+        "description": "The reviewer\u2019s (and authors\u2019) Hirsch index (h-index) and number of co-authorship network connections were used as measures of prominence or seniority in regression specifications.",
+        "guidance": "Scopus does not capture all scientific output (e.g., conference proceedings), so h-index is used for relative comparisons only. Because prominence correlates with network distance, including these controls helps isolate the independent effect of co-authorship distance."
+      },
+      {
+        "name": "Construction of co-authorship network: 'one step out' seed-based approach",
+        "description": "The co-authorship network was constructed by querying lifetime co-authors of each reviewer, author, and editor and combining ties; the resulting network is a 'one step out' network starting from PLOS individuals (seed nodes) and does not measure connectivity of second-order nodes fully.",
+        "guidance": "Resulting network includes ~1.82M individuals and ~4.19M ties. Because of query limits and the one-step construction, the measured network is sparser than reality; this leads to censoring and measurement error, especially for distances >3."
+      },
+      {
+        "name": "Scopus query censoring limitation (max co-authors returned)",
+        "description": "The Scopus query used to identify lifetime co-authors was capable of returning at most 179 co-authors per individual.",
+        "guidance": "This censoring affects degree counts and network completeness; its consequences are discussed in Supplementary Materials A and should be considered when interpreting network-derived measures."
+      },
+      {
+        "name": "Privacy protection: addition of noise to reviewer decisions",
+        "description": "Source data were encrypted and noise was added to reviewer decisions to enhance privacy\u20143% of decisions were randomly flipped.",
+        "guidance": "Analyses were performed after de-identification and noise addition; this introduces a small known perturbation in outcomes which must be acknowledged when interpreting precise effect sizes."
+      },
+      {
+        "name": "Within-manuscript comparison to test co-authorship effects",
+        "description": "To explore whether reviewer distance correlates with unobserved manuscript characteristics, the study compares decisions from reviewers who assessed the same manuscript (within-manuscript comparisons).",
+        "guidance": "Within-manuscript contrasts help control for manuscript quality and assignment biases and provide evidence that closer reviewers tend to give more favorable scores even when evaluating the same manuscript."
+      },
+      {
+        "name": "Use of manuscript fixed effects in regression models",
+        "description": "Regression specifications include manuscript fixed effects to control for unobserved manuscript and author characteristics and to isolate the effect of co-authorship distance.",
+        "guidance": "Fixed-effects models substantially reduce estimated co-authorship effects relative to pooled models, indicating some confounding of co-authorship distance with manuscript characteristics or assignment practices."
+      },
+      {
+        "name": "Modeling decisions: OLS on recoded scores and logistic regression for rejection",
+        "description": "Primary regression analysis uses OLS with the numeric review score (1.0=Reject to 4.0=Accept) as the dependent variable; rejection probability is modeled via logistic regression with Reject coded as 1.0 and otherwise 0.0.",
+        "guidance": "Controls include reviewer h-index and number of co-authorship ties; some models pool rounds while others focus on first-round reviews to better meet independence assumptions."
+      },
+      {
+        "name": "Reporting alternative agreement metrics for comparability (ICC and Cohen\u2019s weighted Kappa)",
+        "description": "In addition to Krippendorff\u2019s alpha, the study reports intra-class correlations (ICC) and Cohen\u2019s weighted Kappa for comparability with other studies.",
+        "guidance": "ICC and Kappa require an equal number of reviewers per paper; to compute these metrics the authors included only the first two reviewers. Weighted Kappa was computed with squared weighting to penalize distant mismatches more than proximate ones."
+      },
+      {
+        "name": "Analyze review rounds separately due to dependence and functional differences",
+        "description": "Disagreement between reviewers was measured separately in each round because (1) PLOS ONE reviewers observe each other\u2019s decisions after the first round, violating independence for later rounds, and (2) later rounds may focus on assessing compliance with requested revisions rather than original evaluation.",
+        "guidance": "Inter-rater reliability and other statistics are therefore reported by round; first-round analyses are preferred for models relying on independence of observations."
+      },
+      {
+        "name": "Interpreting Krippendorff\u2019s alpha worst-case and ordinal penalty",
+        "description": "An alpha of 0.00 denotes no statistical relation between manuscript and ratings\u2014a scenario akin to 'coders... throw[ing] dice' or examining unequal units\u2014while 1.00 denotes perfect agreement.",
+        "guidance": "Alpha is computed treating the rating scale as ordinal, so disagreements on adjacent categories are down-weighted compared to disagreements across distant categories; this affects interpretation of observed low alpha values (~0.193 in first round)."
+      },
+      {
+        "name": "Use of author-suggested reviewer nominations as a proxy for affinity",
+        "description": "The overlap between author-nominated reviewers and measured co-authorship distance was examined; closer co-authorship distance is meaningfully associated with being nominated (\u03c1 = -0.27) and more than 50% of the closest reviewers were nominated by the author(s).",
+        "guidance": "This provides evidence that observable co-authorship ties serve as a practical proxy for unobserved personal or intellectual affinity between reviewers and authors."
+      }
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/polishing_pr_arxiv_html.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "polishing_pr_arxiv_html.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39400,
+  "model": "gpt-5-mini",
+  "elapsed_s": 41.855202915998234,
+  "input_tokens": 13554,
+  "output_tokens": 4455,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI/NLP researchers, conference organizers, and peer-review policy makers interested in detecting and evaluating LLM use in peer reviews",
+    "subtask_short": "detecting AI use in peer reviews",
+    "subtask_description": "Methods, evaluation criteria, and empirical findings for detecting AI-generated, AI-assisted (polished), and human-written scientific peer reviews; includes detector design, similarity metrics, supervised classifiers, and evaluation protocols.",
+    "subtask_keywords": [
+      "peer_review",
+      "ai_detection",
+      "nlp",
+      "evaluation_metrics",
+      "conference_policies"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Conditioning likelihood on the paper contents",
+        "description": "Augment zero-shot detectors by computing the probability of the candidate review conditioned on the manuscript (use Abstract, Introduction and Conclusion as context).",
+        "guidance": "Zero-shot detectors (LogLikelihood, Fast-DetectGPT, Binoculars) can be augmented with paper context by conditioning scoring on selected paper sections when full paper doesn't fit in model context window. Incorporating paper context yields statistically significant improvements for some detectors (LogLikelihood and Fast-DetectGPT) but true positive rates remain below ~80% on the hard subset and false positives increase on H-AI reviews; thus gains are measurable but insufficient for reliable enforcement."
+      },
+      {
+        "name": "Similarity with AI-generated reference reviews",
+        "description": "Generate multiple AI-produced reference reviews by prompting LLMs with the manuscript and measure similarity between the candidate review and these references as an indicator of AI involvement.",
+        "guidance": "Previously shown to outperform zero-shot detectors for fully AI-generated reviews but distributions overlap substantially; individual-review predictions based on similarity to AI references are unreliable. Implementation in this work used 3 models \u00d7 3 prompts \u00d7 5 rollouts = 45 references. Similarity-based classifier trained on these features produced non-trivial misclassification of AI-polished (H-AI) reviews and non-zero false positives on fully human (H) reviews."
+      },
+      {
+        "name": "Cosine similarity between pretrained embeddings",
+        "description": "Measure cosine similarity between pretrained embedding vectors of the candidate review and each AI-generated reference review as a similarity metric.",
+        "guidance": "Used as a baseline similarity metric; showed monotonic shifts in similarity distributions across levels of AI-assistance but with substantial overlap that prevents reliable per-review classification. Pretrained embeddings may not capture differences in reasoning, style, and argumentation distinguishing humans from LLMs."
+      },
+      {
+        "name": "Soft n-gram matching",
+        "description": "Decompose candidate and reference reviews into n-grams and compute the fraction of n-gram units in the candidate that have a close match in any reference (close match = cosine similarity > \u03c4).",
+        "guidance": "Chosen n=40 for a balance between capturing meaningful semantic info and avoiding overly coarse topical embeddings. Final similarity is fraction of semantic units with a close match across any references. Found to produce similar limitations as other similarity metrics for per-review classification."
+      },
+      {
+        "name": "Soft keypoint matching",
+        "description": "Extract key ideas (keypoints) from texts and measure the fraction of keypoints in the candidate review that have a close match in any AI-generated reference.",
+        "guidance": "Key ideas were extracted using GPT-5-mini with a prompt to extract important points. Close match criterion uses embedding cosine similarity > \u03c4. Intended as a more granular measure than n-grams but still suffered from overlapping similarity distributions across AI/Human classes."
+      },
+      {
+        "name": "Matching-based similarity thresholding (close match definition)",
+        "description": "Define a 'close match' between two semantic units if the cosine similarity between their vector embeddings exceeds a predefined threshold \u03c4; similarity score is fraction of units in candidate with such matches.",
+        "guidance": "This threshold \u03c4 is a tunable parameter in Soft n-gram and Soft keypoint matching; selection of \u03c4 affects sensitivity and false positive rates. Implementation details and thresholding choices are important for reproducibility."
+      },
+      {
+        "name": "Classifier on similarity-to-references features (XGBoost five-class -> binary mapping)",
+        "description": "Train a classifier (e.g., five-class XGBoost) using similarity scores to all references (sorted to ensure permutation invariance); map predictions of AI-BP, AI-EP, AI-HI to 'positive' (AI-generated) and others accordingly for computing TPR/FPR.",
+        "guidance": "Using similarity scores to 45 references as a feature vector produces high error rates across categories; sorting the features ensures invariance to reference ordering. At inference, mapping multi-class outputs to a binary violation label changes definitions of true/false positives and must be explicitly reported."
+      },
+      {
+        "name": "Stylometric feature-based supervised classifier",
+        "description": "Use a curated set of stylometric and linguistic features (38 features listed in Appendix B.3) capturing lexical diversity, POS tag distributions, readability, and other statistics to train supervised detectors.",
+        "guidance": "Features include type-token ratio, bigram/trigram uniqueness, verb percentage, abstract noun percentage, average syllables per word, Flesch reading ease, etc. Stylometric classifiers can achieve high in-distribution performance (e.g., ~95.6% detection of AI-HI) but show model-dependent failures and non-trivial false positives on H-AI when evaluated on held-out models."
+      },
+      {
+        "name": "Transformer-based supervised classifier (RoBERTa fine-tuning)",
+        "description": "Fully fine-tune a pretrained transformer (RoBERTa) with a multi-label (5-label) classification head on overlapping text segments and aggregate segment-level predictions by majority voting.",
+        "guidance": "Training on fixed-length overlapping segments, then majority-voting segment-level outputs yields strong in-distribution performance (near 100% TPR and low FPR in optimistic settings). However, generalization to reviews generated by held-out models can degrade unpredictably; false positive rates on H-AI can rise for some held-out models."
+      },
+      {
+        "name": "Segment-level majority voting",
+        "description": "Obtain final prediction for a review by majority voting over classifier predictions on overlapping fixed-length segments of the review text.",
+        "guidance": "This aggregation strategy was used for the RoBERTa classifier to combine segment-level outputs into a whole-review prediction. Design decisions include segment length, overlap amount, and voting ties handling; these affect sensitivity to localized AI edits vs global patterns."
+      },
+      {
+        "name": "Label mapping for evaluation (treat AI-BP/AI-EP/AI-HI as positive)",
+        "description": "For evaluation, consider reviews labeled AI-BP, AI-EP, and AI-HI as 'positive' (AI-generated); adjust definitions of true positive rate (TPR) and false positive rate (FPR) accordingly (e.g., AI-EP predicted as 'AI' is true positive; H-AI predicted as 'AI' is false positive).",
+        "guidance": "Explicit mapping of multi-class labels to binary decisions is critical to interpreting TPR/FPR reported in tables. Authors treat mixed/highly-assisted classes as positive for policy enforcement purposes."
+      },
+      {
+        "name": "In-distribution vs held-out model evaluation",
+        "description": "Evaluate detectors both in an optimistic in-distribution setting (train/test splits from same distribution) and in a held-out-model setting where reviews from one model are excluded from training to simulate deployment on unfamiliar models.",
+        "guidance": "In-distribution results may be overly optimistic; held-out-model experiments reveal unpredictable generalization failures where detectors either miss AI-generated reviews or incur high false positives on H-AI. Conference organizers cannot know which models reviewers will use; therefore held-out evaluation is crucial for deployment realism."
+      },
+      {
+        "name": "Humanization (adversarial paraphrasing) robustness testing",
+        "description": "Assess detector performance after applying humanization/paraphrasing tools to AI-generated or AI-polished reviews to study adversarial robustness.",
+        "guidance": "Humanization markedly impairs many detectors; some detectors (FastDetect, Binoculars, LogLikelihood) classify all humanized reviews as human, while Pangram and GPTZero have mixed behaviors. Humanization can increase false positives on H-AI reviews for some detectors (notably GPTZero), affecting the enforceability of Polishing-only vs No-LLM-use policies."
+      },
+      {
+        "name": "Policy mapping and detector label interpretation implications",
+        "description": "Interpret detector output categories ('AI', 'Mixed', 'Human') in light of conference policies (e.g., No-LLM-use vs Polishing-only) to determine enforceability.",
+        "guidance": "Example: Pangram classifies many humanized AI-BP reviews as 'AI' or 'Mixed', and under a No-LLM-use policy 'Mixed' is unacceptable \u2014 Pangram would flag ~92.8% of humanized violations. GPTZero classifies many humanized AI-BP as 'AI' but none as 'Mixed', making it less useful under No-LLM-use; high H-AI FPR renders it unsuitable for enforcing Polishing-only policies. Thus how detectors map to policy categories matters for practical enforcement."
+      },
+      {
+        "name": "Use of McNemar's test for paired classifier significance",
+        "description": "Compare context-aware vs context-agnostic detector variants (or paired classifiers) using McNemar's test: continuity-corrected Edwards version if (b+c) \u2265 25, exact McNemar (binomial) if (b+c) < 25.",
+        "guidance": "Compute b = instances misclassified by method1 but corrected by method2, c = instances corrected by method1 but misclassified by method2. For large discordant pairs use chi-squared continuity-corrected statistic; for small counts use exact binomial two-sided p-value. All statistics were computed with statsmodels."
+      },
+      {
+        "name": "Inter-annotator agreement measurement with Cohen's \u03ba",
+        "description": "Measure agreement between annotators (and between Gemini judge and annotators) using Cohen's kappa and interpret using Landis & Koch categories (e.g., 0.61\u20130.80 = Substantial).",
+        "guidance": "Authors sampled 50 review pairs (25 labeled 'yes' and 25 'no' by the LLM judge) and obtained \u03ba values showing substantial agreement; Gemini judge achieved 88% accuracy vs gold standard. Use consensus discussion to resolve human-human disagreements when building gold labels."
+      },
+      {
+        "name": "Pairwise human vs LLM-polished judgement protocol",
+        "description": "To judge whether LLM-polished Review B introduces new technical information relative to human Review A, pair source and polished reviews, ignore summary expansions, and focus on sections requiring substantive human judgement.",
+        "guidance": "Use a judge (e.g., Gemini) to answer whether Review B introduces new technical information; validate judge reliability via human annotators and compute inter-annotator agreement; construct gold standard by consensus when annotators disagree. This protocol assesses whether polishing adds substantive content vs harmless rewrites."
+      },
+      {
+        "name": "Choice of semantic unit size for n-gram matching (n=40)",
+        "description": "Select n (semantic unit length) for Soft n-gram matching; authors used n = 40 to capture meaningful semantic information without being too coarse.",
+        "guidance": "n should be large enough to capture semantic content (vs topical signals) but small enough that embeddings still reflect units finer than whole-document topics. The choice of n affects sensitivity to copying vs paraphrase and should be reported."
+      },
+      {
+        "name": "Embedding model selection for similarity metrics",
+        "description": "Choice of pretrained embedding model affects similarity measures; the paper experiments with Linq-Embed-Mistral (4096-dim) among others.",
+        "guidance": "Embedding choice influences what semantic distinctions are captured; authors speculate that pretrained embeddings may inadequately capture reasoning/style differences between human and AI, contributing to unreliability of similarity-based detection."
+      },
+      {
+        "name": "Off-the-shelf detector mechanism documentation",
+        "description": "Describe mechanisms and usage details of baseline detectors used for benchmarking (LogLikelihood, Binoculars, Fast-DetectGPT, GPTZero, Pangram).",
+        "guidance": "Document which model(s) were used for scoring/sampling (e.g., LogLikelihood uses LLaMA-3-8B for scoring; Binoculars uses Falcon-7B observer and Falcon-7B-Instruct performer; FastDetect uses Falcon-7B scoring and Falcon-7B-Instruct sampling; GPTZero and Pangram are proprietary with described behavior/label sets). Such documentation is necessary to reproduce and interpret benchmark results."
+      },
+      {
+        "name": "Reporting per-category TPR and FPR across assistance levels",
+        "description": "Report true positive rate (TPR) and false positive rate (FPR) separately for assistance levels (AI-BP, AI-EP, AI-HI, H-AI, H) to show detector behavior across a spectrum of AI involvement.",
+        "guidance": "Tables 3\u20136 and 4\u20135 in the paper present per-class TPR/FPR. Reporting fine-grained per-assistance-level metrics reveals where detectors fail (e.g., high misclassification of AI-polished reviews, non-zero FPR on H). Use such stratified reporting rather than aggregated metrics to inform policy decisions."
+      }
+    ]
+  }
+}

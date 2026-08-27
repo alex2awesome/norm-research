@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_a3db1532c225.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 14051,
+  "output_tokens": 4965,
+  "elapsed_s": 1236.9253629578743,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference organizers working on peer-review assignment, malicious-bidding detection, and conference program chairs (computer-science researchers in peer review/assignment algorithms)",
+    "subtask_short": "malicious_bid_detection_in_peer_review",
+    "subtask_description": "Designing, evaluating, and defending against malicious reviewer bidding in conference peer review: includes dataset collection (honest vs malicious bids), strategy taxonomy, assignment/similarity modelling, manipulation-success metrics, and baseline detection algorithms. Useful for researchers developing detection or robust assignment algorithms and for program chairs.",
+    "subtask_keywords": [
+      "peer_review",
+      "paper_bidding",
+      "malicious_bidding",
+      "dataset",
+      "detection_algorithms",
+      "conference_assignment"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Paper assignment optimization constraints and objective",
+        "description": "Assignment is computed by solving an optimization problem that maximizes total similarity between reviewers and papers, subject to constraints that each paper is assigned the desired number of reviewers, each reviewer is assigned to (at most) the desired number of papers, and no reviewer is assigned to a paper with which they have declared a conflict of interest.",
+        "guidance": "This is the standard method in modern conferences; used after computing pairwise similarities. References and standard solvers [6,8\u201311,31,32] cited. In experiments each paper assigned 3 reviewers and each reviewer assigned to 3 papers."
+      },
+      {
+        "name": "Similarity computation Sr,p (modeling bids and subject-area match)",
+        "description": "Compute a subject-area score Ar,p (1 if paper subject area matches one of reviewer\u2019s, 0.5 if high-level topic matches, else 0). Bid values Br,p \u2208 {\u22121,0,1} correspond to negative, neutral, and positive bids. Final similarities are computed as Sr,p = (1 + Ar,p)2Br,p (modeled off the NeurIPS 2016 similarity formula).",
+        "guidance": "This formula integrates both expertise (Ar,p) and bids (Br,p) to produce similarities used by the assignment optimizer. The paper uses this concrete instantiation for all empirical evaluations."
+      },
+      {
+        "name": "Bid value mapping and missing-bid handling",
+        "description": "Bids are from options \u201cNot willing to review\u201d, \u201cIndifferent\u201d, and \u201cEager to review\u201d, interpreted as negative, neutral, and positive respectively. A missing bid on a paper is interpreted as an \u201cIndifferent\u201d (neutral) bid.",
+        "guidance": "In the dataset Br,p is encoded as \u22121, 0, or 1; preprocessing treats missing entries as neutral."
+      },
+      {
+        "name": "Honest reviewer bidding instruction (data-production constraint)",
+        "description": "When acting as an honest reviewer, participants were instructed to bid on papers according to their own personal interests, as if they were actually going to review the assigned papers.",
+        "guidance": "Participants were reminded of reviewer load constraints (each paper assigned 3 reviewers; each reviewer assigned at most 3 papers) and told to bid accordingly (many honest reviewers bid positively on multiple papers). This is the baseline behavior to collect 'honest' labels."
+      },
+      {
+        "name": "Malicious reviewer instruction / adversary model (data-production constraint)",
+        "description": "Participants acting as malicious reviewers were instructed to coordinate (with given colluding groups or target papers) and bid so as to be assigned to each other's papers (or to their target paper), with allowance to communicate by any method.",
+        "guidance": "Participants were explicitly warned program chairs may investigate suspicious bidding (e.g., bidding positively only on a single paper) and manually modify assignments; the activity therefore models an adversary aware of partial detection measures."
+      },
+      {
+        "name": "Definition of manipulation success",
+        "description": "A 'successful manipulation' is defined as when a malicious reviewer is assigned to at least one of their target papers.",
+        "guidance": "This definition is chosen because it is robust to within-group coordination differences and to non-participation by some colluders; success rates are averaged across trials to compare strategies."
+      },
+      {
+        "name": "Counting Detection (baseline detection metric/algorithm)",
+        "description": "Compute a score for each reviewer equal to (number of negative bids) \u2212 (number of positive bids). Output a ranking of reviewers by this score (higher score = more suspicious).",
+        "guidance": "Simple baseline shown to detect strategies that use many negative bids (e.g., Negative-in-area). Preprocessing: bids on reviewer\u2019s own paper are discarded before applying detection."
+      },
+      {
+        "name": "Ring Detection / Pairwise detection (baseline algorithm)",
+        "description": "Construct a ranking of reviewer pairs: pairs where both reviewers bid positively on each other\u2019s papers ranked highest, then pairs with exactly one positive, then neither. Within each category, rank pairs by the sum over the two reviewers of (#negative bids \u2212 #positive bids) excluding bids on the paired reviewer\u2019s paper. Output a reviewer ranking by each reviewer\u2019s best-pair position.",
+        "guidance": "Designed to find colluding rings/pairs. Sensitive to precise bid patterns (e.g., neutral bids on some target papers can defeat it); small dataset size makes false positives likely if honest pairs also bid positively by chance."
+      },
+      {
+        "name": "Low-Rank Detection (baseline anomaly detector)",
+        "description": "Assume the honest-bid matrix B is approximately low-rank. Compute a low-rank approximation L to B (paper uses a rank-3 approximation heuristically). Score each reviewer r by sum over papers p of |Br,p \u2212 Lr,p|. Rank reviewers by this score (higher = more anomalous).",
+        "guidance": "Intuition: anomalous bids deviate from a low-dimensional structure. In experiments this method performed poorly on original dataset but was evaluated as a baseline."
+      },
+      {
+        "name": "Preprocessing: discard bids on one's own paper for detection",
+        "description": "Before running detection algorithms, bids made by each reviewer on their own paper are discarded.",
+        "guidance": "This prevents trivial signals from authorship influencing detection and mirrors standard practice of ignoring self-bids."
+      },
+      {
+        "name": "Detection performance metric: ranking and normalized rank",
+        "description": "Detection algorithms output a ranking of all reviewers. Performance is measured by the average rank of malicious reviewers (rank 0 = most suspicious; rank N\u22121 = least suspicious). For large-scale experiments ranks are normalized to [0,1] (0 most suspicious, 1 least suspicious).",
+        "guidance": "Plots show average rank and standard error; lower average rank indicates better detection. Counting Detection averaged around 25th percentile in original data."
+      },
+      {
+        "name": "Evaluation trial construction protocol",
+        "description": "Each evaluation trial considers one malicious group. Construct a full set of reviewers by taking the malicious group and adding honest reviewers sampled at random until the total number of reviewers equals the number of papers. Run multiple (100) trials per group and aggregate results.",
+        "guidance": "This protocol models variable honest populations and reduces dependence on any particular honest-sample realization; used for both manipulation-success and detection evaluations."
+      },
+      {
+        "name": "Malicious strategy taxonomy (Basic)",
+        "description": "Basic: On target papers, bid mostly positively and sometimes neutral. On non-target papers within reviewer\u2019s subject area, bid mostly neutral with a few positive bids.",
+        "guidance": "This was the most common strategy; simple and highly successful in experiments."
+      },
+      {
+        "name": "Malicious strategy taxonomy (Negative-in-area)",
+        "description": "Negative-in-area: Like Basic, but bid mostly negatively on non-target papers within the reviewer\u2019s subject area (still with a few positive bids).",
+        "guidance": "This strategy produces many negative bids and is particularly well-detected by Counting Detection."
+      },
+      {
+        "name": "Malicious strategy taxonomy (Overlap)",
+        "description": "Overlap: Like Basic, but coordinate bids on non-target papers with other group members so that all group members bid positively on the same set of non-target, in-area papers (aiming to 'overload' those papers so not all group members can be assigned to them).",
+        "guidance": "Intended to force assignment conflicts among group members; performed poorly in original small dataset (likely due to weak implementation by participants) but can be modeled in synthetic scaling."
+      },
+      {
+        "name": "Malicious strategy taxonomy (Cycle)",
+        "description": "Cycle: Like Basic, but arrange that each group member bids positively on one other member\u2019s target paper to create a cycle of positive bids; bid neutral or negative on other target papers.",
+        "guidance": "Cycle can succeed and avoids pairwise ring detection if group size > 2; implementation detail matters (bid on a single target paper vs multiple)."
+      },
+      {
+        "name": "Malicious strategy taxonomy (Popularity)",
+        "description": "Popularity: Like Basic, but choose non-target, in-area positive bids based on perceived paper 'popularity' \u2014 bid positively on papers expected to be unpopular (to be additionally assigned there) and neutral on likely-popular papers.",
+        "guidance": "Hard for participants to implement well; mixed empirical success. The authors did not implement this strategy in synthetic scaling due to modeling difficulty."
+      },
+      {
+        "name": "Synthetic dataset construction procedure (scaling rules)",
+        "description": "To scale up data: choose total reviewers/papers, malicious group size, and strategy. Copy subject areas from original sampled reviewers. For honest reviewers, sample an original honest reviewer as a model and replicate counts of positive bids in-area and out-of-area; scale negative bids by the ratio of new to old paper counts. For malicious reviewers, model non-target bids from malicious model reviewers and then modify target bids per strategy (e.g., add positive bids on target papers; make cycles/overlaps as required).",
+        "guidance": "Positive bids are not scaled (to reflect reviewer load constraints); negative bids are scaled up proportionally because participants often placed many negative bids. Authors ran multiple synthetic trials (100) per setting and experimented up to 5000 reviewers/papers."
+      },
+      {
+        "name": "Dataset documentation, formats, and release requirements",
+        "description": "The released dataset includes two text files (subject areas, paper titles) and four CSVs: setup.csv (reviewer profiles: name, sas, authored_sa, authored_id, target_sa, target_id, group), honest_bidding.csv, malicious_bidding.csv (responses per phase), and strategy_annotations.csv (Strategy index, Discussed). Dataset is de-identified and licensed under CC BY 4.0; IRB approval obtained.",
+        "guidance": "Dataset intended for researchers studying malicious behavior in peer review; full documentation in Appendix A and code at the provided GitHub link. The release includes instructions for using and interpreting columns; risk of re-identification judged low."
+      },
+      {
+        "name": "Experiment parameter choices and heuristics (e.g., low-rank rank selection)",
+        "description": "Choices like low-rank approximation rank (rank-3 used) and similarity formula parameters were set heuristically, e.g., rank selection based on inspection of singular values of sampled honest matrices.",
+        "guidance": "Authors note such choices were heuristic and suggest future work should explore parameter sensitivity; these choices are part of reproducible experiment specification."
+      },
+      {
+        "name": "Analytic measures of bidding behavior (quantitative and qualitative analyses)",
+        "description": "Quantitative measures include distributions of counts of positive and negative bids per reviewer, average manipulation success rates per strategy, and average detection ranks per strategy. Qualitative measures include textual strategy descriptions provided by participants used to categorize implemented strategies.",
+        "guidance": "Combine quantitative bid distributions (e.g., histograms) with participant free-text responses to produce realistic strategy taxonomies and to guide synthetic implementations."
+      }
+    ]
+  }
+}

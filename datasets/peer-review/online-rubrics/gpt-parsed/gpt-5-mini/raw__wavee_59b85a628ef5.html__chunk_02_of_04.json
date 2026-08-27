@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_59b85a628ef5.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_59b85a628ef5.html",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39881,
+  "model": "gpt-5-mini",
+  "elapsed_s": 45.9889125410009,
+  "input_tokens": 12783,
+  "output_tokens": 4353,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners building or evaluating automatic peer-review / review-generation systems (NLP/ML community), and annotators/curators of review datasets",
+    "subtask_short": "automated_peer_review_evaluation",
+    "subtask_description": "Evaluation and annotation framework for automatically generated peer reviews of scientific (ML/NLP) papers, including aspect-level labels, metrics (REC, SACC, ACON, BERTScore), annotation procedures, and extraction/tagging methods.",
+    "subtask_keywords": [
+      "peer_review",
+      "automated_review",
+      "aspect_annotation",
+      "evaluation_metrics",
+      "nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "REC (recommendation sentiment)",
+        "description": "REC corresponds to the recommendation sentiment of a review, with {\u22121, 0, 1} representing negative, neutral and positive.",
+        "guidance": "To decide sentiment of a reference review, use rating information: (i) ratings corresponding to marginal accept or marginal reject \u2192 neutral; (ii) rating above marginal accept \u2192 positive; (iii) otherwise \u2192 negative. To decide sentiment of a generated review, two project-members judge sentiment polarity: if they agree use agreed sentiment, otherwise label as neutral. Reported Cohen kappa between annotators = 0.5778 (\"moderate\" agreement)."
+      },
+      {
+        "name": "INFO (evidence judgement for negative aspects)",
+        "description": "INFO: The judgement of evidence for negative aspects was conducted by a member of the project team, who judged whether each identified negative aspect was accompanied by evidence irrespective of the correctness of the evidence.",
+        "guidance": "In other words, as long as the reviewer provides a reason, that is counted as evidence; factual correctness of that reason is not required for counting evidence."
+      },
+      {
+        "name": "SACC & ACON (summary accuracy and valid support for negative aspects)",
+        "description": "SACC and ACON: judgement of summary accuracy and valid support for negative aspects are performed by one of the first authors of the reviewed paper. Summary and each negative aspect in the review should be scored 0, 0.5 or 1 representing agree, partially agree and disagree respectively.",
+        "guidance": "Annotators (paper authors) are provided the following instructions (verbatim excerpt):\n- agree means that you think it\u2019s factually correct. \n- For each aspect, agree means that you think the strength/weakness the reviewer points out is reasonable or constructive. \nScoring interface: authors score the summary and each aspect in a shared Google doc using 1/0.5/0."
+      },
+      {
+        "name": "BERTScore (for summary evaluation)",
+        "description": "BERTScore is applied as an automatic evaluation metric for summary quality.",
+        "guidance": "They apply the same rescaling procedure following Zhang et al. (2019), which does not affect ranking ability but makes scores more discriminative."
+      },
+      {
+        "name": "Aspect Score (per-review aspect-level score)",
+        "description": "Aspect score of a review: if an aspect does not appear in a review, count the score for this aspect as 0.5 (neutral). If an aspect appears, let occurrences O = {o1,...,on} and positive occurrences Op = {op1,...,op_p}; aspect score = p_n / n (i.e., number of positive occurrences divided by total occurrences).",
+        "guidance": "This yields aspect-level scores in [0,1]; absence treated as neutral (0.5). Used to compute average aspect scores across accepted/rejected papers."
+      },
+      {
+        "name": "Aspect Precision (how to measure precision of predicted aspect spans)",
+        "description": "To measure aspect precision, three annotators decide whether each aspect span the model predicted is accurate; annotators delete a tagged span if they regard it inappropriate. Denote prediction spans M and filtered spans from annotators as F1, F2, F3. Define C = {l | l \u2208 F1, l \u2208 F2, l \u2208 F3}. Precision = nC / nM (Equation 5).",
+        "guidance": "Annotators remove incorrect predicted spans; common-correct spans C are those present in all three filtered sets. Precision is number of common-correct spans divided by number of predicted spans."
+      },
+      {
+        "name": "Aspect Recall (how to measure recall of predicted aspect spans)",
+        "description": "To measure aspect recall, three annotators label aspect spans the model ignored. Let additional labeled spans from annotators be A, B, C. Define pairwise common ignored spans I1, I2, I3 where a pairwise intersection counts as common if |intersection|/min{|span1|,|span2|} > 0.5. Define three-annotator common ignored spans I where |ai \u2229 bj \u2229 ck| / min{|ai|,|bj|,|ck|} > 0.3. Total number of spans n is computed as n = nM + nA + nB + nC \u2212 nI1 \u2212 nI2 \u2212 nI3 + nI (Equation 6). Recall = nM / n (Equation 7).",
+        "guidance": "This procedure assumes model-predicted spans are correct and computes recall relative to combined human-labeled spans after de-duplication via intersection thresholds. Thresholds: 0.5 for pairwise, 0.3 for triple intersections."
+      },
+      {
+        "name": "Review aspect categories / dimensions",
+        "description": "The paper uses a set of fine-grained review aspects/dimensions for annotating and evaluating reviews, including (as shown in tables and figures): summary, originality, clarity, meaningful comparison, motivation, substance. Other labels used in analyses include soundness (SOU), replicability (REP), and possibly 'representation' abbreviations, yielding the acronym-like set MOTORISOUSUBREPCLACMP which maps to MOT (motivation), ORI (originality), SOU (soundness), SUB (substance), REP (replicability), CLA (clarity), CMP (meaningful comparison).",
+        "guidance": "Examples provided map sentences to aspects (e.g., 'The motivation of using the conditional prior is unclear.' \u2192 Motivation; 'This paper presents a novel approach...' \u2192 Originality; 'This assumption is not true in practice.' \u2192 Soundness; 'The experiments are well-conducted.' \u2192 Substance). These categories are used for aspect-level scoring, bias analyses, and spider-chart visualizations."
+      },
+      {
+        "name": "Heuristics for refining aspect-tagging predictions",
+        "description": "Seven heuristic rules are applied to refine token-level aspect predictions output by the sequence tagger. The rules alter/merge/split predicted tag spans to yield more coherent aspect spans.",
+        "guidance": "The seven rules (verbatim summary):\n1) If there are no other tags (tagged 'O') between two 'summary' tags, replace all tags between them with 'summary'.\n2) If multiple discontinuous 'summary' spans exist, keep the first and discard others.\n3) If punctuation is separately tagged and differs from neighbors, replace its tag with 'O'.\n4) If two identical tags are separated by a single other tag, replace that tag with its right neighbor's tag.\n5) If a single token has a tag and its neighbors are 'O', replace this tag with 'O'.\n6) For a non-summary non-'O' tag span whose neighbors are 'O' and span start/end are not special symbols, expand the span until meeting another non-'O' tag or special symbol.\n7) If a 'summary' span does not end with a period, truncate or extend it by at most five words to make it end with a period.\nExamples illustrating before/after tag sequences are provided (Table 9)."
+      },
+      {
+        "name": "Training setup for the aspect tagger (sequence labeling)",
+        "description": "Annotation formulated as sequence labeling: input tokens S = w1..wn, target tags T = t1..tn. Use BERT to obtain contextualized token vectors e1..en, then token classification via softmax(pi = softmax(W ei + b)). Loss is negative log-likelihood of correct labels.",
+        "guidance": "Practical settings: treat each sentence as an individual training example (they tried larger context but got worse results). They used 900 annotated reviews for training and 100 validation (equivalent to 16,543 training samples and 1,700 validation samples at sentence level). Initial checkpoint: 'bert-large-cased'. Optimizer: Adam with lr=5e-5, trained 5 epochs; model with lowest validation loss saved as aspect tagger."
+      },
+      {
+        "name": "Keywords filtering for CE (salient sentence extraction)",
+        "description": "First step of sentence extraction selects sentences containing any of a predefined set of 48 keywords (and their inflections) to filter candidate sentences from the source document (Table 11 lists keywords).",
+        "guidance": "This reduces average sentence count per paper from ~209 to ~92 selected sentences (statistics shown for ICLR/NeurIPS papers). The 48 keywords include words like 'propose', 'evaluate', 'dataset', 'experiment', 'outperform', 'demonstrate', 'interpret', 'baseline', etc."
+      },
+      {
+        "name": "Cross-Entropy Method (CE) for selecting salient sentences",
+        "description": "The second step formulates sentence extraction as a combinatorial optimization problem maximizing R(S) = \u2212 sum_{w\u2208S} pS(w) log pS(w), where pS(w) = Count(w)/Len(S). The goal is to select a small set of sentences (\u226430) that cover diverse words (entropy-based objective).",
+        "guidance": "They apply the Cross Entropy Method (Rubinstein & Kroese, 2013) with algorithmic steps: initialize p0=(1/2,...), sample N Bernoulli vectors per iteration, compute performance scores R(Si), set \u03b3t as (1\u2212\u03c1) sample quantile, estimate \u02c6pt from elite samples, perform smoothed update pt = \u03b1 \u02c6pt + (1\u2212\u03b1) pt\u22121, stop if \u03b3t unchanged for 3 iterations. Chosen parameters: N=1000, \u03c1=0.05, \u03b1=0.7. If a sampled selection exceeds 30 sentences, drop the sample. They slightly decrease initial probability when >90 sentences after filtering to ensure enough samples early on."
+      },
+      {
+        "name": "Attention / evidence alignment patterns (diagnostic guidance)",
+        "description": "Empirical attention patterns relate generated aspects to source evidence: (1) summary generation attends to sentences with strong indicators like 'we propose'/'we introduce'; (2) originality attends to previous work sections and contribution descriptions; (3) substance attends to experiment settings and number of experiments; (4) meaningful comparison attends to places containing 'et al.'",
+        "guidance": "These patterns are used to trace evidence when the model generates a specific aspect (by inspecting attention heatmaps). They note the aggregation method for attention: take maximum across token/head aggregations. This is diagnostic guidance for validating whether generated assertions are grounded in source text."
+      },
+      {
+        "name": "Adjusting BART for long documents \u2014 attempted architectures and observed failure modes",
+        "description": "They attempted three strategies to adapt BART to long inputs: (Arc-I) expand positional encodings periodically, (Arc-II) independently-windowed BART that chunks documents into 1024-size windows and concatenates window encodings, (Arc-III) dependently-windowed BART using a compressive memory for inter-window dependencies.",
+        "guidance": "Empirical finding: none of these adjustments produced satisfying fluent and coherent outputs. Common problems: inconsistent person narration (first \u2194 third), contradictions between consecutive sentences, more descriptive text and fewer opinions. This informs a practical rubric: current naive positional/segmentation fixes may not yield coherent long-review generation."
+      },
+      {
+        "name": "Annotation guideline and dataset-level statistics",
+        "description": "The ASAP-Review dataset annotation guideline (link provided) details how to annotate aspects in reviews. Dataset statistics reported: average sentence count per paper ~209, selected sentences after keyword filtering ~92, etc.",
+        "guidance": "Annotation resources are available at the project repository. Use the guideline for instructions to annotators and replicating annotation decisions (link: https://github.com/neulab/ReviewAdvisor/blob/main/materials/AnnotationGuideline.pdf)."
+      }
+    ]
+  }
+}

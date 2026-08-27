@@ -1,0 +1,214 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/arxiv_architecture.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 5513,
+  "output_tokens": 5072,
+  "elapsed_s": 473.52604395803064,
+  "extracted": {
+    "orientation": "other",
+    "intended_audience": "arXiv platform engineers, system architects, developers, moderators, and administrators",
+    "subtask_short": "arXiv submission system architecture",
+    "subtask_description": "Architecture and requirements for the arXiv submission & moderation subsystem: design goals, component responsibilities, interfaces, and operational constraints for implementing accession, QA/moderation, automation, and event-based auditing of submissions up to announcement.",
+    "subtask_keywords": [
+      "arxiv",
+      "submission_system",
+      "moderation",
+      "event_sourcing",
+      "software_architecture"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Accession via multiple interfaces",
+        "description": "The subsystem must accept submission of e-print content and metadata via multiple interfaces, including interfaces provided by trusted third-party platforms.",
+        "guidance": "Supports both interactive (UI) and programmatic (REST API, bulk deposit) submission paths; must allow trusted external clients to deposit on behalf of users with explicit authorization."
+      },
+      {
+        "name": "Quality assurance tools and moderation workflows",
+        "description": "Provide tools and workflows to screen submissions (moderation) prior to announcement.",
+        "guidance": "Includes manual moderator interfaces for flags, comments, proposals and automated QA checks; supports iterative submitter revisions and moderator-driven reclassification/comments."
+      },
+      {
+        "name": "Extensible automation for moderation",
+        "description": "An extensible system for automating parts of the moderation process must be provided.",
+        "guidance": "Architecture must support configurable rule-based automation (agent-run processes) that can be extended to add or modify automated checks and actions."
+      },
+      {
+        "name": "Event-based audit log",
+        "description": "Maintain an event-based log of all submission and moderation activity related to a paper.",
+        "guidance": "Events should be emitted for submission lifecycle actions to support auditing, reproducible state reconstruction, and downstream processes; events are used as the primary source of truth where possible."
+      },
+      {
+        "name": "Scope of responsibility up to announcement",
+        "description": "The subsystem is responsible for all submission-related activities up to (but not including) announcement.",
+        "guidance": "Design and interfaces should stop at handoff to the announcement agent/process; downstream announcement steps are separate services consuming submission outputs/events."
+      },
+      {
+        "name": "Multi-agent synchronization",
+        "description": "The subsystem must sensibly incorporate input from, and synchronize the activities of, a variety of human and non-human agents.",
+        "guidance": "Must coordinate actions between submitters, moderators, administrators, automated processes, and third-party clients; avoid inconsistent state and ensure clear ownership of changes."
+      },
+      {
+        "name": "Administrator auditability of submission state changes",
+        "description": "Administrators must be able to audit all changes to submission state in the subsystem (e.g., actions by submitters, moderators, automated processes).",
+        "guidance": "Provide administrative UIs showing event history, annotations, and the ability to inspect who/what caused state transitions; persistent event records are required for auditing."
+      },
+      {
+        "name": "Configurable automated rules and processes for admins",
+        "description": "Administrators must be able to configure automated rules and processes.",
+        "guidance": "Expose administrative controls for enabling/disabling and tuning automation rules executed by the submission agent; changes should be auditable and have safe defaults."
+      },
+      {
+        "name": "Support many interfaces and third-party integrations",
+        "description": "The subsystem must support future development of potentially many alternative interfaces for submission and moderation, including interfaces developed and operated by trusted third-parties.",
+        "guidance": "Design APIs and authentication/authorization so third parties can integrate safely; ensure backward compatibility and stable API gateway controls."
+      },
+      {
+        "name": "High-volume throughput and scalability",
+        "description": "The subsystem must be able to support a high volume of activity (example: ~11,000 submissions/month with expected growth).",
+        "guidance": "Architect for scaling (cloud-ready storage, queues, stateless services) and plan capacity growth (expected \u226510%/year). Performance and reliability under load are required."
+      },
+      {
+        "name": "Support future operational and policy changes",
+        "description": "The subsystem must make it easier to support future operational and policy changes around submission content, quality assurance, metadata, and other areas of concern.",
+        "guidance": "Design for flexibility: modular services, clear data models, event-driven hooks to change processes without large rewrites."
+      },
+      {
+        "name": "Decompose functionality into utility services",
+        "description": "Major functional components should be decomposed into independent utility services that are agnostic about the submissions themselves (classification, overlap detection, compilation, file management, etc.).",
+        "guidance": "Utility services provide reusable functionality via APIs and should not embed submission business logic; keeps the system modular and replaceable."
+      },
+      {
+        "name": "Core submission package as authoritative write API",
+        "description": "A core submission package provides the foundational logic and is the only mechanism for writing submission data to the Submission database.",
+        "guidance": "All UI and agent services must use the core package to perform canonical submission operations (events/commands); prevents divergent write paths and enforces business rules."
+      },
+      {
+        "name": "Core interface services built on core package",
+        "description": "Core submission interface services (UIs and APIs) must be built on top of the core submission package to support submission and moderation workflows.",
+        "guidance": "Interface services should delegate state mutations to the core package to guarantee consistent application of business logic and event emission."
+      },
+      {
+        "name": "Agent framework for rules and conditional processes",
+        "description": "Provide an agent which defines rules and conditional processes based on submission events to orchestrate automated backend processing.",
+        "guidance": "Agent must observe event streams, match rules, execute processes asynchronously, and emit resulting events; configurable rules for triggering processes are required."
+      },
+      {
+        "name": "Authenticated user capabilities",
+        "description": "Authenticated users must be able to submit e-prints, view and amend submission status, preview submissions, and edit source files via the UI.",
+        "guidance": "UI must provide metadata entry, source package upload/edits, previewing, and integration with compilation services to help prepare announcement-ready submissions."
+      },
+      {
+        "name": "Moderator capabilities",
+        "description": "Moderators (authenticated users with moderator role) must be able to screen and curate submissions via a moderation interface and generate comments, flags, proposals, and annotations.",
+        "guidance": "Moderation UI should provide workflows for proposing reclassification, commenting, flagging, and requesting submitter/admin input; moderator actions must be recorded as events."
+      },
+      {
+        "name": "Administrator management capabilities",
+        "description": "Administrators must be able to audit and manage the submission platform, including behavior of automated processes and policies, via an administrative interface.",
+        "guidance": "Admin interfaces should allow configuring policies/automation, intervening on submission content/metadata, and acting on moderator proposals with visibility into event history."
+      },
+      {
+        "name": "API gateway enforcement and REST API",
+        "description": "All API access must pass through the arXiv API gateway; the submission system provides a RESTful API for programmatic use with client authentication and explicit user authorization for deposits.",
+        "guidance": "API exposes backend services (file management, compilation, classification) and must enforce authorization at gateway level; supports bulk and single submission deposits."
+      },
+      {
+        "name": "Web-hook notification support for clients",
+        "description": "Provide a web-hook notification service that pushes updates in submission state to authorized API clients.",
+        "guidance": "Allow clients to register callbacks; event consumer implementation should guarantee delivery semantics and security (authentication/authorization)."
+      },
+      {
+        "name": "Administrator-controlled exposure of backend services",
+        "description": "Backend services exposed via the API gateway must have access explicitly authorized by administrators.",
+        "guidance": "Service-level authorization and admin-managed permissions are required to limit which clients/services can call sensitive backend endpoints."
+      },
+      {
+        "name": "Submission database responsibilities and event primary source",
+        "description": "The Submission database must persist operational and core descriptive metadata; the primary source of truth for the state of each submission is a set of transformation events; derivative representations are stored for querying.",
+        "guidance": "Store both events and derived projections; support migrations from legacy DBs and a clear plan for event-sourcing as the canonical model."
+      },
+      {
+        "name": "Canonical commands/events to canonicalize operations",
+        "description": "Provide a set of commands (events) that canonicalize operations on submissions and serve as the basis for composing rule-based QA processing tasks.",
+        "guidance": "Commands/events should be well-defined, versioned, and used consistently by UI, API, and agent components to ensure consistent behavior across the system."
+      },
+      {
+        "name": "Integration with utility services and notification broker",
+        "description": "Submission core must provide service integration modules for working with utility services (compilation, classifier, etc.) and integrate with a notification broker for event dissemination.",
+        "guidance": "Use a broker (e.g., Kinesis) for event propagation; utility integrations should be encapsulated in modules to isolate dependencies."
+      },
+      {
+        "name": "Agent responsibilities: orchestration, tracking, conditional execution",
+        "description": "The agent must orchestrate automated backend processes based on submission events, keep track of what processes have been carried out and their outcomes, and provide a framework for defining conditions under which processes run.",
+        "guidance": "Processes should run asynchronously, emit events back to the stream, and the agent should rely on a task queue (e.g., Celery/Redis) for execution management."
+      },
+      {
+        "name": "Core interface services must update submission state via core package",
+        "description": "Core interface services (Submission UI, Submission API service, Moderation UI, Administrative UI) must integrate with the Submission database to modify state via the Submission core package.",
+        "guidance": "Interfaces must not perform direct DB mutations; they should invoke core package commands to ensure consistent event emission and state transitions."
+      },
+      {
+        "name": "File management: verification and sanitization",
+        "description": "File management service is responsible for ensuring the safety and suitability of uploaded files by performing verification and sanitization.",
+        "guidance": "Accept uploads, sanitize/verify contents, and present sanitized artifacts to other services; support different storage backends (SFS on-prem, EFS/AWS in cloud)."
+      },
+      {
+        "name": "Compilation/build service with logs",
+        "description": "Provide a compilation service that builds sanitized upload packages into PDF, PostScript, and other formats and makes compilation logs available.",
+        "guidance": "Compilation should use an arXiv TeX tree, back storage (e.g., S3), and expose logs for submitter feedback on failures/warnings to help produce announcement-ready submissions."
+      },
+      {
+        "name": "Plain text extraction for downstream QA",
+        "description": "Extract plain text from PDFs (and produce normalized PSV tokenized text) to support overlap detection and classification services.",
+        "guidance": "Make both raw extracted text and normalized tokenized forms available to other services for machine processing (similarity, classification)."
+      },
+      {
+        "name": "Overlap detection for duplicate detection",
+        "description": "Operate on extracted text and metadata to detect possibly duplicate submissions (overlap detection service).",
+        "guidance": "Return candidates (announced e-prints) with a high degree of overlap for moderator inspection; integrate with event-driven QA checks."
+      },
+      {
+        "name": "Classification/autoclassifier service",
+        "description": "Operate on extracted plain text and metadata to propose categories for submitted papers.",
+        "guidance": "Classifier outputs should be used as moderator aids and be auditable; integration example: FinalizeSubmission event triggers RunAutoclassifier process via the agent."
+      },
+      {
+        "name": "Notification service for emails and UI configuration",
+        "description": "A notification service must dispatch email notifications to submitters and moderators in response to submission events and provide UIs for end-user and administrator configuration.",
+        "guidance": "Ensure delivery, configurable templates, and user-level preferences; tie notifications to event stream to ensure consistent triggers."
+      },
+      {
+        "name": "Web-hook notification service implementation",
+        "description": "Provide mechanisms for API clients to register callbacks for submission events; consumer implemented using Kinesis Consumer Library and MultiLangDaemon.",
+        "guidance": "Implement secure callback registration, retry/delivery semantics, and authorization checks for registered clients."
+      },
+      {
+        "name": "Event-driven example: autoclassifier integration",
+        "description": "Example flow: FinalizeSubmission event emitted by Submission UI \u2192 Submission agent observes event and matches rule \u2192 agent runs RunAutoclassifier process.",
+        "guidance": "Illustrates rule-based, event-triggered automation; finalization should include attestation fields and produce events consumed by agent processes."
+      },
+      {
+        "name": "Event-sourcing goal: events as source of truth",
+        "description": "Adopt an event-sourcing framework where the current state of a submission is generated from all events that have occurred.",
+        "guidance": "Plan migration away from legacy components that write directly to DB; when achieved, applications should write events to the event controller and read state from the DB projections only."
+      },
+      {
+        "name": "Handle legacy direct writes and interpolation",
+        "description": "Until legacy components are retired, changes made by direct DB mutations must be inferred/interpolated into the event stream (arxiv.submission.services.classic.interpolate).",
+        "guidance": "Provide interpolation mechanisms for reconciling legacy writes with event-sourced state; document limitations and data-migration strategies."
+      },
+      {
+        "name": "Avoid race conditions on event stream; enforce consistency",
+        "description": "Care must be taken not to persist events that are inconsistent with the current submission state; adopt optimistic locking/versioning and an event controller to reject mismatched-version events.",
+        "guidance": "Interim approach: rely on legacy DB atomic transactions and short-lived shared locks on related rows while committing events; long-term: event controller with version checks."
+      },
+      {
+        "name": "Reduce event-generating applications' responsibility for state projection",
+        "description": "Ultimately, event-generating applications should only read state and write events to the event stream; responsibility for updating projected submission state should be moved to an event controller service.",
+        "guidance": "Currently, event-generating apps must both write events and update state due to legacy constraints; plan to centralize persistence/consistency logic in the event controller to preserve ACID guarantees and simplify producers."
+      }
+    ]
+  }
+}

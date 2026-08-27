@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_1ac0630f05da.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_1ac0630f05da.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39296,
+  "model": "gpt-5-mini",
+  "elapsed_s": 50.40115741599948,
+  "input_tokens": 17385,
+  "output_tokens": 5143,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference organizers studying/detecting reviewer-author collusion from bidding data (computer science / peer-review community)",
+    "subtask_short": "detecting reviewer collusion from bidding",
+    "subtask_description": "Empirical evaluation of dense-subgraph discovery algorithms to detect reviewer-author collusion from conference bidding data, using both unipartite (reviewer-reviewer) and bipartite (reviewer-paper) graph representations and measuring both detection performance and manipulation success.",
+    "subtask_keywords": [
+      "peer_review",
+      "collusion_detection",
+      "bidding_graph",
+      "dense_subgraph",
+      "empirical_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Jaccard similarity between true colluders and algorithm output",
+        "description": "Values indicate the mean Jaccard similarity between the true set of colluders and the algorithm output. Higher values correspond to better detection performance.",
+        "guidance": "Report mean and standard errors across repeated trials (the paper uses 50 trials per setting). Use Jaccard similarity as the primary detection-performance metric when the ground-truth set of colluders is known."
+      },
+      {
+        "name": "Collusion injection model for unipartite graph (G1)",
+        "description": "For each (k, \u03b3), choose k reviewers uniformly at random among reviewers that authored \u22651 paper; add edges uniformly at random between reviewers until the subgraph has edge density at least \u03b3. The modified graph is the input to detection algorithms.",
+        "guidance": "Repeat the injection procedure for many trials (50 used here) and report the mean detection metric (Jaccard). This injection defines the ground-truth colluding group for evaluation."
+      },
+      {
+        "name": "Edge density (\u03b3) as collusion-strength parameter (unipartite)",
+        "description": "Edge density \u03b3 of the injected reviewer subgraph is used to parameterize how tightly connected the colluding group is; detection is evaluated across ranges of k (group size) and \u03b3.",
+        "guidance": "Explore a grid of (k, \u03b3) values to characterize algorithm performance and identify regions where honest-reviewer groups exist vs. where detection fails."
+      },
+      {
+        "name": "Counting honest-reviewer groups as baseline/false-positive indicator",
+        "description": "Count the number of reviewer subsets of size k and edge density \u03b3 that occur in the honest (unmodified) bidding graph; these are 'honest-reviewer groups'.",
+        "guidance": "Use these counts as indicators of potential false positives for heuristic defenses \u2014 a high count implies many indistinguishable honest groups and thus many potential false alarms. Present exact counts across (k, density) cells (figures shown)."
+      },
+      {
+        "name": "Local-search initialization protocol and best-of-multiple-initializations",
+        "description": "For local-search algorithms (OQC-Local, TellTail, OQC-Specialized), return the best result over 11 initializations: first initialization per a heuristic (triangle-counting heuristic for G1; bid-author-bid-author cycle-based heuristic for G2) and 10 uniformly random initializations.",
+        "guidance": "Report which initialization(s) produced the best detection results; note that random initializations can lead to higher objective values but lower overlap with true colluders, indicating potential misalignment between objective and detection goal. The paper shows results both for heuristic-only and for best-of-all-initializations (appendix)."
+      },
+      {
+        "name": "Symmetrization of directed bidding data for unipartite analysis",
+        "description": "Convert directed reviewer-to-reviewer graph G1 to an undirected graph G by including an undirected edge (r1,r2) iff both directed edges (r1,r2) and (r2,r1) exist in E1.",
+        "guidance": "This preprocessing step is used before applying undirected dense-subgraph algorithms; it changes the notion of an edge to require mutual bidding and thus affects density calculations and detection outcomes."
+      },
+      {
+        "name": "Bipartite bidding graph representation (G2) and edge types",
+        "description": "Represent bidding data as a bipartite graph G2 = (V2, E2) with reviewers R and papers P as vertex sets and three undirected edge types: bid edges (E(B)) indicating positive bids, authorship edges (E(A)) indicating a reviewer authored a paper, and conflict-of-interest edges (E(C)) for conflicts where the reviewer did not author the paper.",
+        "guidance": "Use this representation to capture all data available to detection algorithms. Specify which subsets of edges (e.g., only bid edges or bid+authorship) are used as algorithm inputs."
+      },
+      {
+        "name": "Definition of P[R'] (paper set for reviewer subset) and P[S]",
+        "description": "For any subset of reviewers R' \u2286 R, define P[R'] = \u222a_{r\u2208R'} {p \u2208 P : (r,p) \u2208 A} \u2014 the set of papers authored by reviewers in R'.",
+        "guidance": "P[S] is used in defining bid density and the specialized OQC objective on the bipartite graph; it delimits the universe of papers relevant to a reviewer group."
+      },
+      {
+        "name": "Bid density (\u03b7S) for reviewer groups in bipartite graph",
+        "description": "Bid density \u03b7_S is defined as the total number of bids made by reviewers in S on papers in P[S], divided by the maximum possible number of bids by reviewers in S on papers in P[S]: \u03b7_S = |E(B)[S \u222a P[S]]| / (|S||P[S]| \u2212 |E(A)[S \u222a P[S]]| \u2212 |E(C)[S \u222a P[S]]|).",
+        "guidance": "Because bid density is naturally lower than unipartite edge density, evaluate \u03b7 in a range appropriate for the bipartite setting (the paper considers \u03b7 between 0.2 and 1.0). Counting honest-reviewer groups under bid-density gives a baseline for false positives."
+      },
+      {
+        "name": "Collusion injection model for bipartite graph (G2)",
+        "description": "For each (k, \u03b7), choose a set M of k reviewers uniformly at random among reviewers who authored \u22651 paper; repeatedly choose reviewer-paper pairs uniformly at random from M\u00d7P[M] and add them to bid edges until the bid density is at least \u03b7. The modified graph is used to construct algorithm inputs.",
+        "guidance": "Repeat for many trials (50 used) and report mean detection metrics. This models colluders adding bids to realize (or approximate) a target bid-density."
+      },
+      {
+        "name": "Detection-success / manipulation-success metrics (assignment influence)",
+        "description": "Two metrics are used to evaluate colluders' success at achieving favorable paper assignments: (1) fraction of colluder-authored 'target' papers with at least one colluder assigned; (2) fraction of colluders who authored at least one paper that has at least one other colluder assigned.",
+        "guidance": "Compute assignments via the paper-assignment procedure (Section 3.1), run 50 trials per parameter setting, and report the mean and standard errors for each metric. Use both metrics because (1) is a stricter measure while (2) measures per-colluder benefit."
+      },
+      {
+        "name": "Discard paper vertices and consider only reviewer vertices in outputs",
+        "description": "When algorithms return subsets of vertices (possibly including paper nodes), discard any paper vertices and treat only the reviewer vertices as the detected colluders.",
+        "guidance": "This evaluation convention isolates detection performance for reviewers, aligning reported Jaccard similarity with the true set of colluding reviewers."
+      },
+      {
+        "name": "Fraudar objective and camouflage-resistance property",
+        "description": "Fraudar selects a subset S that approximately maximizes (1/|S|) \u03a3_{(u,v)\u2208E[S]} (log(5+deg(v)))^{-1}. This objective is described as 'camouflage-resistant' meaning fraudulent users cannot improve their own objective by adding extra edges to honest products.",
+        "guidance": "Use Fraudar on the bipartite reviewer-paper graph treating reviewers as users and papers as products; evaluate both using only bid edges and using bid+authorship edges as input variants."
+      },
+      {
+        "name": "OQC (optimal quasi-clique) objective and generalization for bipartite (OQC-Specialized)",
+        "description": "In the unipartite setting OQC optimizes an edge-surplus style objective f(S)=|E[S]| \u2212 (1/3)|S|^(?) (original paper uses edge-surplus notion). OQC-Specialized generalizes this to the bipartite setting: f(S) = |E(B)[S \u222a P[S]]| \u2212 \u03b1*(expected number of bids) (an 'edge surplus' above expectation if each bid occurs independently with probability \u03b1); \u03b1 is set to 1/3.",
+        "guidance": "Use local search to optimize this objective in the bipartite setting. Observe that even when this objective succeeds in some regimes it may not reach near-perfect Jaccard, indicating that the true colluding group may not be a local optimum of the objective."
+      },
+      {
+        "name": "Algorithm input variants (edge sets) for evaluation",
+        "description": "Evaluate algorithms with different input edge sets: e.g., for G2 use E = E(B) (bid edges only) and E = E(B) \u222a E(A) (bid plus authorship); for G1 use the symmetrized undirected edges.",
+        "guidance": "Compare performance across these input variants to measure sensitivity to available metadata; the paper reports similar performance for most algorithms across E(B) vs. E(B)\u222aE(A) except where noted."
+      },
+      {
+        "name": "Stochastic trial-and-reporting standard",
+        "description": "For each parameter setting (k, \u03b3) or (k, \u03b7), repeat the injection and detection procedure for many independent trials (50 in this work) and report means with standard errors in figures/tables.",
+        "guidance": "This standardizes comparisons across algorithms and parameter settings and quantifies variability in detection/manipulation outcomes."
+      },
+      {
+        "name": "Objective alignment diagnostic",
+        "description": "Be wary that an algorithm's internal objective value may be misaligned with the external detection objective (overlap with true colluders); e.g., OQC-Local random initializations often produced higher objective values but lower overlap with true colluders.",
+        "guidance": "Validate detection algorithms not only by their objective values but directly by overlap metrics (like Jaccard) against realistic ground-truth injections and inspect sensitivity to initializations."
+      },
+      {
+        "name": "Greedy-peeling heuristic for finding larger high-density groups (practical note)",
+        "description": "A greedy peeling method can be run to heuristically find high-density reviewer groups of larger sizes when exhaustive enumeration is infeasible, but in this work it performed poorly and results were relegated to the appendix.",
+        "guidance": "Consider greedy heuristics for scalability, but empirically validate their efficacy; do not assume greedy-found groups represent true colluders without checking detection metrics."
+      },
+      {
+        "name": "Limitations and replication recommendation",
+        "description": "The analysis is performed on semi-synthetic datasets because real datasets with bidding and authorship are not publicly available; bidding patterns may not fully represent real conferences.",
+        "guidance": "Program chairs are advised to replicate the methodology on their own real bidding data to further verify results before drawing deployment conclusions."
+      },
+      {
+        "name": "Policy safeguard: manual investigation before punitive action",
+        "description": "Because of the high cost of misidentifying an honest reviewer, program chairs should at least conduct an associated thorough manual investigation before pursuing any form of action against a suspected collusion ring.",
+        "guidance": "Treat algorithmic detection as an aid, not definitive proof; use manual review and additional metadata to avoid reputational harm from false positives."
+      }
+    ]
+  }
+}

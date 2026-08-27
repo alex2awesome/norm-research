@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/pmc_2488382_nih_pr_statistical_analysis.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 9106,
+  "output_tokens": 4353,
+  "elapsed_s": 895.4264229589608,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "statisticians, NIH peer-review policy makers, and researchers analyzing grant review/panel rating data",
+    "subtask_short": "NIH R01 peer-review statistical analysis",
+    "subtask_description": "Developing and applying a Bayesian hierarchical/latent-variable statistical model to analyze NIH R01 panel ratings (reader pre-scores, reader post-scores, and nonreader scores), correct for rater bias, quantify uncertainty in rankings, and inform funding decisions accounting for costs and uncertainty.",
+    "subtask_keywords": [
+      "nih",
+      "r01",
+      "peer_review",
+      "statistical_model",
+      "panel_ratings"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Adjust for differences in reviewer scoring patterns (rater bias)",
+        "description": "Include parameters that reflect differences in reviewer scoring patterns (rater biases) so that model-based estimates correct for tendency of some raters to score more stringently or leniently.",
+        "guidance": "Estimating rater biases explains part of MSE improvement in cross-validation and, when propagated through the full model, can substantially change proposal rankings (model-based correction changed a rank from 13 to 8 in an example). Corrections for rater biases are estimated to change \u224825% of funding decisions (20% at 15% funding line, \u224827% at 10%). The model represents rater bias terms r_j and a mean bias \u03b6 to account for differences between pre- and post/nonreader score means."
+      },
+      {
+        "name": "Model information transfer from pre-scores and discussion to final ratings",
+        "description": "Provide a mechanism to account for the transfer of information from an application's preliminary ratings and group discussion to final ratings provided by all panel members (i.e., represent reader post-scores and nonreader scores as functions of pre-scores, discussion, and other readers' scores).",
+        "guidance": "Represent latent variables for post-scores and nonreader scores as weighted averages of (1) a reader's own pre-score, (2) the proposal discussion, and (3) other readers' pre-scores. Include a term v_i \u03bc_i to model systematic shifts between pre- and post-scores that result from discussion. Weights u_ij, v_i, w_ijk are modeled (see Dirichlet weighting) to capture how much each information source contributes."
+      },
+      {
+        "name": "Provide posterior estimates of uncertainty for proposal ratings",
+        "description": "Produce posterior distributions/ probabilities quantifying the uncertainty associated with each proposal's merit and ranking (e.g., posterior probability that one proposal is better than another).",
+        "guidance": "Use posterior samples to compute pairwise probabilities and probabilities that particular fundable subsets contain the true top proposals. Example: posterior probability that proposals 1\u201313 are the 13 best was 17%, while an alternative selection had 21%\u2014demonstrating how accounting for uncertainty can change funding choices. Use these posterior uncertainties within decision-theoretic frameworks that balance costs and merit uncertainty."
+      },
+      {
+        "name": "Model reader pre-scores with appropriate ordinal latent-variable models",
+        "description": "Treat reader pre-scores as independent assessments modeled via ordinal probit (latent variable) models with category thresholds per study section.",
+        "guidance": "Specify \u03bc_i as continuous-valued latent merit and r_j as reviewer bias; include category thresholds \u03b3_m associated with IRG study sections. On the latent scale, \u03bc_i are assumed standard normal to establish measurement scale. This is the 'first-stage model' in the hierarchy."
+      },
+      {
+        "name": "Model reader post-scores and nonreader scores as hierarchical weighted processes",
+        "description": "Assume reader post-scores are weighted averages of their own pre-scores, the reported pre-scores of others, and the proposal discussion; nonreader scores are similarly modeled as weighted averages of reader post-scores and proposal merit.",
+        "guidance": "Use a multi-stage hierarchical model (first-stage pre-scores, second-stage post-scores, third-stage nonreader scores). Error terms for post- and nonreader latent variables have Gaussian structure but additional modeling (Dirichlet weights) is required to mimic observed concentration effects (e.g., many nonreader scores lie between reader post-scores or equal them)."
+      },
+      {
+        "name": "Allow weights to be extreme (Dirichlet-generated) to mimic concentration of nonreader scores",
+        "description": "Generate the weights (u_ij, v_i, w_ijk) from a Dirichlet model so they are likely assigned values close to 0 or 1, permitting the model to mimic the tendency of nonreaders to concentrate scores around and between reader scores.",
+        "guidance": "Hyperparameters a, b, c of the Dirichlet determine the average relative weights readers and nonreaders assign to information sources. This innovation accounts for the high proportion of post- and nonreader scores that lie within ranges set by readers' scores."
+      },
+      {
+        "name": "Account for dual practical scoring scales and consider scale redesign",
+        "description": "Recognize that reviewers effectively use two distinct scoring granularities (increments of 0.1 and 0.5) and consider whether an alternative scale (e.g., a 20-point scale anchored at an 'average' rating of 10) would better reflect current rating behavior.",
+        "guidance": "Empirical evidence (histograms, Fig. 2) shows nonmonotonic relations at extremes suggestive of dual scales; a 20-point scale could provide finer resolution for competitive proposals and a 10-point scheme for nonstreamlined proposals."
+      },
+      {
+        "name": "Enforce nonreader scoring constraint (policy): within 0.5 units or written justification",
+        "description": "Nonreaders are required to either score the proposal within 0.5 units of the range established by reader post-scores or provide a written statement to the SRO explaining why they scored outside that range.",
+        "guidance": "This is a procedural rule of the NIH review process that affects the distribution and interpretation of nonreader scores and should be incorporated or accounted for in modeling."
+      },
+      {
+        "name": "Streamlining based on pre-scores",
+        "description": "Study section SRO and chair may suggest proposals to be 'streamlined'\u2014based on pre-scores, proposals viewed as unlikely to receive fundable priority scores may not be discussed further if no one objects.",
+        "guidance": "Streamlining removes many proposals from discussion and therefore from the post-score process; models must account for selection/streamlining when analyzing final priority scores and percentiles."
+      },
+      {
+        "name": "Convert priority scores to percentile rankings appropriately",
+        "description": "In established study sections convert priority scores to percentiles by comparison with recent priority scores from that study section; in newer study sections or special emphasis panels calculate percentiles by comparison with established norms.",
+        "guidance": "Percentile scores are the basis for many IC funding decisions and should be the modeled target when assessing funding outcomes; differences in percentile conversion procedure across SRGs must be considered."
+      },
+      {
+        "name": "Use cross-validation to assess effectiveness of bias corrections",
+        "description": "Evaluate bias-correcting models with cross-validation on reader pre-scores (which can be treated as conditionally independent) to compare model-based prediction error to NIH (sample-mean) prediction error.",
+        "guidance": "Example implementation: randomly assign 90% of pre-scores to training and 10% to test; model-based predictions reduced mean squared error from 0.413 (sample mean) to 0.373 (\u224810% reduction), demonstrating benefit attributable to estimating rater biases."
+      },
+      {
+        "name": "Estimate and update global hyperparameters across review groups",
+        "description": "For practical implementation, estimate model hyperparameters that are common across SRGs (e.g., correlation of category thresholds) using data from many review cycles and provide off-line updates to enable timely online use.",
+        "guidance": "Estimating hyperparameters requires evaluation of the complete likelihood over many SRGs, which can delay processing; recommended approach is off-line estimation and distribution of static summaries/posterior hyperparameter values for concurrent end-user software."
+      },
+      {
+        "name": "Allow model extensions for reviewer roles and attributes",
+        "description": "Extend the model to allow for differences in weights or behavior between primary reviewers, secondary reviewers, discussants, and to include reviewer attributes (academic rank, gender, ethnicity, SRG experience) as explanatory variables.",
+        "guidance": "These extensions could explain variation in score shifts and improve model fidelity, but will require data on reviewer attributes and careful modeling to avoid confounding."
+      },
+      {
+        "name": "Adopt Bayesian hierarchical latent-variable modeling for multirater ordinal data",
+        "description": "Use a Bayesian hierarchical framework with latent variables to model multirater ordinal data from interactive panels (Delphi-like procedures).",
+        "guidance": "This approach accommodates dependencies across ratings stages, permits posterior uncertainty quantification, and extends established methods for multirater ordinal and item response data. Numerical algorithms and diagnostics (provided in supporting information) are necessary."
+      },
+      {
+        "name": "Incorporate costs and use decision-theoretic selection of fundable subsets",
+        "description": "Combine posterior uncertainties about merits with proposal requested costs to select fundable subsets that maximize the probability of funding the true top proposals under a fixed budget.",
+        "guidance": "Algorithm: sample from posterior, rank proposals per sample, compute posterior probability that each feasible subset contains the top set given cost constraint. Example: an alternative selection of proposals with same total cost yielded a 21% posterior probability vs 17% for the naive top-13 choice."
+      },
+      {
+        "name": "Assess and quantify uncertainty in proposal orderings when allocating funds",
+        "description": "Recognize and quantify the uncertainty in relative rankings (pairwise and across ranges) and use these uncertainties when making allocation decisions, especially when uncertainty is large.",
+        "guidance": "Example: the eighth-ranked proposal had only 0.60 posterior probability of being better than the ninth, and non-negligible probabilities of being as high as top-4 or as low as top-15, illustrating wide uncertainty that should influence funding decisions."
+      },
+      {
+        "name": "Experimentally evaluate the discussion effect",
+        "description": "Design experiments (e.g., set aside random samples of reader pre/post information from SRG discussion) to evaluate whether group discussion provides an unbiased glimpse of true merit or introduces systematic biases.",
+        "guidance": "Compare nonreader scores to omitted pre-scores (corrected for bias) to assess the independence and information content of discussion; analyze deviations and the influence of reader attributes. Such experiments can inform tradeoffs between SRG meeting costs and collecting more independent ratings."
+      },
+      {
+        "name": "Model identifiability and parameterization choices to set measurement scale",
+        "description": "Establish the underlying measurement scale by assuming \u03bc_i ~ standard normal and include model components (e.g., mean bias \u03b6) to align pre-score means with post/nonreader score means.",
+        "guidance": "Careful parameterization is needed for identifiability; choices (e.g., prior distributions, scale settings) affect interpretations and must be documented and tested in diagnostics."
+      },
+      {
+        "name": "Recognize practical challenges and need for sensitivity analyses",
+        "description": "Acknowledge that choice of model class and assumptions (e.g., 'ideal' v_i \u03bc_i discussion effect) may be optimistic and perform sensitivity analyses to assess how funding decisions depend on modeling choices.",
+        "guidance": "Assess sensitivity to alternative classes of models and assumptions about discussion effects, weights, and hyperparameter priors; the data alone may not identify some features without external 'gold standard' information."
+      },
+      {
+        "name": "Account for selection of readers when estimating final percentile scores",
+        "description": "Model the effect that the particular reviewers assigned to an application have on its final priority and percentile scores (i.e., selection of readers can have a major impact).",
+        "guidance": "The model explicitly accounts for selection of readers; example showed extreme changes in ranking due to the specific biases and unusual scores of assigned readers. Analysts should consider selection effects when estimating merit and funding outcomes."
+      },
+      {
+        "name": "Model category thresholds \u03b3_m associated with IRG study sections",
+        "description": "Include study-section-specific category thresholds (\u03b3_m) in ordinal models to model differences in score cutpoints across IRGs.",
+        "guidance": "Thresholds may be correlated across groups and their correlation structure is a hyperparameter requiring pooled data to estimate; accurate modeling of \u03b3_m is important for comparability of scores across study sections."
+      }
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wsdm_2017_pdf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16491,
+  "output_tokens": 4453,
+  "elapsed_s": 1493.155342000071,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference program chairs, peer reviewers, and researchers studying peer review",
+    "subtask_short": "conference_peer_review_evaluation",
+    "subtask_description": "Evaluating and experimentally comparing single-blind vs double-blind conference peer-review processes, including bidding, reviewer scoring/ranking, assignment, and measurements of implicit bias and reviewer behavior.",
+    "subtask_keywords": [
+      "peer_review",
+      "conference",
+      "single_blind",
+      "double_blind",
+      "bidding",
+      "reviewing"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Review Score Scale",
+        "description": "Reviewers selected a score for each paper from these options: 6 = Strong accept (I think this paper is well above the bar and will fight for it); 3 = Accept (I think this paper should be accepted); -2 = Borderline (I think this paper is below the bar, but am open to accept if there is strong support); -4 = Reject (I think this paper should be rejected); -6 = Strong reject (I think this paper is well below the bar and will fight against it).",
+        "guidance": "Score represents an overall recommendation for the paper and is used as the primary dependent variable for measuring reviewer positivity (e.g., Pr[score > 0])."
+      },
+      {
+        "name": "Reviewer Rank Categories",
+        "description": "Reviewers selected a rank for each paper from these options: 4 = Top paper in my batch; 3 = Top 25% in my batch; 2 = Top 50% in my batch; 1 = Bottom 50% in my batch.",
+        "guidance": "Rank is a relative judgment of the paper compared to others reviewed by the same reviewer; ranks are not validated for consistency (reviewers may, in principle, rank many papers as top). Ranks are combined with scores when constructing blinded paper quality metrics."
+      },
+      {
+        "name": "Bidding Options and Defaults",
+        "description": "During bidding each reviewer can enter one of: yes, maybe, no. If a reviewer takes no action, the default bid is no. There is a fourth value to indicate a conflict of interest (handled separately).",
+        "guidance": "Bids are used as input to automatic assignment. The paper shows single-blind reviewers bid significantly fewer papers (22% fewer) in their experiment; bidding behavior is a key metric to monitor for allocation quality."
+      },
+      {
+        "name": "Blinded Paper Quality Score (bpqs)",
+        "description": "A proxy measure for intrinsic paper quality constructed from blinded raters by combining linearly their scores s and ranks r, standardized to zero mean and unit variance. The authors choose q = s + 0.111 r to maximize between-blinded-reviewer correlation, and take the average of double-blind reviews for a paper, normalized to unit standard deviation (bpqs).",
+        "guidance": "Use bpqs as a first-order control for intrinsic quality when modeling second-order implicit biases (so biases are effects beyond intrinsic quality)."
+      },
+      {
+        "name": "Bids-by-Reviewer and Bids-by-Paper (bbr, bbp)",
+        "description": "bbr = total number of bids entered by a reviewer (encodes reviewer bid appetite); bbp = total number of bids on a paper by double-blind reviewers (encodes intrinsic bid-attractiveness of a paper).",
+        "guidance": "Include bbr and bbp as covariates when modeling bidding behavior to control for reviewer willingness to bid and paper attractiveness."
+      },
+      {
+        "name": "Feature: Academic Paper (aca)",
+        "description": "A paper is considered academic if a strict majority of the authors are from academic institutions (corporate, governmental, non-profit, unaffiliated are non-academic). This determination was made by hand-written rules.",
+        "guidance": "Treat 'academic' as a boolean covariate when modeling review/bid behavior; it encodes institutional type and may correlate with other bias features."
+      },
+      {
+        "name": "Feature: Female Author (wom)",
+        "description": "Papers are marked as having a female author if at least one author is female. Because conventions for first author are not uniform in the field, the study uses presence of any female author rather than first-author gender.",
+        "guidance": "Gender was manually annotated; alternative definitions (first author female, majority female) can be considered. Use this as a covariate to study gender (Matilda) effects."
+      },
+      {
+        "name": "Feature: Paper from USA (usa)",
+        "description": "Country of a paper is determined by the plurality country among authors; paper_from_USA is true if that plurality country is the USA.",
+        "guidance": "Country is a boolean covariate used in regressions to test for geographic biases; the plurality scheme is explicit and should be noted when replicating."
+      },
+      {
+        "name": "Feature: Famous Author (fam)",
+        "description": "A famous author is defined as an author with at least 3 accepted papers at earlier WSDM conferences and at least 100 papers according to dblp. A paper has the fam feature true if it has at least one such author.",
+        "guidance": "Use this concrete operationalization to detect prestige bias; the authors find significant positive odds multipliers for fam in single-blind reviewers."
+      },
+      {
+        "name": "Feature: Same Country as Reviewer (same)",
+        "description": "The same-country feature is true if the paper's plurality country equals the country of the reviewer (from EasyChair registration).",
+        "guidance": "Used to detect national/regional favoritism when author identities are visible to reviewers."
+      },
+      {
+        "name": "Feature: Top University (uni)",
+        "description": "Top universities are defined as the top 50 global computer science universities (per topuniversities.com); uni is true if any author is from a top university.",
+        "guidance": "This explicit top-50 list is used to operationalize institutional prestige; the authors find uni significant in both bidding and review regressions."
+      },
+      {
+        "name": "Feature: Top Company (com)",
+        "description": "Top companies are defined as Google, Microsoft, Yahoo!, and Facebook; com is true if any author is from one of these companies.",
+        "guidance": "Used to detect corporate prestige bias; yielded a strong effect (odds multiplier ~2.10) in review predictions."
+      },
+      {
+        "name": "Ethical Principles for Experiment Design",
+        "description": "Two adopted principles: Principle 1. No-Bias Condition \u2014 A paper's likelihood of acceptance should not change based on its experimental condition. Principle 2. Veracity Condition \u2014 We will not lie to any participant in the experiment.",
+        "guidance": "Design experiments to avoid changing authors' acceptance chances and avoid deception of participants; these principles constrain feasible experimental designs and motivate the chosen split-by-reviewer design."
+      },
+      {
+        "name": "Reviewer Assignment Structure (experiment)",
+        "description": "For the experiment: program committee randomly split into two equal groups (SBPC and DBPC). Each paper was assigned four PC reviewers: exactly 2 from SBPC and 2 from DBPC. SBPC saw author names/affiliations during bidding and review; DBPC did not. PDFs were anonymized.",
+        "guidance": "This structure allows measurement of single-blind vs double-blind reviewer behavior without altering final acceptance decisions during the experiment phase; assignment used EasyChair's standard assignment algorithm run separately for each group."
+      },
+      {
+        "name": "Presentation of Information in Bidding Interface",
+        "description": "Single-blind reviewers see author names before the paper title with hyperlinks to author homepages; institutions are not shown at the bidding stage. Both groups see titles and abstracts; details page provides keywords and abstract and for SBPC the list of authors with affiliations. PDFs are anonymized and do not list authors or affiliations.",
+        "guidance": "The exact presentation of author/affiliation information to reviewers materially affects bidding and review behavior and must be controlled/documented when comparing reviewing models."
+      },
+      {
+        "name": "Inter-reviewer Agreement and Number of Reviews",
+        "description": "Inter-reviewer correlation for bpqs among blinded reviewers was 0.38. The operative inter-reviewer correlation increases with number of reviewers per paper (authors provide formula relating correlation and number of raters).",
+        "guidance": "Conference organizers should quantify inter-reviewer agreement and choose the number of reviews per paper appropriately (e.g., increasing from n=2 to n=4 raises operative correlation). This is a policy/design parameter to trade off cost and reliability."
+      },
+      {
+        "name": "Practical Issues with Double-Blind Reviewing",
+        "description": "Anonymization can be impractical for certain fields (e.g., well-known systems projects); automated deanonymization can identify authors with substantial accuracy (40\u201350% overall, ~80% for prolific authors). Preprints on arXiv complicate anonymity; policies vary (NIPS asks reviewers not to actively look for preprints).",
+        "guidance": "Account for limitations of anonymity when adopting double-blind review; explicit policies on preprints and guidance to reviewers are recommended."
+      },
+      {
+        "name": "Conflict of Interest Detection and Handling",
+        "description": "EasyChair automatically detects conflicts based on email domains and reviewers may specify additional conflicts during bidding. The system can be configured to allow authors to specify conflicts at submission time (not enabled in this experiment). In WSDM 2017 total declared conflicts were not significantly different between single- and double-blind settings.",
+        "guidance": "Monitor conflicts both automatically and via reviewer disclosure; configuration choices (allowing author-specified conflicts at submission) affect detection and should be documented."
+      },
+      {
+        "name": "Metrics to Monitor for Evaluating Reviewing Process",
+        "description": "Key measurable indicators include: number of bids per reviewer, distribution of bids across paper classes, odds multipliers for features (fam, uni, com, wom) in logistic regressions predicting positive review, review length, distribution of scores and ranks, reviewer agreement (correlation), number of conflicts expressed, and changes to scores during discussion.",
+        "guidance": "Collect these metrics to quantify differences between reviewing models and to detect implicit biases; include both first-order (bpqs, bbr, bbp) and second-order (fame/institution/gender) covariates in analyses."
+      },
+      {
+        "name": "Experimental Design Anti-patterns (rejected designs)",
+        "description": "The authors rejected: (1) splitting papers between single- and double-blind conditions (would change acceptance likelihood per paper), (2) splitting each reviewer into some single-blind and some double-blind reviews (problematic bidding and potential comparison bias), (3) removing reference to the experiment from CFP and communications (would entail deception), (4) sending small number of papers through both conditions in parallel (insufficient statistical power).",
+        "guidance": "Avoid experimental designs that bias acceptance chances, force direct within-reviewer comparisons, or involve deception. Prefer designs respecting No-Bias and Veracity principles."
+      },
+      {
+        "name": "Mechanism to Run Split Blind Experiment in EasyChair (ERC workflow)",
+        "description": "A practical workflow using EasyChair's External Review Committee (ERC) model: disable subreviewers; change reviewing model to ERC; configure PC to see author names and ERC as double-blind; configure review access; randomly split reviewers into PC and ERC; set senior PC paper assignments to 0; configure per-member paper counts; run assignment separately for PC and ERC; run reviewing; after reviews, change ERC members to standard PC and continue discussion/decision phases.",
+        "guidance": "Follow these concrete steps to implement a parallel single-blind / double-blind reviewing experiment using existing conference management tooling without lying to participants or altering acceptance chances during the experiment."
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/llms_favor_llms_html.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "llms_favor_llms_html.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39789,
+  "model": "gpt-5-mini",
+  "elapsed_s": 49.91280383300182,
+  "input_tokens": 13378,
+  "output_tokens": 5700,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML researchers, conference program chairs, and peer-review policy-makers studying LLM effects on peer review",
+    "subtask_short": "ML conference peer-review analysis",
+    "subtask_description": "Analyzing how use of large language models (LLMs) by authors, reviewers, and metareviewers affects review scores, metareview decisions, and paper acceptance in major ML conferences (ICLR/ICML/NeurIPS). Includes detection of LLM use, statistical tests, and synthetic LLM-generated review experiments.",
+    "subtask_keywords": [
+      "peer_review",
+      "llm",
+      "conference_reviews",
+      "evaluation_metrics",
+      "statistical_analysis"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "\u03b1 value threshold (LLM-aided classification)",
+        "description": "\u03b1 value of 0.15 is used as a threshold: Papers and Reviews are classified as LLM-aided if they have \u03b1>0.15 and Human otherwise.",
+        "guidance": "This threshold is applied consistently across analyses and tables (papers, reviews, metareviews). Metareviews with \u03b1>0.15 are treated as LLM-aided in regressions; the 0.15 cutoff drives quadrant assignments in summary statistics tables."
+      },
+      {
+        "name": "Detecting LLM use (Liang et al. MLE method)",
+        "description": "Frame detection as a Maximum Likelihood Estimation problem: assume text x is drawn from a mixture (1-\u03b1)P + \u03b1Q, and find \u03b1 that maximizes \u2112(\u03b1)=\u2211_i log((1-\u03b1)P(x_i)+\u03b1Q(x_i)). Base distributions P (human) and Q (LLM) are estimated using unigram frequency models.",
+        "guidance": "P is estimated from human-written text and Q from LLM-generated paraphrases. The authors use provided pre-computed word frequency distributions trained on CS paper abstracts (arXiv cs.CL and cs.LG) before Nov 2023. Sentences x_i are the unit of observation."
+      },
+      {
+        "name": "Overall Rating (conference-specific scales)",
+        "description": "The 'Overall Rating' or 'Rating' field provided by reviewers (used as the primary outcome in many analyses). Scales vary by conference (e.g., ICLR 1\u201310, NeurIPS 1\u20136, ICML 1\u20135).",
+        "guidance": "Used in within-paper paired analyses, synthetic review experiments, and as a predictor (mean rating) in logistic regressions for acceptance. Analyses account for differing scales per conference when reporting CATEs and comparisons."
+      },
+      {
+        "name": "Reviewer Confidence",
+        "description": "A numeric 'Confidence' field reviewers must provide alongside ratings (reported in summary statistics and plotted across quality buckets).",
+        "guidance": "Observed trends: both LLM-aided and human reviews show lower confidence for higher-quality papers; human reviews have slightly higher confidence than LLM-aided reviews. Fully LLM-generated reviews often assign a uniform confidence (e.g., 4), suggesting limited calibrated confidence."
+      },
+      {
+        "name": "Review content rating dimensions (Contribution, Soundness, Presentation, Quality, Clarity, Significance, Originality)",
+        "description": "Multiple per-review rating fields (examples include Contribution, Soundness, Presentation; or Quality, Clarity, Significance, Originality depending on venue) that capture different aspects of paper merit.",
+        "guidance": "Analyses show similar trends across these fields as for Overall Rating (e.g., LLM-aided reviews give slightly higher scores to low-quality papers). Figures and tables report mean \u00b1 std dev for these dimensions by (Paper, Review) quadrant."
+      },
+      {
+        "name": "Mean rating (mean rating)",
+        "description": "Mean rating captures the central tendency of reviewer scores for a paper; used as a covariate in acceptance models.",
+        "guidance": "In logistic regression for acceptance, mean rating strongly predicts acceptance (example coefficient \u03b21=+3.327, p<0.001). Always included when assessing whether LLM assistance in metareviews affects acceptance beyond score information."
+      },
+      {
+        "name": "Standard deviation of ratings (std rating)",
+        "description": "Std rating measures disagreement among reviewers (the dispersion of reviewer scores).",
+        "guidance": "Higher rating variance is associated with lower acceptance probability (example coefficient \u03b22\u2248\u22120.288, p<0.001). Used as a control in logistic regression models predicting acceptance."
+      },
+      {
+        "name": "Logistic regression for acceptance (Eq. 8)",
+        "description": "Model: logit(P_accepted) = \u03b21(mean rating) + \u03b22(std rating) + \u03b23 I_metareview + \u03b3' Z, where I_metareview is an indicator for LLM-aided metareviews and Z are area fixed effects.",
+        "guidance": "The coefficient \u03b23 measures whether LLM-aided metareviews associate with different acceptance probabilities after controlling for mean score, disagreement, and area. Table IX reports \u03b23>0 indicating higher acceptance likelihood for papers with LLM-aided metareviews, controlling for scores."
+      },
+      {
+        "name": "Within-paper paired analysis (\u0394_i)",
+        "description": "For each paper compute treatment effects \u0394_i using only the non-quality-indicator reviews and test whether \u0394_i differs between LLM and human papers; CATE Diff. = mean(\u0394_i for LLM papers) \u2212 mean(\u0394_i for human papers).",
+        "guidance": "This within-paper paired approach compares reviewer behavior on the same paper to control for paper quality. Results are tested with Mann\u2013Whitney U tests (one-tailed) and stratified by quality buckets to probe heterogeneity."
+      },
+      {
+        "name": "Mann\u2013Whitney U test (one-tailed)",
+        "description": "Non-parametric test used to compare distributions of treatment effects or ratings between groups (applied one-tailed in reported tables).",
+        "guidance": "Used for within-paper paired analyses (Table VII) and synthetic LLM vs human review comparisons (Table VIII). p-values reported alongside point estimates to indicate statistical significance."
+      },
+      {
+        "name": "Regression with interaction (Eq. 9) to estimate LLM effects",
+        "description": "Model: Y_ij = \u03b20 + \u03b21 X_i^{LLM} + \u03b22 T_ij + \u03b23 (X_i^{LLM} \u00d7 T_ij) + \u03b3' Z_i + \u03b5_ij, where X_i^{LLM} indicates paper was LLM-aided and T_ij indicates review was LLM-aided.",
+        "guidance": "Interpretation: \u03b21 measures average difference for LLM-aided papers, \u03b22 measures effect of LLM-aided reviews on human papers (CATE(Human)=\u03b22), \u03b22+\u03b23 measures effect on LLM-aided papers (CATE(LLM)). Used to demonstrate asymmetric relationships (e.g., LLM-aided reviews help LLM-aided papers more)."
+      },
+      {
+        "name": "CATE estimation and interpretation",
+        "description": "CATE(Human) = \u03b22; CATE(LLM) = \u03b22 + \u03b23; difference \u03b23 quantifies whether LLM-aided reviews have differential effects when evaluating LLM-aided papers.",
+        "guidance": "Numerical examples: in ICLR 2024, \u03b22\u22480.271 (LLM-aided reviews increase ratings on human papers), \u03b22+\u03b23\u22480.615 on LLM papers, and \u03b23\u22480.344 indicates a significantly stronger positive effect when both paper and review are LLM-aided."
+      },
+      {
+        "name": "Quality buckets defined by left-out human review",
+        "description": "Paper quality is determined using a left-out human review; remaining human reviews are used to plot the comparison curves and to assign papers to quality buckets.",
+        "guidance": "This procedure creates an out-of-sample quality measure for stratified analyses (Figures 4, 7, 8). It is used to show that LLM-aided review leniency is concentrated in lower quality buckets."
+      },
+      {
+        "name": "Characteristics of fully LLM-generated reviews (rating compression)",
+        "description": "Fully LLM-generated reviews assign ratings almost exclusively between 6 and 7 regardless of paper quality, exhibiting minimal slope across quality buckets.",
+        "guidance": "This compression implies poor discrimination: fully LLM-generated reviews inflate ratings for weak papers and give little signal about merit, undermining peer review accuracy. Human-in-the-loop moderation partially mitigates compression."
+      },
+      {
+        "name": "Alignment and diagnostic metrics for synthetic metareviews",
+        "description": "Metrics include alignment % between synthetic metareviews and actual decisions, synthetic accept rate, actual accept rate, and precision/recall of synthetic accept recommendations.",
+        "guidance": "Reported example: fully LLM-generated metareviews align with actual decisions 72.6% overall; synthetic accept rate 19.1% vs actual 46.5%. Synthetic accepts achieve 100% precision (when recommending accept the paper was actually accepted) but have low recall (e.g., 43.2% for human metareviews), indicating systematic underprediction of acceptances."
+      },
+      {
+        "name": "Use of area fixed effects (Z vector) as regression controls",
+        "description": "Z represents area fixed effects (paper research area indicators) included in regressions to control for confounders; mappings between ICLR 2024 and 2025 area labels are provided.",
+        "guidance": "Including area indicators controls for variation across subfields. The combined dataset uses a mapped set of 23 research areas; significant area coefficients are reported (e.g., learning theory, generative models)."
+      },
+      {
+        "name": "Definition of CATE Diff. for within-paper comparisons",
+        "description": "CATE Diff. = mean(\u0394_i for LLM papers) \u2212 mean(\u0394_i for human papers) as reported in Table VII.",
+        "guidance": "Used to summarize within-paper paired differences in treatment effects across quality buckets; p-values from Mann\u2013Whitney U tests indicate whether differences are statistically significant."
+      },
+      {
+        "name": "Sampling/oversampling strategy for synthetic LLM experiments",
+        "description": "Fully LLM-generated reviews and metareviews were produced for randomly sampled papers with oversampling of LLM-aided papers (to ensure reliable analysis): e.g., sample counts such as 60 LLM-aided and 480 human papers for ICLR 2025, etc.",
+        "guidance": "The oversampling is necessary because LLM-aided papers are a minority in the corpora; analyses and p-values account for these sampling decisions when comparing synthetic LLM judgments to human judgments."
+      },
+      {
+        "name": "Interpretation guidance: differential effects vs compositional heterogeneity",
+        "description": "Apparent LLM\u2013LLM interaction (LLM-aided reviews favoring LLM-aided papers) is driven primarily by compositional overrepresentation of LLM-aided papers in low-quality ranges where LLM-aided reviews are generally lenient, rather than by specific favoritism.",
+        "guidance": "This interpretive standard is derived from combining regression, within-paper paired analysis, and quality-bucket stratification: restrict analyses to accepted/high-quality papers to test whether interaction persists (often disappears)."
+      }
+    ]
+  }
+}

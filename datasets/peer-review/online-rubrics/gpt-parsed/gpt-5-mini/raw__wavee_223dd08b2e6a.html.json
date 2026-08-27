@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_223dd08b2e6a.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17671,
+  "output_tokens": 3992,
+  "elapsed_s": 1178.5088304579258,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and developers working on automated peer review / LLM-based review systems (ML/NLP community)",
+    "subtask_short": "automated paper review generation",
+    "subtask_description": "Guidelines and evaluation standards for generating and standardizing peer reviews of academic papers using LLMs, plus metrics and procedures to measure review quality, consistency, and format compliance.",
+    "subtask_keywords": [
+      "automated_peer_review",
+      "sea_framework",
+      "llm",
+      "standardization",
+      "evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Standardized review format (nine sections)",
+        "description": "The consolidated review must be organized into nine sections: Summary, Strengths, Weaknesses, Questions, Soundness, Presentation, Contribution, Rating and Paper Decision.",
+        "guidance": "Follow the exact template provided (Table 10 / Table 11). The output must follow the template format and section headings exactly. The standardized review used for SFT includes a textual part (Summary, Strengths, Weaknesses, Questions), a quantitative part (Soundness, Presentation, Contribution, Rating), and the Paper Decision (Accept/Reject) with corresponding reasons."
+      },
+      {
+        "name": "Summary length",
+        "description": "Summary should be around 100-150 words.",
+        "guidance": "Combine summaries from all reviews into a cohesive summary of about 100-150 words. This is explicitly required in the instruction templates."
+      },
+      {
+        "name": "Strengths / Weaknesses / Questions as unified bullet lists",
+        "description": "Strengths, Weaknesses and Questions should be combined into unified, cohesive bullet-point lists that avoid redundancy while preserving specific details and depth.",
+        "guidance": "Each point should be supported by specific examples from the reviews/paper where possible. Preserve reviewer specificity and avoid simple concatenation of repeated items."
+      },
+      {
+        "name": "Soundness / Presentation / Contribution scoring (integer 1\u20134)",
+        "description": "Aggregate per-review scores for Soundness, Presentation, and Contribution into a single integer score (must be an integer) mapped to labels: 1 poor, 2 fair, 3 good, 4 excellent.",
+        "guidance": "Aggregate reviewers' scores (e.g., via weighted average) and then determine a suitable integer score. Provide the labeled result (e.g., '3 good')."
+      },
+      {
+        "name": "Rating score (integer 1\u201310 with labels)",
+        "description": "Aggregate per-review 'Rating' into an integer rating in [1,10] and map it to descriptive labels (1 strong reject ... 10 strong accept, should be highlighted at the conference).",
+        "guidance": "The Rating must be an integer and mapped to the canonical textual criterion (table provided). Example: '5 marginally below the acceptance threshold', '7 accept, but needs minor improvements'."
+      },
+      {
+        "name": "Paper Decision content and rationale",
+        "description": "Paper Decision must include the Decision itself (Accept/Reject) and reasons based on meta-review criteria: originality, methodological soundness, significance of results, and clarity and logic of presentation.",
+        "guidance": "Ensure the Decision matches any 'Decision' key in the JSON input if present. Reasons should cite criteria such as originality, methodology, significance, and clarity, and be consistent with aggregated scores and Rating."
+      },
+      {
+        "name": "Numeric outputs must be valid integers / valid score generation",
+        "description": "Generated quantitative fields (Soundness, Presentation, Contribution, Rating) must be valid integers in the prescribed ranges; invalid (textual) outputs are considered unsuccessful generation.",
+        "guidance": "The paper reports percentages of valid generations; models must ensure numeric output format to be counted as valid (MSE and other analyses assume numeric outputs)."
+      },
+      {
+        "name": "Strict format adherence / instruction compliance",
+        "description": "Generated standardized reviews must strictly follow the specified format/template; adherence is measured (regex-based) and noncompliant outputs are penalized.",
+        "guidance": "SEA-S was evaluated for correct formatting via regular expression matching; aim for 100% correctly formatted results. Non-adherence (e.g., missing sections or different headings) is an anti-pattern."
+      },
+      {
+        "name": "Constructiveness and evidence support",
+        "description": "Reviews should be constructive and provide detailed evidence for each argument, supplying concrete examples or pointers to paper content to support claims.",
+        "guidance": "SEA emphasizes 'constructive reviews with strong evidence supports'. GPT-4 outputs were noted to provide detailed evidence for each argument; SFT should preserve that behavior. Generic, vague, or unsupported comments are anti-patterns."
+      },
+      {
+        "name": "Integration / Standardization of multiple reviews",
+        "description": "When multiple reviews exist for a paper, integrate them into a single, unified review that eliminates redundancy and error, focusing on major advantages and disadvantages.",
+        "guidance": "SEA-S integrates all reviews per paper into one standardized review to serve as SFT training data. Integration should avoid naive concatenation (an anti-pattern exhibited by some models) and should preserve diverse perspectives into a cohesive output."
+      },
+      {
+        "name": "Cross-venue format unification",
+        "description": "Standardize reviews across different venues and criteria into a unified format to make them consistent and usable for SFT.",
+        "guidance": "Different conferences have varied formats; the standardization module must convert these heterogeneous formats into the unified nine-section schema for downstream training. Failure to normalize formats can hinder SFT performance."
+      },
+      {
+        "name": "Mismatch score definition (ground truth)",
+        "description": "Mismatch score (y_true) measures consistency between a reviewer\u2019s rating and the confidence-weighted average rating for the paper: y_true = spri \u2212 (sum_j cprj * sprj) / (sum_j cprj).",
+        "guidance": "When y_true = 0 the review is relatively neutral/consistent; larger magnitude indicates lower consistency. Example: ratings {2,6,6,6} all full confidence => reviewer rated 2 considered lower-quality (deviates from weighted average 5)."
+      },
+      {
+        "name": "Mismatch score estimation (SEA-A regression)",
+        "description": "Estimate mismatch score via a lightweight regression model (SEA-A) trained with MSE loss on pairs <parsed_paper, review>, using long-context sentence embeddings and computed query/key vectors.",
+        "guidance": "Use a sentence representation model for long contexts (e.g., SFR-Embedding-Mistral) to get h_p and h_r, compute q and k vectors (q = W_q h, k = W_k h) and predict y_pred = w(q_p k_r^T + q_r k_p^T) + b. Train with MSE to minimize error relative to y_true."
+      },
+      {
+        "name": "Self-correction regeneration policy",
+        "description": "If estimated mismatch y_pred > threshold \u03b8, regenerate the review by adding the current mismatch score as an additional prompt; if mismatch exceeds \u03b8 across 10 successive trials, terminate and select the review with the smallest score.",
+        "guidance": "Set \u03b8 to the average mismatch score on validation. SEA-EA uses this policy to improve consistency; the regeneration loop and termination rule are explicit parts of the pipeline."
+      },
+      {
+        "name": "Automatic evaluation metrics for generated reviews",
+        "description": "Evaluate generated reviews using BLEU, ROUGE (Recall and F1), and BERTScore to measure n-gram overlap and semantic similarity against references/benchmarks.",
+        "guidance": "ROUGE-Recall assesses comprehensiveness (how much key information from the paper is captured); ROUGE-F1 assesses balance between precision and recall; BERTScore focuses on semantic similarity in embedding space. For completeness assessment, concatenate all human reviews as the benchmark."
+      },
+      {
+        "name": "Quantitative score evaluation metric (MSE)",
+        "description": "Use Mean Squared Error (MSE) to measure discrepancy between generated quantitative scores and reference (confidence-weighted average) scores.",
+        "guidance": "Lower MSE indicates more accurate numeric score generation. Also report proportion of generated reviews with valid numeric scores (validity rate)."
+      },
+      {
+        "name": "Decision-level evaluation: classification metrics and reason similarity",
+        "description": "Evaluate the generated paper Decision against the Area Chair decision using accuracy, precision, recall, F1; measure semantic similarity between generated reasons and meta-reviews with BERTScore.",
+        "guidance": "Compute standard classification metrics for Decision prediction; compute BERTScore between generated 'Reasons' and meta-review text. High BERTScore indicates semantically aligned reasons."
+      },
+      {
+        "name": "Standardization content quality analysis (ROUGE precision/recall)",
+        "description": "Assess content overlap between standardized outputs and references via ROUGE precision and recall to quantify exclusive and overlapping semantic content.",
+        "guidance": "Compute ROUGE-1/ROUGE-2/ROUGE-L precision/recall between candidate standardized outputs and references (SEA-S outputs were used as reference in experiments). Analyze overlapping vs exclusive information to evaluate richness of standardized content."
+      },
+      {
+        "name": "Format-correctness proportion",
+        "description": "Measure the proportion of standardized reviews that correctly match the required format (e.g., via regex matching); high proportion indicates strong instruction adherence.",
+        "guidance": "SEA-S achieved 100% correctly formatted results in experiments; models that fail to meet format specs (e.g., generate free text instead of structured sections) are penalized and may yield N/A for quantitative evaluations."
+      },
+      {
+        "name": "Human and LLM-based subjective evaluation",
+        "description": "Supplement automatic metrics with human expert judgements and LLM (e.g., GPT-4o) scorings using questionnaires (e.g., 10 questions for review quality, 7 for standardized content), rated on 1\u201310 scales plus top-1 preference.",
+        "guidance": "Recruit qualified experts to rate sampled reviews and ask them to choose the best review among anonymized model outputs; optionally use an LLM rater for additional, reproducible scoring. Aggregate mean scores across evaluators."
+      },
+      {
+        "name": "Parsing fidelity requirement",
+        "description": "Parse PDFs into structured text and LaTeX (for formulas) using document parsers (e.g., Nougat) so LLMs can better understand paper contents.",
+        "guidance": "Accurate parsing of formulas and layout (LaTeX codes rather than corrupted text) improves downstream review quality. Using naive text extraction that corrupts formulas is an anti-pattern."
+      }
+    ]
+  }
+}
