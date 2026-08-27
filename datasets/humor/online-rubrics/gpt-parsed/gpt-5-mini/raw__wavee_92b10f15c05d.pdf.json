@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_92b10f15c05d.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 13503,
+  "output_tokens": 3399,
+  "elapsed_s": 2178.378902666969,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / multimodal machine learning researchers working on humor detection and dataset creation",
+    "subtask_short": "multimodal_humor_detection",
+    "subtask_description": "Creating and evaluating a multimodal dataset and models for detecting humor (laughter) from punchlines and preceding context using text, visual, and acoustic modalities; includes dataset construction, feature extraction, baselines, and evaluation.",
+    "subtask_keywords": [
+      "humor",
+      "multimodal",
+      "dataset",
+      "ted_talks",
+      "laughter_detection",
+      "nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Multimodality inclusion",
+        "description": "UR-FUNNY is the only humor detection dataset which incorporates all three modalities of text, visual and acoustic.",
+        "guidance": "Dataset and models should include and exploit text, visual and acoustic modalities rather than relying on one modality alone; experiments show best performance when all three (T+A+V) are used together."
+      },
+      {
+        "name": "Diversity in speakers and topics",
+        "description": "A suitable dataset for multimodal humor detection should be diverse in a) speakers: modeling the idiosyncratic expressions of humor may require a dataset with large number of speakers, and b) topics: different topics exhibit different styles of humor as the context and punchline can be entirely different from one topic to another.",
+        "guidance": "Collect from platforms with many speakers and topics (TED talks used here: 1741 speakers, 417 topics) to capture idiosyncratic styles and topical variation."
+      },
+      {
+        "name": "Punchline and context definition via laughter marker",
+        "description": "The 'laughter' marker is used as an indicator of humor. Specifically, the sentence immediately before the marker is considered as the punchline and the sentences prior to punchline (but after previous laughter marker) are considered context.",
+        "guidance": "Use reliably annotated audience/laughter markers to extract punchline-context triplets (P = punchline, C = context) to model build-up and twist dynamics; ensures consistent labeling of positive instances."
+      },
+      {
+        "name": "Negative sampling from same-video distribution",
+        "description": "Negative samples are chosen at random intervals where the last sentence is not immediately followed by a laughter marker. This negative sampling uses sentences from the same videos.",
+        "guidance": "Draw negatives from the same domain and videos as positives (homogeneous distribution) rather than from disparate sources, to create a more challenging and realistic classification task (UR-FUNNY has a homogeneous 50% split)."
+      },
+      {
+        "name": "Forced alignment and word-level multimodal alignment",
+        "description": "Using forced alignment, we mark the beginning and end of each sentence in the video as well as words and phonemes. Therefore, an alignment is established between text, visual and acoustic. For each modality, visual and acoustic cues are aligned on word level by interpolation.",
+        "guidance": "Apply forced alignment (e.g., P2FA) to obtain word/phoneme timings and interpolate visual/acoustic frames to word-level so each word has accompanying visual and acoustic descriptors; this facilitates synchronized multimodal modeling."
+      },
+      {
+        "name": "Speaker-independent train/validation/test splits",
+        "description": "These folds share no speaker with each other - hence standard folds are speaker independent (Zadeh et al., 2016).",
+        "guidance": "Ensure no speaker overlap across splits to minimize overfitting to speaker identity and to evaluate generalization to unseen speakers."
+      },
+      {
+        "name": "Equal positive/negative class balance",
+        "description": "After negative sampling, there is a homogeneous 50% split in the dataset between positive and negative examples.",
+        "guidance": "Maintain balanced classes to avoid trivial class-skew effects on accuracy and to simplify baseline comparisons; report counts for train/val/test."
+      },
+      {
+        "name": "Acoustic feature extraction (COVAREP 81 features)",
+        "description": "COVAREP software is used to extract 81 acoustic features at 30 frame/sec: fundamental frequency (F0), voiced/unvoiced (VUV), normalized amplitude quotient (NAQ), quasi open quotient (QOQ), glottal source parameters (H1H2, Rd, Rd conf), parabolic spectral parameter (PSP), maxima dispersion quotient (MDQ), spectral tilt/slope of wavelet responses (peak/slope), Mel cepstral coefficients (MCEP 0-24), harmonic model and phase distortion mean (HMPDM 0-24) and deviations (HMPDD 0-12), and the first 3 formants.",
+        "guidance": "Extract rich acoustic descriptors related to prosody, voice quality and spectral characteristics since these are related to emotions and tone of speech and help in multimodal humor detection."
+      },
+      {
+        "name": "Visual feature extraction (OpenFace / FACS AUs)",
+        "description": "OpenFace facial behavioral analysis tool is used to extract facial Action Units (AU) features based on the Facial Action Coding System (FACS). Rigid and non-rigid facial shape parameters are also extracted.",
+        "guidance": "Use face-centered visual features (AUs, shape) at frame rate (e.g., 30 fps); note camera volatility in presentations and that the speaker's face is often the only consistently available visual source."
+      },
+      {
+        "name": "Text features and phoneme-level alignment",
+        "description": "GloVe word embeddings are used as pre-trained word vectors for the text features. P2FA forced alignment model is used to align the text and audio on phoneme level; timing annotations of context and punchline are extracted from the forced alignment.",
+        "guidance": "Represent text with pre-trained embeddings and align to audio/visual at phoneme/word level to enable synchronized multimodal inputs."
+      },
+      {
+        "name": "Modeling both punchline and context (punchline prioritized)",
+        "description": "Both context and punchline information are important as C-MFN outperforms C-MFN (P) and C-MFN (C) models. Punchline is the most important component for detecting humor as the performance of C-MFN (P) is significantly higher than C-MFN (C).",
+        "guidance": "Design models to encode punchline strongly while also modeling context (build-up) \u2014 e.g., include unimodal and multimodal context networks to capture temporal and cross-modal relations; evaluate variants using only P, only C, and both."
+      },
+      {
+        "name": "Context modeling via unimodal LSTMs and multimodal transformer encoder",
+        "description": "Unimodal Context Network consists of M LSTMs (one per modality) encoding each context sentence into vectors hm,n. Multimodal Context Network concatenates modality representations per sentence and applies self-attention (transformer encoder) to find asynchronous spatio-temporal relations, producing \u02c6H.",
+        "guidance": "Use per-modality sequence encoders (LSTMs) for context utterances and a self-attention-based fusion (transformer encoder) across modalities/sentences to capture complex temporal relations in context."
+      },
+      {
+        "name": "Memory Fusion Network initialization with context representations",
+        "description": "The Memory Fusion Network (MFN) contains a System of LSTMs and a Multi-view Gated Memory. The C-MFN initializes MFN memories using the outputs H (unimodal) and \u02c6H (multimodal) of the context networks (mapping via fully connected networks).",
+        "guidance": "Integrate context by initializing downstream multimodal sequential models (e.g., MFN) with learned context encodings so punchline modeling is conditioned on prior context."
+      },
+      {
+        "name": "Evaluation protocol and metrics",
+        "description": "Models are trained using categorical cross-entropy. Binary accuracy is reported for variants and modality combinations; Random Forest baseline and human performance (82.5% on UR-FUNNY) are provided for comparison.",
+        "guidance": "Use categorical cross-entropy for training and report classification accuracy (and other relevant metrics) on speaker-independent test folds; include non-neural baselines and human performance to contextualize model results."
+      },
+      {
+        "name": "Avoid reliance on trivial superficial features",
+        "description": "There is no trivial or degenerate distinctions between humor and non-humor cases. Classification of humor versus non-humor cases cannot be done based on simple measures (such as number of words); it requires understanding the content of sentences.",
+        "guidance": "Design datasets and evaluation so that simple heuristics (word count, duration) cannot separate classes; focus on semantic, prosodic and multimodal cues and report distributions to demonstrate non-triviality."
+      }
+    ]
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_2acd19d77165.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 19321,
+  "output_tokens": 4412,
+  "elapsed_s": 2151.1581838331185,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in NLP / affective computing working on multimodal sarcasm and humor detection in code-mixed conversational settings",
+    "subtask_short": "multi-modal sarcasm/humor detection",
+    "subtask_description": "Detect and classify each utterance in a multi-speaker conversational dialog as sarcastic/non-sarcastic and humorous/non-humorous, using multi-modal inputs (text, acoustic, optionally visual) and dialog context; applied to Hindi-English code-mixed data.",
+    "subtask_keywords": [
+      "sarcasm_detection",
+      "humor_classification",
+      "code-mixed",
+      "multimodal",
+      "conversational_dialog",
+      "hindi_english"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Task formulation (utterance-level binary classification)",
+        "description": "Given a sequence of utterances U = (u1, u2, ..., un) in a dialog video, classify each utterance into \u2013 (i) sarcastic or non-sarcastic, and (ii) humorous or non-humorous.",
+        "guidance": "Each utterance ui may have multiple modality representations (textual uT_i, acoustic uA_i, visual uV_i). Classification is performed per utterance within the dialog context."
+      },
+      {
+        "name": "Definition of sarcasm",
+        "description": "Sarcasm is defined as an expression meant to criticize, taunt, or hurt someone\u2019s feeling in a sober and explicitly non-disrespectful manner.",
+        "guidance": "Not all sarcastic statements are amusing; annotation should follow this conceptual definition when assigning sarcastic labels."
+      },
+      {
+        "name": "Definition of humor",
+        "description": "Humorous statements aim to incite amusing or comic feelings with the intention to make their audience laugh.",
+        "guidance": "A light-hearted sarcastic statement which does not offend can be interpreted as humorous; annotate humor separately from sarcasm."
+      },
+      {
+        "name": "Annotate both sarcasm and humor per utterance",
+        "description": "For each utterance, assign appropriate sarcasm (sarcastic or non-sarcastic) and humor (humorous or non-humorous) labels.",
+        "guidance": "Treat the two labels independently \u2014 an utterance can be sarcastic and/or humorous. Use majority voting across annotators to aggregate labels."
+      },
+      {
+        "name": "Annotation protocol and inter-annotator agreement",
+        "description": "Use multiple annotators (three used here) and aggregate labels by majority voting. Report inter-rater agreement (Cohen Kappa).",
+        "guidance": "Paper reports Cohen Kappa = 0.654 (humor) and 0.681 (sarcasm); include such agreement statistics to validate annotation quality."
+      },
+      {
+        "name": "Dataset composition (dialog-level, multi-party)",
+        "description": "Collect multi-party conversational dialogs (MaSaC: ~1,200 multi-party dialogs from TV show 'Sarabhai vs. Sarabhai'), split by scenes into dialogs, and split dialogs into utterances (~15,000 utterances).",
+        "guidance": "Each dialog is treated as a standalone conversation; context for an utterance is restricted to the current dialog."
+      },
+      {
+        "name": "Modalities to include and noise considerations",
+        "description": "Leverage distinct and diverse information offered by each modality while reducing the effect of noise among multi-modal information sources.",
+        "guidance": "If a modality (e.g., visual frames) contains irrelevant content or noise (multiple actors, low-quality frames) it may be better to exclude it as it can 'defile the learning process by attending to irrelevant content.'"
+      },
+      {
+        "name": "Modality selection for this work",
+        "description": "Use textual and acoustic modalities for modeling; visual modality was excluded in main models due to noisy / low-quality frames and presence of multiple actors.",
+        "guidance": "Visual features were extracted experimentally (Affectiva, GoogleNet) but yielded poor results; include visual only if frame quality and actor alignment support useful signals."
+      },
+      {
+        "name": "Alignment of multi-modal signals",
+        "description": "Mark boundaries of each utterance on the time spectrum by detecting prolonged silence, discard silence, and map corresponding speech and visual frames to utterances.",
+        "guidance": "Accurate alignment is necessary to extract utterance-level acoustic and visual features that correspond to the transcripts."
+      },
+      {
+        "name": "Laughter removal from audio",
+        "description": "Remove audience laughter and background noise from audio to avoid the model overfitting on audience reactions when the target task is humor classification.",
+        "guidance": "Paper uses Audacity's laughter suppression approach (identify laughter frequency bands, suppress above threshold, smooth sample). Document and justify any audio cleaning."
+      },
+      {
+        "name": "Automatic speech recognition for transcripts",
+        "description": "Use an ASR system (Gnani.ai, Google Speech API-based) to extract speech transcripts for each utterance.",
+        "guidance": "Verify ASR quality especially for romanized code-mixed Hindi-English; manual correction may be necessary if ASR fails on transliterations."
+      },
+      {
+        "name": "Textual feature representation",
+        "description": "Use pre-trained FastText multilingual word embeddings (300-dimensional, uncased) for tokens; achieved >90% coverage of vocabulary.",
+        "guidance": "Multilingual embeddings help handle code-mixing; document embedding coverage and consider alternatives (BERT, multilingual BERT) as baselines."
+      },
+      {
+        "name": "Acoustic feature representation",
+        "description": "Extract MFCC-based acoustic features (up to 128 MFCCs per frame) using Librosa and obtain utterance-level representations by applying a time-distributed 1D convolution over MFCC frames.",
+        "guidance": "Acoustic features capture pitch, intensity and prosodic cues that complement textual semantics for sarcasm/humor detection."
+      },
+      {
+        "name": "Visual feature representation (experimental)",
+        "description": "Visual features were extracted using Affectiva API and GoogleNet (Va, Vg) for evaluation but performed poorly due to low-quality frames.",
+        "guidance": "If visual signals are high-quality and actor-specific, include; otherwise exclude to prevent noisy attention."
+      },
+      {
+        "name": "Utterance-level hierarchical localized attention (H-ATNU)",
+        "description": "Compute efficient textual utterance representation using a hierarchy of localized attentions that attend to a small portion of the input sentence at a time; AtnWidthU controls window size.",
+        "guidance": "AtnWidthU in [2,5] was tested and AtnWidthU = 3 was optimal in experiments. Hierarchical attention supports extraction of long-term relations by progressively attending to wider spans."
+      },
+      {
+        "name": "Dialog-level modality-specific contextual attention (C-ATND)",
+        "description": "Employ separate dialog-level attention modules that compute attention weights \u03b1 (acoustic), \u03b2 (textual), and \u03b3 (cross-modal) over preceding utterances to capture contextual importance.",
+        "guidance": "AtnWidthD (number of preceding utterances considered) was best at 5; attention weights signify the importance of contextual utterances for classifying the current utterance."
+      },
+      {
+        "name": "Filtering / gating mechanism to reduce inter-modal noise",
+        "description": "Apply a gating/filtering mechanism that learns interactions among modalities and filters noise via sigmoid gates (\u03c3) and tanh activations to control information flow.",
+        "guidance": "Gating values near 0 block irrelevant information; near 1 allow forwarding. Filtering improved bi-modal/tri-modal performance in experiments."
+      },
+      {
+        "name": "Residual skip connections",
+        "description": "Use residual skip connections when forming final attended representations to stabilize learning (e.g., concatenating attended context with original hidden representation).",
+        "guidance": "Residual connections were used to form the final attended representations \u02c6h^A_i, \u02c6h^T_i, \u02c6h^{AT}_i."
+      },
+      {
+        "name": "Sequence modeling and LSTM configuration",
+        "description": "Model dialog-level sequences using LSTM(s); in experiments forward LSTM with 128-dimensional hidden state per modality was used.",
+        "guidance": "Use modality-specific LSTMs to learn sequences of hidden states h^T_i and h^A_i before applying contextual attention."
+      },
+      {
+        "name": "Training hyperparameters and optimization",
+        "description": "Use dropout = 40%, batch size = 32, ReLU activation, output sigmoid with binary cross-entropy loss, and Adam optimizer for training.",
+        "guidance": "Document hyperparameters and justify choices; these were the settings used for reported experiments."
+      },
+      {
+        "name": "Evaluation metrics and preference",
+        "description": "Compute precision, recall, F1-score, and accuracy for both sarcasm and humor classification; prefer F1-score due to unbalanced label distribution.",
+        "guidance": "Report both accuracy and F1 for completeness but emphasize F1 when classes are imbalanced (e.g., sarcastic/non-sarcastic: 391/1185)."
+      },
+      {
+        "name": "Experimental comparisons / baselines",
+        "description": "Evaluate multiple variants: uni-modal (textual/acoustic/visual), hierarchical vs. mean/BERT utterance embeddings, with/without dialog-level attention, with/without filtering, and multi-modal fusion.",
+        "guidance": "Compare to strong baselines (e.g., TBERT, Tavg, LSTM variants) and report per-modality and combined results to quantify contribution of each component."
+      },
+      {
+        "name": "Attention-context window selection guidance",
+        "description": "The contextual window size for dialog-level attention (AtnWidthD) should capture nearby context but not too far; in experiments performance degraded beyond 5 preceding utterances.",
+        "guidance": "Choose AtnWidthD to reflect the empirically observed proximity of sarcasm/humor context (~5 utterances). Too small a window lacks context; too large introduces irrelevant signals."
+      },
+      {
+        "name": "Dataset split and validation protocol",
+        "description": "Split dialogs into train/test sets (paper: 1,100 train dialogs and 90 test dialogs) and use 10% of train as validation. Report counts of utterances and class distributions.",
+        "guidance": "Maintain dialog-level split (no leak across train/test) and report speaker-wise distributions and label counts to show dataset characteristics."
+      },
+      {
+        "name": "Handle code-mixing and language identification challenges",
+        "description": "Code-mixed inputs require word-level language identification and multilingual/cross-lingual representations; transliteration ambiguity (e.g., 'main') complicates dictionary lookups.",
+        "guidance": "Use multilingual embeddings, consider language identification preprocessing, and analyze model performance against degree of code-mixing. Paper observed better performance on utterances with more English words."
+      },
+      {
+        "name": "Interpretability via attention heatmaps",
+        "description": "Use attention heatmaps (textual, acoustic, cross-modal) to analyze which contextual utterances the model attends to and to justify model decisions.",
+        "guidance": "Heatmaps should show higher attention weights for contextually relevant utterances; use them to validate model behavior qualitatively."
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/af70964d7005.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 6930,
+  "output_tokens": 3501,
+  "elapsed_s": 1106.3043727918994,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational linguists / NLP researchers interested in computational humor and semantic-network based generation",
+    "subtask_short": "semantic-script humor generation",
+    "subtask_description": "Generate two-line question/answer jokes by mining dual scripts (semantic circuits) from a semantic network (ConceptNet) in accordance with the Semantic-Script Theory of Humor, optimizing for semantic overlap and inter-script incongruity and converting circuits to surface form via templates.",
+    "subtask_keywords": [
+      "computational_humor",
+      "semantic_script_theory",
+      "conceptnet",
+      "script_generation",
+      "question_answer_jokes"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "SSTH core conditions: overlap and incongruity",
+        "description": "The Semantic-Script Theory of Humor (SSTH) posits two underlying scripts, one more obvious than the other; to be humorous the underlying scripts must satisfy two conditions: overlap and incongruity.",
+        "guidance": "In the setup phase instances of the two scripts are presented in a way that does not give away the less obvious script (due to their overlap). In the punchline a trigger expression forces the audience to switch interpretation to the alternate (less likely) script; the alternate script must differ significantly in meaning (be incongruent) with the first for the switch to have a humorous effect. Example provided: '\u201cIs the [doctor]S1 at home?\u2019 the [patient]S1 asked in his [bronchial]S1 [whisper]S2. \u201cNo,\u201d the [doctor\u2019s]S1 [young and pretty wife]S2 [whispered]S2 in reply. [\u201cCome right in.\u201d]S2' (Raskin, 1985) \u2014 demonstrates setup (overlap) and punchline (incongruity)."
+      },
+      {
+        "name": "Script feasibility / surface-realizability",
+        "description": "A semantic circuit (pair of paths from a root to a common node) must yield a meaningful surface form; feasible circuits are distinguished from infeasible ones.",
+        "guidance": "Feasible circuits are learned in a supervised way (binary labels {feasible, infeasible} assigned to candidate circuits \u2014 authors used 8 seed concepts with ~300 generated circuits each). Many found circuits do not yield meaningful surface forms and must be pruned. Learned transition probabilities help ensure scripts correspond to surface-realizable sequences capturing events, consequences, qualifiers of time/size/location/certainty."
+      },
+      {
+        "name": "Script model: first-order Markov chain over relations",
+        "description": "Model each script as a first-order Markov chain of relations between concepts (a chain of concepts c1,c2...cn joined by directed relations rij).",
+        "guidance": "Compute likelihood Pr(S) = \u220f Pr(r_ij | r_jk) where the conditionals are estimated from maximum likelihood on training data. This captures likely transitions between concepts in a surface-realizable sequence."
+      },
+      {
+        "name": "Semantic overlap via modified spreading activation",
+        "description": "Find semantic circuits by performing a modified spreading activation from a user-specified root concept and favoring circuits that maximize semantic overlap.",
+        "guidance": "Activation starts at the root and radiates along outgoing edges. Edge-pairs are weighted by their transition probabilities Pr(r_ij | r_jk) and a decay factor \u03b3 < 1 penalizes long scripts. A fan-out constraint penalizes nodes with many outgoing edges (common concepts). Activation weight for a node w(c_i) is computed as a weighted sum over predecessor nodes with the fan-out penalty and \u03b3; termination occurs when activation weights fall below a threshold and loop checking prevents feedback. Nodes are then ranked by activation weight to select candidate scripts."
+      },
+      {
+        "name": "Circuit ranking: decay-weighted log-likelihood \u03c6_k",
+        "description": "Score candidate scripts within a circuit using a decay-weighted log-likelihood metric \u03c6_k to prefer high-likelihood, appropriately-sized scripts.",
+        "guidance": "\u03c6_k = |S_k| log \u03b3 + |S_k| * \u03a3_i log Pr_k(r_{i+1} | r_i), where |S_k| is the script length and \u03b3 is the decay factor. Scripts with the highest \u03c6_k in top-ranking circuits represent likely feasible scripts that display significant semantic overlap within the circuit."
+      },
+      {
+        "name": "Inter-script incongruity via concept/community clustering",
+        "description": "Measure concept incongruity by clustering ConceptNet (Fast Community Detection) and selecting concepts so that question concepts come from different scripts but the same cluster while the answer concept comes from a different cluster.",
+        "guidance": "Hierarchical/community clustering produces clusters of related concepts (e.g., religion, marriage, computers). Templates select up to two concepts in the question from different scripts but the same cluster, and one concept in the answer from a different cluster \u2014 this enforces inter-script incongruity at the surface level. Authors note noise in clustering can cause 'cluster overfitting' where related concepts are assigned to separate clusters, degrading humor."
+      },
+      {
+        "name": "Surface realization: template alignment and greedy scoring for incongruity",
+        "description": "Convert selected script concepts to natural-language question/answer templates by aligning a subset of script concepts to surface templates while maximizing inter-script incongruity.",
+        "guidance": "Each template presents up to two concepts in the question and one in the answer (Q/A format). Alignment is performed via a scoring heuristic which greedily optimizes for incongruity of the surface form. The surface realizer assumes part-of-speech or phrase types from ConceptNet's relation specifications; inconsistent POS/phrase types in ConceptNet entries can produce nonsensical outputs. Relaxing rigid template constraints is suggested to produce more diverse types of generated humor."
+      },
+      {
+        "name": "ConceptNet data-quality and pruning heuristics",
+        "description": "Mitigate noise from ConceptNet entries and weak relations by pruning low-quality concepts and terminal nodes before surface realization.",
+        "guidance": "Use ConceptNet's SCORE attribute (number of user votes) to prune low-scoring concepts and exclude terminal nodes (nodes not expanded by users) from consideration. These steps partially address nonsensical two-liners caused by erroneous POS/phrase-type annotations and noisy clustering."
+      },
+      {
+        "name": "Human evaluation rubric: 1\u20134 categorical rating",
+        "description": "Evaluate generated two-liners with human subjects using a 1-to-4 categorical scale mapped to qualitative categories.",
+        "guidance": "Scale: 4 = hilarious, 3 = humorous, 2 = not-humorous, 1 = nonsense. Experiment: N=15 subjects (graduate students), each shown 48 highest-ranking two-liners drawn from root categories (priest, woman, computer, robot), mixed with human-made two-liners to normalize biases. Three generator variants evaluated per subject: ScriptModel+ConceptClustering (SM+CC), ScriptModel only (SM), and Baseline. Statistical comparison: SM+CC mean = 1.95 (STD=0.27) vs Baseline mean = 1.06 (STD=0.58); SM+CC yields significantly higher scores (one-sided t-test, 95% confidence). Authors note substantial fractions of non-humorous/nonsensical outputs remain."
+      },
+      {
+        "name": "Failure modes and recommended mitigations",
+        "description": "Documented causes of non-humorous or nonsensical outputs and proposals to improve robustness.",
+        "guidance": "Primary failure modes: (1) noise in concept clustering (cluster overfitting assigning related concepts to different clusters) leading to incorrect incongruity, and (2) inconsistencies between ConceptNet relation types and assumed POS/phrase types in surface templates producing nonsensical phrases. Mitigations: prune low-scoring concepts and terminal nodes, augment ConceptNet with additional domain/affect resources (SenticNet, WordNet-Domains) for more robust clustering and incongruity generation, and relax rigid surface-realizer templates to allow more varied narrative forms beyond Q/A."
+      }
+    ]
+  }
+}

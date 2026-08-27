@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_d20b0e0be9f1.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 10605,
+  "output_tokens": 3866,
+  "elapsed_s": 2193.7628102500457,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational-linguistics and multimodal-ML researchers building/using humor-detection datasets and models",
+    "subtask_short": "humor_detection_in_stand-up_videos",
+    "subtask_description": "Creation, annotation, and evaluation of a multilingual stand-up-comedy dataset for automatic laughter/humor detection framed as word-level sequence labeling; includes ASR-based cleaning, candidate selection, manual test annotation, and baseline modeling protocols.",
+    "subtask_keywords": [
+      "humor",
+      "stand_up",
+      "dataset",
+      "laughter_detection",
+      "sequence_labeling",
+      "multilingual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset composition and inclusion criteria",
+        "description": "The StandUp4AI dataset is composed of 3,617 stand-up videos in 7 languages (English, French, Spanish, Italian, Portuguese, Hungarian, Czech) totaling \u2248334 hours; on each channel, videos from YouTube Shorts and videos where more than one comedian appeared were excluded.",
+        "guidance": "Collect videos from curated channels (Table 1). Exclude shorts and multi-comedian videos to keep performances coherent; report per-channel/language counts (videos, hours, words, laughter labels)."
+      },
+      {
+        "name": "Laughter annotation framing (word-level sequence labeling)",
+        "description": "Do not frame humor/laughter detection as a binary sequence classification; instead label at the word level so each word receives a binary tag indicating whether laughter occurs right after it and before the end of the next word.",
+        "guidance": "This framing enables continuous prediction throughout a joke and anticipatory prediction (predicting laughter before it happens in model observations). Use word-aligned labels rather than end-of-sequence punchline detection."
+      },
+      {
+        "name": "Label creation procedure for laughter segments",
+        "description": "For each laughter segment with start t0 and end t1, find the 'start' word whose timing window either overlaps or immediately follows t0, and the 'end' word around t1; if both boundaries fall on the same word label that word positive, otherwise tag all words in between as positive.",
+        "guidance": "Use word timestamps from ASR outputs (after correction) to map time-based laughter segments to word indices so models can predict start/stop of laughter."
+      },
+      {
+        "name": "Automatic laughter-detection pipeline baseline choices",
+        "description": "Primary off-the-shelf acoustic laughter detector used: Omine et al. (2024) model; unsupervised baseline used: FunnyNet framework (Liu et al., 2022).",
+        "guidance": "Run multiple detectors for comparison; use state-of-the-art supervised detectors as well as unsupervised baselines to evaluate gains from ASR-based enhancement."
+      },
+      {
+        "name": "ASR tools and expected ASR error characteristics",
+        "description": "Transcripts and timestamps are produced using two ASR systems: Whisper (Radford et al., 2023) and WhisperX (Bain et al., 2023). Real word errors are small (examples: French word errors <1.0%, timestamp errors ~2.0%; English word errors <0.5%, timestamp errors ~0.1%), with most errors caused by similar pronunciations and missing fillers.",
+        "guidance": "Expect variation by language and dialect (e.g., dialects like Mexican/Chilean Spanish challenge ASR). Inspect common misrecognitions (e.g., 'qu\u2019on' vs 'con') as they may change semantics; plan corrections for timestamp perturbations near laughter."
+      },
+      {
+        "name": "ASR-based timestamp correction (intersection method)",
+        "description": "Correct timestamp errors around laughter by aggregating outputs of Whisper and WhisperX: search for longer-in-time words and check for intersections between transcripts; when found, keep the begin and end timestamps of the intersection to insert a new laughter in the resulting transcript and remove the intersection from neighboring word timestamps.",
+        "guidance": "This method addresses merging of laughter into neighboring words (Whisper tends to merge with next word; WhisperX with previous). Use intersection timestamps to create candidate laughter events and fix erroneous word time windows (see Table 6 example)."
+      },
+      {
+        "name": "Automatic candidate laughter selection and manual validation",
+        "description": "Generate candidate outbursts from ASR-corrected transcripts; manually annotate candidates in a subset (50 videos) to determine real laughter vs other events, then train a classifier (RandomForest) on these examples.",
+        "guidance": "Use manual labels on candidates to bootstrap a classifier that filters false-positives from acoustic detection; manual annotation of a representative subset is required to train this filter."
+      },
+      {
+        "name": "Acoustic feature set for candidate classifier",
+        "description": "Extract a comprehensive acoustic feature set including temporal (duration, voiced ratio, burst count, temporal centroid), energy (rms mean/std/slope, energy at 90th percentile), spectral (bandwidth, rolloff at 85/95%, flatness, contrast, centroid), pitch (median, std, HNR), modulation energy (4\u201312 Hz), chroma (1\u201312), MFCCs (1\u201313) and first/second derivatives (delta, delta2 MFCCs).",
+        "guidance": "Use a rich, multi-type feature set (temporal/energy/spectral/pitch/chroma/MFCC) to distinguish laughter from fillers/claps/noise. Librosa is used to extract features in the paper."
+      },
+      {
+        "name": "Post-processing rule: discard very short audio segments",
+        "description": "All audio segments with duration shorter than 0.5 seconds are discarded and classified as 'other' (not considered in model evaluation).",
+        "guidance": "Short bursts under 0.5s are excluded from candidate evaluation to avoid spurious detections; apply this threshold prior to classifier training/evaluation."
+      },
+      {
+        "name": "Candidate classifier model and hyperparameter tuning",
+        "description": "Use a RandomForest binary classifier to distinguish laughter from non-laughter. For hyperparameter tuning use 15% of the dataset for validation; tuned parameters included n_estimators, max_depth, and min_samples_split with optimal values reported as n_estimators=50, max_depth=13, min_samples_split=2; run multiple iterations varying train/test splits.",
+        "guidance": "Perform many iterations (the paper used 200) varying training/testing splits while consistently holding out 15% for validation; report confidence intervals for precision/recall/F1."
+      },
+      {
+        "name": "Test set manual annotation protocol and reliability target",
+        "description": "Build a manually annotated test set of 67 videos (~10 per language) annotated with precise timestamps to 0.1s using audio and Audacity; annotate twice to compute Krippendorff's \u03b1 using a distance metric based on IoU with threshold 0.2; reported inter-annotator agreement \u03b1 = 0.91.",
+        "guidance": "Annotate at high temporal precision (0.1s), double-annotate for reliability, and compute Krippendorff's alpha with an IoU distance (threshold 0.2) to quantify agreement. Manually check ASR outputs to ensure label-word alignment for evaluation."
+      },
+      {
+        "name": "Evaluation metric for acoustic laughter detection (IoU-based)",
+        "description": "Validate acoustic laughter detections using sequence-overlap metrics such as Intersection-over-Union (IoU) with a recommended threshold of 0.2 to consider a prediction positive.",
+        "guidance": "Use IoU\u22650.2 for hit/miss decisions when comparing predicted laughter segments to manual ground truth; report precision, recall, and F1 at that IoU threshold (the paper reports these comparisons across methods)."
+      },
+      {
+        "name": "Evaluation choice for word-level sequence labeling",
+        "description": "Validate sequence-labeling models with classification metrics (precision, recall, F1) on word-level labels rather than sequence-classification frameworks (e.g., do not rely on rigid sequence-evaluation tools like seqeval) because the task is predicting laughter at word boundaries.",
+        "guidance": "Ground metrics on word-level predictions (binary per-word) rather than temporal IoU; clarify evaluation unit (word) and report standard classification metrics."
+      },
+      {
+        "name": "Sequence preprocessing for model training (max length and stride)",
+        "description": "Train sequence-labeling transformers with a maximum sequence length of 512 tokens and use a stride of 128 tokens when cutting from the same monologue to ensure past context is preserved.",
+        "guidance": "When splitting long monologues maintain overlap (stripe/stride) to keep context for tokens near chunk boundaries; choose max_length=512 with stride=128 as an effective configuration."
+      },
+      {
+        "name": "Modeling/training protocol for sequence labeling baselines",
+        "description": "Fine-tune pretrained transformers (xlm-roberta-base) with Adam optimizer, 10 epochs, learning rate 1e-5. Use standard libraries (transformers, torch) and report classification metrics per language and model type (monolingual vs multilingual).",
+        "guidance": "Use consistent training hyperparameters and report multilingual vs monolingual comparisons; make experimental environment and library versions explicit for reproducibility."
+      },
+      {
+        "name": "Effect of cleaned/enhanced labels on model performance",
+        "description": "Models trained on the ASR-enhanced (cleaned) set of laughter labels achieve higher performance than models trained on raw off-the-shelf-laughter detections; training on cleaned data is recommended.",
+        "guidance": "Apply ASR-based enhancements (timestamp corrections and candidate filtering) to produce cleaner weak labels before model training to improve downstream sequence-labeler F1."
+      },
+      {
+        "name": "Release of auxiliary visual features (optional for multimodal work)",
+        "description": "Release visual features extracted from videos (Action Units via LibreFace, poses via MMdetection/MMpose, camera-angle changes via PySceneDetect) though not used in the current unimodal baselines.",
+        "guidance": "Provide extracted visual descriptors in the released dataset so future multimodal experiments can integrate them; document which videos were discarded for visual extraction failures."
+      },
+      {
+        "name": "Limitations and reporting requirements",
+        "description": "Report limitations including unimodal focus in initial baselines (only textual/unimodal models), not modeling laughter intensity, dialectal ASR errors (e.g., Chilean/Mexican Spanish), and reliance on YouTube videos which may be deleted; do not distribute raw video/audio.",
+        "guidance": "Explicitly list limitations in dataset/model papers, plan normalization/intensity annotation in future work, and mention dialect effects on ASR. Use metadata/annotations only to mitigate copyright concerns."
+      },
+      {
+        "name": "Ethics and data distribution policy",
+        "description": "Distribute only extracted annotations and transcripts \u2014 not the original videos \u2014 for strictly non-commercial, academic research; provide a dedicated contact email for GDPR-related removal requests; prohibit redistribution or commercial exploitation of the dataset.",
+        "guidance": "State legal/ethical rationale (fair use, InfoSoc Directive) and include attribution requirements to comedians; enforce non-commercial license and provide mechanisms to honor removal requests under privacy regulations."
+      }
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/ffc5904965d6.pdf",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "ffc5904965d6.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39765,
+  "model": "gpt-5-mini",
+  "elapsed_s": 61.884592084010364,
+  "input_tokens": 11017,
+  "output_tokens": 4293,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on harmful meme detection, multimodal LLMs, and content moderation systems",
+    "subtask_short": "harmful_meme_detection_with_MLLMs",
+    "subtask_description": "Designing and evaluating a reasoning-based multimodal detection pipeline (HMGUARD / HMCOT) that uses MLLMs to identify whether a meme is harmful by decomposing the task into subquestions about surface, fusion, composition, propaganda, and intent. Includes dataset collection, ablation studies, and robustness tests.",
+    "subtask_keywords": [
+      "harmful_meme",
+      "mllm",
+      "chain_of_thought",
+      "content_moderation",
+      "multimodal_detection"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of harmful content (task specification)",
+        "description": "\"Your task is to pinpoint any instances of hate speech, explicit violence, discrimination, or any other type of content that may be considered harmful.\"",
+        "guidance": "Treat the target label as any meme containing hate speech, explicit violence, discrimination, or other content considered harmful. The model should be instructed as a content moderation specialist to focus on these categories."
+      },
+      {
+        "name": "Meme domain alignment",
+        "description": "\"This is a meme, using text and images for humor or satire, shaped by culture and contexts\"",
+        "guidance": "Align the model with cultural and contextual meme understanding so it can interpret interplay of images and text. Use this prompt to make the model sensitive to varied interpretations across cultures before applying downstream detection prompts."
+      },
+      {
+        "name": "Task-specific adaptation",
+        "description": "\"You are a content moderation specialist. Your task is to pinpoint any instances of hate speech, explicit violence, discrimination, or any other type of content that may be considered harmful.\"",
+        "guidance": "Adapt the model to the specific downstream task via prompts that narrow its focus to harmful-content detection; this helps improve precision and reduces search space for the model's reasoning."
+      },
+      {
+        "name": "Surface Meaning Identification (Q1)",
+        "description": "Q1: \"What are the words and images contained in the meme, and do the semantics of the text and image directly convey harmful content?\"",
+        "guidance": "As the initial sub-problem, extract explicit text and visible image content and return early if text/image directly contain harmful content. This module reduces redundancy for later chain-of-thought steps."
+      },
+      {
+        "name": "Fusion Meaning Identification (Q2)",
+        "description": "Q2: \"What are the explicit or implicit relationships between text and image, and does the relationship between the text and the image potentially reveal harmful content?\"",
+        "guidance": "Analyze multimodal interactions where text or image alone seem innocuous but their combination implies harm. Determine whether fusion semantics reveal implicit abusive meanings."
+      },
+      {
+        "name": "Composition Meaning Identification (Q3a / Q3b)",
+        "description": "Q3a: \"Is the meme a stitching image?\" \u2014 if yes, Q3b: \"Consider the relationship of images, and understand whether the stitching images are trying to express explicit or implicit harmful content.\"",
+        "guidance": "Detect whether meme uses multiple panels/stitching; if so, analyze relationships (narrative sequence, chronological order, cause-and-effect, before/after comparisons) between panels to avoid being trapped by local features and to uncover composite meanings."
+      },
+      {
+        "name": "Propaganda Meaning Identification (Q4)",
+        "description": "Q4: \"Are the following propaganda techniques used to explicitly or implicitly express harmful content?\" (choices referenced from \u00a7IV-F)",
+        "guidance": "Detect rhetorical/propaganda techniques embedded in memes (e.g., appeal to strong emotions, name-calling/labeling, smears, transfer). These techniques can subtly convey or amplify harmful associations and reduce detectability; list which technique(s) are present."
+      },
+      {
+        "name": "Intention verification (Q5)",
+        "description": "Q5: \"Does the meme intend to have any targeted derogatory, humiliating, insulting, satirical, or disparaging meaning?\"",
+        "guidance": "Evaluate the meme's communicative intent using evidence from surface, fusion, composition, and propaganda analyses. Determine whether the meme is targeted (e.g., at a protected class) and whether the intent is derogatory or disparaging."
+      },
+      {
+        "name": "Final decision with consistency (Final Decision / Q6)",
+        "description": "Final Decision: \"Combining the analysis from the previous questions, please make the final decision on whether this meme is harmful or harmless. You need to make sure that your answers are consistent with the questions above.\"",
+        "guidance": "Integrate all intermediate answers into a single harmful/harmless label, ensuring internal consistency to mitigate hallucination; final output should reference prior sub-answers when possible."
+      },
+      {
+        "name": "Decompose detection into HMCOT chain-of-thought steps",
+        "description": "HMCOT divides harmful meme detection into seven major steps: (1) Meme Domain Alignment and Task-specific Adaption; (2) Surface Meaning Identification; (3) Fusion Meaning Identification; (4) Composition Meaning Identification; (5) Propaganda Meaning Identification; (6) Intention Verification; (7) Final Decision.",
+        "guidance": "Formalize detection as sequential subproblems so the model reasons step-by-step. Design intermediate prompts so each step conditions on previous outputs and contributes to the final decision."
+      },
+      {
+        "name": "Design of adaptive prompts (two modules)",
+        "description": "Adaptive prompts consist of two modules: meme domain alignment and task-specific adaptation.",
+        "guidance": "Include both modules: domain alignment to adjust cultural/contextual understanding; task-specific adaptation to focus the model on harmful-content detection. Ablation shows both are important (improve accuracy and F1)."
+      },
+      {
+        "name": "Prompt engineering for MLLMs (practical phrasing)",
+        "description": "Example prompt texts provided: domain alignment prompt and the content-moderation specialist prompt.",
+        "guidance": "Use the example phrasings verbatim or adapted to condition the MLLM prior to the chain-of-thought subquestions to boost performance and reduce variance."
+      },
+      {
+        "name": "Leverage MLLMs with reasoning ability (model choice and justification)",
+        "description": "Use GPT-4-vision-preview (or other capable MLLMs) due to strong contextual understanding and reasoning capabilities for multimodal tasks.",
+        "guidance": "Prefer MLLMs with advanced reasoning for HMCOT; open-source models may work but may underperform (e.g., LLaVA results were lower)."
+      },
+      {
+        "name": "Use intermediate outputs for final decision (answer extraction)",
+        "description": "The responses generated by the MLLM are analyzed to extract answers for each of the HMCOT Prompts. In the final stage, utilize all the intermediate responses to determine whether the input meme contains harmful content.",
+        "guidance": "Explicitly parse and store each Ai (A1..A5/A6) and feed them into the final decision prompt to ensure that the final label is a function of the chain-of-thought outputs rather than a fresh unconstrained generation."
+      },
+      {
+        "name": "Evaluation metrics and comparative benchmarks",
+        "description": "Use Accuracy, Precision, Recall, F1-score, macro-F1, and True Positive Rate (TPR) to compare detectors (MOMENTA, HateDetectron, MR.HARM, ExplainHM, GPT-4, HMGUARD).",
+        "guidance": "Report multiple metrics (including macro-F1 when datasets are imbalanced). Use tables to compare results across datasets (FHM, HarMeme, HMW). Underline/bold best results as appropriate for clarity."
+      },
+      {
+        "name": "Ablation studies on adaptive prompts and reasoning modules",
+        "description": "Evaluate HMCOT with and without adaptive prompts, and ablate each reasoning module M1..M5 (Surface, Fusion, Composition, Propaganda, Intention) to measure contributions.",
+        "guidance": "Perform controlled ablations; report accuracy and F1-score for each ablated variant to quantify each component's contribution. Example: removal of M4 (Propaganda) produced the largest accuracy drop in reported experiments."
+      },
+      {
+        "name": "Robustness testing with adversarial NLP perturbations",
+        "description": "Test robustness against letter addition, letter deletion, letter swapping, and space insertion perturbations on text embedded in memes.",
+        "guidance": "Augment harmful examples with typical NLP adversarial edits and measure detection rate; HMGUARD achieved 95% on the augmented set in the paper. Use these tests to evaluate real-world resilience."
+      },
+      {
+        "name": "Handling meme propaganda techniques",
+        "description": "Detect and analyze propaganda techniques such as 'appeal to strong emotions', 'name-calling', 'smears', and 'transfer' which embed socio-political messages and amplify harmful associations.",
+        "guidance": "Provide choices of known propaganda techniques in prompts and ask the model to identify which are used. Recognize that propaganda reduces detectability and requires nuanced semantic/sentiment analysis."
+      },
+      {
+        "name": "Addressing meme composition challenges (stitched/multi-panel images)",
+        "description": "Stitched images complicate visual understanding; analysis must consider panel relationships (narrative, sequence, cause-effect) to avoid misclassification.",
+        "guidance": "Include a separate composition module (Q3a/Q3b) that first detects stitching then analyzes inter-panel relations. This is crucial because stitching can encode implicit comparisons or causality."
+      },
+      {
+        "name": "Design for detection of subtle rhetorical devices (sarcasm, satire, double entendre)",
+        "description": "Detection requires deeper semantic analysis capable of identifying sarcasm, satire, or double entendre, which are prevalent in memes.",
+        "guidance": "Incorporate prompts and reasoning steps targeted at detecting indirect rhetorical devices; consider retrieval or external knowledge to disambiguate satire vs. targeted abuse."
+      },
+      {
+        "name": "Data collection and annotation procedure for 'in-the-wild' evaluation",
+        "description": "Collect memes from social platforms (e.g., Pinterest), remove repetitive/blurred items, build a codebook, conduct annotation with inter-rater reliability, and report dataset composition (e.g., 102 harmful, 198 harmless).",
+        "guidance": "Ensure clear codebook and annotation protocol: use discussion rounds to reach consistent labels and test final coding consistency. Report how many samples were used for training/testing and any preprocessing steps."
+      },
+      {
+        "name": "Ethical guidelines for data collection and annotation",
+        "description": "Annotators were informed that harmful content would be present and only meme data (no user account info) was collected to protect privacy.",
+        "guidance": "Minimize presence of harmful content in outputs, obtain informed consent for annotation tasks when needed, and avoid collecting personally identifying information. Document ethical considerations in the dataset section."
+      },
+      {
+        "name": "Deployment and transferability considerations",
+        "description": "HMGUARD can be deployed to other digital content safety issues (unsafe images, deepfake detection) and can be integrated with other MLLMs.",
+        "guidance": "Design HMCOT prompts and adaptive modules to be model-agnostic where possible; validate with multiple MLLMs; be aware that performance varies with base model capability (e.g., GPT-4 > LLaVA in reported experiments)."
+      },
+      {
+        "name": "Reporting of performance by subcategories and image properties",
+        "description": "Report per-category/feature performance (e.g., number of panels, image type: illustration/photo/screenshot, shot scale, movement types, presence/absence of propaganda techniques) and TPR improvements.",
+        "guidance": "Provide breakdowns (TPR/accuracy) across meme categories and image properties to show strengths/weaknesses; highlight where the method significantly improves (e.g., stitching images, propaganda techniques)."
+      },
+      {
+        "name": "Mitigating hallucination and ensuring faithfulness",
+        "description": "To alleviate the problem of faithfulness hallucination, ensure that the final answer is consistent with context and intermediate outputs.",
+        "guidance": "Force the final-decision prompt to reference intermediate answers and require consistency checks; design prompts to reduce unconstrained generation at the final step."
+      },
+      {
+        "name": "Scalability via careful intermediate prompt design",
+        "description": "Intermediate prompts need to be carefully designed based on important elements such as the definition and characteristics of harmful memes, allowing the model to determine harmfulness in a clear, step-by-step process.",
+        "guidance": "Craft sub-questions that each consider outputs of previous steps; design prompts to be reusable and scalable across datasets and models."
+      }
+    ]
+  }
+}

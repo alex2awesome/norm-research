@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_88f97abf0a27.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16716,
+  "output_tokens": 4254,
+  "elapsed_s": 2180.653287375113,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / computational-linguistics researchers and practitioners working on satire/sarcasm detection and dataset/model development",
+    "subtask_short": "Romanian headline satire detection",
+    "subtask_description": "Create and evaluate methods for detecting satirical tone in Romanian news headlines (SaRoHead dataset), including dataset collection/processing, classic ML baselines, BERT variants with intermediate-task transfer and meta-learning, and LLM zero/few-shot and LoRA fine-tuning experiments.",
+    "subtask_keywords": [
+      "satire",
+      "headline",
+      "romanian",
+      "dataset",
+      "nlp_classification",
+      "model_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset composition (SaRoHead)",
+        "description": "SaRoHead comprises 20,725 news headlines gathered from Romanian outlets, grouped by overall category (social, politics, sports); corpus spans 2009\u20132025 (cutoff June 2025); each label contains approximately 10,000 samples with social and political labels roughly balanced and sports underrepresented.",
+        "guidance": "Table 1 and Table 2 compare SaRoHead with similar datasets; maintain per-category splits (see Table 3). The dataset is 'titles only' and is intended to be made public."
+      },
+      {
+        "name": "Data collection sources and domain selection",
+        "description": "Scrape headlines from satirical and non-satirical outlets using site maps and BeautifulSoup. Satirical content from TimesNewRoman; non-satirical from DCNews, Antena3, Mediafax, sport.ro. Domains selected: social, politics, sports.",
+        "guidance": "When source URLs lack explicit category keywords (e.g., DCNews), look for keywords relevant to each domain to assign category. Use diverse outlets to enrich dataset diversity."
+      },
+      {
+        "name": "Labeling via distant supervision at source level",
+        "description": "Use distant supervision: consider all headlines from a known satirical outlet (TimesNewRoman) as satirical and headlines from mainstream sources as non-satirical, following Kiesel et al. (2019).",
+        "guidance": "This avoids human labeling but may introduce source-level bias; acknowledge that satirical content coming from a single source can bias results."
+      },
+      {
+        "name": "Removal of diacritics for normalization",
+        "description": "Normalize text by removing diacritics and replacing them with English-equivalent letters.",
+        "guidance": "Applied to reduce vocabulary sparsity due to diacritic variants."
+      },
+      {
+        "name": "Named entity replacement and manual correction",
+        "description": "Replace named entities (names, personalities, geographic locations, facilities) with placeholders using Spacy's Romanian NER and enforce manual replacements where the NER is imperfect.",
+        "guidance": "Placeholders used include: [FACILITY], [NAT_REL_POL], [ORGANIZATION], [PERSON], [ORGANIZATION] (as listed). This reduces bias and ethical challenges; manual corrections were made for missed entities."
+      },
+      {
+        "name": "Dataset splits and per-topic balancing",
+        "description": "Split the dataset into training, validation, and test sets per topic (social, politics, sport) with counts shown in Table 3.",
+        "guidance": "Maintain balance across satiric vs non-satiric labels per category where possible; document underrepresented categories (sports has ~1,000 samples per label). Experiments are run and evaluated on every domain individually and averages reported across domains."
+      },
+      {
+        "name": "Feature extraction for classical ML baselines",
+        "description": "Use unigrams, bi-grams, and tri-grams extracted with CountVectorizer as features for classical machine-learning approaches.",
+        "guidance": "Feature selection techniques are applied afterward; pad inputs appropriately for batch processing in neural settings but classical ML uses extracted n-gram features."
+      },
+      {
+        "name": "Feature selection techniques and feature counts",
+        "description": "Consider Mutual Information (MI), Chi-Squared test (CHI2), and ANOVA for selecting a number F of relevant features, with F \u2208 {500, 1000, 1500, 3000, 5000, 7000}.",
+        "guidance": "Experiments showed peak performance across algorithms at 1,500 features; grid over F should be evaluated. Use MI to measure importance of a word given a label; CHI2 to measure link between two features; ANOVA to analyze between- and within-group variance."
+      },
+      {
+        "name": "Standard machine-learning algorithms and default hyperparameters",
+        "description": "Evaluate SVM, Random Forest, Logistic Regression, and Naive Bayes (scikit-learn implementations). Default/explicit hyperparameters used: SVM margin=1.0 (RBF kernel), Random Forest uses Gini entropy, Naive Bayes Laplace smoothing \u03b1=1.0, Logistic Regression regularization C=1.0.",
+        "guidance": "Report results across feature selection methods and numbers of features; topic-wise differences can be substantial (e.g., SVM performs well on political satire)."
+      },
+      {
+        "name": "BERT-based models to evaluate",
+        "description": "Use Romanian pretrained BERT, XLM-RoBERTa, and a Romanian pretrained Distilled-BERT as Transformer baselines.",
+        "guidance": "Compare monolingual Romanian-pretrained models vs multilingual XLM-R to assess language-specific pattern capture; XLM-R may underperform for language-specific satire patterns."
+      },
+      {
+        "name": "Intermediate unsupervised task transfer learning (masked LM)",
+        "description": "Pretrain/fine-tune BERT variants on related intermediate unsupervised tasks (masked language modeling) using intermediate datasets (SaRoCo, SciTechBaitRo, RoCliCo) for specified epochs (SaRoCo: 40, SciTechBaitRo: 45, RoCliCo: 50), then fine-tune on SaRoHead.",
+        "guidance": "For downstream training, freeze backbone and train only a linear layer that takes the CLS embedding; use linear learning-rate scheduler, initial LR grid {1e-3,1e-4,1e-5} (chosen 1e-3), Adam optimizer, batch size 32, 35 epochs. Intermediate tasks can help when similar (e.g., clickbait-like data improves BERT)."
+      },
+      {
+        "name": "Meta-learning with Reptile",
+        "description": "Apply the first-order meta-learning algorithm Reptile: sample tasks from a pool (intermediate datasets + topic subsets), perform task-specific updates with Adam, then update original parameters toward task-updated parameters.",
+        "guidance": "Grid-search hyperparameters K \u2208 {5,7}, \u03b2 \u2208 {1e-4,1e-3,1e-2}, \u03b1 \u2208 {0.1,0.3,0.5,0.8}, batch size 32. Reported best: K=7, \u03b2=1e-4, \u03b1=0.8; meta epochs=150; use linear decrease in \u03b1 during training; when meta-learning update all model parameters. Reptile improved F1 beyond single intermediate-task training."
+      },
+      {
+        "name": "Per-topic (category-wise) training and evaluation",
+        "description": "Train and evaluate models separately for each news category (social, politics, sports), since each news category has its own nuances.",
+        "guidance": "Report metrics per topic and also average across topics; political topic yielded highest F1s indicating satire bias toward politics in Romanian headlines."
+      },
+      {
+        "name": "Large Language Models: zero- and few-shot prompting setup",
+        "description": "Evaluate Romanian instruction-tuned LLMs (RoLlama2, RoLlama3, RoGemma2, RoMistral) in 0/2/4/6-shot settings; if n \u2260 0, provide n examples with half satiric and half non-satiric.",
+        "guidance": "Use a simple prompt (given in Appendix A) instructing the model to answer only 'da'/'nu' (yes/no) based solely on the title with entities hidden; vary n and record how metrics change. Observe that some LLMs require many examples (RoMistral) while RoLlama3 benefits from more examples up to 6-shot."
+      },
+      {
+        "name": "LoRA fine-tuning for LLMs and chosen hyperparameters",
+        "description": "Apply Low-rank Adaptation (LoRA) to LLMs: grid-search \u03b1 \u2208 {8,16}, r \u2208 {4,8,16}, epochs N \u2208 {3,5,7}; chosen settings: \u03b1=8, r=8, dropout=0.01, N=5. Optimizer: Adam with weight decay 1e-2. Fine-tune attention projection matrices WQ, WK, WV, Wo. Device batch size = 8.",
+        "guidance": "LoRA significantly improved few-shot performance for most models; vary \u03b1 and r to find the best tradeoff. Consider adapter fusion if using multiple adapters."
+      },
+      {
+        "name": "Evaluation metrics (precision, recall, F1) on satiric label",
+        "description": "Evaluate models using Precision (P), Recall (R), and F1-score computed on the satiric label; report averages across domains and model runs as specified.",
+        "guidance": "Compute per-topic metrics and then average across topics (they report the average of three results for social, politics, sports). Use harmonic mean for F1 and underline/bold conventions in tables to highlight best scores (paper convention)."
+      },
+      {
+        "name": "Grid search and hyperparameter selection",
+        "description": "Use grid search to find optimal hyperparameters for feature counts, learning rates, Reptile parameters, LoRA \u03b1 and r, and number of LoRA epochs.",
+        "guidance": "Document grid ranges (provided in methods) and report the chosen hyperparameters (e.g., chosen BERT fine-tuning LR = 1e-3 in their pipeline)."
+      },
+      {
+        "name": "Handling and reporting of class imbalance and category underrepresentation",
+        "description": "Assess per-domain label distributions and acknowledge underrepresentation (sports has ~1,000 samples per label); visualize balancing (Figure 1) and report counts (Table 2).",
+        "guidance": "When categories are imbalanced, report results per-topic rather than only global aggregate; mention the potential effect on model performance."
+      },
+      {
+        "name": "Prompt design constraints and evaluation protocol for LLMs",
+        "description": "Design prompts to restrict LLMs to use only the headline (entities hidden) and to answer 'yes'/'no' ('da'/'nu') without further explanation; include a system-level definition of satire (absurdity, irony, sarcasm).",
+        "guidance": "Note that prompt simplicity is a limitation: prompting only with a title may not provide sufficient context for LLMs; consider more complex prompts or additional hints in future work."
+      },
+      {
+        "name": "Ethical and legal compliance for dataset use",
+        "description": "Collect publicly available data for non-commercial research under EU directive 2019/790 and perform named-entity labeling in compliance with GDPR (Regulation 2016/679).",
+        "guidance": "Document compliance and ensure dataset release adheres to copyright and privacy rules; anonymize or replace entities to reduce privacy risks."
+      },
+      {
+        "name": "Limitations to disclose when releasing dataset and results",
+        "description": "Report limitations such as missed named entities (NER errors not exhaustively fixed), satirical content from a single source (potential bias), LLM prompt complexity, and limited number of related intermediate-task datasets in Romanian.",
+        "guidance": "Acknowledge how these limitations may influence results and generalization; highlight where manual corrections were applied and where they were not possible."
+      },
+      {
+        "name": "Reporting experimental averaging conventions",
+        "description": "Report averages across domains (social, politics, sports) and clarify whether averages are across runs or topics; the paper reports averages of three results (the three domains) over a single training run.",
+        "guidance": "Be explicit about what is being averaged (per-topic metric averages vs multiple randomized training runs) to ensure reproducibility and comparability."
+      }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_9f7fb89e4ae6.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8411,
+  "output_tokens": 3771,
+  "elapsed_s": 2177.0566457908135,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / machine learning researchers and practitioners developing sarcasm-detection systems",
+    "subtask_short": "sarcasm detection model development",
+    "subtask_description": "Designing, training, and evaluating text-based sarcasm-detection models (parallel LSTM architecture) using benchmark sarcasm and humor corpora, with explicit preprocessing, feature extraction, hyperparameter tuning, and benchmarking against state-of-the-art datasets.",
+    "subtask_keywords": [
+      "sarcasm_detection",
+      "deep_learning",
+      "nlp",
+      "plstm",
+      "binary_classification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset selection (use of benchmark sarcasm corpora)",
+        "description": "Select appropriate sarcasm corpora such as MUStARD (multimodal sarcasm detection dataset), SIGN, Sarcasm V2, SARC, and handpicked humor literature from Project Gutenberg (e.g., The Comedy of Errors, Three Men in a Boat) for training and validation.",
+        "guidance": "Prefer benchmark datasets with annotated sarcastic/non-sarcastic labels; document dataset vocabulary length (V), size, and SoA results. When comparing, run experiments across multiple datasets to show generalization. The paper uses MUStARD (text modality) as the primary training corpus and Project Gutenberg texts for external validation."
+      },
+      {
+        "name": "Modality selection (text-only from multimodal corpora)",
+        "description": "When using multimodal sarcasm datasets, you may select only the textual modality (transcriptions) for text-based sarcasm detection experiments.",
+        "guidance": "The authors select only the transcription/textual modality from MUStARD. State which modalities are used and justify exclusion of others (e.g., audio/video) if applicable."
+      },
+      {
+        "name": "Preprocessing and tokenization (manual tokenizing, line-indexing)",
+        "description": "Manually tokenize corpus files and create line-indexed dialogues/utterances to capture per-utterance features and lengths.",
+        "guidance": "Produce per-utterance indices, record utterance length distribution (e.g., min 7 words, max 65 words in MUStARD-derived corpus), and ensure monologues/dialogues are preserved. Note when datasets require little preprocessing (e.g., Project Gutenberg linear texts)."
+      },
+      {
+        "name": "Sarcastic word distribution features (frequency-based features)",
+        "description": "Extract frequency distribution of the most recurring words in sarcastic dialogues and use these as features (e.g., top-100 recurring words and their frequencies/distribution).",
+        "guidance": "Compute distributions (frequency and percentage) for recurring tokens (examples: 'oh','know','like','yeah','well', etc.), and use weighted vectors generated from such words as part of the input representation. Report tables of frequent tokens and distribution statistics."
+      },
+      {
+        "name": "Sentence-level utterance representation (use of pre-trained models like BERT)",
+        "description": "Represent sentence-level utterance features using pre-trained contextual encoders (the paper uses BERT features for utterance representation).",
+        "guidance": "Combine handcrafted sarcastic-word features with contextual sentence embeddings (BERT) to represent utterances; document how these features are combined/normalized before feeding into model."
+      },
+      {
+        "name": "Handling class balance in corpus",
+        "description": "Decide whether to rebalance or not; if the corpus highly consists of sarcastic statements, the authors do not partition balanced or imbalanced allocations further.",
+        "guidance": "Explicitly state balancing strategy. The paper leaves MUStARD-derived corpus as-is (highly sarcastic) and proceeds without forced balancing; justify this choice and consider its effects on metrics."
+      },
+      {
+        "name": "Input vector generation and embedding dimension",
+        "description": "Generate weighted input vectors from token indices and use a word embedding dimension (the paper uses dimension = 400).",
+        "guidance": "Describe how token indices map to embeddings and how weighted vectors (from word-frequency features) are formed. Report chosen embedding dimension and rationale (here: 400)."
+      },
+      {
+        "name": "Parallel LSTM architecture (pLSTM design)",
+        "description": "Use an amalgamation of four parallel long short-term networks (pLSTM), each with identical sizes but individual output classifiers (distinct activation functions); feed the same input vectors to all four networks.",
+        "guidance": "Design four equipollent LSTM substructures that operate independently on identical inputs but have isolated fully connected deep layers and different final activation classifiers. Monitor individual submodule performance as well as the combined architecture."
+      },
+      {
+        "name": "Bidirectional LSTM and gate computations",
+        "description": "Each LSTM module should be bidirectional, containing a backward and forward pass; gate computations follow standard LSTM equations combining forward and reverse sequence signals.",
+        "guidance": "Explicitly model input, output, forget, and cell computations (paper provides equations (1)-(4)). Combine forward (Fseq(\u2192)) and backward (Rseq(\u2190)) signals in gate calculations and document formulas used."
+      },
+      {
+        "name": "Activation function experimentation (softmax, sigmoid, relu, tanh)",
+        "description": "Compare different activation functions for the final classifiers on each pLSTM: softmax, sigmoid, relu, tanh; choose the best based on training/validation performance.",
+        "guidance": "Report per-activation-module training dynamics and final accuracies. In this work, pLSTM+softmax (training acc 98.95%) and pLSTM+sigmoid (96.88%) outperformed relu and tanh which suffered heavy data loss and poor performance; consider discarding poorly performing activations."
+      },
+      {
+        "name": "Hidden layer sizing (number of hidden units / layers)",
+        "description": "Configure the LSTM substructures with sufficient hidden capacity (paper reports '500 hidden layers' per LSTM substructure\u2014interpreted as a large hidden dimension).",
+        "guidance": "State the number of hidden units/layers used (authors report 500 hidden units/unitsized layers) and justify capacity choices. Monitor for overfitting with large hidden sizes and adjust regularization accordingly."
+      },
+      {
+        "name": "Dense layers and final classifier configuration",
+        "description": "Include dense hidden layers after LSTM substructures and vary the outermost activation/classifier per submodule.",
+        "guidance": "Document the dense layer sizes, activation functions, and how outputs from the parallel modules are combined or compared. The architecture keeps dense layers isolated per module."
+      },
+      {
+        "name": "Optimizer and loss function",
+        "description": "Use Adam optimizer with categorical cross-entropy for binary categorical classification (sarcastic vs non-sarcastic).",
+        "guidance": "Specify optimizer hyperparameters (paper uses Adam with learning rate 0.01) and loss formulation. Confirm choice aligns with output activation (e.g., softmax with categorical cross-entropy)."
+      },
+      {
+        "name": "Learning rate and training schedule",
+        "description": "Set learning rate (paper uses 0.01) and number of epochs (paper uses 500 epochs), and monitor verbose training logs.",
+        "guidance": "Report chosen learning rate, number of epochs, and verbosity; inspect epoch-level training loss and accuracy curves to detect convergence or divergence. The paper monitors up to epoch 500 and inspects early training behavior (0\u2013100 epochs)."
+      },
+      {
+        "name": "Dropout and regularization settings",
+        "description": "Apply dropout to avoid overfitting; the authors use dropout rates of 0.6 for vectorization and 0.4 for bidirectional layers.",
+        "guidance": "Report where dropout is applied and the specific rates. Use dropout aggressively when using large embedding/hidden sizes; validate effect on validation performance."
+      },
+      {
+        "name": "Training monitoring and per-epoch reporting",
+        "description": "Track training loss and accuracy per epoch and report S/NS (successful detection of sarcastic/non-sarcastic) percentages at intervals (e.g., every 100 epochs).",
+        "guidance": "Provide epoch-level graphs and tables (e.g., Table 2 shows S/NS at 100-500 epochs) to demonstrate convergence and relative behavior across modules (softmax vs sigmoid vs relu vs tanh)."
+      },
+      {
+        "name": "Cross-validation and test protocol (5-fold random cross-training, 3:2 split)",
+        "description": "Perform 5-fold random cross-training with a 3:2 train:test split (shuffle datasets) and then test on the entire corpora for validation.",
+        "guidance": "Document folding strategy, randomization, and how folds are aggregated. The paper shuffles data and performs 5-fold cross-training to obtain robust performance estimates across datasets."
+      },
+      {
+        "name": "Reported evaluation metrics (precision, recall, F1, accuracy, F-measure)",
+        "description": "Report standard classification metrics per-class and overall: precision, recall, F1-score, accuracy, and F-measure; report both training and test/validation values.",
+        "guidance": "Provide classification reports (Table 3), F-scores and overall accuracy for each module and dataset. Report train vs test numbers and where possible provide both numeric tables and discussion of results (e.g., pLSTM+softmax: precision 0.99, recall 0.98, F1 0.9851, accuracy 0.9850)."
+      },
+      {
+        "name": "Benchmarking against prior state-of-the-art",
+        "description": "Compare model performance against reported state-of-the-art (SoA) results on the same datasets to demonstrate improvement.",
+        "guidance": "Compile a table with dataset V, size, train/test performance, and compare to cited SoA. In this paper pLSTM+softmax achieves higher test accuracies (e.g., 98.31% on selected Gutenberg validation) than previously reported baselines (where available)."
+      },
+      {
+        "name": "Module independence and per-module evaluation",
+        "description": "Treat each parallel module as independently operating on identical inputs to allow monitoring of individual behaviors and to isolate the contribution of each activation/classifier.",
+        "guidance": "Report per-module training and test performance and consider discarding submodules that consistently underperform (the authors discarded the relu and tanh modules after poor performance)."
+      },
+      {
+        "name": "Limitations and scope (generalization to conversational/contextual sarcasm)",
+        "description": "Acknowledge dataset and model limitations: models trained on independent sarcastic utterances may not capture conversational or situational sarcasm reliant on context.",
+        "guidance": "State that training on isolated sarcastic statements may produce generic-sounding sarcasm and may not generalize to ongoing conversational contexts; propose future work such as context-aware attention mechanisms or generative sarcasm models."
+      },
+      {
+        "name": "Model selection guidance (choose best-performing substructures)",
+        "description": "Select the best-performing substructures (activations) for final deployment based on validation metrics; in this work pLSTM+softmax and pLSTM+sigmoid were chosen as better-performing modules.",
+        "guidance": "Use validation accuracy and F-score to decide which submodules to retain for benchmarking and reporting. Demonstrate combined vs single-submodule behavior when applicable."
+      }
+    ]
+  }
+}

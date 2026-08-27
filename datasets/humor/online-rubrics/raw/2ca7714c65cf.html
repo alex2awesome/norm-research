@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<!--[if IE 6]>    <html class="no-js ie6 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="UTF-8" />
+	<title>Annoyance Theatre | People and Chairs</title>
+
+	<!-- Basic Meta Data -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- WordPress -->
+	<link rel="profile" href="http://gmpg.org/xfn/11" />
+	<link rel="pingback" href="https://peopleandchairs.com/xmlrpc.php" />
+	<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=8705'
+					+ '&is_singular=';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9wZW9wbGVhbmRjaGFpcnMuY29t"
+		+ "&wpcomid=33465894"
+		+ "&time=" + Math.floor( Date.now() / 1000 );
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel="alternate" type="application/rss+xml" title="People and Chairs &raquo; Feed" href="https://peopleandchairs.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="People and Chairs &raquo; Comments Feed" href="https://peopleandchairs.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="People and Chairs &raquo; Annoyance Theatre Tag Feed" href="https://peopleandchairs.com/tag/annoyance-theatre/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/wp-content/mu-plugins/likes/jetpack-likes.css?m=1743883414i&cssminify=yes' type='text/css' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/common.min.css */
+</style>
+<style id="wp-block-library-inline-css-extra">
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+<style id="classic-theme-styles-inline-css">
+.wp-block-button__link{background-color:#32373c;border-radius:9999px;box-shadow:none;color:#fff;font-size:1.125em;padding:calc(.667em + 2px) calc(1.333em + 2px);text-decoration:none}.wp-block-file__button{background:#32373c;color:#fff}.wp-block-accordion-heading{margin:0}.wp-block-accordion-heading__toggle{background-color:inherit!important;color:inherit!important}.wp-block-accordion-heading__toggle:not(:focus-visible){outline:none}.wp-block-accordion-heading__toggle:focus,.wp-block-accordion-heading__toggle:hover{background-color:inherit!important;border:none;box-shadow:none;color:inherit;padding:var(--wp--preset--spacing--20,1em) 0;text-decoration:none}.wp-block-accordion-heading__toggle:focus-visible{outline:auto;outline-offset:0}.wp-block-tab:not(.has-text-color){color:inherit!important}.wp-block-tab:not(.has-background){background-color:inherit!important}.wp-block-tab:focus,.wp-block-tab:hover{text-decoration:none}.wp-block-tab:focus-visible{outline:auto;outline-offset:0}
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/classic.min.css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??-eJx9jUsOwjAMRC+EY6UgCAvEWZrEKoG4jWq3hduTLvisurFG1nszuBQIQ6/UK5Y8dakXDIPPQ3gINsY6Y0ESl0ww0mwOGJPolwDRVyYTRHb4V8QT/LpGqn8ura4EU0wtZeKKbWlLih1p1eWTQem5rZQ6A96XkUSgXk4Tg97qlqzelS/26KzbN835dH8DjlpbIA==&cssminify=yes' type='text/css' media='all' />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/_static/??-eJyFjEkOwjAMRS9EsJjpAnGWENzUyHGi2hHq7UkRCxAS7P70PtyLC1kMxcAGTKhQRkxUE3iZA1CbGJdBdQF/tySB67XlT0gHRNNX50h6ErLp6ypVV7hGEoURL5xjkxHa6s3+giJmxzl4oywfxvXsaZzRczqtdsfN+tDtt93tAdR/W6Y=&cssminify=yes' type='text/css' media='all' />
+<style id="jetpack-global-styles-frontend-style-inline-css">
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+/*# sourceURL=jetpack-global-styles-frontend-style-inline-css */
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/_static/??-eJyNjcsKAjEMRX/IGgaqgwvxU6TTlDZjmhTTIv69D9yIG3f3wOUcuDUXVXqSDnW4xiOTGKyptxAvHwYbAlVxcDKwEq4JA+L9PUnyNppt4G/RmSTCMogRTCMFdqxZ7Qt+lL2k+owXD5l1Cfw6nOpxmme/837aH9YHfvpKpw==&cssminify=yes' type='text/css' media='all' />
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"33465894","postID":"0","siteURL":"https://peopleandchairs.com","xhrURL":"https://peopleandchairs.com/wp-admin/admin-ajax.php","nonce":"0d227c72f5","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https://s0.wp.com/wp-content/js/wpcom-proxy-request.js?m=1513050504i&amp;ver=20211021","i18n":{"followedText":"New posts from this site will now appear in your \u003Ca href=\"https://wordpress.com/reader\"\u003EReader\u003C/a\u003E","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+//# sourceURL=wpcom-actionbar-placeholder-js-extra
+</script>
+<script id="jetpack-mu-wpcom-settings-js-before">
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https://s0.wp.com/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/"};
+//# sourceURL=jetpack-mu-wpcom-settings-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJyFjUsOwjAMRC9E6gLit0CcJQoWOKrdYDtAb08qQGLHaqSZ9zTwKCGN4igO2UAHD0XH59RlW0DbSNJQz2jzmG8VdfpExyR/ocB00ej4C3/f/IrclKLIVBmizAXkeI+WlIrbm2jaiY/L3arfrPvt/pBfbxVBsQ=='></script>
+<script id="rlt-proxy-js-after">
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+//# sourceURL=rlt-proxy-js-after
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://peopleandchairs.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Annoyance Theatre &#8211; People and Chairs" />
+<meta property="og:url" content="https://peopleandchairs.com/tag/annoyance-theatre/" />
+<meta property="og:site_name" content="People and Chairs" />
+<meta property="og:image" content="https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=200&#038;ts=1778408775" />
+<meta property="og:image:width" content="200" />
+<meta property="og:image:height" content="200" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:creator" content="@peopleandchairs" />
+<meta name="twitter:site" content="@peopleandchairs" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="shortcut icon" type="image/x-icon" href="https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=32" sizes="16x16" />
+<link rel="icon" type="image/x-icon" href="https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=32" sizes="16x16" />
+<link rel="apple-touch-icon" href="https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=114" />
+<link rel='openid.server' href='https://peopleandchairs.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://peopleandchairs.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://peopleandchairs.com/osd.xml" title="People and Chairs" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+	<!--[if (gte IE 6)&(lte IE 8)]>
+	<script src="https://s0.wp.com/wp-content/themes/premium/anthem/includes/javascripts/selectivizr.min.js?m=1320438550i"></script>
+	<![endif]-->
+	<!--[if lte IE 8]>
+		<style type="text/css">
+			@media (min-width: 961px) {
+  #container {
+    max-width: 1240px;
+  }
+
+  header[role="banner"] {
+    width: 23.0645161%;
+  }
+
+  #content {
+    width: 74.3548387%;
+    margin-left: 2.5806452%;
+  }
+}
+@media only screen and (min-width: 768px) {
+  #content article p img, #content.page p img {
+    max-width: 152.649%;
+  }
+}
+@media only screen and (max-width: 767px) {
+  ul.playlist li a {
+    font-size: .85em;
+  }
+}
+@media (-webkit-min-device-pixel-ratio: 1) and (max-device-width: 1024px) {
+  input[type="radio"],
+  input[type="checkbox"] {
+    vertical-align: baseline;
+    top: 2px;
+  }
+}
+@media (-webkit-min-device-pixel-ratio: 1) and (max-device-width: 480px) {
+  input[type="radio"],
+  input[type="checkbox"] {
+    vertical-align: baseline;
+    top: 0;
+  }
+}
+@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 480px) {
+  input[type="radio"],
+  input[type="checkbox"] {
+    vertical-align: baseline;
+    top: 0;
+  }
+}
+@media (-webkit-min-device-pixel-ratio: 0) {
+  select {
+    background-image: url('../../images/select_arrow.gif');
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 20px;
+  }
+
+  select[size],
+  select[multiple] {
+    background-image: none;
+    padding: 0;
+  }
+
+  ::-webkit-validation-bubble-message {
+    box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #666666), color-stop(1, black));
+    border: 1px solid;
+    border-color: #747474 #5e5e5e #4f4f4f;
+    color: #fff;
+    font: 13px/17px "Lucida Grande", Arial, "Liberation Sans", FreeSans, sans-serif;
+    overflow: hidden;
+    padding: 15px 15px 17px;
+    text-shadow: #000 0 0 1px;
+    height: 16px;
+  }
+
+  ::-webkit-validation-bubble-arrow,
+  ::-webkit-validation-bubble-top-outer-arrow,
+  ::-webkit-validation-bubble-top-inner-arrow {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: #666;
+    border: 0;
+  }
+}
+@media only screen and (max-width: 920px) {
+  #container {
+    position: static;
+    margin: 0 auto 2em;
+    padding: 20px 20px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  header .about {
+    clear: both;
+    display: none;
+  }
+  header .about .links li {
+    display: inline;
+  }
+  header .about .links li:after {
+    content: "/";
+    margin: 0 10px;
+    color: rgba(0, 0, 0, 0.35);
+    font-weight: normal;
+  }
+  header .about .links li:last-child:after {
+    content: "";
+    margin-right: 0;
+  }
+
+  a#toggle {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    display: block;
+    padding: .65em 1em;
+    font-weight: normal;
+    font-size: .625em;
+    color: #AAA;
+    color: rgba(0, 0, 0, 0.35);
+    background: #F1F1F1;
+    border-right: 1px solid #E9E9E9;
+    border-bottom: 1px solid #E9E9E9;
+    border-left: 1px solid #E9E9E9;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
+  }
+
+  a#toggle:hover {
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  #content {
+    float: left;
+    width: 100%;
+    min-height: auto;
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 767px) {
+  header[role="banner"] {
+    float: left;
+    width: 100%;
+    min-height: 105px;
+    margin-bottom: 0;
+  }
+
+  header #branding img {
+    width: 80px;
+    float: left;
+    max-width: 100%;
+    margin: 0 10px 20px 0;
+  }
+  header #branding h1 {
+    float: right;
+    max-width: 190px;
+    margin: 0;
+    padding-top: 25px;
+    text-align: right;
+  }
+  header .about {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+  }
+  header .about .links {
+    margin-bottom: 0;
+  }
+  header .about .links li {
+    line-height: 1.8em;
+  }
+  header a#toggle {
+    top: 0;
+    right: 20px;
+  }
+
+  body.logged-in header a#toggle {
+    top: 28px;
+  }
+
+  nav {
+    clear: right;
+    float: right;
+    margin: 0 0 20px;
+    padding: 5px 0;
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+  nav ul {
+    text-align: right;
+  }
+  nav li {
+    display: inline;
+    margin: 0;
+  }
+  nav li a {
+    color: rgba(0, 0, 0, 0.25);
+  }
+  nav li:after {
+    content: "/";
+    margin: 0 4px 0 8px;
+    color: rgba(0, 0, 0, 0.15);
+    font-weight: normal;
+  }
+  nav li:last-child:after {
+    content: "";
+    margin: 0;
+    font-weight: normal;
+  }
+  nav li:first-child {
+    padding-left: 10px;
+  }
+
+  #branding h1.no-img {
+    float: left;
+  }
+
+  nav.no-img {
+    clear: left;
+    float: left;
+  }
+  nav.no-img li {
+    padding: 0;
+  }
+
+  #content .post-body .gallery img {
+    padding: 2px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+  }
+
+  article p, article li, #content.page p, #content.page li {
+    width: 100%;
+  }
+  article blockquote, article ul, article ol, #content.page blockquote, #content.page ul, #content.page ol {
+    width: 90%;
+  }
+  article ul.normal, article ol.normal, #content.page ul.normal, #content.page ol.normal {
+    margin-left: 20px;
+  }
+  article figure, #content.page figure {
+    width: 100%;
+  }
+  article .r-float, article .l-float, article .alignleft, article .alignright, #content.page .r-float, #content.page .l-float, #content.page .alignleft, #content.page .alignright {
+    display: inline-block;
+    float: none;
+    width: auto;
+    margin: 0 0 1em 0;
+  }
+  article .r-float img, article .l-float img, article .alignleft img, article .alignright img, #content.page .r-float img, #content.page .l-float img, #content.page .alignleft img, #content.page .alignright img {
+    width: 100%;
+  }
+  article .wp-caption.alignleft, article .wp-caption.alignright, #content.page .wp-caption.alignleft, #content.page .wp-caption.alignright {
+    margin-bottom: 0;
+  }
+
+  ol.commentlist {
+    padding-top: 1.5em;
+  }
+  ol.commentlist li.comment .c-grav {
+    float: right;
+    width: auto;
+    margin: 0 0 10px 10px;
+  }
+  ol.commentlist li.comment .c-grav img {
+    width: 50px;
+    height: 50px;
+  }
+  ol.commentlist li.comment .c-body {
+    float: none;
+    width: auto;
+  }
+  ol.commentlist li.comment .c-body .c-head {
+    margin-bottom: .5em;
+    font-size: .875em;
+  }
+  ol.commentlist li.comment .c-body .c-date {
+    position: static;
+    margin-bottom: 1em;
+  }
+  ol.commentlist li.comment.depth-2 {
+    width: auto;
+    float: none;
+  }
+
+  #respond fieldset > textarea {
+    width: 100%;
+  }
+
+  aside[role="widgets"] {
+    clear: both;
+    width: 100%;
+    margin-bottom: 3em;
+    padding: 2em 0 1em;
+  }
+  aside[role="widgets"] .group {
+    clear: both;
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  footer p#copyright {
+    float: left;
+    width: 100%;
+    margin-bottom: 1.5em;
+  }
+  footer .social {
+    position: static;
+    clear: left;
+    width: 100%;
+  }
+  footer .social li {
+    float: left;
+    margin-right: 8px;
+    margin-left: 0;
+  }
+  footer .social li a {
+    opacity: 1;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 920px) {
+  header[role="banner"] {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  header #branding img {
+    float: left;
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  header #branding h1 {
+    float: left;
+    max-width: 200px;
+    margin: 0 0 10px 20px;
+    padding: 3.6em 0 0 1.5em;
+    text-align: right;
+  }
+  header .about {
+    float: left;
+    width: 65.5097614%;
+    margin-bottom: 2em;
+  }
+  header .about .links {
+    margin-bottom: 20px;
+  }
+  header a#toggle {
+    top: -20px;
+    right: 0;
+  }
+
+  nav {
+    clear: both;
+    position: absolute;
+    top: 3.4em;
+    right: 0;
+    max-width: 40%;
+    padding: 0;
+    border: none;
+    text-align: right;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+  nav li {
+    display: inline;
+    margin-right: 10px;
+  }
+
+  #branding h1.no-img {
+    max-width: auto;
+    margin: 0;
+    padding: 2.5em 0 1em 0;
+    text-align: left;
+  }
+
+  nav.no-img {
+    top: 2.5em;
+  }
+
+  nav.no-title {
+    top: 62px;
+  }
+
+  article figure {
+    width: auto;
+  }
+
+  article.photo figure.post-image {
+    width: 100%;
+  }
+  article.photo figure.post-image img {
+    width: 100%;
+  }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+  .feedback .comments a {
+    background-position: -5px 2px;
+    background-size: 22px;
+  }
+
+  .feedback .notes a {
+    background-position: -5px 2px;
+    background-size: 22px;
+  }
+
+  .flex-direction-nav li a {
+    padding: 0;
+    bottom: -2px;
+  }
+
+  .flex-direction-nav li a.flex-next {
+    padding: 0;
+    background-position: 100% top;
+    background-size: 22px;
+  }
+
+  .flex-direction-nav li a.flex-prev {
+    padding: 0;
+    background-position: -5px top;
+    background-size: 22px;
+  }
+
+  article.link p > a:after {
+    background-position: -5px top;
+    background-size: 22px;
+  }
+
+  footer .social li a {
+    background-position: -6px 2px;
+    background-size: 22px;
+  }
+
+  ul.playlist li a,
+  ul.playlist li.sm2_playing a {
+    background-position: 0 center;
+    background-size: 16px;
+  }
+
+  ul.playlist li a {
+    background-image: url(images/icon-play-2x.png);
+  }
+
+  ul.playlist li.sm2_playing a {
+    background-image: url(images/icon-pause-2x.png);
+  }
+}		</style>
+		<script type="text/javascript" src="https://s0.wp.com/wp-content/themes/premium/anthem/includes/javascripts/mediaqueries.js?m=1345248277i"></script>
+	<![endif]-->
+			<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="description" content="Posts about Annoyance Theatre written by cameronandsally" />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-4' href='/_static/??-eJydjtsKg0AMRH+oGgtSn0o/pWgMEt3dBJNF/Ptu6QX61vZtzjAcBjatUJJTcoi50pAnTgYzufa4PBksJ7hyQhiC4GJgGyutNZod4GtBlDEHMsB+lWwU3ptX8aPvcShzGAsOhiurs5TtB9WR059HNx4ncgMXrVSsJPM90N12iedj13Vtc2qbZr4BTS57JA==&cssminify=yes' type='text/css' media='all' />
+
+</head>
+<body class="archive tag tag-annoyance-theatre tag-7640096 wp-theme-premiumanthem customizer-styles-applied jetpack-reblog-enabled">
+
+<div id="container">
+
+<header role="banner">
+
+	<div id="branding">
+								<a href="https://peopleandchairs.com/">
+				<img class="" src="https://peopleandchairs.files.wordpress.com/2013/02/screen-shot-2013-02-15-at-8-55-25-pm.png" alt="People and Chairs" />
+			</a>
+		
+				<h1 id="site-title" class="hide"><a href="https://peopleandchairs.com/">People and Chairs</a></h1>
+	</div>
+
+			<a href="#" id="toggle">Info</a>
+
+				<div class="about">
+							<p>The improv blog with attitude.</p>
+						<ul class="links"><li id="menu-item-4978" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-4978"><a href="https://peopleandchairs.com/category/warm-ups-games-exercises/">Warm-ups, Games &amp; Exercises</a></li>
+<li id="menu-item-8212" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8212"><a href="https://peopleandchairs.com/category/long-form-harold/">Long Form &amp; Harold</a></li>
+<li id="menu-item-1651" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1651"><a href="https://peopleandchairs.com/category/scene-work/">Scene Work</a></li>
+<li id="menu-item-15851" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-15851"><a href="https://peopleandchairs.com/category/live-shows-festivals/">Live Shows &amp; Festivals</a></li>
+<li id="menu-item-17557" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-17557"><a href="https://peopleandchairs.com/category/improv-tips-quotes/">Improv Tips &amp; Quotes</a></li>
+<li id="menu-item-16853" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-16853"><a href="https://peopleandchairs.com/category/improv-anxiety/">Improv &amp; Anxiety</a></li>
+<li id="menu-item-2337" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2337"><a href="https://peopleandchairs.com/category/interviews/">Interviews</a></li>
+<li id="menu-item-3483" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3483"><a href="https://peopleandchairs.com/category/guest-posts/">Guest Posts</a></li>
+<li id="menu-item-11954" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11954"><a href="https://peopleandchairs.com/category/podcasts-blogs-twitter/">Podcasts, Blogs &amp; Twitter</a></li>
+<li id="menu-item-9416" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-9416"><a href="https://peopleandchairs.com/category/pov-with/">POV with&#8230;</a></li>
+<li id="menu-item-739" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-739"><a href="https://peopleandchairs.com/category/teaching-coaching/">Teaching &amp; Coaching</a></li>
+<li id="menu-item-18404" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-18404"><a href="https://peopleandchairs.com/category/the-joy-of-improv/">The Joy of Improv</a></li>
+<li id="menu-item-16671" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-16671"><a href="https://peopleandchairs.com/category/the-professionals/">The Professionals</a></li>
+<li id="menu-item-1369" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1369"><a href="https://peopleandchairs.com/category/tv-film-web-series/">TV, Film &amp; Web Series</a></li>
+<li id="menu-item-2030" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2030"><a href="https://peopleandchairs.com/category/other-cool-stuff/">Other Cool Stuff</a></li>
+<li id="menu-item-20923" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-20923"><a href="https://peopleandchairs.com/category/side-projects-2/">Side Projects</a></li>
+<li id="menu-item-20067" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-20067"><a href="https://peopleandchairs.com/category/most-popular-posts/">Most Popular Posts</a></li>
+<li id="menu-item-14899" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-14899"><a href="https://peopleandchairs.com/category/shop/">Shop</a></li>
+</ul>		</div>
+	
+	<nav class="no-title"><ul><li id="menu-item-17823" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17823"><a href="https://peopleandchairs.com/about/">About</a></li>
+<li id="menu-item-543" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-543"><a href="http://www.annoyanceproductions.com/">Annoyance Theatre</a></li>
+<li id="menu-item-544" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-544"><a href="http://www.baddogtheatre.com/bdt/">Bad Dog Theatre</a></li>
+<li id="menu-item-18989" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18989"><a href="http://improvutopia.com">Camp Improv Utopia</a></li>
+<li id="menu-item-546" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-546"><a href="http://www.comedybar.ca/">Comedy Bar</a></li>
+<li id="menu-item-4041" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4041"><a href="http://www.dadsgarage.com/">Dad&#8217;s Garage</a></li>
+<li id="menu-item-19836" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-19836"><a href="http://www.davidrazowsky.com/">David Razowsky</a></li>
+<li id="menu-item-1458" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1458"><a href="http://www.improvboston.com/">ImprovBoston</a></li>
+<li id="menu-item-3812" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3812"><a href="http://http://improveverywhere.com/">Improv Everywhere</a></li>
+<li id="menu-item-548" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-548"><a href="http://ioimprov.com/chicago/">iO Chicago</a></li>
+<li id="menu-item-15672" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15672"><a href="http://jimmycarrane.com">Jimmy Carrane</a></li>
+<li id="menu-item-551" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-551"><a href="http://www.magnettheater.com/index.php">Magnet Theater</a></li>
+<li id="menu-item-552" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-552"><a href="http://blog.montrealimprov.com/">Montreal Improv</a></li>
+<li id="menu-item-10787" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-10787"><a href="http://www.outofboundscomedy.com">Out Of Bounds Comedy</a></li>
+<li id="menu-item-21685" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-21685"><a href="https://www.youtube.com/channel/UCarUQxbetwstImqcN0Kzi1g">Paul Vaillancourt</a></li>
+<li id="menu-item-21686" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-21686"><a href="https://playwithfireimprov.com/classes/">Play Anxiety Away</a></li>
+<li id="menu-item-11198" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11198"><a href="http://playwithfireimprov.com/">Play With Fire Improv</a></li>
+<li id="menu-item-553" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-553"><a href="http://www.rapidfiretheatre.com/">Rapid Fire Theatre</a></li>
+<li id="menu-item-16849" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16849"><a href="https://www.sakcomedylab.com">SAK Comedy Lab</a></li>
+<li id="menu-item-554" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-554"><a href="http://www.secondcity.com/">Second City</a></li>
+<li id="menu-item-555" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-555"><a href="http://tjanddave.com/">TJ and Dave</a></li>
+<li id="menu-item-556" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-556"><a href="http://www.ucbtheatre.com/">UCB Theatre</a></li>
+<li id="menu-item-22803" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-22803"><a href="https://365daysofplayproject.wordpress.com">365 Days of Play</a></li>
+</ul></nav></header><!-- /header -->
+<section id="content" class="blog">
+					<h1 class="archive">Posts tagged <em>Annoyance Theatre</em></h1>
+					<div class="archive-list">
+				<h2>Choose another tag?</h2>
+				<ul><li><a href="https://peopleandchairs.com/tag/annoyance-theatre/" rel="tag">Annoyance Theatre</a></li><li><a href="https://peopleandchairs.com/tag/improv-comedy/" rel="tag">improv comedy</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-annoyance/" rel="tag">Mick Napier Annoyance</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-improv/" rel="tag">Mick Napier improv</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-interview/" rel="tag">Mick Napier interview</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-second-city/" rel="tag">Mick Napier Second City</a></li></ul>			</div>
+						<article id="post-8705" class="text post-8705 post type-post status-publish format-standard has-post-thumbnail hentry category-interviews tag-annoyance-theatre tag-improv-comedy tag-mick-napier-annoyance tag-mick-napier-improv tag-mick-napier-interview tag-mick-napier-second-city">
+	<h1><a href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/" class="permalink">Interview: Mick Napier (Part&nbsp;One)</a></h1>
+	<section class="post-body">
+		<p><em><a href="http://www.annoyanceproductions.com/actors/napier.shtml" target="_blank" rel="noopener">Mick Napier</a> would probably say &#8220;fuck it&#8221; to a formal introduction, but here goes anyway&#8230; He&#8217;s an actor, teacher, author, founder and Artistic Director of the Annoyance Theatre, and Artistic Consultant to The Second City. He has directed Tina Fey, Stephen Colbert, David Sedaris, and just about anyone else you think is cool.</em></p>
+<div data-shortcode="caption" id="attachment_8782" style="width: 763px" class="wp-caption alignnone"><a href="https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png"><img aria-describedby="caption-attachment-8782" data-attachment-id="8782" data-permalink="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/screen-shot-2013-04-21-at-8-01-53-pm/" data-orig-file="https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png" data-orig-size="753,711" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="Screen shot 2013-04-21 at 8.01.53 PM" data-image-description="" data-image-caption="&lt;p&gt;Photo © Carol Bontekoe&lt;/p&gt;
+" data-large-file="https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png?w=753" class="size-full wp-image-8782" src="https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png?w=922" alt="Photo © Carol Bontekoe"   srcset="https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png 753w, https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png?w=150&amp;h=142 150w, https://peopleandchairs.com/wp-content/uploads/2013/04/screen-shot-2013-04-21-at-8-01-53-pm.png?w=300&amp;h=283 300w" sizes="(max-width: 753px) 100vw, 753px" /></a><p id="caption-attachment-8782" class="wp-caption-text">Photo © <a href="https://www.facebook.com/Colorful.Cow.Photography" target="_blank" rel="noopener">Carol Bontekoe</a></p></div>
+<p><strong>P&amp;C</strong>: You’ve said that you don’t watch a lot of comedy; you’ve never seen <em>Seinfeld</em> or <em>Friends</em>. Do you think that gives you a more unique perspective on what’s funny?</p>
+<p><strong>MN</strong>: I think it can. That’s not the reason I don’t really watch those things but I do feel like it gives me a feeling of not being affected by all those, or influenced by them, in a good way.</p>
+<p>But it also provides a deficit when I’m working. Like if I’m directing at Second City, I kinda feel out of it sometimes. I rely on my cast to tell me if something’s been done, or we’re visiting a comedic premise that’s been visited before.</p>
+<p>So I think it’s kind of a fun thing, but it’s also been a bad thing for me, too. It makes people think that I’m indifferent to comedy.</p>
+<p>It’s interesting you’re asking me that right now, because I made a concerted effort to express that less to people lately because I think it leaves people with a feeling that’s like, “Oh God, he doesn’t even like comedy…”</p>
+<p><strong>P&amp;C</strong>: (laughs)</p>
+<p><strong>MN</strong>: I do! I do like comedy. It’s just that sometimes it becomes a little bit of a work…a job for me.</p>
+<p>With media or like with television and stuff, if I’m presented a comedy versus, you know, a<em> Law &amp; Order</em> or something, I’m gonna probably go for the drama. But it’s also that way with me and fiction. I don’t read fiction that much, so if I can read <em>The Scarlet Letter</em> or how a refrigerator works, I’m going to read how a refrigerator works.</p>
+<p><strong>P&amp;C: </strong>(laughs)</p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;">When you started doing improv, you didn’t actually have any improv training per se; you just sort of jumped into it, is that right?</span></strong></p>
+<p><strong>MN</strong>: Yeah, I was in college and I was in theatre, and I think I grew a little weary of rehearsing the same thing over and over, and at that time happened upon a book by Jeff Sweet, <em><a href="https://www.amazon.com/Something-Wonderful-Right-Away-History/dp/0879100737/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1533774956&amp;sr=1-1&amp;keywords=something+wonderful+right" target="_blank" rel="noopener">Something Wonderful Right Away</a>, </em>and I really was enthralled by the idea of just making it up.</p>
+<p>So I got together with my friend Dave MacNerland and we formed a group in college and I had never seen it, nor had I ever done it. But I put an audition notice up for a group, and we auditioned people and we started improvising. Mostly sketches and short form stuff, games.</p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;">We were actually writing a new sketch show every week or two, and then we would throw improv games in the middle of those.</span></strong></p>
+<p>For college it was crazy, because we spent an incredible amount of time &#8211; three or four nights a week – working on stuff or rehearsing stuff. So it was a new, I’d say hour-long sketch show every week, with some games in there.</p>
+<p><strong>P&amp;C</strong>: Wow, that’s a lot of work.</p>
+<p><strong>MN</strong>: It was. I look back on that now, and look at the two-month rehearsal process for the Second City Mainstage to get that much time, and it’s crazy.</p>
+<p><strong>I think when you don’t know something you just kinda do it and say “Fuck it.” And I think you don’t know that you’re not supposed to really know that, or not know that. </strong></p>
+<p>We had a nice following. It was called Dubbletaque, and we were in a couple of different bars in college.</p>
+<p><strong>P&amp;C</strong>: From there, you were on an iO team called Grime and Punishment.</p>
+<p><strong>MN</strong>: Yeah, I was in college until ’86 and then moved to Chicago, and almost immediately started at iO and started at Second City all at the same time.</p>
+<p>Back then there were only about, maybe five or six iO teams. And there was the Second City training program, which had just created its official Conservatory back then.</p>
+<p>I started improvising about the same time as a guy named Dave Pasq – or not Dave Pasquesi, he was improvising before me – but Dave Razowsky. And we were on the same team. That was with Rich Laible, and also Tim Meadows was on that team. That was a really good group of people. Timmy and I started improvising about the same week in Chicago.</p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;"><strong>P&amp;C</strong>: Can you describe the improv scene in Chicago at that time? Obviously it was a much smaller community.</span></strong></p>
+<p><strong>MN</strong>: I think long form was really starting, and that was only about five or six years old when I got to Chicago. It was a lot smaller; at the time though of course I thought it was huge because I’m from Indiana, and Second City’s training program was big enough that I certainly felt the competition, so I never really thought it was small at the time. But now looking back on it, I do.</p>
+<p>Like, Second City when I was there, it took a little less than a year to get through their entire program. And now they have A through E, and then they have One through Six, and then iO has six levels, and then the Annoyance has five levels. So I think it takes a lot longer for people to get through the improv experience now.</p>
+<p>Does Toronto’s Second City have two years, do they have A through E? I don’t even know.</p>
+<p><strong>P&amp;C</strong>: They have A through E, and then you can audition for Conservatory, and I believe they now have a long form program that is separate that is probably five levels, and a musical Conservatory.</p>
+<p><strong>MN</strong>: Jeez.</p>
+<p><strong>P&amp;C</strong>: You can spend your life taking classes. (laughs)</p>
+<p><strong>MN</strong>: Ain’t that the truth. It’s a lot different that way. I think also with Second City, [there&#8217;s] the different programs they’ve set up internally, like their BenchCo, their Twisty here which is like a house team at Second City, and then the ships that you can go on, and then Touring Company and e.t.c. and Mainstage&#8230;</p>
+<p><strong>When I started, the average age of a Mainstage actor at Second City’s Mainstage was probably 26-7, now it’s about 31. </strong></p>
+<p>So all of those things, all the training, and the ships, and all those experiences have actually created an older Mainstage actor.</p>
+<p>Which has become a bit weird for them when they leave, because sometimes when they’re ready to go to Los Angeles, they’ve aged themselves out of a market in a weird way. And that’s become an issue on the long term for those actors.</p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;">I also feel like that, in Chicago anyway, there’s a feeling that you want to go through at least the Annoyance, iO’s experience and Second City’s experience; that that makes a fuller, kind of more well-rounded actor/improviser. And I believe that’s reinforced by the culture here&#8230;that all of your peers are doing that.</span></strong></p>
+<p>People are jumping from one place to another. And in Chicago in the last few years you add to that pH, and Playground, and ComedySportz, and Upstairs Gallery, and literally there’s people that would do three shows in three different places here. They’ll do a show at the Annoyance at 8, and go to iO and do a 10 o’clock show and then go Upstairs Gallery and do one at midnight. It’s crazy.</p>
+<p>I also think adding to that, the feeling of being on a team in a weird way here in Chicago – I think a little of this happens in Toronto, too – is that sometimes people feel as if once they’re on a team, that that’s good enough for now, and they kind of become complacent.</p>
+<p><strong>I’ve seen this a lot in Chicago, where it feels so right and reinforced to be on just a team and to be part of something, that it’s easy to then feel satisfied to put your career aside in a weird way.</strong></p>
+<p>To ironically not even work on your own career. It feels like it’s where you should be at the time, and suddenly six years have gone by. And you’re on a team, and you have done little to really, sort of selfishly pursue your own interests and career. Does that make sense?</p>
+<p><strong>P&amp;C</strong>: Absolutely.</p>
+<p><strong>MN</strong>: I’ve just noticed that happen more and more. And I think with more training and more performance opportunities, ironically it can work against someone that way.</p>
+<p><strong>P&amp;C</strong>: A lot of people fall in love with improv and it becomes almost an addiction. You want more, so you take more workshops and classes, but at a certain point it becomes a law of diminishing returns.</p>
+<p>You talk about that in your book <a href="https://www.amazon.com/Improvise-Scene-Inside-Mick-Napier/dp/156608198X/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1533774883&amp;sr=1-1&amp;keywords=improvise+napier" target="_blank" rel="noopener"><em>Improvise. Scene from the Inside Out</em><img style="border:none !important;margin:0!important;" src="//ir-ca.amazon-adsystem.com/e/ir?t=peopleandchai-20&amp;l=am2&amp;o=15&amp;a=156608198X" alt="" width="1" height="1" border="0" /></a>. I think on page 5 you say that by the time someone has spent about two grand on improv classes, they’re probably fully in their head. And I went “Oh my God, that’s me!”</p>
+<p><strong>MN</strong>: (laughs) Well that came from my own experience; that was me, too. I spent all that time and money and I thought, “Why am I rendered immobile?”</p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;"><strong>P&amp;C</strong>: Now you’re working on a new book…</span></strong></p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;"><strong>MN</strong>: [Jennifer Estlin]’s my girlfriend; [she] runs the Annoyance. Jennifer edited <em>Improvise</em> and she’s edited…we put together about 50 pages. We just started to send it out about two weeks ago. It’s not directly marketed for business, but certainly much more.</span></strong></p>
+<p>Heinemann, who published <em>Improvise</em>, they’ve been great; they’re more of an education-based publisher, and I’m wanting to go a little higher and a little more widespread and commercial. So we’ve learned that I need to get an agent really, to approach those kind of publishers, so that’s what we’re doing right now is fishing for an agent.</p>
+<p>The book itself is just about innovation and all the different things that people, when they get together and create something…that’s entailed in that. It’s everything from how to conduct a meeting, to how to present, to how to pitch something, to the psychology that goes behind creating something, to the inner demons that you have when you start to create something.</p>
+<p>And I attempt a few times to recreate scenarios of like, how one is thinking when they’re approaching a podium if they’re gonna speak, and how terrified they are.</p>
+<p>Or the feeling of the room in a meeting when you have that one asshole in the back with his arms crossed, and looking at you, and what he’s thinking, and why he wants to get attention. And how it doesn’t matter what your idea is, how he’s gonna be negative, and all of that. Hopefully stuff that people can relate to.</p>
+<p>And then there’s a chapter about how to drink – which is very funny and timely for me – I have a chapter about how to drink coffee…</p>
+<p><strong>P&amp;C</strong>: (laughs)</p>
+<p><strong>MN</strong>: …how to not spill coffee on yourself, because I’m always doing that. And this morning I was walking and drinking coffee and spilled it on my shirt and thought about my own advice. I have a whole chapter on drinking coffee. (laughs)</p>
+<p><strong><span class="Apple-style-span" style="font-weight:normal;"><strong>P&amp;C</strong>: Going back in my notes… You’ve said that you find agreement in improv a weak concept. Can you expand on that, since the whole principal of improv seems to be built around agreement?</span></strong></p>
+<p><strong>MN</strong>: Well, I think that agreement has been overblown and overrated in a weird way. I certainly don’t disagree with the idea of immediately agreeing to the circumstances or reality of a space presented to you in an improv scene.</p>
+<p><strong>If you ask for a hammer, then I can be at a hardware store and that’s all good. I believe that it’s an extra stretch… Like, if you were to ask for a hammer and for me to say “I’m on Venus right now,” it’s a lot of baggage to bring those two worlds together. </strong></p>
+<p>So I definitely adhere to the notion of agreeing with the circumstances of an improv scene or circumstances of a relationship, or that label.</p>
+<p>I believe the weakness that I refer to comes from how hyped “Yes and…” is and has become. And I don’t believe that that’s the root of good improvisation or the root of good comedy even. And it left me powerless, to have someone throw an initiation out there and for me to literally, or sometimes comparatively, form the words “<i>Yes</i>, I agree with that, <i>and</i> let me add to that.”</p>
+<p>“Yes, I like ice cream, and strawberry’s my favourite.”</p>
+<p>And it left me just weak, and I didn’t feel like I had any edge on what I was saying. I didn’t feel like I had any underlying irony, or sometimes I say like, a hateful nature about it, or a wicked way of looking at it, or an ironic way…so I had a hard time with that in and of itself, being such a tentative improvisation, and it leaving me feeling so weak.</p>
+<p>And just coming to realize over time that many people would disagree, or <em>characters</em> would disagree with me in an improv scene, or I would do the same, and there was great strength in that. Or other times people would aggressively, and there could be great strength in that.</p>
+<p>But the weaker people that I noticed in improvisation were those that were merely relying on, without much behind it, saying “Yes” and agreeing with things, and then adding a little something to it in the content.</p>
+<p>So I felt like there was a lot more to improvisation than that. And I felt like the teaching of that, and the priority that people placed on that, was actually tending toward being a deficit to their improvisation, and a deficit to the power they brought to it, as opposed to an asset.</p>
+<p>It’s easy enough to teach in about thirty minutes, general agreement to the circumstances of a scene. But to really put a banner behind “Yes, and…” and have people literally agree with everything and add to it in that way, I feel like there’s a lot of different tactics to improvisation that give people a lot more power.</p>
+<p>While that very basic idea of agreement still lives there, I think that once those circumstances are agreed to, a whole other bevy of things can occur.</p>
+<p><strong>P&amp;C:</strong> Annoyance, iO, UCB, and Second City all have their own distinctive styles. iO started in ’81, Annoyance started in ’87 as Metraform, and UCB started in 1990, and Second City way before that.</p>
+<p>When people from Toronto go to Chicago or New York and take workshops, you can see their style change and be informed and more dynamic in certain ways, based on where they trained.</p>
+<p>Do you think there’s still room for new approaches, and if so, why do you think there hasn’t been any for so long?</p>
+<p><strong>MN</strong>: That’s a really good question. I’ve given absolutely no thought to that.</p>
+<p><strong>P&amp;C</strong>: (laughs)</p>
+<p><strong>MN</strong>: I can think about it and talk at the same time…</p>
+<p>I feel like some of that might be that, although there’s different styles, like with iO and UCB, I believe they’re still under the umbrella of long form. I believe that long form and its cultures have become so encompassing that I think that the styles are found <i>within</i> that, but that people don’t feel like they’re gonna create a whole other school of thought that exceeds what is out there now. I’m kinda talking out my ass…</p>
+<p><strong>P&amp;C</strong>: (laughs)</p>
+<p><strong>MN</strong>: (laughs) I am. I also feel…it’s kinda like, Second City is sketch comedy. There’s so many things you can do with it, but it’s always gonna be unrelated scenes, monologues and songs.</p>
+<p>And I feel like improvisation is the same in a way, because it’s always going to be someone on a raised platform saying words they didn’t know they were gonna say, and making them up. And you can do that in many different ways, and the only thing that’s really changed by definition is the length of time, in my opinion: long form versus games or short form.</p>
+<p>If you expand to like, Comedy Sports or Theatre Sports, that’s a slightly different way of playing games. UCB is a slightly different way of looking at the Harold. I think the Annoyance took improvisation and created more narrative works, more musicals, more full-length plays written through improvisation. And that kind of extends from Second City’s way of creating sketch through improvisation.</p>
+<p>So I don’t know the answer to the question, but I feel like there’s all these derivative methods of using the tool that is constant, which is making up things on a stage. And I feel like <i>that</i> sometimes has its limits, which is kind of an age-old argument about whether or not improvisation is actually worthy in and of itself to be a product placed in front of people to pay money for.</p>
+<p>Even twenty-some years ago I kept hearing the conversation, “Will there ever be an improvised television show?” or “Can you take improvisation to movies or TV?” And I feel like people have done that, but it still has its hit rate that you have to accommodate commercially. Or not. But I think that that becomes relevant.</p>
+<p><strong>Because even among the very best improvisers I’ve ever worked with, the very best have a 75% hit rate. Three out of four scenes are gonna be great and one’s not. </strong></p>
+<p>And you have to ask, “Is that commercially viable?”</p>
+<p><em>In Part Two, Mick talks about working in TV, acting skills and auditioning, how not to run an improv theatre, and pool.</em></p>
+<div data-shortcode="caption" id="attachment_8775" style="width: 932px" class="wp-caption alignnone"><a href="https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg"><img aria-describedby="caption-attachment-8775" data-attachment-id="8775" data-permalink="https://peopleandchairs.com/2013/04/25/interview-mick-napier-part-two-2/mickbyrazowsky/" data-orig-file="https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg" data-orig-size="1600,1200" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="MickbyRazowsky" data-image-description="" data-image-caption="&lt;p&gt;Photo © David Razowsky&lt;/p&gt;
+" data-large-file="https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=922" class="size-full wp-image-8775" src="https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=922&#038;h=691" alt="Photo © David Razowsky" width="922" height="691" srcset="https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=922&amp;h=692 922w, https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=150&amp;h=113 150w, https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=300&amp;h=225 300w, https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=768&amp;h=576 768w, https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=1024&amp;h=768 1024w, https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg?w=1440&amp;h=1080 1440w, https://peopleandchairs.com/wp-content/uploads/2013/04/mickbyrazowsky.jpg 1600w" sizes="(max-width: 922px) 100vw, 922px" /></a><p id="caption-attachment-8775" class="wp-caption-text">Photo © <a href="http://www.davidrazowsky.com/improvisacting/Welcome.html" target="_blank" rel="noopener">David Razowsky</a></p></div>
+<p><strong> </strong></p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-official sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-facebook"><div class="fb-share-button" data-href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/" data-layout="button_count"></div></li><li class="share-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/" data-text="Interview: Mick Napier (Part One)" data-via="peopleandchairs" data-related="wordpressdotcom">Tweet</a></li><li class="share-email"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-email-8705"
+				class="share-email sd-button"
+				href="mailto:?subject=%5BShared%20Post%5D%20Interview%3A%20Mick%20Napier%20%28Part%20One%29&#038;body=https%3A%2F%2Fpeopleandchairs.com%2F2013%2F04%2F23%2Finterview-mick-napier-part-one%2F&#038;share=email"
+				target="_blank"
+				aria-labelledby="sharing-email-8705"
+				data-email-share-error-title="Do you have email set up?" data-email-share-error-text="If you&#039;re having problems sharing via email, you might not have email set up for your browser. You may need to create a new email yourself." data-email-share-nonce="cf7050ec25" data-email-share-track-url="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/?share=email">
+				<span id="sharing-email-8705" hidden>Email a link to a friend (Opens in new window)</span>
+				<span>Email</span>
+			</a></li><li class="share-linkedin"><div class="linkedin_button"><script type="in/share" data-url="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/" data-counter="right"></script></div></li><li><a href="#" class="sharing-anchor sd-button share-more"><span>More</span></a></li><li class="share-end"></li></ul><div class="sharing-hidden"><div class="inner" style="display: none;"><ul><li class="share-print"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-print-8705"
+				class="share-print sd-button"
+				href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/?share=print"
+				target="_blank"
+				aria-labelledby="sharing-print-8705"
+				>
+				<span id="sharing-print-8705" hidden>Print (Opens in new window)</span>
+				<span>Print</span>
+			</a></li><li class="share-reddit"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-reddit-8705"
+				class="share-reddit sd-button"
+				href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/?share=reddit"
+				target="_blank"
+				aria-labelledby="sharing-reddit-8705"
+				>
+				<span id="sharing-reddit-8705" hidden>Share on Reddit (Opens in new window)</span>
+				<span>Reddit</span>
+			</a></li><li class="share-pinterest"><div class="pinterest_button"><a href="https://www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fpeopleandchairs.com%2F2013%2F04%2F23%2Finterview-mick-napier-part-one%2F&#038;media=https%3A%2F%2Fpeopleandchairs.com%2Fwp-content%2Fuploads%2F2013%2F04%2Fscreen-shot-2013-04-21-at-8-01-53-pm.png&#038;description=Interview%3A%20Mick%20Napier%20%28Part%20One%29" data-pin-do="buttonPin" data-pin-config="beside"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png" /></a></div></li><li class="share-tumblr"><a class="tumblr-share-button" target="_blank" href="https://www.tumblr.com/share" data-title="Interview: Mick Napier (Part One)" data-content="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/" title="Share on Tumblr"data-posttype="link">Share on Tumblr</a></li><li class="share-telegram"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-telegram-8705"
+				class="share-telegram sd-button"
+				href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/?share=telegram"
+				target="_blank"
+				aria-labelledby="sharing-telegram-8705"
+				>
+				<span id="sharing-telegram-8705" hidden>Share on Telegram (Opens in new window)</span>
+				<span>Telegram</span>
+			</a></li><li class="share-jetpack-whatsapp"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-whatsapp-8705"
+				class="share-jetpack-whatsapp sd-button"
+				href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/?share=jetpack-whatsapp"
+				target="_blank"
+				aria-labelledby="sharing-whatsapp-8705"
+				>
+				<span id="sharing-whatsapp-8705" hidden>Share on WhatsApp (Opens in new window)</span>
+				<span>WhatsApp</span>
+			</a></li><li class="share-end"></li></ul></div></div></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-33465894-8705-6a005d4786416' data-src='//widgets.wp.com/likes/index.html?ver=20260510#blog_id=33465894&amp;post_id=8705&amp;origin=peopleandchairs.wordpress.com&amp;obj_id=33465894-8705-6a005d4786416&amp;domain=peopleandchairs.com' data-name='like-post-frame-33465894-8705-6a005d4786416' data-title='Like or Reblog'><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class='loading'>Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div></div>	</section><!-- /.post-body -->
+	<aside class="tags"><ul><li><a href="https://peopleandchairs.com/tag/annoyance-theatre/" rel="tag">Annoyance Theatre</a></li><li><a href="https://peopleandchairs.com/tag/improv-comedy/" rel="tag">improv comedy</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-annoyance/" rel="tag">Mick Napier Annoyance</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-improv/" rel="tag">Mick Napier improv</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-interview/" rel="tag">Mick Napier interview</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier-second-city/" rel="tag">Mick Napier Second City</a></li></ul></aside><footer>
+				<p class="meta">
+			<time datetime="2013-Apr-TueT01:04:06GMT+0000" pubdate="pubdate">
+			<a href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/" class="permalink">April 23rd</a>
+			</time>
+							<span class="author">by <a href="http://peopleandchairs.com" title="Visit cameronandsally&#8217;s website" rel="author external">cameronandsally</a></span>
+			
+																<span class="labels">in																				<a href="https://peopleandchairs.com/category/interviews/">Interviews</a>
+											</span>
+									</p>
+				<ul class="feedback">
+			<li class="comments">
+				<a href="https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/#respond" title="comments">0</a>
+			</li>
+		</ul>
+	</footer></article><!-- /.text --><article id="post-5727" class="text post-5727 post type-post status-publish format-standard hentry category-live-shows-festivals tag-adam-cawley tag-annoyance-theatre tag-dwayne-wilson tag-kris-siddiqi tag-matt-folliott tag-rob-norman tag-skinprov tag-skinprov-toronto tag-wayne-jones">
+	<h1><a href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/" class="permalink">Live Show: The Skinny on Skinprov&nbsp;Toronto</a></h1>
+	<section class="post-body">
+		<p><strong>&#8220;Clothes make the man. Naked people have little or no influence on society.&#8221; &#8211; Mark Twain</strong></p>
+<p>For years, Chicago audiences have watched scantily-clad men improvise some of the dumbest scenes ever played on a stage. Now it&#8217;s Toronto&#8217;s turn.</p>
+<p>Created by Mick Napier of The Annoyance Theatre, <em>Skinprov </em>is pretty much like it sounds: a bunch of guys do improv while wearing increasingly smaller pieces of fabric. Which makes the non sequitur scenes all the more hilarious.</p>
+<p>Audience favourites Adam Cawley, Rob Norman, Wayne Jones, Kris Siddiqi, Dwayne Wilson and Matt Folliott bare their souls, or at least their flesh, next Wednesday, November 21st, 9:30 pm at Comedy Bar.</p>
+<p>Ladies, start planning your staggette party.</p>
+<p><a href="https://www.facebook.com/events/282491878537507/"><img data-attachment-id="5738" data-permalink="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/175538_227132527417133_2019957696_o/" data-orig-file="https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg" data-orig-size="2048,1536" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="175538_227132527417133_2019957696_o" data-image-description="" data-image-caption="" data-large-file="https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=922" loading="lazy" class="alignnone size-full wp-image-5738" title="175538_227132527417133_2019957696_o" src="https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=922&#038;h=691" alt="" width="922" height="691" srcset="https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=922&amp;h=692 922w, https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=1844&amp;h=1383 1844w, https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=150&amp;h=113 150w, https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=300&amp;h=225 300w, https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=768&amp;h=576 768w, https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=1024&amp;h=768 1024w, https://peopleandchairs.com/wp-content/uploads/2012/11/175538_227132527417133_2019957696_o.jpg?w=1440&amp;h=1080 1440w" sizes="(max-width: 922px) 100vw, 922px" /></a></p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-official sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-facebook"><div class="fb-share-button" data-href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/" data-layout="button_count"></div></li><li class="share-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/" data-text="Live Show: The Skinny on Skinprov Toronto" data-via="peopleandchairs" data-related="wordpressdotcom">Tweet</a></li><li class="share-email"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-email-5727"
+				class="share-email sd-button"
+				href="mailto:?subject=%5BShared%20Post%5D%20Live%20Show%3A%20The%20Skinny%20on%20Skinprov%20Toronto&#038;body=https%3A%2F%2Fpeopleandchairs.com%2F2012%2F11%2F14%2Flive-show-the-skinny-on-skinprov-toronto%2F&#038;share=email"
+				target="_blank"
+				aria-labelledby="sharing-email-5727"
+				data-email-share-error-title="Do you have email set up?" data-email-share-error-text="If you&#039;re having problems sharing via email, you might not have email set up for your browser. You may need to create a new email yourself." data-email-share-nonce="d45bb1201f" data-email-share-track-url="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/?share=email">
+				<span id="sharing-email-5727" hidden>Email a link to a friend (Opens in new window)</span>
+				<span>Email</span>
+			</a></li><li class="share-linkedin"><div class="linkedin_button"><script type="in/share" data-url="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/" data-counter="right"></script></div></li><li><a href="#" class="sharing-anchor sd-button share-more"><span>More</span></a></li><li class="share-end"></li></ul><div class="sharing-hidden"><div class="inner" style="display: none;"><ul><li class="share-print"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-print-5727"
+				class="share-print sd-button"
+				href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/?share=print"
+				target="_blank"
+				aria-labelledby="sharing-print-5727"
+				>
+				<span id="sharing-print-5727" hidden>Print (Opens in new window)</span>
+				<span>Print</span>
+			</a></li><li class="share-reddit"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-reddit-5727"
+				class="share-reddit sd-button"
+				href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/?share=reddit"
+				target="_blank"
+				aria-labelledby="sharing-reddit-5727"
+				>
+				<span id="sharing-reddit-5727" hidden>Share on Reddit (Opens in new window)</span>
+				<span>Reddit</span>
+			</a></li><li class="share-pinterest"><div class="pinterest_button"><a href="https://www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fpeopleandchairs.com%2F2012%2F11%2F14%2Flive-show-the-skinny-on-skinprov-toronto%2F&#038;media=http%3A%2F%2Fpeopleandchairs.files.wordpress.com%2F2012%2F11%2F175538_227132527417133_2019957696_o.jpg&#038;description=Live%20Show%3A%20The%20Skinny%20on%20Skinprov%20Toronto" data-pin-do="buttonPin" data-pin-config="beside"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png" /></a></div></li><li class="share-tumblr"><a class="tumblr-share-button" target="_blank" href="https://www.tumblr.com/share" data-title="Live Show: The Skinny on Skinprov Toronto" data-content="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/" title="Share on Tumblr"data-posttype="link">Share on Tumblr</a></li><li class="share-telegram"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-telegram-5727"
+				class="share-telegram sd-button"
+				href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/?share=telegram"
+				target="_blank"
+				aria-labelledby="sharing-telegram-5727"
+				>
+				<span id="sharing-telegram-5727" hidden>Share on Telegram (Opens in new window)</span>
+				<span>Telegram</span>
+			</a></li><li class="share-jetpack-whatsapp"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-whatsapp-5727"
+				class="share-jetpack-whatsapp sd-button"
+				href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/?share=jetpack-whatsapp"
+				target="_blank"
+				aria-labelledby="sharing-whatsapp-5727"
+				>
+				<span id="sharing-whatsapp-5727" hidden>Share on WhatsApp (Opens in new window)</span>
+				<span>WhatsApp</span>
+			</a></li><li class="share-end"></li></ul></div></div></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-33465894-5727-6a005d478a026' data-src='//widgets.wp.com/likes/index.html?ver=20260510#blog_id=33465894&amp;post_id=5727&amp;origin=peopleandchairs.wordpress.com&amp;obj_id=33465894-5727-6a005d478a026&amp;domain=peopleandchairs.com' data-name='like-post-frame-33465894-5727-6a005d478a026' data-title='Like or Reblog'><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class='loading'>Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div></div>	</section><!-- /.post-body -->
+	<aside class="tags"><ul><li><a href="https://peopleandchairs.com/tag/adam-cawley/" rel="tag">Adam Cawley</a></li><li><a href="https://peopleandchairs.com/tag/annoyance-theatre/" rel="tag">Annoyance Theatre</a></li><li><a href="https://peopleandchairs.com/tag/dwayne-wilson/" rel="tag">Dwayne Wilson</a></li><li><a href="https://peopleandchairs.com/tag/kris-siddiqi/" rel="tag">Kris Siddiqi</a></li><li><a href="https://peopleandchairs.com/tag/matt-folliott/" rel="tag">Matt Folliott</a></li><li><a href="https://peopleandchairs.com/tag/rob-norman/" rel="tag">Rob Norman</a></li><li><a href="https://peopleandchairs.com/tag/skinprov/" rel="tag">Skinprov</a></li><li><a href="https://peopleandchairs.com/tag/skinprov-toronto/" rel="tag">Skinprov Toronto</a></li><li><a href="https://peopleandchairs.com/tag/wayne-jones/" rel="tag">Wayne Jones</a></li></ul></aside><footer>
+				<p class="meta">
+			<time datetime="2012-Nov-WedT02:11:11GMT+0000" pubdate="pubdate">
+			<a href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/" class="permalink">November 14th</a>
+			</time>
+							<span class="author">by <a href="http://peopleandchairs.com" title="Visit cameronandsally&#8217;s website" rel="author external">cameronandsally</a></span>
+			
+																<span class="labels">in																				<a href="https://peopleandchairs.com/category/live-shows-festivals/">Live Shows &amp; Festivals</a>
+											</span>
+									</p>
+				<ul class="feedback">
+			<li class="comments">
+				<a href="https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/#respond" title="comments">0</a>
+			</li>
+		</ul>
+	</footer></article><!-- /.text --><article id="post-636" class="text post-636 post type-post status-publish format-standard hentry category-book-reviews-other-cool-stuff category-other-cool-stuff tag-annoyance-theatre tag-improvise-by-mick-napier tag-improvise-scene-from-the-inside-out tag-mick-napier">
+	<h1><a href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/" class="permalink">Book Review: Improvise. Scene from the Inside Out by Mick&nbsp;Napier</a></h1>
+	<section class="post-body">
+		<p>Mick Napier says, &#8220;Do something.&#8221;</p>
+<p>I say &#8220;Buy this book.&#8221;</p>
+<p>Do it.</p>
+<p>It&#8217;ll be the best $15 you&#8217;ve ever spent.</p>
+<p>(Those Star Wars figurines? That new Kanye album? The KFC Double Down for you and your date? They can&#8217;t do what this book can do for you. Seriously.)</p>
+<p>So why should you spend an improviser&#8217;s fortune?</p>
+<p>Because.</p>
+<p>Because it&#8217;s the best goddamn book on the subject &#8211; and it&#8217;s funny.</p>
+<p>Because Napier, founder of The Annoyance Theatre, knows what he&#8217;s talking about.</p>
+<p>Because if you want to have fun, feel freer onstage, and stop second-guessing yourself, <a href="https://www.amazon.com/Improvise-Scene-Inside-Mick-Napier/dp/156608198X/ref=sr_1_1?ie=UTF8&amp;qid=1533753473&amp;sr=8-1&amp;keywords=improvise+napier" target="_blank" rel="noopener"><em>Improvise. Scene from the Inside Out</em></a><img loading="lazy" style="border:none !important;margin:0!important;" src="//ir-ca.amazon-adsystem.com/e/ir?t=peopleandchai-20&amp;l=am2&amp;o=15&amp;a=156608198X" alt="" width="1" height="1" border="0" /> is for you.</p>
+<p>I love the ideas in this book so much I&#8217;m thinking of getting them tattooed on my arms. Or maybe Brailled. Sure, I&#8217;d have to learn Braille, but I could run our fingers over my forearms onstage, and people would think it was part of my character&#8217;s deal<em>.</em></p>
+<p>Napier would hate that of course. Not the &#8220;having a deal&#8221; thing; he&#8217;s all about that. The tattoo/Braille Cliff Notes thing. Mick Napier abhors rules.</p>
+<p><strong>&#8220;&#8216;Don&#8217;t you have to know The Rules first before you can break them?&#8217; </strong></p>
+<p><strong>I&#8217;ve been asked that question a few hundred times. It&#8217;s usually a student who has already spent $2,658 on improv classes. (People like to justify their expenses.) I wish I could provide comfort, but unfortunately the answer is &#8216;No.&#8217;</strong></p>
+<p><strong>I do not believe one must learn The Rules in order to break them.&#8221;</strong></p>
+<p>Wow.</p>
+<p>When I first read that passage, I&#8217;d been learning improv for about two years. My mind was swimming with advice and admonitions. If I started to do something in a scene, I&#8217;d remember a reason not to. In short, I was so fucking far in my head it&#8217;s a wonder I could see the stage. If he could help people like that, then maybe, just maybe there was hope for me.</p>
+<p><em>Improvise. Scene from the Inside Out<img loading="lazy" style="border:none !important;margin:0!important;" src="//ir-ca.amazon-adsystem.com/e/ir?t=peopleandchai-20&amp;l=am2&amp;o=15&amp;a=156608198X" alt="" width="1" height="1" border="0" /></em> offers a different way to play, one that starts with trusting yourself. It covers a wide range of topics and situations, including:</p>
+<ul>
+<li>two-person scenes</li>
+<li>group scenes</li>
+<li>entering scenes</li>
+<li>techniques to achieve richer, more layered scenes</li>
+</ul>
+<p>It even has exercises you can do on your own. (Or in front of ol&#8217; Vader and Jar-Jar, if you want.)</p>
+<p>Reading the book for the third time, I still laughed out loud. As Homer says, &#8220;It&#8217;s funny &#8217;cause it&#8217;s true.&#8221;</p>
+<p>Everyone I know who&#8217;s trained with Mick came back a more playful, empowered performer. If you can take a class or intensive at Annoyance, I highly encourage it.</p>
+<p>In the meantime, do something. Do yourself a favour: Buy this book.</p>
+<div data-shortcode="caption" id="attachment_22042" style="width: 700px" class="wp-caption alignnone"><img aria-describedby="caption-attachment-22042" data-attachment-id="22042" data-permalink="https://peopleandchairs.com/2017/08/11/book-some-time-with-mick-napier/screen-shot-2017-08-10-at-3-38-08-pm/" data-orig-file="https://peopleandchairs.com/wp-content/uploads/2017/08/screen-shot-2017-08-10-at-3-38-08-pm.png" data-orig-size="690,924" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="Screen Shot 2017-08-10 at 3.38.08 PM" data-image-description="" data-image-caption="&lt;p&gt;Photo © People and Chairs&lt;/p&gt;
+" data-large-file="https://peopleandchairs.com/wp-content/uploads/2017/08/screen-shot-2017-08-10-at-3-38-08-pm.png?w=690" loading="lazy" class="size-full wp-image-22042" src="https://peopleandchairs.com/wp-content/uploads/2017/08/screen-shot-2017-08-10-at-3-38-08-pm.png?w=922" alt=""   srcset="https://peopleandchairs.com/wp-content/uploads/2017/08/screen-shot-2017-08-10-at-3-38-08-pm.png 690w, https://peopleandchairs.com/wp-content/uploads/2017/08/screen-shot-2017-08-10-at-3-38-08-pm.png?w=112&amp;h=150 112w, https://peopleandchairs.com/wp-content/uploads/2017/08/screen-shot-2017-08-10-at-3-38-08-pm.png?w=224&amp;h=300 224w" sizes="(max-width: 690px) 100vw, 690px" /><p id="caption-attachment-22042" class="wp-caption-text">Photo © People and Chairs</p></div>
+<p>&nbsp;</p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-official sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-facebook"><div class="fb-share-button" data-href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/" data-layout="button_count"></div></li><li class="share-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-url="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/" data-text="Book Review: Improvise. Scene from the Inside Out by Mick Napier" data-via="peopleandchairs" data-related="wordpressdotcom">Tweet</a></li><li class="share-email"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-email-636"
+				class="share-email sd-button"
+				href="mailto:?subject=%5BShared%20Post%5D%20Book%20Review%3A%20Improvise.%20Scene%20from%20the%20Inside%20Out%20by%20Mick%20Napier&#038;body=https%3A%2F%2Fpeopleandchairs.com%2F2012%2F03%2F16%2Fbook-review-improvise-scene-from-the-inside-out-by-mick-napier%2F&#038;share=email"
+				target="_blank"
+				aria-labelledby="sharing-email-636"
+				data-email-share-error-title="Do you have email set up?" data-email-share-error-text="If you&#039;re having problems sharing via email, you might not have email set up for your browser. You may need to create a new email yourself." data-email-share-nonce="4166211373" data-email-share-track-url="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/?share=email">
+				<span id="sharing-email-636" hidden>Email a link to a friend (Opens in new window)</span>
+				<span>Email</span>
+			</a></li><li class="share-linkedin"><div class="linkedin_button"><script type="in/share" data-url="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/" data-counter="right"></script></div></li><li><a href="#" class="sharing-anchor sd-button share-more"><span>More</span></a></li><li class="share-end"></li></ul><div class="sharing-hidden"><div class="inner" style="display: none;"><ul><li class="share-print"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-print-636"
+				class="share-print sd-button"
+				href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/?share=print"
+				target="_blank"
+				aria-labelledby="sharing-print-636"
+				>
+				<span id="sharing-print-636" hidden>Print (Opens in new window)</span>
+				<span>Print</span>
+			</a></li><li class="share-reddit"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-reddit-636"
+				class="share-reddit sd-button"
+				href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/?share=reddit"
+				target="_blank"
+				aria-labelledby="sharing-reddit-636"
+				>
+				<span id="sharing-reddit-636" hidden>Share on Reddit (Opens in new window)</span>
+				<span>Reddit</span>
+			</a></li><li class="share-pinterest"><div class="pinterest_button"><a href="https://www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fpeopleandchairs.com%2F2012%2F03%2F16%2Fbook-review-improvise-scene-from-the-inside-out-by-mick-napier%2F&#038;media=%2F%2Fir-ca.amazon-adsystem.com%2Fe%2Fir%3Ft%3Dpeopleandchai-20%26l%3Dam2%26o%3D15%26a%3D156608198X&#038;description=Book%20Review%3A%20Improvise.%20Scene%20from%20the%20Inside%20Out%20by%20Mick%20Napier" data-pin-do="buttonPin" data-pin-config="beside"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png" /></a></div></li><li class="share-tumblr"><a class="tumblr-share-button" target="_blank" href="https://www.tumblr.com/share" data-title="Book Review: Improvise. Scene from the Inside Out by Mick Napier" data-content="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/" title="Share on Tumblr"data-posttype="link">Share on Tumblr</a></li><li class="share-telegram"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-telegram-636"
+				class="share-telegram sd-button"
+				href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/?share=telegram"
+				target="_blank"
+				aria-labelledby="sharing-telegram-636"
+				>
+				<span id="sharing-telegram-636" hidden>Share on Telegram (Opens in new window)</span>
+				<span>Telegram</span>
+			</a></li><li class="share-jetpack-whatsapp"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-whatsapp-636"
+				class="share-jetpack-whatsapp sd-button"
+				href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/?share=jetpack-whatsapp"
+				target="_blank"
+				aria-labelledby="sharing-whatsapp-636"
+				>
+				<span id="sharing-whatsapp-636" hidden>Share on WhatsApp (Opens in new window)</span>
+				<span>WhatsApp</span>
+			</a></li><li class="share-end"></li></ul></div></div></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-33465894-636-6a005d478ef2b' data-src='//widgets.wp.com/likes/index.html?ver=20260510#blog_id=33465894&amp;post_id=636&amp;origin=peopleandchairs.wordpress.com&amp;obj_id=33465894-636-6a005d478ef2b&amp;domain=peopleandchairs.com' data-name='like-post-frame-33465894-636-6a005d478ef2b' data-title='Like or Reblog'><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class='loading'>Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div></div>	</section><!-- /.post-body -->
+	<aside class="tags"><ul><li><a href="https://peopleandchairs.com/tag/annoyance-theatre/" rel="tag">Annoyance Theatre</a></li><li><a href="https://peopleandchairs.com/tag/improvise-by-mick-napier/" rel="tag">Improvise by Mick Napier</a></li><li><a href="https://peopleandchairs.com/tag/improvise-scene-from-the-inside-out/" rel="tag">Improvise: Scene from the Inside Out</a></li><li><a href="https://peopleandchairs.com/tag/mick-napier/" rel="tag">Mick Napier</a></li></ul></aside><footer>
+				<p class="meta">
+			<time datetime="2012-Mar-FriT02:03:16GMT+0000" pubdate="pubdate">
+			<a href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/" class="permalink">March 16th</a>
+			</time>
+							<span class="author">by <a href="http://peopleandchairs.com" title="Visit cameronandsally&#8217;s website" rel="author external">cameronandsally</a></span>
+			
+																<span class="labels">in																				<a href="https://peopleandchairs.com/category/other-cool-stuff/book-reviews-other-cool-stuff/">Book Reviews</a>
+																				<a href="https://peopleandchairs.com/category/other-cool-stuff/">Other Cool Stuff</a>
+											</span>
+									</p>
+				<ul class="feedback">
+			<li class="comments">
+				<a href="https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/#comments" title="comments">2</a>
+			</li>
+		</ul>
+	</footer></article><!-- /.text -->
+<div class="paging">
+	<ul>
+		<li class="older"></li>
+		<li class="newer"></li>
+	</ul>
+</div><!-- end paging -->	</section><!--end content-->
+	<aside role="complementary">
+		<div id="search-4" class="widget widget_search"><h4>Search</h4><form role="search" method="get" id="searchform" class="searchform" action="https://peopleandchairs.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></div><div id="blog_subscription-4" class="widget widget_blog_subscription jetpack_subscription_widget"><h4><label for="subscribe-field">Subscribe To Posts</label></h4>
+
+			<div class="wp-block-jetpack-subscriptions__container">
+			<form
+				action="https://subscribe.wordpress.com"
+				method="post"
+				accept-charset="utf-8"
+				data-blog="33465894"
+				data-post_access_level="everybody"
+				id="subscribe-blog"
+			>
+				<p>Enter your email address to follow this blog and receive notifications of new posts by email.</p>
+				<p id="subscribe-email">
+					<label
+						id="subscribe-field-label"
+						for="subscribe-field"
+						class="screen-reader-text"
+					>
+						Email Address:					</label>
+
+					<input
+							type="email"
+							name="email"
+							autocomplete="email"
+							
+							style="width: 95%; padding: 1px 10px"
+							placeholder="Email Address"
+							value=""
+							id="subscribe-field"
+							required
+						/>				</p>
+
+				<p id="subscribe-submit"
+									>
+					<input type="hidden" name="action" value="subscribe"/>
+					<input type="hidden" name="blog_id" value="33465894"/>
+					<input type="hidden" name="source" value="https://peopleandchairs.com/tag/annoyance-theatre/"/>
+					<input type="hidden" name="sub-type" value="widget"/>
+					<input type="hidden" name="redirect_fragment" value="subscribe-blog"/>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="b7c2f7cd48" />					<button type="submit"
+													class="wp-block-button__link"
+																	>
+						Follow					</button>
+				</p>
+			</form>
+						</div>
+			
+</div><div id="top-posts-4" class="widget widget_top-posts"><h4>Top Posts &amp; Pages</h4><ul class='widgets-list-layout no-grav'>
+<li><a href="https://peopleandchairs.com/2012/12/20/how-colbert-got-over-embarrassment/" title="How Colbert Got Over Embarrassment (And So Can You!)" class="bump-view" data-bump-view="tp"><img loading="lazy" width="40" height="40" src="https://peopleandchairs.files.wordpress.com/2012/12/lauradickinsonturner.jpg?w=40&#038;h=40&#038;crop=1" srcset="https://peopleandchairs.files.wordpress.com/2012/12/lauradickinsonturner.jpg?w=40&amp;h=40&amp;crop=1 1x, https://peopleandchairs.files.wordpress.com/2012/12/lauradickinsonturner.jpg?w=60&amp;h=60&amp;crop=1 1.5x, https://peopleandchairs.files.wordpress.com/2012/12/lauradickinsonturner.jpg?w=80&amp;h=80&amp;crop=1 2x, https://peopleandchairs.files.wordpress.com/2012/12/lauradickinsonturner.jpg?w=120&amp;h=120&amp;crop=1 3x, https://peopleandchairs.files.wordpress.com/2012/12/lauradickinsonturner.jpg?w=160&amp;h=160&amp;crop=1 4x" alt="How Colbert Got Over Embarrassment (And So Can You!)" data-pin-nopin="true" class="widgets-list-layout-blavatar" /></a><div class="widgets-list-layout-links">
+								<a href="https://peopleandchairs.com/2012/12/20/how-colbert-got-over-embarrassment/" title="How Colbert Got Over Embarrassment (And So Can You!)" class="bump-view" data-bump-view="tp">How Colbert Got Over Embarrassment (And So Can You!)</a>
+							</div>
+							</li><li><a href="https://peopleandchairs.com/2015/03/16/tj-dave-pam-on-improvising-at-the-speed-of-life/" title="TJ &amp; Dave &amp; Pam on Improvising At The Speed Of Life" class="bump-view" data-bump-view="tp"><img loading="lazy" width="40" height="40" src="https://peopleandchairs.files.wordpress.com/2015/03/tj-dave-by-eleonora-briscoe.png?w=40&#038;h=40&#038;crop=1" srcset="https://peopleandchairs.files.wordpress.com/2015/03/tj-dave-by-eleonora-briscoe.png?w=40&amp;h=40&amp;crop=1 1x, https://peopleandchairs.files.wordpress.com/2015/03/tj-dave-by-eleonora-briscoe.png?w=60&amp;h=60&amp;crop=1 1.5x, https://peopleandchairs.files.wordpress.com/2015/03/tj-dave-by-eleonora-briscoe.png?w=80&amp;h=80&amp;crop=1 2x, https://peopleandchairs.files.wordpress.com/2015/03/tj-dave-by-eleonora-briscoe.png?w=120&amp;h=120&amp;crop=1 3x, https://peopleandchairs.files.wordpress.com/2015/03/tj-dave-by-eleonora-briscoe.png?w=160&amp;h=160&amp;crop=1 4x" alt="TJ &amp; Dave &amp; Pam on Improvising At The Speed Of Life" data-pin-nopin="true" class="widgets-list-layout-blavatar" /></a><div class="widgets-list-layout-links">
+								<a href="https://peopleandchairs.com/2015/03/16/tj-dave-pam-on-improvising-at-the-speed-of-life/" title="TJ &amp; Dave &amp; Pam on Improvising At The Speed Of Life" class="bump-view" data-bump-view="tp">TJ &amp; Dave &amp; Pam on Improvising At The Speed Of Life</a>
+							</div>
+							</li><li><a href="https://peopleandchairs.com/2013/03/06/enjoy-the-silence-improvising-without-dialogue-part-two/" title="Enjoy The Silence: Improvising Without Dialogue (Part Two)" class="bump-view" data-bump-view="tp"><img loading="lazy" width="40" height="40" src="https://i0.wp.com/peopleandchairs.com/wp-content/uploads/2013/03/screen-shot-2013-03-03-at-3-17-36-pm.png?resize=40%2C40&#038;ssl=1" srcset="https://i0.wp.com/peopleandchairs.com/wp-content/uploads/2013/03/screen-shot-2013-03-03-at-3-17-36-pm.png?resize=40%2C40&amp;ssl=1 1x, https://i0.wp.com/peopleandchairs.com/wp-content/uploads/2013/03/screen-shot-2013-03-03-at-3-17-36-pm.png?resize=60%2C60&amp;ssl=1 1.5x, https://i0.wp.com/peopleandchairs.com/wp-content/uploads/2013/03/screen-shot-2013-03-03-at-3-17-36-pm.png?resize=80%2C80&amp;ssl=1 2x, https://i0.wp.com/peopleandchairs.com/wp-content/uploads/2013/03/screen-shot-2013-03-03-at-3-17-36-pm.png?resize=120%2C120&amp;ssl=1 3x, https://i0.wp.com/peopleandchairs.com/wp-content/uploads/2013/03/screen-shot-2013-03-03-at-3-17-36-pm.png?resize=160%2C160&amp;ssl=1 4x" alt="Enjoy The Silence: Improvising Without Dialogue (Part Two)" data-pin-nopin="true" class="widgets-list-layout-blavatar" /></a><div class="widgets-list-layout-links">
+								<a href="https://peopleandchairs.com/2013/03/06/enjoy-the-silence-improvising-without-dialogue-part-two/" title="Enjoy The Silence: Improvising Without Dialogue (Part Two)" class="bump-view" data-bump-view="tp">Enjoy The Silence: Improvising Without Dialogue (Part Two)</a>
+							</div>
+							</li><li><a href="https://peopleandchairs.com/2013/06/10/pov-with-cameron-algie/" title="POV with Cameron Algie" class="bump-view" data-bump-view="tp"><img loading="lazy" width="40" height="40" src="//ir-ca.amazon-adsystem.com/e/ir?t=peopleandchai-20&#038;l=am2&#038;o=15&#038;a=1566080037" srcset="//ir-ca.amazon-adsystem.com/e/ir?t=peopleandchai-20&amp;l=am2&amp;o=15&amp;a=1566080037 1x" alt="POV with Cameron Algie" data-pin-nopin="true" class="widgets-list-layout-blavatar" /></a><div class="widgets-list-layout-links">
+								<a href="https://peopleandchairs.com/2013/06/10/pov-with-cameron-algie/" title="POV with Cameron Algie" class="bump-view" data-bump-view="tp">POV with Cameron Algie</a>
+							</div>
+							</li><li><a href="https://peopleandchairs.com/2013/07/19/whose-harold-is-it-anyway/" title="Whose Harold Is It Anyway?" class="bump-view" data-bump-view="tp"><img loading="lazy" width="40" height="40" src="https://peopleandchairs.files.wordpress.com/2013/07/haroldgraphic.png?w=40&#038;h=40&#038;crop=1" srcset="https://peopleandchairs.files.wordpress.com/2013/07/haroldgraphic.png?w=40&amp;h=40&amp;crop=1 1x, https://peopleandchairs.files.wordpress.com/2013/07/haroldgraphic.png?w=60&amp;h=60&amp;crop=1 1.5x, https://peopleandchairs.files.wordpress.com/2013/07/haroldgraphic.png?w=80&amp;h=80&amp;crop=1 2x, https://peopleandchairs.files.wordpress.com/2013/07/haroldgraphic.png?w=120&amp;h=120&amp;crop=1 3x, https://peopleandchairs.files.wordpress.com/2013/07/haroldgraphic.png?w=160&amp;h=160&amp;crop=1 4x" alt="Whose Harold Is It Anyway?" data-pin-nopin="true" class="widgets-list-layout-blavatar" /></a><div class="widgets-list-layout-links">
+								<a href="https://peopleandchairs.com/2013/07/19/whose-harold-is-it-anyway/" title="Whose Harold Is It Anyway?" class="bump-view" data-bump-view="tp">Whose Harold Is It Anyway?</a>
+							</div>
+							</li></ul>
+</div><div id="twitter-4" class="widget widget_twitter"><h4><a href='http://twitter.com/peopleandchairs'>Twitter Updates</a></h4><a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/peopleandchairs">Tweets by peopleandchairs</a></div>	</aside>
+	<aside role="widgets">
+											<div class="group">
+					<div id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" class="searchform" action="https://peopleandchairs.com/">
+				<div>
+					<label class="screen-reader-text" for="s">Search for:</label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="Search" />
+				</div>
+			</form></div>				</div>
+												<div class="group">
+					<div id="text-2" class="widget widget_text">			<div class="textwidget"><p>© Sally Smallwood and Cameron Algie 2012-2017</p>
+</div>
+		</div>				</div>
+												<div class="group">
+					<div id="archives-2" class="widget widget_archive"><h4>Archives</h4>
+			<ul>
+					<li><a href='https://peopleandchairs.com/2018/11/'>November 2018</a></li>
+	<li><a href='https://peopleandchairs.com/2018/05/'>May 2018</a></li>
+	<li><a href='https://peopleandchairs.com/2018/02/'>February 2018</a></li>
+	<li><a href='https://peopleandchairs.com/2018/01/'>January 2018</a></li>
+	<li><a href='https://peopleandchairs.com/2017/12/'>December 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/11/'>November 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/10/'>October 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/09/'>September 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/08/'>August 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/07/'>July 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/06/'>June 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/05/'>May 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/04/'>April 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/03/'>March 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/02/'>February 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2017/01/'>January 2017</a></li>
+	<li><a href='https://peopleandchairs.com/2016/12/'>December 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/11/'>November 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/10/'>October 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/09/'>September 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/08/'>August 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/07/'>July 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/06/'>June 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/05/'>May 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/04/'>April 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/03/'>March 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/02/'>February 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2016/01/'>January 2016</a></li>
+	<li><a href='https://peopleandchairs.com/2015/12/'>December 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/11/'>November 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/10/'>October 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/09/'>September 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/08/'>August 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/07/'>July 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/06/'>June 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/05/'>May 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/04/'>April 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/03/'>March 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/02/'>February 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2015/01/'>January 2015</a></li>
+	<li><a href='https://peopleandchairs.com/2014/12/'>December 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/11/'>November 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/10/'>October 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/09/'>September 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/08/'>August 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/07/'>July 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/06/'>June 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/05/'>May 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/04/'>April 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/03/'>March 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/02/'>February 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2014/01/'>January 2014</a></li>
+	<li><a href='https://peopleandchairs.com/2013/12/'>December 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/11/'>November 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/10/'>October 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/09/'>September 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/08/'>August 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/07/'>July 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/06/'>June 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/05/'>May 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/04/'>April 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/03/'>March 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/02/'>February 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2013/01/'>January 2013</a></li>
+	<li><a href='https://peopleandchairs.com/2012/12/'>December 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/11/'>November 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/10/'>October 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/09/'>September 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/08/'>August 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/07/'>July 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/06/'>June 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/05/'>May 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/04/'>April 2012</a></li>
+	<li><a href='https://peopleandchairs.com/2012/03/'>March 2012</a></li>
+			</ul>
+
+			</div>				</div>
+											</aside>
+
+<footer role="contentinfo">
+	<p id="copyright">
+		<a href="https://peopleandchairs.com/about/">About</a> | 
+		<a href="https://wordpress.com/?ref=footer_blog" rel="nofollow">Blog at WordPress.com.</a>
+			</p>
+
+	<section class="social">
+		<ul>
+			<li class="rss"><a href="https://peopleandchairs.com/feed/rss/" title="RSS">RSS</a></li>
+										<li class="facebook"><a href="http://www.facebook.com/pages/People-And-Chairs/311668175559353" title="Facebook">Facebook</a></li>
+											</ul>
+	</section>
+</footer>
+<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/files/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/premium/anthem/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="grofiles-cards-js" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202619d1133547e8a1f2801609f51cef12522abe7f6647d869e9fbc974fe356a37e613"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+//# sourceURL=wpgroho-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-premium-anthem actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://peopleandchairs.com">
+				<img loading='lazy' alt='' src='https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png' srcset='https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=75&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1.5x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=100&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 2x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=150&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 3x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=200&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 4x' class='avatar avatar-50' height='50' width='50' />				People and Chairs			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 386 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="33465894" />
+										<input type="hidden" name="source" value="https://peopleandchairs.com/tag/annoyance-theatre/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="b7c2f7cd48" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fpeopleandchairs.com%252F2013%252F04%252F23%252Finterview-mick-napier-part-one%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="https://peopleandchairs.com">
+				<img loading='lazy' alt='' src='https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png' srcset='https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=50&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=75&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 1.5x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=100&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 2x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=150&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 3x, https://secure.gravatar.com/blavatar/01f88b9ff785b66b26b5cc578abd17b799a3b6be814cfce89ed3cf519ac72165?s=200&#038;d=https%3A%2F%2Fs0.wp.com%2Fi%2Flogo%2Fwpcom-gray-white.png 4x' class='avatar avatar-50' height='50' width='50' />				People and Chairs			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fpeopleandchairs.com%252F2013%252F04%252F23%252Finterview-mick-napier-part-one%252F">Log in</a></li>
+															<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://peopleandchairs.com" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/feeds/1852578">
+										View site in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+			<div id="jp-carousel-loading-overlay">
+			<div id="jp-carousel-loading-wrapper">
+				<span id="jp-carousel-library-loading"><svg class="jetpack-spinner" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"/><path d="M 50 4 A 46 46 0 0 1 96 50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1.4s" from="0 50 50" to="360 50 50" repeatCount="indefinite"/></path></svg></span>
+			</div>
+		</div>
+		<div class="jp-carousel-overlay" style="display: none;">
+
+		<div class="jp-carousel-container">
+			<!-- The Carousel Swiper -->
+			<div
+				class="jp-carousel-wrap swiper jp-carousel-swiper-container jp-carousel-transitions"
+				itemscope
+				itemtype="https://schema.org/ImageGallery">
+				<div class="jp-carousel swiper-wrapper"></div>
+				<div class="jp-swiper-button-prev swiper-button-prev">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskPrev" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="9" height="12">
+							<path d="M16.2072 16.59L11.6496 12L16.2072 7.41L14.8041 6L8.8335 12L14.8041 18L16.2072 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskPrev)">
+							<rect x="0.579102" width="23.8823" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+				<div class="jp-swiper-button-next swiper-button-next">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskNext" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="8" height="12">
+							<path d="M8.59814 16.59L13.1557 12L8.59814 7.41L10.0012 6L15.9718 12L10.0012 18L8.59814 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskNext)">
+							<rect x="0.34375" width="23.8822" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<!-- The main close buton -->
+			<div class="jp-carousel-close-hint">
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<mask id="maskClose" mask-type="alpha" maskUnits="userSpaceOnUse" x="5" y="5" width="15" height="14">
+						<path d="M19.3166 6.41L17.9135 5L12.3509 10.59L6.78834 5L5.38525 6.41L10.9478 12L5.38525 17.59L6.78834 19L12.3509 13.41L17.9135 19L19.3166 17.59L13.754 12L19.3166 6.41Z" fill="white"/>
+					</mask>
+					<g mask="url(#maskClose)">
+						<rect x="0.409668" width="23.8823" height="24" fill="#FFFFFF"/>
+					</g>
+				</svg>
+			</div>
+			<!-- Image info, comments and meta -->
+			<div class="jp-carousel-info">
+				<div class="jp-carousel-info-footer">
+					<div class="jp-carousel-pagination-container">
+						<div class="jp-swiper-pagination swiper-pagination"></div>
+						<div class="jp-carousel-pagination"></div>
+					</div>
+					<div class="jp-carousel-photo-title-container">
+						<h2 class="jp-carousel-photo-caption"></h2>
+					</div>
+					<div class="jp-carousel-photo-icons-container">
+						<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-info" aria-label="Toggle photo metadata visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskInfo" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M12.7537 2C7.26076 2 2.80273 6.48 2.80273 12C2.80273 17.52 7.26076 22 12.7537 22C18.2466 22 22.7046 17.52 22.7046 12C22.7046 6.48 18.2466 2 12.7537 2ZM11.7586 7V9H13.7488V7H11.7586ZM11.7586 11V17H13.7488V11H11.7586ZM4.79292 12C4.79292 16.41 8.36531 20 12.7537 20C17.142 20 20.7144 16.41 20.7144 12C20.7144 7.59 17.142 4 12.7537 4C8.36531 4 4.79292 7.59 4.79292 12Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskInfo)">
+										<rect x="0.8125" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+							</span>
+						</a>
+												<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-comments" aria-label="Toggle photo comments visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskComments" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M4.3271 2H20.2486C21.3432 2 22.2388 2.9 22.2388 4V16C22.2388 17.1 21.3432 18 20.2486 18H6.31729L2.33691 22V4C2.33691 2.9 3.2325 2 4.3271 2ZM6.31729 16H20.2486V4H4.3271V18L6.31729 16Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskComments)">
+										<rect x="0.34668" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+
+								<span class="jp-carousel-has-comments-indicator" aria-label="This image has comments."></span>
+							</span>
+						</a>
+											</div>
+				</div>
+				<div class="jp-carousel-info-extra">
+					<div class="jp-carousel-info-content-wrapper">
+						<div class="jp-carousel-photo-title-container">
+							<h2 class="jp-carousel-photo-title"></h2>
+						</div>
+						<div class="jp-carousel-comments-wrapper">
+															<div id="jp-carousel-comments-loading">
+									<span>Loading Comments...</span>
+								</div>
+								<div class="jp-carousel-comments"></div>
+								<div id="jp-carousel-comment-form-container">
+									<span id="jp-carousel-comment-form-spinner"><svg class="jetpack-spinner" width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"/><path d="M 50 4 A 46 46 0 0 1 96 50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1.4s" from="0 50 50" to="360 50 50" repeatCount="indefinite"/></path></svg></span>
+									<div id="jp-carousel-comment-post-results"></div>
+																														<form id="jp-carousel-comment-form">
+												<label for="jp-carousel-comment-form-comment-field" class="screen-reader-text">Write a Comment...</label>
+												<textarea
+													name="comment"
+													class="jp-carousel-comment-form-field jp-carousel-comment-form-textarea"
+													id="jp-carousel-comment-form-comment-field"
+													placeholder="Write a Comment..."
+												></textarea>
+												<div id="jp-carousel-comment-form-submit-and-info-wrapper">
+													<div id="jp-carousel-comment-form-commenting-as">
+																													<fieldset>
+																<label for="jp-carousel-comment-form-email-field">Email (Required)</label>
+																<input type="text" name="email" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-email-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-author-field">Name (Required)</label>
+																<input type="text" name="author" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-author-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-url-field">Website</label>
+																<input type="text" name="url" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-url-field" />
+															</fieldset>
+																											</div>
+													<input
+														type="submit"
+														name="submit"
+														class="jp-carousel-comment-form-button"
+														id="jp-carousel-comment-form-button-submit"
+														value="Post Comment" />
+												</div>
+											</form>
+																											</div>
+													</div>
+						<div class="jp-carousel-image-meta">
+							<div class="jp-carousel-title-and-caption">
+								<div class="jp-carousel-photo-info">
+									<h3 class="jp-carousel-caption" itemprop="caption description"></h3>
+								</div>
+
+								<div class="jp-carousel-photo-description"></div>
+							</div>
+							<ul class="jp-carousel-image-exif" style="display: none;"></ul>
+							<a class="jp-carousel-image-download" href="#" target="_blank" style="display: none;">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.84615 5V19H19.7775V12H21.7677V19C21.7677 20.1 20.8721 21 19.7775 21H5.84615C4.74159 21 3.85596 20.1 3.85596 19V5C3.85596 3.9 4.74159 3 5.84615 3H12.8118V5H5.84615ZM14.802 5V3H21.7677V10H19.7775V6.41L9.99569 16.24L8.59261 14.83L18.3744 5H14.802Z" fill="white"/>
+									</mask>
+									<g mask="url(#mask0)">
+										<rect x="0.870605" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+								<span class="jp-carousel-download-text"></span>
+							</a>
+							<div class="jp-carousel-image-map" style="display: none;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		</div>
+		
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https://peopleandchairs.com/2013/04/23/interview-mick-napier-part-one/":8705,"https://peopleandchairs.com/2012/11/14/live-show-the-skinny-on-skinprov-toronto/":5727,"https://peopleandchairs.com/2012/03/16/book-review-improvise-scene-from-the-inside-out-by-mick-napier/":636};
+	</script>
+							<div id="fb-root"></div>
+			<script>(function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;appId=249643311490&version=v2.3'; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));</script>
+			<script>
+			document.body.addEventListener( 'is.post-load', function() {
+				if ( 'undefined' !== typeof FB ) {
+					FB.XFBML.parse();
+				}
+			} );
+			</script>
+						<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+						<script type="text/javascript">
+				( function () {
+					var currentScript = document.currentScript;
+
+					// Helper function to load an external script.
+					function loadScript( url, cb ) {
+						var script = document.createElement( 'script' );
+						var prev = currentScript || document.getElementsByTagName( 'script' )[ 0 ];
+						script.setAttribute( 'async', true );
+						script.setAttribute( 'src', url );
+						prev.parentNode.insertBefore( script, prev );
+						script.addEventListener( 'load', cb );
+					}
+
+					function init() {
+						loadScript( 'https://platform.linkedin.com/in.js?async=true', function () {
+							if ( typeof IN !== 'undefined' ) {
+								IN.init();
+							}
+						} );
+					}
+
+					if ( document.readyState === 'loading' ) {
+						document.addEventListener( 'DOMContentLoaded', init );
+					} else {
+						init();
+					}
+
+					document.body.addEventListener( 'is.post-load', function() {
+						if ( typeof IN !== 'undefined' ) {
+							IN.parse();
+						}
+					} );
+				} )();
+			</script>
+								<script type="text/javascript">
+				( function () {
+					// Pinterest shared resources
+					var s = document.createElement( 'script' );
+					s.type = 'text/javascript';
+					s.async = true;
+					s.setAttribute( 'data-pin-hover', true );					s.src = window.location.protocol + '//assets.pinterest.com/js/pinit.js';
+					var x = document.getElementsByTagName( 'script' )[ 0 ];
+					x.parentNode.insertBefore(s, x);
+					// if 'Pin it' button has 'counts' make container wider
+					function init() {
+						var shares = document.querySelectorAll( 'li.share-pinterest' );
+						for ( var i = 0; i < shares.length; i++ ) {
+							var share = shares[ i ];
+							var countElement = share.querySelector( 'a span' );
+							if (countElement) {
+								var countComputedStyle = window.getComputedStyle(countElement);
+								if ( countComputedStyle.display === 'block' ) {
+									var countWidth = parseInt( countComputedStyle.width, 10 );
+									share.style.marginRight = countWidth + 11 + 'px';
+								}
+							}
+						}
+					}
+
+					if ( document.readyState !== 'complete' ) {
+						document.addEventListener( 'load', init );
+					} else {
+						init();
+					}
+				} )();
+			</script>
+					<script id="tumblr-js" type="text/javascript" src="https://assets.tumblr.com/share-button.js"></script>
+			
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script id="jetpack-carousel-js-extra">
+var jetpackSwiperLibraryPath = {"url":"/wp-content/mu-plugins/jetpack-plugin/sun/_inc/blocks/swiper.js"};
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https://peopleandchairs.com/wp-admin/admin-ajax.php","nonce":"188131027d","display_exif":"1","display_comments":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","image_label":"Open image in full-screen.","download_original":"View full size \u003Cspan class=\"photo-size\"\u003E{0}\u003Cspan class=\"photo-size-times\"\u003E\u00d7\u003C/span\u003E{1}\u003C/span\u003E","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"1","login_url":"https://peopleandchairs.wordpress.com/wp-login.php?redirect_to=https%3A%2F%2Fpeopleandchairs.com%2F2013%2F04%2F23%2Finterview-mick-napier-part-one%2F","blog_id":"33465894","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"stats_query_args":"blog=33465894&v=wpcom&tz=0&user_id=0&arch_tag=annoyance-theatre&arch_results=3&subd=peopleandchairs","is_public":"1"};
+//# sourceURL=jetpack-carousel-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/mu-plugins/likes/queuehandler.js,/wp-content/mu-plugins/jetpack-plugin/sun/_inc/build/carousel/jetpack-carousel.min.js?m=1775203507j'></script>
+<script id="twitter-widgets-js" src="https://platform.twitter.com/widgets.js?ver=20111117"></script>
+<script id="sharing-js-js-extra">
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+//# sourceURL=sharing-js-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/mu-plugins/carousel-wpcom/carousel-wpcom.js,/wp-content/mu-plugins/jetpack-plugin/sun/_inc/build/sharedaddy/sharing.min.js?m=1761899756j'></script>
+<script id="sharing-js-js-after">
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-facebook' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-facebook' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-telegram' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-telegram' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtelegram', 'menubar=1,resizable=1,width=450,height=450' );
+						return false;
+					}
+				} );
+			} )();
+//# sourceURL=sharing-js-js-after
+</script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/","ext":".png","svgUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?m=1764078722i&ver=7.0-RC2-62280"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
+</script>
+	<iframe src='https://widgets.wp.com/likes/master.html?ver=20260510#ver=20260510' scrolling='no' id='likes-master' name='likes-master' style='display:none;'></iframe>
+	<div id='likes-other-gravatars' role="dialog" aria-hidden="true" tabindex="-1"><div class="likes-text"><span>%d</span></div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+	<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'33465894','blog_tz':'0','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+		// Prevent sending pageview tracking from WP-Admin pages.
+		_stq.push(['view', {'blog':'33465894','v':'wpcom','tz':'0','user_id':'0','arch_tag':'annoyance-theatre','arch_results':'3','subd':'peopleandchairs'}]);
+		_stq.push(['extra', {'crypt':'UE5tW3cvZGRWQVV2fmh6P01LTGNWMnoxMDdnbzBBakpST3otflpwbSx6LCxLa2JVb0VXcHFxc09fXzltcWkxTUJCSHFbenBqLm5KQVs3aXk/QltvJVNReHRqR0hpK05COWdHRFclRHVVZkF6dWdsSTV6NnAyJUZ0SW1OUVtbeUddLX4zdXpydnBrTz18JXcldUgyRVAva3hKYys2VUR4P34tQWlRfEt3cDNub2J8YkZYPzRnU0w3W01oNUV+aEdOT3hyT1hlVjYuU2RoREpYK0x1LXZUNzlYWzVk'}]);
+_stq.push([ 'clickTrackerInit', '33465894', '0' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="Etc/GMT-0" data-custom-props="{&quot;enq_jquery&quot;:&quot;1&quot;,&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;premium\/anthem&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202619"></script> 	</div><!--end container-->
+</body>
+</html>

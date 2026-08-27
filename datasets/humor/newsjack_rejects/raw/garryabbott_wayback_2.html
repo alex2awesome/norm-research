@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not Good Enough For The BBC! Newsjack Series 11!  | Garry Abbott. Writer &amp; Musician</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://garryabbott.com/xmlrpc.php">
+
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.remove(); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[i].remove();
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+						+ '//' + window.location.hostname;
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9nYXJyeWFiYm90dC5jb20%3D"
+		+ "&wpcomid=49907843"
+		+ "&time=1566201538";
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s2.wp.com' />
+<link rel='dns-prefetch' href='//s1.wp.com' />
+<link rel='dns-prefetch' href='//garryabbott.wordpress.com' />
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.pubmine.com' />
+<link rel='dns-prefetch' href='//x.bidswitch.net' />
+<link rel='dns-prefetch' href='//static.criteo.net' />
+<link rel='dns-prefetch' href='//ib.adnxs.com' />
+<link rel='dns-prefetch' href='//aax.amazon-adsystem.com' />
+<link rel='dns-prefetch' href='//bidder.criteo.com' />
+<link rel='dns-prefetch' href='//cas.criteo.com' />
+<link rel='dns-prefetch' href='//gum.criteo.com' />
+<link rel='dns-prefetch' href='//ads.pubmatic.com' />
+<link rel='dns-prefetch' href='//gads.pubmatic.com' />
+<link rel='dns-prefetch' href='//tpc.googlesyndication.com' />
+<link rel='dns-prefetch' href='//ad.doubleclick.net' />
+<link rel='dns-prefetch' href='//googleads.g.doubleclick.net' />
+<link rel='dns-prefetch' href='//www.googletagservices.com' />
+<link rel='dns-prefetch' href='//cdn.switchadhub.com' />
+<link rel='dns-prefetch' href='//delivery.g.switchadhub.com' />
+<link rel='dns-prefetch' href='//delivery.swid.switchadhub.com' />
+<link rel="alternate" type="application/rss+xml" title="Garry Abbott. Writer &amp; Musician &raquo; Feed" href="https://garryabbott.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Garry Abbott. Writer &amp; Musician &raquo; Comments Feed" href="https://garryabbott.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Garry Abbott. Writer &amp; Musician &raquo; Not Good Enough For The BBC! Newsjack Series&nbsp;11! Comments Feed" href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+			<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/s2.wp.com\/wp-includes\/js\/wp-emoji-release.min.js?m=1556893897h&ver=5.2.2"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56424,55356,57342,8205,55358,56605,8205,55357,56424,55356,57340],[55357,56424,55356,57342,8203,55358,56605,8203,55357,56424,55356,57340]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='all-css-0-1' href='https://s2.wp.com/_static/??-eJyNktFuwyAMRX9oQNOu0fYw7VsgeCmtCQgbVfn7EVi0KtWivSAu3HNtLNQ9iiFMDBMrn0XEPLqJ1D0OwQvyDmHeKDkQvagHzGAYf8GQrLakRgxG45P3oUQC1AxWxEC8UXsYuhuQugJHPdxEVU/21TvmIg2ksdwkUL08yoMy2aFdmq64STrNinhG+EdMpUixm26QVtUC9yOG8GPuZLc0YR1x64FkI2vKn/xXRhTkGARYV8qvA1cH2ctO1amV1xC3plr+9nRvrMuAyrmPmheHL2U0IPhi28N87Fdq2V708qAdf/tJxsQERKKs3mUv+FIKVe7Tf3Tn/vzWvb4fT9dvis/5IQ==?cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='hemingway-rewritten-fonts-css'  href='https://fonts.googleapis.com/css?family=Raleway%3A400%2C300%2C700%7CLato%3A400%2C700%2C400italic%2C700italic&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='all-css-2-1' href='https://s1.wp.com/_static/??-eJyFj+EKwjAMhF/IGqZz/hKfpauxRtumtCllb29lCBNx/vuOy3EXqFEZDoJBQG7oMUMsIzSiYKueVMKaSJoPWSaHW5PzBhYhX1R0xVLIYDFgomb8wK/sn0IKZi5VNRr2a9WVLhYlA5bm8oNQOV1B0EenpVUsthMElnnaG9afYuXYaCEOH0Jdnaa0Fk04OrYNLbSrhXyFzv7UHXbHYd93/XB/AuI5k7Y=?cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='print-css-3-1' href='https://s2.wp.com/wp-content/mu-plugins/global-print/global-print.css?m=1465851035h&cssminify=yes' type='text/css' media='print' />
+<link rel='stylesheet' id='all-css-4-1' href='https://s1.wp.com/_static/??-eJx9i9EKwjAMRX/IGgfbYA/it2SlayNpUpoMf198EBmKT/dcOAceLUQVT+JQ99B4zyQGGJ1UVuwfOkezE/zWm5qHjZE6WMFOkt/7rzKNhBxYsx7PV+Ql1WRQRsisK/JLuNXrMM2XcV6GZbo/AcVpSbo=?cssminify=yes' type='text/css' media='all' />
+<script type='text/javascript'>
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s1.wp.com/_static/??-eJyFj+EKAiEQhF8oT+Lw6E/0LOZtsqarudpRT59C/eg4ChaWYT9mZuWSBJLxdQaWrs2tQn681+B4J38BIqDNusAQkD6wiVSASmdT5BKAWVvYuIZ4Rg+iMuQGUGkxl7jmQhXJV4vEMoNvUbPoriu14f79CNIdYfmLOShJm6vIwPjsnU/huFfqMKppUqN7ATNIcHo='></script>
+<link rel='stylesheet' id='all-css-0-2' href='https://s0.wp.com/wp-content/mu-plugins/highlander-comments/style.css?m=1530132353h&cssminify=yes' type='text/css' media='all' />
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='highlander-comments-ie7-css'  href='https://s2.wp.com/wp-content/mu-plugins/highlander-comments/style-ie7.css?m=1351637563h&#038;ver=20110606' type='text/css' media='all' />
+<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://garryabbott.wordpress.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://s1.wp.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Admin Cat! Ghost!' href='https://garryabbott.com/2014/09/25/admin-cat-ghost/' />
+<link rel='next' title='Admin Cat! Ghost! Part&nbsp;Two.' href='https://garryabbott.com/2014/10/02/admin-cat-ghost-part-two/' />
+<meta name="generator" content="WordPress.com" />
+<link rel="canonical" href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/" />
+<link rel='shortlink' href='https://wp.me/p3npjd-hv' />
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/?format=json&amp;url=https%3A%2F%2Fgarryabbott.com%2F2014%2F10%2F01%2Fnot-good-enough-for-the-bbc-newsjack-series-11%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/?format=xml&amp;url=https%3A%2F%2Fgarryabbott.com%2F2014%2F10%2F01%2Fnot-good-enough-for-the-bbc-newsjack-series-11%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Not Good Enough For The BBC! Newsjack Series 11!" />
+<meta property="og:url" content="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/" />
+<meta property="og:description" content="For those of you who don’t know, ‘Newsjack’ is a topical radio comedy that is broadcast on BBC Radio 4 Extra and has an ‘open door’ writing policy (anyone can submit material). It is the BBC’s flag…" />
+<meta property="article:published_time" content="2014-10-01T13:16:23+00:00" />
+<meta property="article:modified_time" content="2014-10-01T13:16:23+00:00" />
+<meta property="og:site_name" content="Garry Abbott. Writer &amp; Musician" />
+<meta property="og:image" content="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg" />
+<meta property="og:image:width" content="300" />
+<meta property="og:image:height" content="168" />
+<meta property="og:image:alt" content="newsjack" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:creator" content="@Garry_Abbott" />
+<meta name="twitter:site" content="@Garry_Abbott" />
+<meta name="twitter:text:title" content="Not Good Enough For The BBC! Newsjack Series&nbsp;11!" />
+<meta name="twitter:card" content="summary" />
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="shortcut icon" type="image/x-icon" href="https://s1.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48" />
+<link rel="icon" type="image/x-icon" href="https://s1.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48" />
+<link rel="apple-touch-icon-precomposed" href="https://s2.wp.com/i/webclip.png" />
+<link rel='openid.server' href='https://garryabbott.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://garryabbott.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://garryabbott.com/osd.xml" title="Garry Abbott. Writer &#38; Musician" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<meta name="theme-color" content="#ffffff" />
+		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+				<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="application-name" content="Garry Abbott. Writer &amp; Musician" /><meta name="msapplication-window" content="width=device-width;height=device-height" /><meta name="msapplication-tooltip" content="My work and thoughts. New posts whenever." /><meta name="msapplication-task" content="name=Subscribe;action-uri=https://garryabbott.com/feed/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="description" content="For those of you who don’t know, ‘Newsjack’ is a topical radio comedy that is broadcast on BBC Radio 4 Extra and has an ‘open door’ writing policy (anyone can submit material). It is the BBC’s flagship show for encouraging and recruiting new comedy writers by giving everyone a chance to get their material performed,&hellip;" />
+	<style type="text/css">
+			.site-title a,
+		.site-description {
+			color: #ffffff;
+		}
+				.site-header-image {
+			background-image: url(https://garryabbott.files.wordpress.com/2018/09/cropped-transported-cover-artwork-no-text.jpg);
+		}
+		</style>
+			<script type="text/javascript">
+		function __ATA_CC() {var v = document.cookie.match('(^|;) ?personalized-ads-consent=([^;]*)(;|$)');return v ? 1 : 0;}
+		var __ATA_PP = { pt: 1, ht: 0, tn: 'hemingway-rewritten', amp: false, siteid: 8982, blogid: 49907843, consent: __ATA_CC() };
+		var __ATA = __ATA || {};
+		__ATA.cmd = __ATA.cmd || [];
+		__ATA.criteo = __ATA.criteo || {};
+		__ATA.criteo.cmd = __ATA.criteo.cmd || [];
+		</script>
+		<script type="text/javascript" src="//s.pubmine.com/head.js" async></script><link rel="amphtml" href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/amp/"><script type="text/javascript">
+	window.google_analytics_uacct = "UA-52447-2";
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-52447-2']);
+	_gaq.push(['_gat._anonymizeIp']);
+	_gaq.push(['_setDomainName', 'none']);
+	_gaq.push(['_setAllowLinker', true]);
+	_gaq.push(['_initData']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})();
+</script>
+</head>
+
+<body class="post-template-default single single-post postid-1085 single-format-standard mp6 customizer-styles-applied highlander-enabled highlander-light">
+<div id="page" class="hfeed site">
+
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-header-image">
+			<div class="site-branding-wrapper">
+				<div class="site-branding">
+					<h1 class="site-title"><a href="https://garryabbott.com/" rel="home">Garry Abbott. Writer &amp; Musician</a></h1>
+					<h2 class="site-description">My work and thoughts. New posts whenever.</h2>
+				</div>
+			</div>
+		</div>
+	</header><!-- #masthead -->
+	<nav id="site-navigation" class="main-navigation clear" role="navigation">
+		<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><span class="screen-reader-text">Menu</span></button>
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<div class="menu-testmenu-container"><ul id="primary-menu" class="menu"><li id="menu-item-1730" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1730"><a href="https://garryabbott.com/">About me.</a></li>
+<li id="menu-item-1725" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1725"><a href="https://garryabbott.com/category/short-story/">Short Story</a></li>
+<li id="menu-item-1726" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1726"><a href="https://garryabbott.com/category/admin-cat/">ADMIN CAT!</a></li>
+<li id="menu-item-1727" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1727"><a href="https://garryabbott.com/category/comedy-writing/">Comedy Writing</a></li>
+<li id="menu-item-1728" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1728"><a href="https://garryabbott.com/category/politics/">Politics</a></li>
+<li id="menu-item-1729" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1729"><a href="https://garryabbott.com/category/music/">Music</a></li>
+<li id="menu-item-1733" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1733"><a href="https://garryabbott.com/category/fiction/">Fiction</a></li>
+<li id="menu-item-1734" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1734"><a href="https://garryabbott.com/category/reviews/">Reviews</a></li>
+</ul></div>		<div id="header-search-toggle">
+			<span class="screen-reader-text">Search</span>
+		</div>
+		<div id="header-search">
+			<form role="search" method="get" class="search-form" action="https://garryabbott.com/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form>		</div>
+	</nav><!-- #site-navigation -->
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+					
+			
+<article id="post-1085" class="post-1085 post type-post status-publish format-standard hentry category-comedy-writing tag-bbc tag-blog tag-comedy tag-creative-writing tag-daft tag-funny tag-garry-abbott tag-laugh tag-leek tag-lol tag-media tag-newsjack tag-staffordshire tag-stoke-on-trent tag-writer tag-writing">
+	<header class="entry-header">
+					<h1 class="entry-title">Not Good Enough For The BBC! Newsjack Series&nbsp;11!</h1>				<div class="entry-meta">
+			<span class="posted-on"><a href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/" rel="bookmark"><time class="entry-date published" datetime="2014-10-01T13:16:23+00:00">October 1, 2014</time></a></span><span class="byline"><span class="sep"> / </span><span class="author vcard"><a class="url fn n" href="https://garryabbott.com/author/gazamatazabbott/">Garry Abbott</a></span></span>					</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p><a href="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg"><img data-attachment-id="814" data-permalink="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/newsjack/" data-orig-file="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg" data-orig-size="300,168" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="newsjack" data-image-description="" data-medium-file="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg?w=300" data-large-file="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg?w=300" class="alignnone size-full wp-image-814" src="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg?w=676" alt="newsjack" srcset="https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg 300w, https://garryabbott.files.wordpress.com/2014/04/newsjack.jpg?w=150 150w" sizes="(max-width: 300px) 100vw, 300px"   /></a></p>
+<p>For those of you who don’t know, ‘Newsjack’ is a topical radio comedy that is broadcast on BBC Radio 4 Extra and has an ‘open door’ writing policy (anyone can submit material). It is the BBC’s flagship show for encouraging and recruiting new comedy writers by giving everyone a chance to get their material performed, recorded and broadcast.</p>
+<p>Each week writers can submit up to two sketches, nine ‘one liner’ jokes, and now also a ’30 second advert’ sketch. I always try to send everything each week as it pushes me to get better at writing to deadline and under pressure.</p>
+<p>So far I’ve had quite a bit of success and managed to get writing credits in the last four series. I think the current count is 10 one-liners and 2 sketches (having just got my second sketch broadcast in episode 1 of series 11 last Thursday – find it here at 17:07 the ‘Reverend Welby’ sketch and intro: <a href="http://www.bbc.co.uk/podcasts/series/newsjack" rel="nofollow">http://www.bbc.co.uk/podcasts/series/newsjack</a>).</p>
+<p>But still there are always those jokes that didn’t make the cut, and it seems a shame to let them languish on my hard drive when I could be inflicting them on you good people. So here it is again, the return of ‘Not Good Enough For The BBC! Newsjack Series 11’.</p>
+<p>I’m only going to post the one-liners. I might do something about unused sketches after the current series has finished. Just so you know, there are now only two categories of one liners that we can write for; we can submit 6 ‘Breaking News’ lines (comedy headlines basically) and 3 ‘TV Listings’ (continuity announcers type stuff&#8230; Tonight at 9pm on ITV etc&#8230;).</p>
+<p>I find the TV listings much harder as they aren’t really ‘topical’, they are more ‘pun’ based usually, unless you can find a current news story and TV show that work well together. As you will see from my submissions below, I actually managed that last week with the Tesco losing £250 million pounds story set up as the ‘£250 million pound drop’ game show. A version of this joke was actually used last week with slightly different wording, but it wasn’t mine! Unfortunately for me, another writer had the same idea and must have been higher up in the reading pile. This also happened to me last series with a TV listing joke about ‘The Great British Sewing Wasp’, which another writer submitted as ‘The Great British Knitting Spider’ and got the credit for!  These things happen when over 700 submissions are boiled down to only about a dozen writers. That is why it is important to be as original as possible or just avoid the big news stories (and therefore possible duplication/competition).</p>
+<p>So, here they are. Enjoy! (And make sure you read them with funny voices in your head&#8230; you know the ones, the funny voices in your head. Let them read them and don’t be scared).</p>
+<p>BREAKING NEWS!</p>
+<ol>
+<li>As Strictly fever sweeps the nation, President Obama pledges 10,000 troops to help stem the threat.</li>
+<li>Australian man fends off crocodile with a stick when drunk. Where the crocodile got the alcohol from and why it used a stick leaves zoologists baffled.</li>
+<li>The first man to buy an iPhone six who was filmed dropping it on the floor has said it wasn’t an accident after all, he’d just found out that the entire U2 back catalogue had been pre installed.</li>
+<li>A controversial law in Florida to ban baggy trousers that expose the buttocks has been overturned. Police fear this will lead to more crack on the streets.</li>
+<li>As Alex Salmond declares his support for Nicola Sturgeon to become the next leader of the SNP, rival candidates complain that there’s something a bit fishy about all this.</li>
+<li>Ed Miliband disappointed to find out that the coalitions policy on house inflation doesn’t mean everyone gets to live in a bouncy castle.</li>
+</ol>
+<p>TV LISTINGS:</p>
+<ol>
+<li>Coming soon to ITV, the stakes are set even higher with the new thrilling game show: 250 million pound drop! Sponsored by Tesco’s.</li>
+<li>This week on ITV, Davina McCall presents, everything.</li>
+<li>This Saturday on BBC1 at 6.30pm, any old rubbish with some celebrities jumping about for an hour to kill the time before Doctor Who starts.</li>
+</ol>
+<div id="atatags-370373-5d5a56c243ee5">
+        <script type="text/javascript">
+            __ATA.cmd.push(function() {
+                __ATA.initVideoSlot('atatags-370373-5d5a56c243ee5', {
+                    sectionId: '370373',
+                    format: 'inread'
+                });
+            });
+        </script>
+    </div>			<div class="wpcnt">
+				<div class="wpa wpmrec">
+					<span class="wpa-about">Advertisements</span>
+					<div class="u">		<div style="padding-bottom:15px;width:300px;height:250px;float:left;margin-right:5px;margin-top:0px">
+			<div id="atatags-26942-5d5a56c243f13">
+				<script type="text/javascript">
+				__ATA.cmd.push(function() {
+					__ATA.initSlot('atatags-26942-5d5a56c243f13',  {
+						collapseEmpty: 'before',
+						sectionId: '26942',
+						location: 120,
+						width: 300,
+						height: 250
+					});
+				});
+				</script>
+			</div>
+		</div>		<div style="padding-bottom:15px;width:300px;height:250px;float:left;margin-top:0px">
+			<div id="atatags-114160-5d5a56c243f18">
+				<script type="text/javascript">
+				__ATA.cmd.push(function() {
+					__ATA.initSlot('atatags-114160-5d5a56c243f18',  {
+						collapseEmpty: 'before',
+						sectionId: '114160',
+						location: 130,
+						width: 300,
+						height: 250
+					});
+				});
+				</script>
+			</div>
+		</div></div>
+					
+				</div>
+			</div><div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow noopener noreferrer" data-shared="sharing-twitter-1085" class="share-twitter sd-button share-icon" href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/?share=twitter" target="_blank" title="Click to share on Twitter"><span>Twitter</span></a></li><li class="share-facebook"><a rel="nofollow noopener noreferrer" data-shared="sharing-facebook-1085" class="share-facebook sd-button share-icon" href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/?share=facebook" target="_blank" title="Click to share on Facebook"><span>Facebook</span></a></li><li class="share-email"><a rel="nofollow noopener noreferrer" data-shared="" class="share-email sd-button share-icon" href="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/?share=email" target="_blank" title="Click to email this to a friend"><span>Email</span></a></li><li class="share-end"></li></ul></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-49907843-1085-5d5a56c244505' data-src='//widgets.wp.com/likes/index.html?ver=20190321#blog_id=49907843&amp;post_id=1085&amp;origin=garryabbott.wordpress.com&amp;obj_id=49907843-1085-5d5a56c244505&amp;domain=garryabbott.com' data-name='like-post-frame-49907843-1085-5d5a56c244505'><h3 class='sd-title'>Like this:</h3><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class="loading">Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div></div>			</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+						<div class="entry-categories">
+					<a href="https://garryabbott.com/category/comedy-writing/" rel="category tag">Comedy Writing</a>				</div>
+					<div class="entry-tags"><a href="https://garryabbott.com/tag/bbc/" rel="tag">BBC</a>, <a href="https://garryabbott.com/tag/blog/" rel="tag">Blog</a>, <a href="https://garryabbott.com/tag/comedy/" rel="tag">Comedy</a>, <a href="https://garryabbott.com/tag/creative-writing/" rel="tag">Creative writing</a>, <a href="https://garryabbott.com/tag/daft/" rel="tag">daft</a>, <a href="https://garryabbott.com/tag/funny/" rel="tag">Funny</a>, <a href="https://garryabbott.com/tag/garry-abbott/" rel="tag">Garry Abbott</a>, <a href="https://garryabbott.com/tag/laugh/" rel="tag">laugh</a>, <a href="https://garryabbott.com/tag/leek/" rel="tag">Leek</a>, <a href="https://garryabbott.com/tag/lol/" rel="tag">Lol</a>, <a href="https://garryabbott.com/tag/media/" rel="tag">MEdia</a>, <a href="https://garryabbott.com/tag/newsjack/" rel="tag">Newsjack</a>, <a href="https://garryabbott.com/tag/staffordshire/" rel="tag">Staffordshire</a>, <a href="https://garryabbott.com/tag/stoke-on-trent/" rel="tag">Stoke on Trent</a>, <a href="https://garryabbott.com/tag/writer/" rel="tag">Writer</a>, <a href="https://garryabbott.com/tag/writing/" rel="tag">writing</a></div>	</footer><!-- .entry-meta -->
+</article><!-- #post-## -->
+
+				<nav class="navigation post-navigation" role="navigation">
+		<h1 class="screen-reader-text">Post navigation</h1>
+		<div class="nav-links">
+			<div class="nav-previous"><a href="https://garryabbott.com/2014/09/25/admin-cat-ghost/" rel="prev"><span class="meta-nav">&larr;</span> Admin Cat! Ghost!</a></div><div class="nav-next"><a href="https://garryabbott.com/2014/10/02/admin-cat-ghost-part-two/" rel="next">Admin Cat! Ghost! Part&nbsp;Two. <span class="meta-nav">&rarr;</span></a></div>		</div><!-- .nav-links -->
+	</nav><!-- .navigation -->
+	
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			4 thoughts on &ldquo;<span>Not Good Enough For The BBC! Newsjack Series&nbsp;11!</span>&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+				<li class="post pingback">
+		<p>Pingback: <a href='https://garryabbott.com/2014/10/08/not-good-enough-for-the-bbc-newsjack-series-11-part-2/' rel='external nofollow' class='url'>Not Good Enough For The BBC! Newsjack Series 11 &#8211; PART 2! | Garry Abbott. Writer &amp; Musician</a></p>
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href='https://garryabbott.com/2014/10/15/not-good-enough-for-the-bbc-newsjack-series-11-part-3/' rel='external nofollow' class='url'>Not Good Enough For The BBC! Newsjack Series 11 &#8211; PART 3! | Garry Abbott. Writer &amp; Musician</a></p>
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href='https://garryabbott.com/2014/10/22/not-good-enough-for-the-bbc-newsjack-series-11-part-4/' rel='external nofollow' class='url'>Not Good Enough For The BBC! Newsjack Series 11 &#8211; PART 4! | Garry Abbott. Writer &amp; Musician</a></p>
+	</li><!-- #comment-## -->
+	<li class="post pingback">
+		<p>Pingback: <a href='https://garryabbott.com/2014/10/29/good-enough-not-good-enough-for-the-bbc-newsjack-series-11-part-5/' rel='external nofollow' class='url'>Good Enough / Not Good Enough For The BBC! Newsjack Series 11 &#8211; PART 5! | Garry Abbott. Writer &amp; Musician</a></p>
+	</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/#respond" style="display:none;">Cancel reply</a></small></h3>			<form action="https://garryabbott.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+				<input type="hidden" id="highlander_comment_nonce" name="highlander_comment_nonce" value="1acde980f7" /><input type="hidden" name="_wp_http_referer" value="/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/" />
+<input type="hidden" name="hc_post_as" id="hc_post_as" value="guest" />
+
+<div class="comment-form-field comment-textarea">
+	<label for="comment">Enter your comment here...</label>
+	<div id="comment-form-comment"><textarea id="comment" name="comment" title="Enter your comment here..."></textarea></div>
+</div>
+
+<div id="comment-form-identity">
+	<div id="comment-form-nascar">
+		<p>Fill in your details below or click an icon to log in:</p>
+		<ul>
+			<li class="selected" style="display:none;">
+				<a href="#comment-form-guest" id="postas-guest" class="nascar-signin-link"
+                   title="Login via Guest">
+									</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:WordPress.com" id="postas-wordpress" class="nascar-signin-link"
+                   title="Login via WordPress.com">
+					<svg xmlns="http://www.w3.org/2000/svg" role="presentation" viewBox="0 0 24 24" ><rect x="0" fill="none" width="24" height="24"/><g><path fill="#0087be" d="M12.158 12.786l-2.698 7.84c.806.236 1.657.365 2.54.365 1.047 0 2.05-.18 2.986-.51-.024-.037-.046-.078-.065-.123l-2.762-7.57zM3.008 12c0 3.56 2.07 6.634 5.068 8.092L3.788 8.342c-.5 1.117-.78 2.354-.78 3.658zm15.06-.454c0-1.112-.398-1.88-.74-2.48-.456-.74-.883-1.368-.883-2.11 0-.825.627-1.595 1.51-1.595.04 0 .078.006.116.008-1.598-1.464-3.73-2.36-6.07-2.36-3.14 0-5.904 1.613-7.512 4.053.21.008.41.012.58.012.94 0 2.395-.114 2.395-.114.484-.028.54.684.057.74 0 0-.487.058-1.03.086l3.275 9.74 1.968-5.902-1.4-3.838c-.485-.028-.944-.085-.944-.085-.486-.03-.43-.77.056-.742 0 0 1.484.114 2.368.114.94 0 2.397-.114 2.397-.114.486-.028.543.684.058.74 0 0-.488.058-1.03.086l3.25 9.665.897-2.997c.456-1.17.684-2.137.684-2.907zm1.82-3.86c.04.286.06.593.06.924 0 .912-.17 1.938-.683 3.22l-2.746 7.94c2.672-1.558 4.47-4.454 4.47-7.77 0-1.564-.4-3.033-1.1-4.314zM12 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></g></svg>				</a>
+			</li>
+			<li>
+			<li>
+				<a href="#comment-form-load-service:Twitter" id="postas-twitter" class="nascar-signin-link"
+                   title="Login via Twitter">
+					<svg xmlns="http://www.w3.org/2000/svg" role="presentation" viewBox="0 0 24 24" ><rect x="0" fill="none" width="24" height="24"/><g><path fill="#1DA1F2" d="M22.23 5.924c-.736.326-1.527.547-2.357.646.847-.508 1.498-1.312 1.804-2.27-.793.47-1.67.812-2.606.996C18.325 4.498 17.258 4 16.078 4c-2.266 0-4.103 1.837-4.103 4.103 0 .322.036.635.106.935-3.41-.17-6.433-1.804-8.457-4.287-.353.607-.556 1.312-.556 2.064 0 1.424.724 2.68 1.825 3.415-.673-.022-1.305-.207-1.86-.514v.052c0 1.988 1.415 3.647 3.293 4.023-.344.095-.707.145-1.08.145-.265 0-.522-.026-.773-.074.522 1.63 2.038 2.817 3.833 2.85-1.404 1.1-3.174 1.757-5.096 1.757-.332 0-.66-.02-.98-.057 1.816 1.164 3.973 1.843 6.29 1.843 7.547 0 11.675-6.252 11.675-11.675 0-.178-.004-.355-.012-.53.802-.578 1.497-1.3 2.047-2.124z"/></g></svg>				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Facebook" id="postas-facebook" class="nascar-signin-link"
+                   title="Login via Facebook">
+					<svg xmlns="http://www.w3.org/2000/svg" role="presentation" viewBox="0 0 24 24" ><rect x="0" fill="none" width="24" height="24"/><g><path fill="#3B5998" d="M20.007 3H3.993C3.445 3 3 3.445 3 3.993v16.013c0 .55.445.994.993.994h8.62v-6.97H10.27V11.31h2.346V9.31c0-2.325 1.42-3.59 3.494-3.59.993 0 1.847.073 2.096.106v2.43h-1.438c-1.128 0-1.346.537-1.346 1.324v1.734h2.69l-.35 2.717h-2.34V21h4.587c.548 0 .993-.445.993-.993V3.993c0-.548-.445-.993-.993-.993z"/></g></svg>				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div id="comment-form-guest" class="comment-form-service selected">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+<a href="https://gravatar.com/site/signup/" target="_blank">				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Gravatar" width="25" class="no-grav" />
+</a>			</div>
+
+				<div class="comment-form-fields">
+				<div class="comment-form-field comment-form-email">
+					<label for="email">Email <span class="required">(required)</span> <span class="nopublish">(Address never made public)</span></label>
+					<div class="comment-form-input"><input id="email" name="email" type="email" value="" /></div>
+				</div>
+				<div class="comment-form-field comment-form-author">
+					<label for="author">Name <span class="required">(required)</span></label>
+					<div class="comment-form-input"><input id="author" name="author" type="text" value="" /></div>
+				</div>
+				<div class="comment-form-field comment-form-url">
+					<label for="url">Website</label>
+					<div class="comment-form-input"><input id="url" name="url" type="url" value="" /></div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<div id="comment-form-wordpress" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="WordPress.com Logo" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="wp_avatar" id="wordpress-avatar" class="comment-meta-wordpress" value="" />
+				<input type="hidden" name="wp_user_id" id="wordpress-user_id" class="comment-meta-wordpress" value="" />
+				<input type="hidden" name="wp_access_token" id="wordpress-access_token" class="comment-meta-wordpress" value="" />
+						<p class="comment-form-posting-as pa-wordpress">
+			<strong></strong>
+			You are commenting using your WordPress.com account.			<span class="comment-form-log-out">
+				(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'wordpress' );">Log&nbsp;Out</a>&nbsp;/&nbsp;
+				<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)
+			</span>
+			<span class="pa-icon"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" viewBox="0 0 24 24" ><rect x="0" fill="none" width="24" height="24"/><g><path fill="#0087be" d="M12.158 12.786l-2.698 7.84c.806.236 1.657.365 2.54.365 1.047 0 2.05-.18 2.986-.51-.024-.037-.046-.078-.065-.123l-2.762-7.57zM3.008 12c0 3.56 2.07 6.634 5.068 8.092L3.788 8.342c-.5 1.117-.78 2.354-.78 3.658zm15.06-.454c0-1.112-.398-1.88-.74-2.48-.456-.74-.883-1.368-.883-2.11 0-.825.627-1.595 1.51-1.595.04 0 .078.006.116.008-1.598-1.464-3.73-2.36-6.07-2.36-3.14 0-5.904 1.613-7.512 4.053.21.008.41.012.58.012.94 0 2.395-.114 2.395-.114.484-.028.54.684.057.74 0 0-.487.058-1.03.086l3.275 9.74 1.968-5.902-1.4-3.838c-.485-.028-.944-.085-.944-.085-.486-.03-.43-.77.056-.742 0 0 1.484.114 2.368.114.94 0 2.397-.114 2.397-.114.486-.028.543.684.058.74 0 0-.488.058-1.03.086l3.25 9.665.897-2.997c.456-1.17.684-2.137.684-2.907zm1.82-3.86c.04.286.06.593.06.924 0 .912-.17 1.938-.683 3.22l-2.746 7.94c2.672-1.558 4.47-4.454 4.47-7.77 0-1.564-.4-3.033-1.1-4.314zM12 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></g></svg></span>
+		</p>
+					</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-googleplus" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Google photo" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="googleplus_avatar" id="googleplus-avatar" class="comment-meta-googleplus" value="" />
+				<input type="hidden" name="googleplus_user_id" id="googleplus-user_id" class="comment-meta-googleplus" value="" />
+				<input type="hidden" name="googleplus_access_token" id="googleplus-access_token" class="comment-meta-googleplus" value="" />
+						<p class="comment-form-posting-as pa-googleplus">
+			<strong></strong>
+			You are commenting using your Google account.			<span class="comment-form-log-out">
+				(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'googleplus' );">Log&nbsp;Out</a>&nbsp;/&nbsp;
+				<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)
+			</span>
+			<span class="pa-icon"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" x="0px" y="0px" viewBox="0 0 60 60" ><path fill="#519bf7" d="M56.3,30c0,-1.6 -0.2,-3.4 -0.6,-5h-3.1H42.2H30v10.6h14.8C44,39.3 42,42 39.1,43.9l8.8,6.8C53,46 56.3,39 56.3,30z" /><path fill="#3db366" d="M30,57.5c6.7,0 13.1,-2.4 17.9,-6.8l-8.8,-6.8c-2.5,1.6 -5.6,2.4 -9.1,2.4c-7.2,0 -13.3,-4.7 -15.4,-11.2l-9.3,7.1C9.8,51.3 19.1,57.5 30,57.5z" /><path fill="#fdc600" d="M5.3,42.2l9.3,-7.1c-0.5,-1.6 -0.8,-3.3 -0.8,-5.1s0.3,-3.5 0.8,-5.1l-9.3,-7.1C3.5,21.5 2.5,25.6 2.5,30S3.5,38.5 5.3,42.2z" /><path fill="#f15b44" d="M40.1,17.4l8,-8C43.3,5.1 37,2.5 30,2.5C19.1,2.5 9.8,8.7 5.3,17.8l9.3,7.1c2.1,-6.5 8.2,-11.1 15.4,-11.1C33.9,13.7 37.4,15.1 40.1,17.4z" /></svg></span>
+		</p>
+					</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-twitter" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Twitter picture" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="twitter_avatar" id="twitter-avatar" class="comment-meta-twitter" value="" />
+				<input type="hidden" name="twitter_user_id" id="twitter-user_id" class="comment-meta-twitter" value="" />
+				<input type="hidden" name="twitter_access_token" id="twitter-access_token" class="comment-meta-twitter" value="" />
+						<p class="comment-form-posting-as pa-twitter">
+			<strong></strong>
+			You are commenting using your Twitter account.			<span class="comment-form-log-out">
+				(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'twitter' );">Log&nbsp;Out</a>&nbsp;/&nbsp;
+				<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)
+			</span>
+			<span class="pa-icon"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" viewBox="0 0 24 24" ><rect x="0" fill="none" width="24" height="24"/><g><path fill="#1DA1F2" d="M22.23 5.924c-.736.326-1.527.547-2.357.646.847-.508 1.498-1.312 1.804-2.27-.793.47-1.67.812-2.606.996C18.325 4.498 17.258 4 16.078 4c-2.266 0-4.103 1.837-4.103 4.103 0 .322.036.635.106.935-3.41-.17-6.433-1.804-8.457-4.287-.353.607-.556 1.312-.556 2.064 0 1.424.724 2.68 1.825 3.415-.673-.022-1.305-.207-1.86-.514v.052c0 1.988 1.415 3.647 3.293 4.023-.344.095-.707.145-1.08.145-.265 0-.522-.026-.773-.074.522 1.63 2.038 2.817 3.833 2.85-1.404 1.1-3.174 1.757-5.096 1.757-.332 0-.66-.02-.98-.057 1.816 1.164 3.973 1.843 6.29 1.843 7.547 0 11.675-6.252 11.675-11.675 0-.178-.004-.355-.012-.53.802-.578 1.497-1.3 2.047-2.124z"/></g></svg></span>
+		</p>
+					</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-facebook" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Facebook photo" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="fb_avatar" id="facebook-avatar" class="comment-meta-facebook" value="" />
+				<input type="hidden" name="fb_user_id" id="facebook-user_id" class="comment-meta-facebook" value="" />
+				<input type="hidden" name="fb_access_token" id="facebook-access_token" class="comment-meta-facebook" value="" />
+						<p class="comment-form-posting-as pa-facebook">
+			<strong></strong>
+			You are commenting using your Facebook account.			<span class="comment-form-log-out">
+				(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'facebook' );">Log&nbsp;Out</a>&nbsp;/&nbsp;
+				<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)
+			</span>
+			<span class="pa-icon"><svg xmlns="http://www.w3.org/2000/svg" role="presentation" viewBox="0 0 24 24" ><rect x="0" fill="none" width="24" height="24"/><g><path fill="#3B5998" d="M20.007 3H3.993C3.445 3 3 3.445 3 3.993v16.013c0 .55.445.994.993.994h8.62v-6.97H10.27V11.31h2.346V9.31c0-2.325 1.42-3.59 3.494-3.59.993 0 1.847.073 2.096.106v2.43h-1.438c-1.128 0-1.346.537-1.346 1.324v1.734h2.69l-.35 2.717h-2.34V21h4.587c.548 0 .993-.445.993-.993V3.993c0-.548-.445-.993-.993-.993z"/></g></svg></span>
+		</p>
+					</div>
+	
+		</div>
+	</div>
+
+
+	<div id="comment-form-load-service" class="comment-form-service">
+		<div class="comment-form-posting-as-cancel"><a href="javascript:HighlanderComments.cancelExternalWindow();">Cancel</a></div>
+		<p>Connecting to %s</p>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+var highlander_expando_javascript = function(){
+	var input = document.createElement( 'input' ),
+	    comment = jQuery( '#comment' );
+
+	if ( 'placeholder' in input ) {
+		comment.attr( 'placeholder', jQuery( '.comment-textarea label' ).remove().text() );
+	}
+
+	// Expando Mode: start small, then auto-resize on first click + text length
+	jQuery( '#comment-form-identity' ).hide();
+	jQuery( '#comment-form-subscribe' ).hide();
+	jQuery( '#commentform .form-submit' ).hide();
+
+	comment.css( { 'height':'10px' } ).one( 'focus', function() {
+		var timer = setInterval( HighlanderComments.resizeCallback, 10 )
+		jQuery( this ).animate( { 'height': HighlanderComments.initialHeight } ).delay( 100 ).queue( function(n) { clearInterval( timer ); HighlanderComments.resizeCallback(); n(); } );
+		jQuery( '#comment-form-identity' ).slideDown();
+		jQuery( '#comment-form-subscribe' ).slideDown();
+		jQuery( '#commentform .form-submit' ).slideDown();
+	});
+}
+jQuery(document).ready( highlander_expando_javascript );
+</script>
+
+<div id="comment-form-subscribe">
+	<p class="comment-subscription-form"><input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;"/> <label class="subscribe-label" id="subscribe-label" for="subscribe" style="display: inline;">Notify me of new comments via email.</label></p><p class="post-subscription-form"><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto;"/> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog"  style="display: inline;">Notify me of new posts via email.</label></p></div>
+
+
+
+
+<p class="form-submit"><input name="submit" type="submit" id="comment-submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1085' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="2f5c680e78" /></p>
+<input type="hidden" name="genseq" value="1566201538" />
+<p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="162"/></p>			</form>
+			</div><!-- #respond -->
+	<div style="clear: both"></div>
+</div><!-- #comments -->
+
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+	<div id="secondary" class="widget-area" role="complementary">
+		<aside id="gravatar-2" class="widget widget_gravatar"><p><img alt='' src='https://0.gravatar.com/avatar/fe05e456856c7e0071b4a222a25df70b?s=96&#038;d=identicon&#038;r=G' class='avatar avatar-96 grav-widget-center' height='96' width='96'  style="display: block; margin: 0 auto;" /></p>
+</aside><aside id="media_image-6" class="widget widget_media_image"><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://www.amazon.co.uk/-/e/B00FOY38ME" target="_blank" rel="noopener noreferrer"><img width="140" height="224" src="https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg?w=140" class="image wp-image-1721 aligncenter attachment-140x224 size-140x224" alt="" style="max-width: 100%; height: auto;" srcset="https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg?w=140 140w, https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg?w=280 280w, https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg?w=94 94w" sizes="(max-width: 140px) 100vw, 140px" data-attachment-id="1721" data-permalink="https://garryabbott.com/transported-kindle-artwork-full/" data-orig-file="https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg" data-orig-size="1600,2560" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="Transported kindle artwork full" data-image-description="" data-medium-file="https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg?w=354" data-large-file="https://garryabbott.files.wordpress.com/2018/09/transported-kindle-artwork-full.jpg?w=640" /></a></aside><aside id="media_image-4" class="widget widget_media_image"><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://www.amazon.co.uk/Great-Connection-Worlds-Waiting/dp/1537775952"><img width="140" height="224" src="https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg?w=140" class="image wp-image-1306 aligncenter attachment-140x224 size-140x224" alt="" style="max-width: 100%; height: auto;" srcset="https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg?w=140 140w, https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg?w=280 280w, https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg?w=94 94w" sizes="(max-width: 140px) 100vw, 140px" data-attachment-id="1306" data-permalink="https://garryabbott.com/great-connection-high-resolution/" data-orig-file="https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg" data-orig-size="1563,2500" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="great-connection-high-resolution" data-image-description="" data-medium-file="https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg?w=354" data-large-file="https://garryabbott.files.wordpress.com/2016/10/great-connection-high-resolution.jpg?w=640" /></a></aside><aside id="media_image-2" class="widget widget_media_image"><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://www.amazon.co.uk/Dimension-Scales-Other-Stories/dp/1511615168"><img width="140" height="224" src="https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg?w=140" class="image wp-image-842 aligncenter attachment-140x224 size-140x224" alt="" style="max-width: 100%; height: auto;" srcset="https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg?w=140 140w, https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg?w=280 280w, https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg?w=94 94w" sizes="(max-width: 140px) 100vw, 140px" data-attachment-id="842" data-permalink="https://garryabbott.com/about/dimensionscales_abbott_apple-2/" data-orig-file="https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg" data-orig-size="1400,2240" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="DimensionScales_Abbott_apple" data-image-description="" data-medium-file="https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg?w=354" data-large-file="https://garryabbott.files.wordpress.com/2013/04/dimensionscales_abbott_apple.jpg?w=640" /></a></aside><aside id="blog_subscription-2" class="widget widget_blog_subscription jetpack_subscription_widget"><h1 class="widget-title"><label for="subscribe-field">Follow Blog via Email</label></h1>
+            <form action="https://subscribe.wordpress.com" method="post" accept-charset="utf-8"
+                  id="subscribe-blog">
+									<p>Enter your email address to follow this blog and receive notifications of new posts by email.</p>
+<p>Join 2,190 other followers</p>
+                    <p><input type="text" name="email" style="width: 95%; padding: 1px 2px"
+                              placeholder="Enter your email address" value=""
+                              id="subscribe-field"/></p>
+				
+                <p>
+                    <input type="hidden" name="action" value="subscribe"/>
+                    <input type="hidden" name="blog_id" value="49907843"/>
+                    <input type="hidden" name="source" value="https://garryabbott.com/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/"/>
+                    <input type="hidden" name="sub-type" value="widget"/>
+                    <input type="hidden" name="redirect_fragment" value="blog_subscription-2"/>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="3da1b3c3b0" />                    <button type="submit"
+	                    		                	                >
+	                    Follow                    </button>
+                </p>
+            </form>
+			
+</aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h1 class="widget-title">Recent Posts</h1>		<ul>
+											<li>
+					<a href="https://garryabbott.com/2018/10/30/back-to-the-shadows/">Back to The&nbsp;Shadows.</a>
+									</li>
+											<li>
+					<a href="https://garryabbott.com/2018/08/25/restoke-man-up/">Restoke &#8211; Man&nbsp;Up</a>
+									</li>
+											<li>
+					<a href="https://garryabbott.com/2018/03/10/pin-the-devil/">Pin the Devil.</a>
+									</li>
+											<li>
+					<a href="https://garryabbott.com/2018/02/24/is-anybody-there/">Is Anybody There?</a>
+									</li>
+											<li>
+					<a href="https://garryabbott.com/2018/02/14/the-timeless-whirlpool-of-the-talkers/">The Timeless Whirlpool of the&nbsp;Talkers.</a>
+									</li>
+					</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+				<li class="cat-item cat-item-75442365"><a href="https://garryabbott.com/category/admin-cat/">ADMIN CAT!</a>
+</li>
+	<li class="cat-item cat-item-500065834"><a href="https://garryabbott.com/category/book-marketing-diaries/">Book Marketing Diaries</a>
+</li>
+	<li class="cat-item cat-item-942156"><a href="https://garryabbott.com/category/comedy-writing/">Comedy Writing</a>
+</li>
+	<li class="cat-item cat-item-657"><a href="https://garryabbott.com/category/economics/">Economics</a>
+</li>
+	<li class="cat-item cat-item-1747"><a href="https://garryabbott.com/category/fiction/">Fiction</a>
+</li>
+	<li class="cat-item cat-item-586"><a href="https://garryabbott.com/category/food/">Food</a>
+</li>
+	<li class="cat-item cat-item-602954715"><a href="https://garryabbott.com/category/gazfacts/">GazFacts</a>
+</li>
+	<li class="cat-item cat-item-54"><a href="https://garryabbott.com/category/general/">General</a>
+</li>
+	<li class="cat-item cat-item-678"><a href="https://garryabbott.com/category/history/">History</a>
+</li>
+	<li class="cat-item cat-item-668375"><a href="https://garryabbott.com/category/horror-supernatural/">Horror &amp; Supernatural</a>
+</li>
+	<li class="cat-item cat-item-1184910"><a href="https://garryabbott.com/category/life-writing/">Life Writing</a>
+</li>
+	<li class="cat-item cat-item-329026"><a href="https://garryabbott.com/category/media-2/">Media</a>
+</li>
+	<li class="cat-item cat-item-3323"><a href="https://garryabbott.com/category/movie-reviews/">Movie Reviews</a>
+</li>
+	<li class="cat-item cat-item-18"><a href="https://garryabbott.com/category/music/">Music</a>
+</li>
+	<li class="cat-item cat-item-18169747"><a href="https://garryabbott.com/category/performance-2/">Performance</a>
+</li>
+	<li class="cat-item cat-item-1868"><a href="https://garryabbott.com/category/philosophy/">Philosophy</a>
+</li>
+	<li class="cat-item cat-item-422"><a href="https://garryabbott.com/category/poetry/">Poetry</a>
+</li>
+	<li class="cat-item cat-item-398"><a href="https://garryabbott.com/category/politics/">Politics</a>
+</li>
+	<li class="cat-item cat-item-19233231"><a href="https://garryabbott.com/category/protest-2/">Protest</a>
+</li>
+	<li class="cat-item cat-item-100869"><a href="https://garryabbott.com/category/public-art/">Public Art</a>
+</li>
+	<li class="cat-item cat-item-309"><a href="https://garryabbott.com/category/reviews/">Reviews</a>
+</li>
+	<li class="cat-item cat-item-40287"><a href="https://garryabbott.com/category/short-story/">Short Story</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://garryabbott.com/category/uncategorized/">Uncategorized</a>
+</li>
+		</ul>
+			</aside><aside id="twitter_timeline-2" class="widget widget_twitter_timeline"><h1 class="widget-title">Follow me on Twitter</h1><a class="twitter-timeline" data-width="225" data-height="400" data-theme="light" data-link-color="#f96e5b" data-border-color="#e8e8e8" data-lang="EN" data-partner="jetpack" data-widget-id="312551363848577024" href="https://twitter.com/312551363848577024">My Tweets</a></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+				<li><a href='https://garryabbott.com/2018/10/'>October 2018</a></li>
+	<li><a href='https://garryabbott.com/2018/08/'>August 2018</a></li>
+	<li><a href='https://garryabbott.com/2018/03/'>March 2018</a></li>
+	<li><a href='https://garryabbott.com/2018/02/'>February 2018</a></li>
+	<li><a href='https://garryabbott.com/2018/01/'>January 2018</a></li>
+	<li><a href='https://garryabbott.com/2017/04/'>April 2017</a></li>
+	<li><a href='https://garryabbott.com/2017/03/'>March 2017</a></li>
+	<li><a href='https://garryabbott.com/2017/02/'>February 2017</a></li>
+	<li><a href='https://garryabbott.com/2017/01/'>January 2017</a></li>
+	<li><a href='https://garryabbott.com/2016/12/'>December 2016</a></li>
+	<li><a href='https://garryabbott.com/2016/10/'>October 2016</a></li>
+	<li><a href='https://garryabbott.com/2016/07/'>July 2016</a></li>
+	<li><a href='https://garryabbott.com/2016/06/'>June 2016</a></li>
+	<li><a href='https://garryabbott.com/2016/05/'>May 2016</a></li>
+	<li><a href='https://garryabbott.com/2016/04/'>April 2016</a></li>
+	<li><a href='https://garryabbott.com/2015/11/'>November 2015</a></li>
+	<li><a href='https://garryabbott.com/2015/04/'>April 2015</a></li>
+	<li><a href='https://garryabbott.com/2015/03/'>March 2015</a></li>
+	<li><a href='https://garryabbott.com/2015/01/'>January 2015</a></li>
+	<li><a href='https://garryabbott.com/2014/12/'>December 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/11/'>November 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/10/'>October 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/09/'>September 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/08/'>August 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/07/'>July 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/06/'>June 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/05/'>May 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/04/'>April 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/03/'>March 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/02/'>February 2014</a></li>
+	<li><a href='https://garryabbott.com/2014/01/'>January 2014</a></li>
+	<li><a href='https://garryabbott.com/2013/12/'>December 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/11/'>November 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/10/'>October 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/09/'>September 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/08/'>August 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/07/'>July 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/06/'>June 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/05/'>May 2013</a></li>
+	<li><a href='https://garryabbott.com/2013/04/'>April 2013</a></li>
+		</ul>
+			</aside><aside id="recent-comments-2" class="widget widget_recent_comments"><h1 class="widget-title">Recent Comments</h1>				<table class="recentcommentsavatar" cellspacing="0" cellpadding="0" border="0">
+					<tr><td title="Perry" class="recentcommentsavatartop" style="height:48px; width:48px;"><a href="http://www.perryceramics.co.uk" rel="nofollow"><img alt='' src='https://0.gravatar.com/avatar/656f182c9f79ce02eeca83b61c096253?s=48&#038;d=identicon&#038;r=G' class='avatar avatar-48' height='48' width='48' /></a></td><td class="recentcommentstexttop" style=""><a href="http://www.perryceramics.co.uk" rel="nofollow">Perry</a> on <a href="https://garryabbott.com/2018/02/14/the-timeless-whirlpool-of-the-talkers/comment-page-1/#comment-6180">The Timeless Whirlpool of the&hellip;</a></td></tr><tr><td title="Garry Abbott" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="https://garryabbott.wordpress.com" rel="nofollow"><img alt='' src='https://0.gravatar.com/avatar/fe05e456856c7e0071b4a222a25df70b?s=48&#038;d=identicon&#038;r=G' class='avatar avatar-48' height='48' width='48' /></a></td><td class="recentcommentstextend" style=""><a href="https://garryabbott.wordpress.com" rel="nofollow">Garry Abbott</a> on <a href="https://garryabbott.com/2016/12/27/rogue-one-a-star-wars-story-review/comment-page-1/#comment-5826">Rogue One: A Star Wars Story&hellip;</a></td></tr><tr><td title="Nick Sheldon" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="http://www.discodeb.co.uk" rel="nofollow"><img alt='' src='https://1.gravatar.com/avatar/d8a7c09e40d269349c3befa2146d507d?s=48&#038;d=identicon&#038;r=G' class='avatar avatar-48' height='48' width='48' /></a></td><td class="recentcommentstextend" style=""><a href="http://www.discodeb.co.uk" rel="nofollow">Nick Sheldon</a> on <a href="https://garryabbott.com/2016/12/27/rogue-one-a-star-wars-story-review/comment-page-1/#comment-5825">Rogue One: A Star Wars Story&hellip;</a></td></tr><tr><td title="Jamie G" class="recentcommentsavatarend" style="height:48px; width:48px;"><img alt='' src='https://0.gravatar.com/avatar/fa16bf7825c3f23907d55779f7b4cd6c?s=48&#038;d=identicon&#038;r=G' class='avatar avatar-48' height='48' width='48' /></td><td class="recentcommentstextend" style="">Jamie G on <a href="https://garryabbott.com/2016/06/03/the-book-marketing-diaries-part-2-whats-in-a-name/comment-page-1/#comment-5639">The Book Marketing Diaries Par&hellip;</a></td></tr><tr><td title="Garry Abbott" class="recentcommentsavatarend" style="height:48px; width:48px;"><a href="https://garryabbott.wordpress.com" rel="nofollow"><img alt='' src='https://0.gravatar.com/avatar/fe05e456856c7e0071b4a222a25df70b?s=48&#038;d=identicon&#038;r=G' class='avatar avatar-48' height='48' width='48' /></a></td><td class="recentcommentstextend" style=""><a href="https://garryabbott.wordpress.com" rel="nofollow">Garry Abbott</a> on <a href="https://garryabbott.com/2016/06/03/the-book-marketing-diaries-part-2-whats-in-a-name/comment-page-1/#comment-5531">The Book Marketing Diaries Par&hellip;</a></td></tr>				</table>
+				</aside><aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://garryabbott.com/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="meta-2" class="widget widget_meta"><h1 class="widget-title">Meta</h1>			<ul>
+			<li><a href="https://wordpress.com/start?ref=wplogin">Register</a></li>			<li><a href="https://garryabbott.wordpress.com/wp-login.php">Log in</a></li>
+			<li><a href="https://garryabbott.com/feed/">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://garryabbott.com/comments/feed/">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://wordpress.com/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.com</a></li>			</ul>
+			</aside>		<div class="wpcnt">
+			<div class="wpa wpmrec">
+				<span class="wpa-about">Advertisements</span>
+				<div class="u">
+							<div style="padding-bottom:15px;width:300px;height:250px;">
+			<div id="atatags-286348-5d5a56c25282d">
+				<script type="text/javascript">
+				__ATA.cmd.push(function() {
+					__ATA.initSlot('atatags-286348-5d5a56c25282d',  {
+						collapseEmpty: 'before',
+						sectionId: '286348',
+						location: 140,
+						width: 300,
+						height: 250
+					});
+				});
+				</script>
+			</div>
+		</div>
+				</div>
+				
+			</div>
+		</div>	</div><!-- #secondary -->
+
+	</div><!-- #content -->
+	<footer id="colophon" class="site-footer" role="contentinfo">
+				<div class="site-info">
+			<a href="https://wordpress.com/?ref=footer_website">Create a free website or blog at WordPress.com.</a>
+			
+					</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<!--  -->
+<script type='text/javascript' src='//0.gravatar.com/js/gprofiles.js?ver=201934y'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s1.wp.com/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1380573781h'></script>
+
+	<script>
+		//initialize and attach hovercards to all gravatars
+		jQuery( document ).ready( function( $ ) {
+
+			if (typeof Gravatar === "undefined"){
+				return;
+			}
+
+			if ( typeof Gravatar.init !== "function" ) {
+				return;
+			}			
+
+			Gravatar.profile_cb = function( hash, id ) {
+				WPGroHo.syncProfileData( hash, id );
+			};
+			Gravatar.my_hash = WPGroHo.my_hash;
+			Gravatar.init( 'body', '#wp-admin-bar-my-account' );
+		});
+	</script>
+
+		<div style="display:none">
+	<div class="grofile-hash-map-fe05e456856c7e0071b4a222a25df70b">
+	</div>
+	<div class="grofile-hash-map-656f182c9f79ce02eeca83b61c096253">
+	</div>
+	<div class="grofile-hash-map-fe05e456856c7e0071b4a222a25df70b">
+	</div>
+	<div class="grofile-hash-map-d8a7c09e40d269349c3befa2146d507d">
+	</div>
+	<div class="grofile-hash-map-fa16bf7825c3f23907d55779f7b4cd6c">
+	</div>
+	</div>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var HighlanderComments = {"loggingInText":"Logging In\u2026","submittingText":"Posting Comment\u2026","postCommentText":"Post Comment","connectingToText":"Connecting to %s","commentingAsText":"%1$s: You are commenting using your %2$s account.","logoutText":"Log Out","loginText":"Log In","connectURL":"https:\/\/garryabbott.wordpress.com\/public.api\/connect\/?action=request&domain=garryabbott.com","logoutURL":"https:\/\/garryabbott.wordpress.com\/wp-login.php?action=logout&_wpnonce=fd3fca345a","homeURL":"https:\/\/garryabbott.com\/","postID":"1085","gravDefault":"identicon","enterACommentError":"Please enter a comment","enterEmailError":"Please enter your email address here","invalidEmailError":"Invalid email address","enterAuthorError":"Please enter your name here","gravatarFromEmail":"This picture will show whenever you leave a comment. Click to customize it.","logInToExternalAccount":"Log in to use details from one of these accounts.","change":"Change","changeAccount":"Change Account","comment_registration":"0","userIsLoggedIn":"","isJetpack":"","text_direction":"ltr"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s2.wp.com/_static/??/wp-content/js/jquery/jquery.autoresize.js,/wp-content/mu-plugins/highlander-comments/script.js?m=1551752381j'></script>
+
+	<div id="carousel-reblog-box">
+		<form action="#" name="carousel-reblog">
+			<textarea id="carousel-reblog-content" name="carousel-reblog-content" placeholder="Add your thoughts here... (optional)"></textarea>
+			<label for="carousel-reblog-to-blog-id" id="carousel-reblog-lblogid">Post to</label>
+			<select name="carousel-reblog-to-blog-id" id="carousel-reblog-to-blog-id">
+						</select>
+
+			<div class="submit">
+				<span class="canceltext"><a href="#" class="cancel">Cancel</a></span>
+				<input type="submit" name="carousel-reblog-submit" class="button" id="carousel-reblog-submit" value="Reblog Post" />
+				<input type="hidden" id="carousel-reblog-blog-id" value="49907843" />
+				<input type="hidden" id="carousel-reblog-blog-url" value="https://garryabbott.com" />
+				<input type="hidden" id="carousel-reblog-blog-title" value="Garry Abbott. Writer &amp; Musician" />
+				<input type="hidden" id="carousel-reblog-post-url" value="" />
+				<input type="hidden" id="carousel-reblog-post-title" value="" />
+			</div>
+
+			<input type="hidden" id="_wpnonce" name="_wpnonce" value="9fd444cbdc" /><input type="hidden" name="_wp_http_referer" value="/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/" />		</form>
+
+		<div class="arrow"></div>
+	</div>
+
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https:\/\/garryabbott.com\/2014\/10\/01\/not-good-enough-for-the-bbc-newsjack-series-11\/":1085};
+	</script>
+					<div id="sharing_email" style="display: none;">
+		<form action="/2014/10/01/not-good-enough-for-the-bbc-newsjack-series-11/" method="post">
+			<label for="target_email">Send to Email Address</label>
+			<input type="email" name="target_email" id="target_email" value="" />
+
+			
+				<label for="source_name">Your Name</label>
+				<input type="text" name="source_name" id="source_name" value="" />
+
+				<label for="source_email">Your Email Address</label>
+				<input type="email" name="source_email" id="source_email" value="" />
+
+						<input type="text" id="jetpack-source_f_name" name="source_f_name" class="input" value="" size="25" autocomplete="off" title="This field is for validation and should not be changed" />
+			
+			<div
+				class="g-recaptcha"
+				data-sitekey="6LcmyE0UAAAAALID28yVNg7pFCodGaArJzHitez_"
+				data-theme="light"
+				data-type="image"
+				data-tabindex="0"></div>
+			<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=en" async></script>
+			
+			<img style="float: right; display: none" class="loading" src="https://s2.wp.com/wp-content/mu-plugins/post-flair/sharing/images/loading.gif" alt="loading" width="16" height="16" />
+			<input type="submit" value="Send Email" class="sharing_send" />
+			<a rel="nofollow" href="#cancel" class="sharing_cancel" role="button">Cancel</a>
+
+			<div class="errors errors-1" style="display: none;">
+				Post was not sent - check your email addresses!			</div>
+
+			<div class="errors errors-2" style="display: none;">
+				Email check failed, please try again			</div>
+
+			<div class="errors errors-3" style="display: none;">
+				Sorry, your blog cannot share posts by email.			</div>
+		</form>
+	</div>
+<div class="widget widget_eu_cookie_law_widget"><div
+	class="hide-on-button ads-active"
+	data-hide-timeout="30"
+	data-consent-expiration="180"
+	id="eu-cookie-law"
+>
+	<form method="post">
+		<input type="submit" value="Close and accept" class="accept" />
+
+		Privacy &amp; Cookies: This site uses cookies. By continuing to use this website, you agree to their use. <br />
+To find out more, including how to control cookies, see here:
+		<a href="https://automattic.com/cookies" >
+			Cookie Policy		</a>
+ </form>
+</div>
+</div><link rel='stylesheet' id='all-css-0-3' href='https://s0.wp.com/wp-content/mu-plugins/carousel/jetpack-carousel.css?m=1563361695h&cssminify=yes' type='text/css' media='all' />
+<script type='text/javascript'>
+/* <![CDATA[ */
+var actionbardata = {"siteID":"49907843","siteName":"Garry Abbott. Writer & Musician","siteURL":"https:\/\/garryabbott.com","icon":"<img alt='' src='https:\/\/s2.wp.com\/i\/logo\/wpcom-gray-white.png' class='avatar avatar-50' height='50' width='50' \/>","canManageOptions":"","canCustomizeSite":"","isFollowing":"","themeSlug":"pub\/hemingway-rewritten","signupURL":"https:\/\/wordpress.com\/start\/","loginURL":"https:\/\/wordpress.com\/log-in?redirect_to=https%3A%2F%2Fgarryabbott.com%2F2014%2F10%2F01%2Fnot-good-enough-for-the-bbc-newsjack-series-11%2F&signup_flow=account&domain=garryabbott.com","themeURL":"https:\/\/wordpress.com\/theme\/hemingway-rewritten\/","xhrURL":"https:\/\/garryabbott.com\/wp-admin\/admin-ajax.php","nonce":"fecf86c0c0","isSingular":"1","isFolded":"","isLoggedIn":"","isMobile":"","subscribeNonce":"<input type=\"hidden\" id=\"_wpnonce\" name=\"_wpnonce\" value=\"3da1b3c3b0\" \/>","referer":"https:\/\/garryabbott.com\/2014\/10\/01\/not-good-enough-for-the-bbc-newsjack-series-11\/","canFollow":"1","feedID":"18809813","statusMessage":"","customizeLink":"https:\/\/garryabbott.wordpress.com\/wp-admin\/customize.php?url=https%3A%2F%2Fgarryabbott.wordpress.com%2F2014%2F10%2F01%2Fnot-good-enough-for-the-bbc-newsjack-series-11%2F","postID":"1085","shortlink":"https:\/\/wp.me\/p3npjd-hv","canEditPost":"","editLink":"https:\/\/wordpress.com\/post\/garryabbott.com\/1085","statsLink":"https:\/\/wordpress.com\/stats\/post\/1085\/garryabbott.com","i18n":{"view":"View site","follow":"Follow","following":"Following","edit":"Edit","login":"Log in","signup":"Sign up","customize":"Customize","report":"Report this content","themeInfo":"Get theme: Hemingway Rewritten","shortlink":"Copy shortlink","copied":"Copied","followedText":"New posts from this site will now appear in your <a href=\"https:\/\/wordpress.com\/\">Reader<\/a>","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","editSubs":"Manage subscriptions","viewReader":"View site in Reader","viewReadPost":"View post in Reader","subscribe":"Sign me up","enterEmail":"Enter your email address","followers":"Join 2,190 other followers","alreadyUser":"Already have a WordPress.com account? <a href=\"https:\/\/wordpress.com\/log-in?redirect_to=https%3A%2F%2Fgarryabbott.com%2F2014%2F10%2F01%2Fnot-good-enough-for-the-bbc-newsjack-series-11%2F&signup_flow=account&domain=garryabbott.com\">Log in now.<\/a>","stats":"Stats"}};
+/* ]]> */
+</script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https:\/\/garryabbott.com\/wp-admin\/admin-ajax.php","nonce":"2e1fa6a600","display_exif":"1","display_geo":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","download_original":"View full size <span class=\"photo-size\">{0}<span class=\"photo-size-times\">\u00d7<\/span>{1}<\/span>","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"1","login_url":"https:\/\/garryabbott.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fgarryabbott.com%2F2014%2F10%2F01%2Fnot-good-enough-for-the-bbc-newsjack-series-11%2F","blog_id":"49907843","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"local_comments_commenting_as":"<fieldset><label for=\"email\">Email (Required)<\/label> <input type=\"text\" name=\"email\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-email-field\" \/><\/fieldset><fieldset><label for=\"author\">Name (Required)<\/label> <input type=\"text\" name=\"author\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-author-field\" \/><\/fieldset><fieldset><label for=\"url\">Website<\/label> <input type=\"text\" name=\"url\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-url-field\" \/><\/fieldset>","reblog":"Reblog","reblogged":"Reblogged","reblog_add_thoughts":"Add your thoughts here... (optional)","reblogging":"Reblogging...","post_reblog":"Post Reblog","stats_query_args":"blog=49907843&v=wpcom&tz=0&user_id=0&subd=garryabbott","is_public":"1","reblog_enabled":""};
+/* ]]> */
+</script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s1.wp.com/_static/??-eJydUu1OwzAMfCHSgNhgfxCPgrzU7dzmi9hZ2dvjClamaao0fsU639mXS+yUjUtRMIod2LZ4JIf5qxn4wV60QjXZ154iW08jsv2sWPEAsfVYrslywKCUXPdWK4r9BCdTcCok2p/X3IDvHxLhSD0IpX9oeaRsPMXRdMlVNh0tV6bofG1VrjSXQtCBqs3+1OiklVwmansUtli1m0ZC42GygiF7ELzCV+YMKBncaD/UiJVptlyMUEC1iys6aNWf2UOxAVg1Wpl0xFJovsyC3TlBinrhNZGbX2AWLdWtJDn/hXeJD/qRyun3aC5ZN3Y5KKky+nNG5gys+RuJA4p5bh5/Iu1SCSv8nFhM54GK5QMU/TznU0Xv4e1p+7LZbl93u83wDaMTN70='></script>
+<script type='text/javascript'>
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-twitter', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-facebook', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+</script>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script>		<iframe src='https://widgets.wp.com/likes/master.html?ver=20190321#ver=20190321' scrolling='no' id='likes-master' name='likes-master' style='display:none;'></iframe>
+		<div id='likes-other-gravatars'><div class="likes-text"><span>%d</span> bloggers like this:</div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+<script src="//stats.wp.com/w.js?60" type="text/javascript" async defer></script>
+<script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'49907843','blog_tz':'0','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+_stq.push(['view', {'blog':'49907843','v':'wpcom','tz':'0','user_id':'0','post':'1085','subd':'garryabbott'}]);
+_stq.push(['extra', {'crypt':'UE5XaGUuOTlwaD85flAmcm1mcmZsaDhkV11YdWtpP0NsWnVkPS9sL0ViLndld3BuVT01Unp2dX5PUGNVaStkNEY9RmxdLlI/aXo/ekd6eGRUa0lPM2MxVT15SE10RjFqPXhCUXhOQXRnTVgvL0UsbnwmRFUuSDc5XXhET0dzaXRUOERjWGE9JiVNSz09M2NZNlFnRWg1bU1nM1JmSStOc1tiTkZPM2I5Jn4wSVdoLi5ObnI4TnlXZSVXZVlDZXdCcmNoXW9kLWZ0JVBXLGZbUz9BbmxrcUtzVF1oalhZXzRXSENhYVVJZVt2JTg9VkMxSWJWU0xTLXlibmw/YXdnLXlKMnJiZEkwRUp+WE9HXzI4b2I5WjJ8K2xWRmFoMk54aHdHP2FvTTdNZ3J0S1d1L2pCRzlxZiVWZGx3YTNsVW1OPTlvWldGZ0hUN11qXy55REJQL1d5'}]);
+_stq.push([ 'clickTrackerInit', '49907843', '1085' ]);
+	</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:0px;width:0px;overflow:hidden" alt="" /></noscript>
+<script>
+if ( 'object' === typeof wpcom_mobile_user_agent_info ) {
+
+	wpcom_mobile_user_agent_info.init();
+	var mobileStatsQueryString = "";
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedPlatformName )
+		mobileStatsQueryString += "&x_" + 'mobile_platforms' + '=' + wpcom_mobile_user_agent_info.matchedPlatformName;
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedUserAgentName )
+		mobileStatsQueryString += "&x_" + 'mobile_devices' + '=' + wpcom_mobile_user_agent_info.matchedUserAgentName;
+	
+	if( wpcom_mobile_user_agent_info.isIPad() )
+		mobileStatsQueryString += "&x_" + 'ipad_views' + '=' + 'views';
+
+	if( "" != mobileStatsQueryString ) {
+		new Image().src = document.location.protocol + '//pixel.wp.com/g.gif?v=wpcom-no-pv' + mobileStatsQueryString + '&baba=' + Math.random();
+	}
+	
+}
+</script>
+</body>
+</html>

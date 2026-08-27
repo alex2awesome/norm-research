@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/6d0b30f9f988.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 19694,
+  "output_tokens": 4368,
+  "elapsed_s": 953.6593814999796,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP and multimodal AI researchers developing/evaluating computational-humor models and benchmarks",
+    "subtask_short": "NewYorker caption contest benchmark",
+    "subtask_description": "Benchmarks and dataset for evaluating AI 'understanding' of humor from The New Yorker Caption Contest via three tasks (matching, quality ranking, explanation generation) with dense human-authored annotations to support from-pixels and from-description evaluations.",
+    "subtask_keywords": [
+      "humor",
+      "multimodal",
+      "newyorker",
+      "caption_contest",
+      "benchmark"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Matching (caption-to-cartoon recognition)",
+        "description": "Can a model recognize when a caption is appropriate for a given cartoon? Five choices are given, only one of which truly corresponds.",
+        "guidance": "Negative choices are randomly selected finalists from other contests (distractors are balanced across instances so a model that only examines the answer choices cannot achieve better than chance). Matching can require direct object-to-text alignment or indirect/external knowledge (e.g., references to Jane Goodall). Evaluation: accuracy on a 5-way multiple-choice task. Consider both FromPixels (image input only) and FromDescription (human-authored scene descriptions provided) settings."
+      },
+      {
+        "name": "Quality ranking (identify high-rated caption)",
+        "description": "Can a model identify high-quality / highly-rated captions? For each finalist, sample a non-finalist written for the same cartoon and ask the model to identify which caption was rated higher.",
+        "guidance": "Preprocessing includes one round of text-only filtering to discard captions easily identifiable as low-quality and semantic deduplication. Two evaluation measures are reported: NYAcc (accuracy where the finalist was an official New Yorker finalist) and CrowdAcc (accuracy where the finalist was selected by the crowd via NEXT ratings). Models are evaluated by accuracy; human taste can vary and editor vs crowd preferences are tracked separately."
+      },
+      {
+        "name": "Explanation generation (why the caption is funny)",
+        "description": "Can a model generate as good an explanation as a human for why a caption-and-image combination is funny? Free-form explanations of why captions are funny/appropriate were written as references.",
+        "guidance": "Annotation guidance: 'In a few sentences, explain the joke as if to a friend who doesn't \"get it\" yet.' Evaluation primarily via pairwise human judgments: present unlabeled author/machine explanation pairs to 3 crowd-workers per test instance and use majority vote to determine preference. Also report automatic metrics against references (BLEU-4, ROUGE-L) and word-level perplexity. Success criterion (as stated): model succeeds if human judges do not show a preference for author-generated explanations."
+      },
+      {
+        "name": "FromPixels vs FromDescription experimental settings",
+        "description": "Two settings to evaluate models: FromPixels (FP) \u2014 models are given only the cartoon image at test time and must perform visual processing; FromDescription (FD) \u2014 models are provided human-authored cartoon descriptions simulating human-level vision.",
+        "guidance": "FD factors out visual processing to evaluate language-only reasoning over rich textual scene descriptions. FD inputs include multiple human-authored annotations per cartoon (descriptions, uncanny descriptions, locations, entity links). Compare models across FP and FD to analyze vision bottlenecks. Example: fine-tuned CLIP used for FP; composition (OFA\u2192LM) or T5/GPT models used in FD."
+      },
+      {
+        "name": "Annotation: Literal scene descriptions",
+        "description": "Describe the literal contents of the image in 2-3 sentences.",
+        "guidance": "Collect 3 literal descriptions per cartoon. These descriptions are intended to capture the concrete, observable elements of the scene for use in FromDescription models or to simulate a human-level vision system."
+      },
+      {
+        "name": "Annotation: Uncanny / 'what's unusual' descriptions",
+        "description": "Highlight/explain any unusual/out-of-place elements in 1-2 sentences.",
+        "guidance": "Collect 3 'uncanniness' annotations per cartoon. These annotations capture anomalies or elements that make the scene incongruous \u2014 signals often relevant to humor (incongruity-resolution, anomaly detection). They are used as explicit inputs for FD models and as features in prior work."
+      },
+      {
+        "name": "Annotation: Locations",
+        "description": "This scene takes place in/at/on a(n)...",
+        "guidance": "Collect 2 location phrases per cartoon to capture the high-level setting (e.g., 'a laboratory', 'a park'). Useful as contextual features for matching and ranking."
+      },
+      {
+        "name": "Annotation: Entity links (Wikilinks)",
+        "description": "Provide English Wikipedia links that would be helpful for a robot to understand the image.",
+        "guidance": "Collect 2 entity links per cartoon as proxies for needed world knowledge (people, objects, cultural referents). These help models ground references to external knowledge (e.g., Jane Goodall)."
+      },
+      {
+        "name": "Crowd-sourced rating protocol",
+        "description": "Readers rate captions as 'funny', 'somewhat funny', or 'unfunny'; per-caption mean ratings are used.",
+        "guidance": "Ratings collected via the NEXT platform; over 114M ratings total in source corpus, mean/median ~445K/471K per contest for that source. Use per-caption mean to estimate quality and to form CrowdAcc targets for the quality-ranking task."
+      },
+      {
+        "name": "Preprocessing for quality-ranking instances",
+        "description": "Filter and deduplicate caption candidates before forming ranking pairs.",
+        "guidance": "Run one round of text-only filtering to discard easily identifiable low-quality submissions and perform semantic deduplication to avoid near-duplicates. Details of pre-processing influence difficulty and are provided in Appendix C of the paper."
+      },
+      {
+        "name": "Evaluation metrics for matching and ranking",
+        "description": "Use accuracy as the primary metric for matching and quality ranking tasks; report NYAcc and CrowdAcc for quality ranking.",
+        "guidance": "Matching: overall accuracy on 5-way multiple-choice. Quality ranking: report overall accuracy, CrowdAcc (where crowd selected finalist), and NYAcc (where New Yorker editors selected the finalist). Report averages over 5 cross-validation splits and provide human-estimate baselines."
+      },
+      {
+        "name": "Automatic metrics for explanation generation",
+        "description": "Report BLEU-4 and ROUGE-L (word-overlap) and word-level perplexity versus human-written references.",
+        "guidance": "Automatic metrics are complementary to human preference judgments; the paper notes that mirroring surface features (high BLEU/ROUGE) does not guarantee higher judged explanation quality."
+      },
+      {
+        "name": "Human evaluation protocol for explanations",
+        "description": "Pairwise human judgments with 3 crowd-workers per test instance; majority vote decides preference. Inter-annotator agreement reported via Gwet\u2019s \u03b3.",
+        "guidance": "Present unlabeled pairs of author/machine explanations. Use the majority preference to determine which explanation is preferred. Report per-instance agreement statistics and analyze cases of unanimous preference."
+      },
+      {
+        "name": "Human-performance estimation (benchmarking baseline)",
+        "description": "Estimate human performance by sampling instances and asking humans to perform the tasks; report as a comparator to models.",
+        "guidance": "Example protocol: three people (two authors and one person familiar with the project) attempted 100 randomly sampled instances for matching and quality-ranking tasks, with annotators given access to images but not descriptions to simulate FP setting. Note that human estimates are not an absolute upper bound due to label subjectivity and editorial preferences."
+      },
+      {
+        "name": "Model training/evaluation practice: cross-validation splits and contest-held-out testing",
+        "description": "Split the 704 cartoons into 5 cross-validation splits such that entire contests are held out at test time.",
+        "guidance": "Ensure contest-level partitioning so models are evaluated on previously unseen contests; report averages across splits and provide construction details in appendices."
+      },
+      {
+        "name": "Construction of distractors to prevent answer-choice exploitation",
+        "description": "Distractors (incorrect multiple-choice options) are selected from finalists of other contests and balanced across instances.",
+        "guidance": "This design ensures that a model that inspects only answer choices (without cartoon context) cannot do better than chance; in some cases distractors are legitimately good captions for other cartoons, increasing difficulty."
+      },
+      {
+        "name": "Data curation and safety (offensive content handling)",
+        "description": "Manually remove cases that target specific protected classes and otherwise take steps to reduce offensive content in the released corpus.",
+        "guidance": "The authors manually removed a handful of clearly targeted offensive jokes; they do not endorse jokes in the corpus but release the data as objects of study. Low-resolution images were specially treated with additional pay or author-conducted annotations."
+      },
+      {
+        "name": "Annotation labor standards and collection logistics",
+        "description": "Crowdworkers were paid a minimum of $15/hr; qualification rounds, HIT screenshots, and special handling for low-resolution images were used.",
+        "guidance": "Details (qualification, interface screenshots, payment, special-casing low-resolution images) are provided in Appendix A to ensure reproducibility and annotator quality control."
+      },
+      {
+        "name": "ResponsibleNLP checklist / reporting requirements",
+        "description": "ACL/ResponsibleNLP reporting items to be addressed in submissions (limitations, risks, artifact documentation, licenses, data checking/anonymization, dataset statistics, computational reporting, hyperparameters, use of packages, human-annotation reporting, recruitment/payment/consent/IRB, annotator demographics).",
+        "guidance": "Specifically enumerated checklist items in the paper (e.g., 'Did you describe the limitations?', 'Did you discuss potential risks?', 'Did you report train/val/test splits?', 'Did you report number of parameters and computational budget?', 'Did you provide full text of instructions given to participants?', 'Was the data collection protocol approved by an ethics review board?', etc.). The authors reference where each checklist item is answered (Sections 2, 3, Appendix A/B/C). Use this checklist as a rubric for responsible dataset/model release and reporting."
+      }
+    ]
+  }
+}

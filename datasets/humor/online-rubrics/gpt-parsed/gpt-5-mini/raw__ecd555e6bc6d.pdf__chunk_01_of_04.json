@@ -1,0 +1,126 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/ecd555e6bc6d.pdf",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "ecd555e6bc6d.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39820,
+  "model": "gpt-5-mini",
+  "elapsed_s": 44.88903141600895,
+  "input_tokens": 12614,
+  "output_tokens": 4262,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on computational humor, multimodal captioning, and dataset/benchmark construction",
+    "subtask_short": "New Yorker caption contest evaluation",
+    "subtask_description": "Designing, annotating, training, and evaluating models for matching, ranking, and explaining New Yorker cartoon captions (multimodal humor benchmark). Includes dataset construction, crowdworker qualification, and model evaluation protocols.",
+    "subtask_keywords": [
+      "humor",
+      "caption_contest",
+      "multimodal",
+      "benchmark",
+      "new_yorker",
+      "explanation_generation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "BLEU-4 (for explanation generation)",
+        "description": "BLEU-4 used to evaluate surface-form overlap between generated explanations/captions and reference explanations (higher is better).",
+        "guidance": "Authors note BLEU-4 (and similar metrics) suggest mirroring surface features of the explanation corpus can boost scores (e.g., 5-shot GPT-3 achieves 5.07 BLEU-4 vs. 4.99 for 5-shot GPT-4), but also caution that matching surface form is not sufficient for highest-quality explanations."
+      },
+      {
+        "name": "ROUGE-L (for explanation generation)",
+        "description": "ROUGE-L used to measure longest-common-subsequence overlap between generated and reference explanations (higher is better).",
+        "guidance": "Reported alongside BLEU-4 and perplexity; captures surface similarity but may not reflect true explanation quality."
+      },
+      {
+        "name": "Perplexity (PPL) for language-model quality",
+        "description": "Perplexity of generated explanations/captions (lower is better) reported as a diagnostic of model fluency and fit.",
+        "guidance": "Used to compare models' language modeling performance; e.g., high perplexity for directly fine-tuned OFA (roughly 300) indicated poor fit and hard-to-diagnose errors."
+      },
+      {
+        "name": "Matching Accuracy / CrowdAcc / NYAcc",
+        "description": "Accuracy-based metrics used to evaluate the Matching task (select which caption corresponds to a scene) and reported separately for crowd and New Yorker/editor preferences (\u2191 = higher is better).",
+        "guidance": "Table lists Accuracy, CrowdAcc, and NYAcc together with BLEU-4 / ROUGE-L / PPL for Explanation task; ensure comparable test splits and fixed random sampled annotation tuple at test time for fair comparisons."
+      },
+      {
+        "name": "Human pairwise preference judgments",
+        "description": "Use of pairwise human judgments to compare human-written vs. machine-generated explanations/captions; annotators express preference between two items.",
+        "guidance": "Authors used 3 annotators per pair and report majority/unanimous votes (e.g., human-written explanations preferred in 68% of pairwise cases; examined 39/130 cases with unanimous 3/3 votes). Qualitative analysis of unanimous preferences and unanimous machine preferences provided to diagnose errors."
+      },
+      {
+        "name": "Construction of Matching instances (negative assignment constraints)",
+        "description": "Negatives (mismatched captions) are randomly assigned under two constraints: (1) assignments occur only within cross-validation splits to keep train/val/test disjoint; (2) corpus constructed to have no answer-only biases by ensuring each answer appears exactly once as a correct answer and exactly 4 times as an incorrect answer in other instances.",
+        "guidance": "These constraints are required to avoid dataset artifacts where models could exploit answer-only signals."
+      },
+      {
+        "name": "Construction of Quality-ranking instances (definition of \u201cokay\u201d negatives)",
+        "description": "For each high-quality caption, sample 'okay' captions from contest submissions while deduplicating exact matches and avoiding top/bottom extremes.",
+        "guidance": "If crowd ratings are available (later contests), discard top and bottom thirds by mean crowd rating and sample from the middle tertile as 'okay' captions. For earlier contests without ratings, train a quality-ranking model on crowd-labeled data to help discard clearly low-quality entries."
+      },
+      {
+        "name": "High-quality caption identification",
+        "description": "Procedure to form the set of high-quality captions: include official New Yorker finalists automatically; for crowd-rated contests take top-5 by mean crowd score and then select 3 diverse candidates via semantic deduplication.",
+        "guidance": "Semantic deduplication uses SBERT (paraphrase-MiniLM-L6-v2) vectors, hierarchical clustering of candidates, and sampling one candidate per cluster to ensure diversity. Resulting high-quality set: 2.7K captions across 704 contests; each contest has either 3 or 6 high-quality captions depending on data availability."
+      },
+      {
+        "name": "Deduplication rules for forming 'okay' sets",
+        "description": "Exact string deduplication to ensure sampled 'okay' captions are not exact copies of any identified high-quality caption or any other sampled 'okay' caption.",
+        "guidance": "Applied before sampling negatives to avoid trivial duplicates."
+      },
+      {
+        "name": "Tuple construction and single-sample test-time protocol for multi-annotation inputs",
+        "description": "Because multiple annotations are available per cartoon (2 locations \u00d7 3 descriptions \u00d7 3 uncanny descriptions \u00d7 2 entity links), tuples are constructed at the annotator level to preserve dependencies and at test time a single random valid tuple is sampled and fixed across methods.",
+        "guidance": "Specifically, consider 3 (description, uncanny description) \u00d7 2 (location, link) = 6 possible tuples holding author constant; select one random valid tuple per cartoon for evaluation and keep it fixed for fair comparisons."
+      },
+      {
+        "name": "Crowdworker qualification criteria and training",
+        "description": "Qualifications used for Mechanical Turk annotators: allowed countries {AU, CA, NZ, GB, US}, minimum 10K prior approved HITs, minimum 97% acceptance rate; manual qualification rounds were used for different HIT types.",
+        "guidance": "Two types of qualification rounds: one for description/link HITs (manually graded 30 annotators, 21 qualified) and one for pairwise explanation HITs (manually inspected 51 attempts, 29 qualified). Provide content warnings for mature themes and hash worker IDs in public release to preserve anonymity."
+      },
+      {
+        "name": "Pairwise explanation HIT design and scale",
+        "description": "A pairwise-judgment HIT interface was used to collect human preferences over explanations; authors ran \u22482.7K HITs to support explanation comparisons.",
+        "guidance": "Include training/qualification rounds where annotators rated pre-selected good/bad explanations across desirable axes; only qualified annotators accessed final pairwise judgment HITs."
+      },
+      {
+        "name": "Annotation interface prompts for per-annotation-type queries (OFA prompts)",
+        "description": "When querying models for different annotation types, provide per-annotation prompts: (1) locations: 'Where does this take place?' (2) descriptions: 'Describe this image.' (3) uncanny: 'What's unusual about this image?' (4) entities: 'What entities are there?'",
+        "guidance": "These prompts operationalize the four annotation types used as inputs to explanation/generation models and to OFA."
+      },
+      {
+        "name": "Cross-validation and statistical testing protocol",
+        "description": "Use 5 cross-validation splits and aggregate predictions across splits for error analysis; apply \u03c7\u00b2 tests on contest-by-correctness contingency tables to detect clustering of errors by contest; use Spearman correlation and permutation tests to analyze per-contest accuracy correlations and error independence.",
+        "guidance": "Authors found errors were clustered according to contest (p < .05) and moderate Spearman correlation between per-contest accuracy across models; when models' predictions agree they are correct 87% of the time, etc. Use appropriate tests to determine whether errors are correlated across contests, splits, or caption assignments."
+      },
+      {
+        "name": "Quality-ranking model pretraining dataset and sampling for earlier contests",
+        "description": "When crowd ratings are unavailable, train a quality-ranking model (conditioned on caption text only) using crowd-labeled data from 253 contests, sampling top and bottom entries to form a good/bad set.",
+        "guidance": "Sample the top and bottom 1000 entries per contest by mean crowdscore to form a 506K-caption dataset for training; form two labeled sets based on parity of contest (authors' procedure; truncated in chunk). Use this model to eliminate clearly low-quality captions from earlier contests."
+      },
+      {
+        "name": "Model fine-tuning and decoding settings used as experimental standards",
+        "description": "Specific training/decoding choices reported as part of model evaluation: CLIP fine-tuning with linear warmup (200 steps), small LR grid search, batch size 32, image resize+pad to 336px, data augmentations (random horizontal flip, color jitter, grayscale). OFA: validation early stopping on cross-entropy, fine-tune per split, beam search (n=5), label-adjusted smoothed cross entropy (smoothing=0.1), train up to 7 epochs with 6% warmup. T5: per-split LR search for T5-Large; fixed LR for T5-11B. GPT-3/GPT-3.5/GPT-4: zero-shot and in-context prompts, GPT-4 used via Chat API with system message.",
+        "guidance": "These hyperparameter choices and decoding setups are the reproducible experimental standards authors used for fair model comparisons; deviations may change performance and are reported to aid reproducibility."
+      },
+      {
+        "name": "Prompting / in-context example protocol for GPT models",
+        "description": "Zero-shot and in-context prompts for GPT-3 are used for Matching, Quality ranking, and Explanation tasks; in-context prompts include 5 random training examples. Chat API for GPT-4 requires a system prompt describing desired behavior (e.g., 'You are CaptionContestGPT...').",
+        "guidance": "Authors sampled with default hyperparameters in all cases and kept the same 5 in-context examples across compared models for fair evaluation. Costs and model versions were reported (GPT-4 queries ~ $4K)."
+      },
+      {
+        "name": "Audience-dependent evaluation (NY editors vs. crowd)",
+        "description": "Evaluate caption quality/rankings against two audience preferences: New Yorker editors (NYAcc) and crowdsourced annotators (CrowdAcc), recognizing that editorial selections are not an absolute ground truth for funniness.",
+        "guidance": "The tasks operationalize prediction of average preferences rather than individual tastes; acknowledge and report potential biases toward characteristics of prior contest winners or published New Yorker cartoons."
+      },
+      {
+        "name": "Qualitative error analysis and case study norms",
+        "description": "When models disagree with humans or when unanimous preferences occur, perform close qualitative reading to diagnose failure modes (e.g., incorrect image interpretation, small inaccuracies in human references, stylistic differences).",
+        "guidance": "Authors examined unanimous human wins and unanimous machine wins (e.g., 39/130 unanimous human; 8/130 unanimous GPT-4) to illustrate typical errors (misinterpreting scene elements) and cases where style rather than understanding led to differences."
+      }
+    ]
+  }
+}

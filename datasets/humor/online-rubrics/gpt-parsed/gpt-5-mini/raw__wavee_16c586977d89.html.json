@@ -1,0 +1,109 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_16c586977d89.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15315,
+  "output_tokens": 3003,
+  "elapsed_s": 2145.6317781249527,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "comics scholars, digital humanities researchers, and computer-vision/data-science researchers studying comic strips",
+    "subtask_short": "distant viewing comic strip analysis",
+    "subtask_description": "Computational/distant viewing analysis of newspaper comic strips (Panles, captions, paratext) using panel-detection and OCR-based caption detection to study formal features across a large corpus (Peanuts, 1950\u20132000).",
+    "subtask_keywords": [
+      "distant_viewing",
+      "comic_strips",
+      "panel_detection",
+      "caption_detection",
+      "digital_humanities"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Panel visual definition",
+        "description": "Every panel we found was enclosed in a black, rectangular, apparently hand-drawn box. These boxes are arranged in a non-overlapping fashion on a white background.",
+        "guidance": "This definitional observation motivates treating contiguous non-background pixel regions bounded by white background as candidate panels; it is the basis for a rules-based panel detection algorithm."
+      },
+      {
+        "name": "Panel detection algorithm (flood-fill/tint-fill approach)",
+        "description": "First, determine all of the pixels reachable by starting at a white pixel on an edge and creating a path of adjacent white pixels (the background). Next, select any non-background pixel and determine the set of all non-background pixels reachable via adjacent non-background pixels (a detected panel). Repeat until all pixels are accounted for.",
+        "guidance": "Implementation used a breadth-first adaptation of the tint fill algorithm (Smith 1976) in custom C code. After detection, remove very small panels (usually extraneous writing), expand detected panels to full rectangles, and number panels according to reading order."
+      },
+      {
+        "name": "Remove tiny/extraneous panels",
+        "description": "Very small detected panels are usually extraneous writing on the background and should be removed from panel counts.",
+        "guidance": "Filter out small connected components prior to expanding detections to full rectangular panel bounding boxes to avoid counting stray marks or paratext as panels."
+      },
+      {
+        "name": "Expand detected panels to full rectangles",
+        "description": "After identifying contiguous non-background pixel regions, expand the detected panels to be full rectangles for downstream processing and numbering.",
+        "guidance": "Rectangular expansion simplifies later operations (e.g., mapping OCR bounding boxes into panel coordinate space) and aligns with newspaper strip panel geometry."
+      },
+      {
+        "name": "Panel numbering convention",
+        "description": "Number panels according to the standard left-to-right and top-to-bottom reading order.",
+        "guidance": "Use this canonical ordering when aggregating per-panel statistics across strips (e.g., caption presence in panel 1 vs panel 4)."
+      },
+      {
+        "name": "Panel detection validation (manual inspection)",
+        "description": "Validate algorithmic panel detection by manually inspecting a random sample of comics (authors report manual inspection of 135 randomly selected comics).",
+        "guidance": "Authors found only a single error in 135 comics, demonstrating high accuracy; include sample size and error counts when reporting detection reliability."
+      },
+      {
+        "name": "Caption detection algorithm selection",
+        "description": "Apply scene text detection algorithms (Baek et al. 2019) as implemented in the EasyOCR Python module to provide bounding boxes for all detected text in an image.",
+        "guidance": "Choose a modern scene-text/OCR method suitable for hand-lettered/stylized comic lettering; document implementation and library versions (e.g., EasyOCR)."
+      },
+      {
+        "name": "Exclude signatures and paratext from caption counts",
+        "description": "Schulz commonly signed each Peanuts comic at the bottom of the last panel; to remove the signature from counts, automatically remove all text in the bottom third of the last panel.",
+        "guidance": "Filtering by spatial heuristics (bottom third of last panel) helps exclude signatures, dates, and copyright lines; note that signatures are detected about half the time and should not be considered captions."
+      },
+      {
+        "name": "Caption detection validation (manual sample and error reporting)",
+        "description": "Manually validate caption detection on a random sample (authors used 100 comics). Report false detections and sources of error.",
+        "guidance": "Authors report low false-detection rates (very few false positives/negatives); most errors derive from stylized exclamations and sound effects. Always report validation sample size and error counts."
+      },
+      {
+        "name": "Combine panel and caption detections to localize captions within panels",
+        "description": "After detecting panel rectangles and text bounding boxes, indicate which panels in each cartoon have text located within them to determine caption presence and position.",
+        "guidance": "This combination permits per-panel caption presence statistics and analyses of the image-text relationship (e.g., caption position tendencies across panel indices)."
+      },
+      {
+        "name": "Treat dailies and Sundays separately",
+        "description": "Daily strips and Sunday strips differ in format (daily: typically 1x3 or 1x4 horizontal grid, black-and-white; Sunday: larger, color, more panels). Average panel lengths differ and should be analyzed separately (authors report daily avg ~3.74, Sunday avg ~9.49).",
+        "guidance": "Separate analyses by publication format (daily vs Sunday) because layout constraints and narrative possibilities differ substantially."
+      },
+      {
+        "name": "Corpus composition and completeness",
+        "description": "Use a large, well-defined corpus (the study uses the complete Peanuts run: 17,897 cartoons, 1950\u20132000) and document limits (e.g., 2000 incomplete due to Schulz's death).",
+        "guidance": "Clearly report corpus size, date range, and any completeness caveats or missing data when presenting large-scale findings."
+      },
+      {
+        "name": "Quantitative reporting of panel/caption statistics",
+        "description": "After detection, compute and report statistics such as average panel counts by day/year and per-panel caption-presence percentages (e.g., in four-panel strips: first panel contains text 98% of the time).",
+        "guidance": "Present year-by-year visualizations and aggregated percentages to reveal longitudinal trends (e.g., shift away from four-panel format beginning 1988)."
+      },
+      {
+        "name": "Address algorithmic misdetections via manual follow-up",
+        "description": "When visualizations/outputs show anomalies (e.g., extra detected panels in certain strips or years), perform manual inspection to determine if misdetections occurred and report corrections or their causes.",
+        "guidance": "Example: five strips in 1975 where algorithm detected panels that did not exist; manual checks confirmed four-panel layout. Document such audits and how they informed adjustments."
+      },
+      {
+        "name": "Document sources of OCR/vision error",
+        "description": "Recognize and report common error sources: stylized lettering, sound effects, hard-to-detect lettering, and paratext elements that can be mistaken for dialogue.",
+        "guidance": "Report these limitations and, when possible, quantify their impact on detection accuracy; consider targeted heuristics or pre-/post-processing to mitigate them."
+      },
+      {
+        "name": "Reproducibility and code/supplementary materials",
+        "description": "Include full code implementing custom algorithms in supplementary materials to enable reproducibility.",
+        "guidance": "Provide implementation details (language, libraries, custom C code for tint fill, EasyOCR versions) and sample sizes used for validation so others can reproduce and extend the study."
+      },
+      {
+        "name": "Interpretive caution integrating formal results with historical/contextual factors",
+        "description": "When interpreting changes in format (e.g., Schulz's move away from four-panel dailies in 1988), consider editorial constraints, syndicate policies, artist agency, health (e.g., essential tremor), and industry practices rather than ascribing single causes.",
+        "guidance": "Contextualize computational findings with archival/interview evidence (e.g., curator or interview statements) and acknowledge alternative explanations."
+      }
+    ]
+  }
+}

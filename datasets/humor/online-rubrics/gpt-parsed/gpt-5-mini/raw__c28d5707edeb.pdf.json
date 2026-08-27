@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/c28d5707edeb.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 14652,
+  "output_tokens": 4656,
+  "elapsed_s": 1199.622339667054,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and developers in computational humor, conversational AI, and computational creativity (and technically-minded comedy writers)",
+    "subtask_short": "improvised conversational joke generation",
+    "subtask_description": "Designing and evaluating a system that improvises contextually relevant, wordplay-based joke responses to user utterances for integration into open-domain chatbots. Covers algorithmic steps, scoring, dataset preparation, and human evaluation.",
+    "subtask_keywords": [
+      "humor",
+      "computational_creativity",
+      "chatbot",
+      "joke_generation",
+      "wordplay",
+      "monologue_style"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Three-part monologue joke structure (topic, angle, punch line)",
+        "description": "A monologue joke has three parts: 1) the topic \u2014 the statement that the joke is based on; 2) the angle \u2014 a word sequence that smoothly bridges the gap between the topic and the punch line; 3) the punch line \u2014 the word or phrase that results in a laugh. The punch line must appear at the end of the joke and be a surprising incongruity that turns out to be harmless.",
+        "guidance": "This structure (topic \u2192 angle \u2192 punch line) underlies both prewritten monologue jokes and improvised conversational responses. The punch line must be surprising but harmless (incongruity-resolution / benign violation)."
+      },
+      {
+        "name": "Basic Joke-Writing Algorithm (five-step procedure)",
+        "description": "Algorithmic steps to write a monologue joke: 1) Select a topic (one sentence likely to capture attention). 2) Select two topic handles (the two words/phrases most responsible for capturing attention). 3) Generate associations for each topic handle. 4) Create a punch line linking an association of one handle to an association of the other in a surprising way. 5) Generate an angle that connects the topic to the punch line.",
+        "guidance": "These ordered steps provide the roadmap for an automated system to produce a three-part joke; Witscript implements them with concrete NLP modules and scoring."
+      },
+      {
+        "name": "Selecting topic keywords from user input (nouns/NPs/NEs; exclude stop words)",
+        "description": "Extract nouns, noun phrases, and named entities from the user's sentence (the topic). Exclude tokens on a stop-word list that includes common words and words judged unlikely to be useful for humor (e.g., 'official', 'person', 'tonight').",
+        "guidance": "Witscript uses NLTK for extraction and a curated stop-word list; remaining candidates become topic keyword candidates for the two topic handles."
+      },
+      {
+        "name": "Choose two topic keywords that are least likely to appear together (attention-capturing handles)",
+        "description": "Select as the two topic keywords the two candidates that are the least likely to appear together (i.e., the two candidates with the lowest cosine similarity according to Word2Vec embeddings), on the assumption that unlikely co-occurrence signals attention-getting potential.",
+        "guidance": "Witscript loads a pretrained Google Word2Vec model (Google-News-vectors-negative300.bin via Gensim) and uses its 'similarity' function to pick the pair with least cosine similarity (example: 'flower' and 'corpse')."
+      },
+      {
+        "name": "Wordplay score: weighted sum of six subscores",
+        "description": "The wordplay score for any pair of words is computed as a weighted sum of six subscores (edit distance, alliteration, assonance, stop consonant count, ending match, syllable match). Weights and constants were empirically determined based on output quality.",
+        "guidance": "A higher wordplay score indicates better wordplay (stronger phonetic/orthographic relations contributing to funniness); the composite score is used as a proxy for incongruity/surprise when selecting punch lines."
+      },
+      {
+        "name": "Edit distance subscore (for wordplay)",
+        "description": "Subscore is the Levenshtein edit distance between either the pronunciations (from CMU Pronouncing Dictionary) or, if missing, the spellings of the two words. Smaller edit distance yields a better subscore.",
+        "guidance": "Captures phonetic and orthographic similarity; punning can rely on both."
+      },
+      {
+        "name": "Alliteration subscore",
+        "description": "Subscore is 1 if the two words start with the same consonant phoneme; additional constant points are added if more phonemes match. Larger subscore is better.",
+        "guidance": "Alliteration and assonance tend to increase funniness; match phonemes rather than letters."
+      },
+      {
+        "name": "Assonance subscore",
+        "description": "If the two words rhyme then a constant is given; otherwise the subscore equals the number of stressed vowels in one word repeated in the other. Larger subscore is better.",
+        "guidance": "Unexpected rhyming of different-meaning words can produce a surprise effect that, when harmless, triggers funniness."
+      },
+      {
+        "name": "Stop consonant subscore",
+        "description": "Subscore equals the total number of stop consonant phonemes (B, D, G, K, P, T) in both words. A larger total gives a better subscore.",
+        "guidance": "Stop consonants tend to make jokes funnier according to cited literature and was encoded experimentally."
+      },
+      {
+        "name": "Ending subscore",
+        "description": "Subscore is 1 if the last phoneme of both words matches; additional constant points added if more phonemes match at the ends of the words. Larger subscore is better.",
+        "guidance": "Final syllable/ending phonemes are particularly important in wordplay."
+      },
+      {
+        "name": "Syllable subscore",
+        "description": "Subscore is 1 if the two words have the same number of syllables, which increases improbability/surprise and therefore funniness.",
+        "guidance": "Matching syllable counts can make pairings more surprising and thus funnier."
+      },
+      {
+        "name": "Generate associations for topic keywords using word embeddings (top N)",
+        "description": "For each selected topic keyword, list the top fifty associated words (associations) using the 'most similar' function of a pretrained Word2Vec model. These associations are candidate pieces to build punch lines.",
+        "guidance": "Witscript uses top-50 (number determined experimentally). Recognizes limitation that Word2Vec association \u2260 human mental association."
+      },
+      {
+        "name": "Punch line types (Punch Line Maker #4): juxtaposition, substitution, portmanteau",
+        "description": "Attempt three types of wordplay punch lines: 1) juxtaposition \u2014 two associated words placed adjacent (one from each keyword's association list) selected by best wordplay score; 2) substitution \u2014 substitute a word into a multi-word chunk based on best wordplay pairing; 3) portmanteau \u2014 blend two words by substituting syllables (use Pyphen to get syllables), selecting pairs with similar-but-not-identical pronunciations.",
+        "guidance": "For each type, pair associations across the two keyword lists and compute wordplay scores; generate one candidate per type and then select the best-scoring candidate."
+      },
+      {
+        "name": "Select best punch line by maximum wordplay score and apply threshold filter",
+        "description": "Among generated punch line candidates (juxtaposition, substitution, portmanteau), select the one with the best wordplay score as the system's punch line. Filter out any candidate whose wordplay score is below a preset, empirically determined threshold; if no candidate meets threshold, output no joke.",
+        "guidance": "Best wordplay score is used as a proxy for biggest incongruity (most surprising \u2192 most likely funniest). The threshold avoids delivering jokes with insufficient wordplay."
+      },
+      {
+        "name": "Generate angle using a joke-tuned BERT model (backward mask prediction)",
+        "description": "Fine-tune a pretrained BERT (large, uncased) on a curated dataset of monologue jokes (topics + rest) and use it to generate an angle by prepending a [MASK] token to the selected punch line and predicting tokens backwards until a stop condition (punctuation or repeated token). The predicted tokens are prepended to the punch line to form the angle+punch line.",
+        "guidance": "Witscript fine-tuned BERT for one epoch (produced best angles). If BERT's first predicted token is punctuation (indicates gibberish), fallback to selecting a prewritten angle template at random."
+      },
+      {
+        "name": "Dataset preparation constraints for fine-tuning BERT",
+        "description": "Source jokes were scraped (43,145), deduplicated, topics added where missing, extraneous lead-in/out words removed, and only jokes between 17 and 49 tokens retained. Remaining jokes (36,781) were manually annotated into topic and rest for fine-tuning.",
+        "guidance": "Tokens shorter than 17 tended to lack clear topic/angle/punch line; >49 tokens were too wordy to easily identify parts. These bounds were chosen empirically."
+      },
+      {
+        "name": "Finalize response: include filler word and repeat topic keywords for clarity/human-likeness",
+        "description": "Before output, prepend a randomly selected filler word (e.g., 'um', 'like') to make the response sound more humanlike, and repeat the two topic keywords at the beginning of the response to help the user make connections between input and punch line.",
+        "guidance": "Repetition helps comprehension when connections are obscure; filler words increase perceived human-likeness."
+      },
+      {
+        "name": "Human evaluation protocol (4-point scale and aggregation)",
+        "description": "Evaluate system output with human raters using a 4-point scale: 1 (not a joke), 2 (almost a joke), 3 (a joke), 4 (a very good joke). Collect 15 independent ratings per input/response pair, compute mean rating, and compute % of ratings \u22653 as 'percent judged jokes'. Raters in the study: U.S.-based MTurk, HIT approval \u226595%. Baseline: DialoGPT-large; gold: human professional joke.",
+        "guidance": "Use new chat for each DialoGPT test to avoid dialogue history effects; randomize order of items; evaluators blind to source of responses."
+      },
+      {
+        "name": "Computational creativity evaluation: novelty, value, intentionality",
+        "description": "To claim computational creativity rather than mere generation, output should exhibit: novelty (the generated contextually relevant joke is almost certainly new), value (human ratings demonstrate usefulness/funniness), and intentionality (system uses domain knowledge, embeddings, fine-tuned language model, and a fitness function to intentionally produce and filter output).",
+        "guidance": "Use these three characteristics as criteria when judging whether output qualifies as computational creativity."
+      },
+      {
+        "name": "Proposed comprehensive funniness score (feature-based fitness)",
+        "description": "Funniness of a candidate joke could be computed by combining weighted feature scores such as: wordplay score (punch line), interest score (how unrelated the two topic keywords are \u2014 less related \u2192 higher interest), and clarity score (degree to which topic keywords are related to their linked associations).",
+        "guidance": "Combine and weight features to yield a single funniness score for selecting the best full joke response (beyond only wordplay score)."
+      },
+      {
+        "name": "Design/implementation parameters determined experimentally (e.g., top-50 associations, syllable bounds, BERT epochs)",
+        "description": "Several hyperparameters were chosen empirically based on output quality: top-50 associations per keyword, minimum/maximum joke token lengths (17\u201349) for fine-tuning dataset, and fine-tuning BERT for one epoch produced the best angles.",
+        "guidance": "These empirically chosen parameters should be considered part of the production rubric \u2014 adjust and validate experimentally for other corpora/domains."
+      },
+      {
+        "name": "Limitations and recommended improvements for production quality",
+        "description": "Areas impacting production quality include: need for better NLP for selecting topic keywords (improved NER and POS to avoid misparsing 'TGI Fridays' or 'shares'), improved (non-static) association engine reflecting human associations and topicality, and extensions to use common-sense knowledge rather than only wordplay.",
+        "guidance": "These are concrete production criteria for future system versions: dynamic/updatable association resources, hybrid association engines combining distributional and association norms, and integration of commonsense knowledge for non-wordplay punch lines."
+      }
+    ]
+  }
+}
