@@ -1,0 +1,118 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/hks_factcheckers_data.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11084,
+  "output_tokens": 4180,
+  "elapsed_s": 754.2294729999267,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, fact-checking practitioners, and platform/policy stakeholders interested in measuring and comparing fact-checker behavior",
+    "subtask_short": "fact-checker agreement analysis",
+    "subtask_description": "Designing and executing a data-driven comparison of fact-checking organizations: collecting fact-check articles, identifying matching claims across organizations, and measuring rating agreement and sources of disagreement.",
+    "subtask_keywords": [
+      "misinformation",
+      "fact_checking",
+      "dataset_analysis",
+      "fact_checker_comparison"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Selection criteria for fact-checkers",
+        "description": "The selection was guided by specific criteria, including similar fact-checking domains and rating structures.",
+        "guidance": "Choose fact-checking organizations with comparable domains and rating systems to make cross-organizational comparisons feasible. The study selected Snopes, PolitiFact, Logically, and the Australian Associated Press FactCheck to represent a range from human-based analysis to AI-driven approaches and different regions (U.S. and Australia)."
+      },
+      {
+        "name": "Definition of matching claims",
+        "description": "Matching claims: corresponding claims that pertain to the same (mis)information that is being fact-checked (even though their wording could be slightly different).",
+        "guidance": "Treat two fact-checked summaries as a match when they essentially convey the same idea despite wording differences. Use claim summaries/titles provided by publishers as the canonical text to compare; automated methods can identify matches that manual keyword methods would miss."
+      },
+      {
+        "name": "Use claim summaries/titles as the suspicious-claim text",
+        "description": "Considered the summaries (Snopes' distinct \u201cclaim\u201d section, PolitiFact's title, etc.) as the suspicious claims that were refuted by the fact-checking articles.",
+        "guidance": "When building datasets, extract the canonical claim text from explicit 'claim' fields or titles rather than the full article body. This standardizes inputs for matching and similarity comparisons across different publishers."
+      },
+      {
+        "name": "Automated matching method (embedding + similarity threshold)",
+        "description": "To automatically identify matching claims, the authors used word embeddings and pre-trained models, testing Count vectorizer (Bag-of-Words), TF-IDF, and sentence BERT, and varied thresholds to identify the optimal approach.",
+        "guidance": "Compare multiple sentence/claim representations and tune the similarity threshold (the study varied thresholds in 0.05 intervals). The study found TF-IDF with cosine similarity and a 0.5 threshold provided the best performance on manually labeled data (Lim, 2018). Document and validate your chosen method against a labeled sample."
+      },
+      {
+        "name": "Distance metric and threshold tuning",
+        "description": "For the distance metric, cosine similarity was used; thresholds were varied (in 0.05 intervals, ranging from 0 to 1) to find the optimal cutoff.",
+        "guidance": "Systematically tune the similarity threshold and report performance (precision/recall) on a labeled gold set. Use cosine similarity with TF-IDF or other embeddings, but validate which embedding+threshold combination works best for your corpus."
+      },
+      {
+        "name": "Rating comparison strategy: original rating-level and combined veracity-level",
+        "description": "Used two rating levels for analysis: (1) preserved the original rating system for rating-level comparison (e.g., False, Mostly False, Mixture, Mostly True, True), and (2) combined True/Mostly True as Real and False/Mostly False as Fake for veracity-level (real vs. fake) comparison.",
+        "guidance": "Report agreement at both granular rating levels and at coarser veracity levels. Combining categories can clarify whether disagreements are substantive (real vs. fake) or merely due to granularity differences."
+      },
+      {
+        "name": "Handle rating-system granularity differences via mapping/combination",
+        "description": "Fact checkers used different rating granularities (e.g., PolitiFact's six-level Truth-O-Meter; Snopes' five-point scale plus additional fine-grained categories like miscaptioned, scam, satire).",
+        "guidance": "Create explicit mappings when comparing across systems (e.g., combine 'Pants on Fire' with 'False'), document exceptions, and account for extra categories (satire, miscaptioned) which may not map cleanly to truth/false axes."
+      },
+      {
+        "name": "Measure percent of matching claims and agreement rates",
+        "description": "Compute (a) the percentage of statements debunked by one fact checker that have at least one matching claim in another (e.g., 6.5% matching between Snopes and PolitiFact) and (b) among matches, the proportion with consistent ratings and consistent veracity.",
+        "guidance": "Report both the coverage of overlap (how many claims are cross-checked) and the internal agreement rates. Provide both per-organization and mutual-match statistics to reveal asymmetries."
+      },
+      {
+        "name": "Identify and categorize reasons for rating discrepancies",
+        "description": "Systematic reasons for rating discrepancies include: (1) differences in the granularity of verdict ratings, (2) differences in focus between fact checkers, (3) matching-but-subtly-different claims where key information differs, and (4) different timing in fact-checking. The study also found rare cases of divergent contextual interpretation.",
+        "guidance": "When disagreements occur, manually analyze a sample and code reasons into categories like granularity, focus, claim-content differences, timing, and context/interpretation. Provide illustrative examples for each category to validate coding."
+      },
+      {
+        "name": "Differences in focus between fact checkers",
+        "description": "Some disagreements arise because fact checkers emphasize different aspects of a claim (example: Snopes labeled a claim False while PolitiFact labeled a related claim Mostly False due to attention to office budget increases).",
+        "guidance": "Assess whether disagreeing ratings stem from different scopes of what was evaluated (exact phrasing vs. broader implication). Capture whether one organization evaluated a narrower fact while another evaluated a related but broader claim."
+      },
+      {
+        "name": "Similar-but-not-identical claims (key-information differences)",
+        "description": "Matches identified algorithmically can sometimes pair claims with different key facts (example: 'Five people died during the Jan. 6, 2021, U.S. Capitol riot' vs 'Only one person died on that day').",
+        "guidance": "After automated matching, check for critical numeric or factual differences in matched claim pairs. Consider stricter matching thresholds or post-filtering heuristics for claims containing quantities, dates, or named entities."
+      },
+      {
+        "name": "Timing of fact-checking as a source of discrepancy",
+        "description": "Timing differences can cause rating disagreements when one fact check occurs earlier and later evidence enables a different conclusion (example: Snopes labeled a claim Unproven; PolitiFact debunked it three days later).",
+        "guidance": "Record publication dates and consider temporal ordering when interpreting disagreements. Classify disagreements that resolve over time separately from persistent substantive disagreements."
+      },
+      {
+        "name": "Contextual interpretation can produce genuine contradictory verdicts",
+        "description": "Occasionally fact checkers reach conflicting conclusions due to divergent contextual readings (example: different interpretations of the scope of 'Anyone' in a quoted statement produced Mostly True vs Mostly False).",
+        "guidance": "Flag and qualitatively analyze cases where context/interpretation causes contradiction; provide full quote/context and rationale from each organization to adjudicate whether disagreement is resolvable or genuinely interpretive."
+      },
+      {
+        "name": "Manual review of automated-disagreement cases",
+        "description": "After the automatic analysis of rating consensus, the authors manually examined disagreed cases to identify reasons for different ratings (e.g., they manually analyzed 228 disagreed cases).",
+        "guidance": "Use human coders to inspect automated-match disagreements, document coding procedures, and report intercoder reliability where applicable. Manual review is necessary to interpret nuanced causes of disagreement that automated methods cannot resolve."
+      },
+      {
+        "name": "Author-distribution and authorship metrics as operational indicators",
+        "description": "Distribution of the number of fact-checking articles per author varies across fact checkers and likely reflects differences in operational scope and scale (e.g., Snopes had 13 authors, PolitiFact had 177; top authors wrote >20% on some platforms).",
+        "guidance": "Include authorship distributions, counts of unique authors per period, and top-contributor shares as part of organizational profiling; these metrics help interpret bias, capacity, and editorial structure differences."
+      },
+      {
+        "name": "Event-driven temporal analysis",
+        "description": "Major events (e.g., WHO's COVID-19 pandemic declaration, 2020 U.S. election) drive surges in fact-checking activity and should be considered when analyzing frequency over time.",
+        "guidance": "Compare article counts against event timelines and include event markers in temporal plots to contextualize spikes. Consider stratifying analyses by event vs. non-event periods."
+      },
+      {
+        "name": "Dataset creation procedural standards (crawling and metadata)",
+        "description": "Created web crawlers to gather fact-checking articles from the inception of each fact checker until a cutoff date (August 31, 2022); summarized key dataset variables (Table 4).",
+        "guidance": "When building datasets, script reproducible crawlers, document time windows, collect standardized metadata (date, author, claim text, rating, URL), and publish materials for replication (the authors archived materials on Harvard Dataverse)."
+      },
+      {
+        "name": "Platform and policy implication: consistency strengthens credibility",
+        "description": "Multiple fact checkers consistently conveying the same message increases credibility; platforms could consider showing fact-checking consistency across organizations.",
+        "guidance": "As a best practice for platforms, surface corroboration across independent fact-checkers to users (e.g., indicate when two or more organizations reach the same verdict) as it may increase public trust and the effectiveness of corrections."
+      },
+      {
+        "name": "Consider timing-of-correction literature when assessing effectiveness",
+        "description": "Previous meta-analyses identify timing of corrections (debunking vs. prebunking) as a significant factor influencing fact-checking effectiveness, though optimal timing remains debated.",
+        "guidance": "In impact studies, include timing as a covariate (delay between misinformation exposure and correction) and reference experimental literature (debunking often effective but prebunking can work in some contexts) when interpreting corrective influence."
+      }
+    ]
+  }
+}

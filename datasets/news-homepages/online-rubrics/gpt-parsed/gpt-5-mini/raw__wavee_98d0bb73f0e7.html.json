@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_98d0bb73f0e7.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8751,
+  "output_tokens": 2949,
+  "elapsed_s": 1570.8404997920152,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in natural language processing / sentiment analysis (graduate students, NLP engineers) who work on news/article sentiment classification",
+    "subtask_short": "news sentiment analysis (lexicon-based)",
+    "subtask_description": "Lexicon-based sentiment analysis of news articles at the document level, using lexical resources (WordNet / SentiWordNet), preprocessing (tokenize, lowercase, stop-word removal, stemming), TF-IDF weighting, and rule-based aggregation of word polarities to classify articles as positive, negative, or neutral.",
+    "subtask_keywords": [
+      "sentiment_analysis",
+      "news",
+      "lexicon_based",
+      "document_level",
+      "wordnet",
+      "sentiwordnet"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Lexicon-based approach (unsupervised)",
+        "description": "Uses predefined lists of words such that each word in the list is associated with a specific sentiment; does not require training data. \"This research is based on a method for Lexicon-based sentiment analysis of news articles\".",
+        "guidance": "Two main families: dictionary-based (use lexicon lookup) and corpus-based (discover opinion words from large corpora). Lexicon-based methods infer word sentiment by polarity in the lexicon and combine word polarities to infer sentence/document polarity."
+      },
+      {
+        "name": "Dictionary-based methods",
+        "description": "In these methods lexicon dictionary is used in order to find out the positive opinion words and negative opinion words.",
+        "guidance": "Use resources like WordNet and SentiWordNet to identify and score opinion-bearing words via synset IDs and preassigned sentiment scores."
+      },
+      {
+        "name": "Corpus-based methods",
+        "description": "In these methods large corpus of words is used and based on syntactic patterns other opinion words can be found within the context.",
+        "guidance": "Useful to expand lexicons and find context-specific opinion words; typically requires large domain corpora and pattern extraction."
+      },
+      {
+        "name": "Choice of analysis granularity (document/sentence/word/phrase)",
+        "description": "Sentiment analysis can be done on document level, sentence level, word level or phrase level. This paper explores sentiment analysis on the document level.",
+        "guidance": "At document level, the polarity of the whole document is the accumulative total (sum) of polarities of individual words/phrases/sentences. Choose granularity according to task needs (this work uses document-level aggregation)."
+      },
+      {
+        "name": "Text preprocessing steps",
+        "description": "Preprocessing is necessary to clean text and reduce inconsistencies: tokenization, transform to lowercase, stop-word removal, stemming (stem(wordNet)).",
+        "guidance": "Implemented via RapidMiner operators: \"Tokenize\", \"Transform\" (to lowercase), \"filter stop word (English)\", and \"stem (wordNet)\". Preprocessing improves downstream lexicon matching and reduces noise."
+      },
+      {
+        "name": "Use of POS tagging / lemmatization (where applicable)",
+        "description": "POS tagging and lemmatization/stemming are used as part of preprocessing to normalize words and support lexicon lookup (POS used in some referenced algorithms).",
+        "guidance": "POS tagging helps when using lexicons that are POS-sensitive (e.g., SentiWordNet tied to synsets). Lemmatization/stemming (e.g., via NLTK) improves matching to dictionary entries."
+      },
+      {
+        "name": "Term weighting using TF-IDF to identify important words",
+        "description": "After preprocessing, Term Frequency-Inverse Document Frequency (TF-IDF) is used to identify important words in a document; words that occur frequently in a document are considered important and assigned weightage.",
+        "guidance": "Use TF-IDF to prioritize which tokens receive sentiment scoring or to weight word sentiment contributions when aggregating to document score."
+      },
+      {
+        "name": "WordNet as lexical resource",
+        "description": "WordNet (lexical database) is used to find opinion words in a given text and to give sentiment scores (WordNet contains >118,000 word forms and >90,000 senses).",
+        "guidance": "WordNet enables mapping words to synsets; it's used directly (for stemming/lexical lookup) and as the basis for SentiWordNet mapping via synset IDs."
+      },
+      {
+        "name": "SentiWordNet for sentiment scoring",
+        "description": "SentiWordNet 3.0.0 dictionary was used to provide positive, negative and objective scores for words; WordNet and SentiWordNet are connected by Synset IDs.",
+        "guidance": "Use SentiWordNet scores for each token (positive/negative/objective) and compare positive vs negative scores per word to decide polarity; the paper used the RapidMiner \"extract sentiment\" operator backed by SentiWordNet."
+      },
+      {
+        "name": "Aggregation rule for document sentiment",
+        "description": "Combine polarities of individual words/phrases and sentences to compute the sentiment of the entire news article. \"The sentiment score of whole news article has been calculated using the 'extract sentiment' operator.\"",
+        "guidance": "Aggregate by averaging or summing word sentiment scores (paper reports average value of total word sentiments). The operator yields -1 (negative), 0 (neutral) or +1 (positive) final labels."
+      },
+      {
+        "name": "Sentiment label thresholds / scoring convention",
+        "description": "Text having a sentiment score of -1 is considered negative, 0 is neutral, and +1 is positive.",
+        "guidance": "Use the signed sentiment score produced (or thresholded average) to assign class labels; document-level outputs in this work were mapped exactly to -1/0/+1."
+      },
+      {
+        "name": "Dataset selection and class labels",
+        "description": "Use an appropriate news dataset; this paper used the BBC News dataset (2225 documents, five topical areas: business, entertainment, politics, sport, tech; articles from 2004-2005).",
+        "guidance": "Dataset topical distribution and source (single news outlet, language) affect generalizability; document counts per class should be reported when analyzing per-topic sentiment distributions."
+      },
+      {
+        "name": "Method choice trade-offs: lexicon-based vs machine learning",
+        "description": "Lexicon-based methods do not require labeled training data and are simpler to deploy; machine learning approaches (supervised) require labeled data but can produce more accurate results in some settings.",
+        "guidance": "Prior work (Meyer et al.) found ML approaches often yielded more accurate results than lexicon-only systems for fine-grained tasks. Consider availability of labeled data, domain drift, and lexicon coverage when choosing approach."
+      },
+      {
+        "name": "Evaluation / reporting of sentiment distribution",
+        "description": "Report counts and proportions of positive, negative and neutral articles by class/topic (e.g., table of totals per news class).",
+        "guidance": "Beyond raw counts, consider reporting accuracy, precision/recall, and confusion matrices if gold labels are available; in absence of gold labels, descriptive distributions can indicate patterns across topics."
+      },
+      {
+        "name": "Known limitations affecting quality",
+        "description": "Limitations include language coverage (focus on English), insufficient/limited word coverage in lexical databases (new words and new semantics), and dataset/domain variability affecting classifier accuracy and performance.",
+        "guidance": "Acknowledge lexicon update needs, consider multi-source/multilingual datasets, and evaluate domain transfer; the paper explicitly notes limitation of using English news from one source."
+      },
+      {
+        "name": "Implementation / tooling considerations (RapidMiner operators)",
+        "description": "Practical implementation used RapidMiner operators: 'Tokenize', 'Transform' (lowercase), 'filter stop word (English)', 'stem (wordNet)', TF-IDF operator, and 'extract sentiment' operator tied to SentiWordNet.",
+        "guidance": "When reimplementing, ensure equivalent preprocessing, TF-IDF weighting, and SentiWordNet mapping; document exact operator settings and parameters for reproducibility."
+      }
+    ]
+  }
+}

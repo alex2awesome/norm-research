@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_fab09e991631.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17760,
+  "output_tokens": 3701,
+  "elapsed_s": 1632.4853141659405,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "journalism and communication scholars, computational social scientists, media analysts and newsroom data scientists",
+    "subtask_short": "predicting news sharing from articles",
+    "subtask_description": "Developing and testing a framework of 'shareworthiness' by predicting the number of times news articles are shared on social media from article-level characteristics using automated content analysis and regression models. Includes operationalizations, classifiers, and modeling choices for large-scale observational data.",
+    "subtask_keywords": [
+      "news_sharing",
+      "shareworthiness",
+      "news_values",
+      "content_analysis",
+      "social_media",
+      "automated_coding"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Domestic topic",
+        "description": "H1a: Domestic issues increase the number of shares an article receives.",
+        "guidance": "Operationalized with a supervised machine learning (SML) classifier (trained on Dutch news) that codes whether an article refers to a domestic vs international issue. Classifier accuracy reported as 87% (AUC = 0.82)."
+      },
+      {
+        "name": "Geographical distance",
+        "description": "H1b: The lower the geographical distance to the closest country involved, the higher the number of shares an article receives.",
+        "guidance": "Parsed country/capital mentions in the article, calculated distance to Amsterdam via World Distance Calculator. Included only the closest country per article and created dummy bins (<500 km, 501\u20131,000 km, 1,001\u20132,000 km, 2,001\u20135,000 km, 5,001\u201310,000 km, >10,000 km) with 0 km (within Netherlands) as reference."
+      },
+      {
+        "name": "Cultural proximity (Western involvement)",
+        "description": "H1c: Issues involving Western countries increase the number of shares an article receives.",
+        "guidance": "Cultural proximity coded as a binary variable based on Huntington\u2019s civilizations: Western = 1, non-Western = 0."
+      },
+      {
+        "name": "Conflict / controversy",
+        "description": "H2: The presence of conflict increases the number of shares an article receives.",
+        "guidance": "Operationalized using Semetko & Valkenburg\u2019s conflict-frame indicators (disagreement, opposing positions). Coded via an SML classifier (accuracy ~80%, AUC = 0.78)."
+      },
+      {
+        "name": "Human interest / entertainment",
+        "description": "H3: The presence of a human interest angle increases the number of shares an article receives.",
+        "guidance": "Human interest indicators include providing human examples/faces, vignettes evoking feelings, and mentioning effects on individuals or groups. Coded with an SML classifier (accuracy ~79%, AUC = 0.78). Authors link this to entertainment/soft news tendencies."
+      },
+      {
+        "name": "Positivity (positive tone)",
+        "description": "H4: A positive tone increases the number of shares an article receives relative to a neutral tone.",
+        "guidance": "Measured with SentiStrength (positivity scale 1 'not positive' to 5 'very positive'). Positivity is treated as largely orthogonal to negativity; SentiStrength reported accuracy 96.9% when a 1-point difference on the 5-point scale is acceptable."
+      },
+      {
+        "name": "Negativity (negative tone)",
+        "description": "H5: A negative tone increases the number of shares an article receives relative to a neutral tone.",
+        "guidance": "Measured with SentiStrength (negativity scale reversed so both positivity and negativity range 1\u20135). Positivity and negativity can co-occur (low correlation r = .16 in data)."
+      },
+      {
+        "name": "Exclusiveness \u2014 press agency authorship",
+        "description": "RQ1: How does being written by a news agency influence the number of shares an article receives?",
+        "guidance": "Detected by parsing bylines for wire-service or news-agency initials; presence of a news agency byline used as an indicator of lower exclusiveness (may reduce individual incentive to share)."
+      },
+      {
+        "name": "Exclusiveness \u2014 topic popularity score",
+        "description": "RQ2: How does the frequency with which the specific topic of an article is covered in the news at the same time influence the shares a specific article receives?",
+        "guidance": "Topic popularity computed from nouns in article titles: for each 2-week period build popularity-weight vectors (standardized counts of titles containing each noun) and score each article as the mean popularity weight across its title nouns (lower topic popularity interpreted as greater exclusiveness). Frog Dutch morphosyntactic analyzer used to extract nouns."
+      },
+      {
+        "name": "Dependent variable \u2014 Twitter shares",
+        "description": "Number of tweets that include a link to the article, used as the Twitter sharing measure.",
+        "guidance": "Retrieved via Twitter API (queries done Oct 3\u201316, 2014) after >1 month lag to reduce ongoing sharing. For Twitter, count is interpreted straightforwardly as number of shares; distribution is count-like and highly skewed."
+      },
+      {
+        "name": "Dependent variable \u2014 Facebook interactions",
+        "description": "Facebook interactions as a composite measure of sharing-related activity for an article\u2019s URL.",
+        "guidance": "Retrieved via Facebook API; defined as sum of URL likes, shares (including manual copy/paste), and likes/comments on Facebook stories about the URL. Authors note this inflates 'sharing' relative to a strict share count, but may capture related activity that increases visibility."
+      },
+      {
+        "name": "Control variable \u2014 Article length",
+        "description": "Length of the article (measured in characters) included as a control because sharing may vary by story length.",
+        "guidance": "Measured in characters (entered in model in units of 1,000 characters and centered around mean)."
+      },
+      {
+        "name": "Control variable \u2014 Topic categories (main topic)",
+        "description": "Main topic of the article included as a control because different topics receive different baseline sharing.",
+        "guidance": "Main topic determined by an SML classifier based on Comparative Agendas Project topics (originally 19 topics; authors aggregated into 10 categories: defense & foreign affairs; political system; economic policy; social affairs & education; law & order; infrastructure; science & technology; culture & entertainment; weather & disasters; sports). Classifier F1 = .71 (multiclass)."
+      },
+      {
+        "name": "Control variable \u2014 News site fixed effects",
+        "description": "Dummy variables for each news site to account for differing baseline popularity between outlets.",
+        "guidance": "Dummy variables entered for each site (parool.nl used as reference) to adjust intercepts for site-level differences in sharing."
+      },
+      {
+        "name": "Control variable \u2014 Time (days since start)",
+        "description": "Number of days since beginning of data collection included to control for temporal trends in platform usage or site popularity.",
+        "guidance": "Entered as a covariate to account for changing platform/site popularity over the sampling period."
+      },
+      {
+        "name": "Modeling choice \u2014 Negative binomial regression for count outcomes",
+        "description": "Use negative binomial regression to model number of shares/interactions because dependent variables are count data with overdispersion.",
+        "guidance": "Authors examined distributional properties (mean << variance) and compared Poisson vs negative binomial; negative binomial chosen due to overdispersion and substantially better log-likelihoods. Results reported as incidence rate ratios (IRRs)."
+      },
+      {
+        "name": "Operationalization using supervised machine learning classifiers",
+        "description": "Use SML classifiers to code article-level features (domestic/international, conflict, human interest, topic) at scale.",
+        "guidance": "Classifiers trained on human-coded training sets; used scikit-learn for training/testing. Reported performance metrics: classifier for domestic scope AUC = 0.82 (accuracy 87%), conflict AUC = 0.78 (80% accuracy), human interest AUC = 0.78 (79% accuracy), topic classifier F1 = .71. Authors note automated coding trade-offs (ecological validity vs. coding limitations)."
+      },
+      {
+        "name": "Sentiment measurement \u2014 SentiStrength",
+        "description": "Use SentiStrength algorithm to derive article-level positivity and negativity scores.",
+        "guidance": "Both positivity and negativity scaled 1\u20135 (1 = not positive/not negative, 5 = very positive/very negative); negativity scale reversed to align ranges. Authors note SentiStrength was developed/evaluated for English but consider Dutch version sufficiently valid; report 96.9% accuracy for 1-point tolerance."
+      },
+      {
+        "name": "Practical utility (informational usefulness) \u2014 hypothesized factor",
+        "description": "Messages with high practical utility (perceived informational usefulness) may be shared more frequently, suggested by prior literature.",
+        "guidance": "Authors acknowledge practical utility as an important predictor (cites Berger & Milkman, Bobkowski) but explicitly exclude it from analysis due to lack of validated automated coding method for this feature at scale; recommended as future research direction."
+      }
+    ]
+  }
+}

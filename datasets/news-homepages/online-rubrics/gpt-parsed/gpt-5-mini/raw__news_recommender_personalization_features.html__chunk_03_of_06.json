@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/news_recommender_personalization_features.html",
+  "task": "news-homepages",
+  "source_dir": "raw",
+  "source_file": "news_recommender_personalization_features.html",
+  "chunk_idx": 3,
+  "n_chunks": 6,
+  "chunk_chars": 38564,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.47189212500234,
+  "input_tokens": 10689,
+  "output_tokens": 4379,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on personalized news recommender systems (academia and industry)",
+    "subtask_short": "personalized news recommendation",
+    "subtask_description": "Designing, training, evaluating and deploying personalized news recommender systems, including modeling news and users, ranking strategies, training procedures, evaluation metrics, datasets, and responsible-AI considerations.",
+    "subtask_keywords": [
+      "news_recommendation",
+      "recommender_systems",
+      "personalization",
+      "evaluation_metrics",
+      "model_training"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Relevance-based news ranking",
+        "description": "Relevance-based news ranking methods need to accurately evaluate the relevance between candidate news and user interest for subsequent news ranking; many methods model overall relevance by matching unified representations of user interest and candidate news.",
+        "guidance": "Directly matching overall user interest with candidate news may be suboptimal because candidate news usually only matches part of user interests. Fine-grained methods model relatedness between candidate news and clicked news to improve accuracy but are more time-consuming because user representations become candidate-dependent and cannot be precomputed. Pure relevance matching may also reduce diversity (recommend similar items) and worsen filter bubbles."
+      },
+      {
+        "name": "Fine-grained interest matching (relatedness to clicked news)",
+        "description": "Evaluate relevance between user interest and candidate news in a fine-grained way by modeling the relatedness between candidate news and clicked news.",
+        "guidance": "Improves accuracy of relevance modeling but is time-consuming (representations depend on candidate news and cannot be computed in advance). Tradeoff between improved matching accuracy and computational cost."
+      },
+      {
+        "name": "Reinforcement learning-based ranking (long-term optimization)",
+        "description": "RL-based ranking algorithms aim to find the optimal ranking policy to maximize long-term reward rather than greedy per-impression relevance.",
+        "guidance": "Has exploration ability that can increase diversity and discover potential user interests; more suitable for improving long-term user experience and engagement but may sacrifice short-term CTRs. Use techniques (e.g., DQN, Dueling Bandit Gradient Descent) to address classical exploration drawbacks."
+      },
+      {
+        "name": "Greedy per-impression matching vs long-term policy",
+        "description": "Many relevance-based methods greedily choose the news in each impression that best satisfies the ranking policy on the current candidate list, which may not be optimal for long-term user experience.",
+        "guidance": "Consider RL or global optimization to avoid short-sighted recommendations; be aware of trade-offs between immediate CTR and long-term engagement."
+      },
+      {
+        "name": "Incorporating novelty, popularity, and recency in ranking",
+        "description": "Adjust news ranking strategy by incorporating factors such as news novelty, popularity and recency to diversify recommendations and mitigate filter bubbles.",
+        "guidance": "These factors can improve diversity and expose users to broader information; must balance with relevance to user interests to avoid harming user experience."
+      },
+      {
+        "name": "Use of implicit click feedback versus explicit ratings",
+        "description": "Most methods use abundant implicit feedback (clicks) as prediction targets because explicit feedback like ratings is sparse.",
+        "guidance": "Clicks are plentiful but noisy and may not fully reflect true user interests (risk of clickbait optimization). Consider augmenting with other engagement signals (dwell time, finish, likes, shares) to learn engagement-aware models."
+      },
+      {
+        "name": "Loss function and training objective choices",
+        "description": "Depending on formulation: MSE for rating-prediction regression; classification for click prediction; contrastive losses (BPR, InfoNCE) to exploit relations between clicked and nonclicked samples.",
+        "guidance": "BPR compares each clicked sample with one nonclicked but exploits limited negatives. InfoNCE samples multiple negatives and normalizes via softmax to use more negative information. Choice affects ability to leverage negative samples and ranking performance."
+      },
+      {
+        "name": "Design and use of auxiliary / multi-task training objectives",
+        "description": "Train models jointly on recommendation and auxiliary tasks (e.g., reading satisfaction, dwell time prediction, finish prediction, topic prediction, sentiment prediction, popularity/local news detection) to encode additional information.",
+        "guidance": "Auxiliary tasks can improve representations without requiring those features at inference time, but balancing (weighting) multiple loss functions is non-trivial and coefficients can be dataset-sensitive; careful tuning required."
+      },
+      {
+        "name": "Negative sampling strategy for training",
+        "description": "Construction of labeled training samples typically pairs positive clicks with negative samples randomly drawn from the news set or impression list.",
+        "guidance": "Random negatives may be too easy and not help learning discriminative models. Study influence of negative sample quantity and consider harder negative sampling strategies to improve training."
+      },
+      {
+        "name": "Training environment: centralized offline vs distributed/online/federated",
+        "description": "Many models are trained offline on centrally stored data with centralized compute, but this paradigm has drawbacks: computation limits for large models, mismatch with online application distribution shifts, and privacy risks from central storage.",
+        "guidance": "Consider distributed training with acceleration (data rearrangement, cache), online training on streaming data to handle distribution drift, and federated/decentralized approaches to mitigate privacy risks."
+      },
+      {
+        "name": "Federated learning and local differential privacy (LDP) for training/serving",
+        "description": "Federated learning frameworks store user data locally and aggregate model updates; LDP can perturb local gradients to protect privacy.",
+        "guidance": "Federated approaches (FedRec, Uni-FedRec, Efficient-FedRec) can enable privacy-preserving training and serving (decompose embeddings, protect weights, split heavy news model on server and light user model on clients). Tradeoffs include communication cost, performance degradation from DP, difficulty incorporating some collaborative/context features, and deployment complexity."
+      },
+      {
+        "name": "Model decomposition to reduce communication costs in federated settings",
+        "description": "Decompose the whole model into a heavy news model on the server and a lightweight user model on clients; distribute hidden news representations to clients for training/serving.",
+        "guidance": "Allows incorporation of large models (e.g., BERT) on server side while keeping client computation light; communication and privacy trade-offs must be managed."
+      },
+      {
+        "name": "AUC for classification-based evaluation",
+        "description": "Area Under Curve (AUC) is widely used for methods treating recommendation as a classification task; it measures ranking separability between positive and negative samples.",
+        "guidance": "Compute as proportion of positive-negative pairs where positive ranked higher. Common baseline metric for click-prediction tasks and competitions."
+      },
+      {
+        "name": "Precision, Recall and F1 (classification metrics)",
+        "description": "Standard classification metrics computed from TP, FP, FN: Precision = TP/(TP+FP); Recall = TP/(TP+FN); F1 = 2 * Precision * Recall /(Precision+Recall).",
+        "guidance": "Useful for thresholded decision evaluation; complement AUC for practical tradeoffs between false positives and false negatives."
+      },
+      {
+        "name": "Regression metrics: MAE, MSE, RMSE, PCC",
+        "description": "For rating-prediction formulations, use mean absolute error (MAE), mean squared error (MSE), root MSE (RMSE) and Pearson correlation coefficient (PCC) between real and predicted ratings.",
+        "guidance": "Choose metric according to sensitivity to outliers (MSE/RMSE penalize large errors) and correlation orientation (PCC measures linear association)."
+      },
+      {
+        "name": "Ranking metrics: AP, HR@K, MRR, nDCG@K",
+        "description": "When modeling recommendation as ranking, use Average Precision (AP), Hit Ratio@K (HR@K), Mean Reciprocal Rank (MRR), and normalized Discounted Cumulative Gain@K (nDCG@K) applied to top-K recommendation lists.",
+        "guidance": "These metrics focus on top-K quality; nDCG accounts for graded relevance; HR@K and MRR capture presence and position of relevant items."
+      },
+      {
+        "name": "Online engagement metrics: CTR and dwell time",
+        "description": "Click-Through Rate (CTR) and dwell time measure online recommender performance in live systems.",
+        "guidance": "CTR sensitive to short-term clickability and presentation biases; dwell time better captures engagement/quality. Use both to evaluate user experience beyond accuracy."
+      },
+      {
+        "name": "Novelty assessment (human-judged)",
+        "description": "Novelty can be evaluated subjectively by human raters ordering news sets from most novel to least novel.",
+        "guidance": "Human evaluation captures perceived novelty but is costly and subjective; combine with automatic proxies where possible."
+      },
+      {
+        "name": "User engagement metrics (average dwell time, finish ratio, dislike ratio, share ratio)",
+        "description": "Engagement-related metrics (average dwell time, finish ratio, dislike ratio, share ratio) provide broader evaluation beyond CTR.",
+        "guidance": "Useful to build engagement-aware recommendation models and to improve user experience; include in evaluation suites for comprehensive assessment."
+      },
+      {
+        "name": "Diversity metrics: Intra-List Similarity (ILS) and ILAD",
+        "description": "Measure diversity of recommendation lists; ILS computes average cosine similarity between items in a ranking list; ILAD is a related diversity metric used in some works.",
+        "guidance": "Lower ILS indicates more diverse lists. Use diversity metrics to quantify variety and mitigate homogeneous recommendation outputs."
+      },
+      {
+        "name": "Sentiment diversity metrics (SentiMRR, Senti@5, Senti@10)",
+        "description": "Metrics to measure sentiment difference between historical clicked news and candidate news, e.g., SentiMRR, Senti@5, Senti@10 computed from sentiment scores of ranked candidates.",
+        "guidance": "Can be used to ensure recommendations cover sentiment variety and avoid reinforcing sentiment homogeneity; formulas depend on sentiment scoring of items."
+      },
+      {
+        "name": "Fairness evaluation via sensitive-attribute prediction accuracy",
+        "description": "Evaluate consumer-side unfairness by measuring accuracy of predicting sensitive attributes (e.g., gender) from top recommendation results \u2014 higher accuracy means more serious unfairness.",
+        "guidance": "If sensitive attributes can be inferred from recommendations, the system may be biased. Use this as a proxy for consumer-side fairness assessment."
+      },
+      {
+        "name": "Provider-side fairness metrics: EAGF and SPD",
+        "description": "Provider-side fairness measured by Equity Attention for Group Fairness (EAGF) and Supplier Popularity Deviation (SPD), which compare recommended item distributions per group against training set distributions.",
+        "guidance": "Higher EAGF and lower SPD indicate better fairness. Use these metrics to evaluate whether recommendation exposure is equitable across author/publisher groups."
+      },
+      {
+        "name": "Privacy protection metrics: privacy budget and membership inference attacks",
+        "description": "Measure privacy in federated or privacy-preserving models by the privacy budget of gradients (DP parameters) and by conducting membership inference attacks on user behavior histories.",
+        "guidance": "Privacy budget indicates theoretical privacy guarantees; membership inference empirically tests whether private behaviors are recoverable from models. Use both for comprehensive privacy evaluation."
+      },
+      {
+        "name": "Dataset choice and benchmarking standardization (use MIND)",
+        "description": "Dataset selection strongly affects comparability; MIND is recommended as a standard testbed because it provides fixed training/validation/test splits and consistent metrics and a public leaderboard.",
+        "guidance": "Many public datasets (Adressa, Plista, Globo, Yahoo!) use different preprocessing across works, making head-to-head comparisons difficult. Prefer standard benchmarks with leaderboards and fixed evaluation protocols for reproducibility."
+      },
+      {
+        "name": "Competitions and evaluation tasks (NEWSREEL, MIND challenge)",
+        "description": "Competitions typically define two tasks: online living-lab recommendation to maximize CTR and offline simulated prediction to predict future reads (AUC).",
+        "guidance": "Leaderboards and public challenges provide standardized evaluation and encourage progress; interpret online and offline task results differently (CTR vs predicted clicks/AUC)."
+      },
+      {
+        "name": "Content moderation and avoidance of low-quality/harmful content",
+        "description": "Recommendation algorithms should avoid promoting clickbaits, fake news, misinformation, adversarial or harmful content (e.g., hate speech).",
+        "guidance": "Signals for low-quality content include high ratios of short dwell times (e.g., <10s); user activities like comments and social sharing can provide clues. Combine content analysis and user feedback for moderation-aware recommendation."
+      },
+      {
+        "name": "Debiasing user behavior signals",
+        "description": "Address biases in user behavior data (presentation/position bias, popularity bias, exposure/selection biases) to infer debiased user interests for better recommendations.",
+        "guidance": "Methods (e.g., bias-aware modeling, separating bias score and bias-independent preference) can reduce some biases but cannot fully eliminate them without unbiased data; many biases remain under-studied in news recommendation."
+      },
+      {
+        "name": "Fairness-aware modeling techniques and limitations",
+        "description": "Use methods such as decomposed adversarial learning to learn bias-aware and bias-free embeddings (regularized orthogonality) to mitigate unfairness related to sensitive attributes.",
+        "guidance": "Adversarial approaches can reduce attribute-related bias but are brittle, hyperparameter-sensitive, and may not generalize across fairness genres (consumer/provider). Evaluate robustness and tuning difficulty."
+      },
+      {
+        "name": "Diversity-aware recommendation and tradeoffs",
+        "description": "Diversity is important because users may not prefer homogeneous news; many methods focus on accuracy at the expense of diversity and rely on reranking to improve variety.",
+        "guidance": "Reranking strategies can improve diversity but may not optimally trade off accuracy and diversity. Aim to learn unified diversity-aware models rather than post-hoc reranking when possible."
+      },
+      {
+        "name": "Known challenges for privacy-preserving methods",
+        "description": "Differential privacy can cause large performance sacrifices; it's difficult to involve context features and collaborative info (e.g., in GNNs); real-world deployment of federated news recommenders is hard.",
+        "guidance": "Research is needed to reduce DP utility loss, incorporate collaborative/context features under privacy constraints, and design practical federated serving pipelines."
+      },
+      {
+        "name": "Deep news understanding as a future direction",
+        "description": "Improve news modeling via deeper text understanding (knowledge-aware pre-trained language models), multimodal content modeling (images/videos), and unified frameworks to incorporate publisher, popularity and recency features.",
+        "guidance": "Combining advanced NLP, multimodal techniques and unified feature modeling can enhance news representations and downstream user modeling and ranking."
+      }
+    ]
+  }
+}

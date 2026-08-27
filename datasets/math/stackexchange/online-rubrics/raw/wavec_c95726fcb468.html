@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Problem Collection for China</title>
+   <link rel="icon" href="faviconimm.svg" type="image/svg+xml" >
+  <meta name="description" content="Problem Collection for China. History and System. China at International Competitions. Problems. . ">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://imomath.com/css/gradeyard.css">
+  <script src="https://imomath.com/js/jquery.min.js"></script>
+  <script src="https://imomath.com/js/p.min.js"></script>
+
+
+
+<SCRIPT LANGUAGE="javascript">
+<!--
+function toggle(hidingDiv, linkDiv,revealName,hideName) {
+	var hidingT = document.getElementById(hidingDiv);
+	var linkT = document.getElementById(linkDiv);
+	if(hidingT.style.display == "block") {
+    		hidingT.style.display = "none";
+		linkT.innerHTML = revealName;
+  	}
+	else {
+		hidingT.style.display = "block";
+		linkT.innerHTML = hideName;
+	}
+}
+//-->
+</SCRIPT>
+
+ <script id="MathJax-script" async
+          src="https://imomath.com/mathjax/tex-mml-chtml.js">
+  </script>
+
+<script>
+function renderTotpSequence(totp, sec, initial_lapse, options = {}) {
+  sec = Math.max(1, Number(sec)||30);
+  const k = Array.isArray(totp) ? totp.length : 0;
+  if (k === 0) return;
+
+  let elapsed0 = Math.max(0, Number(initial_lapse)||0);
+  const totalSpan = k * sec;
+  if (elapsed0 > totalSpan) elapsed0 = totalSpan;
+
+  const { mount = null, position = "append", injectStyles = true } = options;
+
+  // --- Styles (black text, centered, short bar) ---
+  if (injectStyles && !document.getElementById("totp-seq-styles")) {
+    const style = document.createElement("style");
+    style.id = "totp-seq-styles";
+    style.textContent = `
+      .totp-seq { 
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; 
+        max-width: 420px; 
+        text-align: center;
+        margin: 20px auto;
+      }
+      .totp-row { 
+        background: #fff; 
+        padding: 8px 10px; 
+        border-radius: 10px; 
+        box-shadow: 0 1px 3px rgba(0,0,0,.07); 
+        margin: 10px 0; 
+        display: inline-block;
+      }
+      .totp-code { 
+        font-size: 22px; 
+        letter-spacing: 2px; 
+        color: #000;
+        text-align: center;
+      }
+      .totp-bar { 
+        position: relative; 
+        height: 4px;
+        width: 70%;
+        background: #eee; 
+        border-radius: 999px; 
+        overflow: hidden; 
+        margin: 0 auto 8px auto;
+      }
+      .totp-fill { 
+        position: absolute; left: 0; top: 0; bottom: 0; 
+        width: 0%; background: #0a0;
+      }
+      .totp-bar.expired { background: #e53935; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // --- Container ---
+  const container = document.createElement("div");
+  container.className = "totp-seq";
+
+  // --- Build rows ---
+  const rows = totp.map(code => {
+    const row = document.createElement("div");
+    row.className = "totp-row";
+
+    const bar = document.createElement("div");
+    bar.className = "totp-bar";
+
+    const fill = document.createElement("div");
+    fill.className = "totp-fill";
+    bar.appendChild(fill);
+
+    const codeEl = document.createElement("div");
+    codeEl.className = "totp-code";
+    codeEl.textContent = code;
+
+    row.appendChild(bar);
+    row.appendChild(codeEl);
+    container.appendChild(row);
+
+    return { row, bar, fill, codeEl };
+  });
+
+  const markExpired = (i) => {
+    const { bar, fill } = rows[i];
+    fill.style.width = "100%";
+    bar.classList.add("expired");
+    fill.style.background = "#e53935";
+  };
+  const resetToIdle = (i) => {
+    const { bar, fill } = rows[i];
+    bar.classList.remove("expired");
+    bar.style.background = "";
+    fill.style.width = "0%";
+    fill.style.background = "#0a0";
+  };
+  const setActiveProgress = (i, frac) => {
+    const { bar, fill } = rows[i];
+    bar.classList.remove("expired");
+    fill.style.background = "#0a0";
+    fill.style.width = (Math.max(0, Math.min(1, frac)) * 100).toFixed(3) + "%";
+  };
+
+  let startIndex = Math.floor(elapsed0 / sec);
+  if (startIndex >= k) {
+    for (let i = 0; i < k; i++) markExpired(i);
+  } else {
+    const intra = elapsed0 - startIndex * sec;
+    for (let i = 0; i < startIndex; i++) markExpired(i);
+    for (let i = startIndex + 1; i < k; i++) resetToIdle(i);
+    setActiveProgress(startIndex, intra / sec);
+
+    let idx = startIndex;
+    let slotStartMs = performance.now() - intra * 1000;
+    let rafId = null;
+
+    const tick = (now) => {
+      if (idx >= k) return;
+      const elapsedMs = now - slotStartMs;
+      const frac = elapsedMs / (sec * 1000);
+      if (frac < 1) {
+        setActiveProgress(idx, frac);
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      setActiveProgress(idx, 1);
+      markExpired(idx);
+      idx += 1;
+      if (idx >= k) {
+        cancelAnimationFrame(rafId);
+        return;
+      }
+      slotStartMs = now;
+      resetToIdle(idx);
+      setActiveProgress(idx, 0);
+      rafId = requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }
+
+  // --- Mount logic ---
+  let mountEl = null;
+  if (typeof mount === "string") {
+    mountEl = document.querySelector(mount);
+  } else if (mount instanceof Element) {
+    mountEl = mount;
+  }
+
+  if (mountEl) {
+    if (position === "replace") {
+      mountEl.replaceChildren(container);
+    } else if (position === "prepend") {
+      mountEl.prepend(container);
+    } else {
+      mountEl.appendChild(container);
+    }
+  } else {
+    // No mount provided: try to place before the current script tag if possible
+    const currScript = document.currentScript;
+    const parent = (currScript && currScript.parentElement) || document.body;
+    if (currScript && parent === document.body) {
+      parent.insertBefore(container, currScript);
+    } else {
+      parent.appendChild(container);
+    }
+  }
+
+  return container; // you can move/remove it later if needed
+}
+</script>
+
+ <style>
+      canvas {
+        border: 1px solid black;
+      }
+</style>
+</head>
+<body>
+
+
+
+
+<nav class="navbar navbar-expand-sm  bg-primary navbar-dark">
+<div class="container">
+
+  <a class="navbar-brand" href="index.cgi">
+  
+
+<svg width="24" height="33" class="bi bi-images" role="none" aria-labelledby="svgLogo svgDesc">
+<title id="svgLogo">Website logo</title>
+  <desc id="svgDesc">The logo image for the website</desc>
+<g transform="scale(0.3)">
+<!-- First row//-->
+    <path d="m 0 10 l 10 -10 l 10 10 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 10 l 10 10 l 0 10 l -10 -10 l 0 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 10 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 15 20 l 10 -10 l 10 10 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 20 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 20 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 30 30 l 10 -10 l 10 10 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 30 30 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 30 30 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 45 40 l 10 -10 l 10 10 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 45 40 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 45 40 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 60 50 l 10 -10 l 10 10 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 60 50 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 60 50 m 10 10 l 10 -10 l 0 10 l -10 10 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+<!-- Second row//-->
+   <path d="m 0 30 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 30 l 10 10 l 0 10 l -10 -10 l 0 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 30 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 15 40 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 40 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 40 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 30 50 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 30 50 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 30 50 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 45 60 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 45 60 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 45 60 m 10 10 l 10 -10 l 0 10 l -10 10 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+ <!-- Third row//-->
+   <path d="m 0 50 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 50 l 10 10 l 0 10 l -10 -10 l 0 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 50 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 15 60 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 60 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 60 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 30 70 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 30 70 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 30 70 m 10 10 l 10 -10 l 0 10 l -10 10 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+
+ <!-- Fourth row//-->
+   <path d="m 0 70 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 70 l 10 10 l 0 10 l -10 -10 l 0 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 70 m 10 10 l 10 -10 l 0 5 l -5 5 l 0 5 l -5 5 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+  <path d="m 15 80 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 80 l 10 10 l 0 10 l -5 -5 l 0 -5 l -5 -5 l 0 -5" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 15 80 m 10 10 l 10 -10 l 0 10 l -10 10 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+ <!-- Fifth row//-->
+   <path d="m 0 90 l 5 -5 l 5 5 l 5 -5 l 5 5 l -10 10 l -10 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 90 l 10 10 l 0 10 l -10 -10 l 0 -10" style="fill:none;stroke:currentColor;stroke-width:1"/>
+    <path d="m 0 90 m 10 10 l 10 -10 l 0 10 l -10 10 l 0 -10" style="fill:currentColor;stroke:currentColor;stroke-width:1"/>
+
+</g>
+</svg>
+
+
+
+</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+     <li class="nav-item">
+        <a class="nav-link" href="index.cgi">IMOmath</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="index.cgi?page=problemsFromOlympiads">Olympiads</a>
+      </li>
+  <li class="nav-item">
+        <a class="nav-link" href="index.cgi?page=bookTheIMOCompendium">Book</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="index.cgi?page=mathTexts">Training</a>
+      </li>
+ <li class="nav-item">
+        <a class="nav-link" href="index.cgi?page=query">Calculator</a>
+      </li>
+    </ul> 
+  </div>
+</div>
+</nav>
+
+ 
+ 
+
+
+
+
+ <p></p>
+
+<main id="main-content" tabindex="-1">
+
+
+<div  class="container">
+  
+<p></p>
+<p><A href="https://imomath.com/index.cgi?page=problemsFromOlympiads">Problems from olympiads (main page)</A></p>
+<h1>Problem Collection for China</h1>
+<h2>History and System</h2>
+What is now known as Chinese Mathematical Olympiad was established in 1986 and was initially called \“Winter Camp\“. The olympiad is organized in the IMO format and takes place in late January or early February. Nevertheless, mathematical competitions in China have a much longer tradition. Various competitions such as Beijing Mathematical Olympiad seem to be held since some 60 years ago.
+
+<h2>China at International Competitions</h2>
+China has participated at the IMO since 1985. The IMO team is selected through a selection test in April and a number of smaller competitions during the training program held afterwards. In fact, participation at the IMO is for a Chinese student much more than just a competition - it secures admission for one of prestigeous universities in China which is normally, in a country of more than a billion people, extremely difficult to get otherwise. No wonder that the best, umm... the worst ranking of a Chinese team at the recent IMOs was the 6-th place in 1996.
+
+<h2>Problems</h2>
+<p>The total number of available problems is <b>122</b>.</p>
+<div class="row"><div class="col-sm-4"><table class="table table-striped table-responsive table-hover" aria-label="main table">
+<thead class="table-secondary">
+<tr>
+<th scope="col">Year</th>
+<th scope="col">TSE</th>
+</tr>
+ </thead><tbody><tr>
+<td>1986</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST86.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1987</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST87.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1988</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST88.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1989</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST89.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1990</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST90.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1991</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST91.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1992</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST92.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1993</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST93.pdf">TSE</a></td>
+</tr>
+</tbody></table>
+</div><div class="col-sm-4"><table class="table table-striped table-responsive table-hover" aria-label="main table">
+<thead class="table-secondary">
+<tr>
+<th scope="col">Year</th>
+<th scope="col">TSE</th>
+</tr>
+ </thead><tbody><tr>
+<td>1994</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST94.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1995</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST95.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1996</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST96.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1997</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST97.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1998</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST98.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>1999</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST99.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>2000</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST00.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>2001</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST01.pdf">TSE</a></td>
+</tr>
+</tbody></table>
+</div><div class="col-sm-4"><table class="table table-striped table-responsive table-hover" aria-label="main table">
+<thead class="table-secondary">
+<tr>
+<th scope="col">Year</th>
+<th scope="col">TSE</th>
+</tr>
+ </thead><tbody><tr>
+<td>2002</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST02.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>2003</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST03.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>2004</td>
+<td><a target="_new" href="othercomp/Chn/ChnTST04.pdf">TSE</a></td>
+</tr>
+<tr>
+<td>2005</td>
+<td>TSE</td>
+</tr>
+<tr>
+<td>2006</td>
+<td>TSE</td>
+</tr>
+<tr>
+<td>2007</td>
+<td>TSE</td>
+</tr>
+<tr>
+<td>2008</td>
+<td>TSE</td>
+</tr>
+<tr>
+<td>2009</td>
+<td>TSE</td>
+</tr>
+</tbody></table>
+</div></div>
+
+</div>
+</main>
+<div class="container">
+<hr/>
+<footer class="text-center">
+<small>
+<ul class="list-inline" >
+<li class="list-inline-item">  <a  href="https://gradeyard.com"> <svg width="17" height="17">
+<g transform="scale(0.1)" >
+     <path style="fill:currentcolor;stroke:none;stroke-width:1" d="m 15,85 15,-50 25,-20 60,0 15,15 -25,35 -40,-20 -10,10 -5,15 30,55 20,0 -30,-55 40,20 30,55, -15,10 -60,0 -25,-20 -25,-50"/>     
+<path style="fill:currentcolor;stroke:none;stroke-width:1" d="m 146,46 14,14 -12,18, 21,44 -15,10 -28,-56 20,-30"/>
+</g>
+</svg> GradeYard</a> </li>  
+</ul>
+</small>
+</footer>
+</div>
+<script src="https://imomath.com/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

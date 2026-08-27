@@ -1,0 +1,94 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_0a799e487547.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15092,
+  "output_tokens": 3000,
+  "elapsed_s": 1531.4741343751084,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / machine learning researchers and practitioners working on news headline quality, clickbait detection, and computational journalism",
+    "subtask_short": "headline quality prediction",
+    "subtask_description": "Automatically label published news headlines using web log signals (click count and dwell time) and train deep learning models to predict headline quality for unpublished headlines, balancing popularity and truthfulness.",
+    "subtask_keywords": [
+      "headline_quality",
+      "news_headlines",
+      "nlp",
+      "clickbait_detection",
+      "predictive_model"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Click count",
+        "description": "The number of times an article was read (read count).",
+        "guidance": "Used as one of two primary web-log based measures of headline/article popularity. Read count values are normalized to the scale 0\u20131 before use in quality indicator calculations."
+      },
+      {
+        "name": "Dwell time (average time per visit)",
+        "description": "Da = (sum over users Ta,u) / Ca, where Ta,u is total time user u spent on article a and Ca is number of times article a was read; i.e., average amount of time spent on the article during a user visit.",
+        "guidance": "Dwell time is normalized to 0\u20131. Beware noise/inconsistencies (e.g., users leaving tabs open creates fake high dwell times) and clean clickstream data before calculating measures. The authors did not normalize dwell time by article length because correlation and mutual information with article length were low (0.2 and 0.06 respectively) in their dataset."
+      },
+      {
+        "name": "Indicator 1: High dwell time but low read count",
+        "description": "Articles close to this indicator had high dwell time but low read count.",
+        "guidance": "Interpreted as articles that are interesting to those who click them (readers spend significant time) but whose headlines were not interesting enough to motivate many users to click."
+      },
+      {
+        "name": "Indicator 2: High dwell time and high read count",
+        "description": "Articles close to this indicator had both high dwell time and high read count.",
+        "guidance": "Interpreted as headlines that successfully attracted many readers and articles that satisfied readers (interesting articles). Considered high-quality in both popularity and validity."
+      },
+      {
+        "name": "Indicator 3: Low dwell time but high read count (misleading / clickbait)",
+        "description": "Articles close to this indicator have high read count but low dwell time.",
+        "guidance": "These headlines attracted clicks but the articles did not meet readers' expectations; labeled as misleading headlines (clickbait). The authors note relatively few articles in this group in their dataset."
+      },
+      {
+        "name": "Indicator 4: Low dwell time and low read count",
+        "description": "Articles close to this indicator had both low dwell time and low read count.",
+        "guidance": "Interpreted as headlines that failed to attract users and whose articles were not engaging to those who clicked."
+      },
+      {
+        "name": "Quality representation as soft target distribution over four indicators",
+        "description": "Represent headline quality as a 4-dimensional probability vector Pa = [Pa,1, Pa,2, Pa,3, Pa,4] computed by applying a softmax to distances between (normalized) click-count and dwell-time coordinates and the four indicator corners (formula 2).",
+        "guidance": "Use soft target distributions as ground truth (soft labels) to train models (MSE loss) rather than hard one-hot labels (cross-entropy). Soft targets provide more information per training example and reduce gradient variance\u2014authors found models trained with soft targets trained more efficiently and achieved better performance."
+      },
+      {
+        "name": "Combine popularity and truthfulness (validity) when defining headline quality",
+        "description": "Headline quality should consider both popularity (how many users click) and truthfulness/validity (whether the article satisfies reader expectation, i.e., non-clickbait).",
+        "guidance": "Prior work often treated clickbait detection as binary and relied on human annotators; this work explicitly defines four indicators to capture combinations of popularity and validity and uses log data to operationalize them."
+      },
+      {
+        "name": "Semantic relation between headline and body (headline-article similarity)",
+        "description": "A high-quality headline should be related to the body of its article; semantic similarity between headline and article is a key characteristic of headline quality.",
+        "guidance": "Compute similarity using cosine similarity between word embedding vectors from the headline and the article's first paragraph to form a 2-D similarity matrix; process this matrix with 2-D CNNs to capture matching patterns. The authors found that removing embedding + similarity matrix + 2-D CNN increased RAE by 6%, indicating this component benefits prediction."
+      },
+      {
+        "name": "Use of latent text features (pretrained embeddings and contextual encoders)",
+        "description": "Capture latent features of headlines and articles via embeddings and contextual encoders.",
+        "guidance": "Embedding layer initialized with GloVe (100-dimensional vectors performed best) with dropout rate 0.2; BERT-Base (uncased) is used to encode variable-length inputs into fixed-length vectors which are then projected to 100-d vectors via MLP. These latent features are important inputs to the predictive model."
+      },
+      {
+        "name": "Topic modelling features (NNMF over TF-IDF; t=50)",
+        "description": "Extract topic features from headlines and articles and use topics as input features to FFNN.",
+        "guidance": "Build TF-IDF matrix A (articles as rows, vocabulary as columns), then use NNMF (preferred by authors over LDA on their dataset) to factorize A into W (document-to-topic) and H (topic-to-word). Use rows of W (topic distributions) as features. Authors set number of topics t to 50."
+      },
+      {
+        "name": "Evaluation metrics: Mean Absolute Error (MAE) and Relative Absolute Error (RAE)",
+        "description": "Use MAE and RAE to compare predicted quality indicators against ground truth soft labels.",
+        "guidance": "RAE is defined relative to a simple predictor (the average of the ground truth) as in formula 14. The authors compute model losses using MSE between predicted and ground-truth soft label vectors and report MAE and RAE on test data."
+      },
+      {
+        "name": "Automatic labeling from web log data (advantages and caveats)",
+        "description": "Label large datasets automatically using web log signals (click count and dwell time) rather than manual human annotation.",
+        "guidance": "Advantages: scalable to any dataset size, cheaper, faster, and avoids inconsistent subjective labels from annotators. Caveats: log data contain noise and inconsistencies (e.g., fake dwell times from background tabs) and must be cleaned prior to use; the quality indicators and soft-label computation assume properly normalized and cleaned clickstream signals."
+      },
+      {
+        "name": "Model training / experimental reproducibility settings",
+        "description": "Practical experimental settings used to train and evaluate models.",
+        "guidance": "Authors used Adam optimizer for all models, split data into train/validation/test with 70% / 10% / 20%, trained models using MSE loss on soft targets, used batch normalization before activation layers to help reduce loss, and employed dropout and batch normalization to regularize. These settings are provided as guidance for reproducing comparable performance."
+      }
+    ]
+  }
+}
