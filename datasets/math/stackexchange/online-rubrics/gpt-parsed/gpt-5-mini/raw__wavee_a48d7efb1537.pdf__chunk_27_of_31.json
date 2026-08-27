@@ -1,0 +1,171 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 27,
+  "n_chunks": 31,
+  "chunk_chars": 39980,
+  "model": "gpt-5-mini",
+  "elapsed_s": 151.03729533400474,
+  "input_tokens": 13534,
+  "output_tokens": 5720,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "LaTeX / pgf / TikZ users preparing graphics, shadings, plots, and layered images (authors, publishers, package users)",
+    "subtask_short": "pgf/tikz graphics usage",
+    "subtask_description": "Guidelines and low-level rules for producing and including external graphics, declaring and using shadings, creating plots, using layers, and employing 'quick' pgf commands in pgf/TikZ documents. Targets correct usage and portability (e.g., when a publisher lacks pgf).",
+    "subtask_keywords": [
+      "pgf",
+      "tikz",
+      "latex",
+      "graphics",
+      "shadings",
+      "plots"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "External-graphics two-step workflow",
+        "description": "Produce pictures by running TEX for each graphic (using \n\\pgfrealjobname and \\beginpgfgraphicnamed pairs) to generate separate graphic files, then typeset the main file which will include those external graphics.",
+        "guidance": "Run pdflatex with --jobname=... once per graphic to create survey-f1.pdf, survey-f2.pdf, etc. Then run pdflatex on the main file; the \\beginpgfgraphicnamed blocks will include the generated graphic files. This yields the same output as before externalizing once all graphics are produced."
+      },
+      {
+        "name": "Using pgfexternal.tex for publishers without pgf",
+        "description": "If the recipient (publisher) does not have pgf installed, input pgfexternal.tex (or add its single-line definition) so the main file includes the generated graphics without executing picture code.",
+        "guidance": "pgfexternal.tex defines \\beginpgfgraphicnamed to include the graphic and gobble up everything until \\endpgfgraphicnamed: \n\\long\\def\\beginpgfgraphicnamed#1#2\\endpgfgraphicnamed{\\includegraphics{#1}}. This means you can comment out \\usepackage{tikz} and still include graphics."
+      },
+      {
+        "name": "Baseline option incompatibility for externalized pictures",
+        "description": "The baseline option does not work for pictures written to external graphic files.",
+        "guidance": "Reason: there is no way to store baseline information in an external graphic file, so baseline positioning cannot be preserved when externalizing."
+      },
+      {
+        "name": "Files to send to editor/publisher when externalizing",
+        "description": "When externalizing figures for a publisher lacking pgf, send the modified main .tex file plus the generated graphic files and pgfexternal.tex (or the equivalent line).",
+        "guidance": "Example: send survey.tex (with \\input pgfexternal.tex and without \\usepackage{tikz}), survey-f1.pdf, survey-f2.pdf, and pgfexternal.tex (or include its single-line def in survey.tex)."
+      },
+      {
+        "name": "Shadings overview and usage contexts",
+        "description": "There are three kinds of shadings: horizontal, vertical, and radial. A shading must be declared before use and is put into a TeX box; to insert a shading into {pgfpicture} use \\pgftext around it.",
+        "guidance": "\\pgfuseshading inserts a declared shading into text (needs \\pgftext inside a pgfpicture); \\pgfshadepath can be used only inside a {pgfpicture} and 'fills' the current path with the shading."
+      },
+      {
+        "name": "Declaring horizontal/vertical/radial shadings (syntax and color specs)",
+        "description": "Use \\pgfdeclarehorizontalshading / \\pgfdeclareverticalshading / \\pgfdeclareradialshading with a name, size (height/width/center), and a color specification list. Colors at left/right (or inner/outer) must be specified; intermediate color stops allowed.",
+        "guidance": "Color specifications can use rgb(\u2026)=(r,g,b), gray=(v), or color(\u2026)=({colorname}). Individual specs must be separated by semicolons and given in increasing order. The bar length is deduced from the maximum dimension in the spec."
+      },
+      {
+        "name": "Color-list option for shadings (recalculation when colors change)",
+        "description": "Specifying a color list when declaring a shading causes the shading to be recalculated whenever one of the listed colors changes.",
+        "guidance": "When color list is used, the shading is not created until the first \\pgfuseshading. On use, pgf converts listed colors to rgb using current values (including mixins); if new rgb triples are unique, a new shading is created. When recalculated, the complete shading is recalculated using current values for all colors, even those not in the list. Colors need not be defined at declaration time."
+      },
+      {
+        "name": "Radial-shading semantics (center, radius, distortion)",
+        "description": "A radial shading is a circle whose inner color changes according to the color specification; the color for 0cm is at the center and the color for the maximum dimension is at the border (radius). If the center point is not origin, the shading is distorted so the given center has the 0cm color.",
+        "guidance": "The maximum dimension in the color spec determines the radius; the circle size remains the same, but will be distorted to position the specified center correctly."
+      },
+      {
+        "name": "Inserting and placing declared shadings",
+        "description": "\\pgfuseshading{<name>} inserts a declared shading into text; for pgfpicture usage wrap it in a \\pgfbox. \\pgfshadepath{<name>}{<angle>} used inside pgfpicture clips the current path and inserts a 100bp-wide-and-high shading transformed to 'fill' the path.",
+        "guidance": "The shading is transformed so (50bp,50bp) maps to the path center, (25bp,25bp) to lower-left, and (75bp,75bp) to upper-right \u2014 thus only the center quarter typically survives clipping for rectangles. Rotation and non-rectangular paths change which part is visible; radial shadings rotate without distortion."
+      },
+      {
+        "name": "Behavioral details of \\pgfshadepath coordinate mapping",
+        "description": "When using \\pgfshadepath, pgf: sets up scope, clips to current path, modifies the low-level transformation matrix to center and scale a 100bp shading to the bounding box, rotates by the given angle, then inserts shading; the clipping means only part of the shading is visible.",
+        "guidance": "Because mapping places (25bp,25bp) at lower-left and (75bp,75bp) at upper-right, only the center quarter of a rectangular shading is typically visible. Rotations are applied after scaling, which can make 'hidden' parts visible; if path bounding box is oversized due to curves, results may vary."
+      },
+      {
+        "name": "Additional shading transforms",
+        "description": "Use \\pgfsetadditionalshadetransform{<transformation code>} to apply an extra transform when \\pgfshadepath is used.",
+        "guidance": "The transformation code should be low-level transform commands such as \\pgftransformrotate{20} and is applied after the standard transformations."
+      },
+      {
+        "name": "Plotting architecture (plot streams and handlers)",
+        "description": "pgf uses a two-stage process for plots: (1) generate a plot stream (a sequence of coordinates) and (2) apply a plot handler which does something with the stream (e.g., issue line-to commands or smooth curves).",
+        "guidance": "Plot-stream building commands start with \\pgfplotstream..., handlers start with \\pgfplothandler.... You must set the handler before the stream starts. Streams are processed immediately (not buffered) unless the recording handler is used."
+      },
+      {
+        "name": "Basic plot-stream commands (start, point, end)",
+        "description": "A plot stream is a sequence of \\pgfplotstreamstart, \\pgfplotstreampoint{<point>}, and \\pgfplotstreamend, possibly interleaved with other code; the stream should start with start and end with end.",
+        "guidance": "Each \\pgfplotstreampoint calls the handler's internal macro \\pgf@plotstreampoint. Use \\pgf@plotstreamstart and \\pgf@plotstreamend provided by handlers for setup/cleanup. Streams are not buffered by default."
+      },
+      {
+        "name": "Reading coordinate files: \\pgfplotxyfile format and rules",
+        "description": "\\pgfplotxyfile{<filename>} reads a file where each nonempty line starts with two numbers separated by a space (x y); anything following is ignored; % and # start comment lines.",
+        "guidance": "Each valid line is converted to \\pgfplotstreampoint{\\pgfpointxy{x}{y}}. After reading, \\pgfplotstreamend is called. Lines starting with % or # are ignored."
+      },
+      {
+        "name": "Reading xyz files: \\pgfplotxyzfile format",
+        "description": "\\pgfplotxyzfile{<filename>} works like \\pgfplotxyfile but expects three numbers per non-empty line, converted into \\pgfpointxyz coordinates.",
+        "guidance": "No automatic detection exists to choose between xy and xyz; the user must pick the correct command for file contents."
+      },
+      {
+        "name": "Generating coordinates via \\pgfplotfunction",
+        "description": "\\pgfplotfunction{<variable>}{<sample list>}{<point>} iterates <variable> over <sample list> (a \\foreach-style list) and evaluates <point> to produce coordinates inserted into the plot stream.",
+        "guidance": "Useful for function plots (examples included). Beware: evaluating complex expressions for each point can be very slow."
+      },
+      {
+        "name": "Invoking gnuplot with \\pgfplotgnuplot and caching behavior",
+        "description": "\\pgfplotgnuplot[<prefix>]{<function>} will write a <prefix>.gnuplot and attempt to call the external gnuplot program (via \\write18) to produce a <prefix>.table, then read it with \\pgfplotxyfile. If .gnuplot exists and matches what pgf would write, gnuplot is not invoked and .table is read directly.",
+        "guidance": "This mechanism minimizes calls to gnuplot and allows sharing .gnuplot and .table files so recipients can TEX the file without gnuplot or shell escape. Success depends on \\write18 being enabled and gnuplot being available."
+      },
+      {
+        "name": "Plot handlers: lineto behavior and first-point policy",
+        "description": "\\pgfplothandlerlineto issues a \\pgfpathlineto for each point of the plot, except possibly for the first point, depending on the first-point policy setting.",
+        "guidance": "Use \\pgfsetmovetofirstplotpoint (default) to issue a move-to for the first point (start a new path part), or \\pgfsetlinetofirstplotpoint to issue a line-to for the first point."
+      },
+      {
+        "name": "Plot handler: discard stream",
+        "description": "\\pgfplothandlerdiscard will throw away the plot stream.",
+        "guidance": "Use when you want to ignore generated stream output (e.g., for debugging or conditional processing)."
+      },
+      {
+        "name": "Plot handler: record and replay streams",
+        "description": "\\pgfplothandlerrecord{<macro>} makes each plot-stream command append to <macro>, so at the end <macro> contains all stream commands and can be replayed with another handler.",
+        "guidance": "Common pattern: record a stream into \\mystream, set a different handler (e.g., lineto or closedcurve), invoke \\mystream to replay, and then use \\pgfusepath{stroke}."
+      },
+      {
+        "name": "Declaring and ordering layers",
+        "description": "Declare layers with \\pgfdeclarelayer{<name>} and specify which layers are used and their stacking order using \\pgfsetlayers{<layer list>} placed outside {pgfpicture}. The special layer 'main' should always be part of the list.",
+        "guidance": "Layers are stacked in the order given (first is bottom). You can declare more layers than are used; only those in \\pgfsetlayers participate."
+      },
+      {
+        "name": "Adding content to specific layers with {pgfonlayer}",
+        "description": "Use the {pgfonlayer}{<layer name>} environment inside a picture to add its contents to the named layer. The environment may be used multiple times and contents accumulate for that layer.",
+        "guidance": "You cannot add content to the 'main' layer with this environment; add to main by drawing outside any {pgfonlayer} environments. Commands inside {pgfonlayer} are added to the whole picture (not just local scope) so using it inside groups still affects the picture's layer."
+      },
+      {
+        "name": "Quick commands: performance-oriented, reduced functionality",
+        "description": "Quick commands (prefix 'q') execute much faster than normal pgf commands but provide less functionality; use them when many commands must be processed or commands are executed very often.",
+        "guidance": "Trade-offs: faster execution vs loss of features such as bounding-box tracking, corner-arcing, and coordinate transformations."
+      },
+      {
+        "name": "Quick coordinate command restrictions",
+        "description": "\\pgfqpoint{x}{y} works like \\pgfpoint but x and y must be simple dimensions like 1pt or 1cm; complex expressions like 2ex or arithmetic (2cm+1pt) are not allowed.",
+        "guidance": "Use \\pgfpoint when you require full expression evaluation; use \\pgfqpoint in tight loops with simple numeric dimensions for speed."
+      },
+      {
+        "name": "Quick path construction limitations",
+        "description": "Quick path commands (e.g., \\pgfpathq...) do not keep track of bounding boxes, do not allow arced corners, and do not apply coordinate transformations, although they use the soft-path subsystem and may be mixed with normal path commands.",
+        "guidance": "Use quick path commands only when these limitations are acceptable for performance reasons."
+      },
+      {
+        "name": "\\pgfpathq... quick path primitives",
+        "description": "Quick primitives include \\pgfpathqmoveto{x}{y}, \\pgfpathqlineto{x}{y}, \\pgfpathqcurveto{s1x}{s1y}{s2x}{s2y}{tx}{ty}, and \\pgfpathqcircle{<radius>}; coordinates are not transformed by the CTM (but low-level transforms still apply).",
+        "guidance": "These commands are orders of magnitude faster than their full counterparts (examples show usage); they are ideal for simple repetitive geometry where CTM-based transforms and bounding boxes are not needed."
+      },
+      {
+        "name": "Quick path usage commands and their limitations",
+        "description": "Quick path usage commands (\\pgfusepathqstroke, \\pgfusepathqfill, \\pgfusepathqfillstroke, \\pgfusepathqclip) perform like \\pgfusepath but do not add arrows, do not modify the path (ends not shortened, corners not arced), and are intended for use in performance-critical contexts (e.g., arrow tip definitions).",
+        "guidance": "Do not expect arrow drawing, end shortening, or corner arcing when using these; good for low-level arrow-tip code and fast rendering."
+      },
+      {
+        "name": "Quick text-box insertion and hyperlink behavior",
+        "description": "\\pgfqbox{<box number>} inserts a TeX box into a {pgfpicture} quickly by escaping to TeX, while \\pgfqboxsynced{<box number>} additionally syncs the current CTM to the canvas transformation matrix before insertion.",
+        "guidance": "\\pgfqboxsynced applies the translational part via \\hskip and \\raise to ensure hyperlinks are placed correctly; scaling and rotation cannot (and will not) apply to hyperlinks. Use synced version when correct hyperlink placement is required despite CTM changes."
+      }
+    ]
+  }
+}

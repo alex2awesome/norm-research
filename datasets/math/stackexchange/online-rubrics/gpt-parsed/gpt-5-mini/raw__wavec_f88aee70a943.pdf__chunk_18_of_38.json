@@ -1,0 +1,186 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 18,
+  "n_chunks": 38,
+  "chunk_chars": 39985,
+  "model": "gpt-5-mini",
+  "elapsed_s": 260.40388283399807,
+  "input_tokens": 15221,
+  "output_tokens": 7392,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "advanced users/developers of PARI/GP performing high-precision numerical and algebraic computations",
+    "subtask_short": "gp/pari numerical_and_algebraic_api",
+    "subtask_description": "Documentation of PARI/GP library routines: numerical integration, series/summation/extrapolation methods, product and root finding routines, and data-structure conventions for number fields, algebraic numbers, ideals and related objects. Specifies input formats, assumptions, convergence conditions, performance notes and initialization options.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "numerical_methods",
+      "high_precision",
+      "number_fields",
+      "summation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "intnumromb: analytic cleanup and singularity conditions for reliable numerical integration",
+        "description": "For Romberg numerical integration the integrand and its analytic form must have no singularities on the integration interval or at the boundaries; analytical cleanup (e.g. change of variable) must have been done before calling the routine.",
+        "guidance": "If integrand has boundary/interval singularities, perform variable changes to remove them. The routine assumes the integrand is well-behaved on [a,b]; otherwise results are unreliable. Use sufficient real precision (example: ~100 bits for ~30 decimal digits)."
+      },
+      {
+        "name": "intnumromb: improper integrals and behaviour at infinity",
+        "description": "For improper integrals (one or both limits \u00b1\u221e) the function must decrease sufficiently rapidly at infinity; integration by parts or a change of variable is often necessary.",
+        "guidance": "You may represent infinity by a large finite number (e.g. 10 for some integrals) but beware of underflow for rapidly decreasing functions \u2014 do not use absurdly large constants like 1e1000. Ensure the integrand's tail is within the working precision."
+      },
+      {
+        "name": "intnumromb: integrand magnitude relative to precision",
+        "description": "The function to be integrated should not be very small (relative to current precision) on the entire interval.",
+        "guidance": "If it is uniformly tiny, multiply the integrand by an appropriate constant to avoid underflow/precision loss, then rescale the result."
+      },
+      {
+        "name": "intnumromb: API/syntax and historic variant deprecation",
+        "description": "Library syntax is intnumromb(void *E, GEN (*eval)(void*,GEN), GEN a, GEN b, long flag, long bitprec). The historical variant using prec in words is obsolete.",
+        "guidance": "Pass any needed extra data to eval via E (or NULL). Use current signature rather than the obsolete prec-in-words variant."
+      },
+      {
+        "name": "laurentseries: requirement on series valuation",
+        "description": "laurentseries(f,{M=seriesprecision}, {x=x}) expands f as a Laurent series around x=0 to order M; it requires that f be evaluable on a power series with zero constant term (series valuation == 0).",
+        "guidance": "If f cannot be evaluated on series with 0 constant term (valuation != 0) you'll get a domain error. Individual coefficients up to order M can be retrieved with polcoeff(s,i). laurentseries is generally faster and more precise than repeated numeric differentiation (derivnum) for series coefficients."
+      },
+      {
+        "name": "laurentseries: precision and performance notes",
+        "description": "laurentseries computes f(x + O(x^n)) until n is large enough; resulting series may be more precise than the requested O(x^(M+1)).",
+        "guidance": "Use laurentseries for coefficient extraction and many repeated coefficient computations; examples show it's faster than derivnum for many successive calls."
+      },
+      {
+        "name": "limitnum: assumptions on the sequence and inputs",
+        "description": "limitnum(expr,{k=20},{alpha=1}) performs Lagrange-Zagier numerical extrapolation on a sequence u_n given either as a closure n->u(n) or a vector. It assumes u_n tends to a finite limit and has an asymptotic expansion in powers of n^{-\u03b1}.",
+        "guidance": "Routine is purely numerical and heuristic and may fail. If u is passed as a vector it must be long enough (at least k times current realprecision); closures are preferred when feasible. Adjust k and alpha to reflect asymptotic spacing (u(kn) extrapolation) for better results."
+      },
+      {
+        "name": "prod: initialization parameter sets arithmetic type and affects performance",
+        "description": "prod(X=a,b,expr,{x=1}) computes the product of expr with formal parameter X from a to b. The initialization argument x forces the arithmetic type (integer exact, real with default precision, power series with given O(X^k) precision).",
+        "guidance": "Choosing an appropriate x can drastically change running time and memory (examples show degree 5050 vs truncation to O(X^101)). Use specific initializations to ensure operations are done in the desired ring and to improve speed."
+      },
+      {
+        "name": "prodeuler/prodeulerrat/prodnumrat: domain and degree expectations for multiplicative products",
+        "description": "prodeuler computes product over primes between a and b using eval closure; prodeulerrat/prodnumrat work when the factor functions are rational functions with specified degree constraints (e.g., F a rational function; F-1 rational of degree < 2 for prodnumrat).",
+        "guidance": "Ensure F meets the stated rationality/degree hypotheses; use the specific GEN prodeulerrat/prodnumrat signatures when applicable (they have faster, specialized implementations)."
+      },
+      {
+        "name": "prodinf: infinite product stopping criteria and domain requirements",
+        "description": "prodinf(X=a,expr,{flag=0}) computes an infinite product starting at X=a and stops when relative error of (expression \u2212 1) is less than the default precision; expressions must evaluate to complex numbers. If flag=1 compute product of (1+expr) instead.",
+        "guidance": "Non-convergent products will loop indefinitely \u2014 be careful to ensure convergence beforehand. Use flag appropriately when expr represents multiplicative increment or when 1+expr is the intended factor."
+      },
+      {
+        "name": "solve (zbrent): bracketing requirement and domain continuity",
+        "description": "solve(X=a,b,expr) (zbrent) finds a real root in [a,b] using Brent's method under the condition expr(a)*expr(b) \u2264 0 (roots must be bracketed).",
+        "guidance": "If the function is not defined on the whole [a,b] (e.g., tan(x) on [1,2]) the method can fail or produce errors. Make sure the root interval is valid and the function is continuous/defined everywhere in it."
+      },
+      {
+        "name": "solvestep: heuristic interval-splitting zero-finding and flag meanings",
+        "description": "solvestep(X=a,b,step,expr,{flag=0}) searches for zeros by naive interval splitting and is heuristic; it may or may not find intended zeros. Flag bits mean: 1 return on first zero found; 2 refine until at least one zero found (may loop if none); 4 multiplicative search (requires a>0 & step>1) else additive; 8 refine until a zero is very close to an integer.",
+        "guidance": "Use solvestep for exploratory searches; choose flags according to desired stopping behavior; beware infinite loops in refining modes if no zeros exist."
+      },
+      {
+        "name": "sum: finite sum initialization semantics",
+        "description": "sum(X=a,b,expr,{x=0}) computes a finite sum with initialization x used to force the type of intermediate arithmetic (exact rationals, floating reals at default precision, power series truncated to O(X^k), etc.).",
+        "guidance": "Initialization affects performance and result type \u2014 e.g., summing 1/i as rationals produces enormous denominators; using floating initialization (0.) is much faster and less memory intensive for numeric approximation."
+      },
+      {
+        "name": "sumalt: alternating series summation assumptions, algorithms and complexity",
+        "description": "sumalt(X=a,expr,{flag=0}) applies the Cohen\u2013Villegas\u2013Zagier algorithm to (\u22121)^k a_k alternating series, assuming ak are moments of a positive measure on [0,1] for the flag=0 variant; flag=1 uses a variant with more complicated polynomials. The routine is heuristic; rigorous conditions are difficult to check.",
+        "guidance": "Use sumalt to guess an infinite alternating sum; if the series already converges geometrically prefer suminf. Complexity for target accuracy 10^{-p} is generally O(p^2) time and space; flag=1 can reduce number of needed terms (n \u2248 0.86p) but has higher overhead (time O(p^3), space O(p^2))."
+      },
+      {
+        "name": "suminf: infinite sum stopping rule and applicability",
+        "description": "suminf(X=a,expr) sums an infinite series and stops when relative error of the partial sum is less than default precision for 3 consecutive evaluations; terms must be complex numbers.",
+        "guidance": "If series converges slowly, lower realprecision (even 28 digits may be too much) or use specialized summation (sumalt for alternating, sumpos for same-sign terms). Long-running or non-convergent series may hang or require user interrupts."
+      },
+      {
+        "name": "sumnum: Euler\u2013MacLaurin summation hypotheses, precomputation and complexity",
+        "description": "sumnum(n=a,f,{tab}) numerically sums f(n) from a to +\u221e using Euler\u2013MacLaurin, assuming f has positive values and is C^\u221e; tab (from sumnuminit) precomputes abscissas/weights and asymptotic behaviour, greatly speeding subsequent calls. By default assumes f decreases at least like O(n^{-2}).",
+        "guidance": "If f decreases polynomially with exponent \u22122<\u03b1<\u22121, indicate tab = sumnuminit([+oo,alpha]). If f decreases exponentially indicate tab = sumnuminit([+oo,alpha]) with alpha>0 to avoid exponent overflow. Complexity: f evaluated O(D log D) times where D \u2248 realprecision\u00b7log(10). Use precomputed tab for repeated high-precision calls. Beware cancellation when evaluating f at huge n \u2014 rewrite terms or substitute accurate asymptotic expansions when necessary."
+      },
+      {
+        "name": "sumnum cancellation warning and remedy",
+        "description": "sumnum may evaluate f(n) for enormous n (e.g. >1e233), leading to catastrophic cancellation if f's naive formula subtracts large terms to yield small results.",
+        "guidance": "Rewrite the summand to avoid cancellation or replace f(n) locally by a truncated asymptotic expansion (compute F = truncate(f(1/x)+O(x^k)) and use subst(F,x,1/n) for large n). This can restore full precision."
+      },
+      {
+        "name": "sumnumap (Abel\u2013Plana): analytic continuation requirement and complexity",
+        "description": "sumnumap(n=a,f,{tab}) uses Abel\u2013Plana and requires f to be holomorphic in the right half-plane Re(z)>a; it evaluates f at O(D log D) real and O(D) complex arguments (D \u2248 realprecision\u00b7log(10)).",
+        "guidance": "Geared to slowly decreasing functions; if f decreases exponentially prefer suminf or sumpos. Use sumnumapinit to precompute tables for repeated calls. For Monien-suitable f, sumnummonien may be faster."
+      },
+      {
+        "name": "sumnuminit/sumnumapinit/sumnumlagrangeinit: asymp table initialization format and meaning",
+        "description": "Initialization functions accept asymp in the form [+oo, alpha]. Positive alpha > 0 encodes exponential decrease exp(\u2212alpha n). Negative alpha with \u22122 < alpha < \u22121 encodes polynomial decrease n^{alpha}. sumnumlagrangeinit also accepts parameters describing the remainder expansion (\u03b1 choices 2,1,1/2,1/3,1/4 or t_CLOSURE g) and an optional c1 controlling interpolation step count.",
+        "guidance": "Choose asymp according to known tail behaviour; for slow polynomial tails the exact rate must be provided; for exponential tails a rough alpha is sufficient. Initializations can be time-consuming but drastically speed later summations."
+      },
+      {
+        "name": "sumnumlagrange: remainder expansion hypotheses and parameter selection",
+        "description": "sumnumlagrange(n=a,f,{tab}) uses Lagrange summation assuming the Nth remainder has an asymptotic expansion in integral powers of 1/N by default. The tab can specify alternative expansions via asymp and control interpolation detail via c1. Allowed al values include 1 (default), 1/2, 1/3, 1/4, and 2 (special handling).",
+        "guidance": "Selecting incorrect asymp (e.g., wrong \u03b2) yields garbage results; examples show \u03b6(4/3) behaves as n^{-1/3} remainders and requires careful choice of beta/alpha to get correct results. Initialization cost increases for fractional \u03b1 (1/4 slowest)."
+      },
+      {
+        "name": "sumnummonien: Monien summation analytic continuation and defaults",
+        "description": "sumnummonien(n=a,f,{tab}) assumes f(1/z) has a complex analytic continuation in a neighbourhood of [0,1] and by default that f(n)=O(n^{-2}) with an asymptotic expansion starting at i\u22652. It evaluates f at O(D/log D) real arguments (D \u2248 realprecision\u00b7log(10)).",
+        "guidance": "Use sumnummonieninit to precompute tables for non-standard asymptotic behaviors (asymp, weight w and n0 parameters). The tab supports weights w (log^k or closures) for sums of the form sum f(n) w(n). Ensure consistent n0 across init and subsequent calls. Monien summation can be dramatically faster when its analytic hypotheses hold."
+      },
+      {
+        "name": "sumnummonieninit: asymp and weight parameters",
+        "description": "sumnummonieninit({asymp},{w},{n0=1}) initializes tables for Monien summation. asymp may be \u03b2>0 meaning f(n)=\u2211 a_i / n^{i+\u03b2}, or a vector [\u03b1,\u03b2] with \u03b1>0 and \u03b1+\u03b2>1 encoding f(n)=\u2211 a_i / n^{\u03b1 i+\u03b2}. w encodes multiplicative weights (integers k for (log n)^k, closures n->w(n), or [w,fast] variants).",
+        "guidance": "Select asymp and w to match the summand's analytic structure; otherwise results can be wrong. Precomputation times can be large but subsequent calls are fast."
+      },
+      {
+        "name": "sumnumrat/sumeulerrat/sumeulerrat-like: rational-function summation/product conditions",
+        "description": "Functions like sumnumrat and sumeulerrat compute sums or Euler-like products when input F is a rational function with degree constraints (e.g., degree \u2264 \u22122 or F\u22121 rational of degree less than some bound). Poles at integers \u2265 a are omitted from summation when specified.",
+        "guidance": "Ensure the input rational function meets the degree/pole hypotheses; these specialized routines give exact or high-precision values for rational-function sums/products when applicable."
+      },
+      {
+        "name": "sumdiv and sumdivmult: divisor-sum conventions and multiplicativity assumption",
+        "description": "sumdiv(n,X,expr) sums expr over positive divisors of n; sumdivmult(n,d,expr) sums multiplicative expressions f(d) over divisors d of n and assumes f is multiplicative (f(1)=1 and f(ab)=f(a)f(b) for coprime a,b).",
+        "guidance": "If expr is multiplicative use sumdivmult for efficiency. sumdiv wraps a divisors() loop and lexically scopes the loop variable X to the sumdiv call."
+      },
+      {
+        "name": "sumpos: Van Wijngaarden transform for same-sign series and heuristic nature",
+        "description": "sumpos(X=a,expr,{flag=0}) numerically sums series with same-sign terms using Van Wijngaarden's trick to convert to an alternating series and then applies sumalt. It assumes terms are all of same sign and more or less decreasing.",
+        "guidance": "This routine is heuristic and does not check signs; if expr is zero frequently or not truly same-sign results may be wrong. Flag=1 uses the sumalt(,1) variant; space and time complexity are O(p^2) for p digits of accuracy. Use sumalt/suminf according to series structure."
+      },
+      {
+        "name": "representations: number-field structures (nf, bnf, bnr) and contents",
+        "description": "Number field structures: nf (output of nfinit) contains basic arithmetic data: signature, maximal order basis nf.zk, discriminant, defining polynomial T, etc. bnf (bnfinit) contains nf plus deeper invariants: units U(K), class group Cl(K), and data for discrete log problems. bnr (bnrinit) corresponds to ray class group data and contains bnf plus modulus f and Cl_f(K).",
+        "guidance": "Use the appropriate initialization (nfinit, bnfinit, bnrinit) according to how much arithmetic/class-field/ray-class data you need. These structures are expected formats for many higher-level routines."
+      },
+      {
+        "name": "algebraic-number input formats and limitations",
+        "description": "An algebraic number in K = Q[X]/(T) may be provided as t_INT, t_FRAC, t_POL (implicitly modulo T), t_POLMOD, or as a t_COL v (dimension N = [K:Q]) giving coordinates in the computed integral basis via sum v[i]*nf.zk[i]. A t_VEC will not be recognized.",
+        "guidance": "Prefer t_COL or polynomial/mod representations consistent with the defining polynomial T and nf.zk basis; avoid using t_VEC as it is not accepted."
+      },
+      {
+        "name": "ideal representation formats and extended-ideal conventions",
+        "description": "An ideal may be given as: (i) a principal ideal via an algebraic number in accepted forms, (ii) a prime ideal as the 5-component vector from idealprimedec/idealfactor, (iii) a t_MAT in Hermite Normal Form (HNF) whose columns give a Z-basis, or (iv) an extended ideal [I,t] where I is an ideal and t is an algebraic number representing (t)I.",
+        "guidance": "Prefer converting ideals to HNF with idealhnf for functions that expect that format. Extended ideals [I,t] keep track of the principal part t for operations like idealmul/idealsqr/idealinv/idealpow/idealred (which update the principal part); other functions silently discard the extended part (e.g., idealadd)."
+      },
+      {
+        "name": "principal part representations and factorizations for extended ideals",
+        "description": "The principal part t of an extended ideal may be represented as any algebraic number form or as a factorization matrix (in terms of field elements, not ideals), including an empty factorization matrix factor(1) or the empty matrix [;] as synonyms for 1. Many functions accept factored form (famat) inputs to avoid coefficient explosion.",
+        "guidance": "When working with giant principal elements, keep them in factorized form to avoid unnecessary expansion; use nffactorback to recover expanded form if needed. Some functions (e.g., ideallog) accept famats directly."
+      },
+      {
+        "name": "finite abelian-group representation and characters",
+        "description": "A finite abelian group G is represented in user-readable format by its Smith Normal Form as [h,d] or [h,d,g], where h is cardinality, d the vector of elementary divisors and g a vector of generators (G = \u2295 (Z/diZ) g_i). Characters are row vectors \u03c7=[a1,...,an] with \u03c7(\u2211 g_j n_j) = exp(2\u03c0 i \u2211 a_j n_j/d_j). Subgroups are input as HNF square matrices whose columns express generators in the basis g_i; determinant equals the index (G:H).",
+        "guidance": "Use this SNF/HNF representation for group computations; ensure elementary divisors satisfy d_n | ... | d_1 and product equals h."
+      },
+      {
+        "name": "relative-extensions and pseudo-matrix conventions",
+        "description": "Relative extensions L/K are represented with rnf (output of rnfinit) where rnf.nf is the base-field nf. A relative matrix is an m\u00d7n matrix with entries in K; an ideal list is a row vector of fractional ideals. A pseudo-matrix (A,I) with A a relative matrix and I an ideal list defines a torsion-free projective Z_K-module a1A1 \u2295 ... \u2295 anAn. An integral pseudo-matrix w(A,I,J) requires ai,j \u2208 b_i a_j^{-1} for given ideal lists and defines modules and linear maps; arbitrary finite-type Z_K-modules with torsion are given by integral pseudo-matrices.",
+        "guidance": "When specifying pseudo- or integral pseudo-matrices follow the ai,j \u2208 b_i a_j^{-1} constraint and use the provided data-structure formats; these are required by routines that manipulate projective and torsion Z_K-modules."
+      }
+    ]
+  }
+}

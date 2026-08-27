@@ -1,0 +1,141 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 25,
+  "n_chunks": 42,
+  "chunk_chars": 39623,
+  "model": "gpt-5-mini",
+  "elapsed_s": 143.71592495899677,
+  "input_tokens": 15104,
+  "output_tokens": 4374,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX/TeXmacro users and implementers troubleshooting typesetting errors (advanced TeX users, macro writers, typesetters)",
+    "subtask_short": "TeX error recovery and diagnostics",
+    "subtask_description": "Guidance and standards for diagnosing, recovering from, and preventing errors in TeX input and macro code; includes use of tracing, interpreting diagnostic messages, memory/capacity handling, and practical workflow suggestions for long manuscripts.",
+    "subtask_keywords": [
+      "tex",
+      "error_recovery",
+      "troubleshooting",
+      "tracing",
+      "macros",
+      "typesetting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use token-discarding commands at error prompt",
+        "description": "Typing a numeric response (e.g. '2') at TeX's error prompt tells TeX to discard the next N tokens that it reads, allowing graceful recovery from certain mis-read inputs.",
+        "guidance": "Example: after an erroneous partial read that left tokens like 'i' and 'm' pending, typing '2' discards the next two tokens so they are 'read and gone' and you can then insert the intended command (e.g. \\hsize=4in) before TeX continues. This is better than just hitting return which may cause TeX to treat the leftover tokens as part of new text."
+      },
+      {
+        "name": "Understand and manage TeX's inserted tokens",
+        "description": "TeX sometimes inserts tokens to make sense of broken input (e.g. inserting 'pt' when a unit is missing, inserting '$' for a missing math delimiter, or an innocuous control sequence after \\def).",
+        "guidance": "Inserted text may be explicitly shown (e.g. '<inserted text> $'); if the inserted token has not yet been read you can remove it before TeX really sees it. However when the error occurred after some text was already typeset (e.g. missing $ after displayed text), you cannot change earlier spacing \u2014 the goal is to proceed so that TeX passes the present error and detects subsequent ones (often by discarding tokens or inserting small fixes)."
+      },
+      {
+        "name": "Prefer minimal insertion to proceed (avoid elaborate fixes)",
+        "description": "When TeX has typeset material already and an error occurs (so past spacing can't be fixed), aim not for perfect output but to let TeX pass the error and continue.",
+        "guidance": "Example: after an omitted '$' that makes the rest of the paragraph math, the simple solution recommended is to type '2' and continue rather than attempting a complicated edit that tries to reconstruct precise math structure."
+      },
+      {
+        "name": "TeX's two recovery modes: ignore or insert",
+        "description": "TeX typically recovers from errors either by ignoring an unknown command or by inserting something that will keep it happy.",
+        "guidance": "Examples: it ignores undefined control sequences (treats them as absent) or inserts units such as 'pt' when needed. Be aware of which behavior applies so you can choose an appropriate interactive response."
+      },
+      {
+        "name": "If an error's cause is delayed, find the runaway argument start",
+        "description": "When an error results from a mistake several lines earlier (e.g., a missing '}' or delimiter), TeX may not notice until later and will display a 'runaway argument' or similar; you may have lost the whole paragraph.",
+        "guidance": "Look at the beginning of the displayed text that TeX shows as part of the error to figure out where the missing token belongs. Simplify and inspect to locate and fix the missing delimiter."
+      },
+      {
+        "name": "First error may spawn later spurious errors",
+        "description": "The first error in a document can cause TeX to go out of sync and produce many subsequent error messages that are artifacts.",
+        "guidance": "Run TeX once through the file to locate places where input conflicts with TeX's rules; focus on fixing early errors because they often clear up multiple later messages."
+      },
+      {
+        "name": "If you've redefined important primitives, get human help or reread earlier material",
+        "description": "Errors due to misunderstanding (e.g., unknowingly redefining an important control sequence like \\box) can produce mysterious diagnostics because TeX can only explain its viewpoint.",
+        "guidance": "Seek human counsel or re-read earlier chapters; understanding TeX's 'attitude' is necessary to interpret odd failures."
+      },
+      {
+        "name": "Simplify to the minimal failing example",
+        "description": "If you cannot find the cause of a problem, remove all working parts until you have the shortest possible input file that still fails in the same way.",
+        "guidance": "A shorter failing file is easier for you or others to analyze and pinpoint the issue."
+      },
+      {
+        "name": "Be aware of when TeX ignores spaces",
+        "description": "TeX ignores spaces after control words and after number/unit arguments to primitives; this can make it look as if a typed space disappeared.",
+        "guidance": "If you use properly designed macros you likely won't be concerned, but when designing or troubleshooting macros be mindful of these rules. Chapter 8's rules imply that replying at the error prompt removes trailing spaces from the end of the line; exercise caution when inserting spaces interactively."
+      },
+      {
+        "name": "Use \\tracingcommands to track where extra spaces originate",
+        "description": "Setting \\tracingcommands=1 causes TeX to write a log entry whenever it begins to execute a primitive command, allowing you to see when a 'blank space' primitive is invoked.",
+        "guidance": "This helps find where spurious spaces crept in when processing complicated macro code. Other tracing parameters document other aspects (see related tracing metrics)."
+      },
+      {
+        "name": "Interrupting TeX for diagnosing infinite loops",
+        "description": "Most implementations allow you to interrupt TeX; the program switches into \\errorstopmode so you can inspect or modify state.",
+        "guidance": "On interrupt you can abort the run, \\show or change control sequences and registers, or insert commands to debug. Random interrupts can reveal where TeX spends most time (hotspots) when inefficient macros cause loops."
+      },
+      {
+        "name": "Batch/nonstop modes and emergency stops",
+        "description": "When running in \\batchmode or \\nonstopmode, TeX may do an 'emergency stop' if it needs terminal input (e.g., a file can't be opened or no \\end found).",
+        "guidance": "Be prepared for messages like 'Fatal format file error', 'That makes 100 errors; please try again', 'Interwoven alignment preambles are not allowed', 'I can't go on', or 'This can't happen' and take appropriate corrective actions (fix format mismatch, correct infinite loops, repair alignment preambles, or complain if TeX itself is broken)."
+      },
+      {
+        "name": "Diagnose and respond to 'TeX capacity exceeded' messages",
+        "description": "The 'TeX capacity exceeded' message names which memory component is overloaded (e.g., number of strings, pool size, main memory size, hash size, font memory, input stack size, save size, text input levels, etc.) and reports current usage.",
+        "guidance": "You can increase components if the machine is large enough, or reallocate space among components. Before asking for a custom TeX build, ensure you're using TeX properly: avoid gigantic paragraphs/alignments that force TeX to read far ahead, and avoid loading enormous macro libraries \u2014 load only needed macros. Use \\tracingstats to report actual usage; set it >=2 to report usage at every \\shipout."
+      },
+      {
+        "name": "Some errors are unbounded and won't be fixed by increasing capacity",
+        "description": "Certain programming mistakes (e.g., unbounded recursion like \\def\\recurse{(\\recurse)}) will overflow any finite TeX memory and cannot be fixed by simply increasing a stack size.",
+        "guidance": "Recognize recursion/loop errors and correct the logic rather than attempting to expand TeX's capacity indefinitely."
+      },
+      {
+        "name": "Understand save size usage and be consistent with global/local assignments",
+        "description": "TeX uses two words of save size for a non-global assignment when the previous value wasn't assigned at the same grouping level. Inconsistent mixing of local and global assignments can make save stack usage grow without bound.",
+        "guidance": "Use \\tracingrestores=1 to see what TeX restores at group ends. To avoid save stack overflow, be consistent: either assign variables globally always or locally always. Appendices B and D give ideas to make macros more compact."
+      },
+      {
+        "name": "Use tracing families for targeted diagnostics",
+        "description": "TeX offers multiple tracing parameters: \\tracingcommands, \\tracingrestores, \\tracingparagraphs, \\tracingpages, \\tracingmacros, \\tracinglostchars, \\tracingoutput, \\tracingstats, and \\tracingonline which controls where tracing output goes.",
+        "guidance": "Set the relevant tracing parameter(s) to obtain the information you need (they go to the log file unless \\tracingonline>0). Plain TeX's \\tracingall macro turns on the maximum amount of tracing and sets \\showboxbreadth and \\showboxdepth high so full box contents are shown. Note: some production TeX builds omit certain tracing checks for speed."
+      },
+      {
+        "name": "Control box-display verbosity with \\showboxbreadth and \\showboxdepth",
+        "description": "\\showboxbreadth (plain TeX default 5) limits the maximum number of items shown per level; \\showboxdepth (plain TeX default 3) limits the depth displayed when TeX shows box contents in diagnostics.",
+        "guidance": "Lower values abbreviate display (showing '[]' and 'etc.'), while higher values show more internal box structure. Use high values (or \\tracingall) when you need to inspect full box contents to decide whether anomalies come from TeX or downstream software."
+      },
+      {
+        "name": "Interpretation of overfull/tight/loose/underfull boxes",
+        "description": "A nonempty hbox is 'overfull' if its glue cannot shrink to achieve the specified size provided that \\hbadness < 100 or the excess width (after maximum shrink) > \\hfuzz; it's 'tight' if glue shrinks and badness > \\hbadness; 'loose' if glue stretches and badness > \\hbadness but <=100; 'underfull' if glue stretches and badness > \\hbadness and >100. Similar for vboxes.",
+        "guidance": "TeX prints a warning message and displays the offending box whenever such anomalies are discovered. Empty boxes are never considered anomalous. Use previous chapters' techniques to cure overfull boxes, bad breaks, and math formula improvements."
+      },
+      {
+        "name": "Alignment diagnostics: prototype row only and absence of overfull rules",
+        "description": "When an alignment (\\halign, \\valign) is anomalous (overfull/tight/loose/underfull) you receive only one message and TeX displays a prototype row (or prototype column) showing the structure \u2014 not every aligned line.",
+        "guidance": "Example: underfull \\hbox in alignment will show a prototype row with unset boxes that display column widths. Overfull rules are never appended to lines of overfull alignments."
+      },
+      {
+        "name": "Use \\tracingoutput to see symbolic box contents being shipped out",
+        "description": "\\tracingoutput (if positive) makes TeX display the contents of every box being shipped out to the dvi file in symbolic form.",
+        "guidance": "This lets you inspect whether typesetting anomalies were caused by TeX itself or by postprocessing software that converts DVI to hardcopy."
+      },
+      {
+        "name": "Use \\pausing=1 to get interactive editing while reading input",
+        "description": "Setting \\pausing=1 gives you a chance to edit each line of input as it is read from the file, allowing temporary patches without changing the file.",
+        "guidance": "This is useful while troubleshooting; you can insert \\show... commands or temporary fixes and keep TeX running at human speed."
+      },
+      {
+        "name": "Workflow for long manuscripts: galley/book split",
+        "description": "For long manuscripts prepare a 'galley' file and a 'book' file; enter text into the galley file with basic control information at the beginning and then append galleys to the book file.",
+        "guidance": "Process only a few pages at a time, check galleys until they look right, then occasionally run the book file through TeX to see how pages actually fit together. Split long chapters into subchapters if helpful."
+      }
+    ]
+  }
+}

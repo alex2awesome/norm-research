@@ -1,0 +1,176 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_d2b9e2308e9d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_d2b9e2308e9d.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 13,
+  "chunk_chars": 39755,
+  "model": "gpt-5-mini",
+  "elapsed_s": 63.97620054199069,
+  "input_tokens": 12858,
+  "output_tokens": 5270,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Sage developers and contributors performing portability/build testing with Docker, tox, and GitHub Actions",
+    "subtask_short": "portability testing of Sage",
+    "subtask_description": "Guidance for building, testing, debugging, and distributing Sage builds across platforms using Docker, generated Dockerfiles, tox environments (docker/local), GitHub Actions, and VS Code devcontainers. Covers how to generate images, run partial builds, inspect failures, and use prebuilt images.",
+    "subtask_keywords": [
+      "sage",
+      "portability_testing",
+      "docker",
+      "tox",
+      "github_actions",
+      "devcontainers"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Create images from running containers",
+        "description": "You can create a new image corresponding to a container's current state using docker commit; the command prints the image id. You may refer to the image by either the symbolic name you give or its id.",
+        "guidance": "Example: docker commit 39d693b2a75d ubuntu-latest-minimal-17 -> sha256:...; use either name ubuntu-latest-minimal-17 or the id to run the image. Useful for preserving container state after interactive debugging."
+      },
+      {
+        "name": "Mount worktree when running image for development",
+        "description": "When running an image for development, mount your working tree into the container; otherwise the image snapshot will not include your live worktree and the container will have no access to it.",
+        "guidance": "Example: docker run -it --mount type=bind,source=$(pwd),target=/sage ubuntu-latest-minimal-17; without mounting, changes made outside the image are not available inside the container."
+      },
+      {
+        "name": "Share and save Docker images",
+        "description": "Docker images produced can be shared with other users (e.g., push to Docker Hub) or saved to a tar archive for distribution or collaboration.",
+        "guidance": "See Docker documentation for pushing to Docker Hub or saving images to tar archives."
+      },
+      {
+        "name": "Generate Dockerfiles automatically",
+        "description": "Sage provides a script (.github/workflows/write-dockerfile.sh) to generate a Dockerfile recipe for building images; the script accepts arguments (e.g., package-type lists) passed to sage --package list.",
+        "guidance": "Generated Dockerfile includes ARG BASE_IMAGE, FROM ${BASE_IMAGE}, steps to install system packages, bootstrap, configure, build, and test. Sections are separated by :comments: to simplify customization. Example command: .github/workflows/write-dockerfile.sh debian \":standard: :optional:\" > Dockerfile."
+      },
+      {
+        "name": "Dockerfile copies snapshot of source tree (and what is excluded)",
+        "description": "Dockerfile built images copy a snapshot of the Sage worktree into the build container using ADD; this copy is subject to .gitignore (via .dockerignore), so some build artifacts and configuration files are not copied.",
+        "guidance": "Files excluded include configuration (config.status), $SAGE_LOCAL, and other build artifacts. Because of this, Docker builds can be run from a non-distclean tree and will not write into the host worktree."
+      },
+      {
+        "name": "Customize docker build with build args (BASE_IMAGE, NUMPROC, EXTRA_CONFIGURE_ARGS)",
+        "description": "You can pass ARG values to docker build to customize base image, parallelism, and extra configure args; defaults are defined in the generated Dockerfile via ARG commands.",
+        "guidance": "Example: docker build . -f Dockerfile --build-arg BASE_IMAGE=ubuntu:latest --build-arg NUMPROC=4 --build-arg EXTRA_CONFIGURE_ARGS=\"--with-python=/usr/bin/python3.42\". These change FROM, MAKE parallel jobs, and configuration options."
+      },
+      {
+        "name": "Perform partial/silent builds via TARGETS_PRE, TARGETS, USE_MAKEFLAGS",
+        "description": "To avoid full builds, set TARGETS_PRE and TARGETS to build only specific packages; use USE_MAKEFLAGS to silence build output or pass flags to make.",
+        "guidance": "Example: docker build . -f Dockerfile --build-arg TARGETS_PRE=ratpoints --build-arg TARGETS=ratpoints --build-arg USE_MAKEFLAGS=\"V=0\" will build only ratpoints quietly. Default is full build which can take a long time."
+      },
+      {
+        "name": "When builds fail the intermediate container remains; inspect and copy build artifacts",
+        "description": "If docker build fails, no image id is shown but the intermediate container used for the failing step exists; you can inspect, copy files out of it, or commit it to preserve state.",
+        "guidance": "Commands: docker ps -a to list containers, docker cp <container>:/sage/local/var/tmp/sage/build ubuntu-build to copy out the build directory, docker commit <container> to create an image from the failed container for interactive debugging."
+      },
+      {
+        "name": "Use docker commit to preserve a failing build's container for debugging",
+        "description": "You can docker commit a failing build container then run it interactively to continue debugging (install missing packages, re-run spkg-install, etc.).",
+        "guidance": "Example flow shown: docker commit 61833... -> docker run -it <id> bash -> inspect build dir and run apt-get install, apt-file update, spkg-install, etc. Useful for fixing bitrot or missing dependencies."
+      },
+      {
+        "name": "Use tox for automated Docker-based portability testing",
+        "description": "Sage provides a sophisticated tox configuration (SAGE_ROOT/tox.ini) for portability testing; tox environments are identified by symbolic names composed of factors (technology-system-packages-configuration).",
+        "guidance": "Technology factor: docker or local; system factor: ubuntu-focal, debian-buster, fedora-30, etc.; packages factor: minimal/standard/maximal; configuration factor controls configure script args. Factors are hyphen-joined to form environment names. Recommended order of factors is technology-system-packages-configuration for consistent cacheable names."
+      },
+      {
+        "name": "Technology factor definitions (docker vs local)",
+        "description": "The technology factor determines how the environment is run: docker builds a Docker image; local runs testing on the host OS. The choice affects isolation and requirements (e.g., local requires build prerequisites installed).",
+        "guidance": "Use docker for isolated, reproducible images; use local for host-OS testing (may require distclean worktree and autotools installed). See later sections for variants (local-direct, local-homebrew-macos-*)."
+      },
+      {
+        "name": "Packages factor definitions (minimal, standard, maximal)",
+        "description": "The packages factor describes which system packages are installed prior to building Sage: minimal installs prerequisites for bootstrapping and building; standard adds packages equivalent to Sage standard packages; maximal adds standard + optional packages.",
+        "guidance": "Corresponds to sage --package list queries: :standard:, :optional:, etc.; affects which SPKGs are built from source vs provided by system."
+      },
+      {
+        "name": "Configuration factor and ordering recommendation",
+        "description": "The configuration factor (may be empty) controls how the configure script is run; use consistent factor ordering for caching and naming even if order doesn't matter functionally.",
+        "guidance": "E.g., tox -e docker-ubuntu-bionic-standard; order allows deterministic names used for caching and image naming."
+      },
+      {
+        "name": "Supply EXTRA_DOCKER_BUILD_ARGS via environment to pass extra docker build args",
+        "description": "Arbitrary extra arguments to docker build can be supplied through the environment variable EXTRA_DOCKER_BUILD_ARGS (e.g., to enable non-silent builds V=1).",
+        "guidance": "Example: EXTRA_DOCKER_BUILD_ARGS=\"--build-arg USE_MAKEFLAGS=\\\"V=1\\\"\" tox -e docker-ubuntu-bionic-standard. (Text shows variable name TRA_DOCKER_BUILD_ARGS in a context but intent is to allow passing extra docker build args.)"
+      },
+      {
+        "name": "Default tox targets and passing positional args to build specific packages",
+        "description": "By default tox uses TARGETS_PRE=all-sage-local and TARGETS=build (a complete build without docs). Passing positional arguments after -- to tox sets TARGETS_PRE and TARGETS to those arguments, enabling building specific packages.",
+        "guidance": "Example: tox -e docker-centos-8-standard -- ratpoints will build only ratpoints and produce an image named sage-centos-8-standard-with-targets:<tag>."
+      },
+      {
+        "name": "Image naming conventions produced by tox/Git describe integration",
+        "description": "Successful builds create images tagged using the tox environment name with suffixes like -with-targets and a tag describing git revision via git describe --dirty.",
+        "guidance": "Example: sage-centos-8-standard-with-targets:9.1.beta9-431-gca4b5b2f33-dirty. The -with-targets suffix indicates built targets; other suffixes exist for intermediate stages."
+      },
+      {
+        "name": "Create named intermediate images with DOCKER_TARGETS",
+        "description": "You can ask tox to create named intermediate images (with-system-packages, configured, with-targets) by setting DOCKER_TARGETS to a list of stage names.",
+        "guidance": "Example: DOCKER_TARGETS=\"with-system-packages configured with-targets\" tox -e docker-centos-8-standard -- ratpoints will generate images for those stages and tag them accordingly."
+      },
+      {
+        "name": "Meaning of staged image suffixes",
+        "description": "Different image name suffixes correspond to build stages and contents: -with-system-packages (system packages installed only), -configured (bootstrapped+configured), -with-targets-pre (partial source tree, full SAGE_LOCAL), -with-targets (full source tree and full Sage), -with-targets-optional (full build including optional packages and make ptest results).",
+        "guidance": "-with-targets-optional indicates full builds and a run of make ptest; some images may be outdated due to build errors; standard and minimal images are discontinued in some contexts."
+      },
+      {
+        "name": "Use docker images to debug build failures and understand logs",
+        "description": "Build logs are available as artifacts from CI runs; GitHub Actions annotations point at logs with errors or warnings. Use artifacts/logs and annotations to find build errors or test failures.",
+        "guidance": "In GitHub Actions, annotations show red 'check failure' for build errors and yellow 'check warning' for tests/doctests or configure notices. Click item to view log viewer and download artifacts for full logs."
+      },
+      {
+        "name": "GitHub Actions default CI limits and behavior",
+        "description": "CI runs on GitHub Actions are run on 2-core machines with ~7GB RAM and 14GB SSD and have a 6h job time limit; workflows are split into two jobs for robustness and Docker images are stored on ghcr.io as artifacts.",
+        "guidance": "These constraints mean some builds (especially full builds+ptest) may be borderline; logs and annotations are available as artifacts; images corresponding to build phases are pushed to ghcr.io."
+      },
+      {
+        "name": "Triggering portability CI runs in personal forks",
+        "description": "Developers can run the same portability tests in their forks by enabling GitHub Actions and either using the Actions UI 'Run workflow' or by creating and pushing a tag (e.g., lightweight tag 'ci') to trigger the workflows.",
+        "guidance": "Procedure: git remote -v | grep origin to verify origin; git tag -f ci; git push -f origin ci. Alternatively use Actions tab to select workflow and branch then click 'Run workflow'."
+      },
+      {
+        "name": "Pulling images from ghcr.io requires a Personal Access Token with read:packages",
+        "description": "To pull images published to GitHub Packages (ghcr.io) for private user namespaces, generate a PAT with read:packages scope and login to ghcr.io with docker login using the token.",
+        "guidance": "Create token at https://github.com/settings/tokens/new, select read:packages, then: echo <token> | docker login ghcr.io --username YOUR-GITHUB-USERNAME. Then docker pull ghcr.io/... and docker run to use the image."
+      },
+      {
+        "name": "Prebuilt images are for debugging, not production; dev tag corresponds to latest development release",
+        "description": "Prebuilt ghcr.io images are intended to help developers debug platform-specific build issues; they are not intended for production deployment. The dev tag points to the most recent development version built by CI.",
+        "guidance": "Example: docker run -it ghcr.io/sagemath/sage/sage-ubuntu-focal-standard-with-targets-optional:dev bash; note image size and that some images may be outdated if CI had build errors."
+      },
+      {
+        "name": "Use VS Code Dev Containers with prebuilt images and devcontainer.json",
+        "description": "VS Code Dev Containers extension can be used to develop inside prebuilt images; Sage provides sample devcontainer.json configurations that select images (e.g., ubuntu-jammy-standard) and perform onCreateCommand and updateContentCommand to install packages and rebuild Sage inside the container.",
+        "guidance": "Workflow: open repo in VS Code, choose 'Reopen Folder in Container' and pick configuration; VS Code pulls big images from ghcr.io, installs additional packages, bootstraps/configures and builds Sage reusing SAGE_LOCAL and SAGE_VENV from the image. After configuration, worktree is available at /workspaces/<repo>."
+      },
+      {
+        "name": "Devcontainer caveat: $SAGE_ROOT and symlinks are container-local",
+        "description": "When Sage is configured and rebuilt inside the dev container, $SAGE_ROOT/venv, $SAGE_ROOT/prefix, and possibly $SAGE_ROOT/logs will be symlinks that work inside the container but not on the host; $SAGE_ROOT/sage may not work on host afterwards.",
+        "guidance": "After working with the dev container, remove logs if they are symlinks and rerun the configure script on the host to restore a usable host-side worktree."
+      },
+      {
+        "name": "Local-direct tox environment requires distclean worktree and creates isolated SAGE_LOCAL/logs in .tox",
+        "description": "The local-direct tox environment runs builds on the host but uses a separate tox environment directory (.tox/local-direct) to hold SAGE_LOCAL and logs; it still writes some build artefacts into the worktree (config.status), so only one local build per worktree can run at a time.",
+        "guidance": "Create a fresh distclean git worktree (git worktree add worktree-local) before running local-direct; .tox contains isolated prefix and logs symlinked into the worktree for convenience; reuse of environment leads to incremental builds; use -r to start fresh."
+      },
+      {
+        "name": "Best-effort isolation of local tox (local) and its limits",
+        "description": "The local technology (tox -e local) attempts to isolate the build by setting environment vars and PATH to /usr/bin:/bin:/usr/sbin:/sbin, but isolation is not complete because build scripts may inspect /usr/local or other locations; using /usr/local is considered standard behavior.",
+        "guidance": "If a package build script inspects other filesystem locations beyond standard ones, that is considered a bug in the Sage distribution and should be reported. Local isolation settings exclude /usr/local/bin from PATH by default for isolation."
+      },
+      {
+        "name": "Local macOS Homebrew and Conda environments for isolated builds",
+        "description": "Sage provides tox environments that create isolated Homebrew (local-homebrew-macos-*) or Miniconda (local-conda-forge-*) installations inside the tox env directory to avoid interfering with system Homebrew/Conda installations.",
+        "guidance": "local-homebrew sets PATH and uses a .homebrew-build-env to have build scripts find keg-only packages; variants control whether Homebrew's python3 is used or system XCode python is used. local-conda-forge uses conda-forge channel and compilers from that channel. These environments do not interact with other user installations."
+      },
+      {
+        "name": "Environment variables to skip steps and interactive bash target",
+        "description": "Local technology environments accept SKIP_SYSTEM_PKG_INSTALL, SKIP_BOOTSTRAP, SKIP_CONFIGURE to skip repeated steps and save time when reusing tox envs; there is a special target 'bash' that starts an interactive shell instead of building.",
+        "guidance": "Examples: SKIP_SYSTEM_PKG_INSTALL=yes SKIP_BOOTSTRAP=1 SKIP_CONFIGURE=1 tox -e local-homebrew-macos-minimal -- bash; useful for debugging or iterative development without redoing expensive steps."
+      }
+    ]
+  }
+}

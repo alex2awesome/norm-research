@@ -1,0 +1,180 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 34,
+  "n_chunks": 42,
+  "chunk_chars": 39589,
+  "model": "gpt-5-mini",
+  "elapsed_s": 209.90369866700348,
+  "input_tokens": 15801,
+  "output_tokens": 6904,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "advanced TeX users / macro writers / book designers preparing TeX formats and output routines",
+    "subtask_short": "designing TeX document formats",
+    "subtask_description": "Guidance and concrete heuristics for implementing TeX output routines and creating document formats (business letters, concert programs, full-book format) including performance, inter-routine communication, syntax-checking runs, font and page-layout choices, and macro structure.",
+    "subtask_keywords": [
+      "tex",
+      "formatting",
+      "macros",
+      "typesetting",
+      "book_design"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Prefer simple schemes when constants are small",
+        "description": "Do not automatically resort to asymptotically faster but more complicated schemes when the constant of proportionality is small; in practice a simpler method may be faster overall.",
+        "guidance": "Example: although \removehboxes has running time of order n^2, the constant b for the \\"
+      },
+      {
+        "name": "Do not bypass removehboxes by crude unboxing",
+        "description": "Avoid bypassing the \removehboxes operation by doing something like \\setbox0=\\hbox{\\unhbox2\\unhbox0} in \\makehboxofhboxes because this makes the top-level list inside \\box0 too long for efficient unboxing.",
+        "guidance": "Although it may seem simpler, this anti-pattern harms unboxing efficiency and should be avoided."
+      },
+      {
+        "name": "Use marks and outputpenalty to communicate with the output routine",
+        "description": "When the output routine needs to know why it was invoked, use \\mark operations or test \\outputpenalty to infer the cause.",
+        "guidance": "Specific technique: use different \\outputpenalty values (e.g. -10000, -10001, -10002 or less) to force the output routine to act; different penalty values can encode different messages. Note: if the output routine puts material back on the contribution list it need not restore the penalty at the breakpoint."
+      },
+      {
+        "name": "Inspect packaged page (\\box255) to determine page fullness",
+        "description": "The output routine can use \\vbox{\\unvcopy255} to discover how full the current page (\\box255) actually is.",
+        "guidance": "Underfull and overfull boxes are not reported when \\box255 is packaged for the output routine, so you can eject a page prematurely if you want to pass a signal. To pass a signal when inserts are present set \\holdinginserts positive so the signal is preserved when \\box255 is sent back through the page builder."
+      },
+      {
+        "name": "Use depth of \\box255 and special struts as hidden channels",
+        "description": "Communicate information to the output routine by encoding values in the depth (\\dp255) of \\box255, e.g. by having each paragraph end with a deeper \\specialstrut so a page ending with a paragraph yields a recognizable \\dp255.",
+        "guidance": "Ensure \\maxdepth is large enough (plain TeX uses \\maxdepth=4pt; struts are normally 3.5pt) and use large invisible distances (e.g. 1000sp) to encode multiple messages."
+      },
+      {
+        "name": "Use very small \\vsize to have lines delivered one-by-one",
+        "description": "If \\vsize is very small, TeX will construct paragraphs as usual but send them to the output routine one line at a time.",
+        "guidance": "This allows the output routine to attach marginal notes or other per-line processing; paragraphs rebuilt and returned from the output routine will then permit normal page breaks once \\vsize is restored."
+      },
+      {
+        "name": "Two-pass information gathering via \\write and \\read",
+        "description": "The output routine may write notes to a file during a first pass; a second pass can \\read that information back in to perform the actual typesetting.",
+        "guidance": "Design output to gather information on pass one and do final typesetting on pass two using persisted data (a classic two-pass strategy)."
+      },
+      {
+        "name": "Fast syntax-check run (speeding TeX when only checking for errors)",
+        "description": "When running TeX just to check for syntax errors without producing output, apply a sequence of changes to make TeX much faster.",
+        "guidance": "Recommended steps (from text): (1) Define a dummy font (no characters) and set all font identifiers to that dummy (e.g. \\let\\tenrm=\\dummy), (2) select the dummy font, (3) set \\tracinglostchars=0, (4) set \\output to a no-op such as \\output={\\setbox0=\\box255\\deadcycles=0}, (5) \\newtoks\\output (so no other output routine is defined), (6) \\frenchspacing to avoid space-factor calculations, (7) \\hbadness=10000 to suppress underfull reports, (8) optionally disable \\write with \\let\\immediate=\\relax and a tricky \\def\\write to avoid IO. These changes typically make TeX run more than four times as fast for syntax checking."
+      },
+      {
+        "name": "Structure for multi-letter business-letter format",
+        "description": "A business-letter format file (letterformat.tex) should define a structured per-letter block with elements: (letterhead), \\address, \\body, \\closing, optional annotations, optional \\ps, \\endletter and optional \\makelabel.",
+        "guidance": "Each letter's \\address produces one or more lines, \\body may contain one or more paragraphs (typeset normally with TeX line breaking), and \\closing/\\annotations/\\ps behave as specified. The letter format file can be input once and then multiple letters processed sequentially."
+      },
+      {
+        "name": "Magnification strategy for letters",
+        "description": "Choose magnification (e.g. \\magnification=\\magstep1 or \\magstephalf) appropriate to letter length; the same magnification applies to all n letters, so change requires rerunning TeX.",
+        "guidance": "Use larger magnification for short letters; omit magnification for long letters. If different magnifications are needed, run TeX more than once."
+      },
+      {
+        "name": "Distinguish line mode vs paragraph mode for letter elements",
+        "description": "Address and closing should use a line mode (obeying input line breaks exactly), while \\body and \\ps should use paragraph mode (TeX chooses line breaks and justification).",
+        "guidance": "Provide control macros \\beginlinemode and \\beginparmode and an \\endmode that terminates the current mode; implement \\address to collect lines and produce a boxed address for the label."
+      },
+      {
+        "name": "Use \\longindentation for closing/date/label layout and hanging indentation",
+        "description": "\\longindentation controls indentation of the closing material, date, and aspects of the letterhead; the \\address macro creates a box with \\hsize=\\longindentation and applies hanging indentation for lines that overflow.",
+        "guidance": "Set \\longindentation to appropriate value (example: \\longindentation=4truein) and break address lines exceeding it using hanging indentation."
+      },
+      {
+        "name": "Prevent page breaks between body and postscripts",
+        "description": "Dosing macros should be careful not to allow a page break anywhere between the end of the \\body and the beginning of a \\ps.",
+        "guidance": "Use \\nobreak and suitable penalties when defining \\closing and \\ps to keep those pieces together."
+      },
+      {
+        "name": "Optional \\makelabel to produce address labels",
+        "description": "Provide a \\makelabel macro that uses the stored address box to produce a label (can be omitted if address label not desired).",
+        "guidance": "The example \\makelabel constructs a ruled box with the return address and the addressee aligned appropriately; it calls \\endletter then assembles the label."
+      },
+      {
+        "name": "Concert program format: compact page and explicit size macros",
+        "description": "A concert program format can assume a single-page width (example: \\hsize=4in), no page numbers, and provide macros (\\bigtype, \\medtype, \\smalltype) that set the text fonts and \\baselineskip appropriately.",
+        "guidance": "Define font assignments for each size, set \\baselineskip (with some shrinkability for one-page documents), and use \\vfill at the bottom of the page. Avoid stretchability in the baseline where not needed."
+      },
+      {
+        "name": "Allow shrinkability in baselineskip for single-page documents",
+        "description": "Shrinkability in \\baselineskip (e.g. \\baselineskip=14pt minus 1pt) is acceptable in a one-page concert program to squeeze copy to fit; avoid in book formats where differing spacing across pages looks bad.",
+        "guidance": "Use shrinkability sparingly and only when consistent with the document type (one-page vs book)."
+      },
+      {
+        "name": "Define application-specific macros for domain vocabulary and symbols",
+        "description": "When plain TeX lacks convenient constructs for domain-specific needs (e.g. musical programs), define macros like \\(#1) for roman parentheses, \\sharp and \\flat to produce musical signs, and \\. for thinspace.",
+        "guidance": "These macros may shadow plain-TeX math definitions but apply in text mode for this application; ensure correct raising and font selection for symbols."
+      },
+      {
+        "name": "Macro authoring for flexible argument/line handling",
+        "description": "Design macros (e.g. \\composition, \\composer, \\movements, \\soloists) to handle a variable number of lines and to permit user control of vertical spacing rather than hard-coding spacing.",
+        "guidance": "Examples use \\halign with \\crcr so an extra final \\cr is not needed; the macros intentionally omit automatic vertical spacing and rely on user inserts (\\smallskip, \\medskip, \\bigskip) because musical literature demands varied spacing."
+      },
+      {
+        "name": "Prepare sample pages showing every element required in book design",
+        "description": "Sample pages used as the basis of a design should show each element that will appear in the book: chapter titles, illustrations, subchapter headings, footnotes, displayed formulas, typewriter type, dangerous bends, exercises, answers, quotations, tables, numbered lists, bulleted lists, etc., and indicate desired margins for reader notes.",
+        "guidance": "A complete sample set lets the designer bring disparate elements into a consistent framework; this is an essential early step."
+      },
+      {
+        "name": "Consult a professional book designer",
+        "description": "Authors typesetting their own books should still show sample pages to a professional designer and accept guidance\u2014book design is an art requiring creativity, skill, experience, and taste.",
+        "guidance": "The author warns against attempting full book design without professional help; many layout decisions interact and require experience to resolve coherently."
+      },
+      {
+        "name": "Adopt consistent design decisions (indentation, running heads, page numbering, sizes)",
+        "description": "Decisions such as a uniform paragraph/display indentation (example: 3 picas), placing page numbers in bold in the margins, using italic running headlines with caps+lowercase, choosing main and special text sizes (e.g. 10pt on 12pt base, 9pt on 11pt base), and selecting \\hsize and \\vsize should be made coherently because each influences the others.",
+        "guidance": "Example values used by the designer: \\hsize=29pc, \\vsize=44pc, paragraph indentation 3pc, devote a left-hand page to chapter illustrations, etc."
+      },
+      {
+        "name": "Be cautious with vertical stretch/shrink decisions",
+        "description": "Decide whether to allow vertical stretching and shrinking (flexible glue); designers may omit it, while authors might introduce it for practical benefits (e.g. flexible glue to support cut-and-paste operations).",
+        "guidance": "If used, understand aesthetic consequences (varying spacing between pages) and apply only where acceptable for the publication."
+      },
+      {
+        "name": "Preload and configure fonts and font parameters",
+        "description": "Load required fonts at the start (e.g. 9pt, 8pt, 6pt sets and special fonts), set \\skewchar for math fonts, and set \\hyphenchar=-1 for typewriter fonts to inhibit hyphenation where control sequence names and keywords appear.",
+        "guidance": "Also define small caps, pseudo-small-caps, and any special fonts (title fonts, logo fonts) and ensure they are loaded at 'true' sizes if magnification will be applied later."
+      },
+      {
+        "name": "Provide size-switching macros that set text and math fonts consistently",
+        "description": "Define macros such as \\tenpoint, \\ninepoint, \\eightpoint which set \\textfont, \\scriptfont, \\scriptscriptfont for families (roman, math, slanted, tt, bold), declare \\it, \\sl, \\tt, \\bf etc., and set \\normalbaselineskip and \\strutbox appropriately.",
+        "guidance": "Also set \\ttglue for typewriter-like text (fixed spacing) and any small-cap substitutions; keep size-switching centralized for consistency."
+      },
+      {
+        "name": "Set explicit page-layout parameters",
+        "description": "Choose parameters such as \\vsize, \\maxdepth, \\hsize, \\parindent, \\abovedisplayskip, \\belowdisplayskip, \\abovedisplayshortskip, \\belowdisplayshortskip, and \\ruleht according to the design.",
+        "guidance": "Examples: \\vsize=44pc, \\maxdepth=2.2pt, \\hsize=29pc, \\parindent=3pc, \\ruleht=.5pt, \\abovedisplayskip=6pt plus 3pt minus 1pt, etc."
+      },
+      {
+        "name": "Use an insertion class for marginal notes with no limit",
+        "description": "Handle author marginal notes via a dedicated insertion class (e.g. \\newinsert\\margin) with \\dimen\\margin=\\maxdimen to allow unlimited marginal notes and \\skip\\margin=0 so marginal inserts take up no normal text space.",
+        "guidance": "This insertion class can place small-type editorial/index notes in the margin without disturbing main text flow."
+      },
+      {
+        "name": "Customize the footnote mechanism for book requirements",
+        "description": "Redefine \\footnote to typeset footnotes in a specified smaller point size (example: 8pt), indented and with simplified behavior, and set \\skip\\footins and \\dimen\\footins to control spacing and maximum footnote content per page.",
+        "guidance": "Example settings: \\skip\\footins=12pt plus 2pt minus 4pt, \\dimen\\footins=30pc, \\floatingpenalty=20000, \\interlinepenalty=100 inside the footnote insertion box."
+      },
+      {
+        "name": "Control running headlines and title pages",
+        "description": "Keep running headline contents in a control sequence \\rhead; use a \\titlepage flag to suppress headlines on a specific page, and implement \\leftheadline and \\rightheadline to place headlines and folios appropriately depending on page parity.",
+        "guidance": "Examples place folios in bold in the margin and running heads in italic; title pages set \\global\\titletrue so the next page omits headlines."
+      },
+      {
+        "name": "Assemble final page output with a single \\onepageout macro",
+        "description": "Define a \\onepageout macro that composes each shipped page by attaching headlines, marginal notes, the main material, footnotes, and any camera alignment marks; drive it by setting \\output{\\onepageout{\\unvbox255}}.",
+        "guidance": "The macro should position top material (headlines, corner rules), insert marginal boxes if \\margin is nonvoid, include the main content (#1), then append footnotes separated by a rule and the configured \\skip\\footins; set \\boxmaxdepth=\\maxdepth before shipping."
+      },
+      {
+        "name": "Provide camera-alignment (corner) rules for plate making",
+        "description": "Typeset registration/corner marks and a small page number near corner markings for photographic plate alignment; these marks will be erased before final printing.",
+        "guidance": "Implement a \\setcornerrules that places vertical/horizontal rules and the folio number as small auxiliary material outside the main text area."
+      }
+    ]
+  }
+}

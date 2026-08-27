@@ -1,0 +1,161 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/d4c976021752.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "d4c976021752.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 17,
+  "chunk_chars": 39800,
+  "model": "gpt-5-mini",
+  "elapsed_s": 74.98705329199584,
+  "input_tokens": 12275,
+  "output_tokens": 4123,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Isabelle/Isar users and tool authors implementing or declaring inner syntax, translations, and proof tooling (advanced users/programmers)",
+    "subtask_short": "isabelle inner_syntax_translations",
+    "subtask_description": "Rules and practical guidance for declaring inner syntax, AST representations, translation rules/functions, and related proof-tool configuration in Isabelle/Isar (including parsing/printing behavior and simpli\ufb01er configuration).",
+    "subtask_keywords": [
+      "isabelle",
+      "syntax",
+      "ast",
+      "translations",
+      "ml",
+      "theory_development"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "AST datatype definition",
+        "description": "The intermediate AST format is represented by the ML datatype 'ast = Constant of string | Variable of string | Appl of ast list'. An AST is either an atom (constant or variable) or a list (at least two) of subtrees.",
+        "guidance": "ASTs are first-order; constants are shown as quoted strings and variables as unquoted strings in diagnostics. Empty list () and singletons (x) are excluded as ASTs. Use this representation for syntax rewriting (\u00a78.5.1)."
+      },
+      {
+        "name": "Semantic role of Ast.Constant vs Ast.Variable",
+        "description": "Ast.Constant denotes known constants (or syntax-declared constants) while Ast.Variable leaves the role open (could be constant, free, bound, schematic later).",
+        "guidance": "Use Ast.Variable when input syntax does not yet fix scope/name resolution; use Ast.Constant when you want to prevent later reinterpretation. When printing fully formal lambda-terms, term constants become Ast.Constant and variables become Ast.Variable. CONST/XCONST in the term language and explicit CONST markers are available to enforce constant treatment."
+      },
+      {
+        "name": "Authentic syntax names",
+        "description": "Use fully-qualified constant names with a special prefix indicating their formal category (class, type, const, fixed) to represent constants faithfully within untyped ASTs.",
+        "guidance": "This avoids surprises from later name-resolution; authentic names work implicitly for input of notation-introduced term constants, type constants/constructors, type classes, and output of these entities. Prefer authentic names where syntax transformations cross parsing/name-resolution boundaries."
+      },
+      {
+        "name": "Raw syntax declarations provide unchecked grammar access",
+        "description": "Raw syntax (syntax, nonterminal, syntax_types, syntax_consts, translations, etc.) augments the inner priority grammar and pretty-printer without sanity checks; translations/macros must turn resulting parse trees into proper formal entities.",
+        "guidance": "Because there are no automatic sanity checks, be careful: invent syntax constant names (convention: start with underscore) to avoid clashes, and provide translations to interpret parse trees into typed/formal terms."
+      },
+      {
+        "name": "syntax (mode) c :: \u03c3 (mx) semantics",
+        "description": "Declares a grammar production and pretty-printer template: c is the syntax constant, \u03c3 the function type, and mx the mixfix template with argument slots (_), priorities and a resulting nonterminal with priority q.",
+        "guidance": "Argument types \u03c4i map to nonterminals (prop, logic, any, \u03ba); priorities default to 0 and resulting nonterminal priority defaults to 1000. If c==\"\" it's a copy production that copies the parse tree directly. Choose names carefully to avoid clashes with existing declarations."
+      },
+      {
+        "name": "copy production behavior",
+        "description": "A syntax declaration with c = \"\" indicates a copy production: the resulting parse tree t is copied directly without further decoration.",
+        "guidance": "Use copy productions when you want the parse tree to pass through unchanged into the AST stage; be aware they bypass the synthetic syntax-constant decoration step."
+      },
+      {
+        "name": "no_syntax removes grammar declarations and translations",
+        "description": "no_syntax (mode) decls removes grammar declarations and associated translations resulting from decls, interpreted like the corresponding syntax command.",
+        "guidance": "Use no_syntax to undo raw syntax declarations or macros introduced earlier in the theory context."
+      },
+      {
+        "name": "syntax_types / syntax_consts declare dependencies for markup",
+        "description": "syntax_types and syntax_consts declare dependencies of syntax constants with respect to formal logic entities (types, constants), telling the inner-syntax engine how to markup concrete syntax for hyperlinks and editor support.",
+        "guidance": "This is an abstract specification of the effect of translation rules or translation functions; list multiple names on both sides to indicate multiple dependencies."
+      },
+      {
+        "name": "Translation rules (translations) as first-order AST rewrite rules",
+        "description": "translations specifies syntactic translation rules (macros) as first-order rewrite rules on ASTs; there are separate lists for parse rules (=>), print rules (<=), and combined parse/print rules (==).",
+        "guidance": "Both sides of rules undergo parsing and AST-parse normalization; translation patterns may be prefixed by syntactic category (default logic). Use translation rules for macros that can be expressed as first-order AST rewrites."
+      },
+      {
+        "name": "AST rewrite rules side-conditions",
+        "description": "AST rewrite rules must be left-linear (lhs must not contain repeated variables) and every variable occurring in rhs must also occur in lhs.",
+        "guidance": "Left-linearity is required because AST equality is not well-defined when decorations differ; violating these conditions leads to ill-formed or ambiguous rewrites."
+      },
+      {
+        "name": "AST pattern matching semantics",
+        "description": "Matching rules for ASTs: Atomic ASTs Ast.Variable x or Ast.Constant x are matched by pattern Ast.Constant x (treat atomic ASTs as potential constants); Ast.Appl [Constant \"_constrain\", u, T] with u atomic is matched by Ast.Constant x when T encodes a source position or types are optional; Ast.Variable x matches any object binding x; Ast.Appl us matches Ast.Appl ts if lists have same length and subtrees match; otherwise matching fails.",
+        "guidance": "Successful matches yield substitutions applied to rhs. Be aware that atomic objects may be coerced to constants by matching, making them 'actual constants' even before namespace resolution\u2014use explicit CONST where needed."
+      },
+      {
+        "name": "Normalization strategy for applying translation rules",
+        "description": "Normalizing an AST repeatedly applies translation rules until none are applicable, in a yoyo pattern: top-down, bottom-up, top-down, etc.; at each subtree, rules are chosen in order of appearance in theory definitions.",
+        "guidance": "Use syntax_ast_trace and syntax_ast_stats to diagnose the process. Print_syntax output helps reveal internal AST forms if translation rules behave incorrectly."
+      },
+      {
+        "name": "Effect of eta_contract on printing and matching",
+        "description": "If eta_contract is true, terms are \u03b7-contracted before the AST rewriter sees them; abstractions needed for print rules may vanish, causing print rules to fail.",
+        "guidance": "If print rules fail due to \u03b7-contraction, avoid this by writing manual ML translation functions (the same mechanism as built-in binder declarations) or adjust eta_contract."
+      },
+      {
+        "name": "Translation functions (ML) admit arbitrary inner-syntax manipulation",
+        "description": "parse_ast_translation, parse_translation, print_translation, typed_print_translation, and print_ast_translation declare ML functions of specific types to be invoked for particular syntax names; they permit almost arbitrary transformations of parse-trees, ASTs, and terms.",
+        "guidance": "Signature types are given explicitly (e.g., string * (Proof.context -> Ast.ast list -> Ast.ast)) list for parse_ast_translation). The argument list consists of (c, tr) pairs; naming convention: c_tr. The print_syntax command shows declared translation functions. Use these when first-order AST rewrites are insufficient."
+      },
+      {
+        "name": "Invocation strategy: parse vs print translations",
+        "description": "Parse translations are applied bottom-up on already-translated arguments and must not fail (exceptions cause errors); at most one parse translation per syntactic name. Print translations are applied top-down on partly internal arguments, may raise Match to indicate failure (no effect), and multiple functions may be associated and tried in declaration order.",
+        "guidance": "Print translations must not reintroduce the head constant they are invoked on, because results are re-translated. Choose parse vs print depending on desired control and error semantics."
+      },
+      {
+        "name": "Only constants invoke translation functions",
+        "description": "Only constant atoms (Ast.Constant for ASTs, Const for terms) can invoke associated translation functions; plain identifiers without known constant status cannot invoke parse translations during parsing.",
+        "guidance": "This means parse translations can be associated only with parse tree heads or syntactic constants introduced earlier; print translations operate on already-internal terms where constants are explicit."
+      },
+      {
+        "name": "Parse tree -> AST transformation rules",
+        "description": "Parse trees (lists of tokens and nested constituent parse trees) are transformed into ASTs by stripping delimiters and copy productions and retaining some source position information; built-in AST translations make lambda-term structure explicit (e.g., f x y z -> (f x y z), lambda sequences to nested \"_abs\", type application mapped to (ty 'a) etc.).",
+        "guidance": "Parse -> AST built-ins insert additional constraints representing source positions. AST translation functions can augment this mapping."
+      },
+      {
+        "name": "AST -> term transformation rules",
+        "description": "After macros, ASTs are mapped to first-order terms: AST constants -> term constants, AST variables -> term variables or constants per namespace, AST applications -> iterated term applications. Type constraints may appear as _constrain nodes to be resolved later by type inference.",
+        "guidance": "Proper abstractions and bound variables are introduced by parse translations associated with particular syntax constants (e.g., \"_abs\" becomes a de-Bruijn Abs node)."
+      },
+      {
+        "name": "Printing process and grammar priorities",
+        "description": "Printing maps terms through ASTs to pretty-printed text using the priority grammar: each AST application with head c is printed according to the first grammar production for result name c; argument slots have required syntax priorities and are parenthesized as needed.",
+        "guidance": "If an AST application has more arguments than its production, it is split and printed recursively. Applications with too few args or non-constant head are printed in prefix form. Multiple productions are tried in order. White space is not inserted automatically\u2014specify blanks or breaks in mixfix declarations."
+      },
+      {
+        "name": "Naming conventions to avoid clashes",
+        "description": "Syntactic constants are conventionally prefixed by a single underscore (e.g., _foobar) to avoid accidental clashes with unqualified constants or identifiers in parse trees.",
+        "guidance": "Choose unique names for invented syntax constants; use @{const_syntax c} / @{class_syntax c} / @{type_syntax c} to inline authentic qualified names into ML."
+      },
+      {
+        "name": "Use diagnostics options syntax_ast_trace and syntax_ast_stats",
+        "description": "syntax_ast_trace and syntax_ast_stats control diagnostic output during AST normalization when translation rules are applied.",
+        "guidance": "Enable these options to understand normalization order, chosen rules, and to debug problematic translation behavior."
+      },
+      {
+        "name": "Configuration options stored in context and changed by attributes",
+        "description": "Isabelle maintains named configuration options in theory or proof contexts (types bool, int, real, string); options are declared in ML and can be changed with an attribute of the same name (e.g., declare [[show_main_goal = false]]).",
+        "guidance": "print_options displays available options, types, and current values. Changing a global option in a local context is ignored. Bool options default to true syntax when used as attribute expressions."
+      },
+      {
+        "name": "unfold / fold behavior and abs_def",
+        "description": "unfold a1...an expands given definitions throughout all goals in two stages (direct rewriting then via abs_def), fold reverses the expansion. abs_def turns equations like f x y \u2261 t into f \u2261 \u03bbx y. t to ensure full expansion.",
+        "guidance": "Use unfold for thorough expansion; chained facts are inserted and subject to rewriting. This ensures definitions are fully expanded regardless of actual parameters."
+      },
+      {
+        "name": "simp method semantics and modifiers",
+        "description": "simp invokes the Simpli\ufb01er on the first subgoal after inserting chained facts (optional simp add: facts). It fails if the subgoal remains unchanged. Modifiers include add/del/flip/only/split/cong and !, which respectively add/delete rules, flip sides of rules, restrict to only given rules, control split rule usage, and control congruence rules; ! causes aggressive split usage with the classical reasoner applied after each split.",
+        "guidance": "Be aware that original goal premises and chained facts are simplified themselves; add/del follow object-logic policies and may differ. flip replaces a rule by its symmetric version. The split modifier requires the Splitter to be included in the simpset. Use simp_all to act on all goals (from last to first)."
+      },
+      {
+        "name": "Simpli\ufb01er rewriting strategy",
+        "description": "The Simpli\ufb01er performs conditional and unconditional rewriting, using context rule declarations and local assumptions. The rewriting strategy is strictly bottom-up except for congruence rules (applied while descending); conditions of conditional rules are solved recursively before application.",
+        "guidance": "Default simpsets for major object logics make the Simpli\ufb01er ready for general use. Hooks allow strategy modification or integration of other solvers for conditions (e.g., linear arithmetic)."
+      },
+      {
+        "name": "split and subst family low-level methods",
+        "description": "split a1...an performs single-step case splitting using given rules; subst eq performs a single substitution using eq (meta or object equality), with variants subst (asm) and subst (i..j) to substitute in assumptions or at specified positions; hypsubst uses an assumption of form x = t where x is a free or bound variable.",
+        "guidance": "Positions for subst (i..j) are numbered top-down left-right in the term tree; non-overlapping positions may be assumed simultaneous. These low-level methods are for specialized applications; the Simpli\ufb01er usually provides the canonical normalization approach."
+      }
+    ]
+  }
+}

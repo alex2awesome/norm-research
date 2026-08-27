@@ -1,0 +1,355 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 41,
+  "n_chunks": 92,
+  "chunk_chars": 39995,
+  "model": "gpt-5-mini",
+  "elapsed_s": 287.0259786250026,
+  "input_tokens": 12431,
+  "output_tokens": 9415,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users (computational group theorists / mathematicians) working with permutation and matrix groups",
+    "subtask_short": "GAP stabilizer chain usage",
+    "subtask_description": "Reference/manual guidance for constructing, querying, modifying, and optimizing stabilizer chains in GAP (and related matrix-group attributes and functions). Covers StabChain options, stabilizer-chain record components, operations on chains, backtrack/partition routines, and practical tips for large-degree groups.",
+    "subtask_keywords": [
+      "gap",
+      "stabilizer_chain",
+      "permutation_group",
+      "matrix_group",
+      "options"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "StabChain caching and immutability behavior",
+        "description": "If the value of StabChainImmutable for G is already known and if this stabilizer chain matches the requirements of options, StabChain simply returns this stored stabilizer chain. Otherwise StabChain calls StabChainOp and returns an immutable copy of the result; additionally, this chain is stored as StabChainImmutable value for G. If no options argument is given, its components default to the global variable DefaultStabChainOptions. If base is a list of positive integers, the version StabChain(G, base) defaults to StabChain(G, rec(base := base)).",
+        "guidance": "Use caching via StabChainImmutable when possible; be aware that StabChain may return an immutable copy and also store it for future calls."
+      },
+      {
+        "name": "Option: base (default an empty list)",
+        "description": "A list of points, through which the resulting stabilizer chain shall run. For the base B of the resulting stabilizer chain S this means: if reduced is true then those points of base with nontrivial basic orbits form the initial segment of B; if reduced is false then base itself is the initial segment of B. Repeated occurrences of points in base are ignored. If a stabilizer chain for G is already known then the stabilizer chain is computed via a base change.",
+        "guidance": "Specify base when you need the chain to run through particular points; remember reduced interacts with base to decide which points appear in the final base."
+      },
+      {
+        "name": "Option: knownBase (no default value)",
+        "description": "A list of points which is known to be a base for the group. Such a known base makes it easier to test whether a permutation given as a word in terms of a set of generators is the identity, since it suffices to map the known base with each factor consecutively rather than multiplying whole permutations. This speeds up the Schreier-Sims algorithm when a new stabilizer chain is constructed; it will not affect a base change, however. The component knownBase bears no relation to the base component; you may specify knownBase and base independently.",
+        "guidance": "Provide knownBase to speed construction/tests (especially with straight-line program representations); does not change final base unless you perform a base change explicitly."
+      },
+      {
+        "name": "Option: reduced (default true)",
+        "description": "If true the resulting stabilizer chain S is reduced, i.e., the case G(i) = G(i+1) does not occur. Setting reduced to false makes sense only if the component base is also set; in this case all points of base will occur in the base B of S, even if they have trivial basic orbits. Note that if base is just an initial segment of B, the basic orbits of the points in B\\base are always nontrivial.",
+        "guidance": "Use reduced=true to eliminate trivial stabilizer steps; set reduced=false only when you explicitly want every point in base to appear (including trivial orbits)."
+      },
+      {
+        "name": "Option: tryPcgs (default true)",
+        "description": "If true and either the degree is at most 100 or the group is known to be solvable, GAP will first try to construct a pcgs for G which will succeed and implicitly construct a stabilizer chain if G is solvable. If G turns out non-solvable, one of the other methods will be used. This solvability check is comparatively fast, even if it fails, and it can save a lot of time if G is solvable.",
+        "guidance": "Leave tryPcgs=true for small-degree or solvable groups to gain performance; if degree is large and you know solvability, set IsSolvableGroup or provide information to avoid expensive checks."
+      },
+      {
+        "name": "Option: random (default 1000) \u2014 Monte Carlo behavior",
+        "description": "random controls the Monte Carlo/randomized algorithm behavior. A non-deterministically constructed stabilizer chain is correct with probability at least random/1000 (see detailed explanation in section 43.7).",
+        "guidance": "Lower random for faster but less-certain (Monte Carlo) constructions; set to 1000 (default) for high confidence, or a small value like 1 for faster approximate construction (example used StabChainOptions(g).random := 1 for fast Monte Carlo)."
+      },
+      {
+        "name": "Option: size (default Size(G) if known)",
+        "description": "If present, its value is assumed to be the order of the group G. This information can be used to prove that a non-deterministically constructed stabilizer chain is correct. In this case GAP does a non-deterministic construction until the size is correct.",
+        "guidance": "Set size when you know |G| to make randomized constructions deterministic/correct by verifying against provided size."
+      },
+      {
+        "name": "Option: limit (default Size(Parent(G)) or parent's StabChainOptions.limit)",
+        "description": "If present, it must be greater than or equal to the order of G. The stabilizer chain construction stops if size limit is reached.",
+        "guidance": "Use limit to constrain resource usage or to prevent runaway construction; ensure limit >= |G| or behaviour may be premature stopping."
+      },
+      {
+        "name": "Attribute: StabChainOptions(G)",
+        "description": "A record that stores the options with which the stabilizer chain stored in StabChainImmutable has been computed.",
+        "guidance": "Query StabChainOptions(G) to inspect the options used to compute the cached stabilizer chain."
+      },
+      {
+        "name": "Global: DefaultStabChainOptions",
+        "description": "Global variable that stores default options for StabChain.",
+        "guidance": "Modify DefaultStabChainOptions to change defaults for subsequent StabChain calls."
+      },
+      {
+        "name": "Function: StabChainBaseStrongGenerators(base, sgs[, one])",
+        "description": "Given a base and a strong generating set sgs (and optional identity one), constructs a stabilizer chain corresponding to the given base and strong generating set without the need to find Schreier generators \u2014 much faster than other algorithms. If sgs nonempty, argument one is optional; if not given, One(sgs[1]) is used as identity.",
+        "guidance": "Use this function to construct a chain from an existing strong generating set to avoid expensive Schreier-tree computations."
+      },
+      {
+        "name": "Attribute: MinimalStabChain(G)",
+        "description": "Returns the reduced stabilizer chain corresponding to the base [1,2,3,4,...].",
+        "guidance": "Use MinimalStabChain when you want the canonical reduced chain for the standard base ordering."
+      },
+      {
+        "name": "Stabilizer chain record structure and components",
+        "description": "A stabilizer chain is stored as a recursive record S with components describing one level G(i) (the current stabilizer) and a component stabilizer which holds the next-level record. Components include: identity, labels, genlabels, generators, orbit, base point at first position in orbit, transversal (factorized inverse transversal), translabels (indices such that transversal[j] = labels[translabels[j]]), and stabilizer (next level). The last member has no stabilizer component bound.",
+        "guidance": "Understand these components to safely inspect/manipulate chains; do not print whole chains (recursive) unless you want massive output."
+      },
+      {
+        "name": "labels and genlabels semantics",
+        "description": "labels is a list of permutations containing labels for the Schreier tree; first entry always identity. genlabels is a list of integers indexing some permutations in labels; labels{genlabels} form a generating set for the current stabilizer. If genlabels is empty, the rest of the chain represents the trivial subgroup.",
+        "guidance": "Expect generators often to be labels{genlabels}; genlabels being empty signifies trivial remainder of chain."
+      },
+      {
+        "name": "generators component",
+        "description": "A list of generators for the current stabilizer, usually labels{genlabels}.",
+        "guidance": "Generators may be stored explicitly or referenced via labels/genlabels; code manipulating generators should handle both representations."
+      },
+      {
+        "name": "orbit and transversal semantics",
+        "description": "orbit stores the vertices of the Schreier tree forming the basic orbit bG(i), ordered so base point bi is first. transversal stores factorized inverse transversal elements; transversal[i] maps i closer to base point by combining labels along path. translabels is an index list mapping transversals to labels and is used to speed base changes.",
+        "guidance": "Use transversal and translabels for efficient mapping and base change operations; they are memory-optimized."
+      },
+      {
+        "name": "Recursive stabilizer component",
+        "description": "If current stabilizer is nontrivial, stabilizer holds a record for the stabilizer of the current base point (with labels, identity, genlabels, generators, orbit, translabels, transversal, and perhaps stabilizer). Different stabilizer chains may share the same record as one of their iterated stabilizer components.",
+        "guidance": "Be careful when mutating nested stabilizer records because they may be shared between chains."
+      },
+      {
+        "name": "Anti-pattern: printing stabilizer chains",
+        "description": "Since the structure is recursive, never print a stabilizer chain (unless you want to exercise the scrolling capabilities of your terminal).",
+        "guidance": "Avoid printing entire chains; instead query specific components (BaseStabChain, SizeStabChain, etc.)."
+      },
+      {
+        "name": "Operation: BaseStabChain(S)",
+        "description": "Returns the base belonging to the stabilizer chain S.",
+        "guidance": "Use to retrieve the actual base of a stored stabilizer chain."
+      },
+      {
+        "name": "Attribute: BaseOfGroup(G)",
+        "description": "Returns a base of the permutation group G. There is no guarantee that a stabilizer chain stored in G corresponds to this base.",
+        "guidance": "If you need the base matching a stored stabilizer chain, use BaseStabChain(StabChain(G))."
+      },
+      {
+        "name": "Operation: SizeStabChain(S)",
+        "description": "Returns the product of the orbit lengths in stabilizer chain S, i.e., the order of the group described by S.",
+        "guidance": "Use SizeStabChain to get the group order represented by a chain without recomputing group size from generators."
+      },
+      {
+        "name": "Operation: StrongGeneratorsStabChain(S)",
+        "description": "Returns a strong generating set corresponding to the stabilizer chain S.",
+        "guidance": "Useful when you need a strong generating set matched to the chain for further algorithms or for constructing a group via GroupStabChain."
+      },
+      {
+        "name": "Operation: GroupStabChain([G,] S)",
+        "description": "Constructs a permutation group with stabilizer chain S (i.e., a group with generators Generators(S) to which S is assigned as component stabChain). If optional argument G is given, result will have parent G.",
+        "guidance": "Use to rebuild a Group object from a stabilizer-chain record when necessary."
+      },
+      {
+        "name": "Operation: OrbitStabChain(S, pnt)",
+        "description": "Returns the orbit of pnt under the group described by stabilizer chain S.",
+        "guidance": "Query orbits using the chain representation for efficiency."
+      },
+      {
+        "name": "Operation: IndicesStabChain(S)",
+        "description": "Returns a list of the indices of the stabilizers in the stabilizer chain S.",
+        "guidance": "Indices can be used to observe the factor indices between successive stabilizers."
+      },
+      {
+        "name": "Operation: ListStabChain(S)",
+        "description": "Returns a list that contains at position i the stabilizer of the first i-1 base points in the stabilizer chain S.",
+        "guidance": "Use to materialize the sequence of stabilizer subgroups represented by the chain."
+      },
+      {
+        "name": "Operation: ElementsStabChain(S)",
+        "description": "Returns a list of all elements of the group described by S. The list is duplicate free but may be unsorted.",
+        "guidance": "Use with caution for large groups (may be huge); good for small groups or testing."
+      },
+      {
+        "name": "Operation: IteratorStabChain(S)",
+        "description": "Returns an iterator for the elements of the group described by S. Elements are produced by iterating through all base images in turn, in the ordering induced by the base.",
+        "guidance": "Prefer iterators for streaming access to group elements without constructing the whole list."
+      },
+      {
+        "name": "Operation: InverseRepresentative(S, pnt)",
+        "description": "Calculates the transversal element which maps pnt back to the base point of S by walking up the Schreier tree and multiplying labels.",
+        "guidance": "Use InverseRepresentative for efficient computation of the element mapping a point back to the root."
+      },
+      {
+        "name": "Operation: SiftedPermutation(S, g)",
+        "description": "Sifts permutation g through stabilizer chain S and returns the remainder after the last step. The remainder is identity iff original g is in group G described by S.",
+        "guidance": "Use SiftedPermutation for membership tests relative to the chain."
+      },
+      {
+        "name": "Operation: MinimalElementCosetStabChain(S, g)",
+        "description": "Returns a permutation h such that Gg = Gh (i.e., g*h^{-1} \u2208 G) and the list of images under h of the base belonging to S is lexicographically minimal.",
+        "guidance": "Use to canonicalize coset representatives by lexicographic minimality of base images."
+      },
+      {
+        "name": "Operation: LargestElementStabChain(S, id)",
+        "description": "Returns element h \u2208 G with the property that the list of images under h of the base is lexicographically maximal. The second argument id must be an identity element (used to start recursion).",
+        "guidance": "Useful for maximizing base image lists; requires identity argument for recursion."
+      },
+      {
+        "name": "Operation: ApproximateSuborbitsStabilizerPermGroup(G, pnt)",
+        "description": "Returns an approximation of the orbits of Stabilizer(G, pnt) on all points of Orbit(G, pnt) without computing the full point stabilizer; as not all Schreier generators are used, result may represent orbits of only a subgroup of the point stabilizer.",
+        "guidance": "Use when approximate suborbit structure suffices and full stabilizer computation is expensive."
+      },
+      {
+        "name": "Low-level routines caution",
+        "description": "Low-level routines to modify/create stabilizer chains are technical and should only be used if deliberately required.",
+        "guidance": "Unless you know exactly why, prefer high-level functions; low-level functions can corrupt shared records if misused."
+      },
+      {
+        "name": "Operation: CopyStabChain(S)",
+        "description": "Returns a mutable copy of S that has no mutable object (list or record) in common with S. labels components of the result are possibly shared by several levels, but superfluous labels are removed (an entry in labels is superfluous if it does not occur among genlabels or translabels on any sharing levels).",
+        "guidance": "Use CopyStabChain to obtain an independent mutable copy for local modification; good for extracting sub-chains."
+      },
+      {
+        "name": "Operation: CopyOptionsDefaults(G, options)",
+        "description": "Sets components in a stabilizer chain options record options according to what is known about group G. Can be used to obtain a new stabilizer chain for G quickly.",
+        "guidance": "Call CopyOptionsDefaults to pre-fill options from group metadata to speed chain creation."
+      },
+      {
+        "name": "Operation: ChangeStabChain(S, base[, reduced])",
+        "description": "Changes or reduces stabilizer chain S to be adapted to base. Optional reduced argument interpreted as: reduced=false: change chain, do not reduce; reduced=true: change chain and reduce it.",
+        "guidance": "Use ChangeStabChain to perform base change and optionally drop trivial steps."
+      },
+      {
+        "name": "Operation: ExtendStabChain(S, base)",
+        "description": "Extends S so that it corresponds to base. The original base of S must be a subset of base.",
+        "guidance": "Use to add further base points to an existing chain (original base must be subset)."
+      },
+      {
+        "name": "Operation: ReduceStabChain(S)",
+        "description": "Changes S to a reduced stabilizer chain by eliminating trivial steps.",
+        "guidance": "Call ReduceStabChain when you want to compact a chain and remove G(i)=G(i+1) occurrences."
+      },
+      {
+        "name": "Operation: RemoveStabChain(S)",
+        "description": "Cuts off the chain at S by changing entries in S; used to remove trailing trivial steps. S must be a stabilizer record in a stabilizer chain.",
+        "guidance": "Use to truncate a chain at a chosen level safely."
+      },
+      {
+        "name": "Operation: EmptyStabChain(labels, id[, pnt])",
+        "description": "Constructs a stabilizer chain for the trivial group with identity equal to id and labels = {id} \u222a labels (with genlabels and generators empty). If optional pnt given, the only stabilizer is initialized with one-point basic orbit [pnt] and with translabels and transversal components.",
+        "guidance": "Use to initialize trivial chains or to create base cases for iterative construction."
+      },
+      {
+        "name": "Operation: InsertTrivialStabilizer(S, pnt)",
+        "description": "Initializes the current stabilizer with pnt as EmptyStabChain did, but assigns the original S to new S.stabilizer so a new level with trivial basic orbit is inserted. Should be used only if pnt is really fixed by generators of S, because new generators can be added and the orbit/transversal extended with AddGeneratorsExtendSchreierTree.",
+        "guidance": "Only insert trivial stabilizers when you know pnt is fixed by all generators; otherwise chain invariants break."
+      },
+      {
+        "name": "Operation: IsFixedStabilizer(S, pnt)",
+        "description": "Returns true if pnt is fixed by all generators of S and false otherwise.",
+        "guidance": "Check IsFixedStabilizer before InsertTrivialStabilizer to ensure correctness."
+      },
+      {
+        "name": "Operation: AddGeneratorsExtendSchreierTree(S, new)",
+        "description": "Adds elements in new to the list of generators of S and extends the orbit and transversal at the same time. This is the only legal way to extend a Schreier tree because it involves careful handling of tree components.",
+        "guidance": "Always use this function when adding generators that require extending the Schreier tree to maintain data structure invariants."
+      },
+      {
+        "name": "Backtrack/partition-backtrack usage of stabilizer chains",
+        "description": "Stabilizer chains are a main use for backtrack algorithms for permutation groups. GAP implements a partition-backtrack algorithm and uses it in computations of centralizers, normalizers, intersections, conjugating elements and stabilizers for various actions.",
+        "guidance": "Provide good chains and bases to improve backtrack performance; many higher-level methods call backtrack routines internally."
+      },
+      {
+        "name": "Operation: SubgroupProperty(G, Pr[, L])",
+        "description": "Pr must be a one-argument function returning true/false for elements of G, and the subset of elements fulfilling Pr must be a subgroup (if not the result is unpredictable). Computes this subgroup. Optional L is a subgroup of elements fulfilling Pr and can be given to speed calculation.",
+        "guidance": "Only use SubgroupProperty when the property defines a subgroup; supply known subgroup L to accelerate computation."
+      },
+      {
+        "name": "Operation: ElementProperty(G, Pr[, L[, R]])",
+        "description": "Returns an element \u03c0 \u2208 G such that Pr(\u03c0) is true, or fail if none exists. Optional L and R are subgroups of G such that Pr has same value on cosets Lg and gR, respectively. Typical use is element-finding with coset invariance (e.g., conjugacy test using L=CG(a), R=CG(b)).",
+        "guidance": "Provide L and R when property is coset-invariant to drastically speed search; useful for conjugacy and similar tests."
+      },
+      {
+        "name": "Operation/attribute: TwoClosure(G)",
+        "description": "The 2-closure of a transitive permutation group G on n points is the largest subgroup of Sn with the same orbits on ordered pairs of points as G. It can be interpreted as stabilizer of orbital graphs of G.",
+        "guidance": "Use TwoClosure to obtain the permutation group's 2-closure for graph/orbital-based computations."
+      },
+      {
+        "name": "Info class: InfoBckt",
+        "description": "InfoBckt is the info class for the partition backtrack routines.",
+        "guidance": "Use InfoBckt to control/info logging for partition-backtrack operations."
+      },
+      {
+        "name": "Guidance: large-degree permutation group heuristics",
+        "description": "Permutation groups of large degree (usually at least a few 10000) can pose a challenge to heuristics. For solvable groups many calculations are faster; GAP will only automatically test solvability if degree \u2264 100. Therefore, if a large-degree group is known solvable, set SetIsSolvableGroup(G,true).",
+        "guidance": "For large-degree groups, explicitly inform GAP about solvability to avoid expensive tests and exploit faster algorithms (see tryPcgs option interaction)."
+      },
+      {
+        "name": "Guidance: memory usage and straight-line program elements",
+        "description": "A permutation on more than 65536 points requires 4 bytes per point to store; e.g., permutations on 256000 points need ~1MB each. Storing permutations for a stabilizer chain may exceed memory. Replacing permutations by straight line program (SLP) elements can drastically reduce memory (example computing a stabilizer chain in ~200MB instead of >512MB).",
+        "guidance": "Use StraightLineProgGens to represent generators compactly when degree is huge. Tradeoff: element comparisons become more expensive. Register a known base with SLP gens so element comparison only compares images of base points; if doing extensive computations, recreate group with SLP gens knowing previously computed base and size to speed future chain computations."
+      },
+      {
+        "name": "Behavior: Monte Carlo vs deterministic tradeoffs",
+        "description": "Using random algorithms (e.g., StabChainOptions.random small) can be faster but yields Monte Carlo results; providing size allows GAP to verify chain correctness by continuing randomized construction until size matches provided value.",
+        "guidance": "If you need guaranteed-correct chains, supply size; otherwise carefully choose random parameter to balance speed vs correctness probability."
+      },
+      {
+        "name": "Matrix-group attribute: DimensionOfMatrixGroup",
+        "description": "Provides the dimension (n) of the matrix group (n\u00d7n).",
+        "guidance": "Query to know ambient space dimension before performing dimension-dependent computations."
+      },
+      {
+        "name": "Matrix-group attribute: DefaultFieldOfMatrixGroup vs FieldOfMatrixGroup",
+        "description": "DefaultFieldOfMatrixGroup returns a field containing all matrix entries (not necessarily smallest). FieldOfMatrixGroup returns the smallest field containing all entries but can be expensive to compute.",
+        "guidance": "Use DefaultFieldOfMatrixGroup for cheap access to field info (e.g., characteristic); use FieldOfMatrixGroup only when you need the smallest field."
+      },
+      {
+        "name": "Function: TransposedMatrixGroup(matgrp)",
+        "description": "Returns the transpose of the matrix group matgrp. The transpose of the transpose of matgrp is identical to matgrp.",
+        "guidance": "Use when you need to switch representation conventions or to account for left/right action differences."
+      },
+      {
+        "name": "Property: IsFFEMatrixGroup",
+        "description": "Tests whether all matrices in G have finite field element entries.",
+        "guidance": "Use to select methods specialized for finite-field matrix groups."
+      },
+      {
+        "name": "Actions: ProjectiveActionOnFullSpace and ProjectiveActionHomomorphismMatrixGroup",
+        "description": "ProjectiveActionOnFullSpace(G,F,n) returns the image of the projective action of G on the full row space F^n. ProjectiveActionHomomorphismMatrixGroup returns an action homomorphism for a faithful projective action of G on the underlying vector space (not necessarily full space).",
+        "guidance": "Use these to obtain projective actions of matrix groups for geometric or projective-group computations."
+      },
+      {
+        "name": "Function: BlowUpIsomorphism(matgrp, B)",
+        "description": "For matgrp and basis B of a field extension L/K such that entries of all matrices lie in L, returns the isomorphism mapping A to BlownUpMat(A,B).",
+        "guidance": "Use to realize a matrix group over a smaller/base field by blowing up with basis."
+      },
+      {
+        "name": "Properties: IsGeneralLinearGroup / IsGL and IsSpecialLinearGroup / IsSL and 'natural' variants",
+        "description": "IsGL/IsGeneralLinearGroup tests whether a group is isomorphic to a General Linear group (limited methods currently). IsNaturalGL/IsNaturalSL test whether a matrix group is GL/SL in the right dimension over the (smallest) ring containing all entries (currently trivial checks are available).",
+        "guidance": "These properties may perform limited/trivial tests presently; interpret results accordingly and prefer structural checks when necessary."
+      },
+      {
+        "name": "Invariant forms: InvariantBilinearForm / InvariantSesquilinearForm / InvariantQuadraticForm",
+        "description": "Attributes return forms invariant under matgrp: bilinear form matrix F satisfying g\u00b7F\u00b7gtr = F; sesquilinear form M with Frobenius twisting; quadratic form Q giving q(v)=vQvtr with relation to invariant symmetric bilinear form F = Q + Qtr (special considerations in characteristic 2). When InvariantQuadraticForm is set, InvariantBilinearForm is accessible and the two are compatible.",
+        "guidance": "Use these attributes to detect/construct invariant forms and to determine whether group respects orthogonal/unitary/sp groups; be aware of characteristic subtleties."
+      },
+      {
+        "name": "Property tests for respecting forms",
+        "description": "IsFullSubgroupGLorSLRespectingBilinearForm/ SesquilinearForm/QuadraticForm test whether matgrp is the full subgroup of GL or SL respecting the respective invariant form stored in the group's attributes.",
+        "guidance": "Use to classify whether matgrp equals the full isometry group of the form (within GL/SL)."
+      },
+      {
+        "name": "Matrix groups in characteristic 0 dependency",
+        "description": "Most functions for matrix groups in characteristic 0 use methods from the CaratInterface package. If CaratInterface is not installed/compiled, no suitable methods are available.",
+        "guidance": "Install/compile CaratInterface to enable these routines."
+      },
+      {
+        "name": "Entry-type tests for matrix groups",
+        "description": "IsCyclotomicMatrixGroup, IsRationalMatrixGroup, IsIntegerMatrixGroup test whether all matrices in G have cyclotomic, rational, or integer entries, respectively.",
+        "guidance": "Use these predicates to select algorithms tailored to entry types."
+      },
+      {
+        "name": "Natural GL/SL over Z and related attributes",
+        "description": "IsNaturalGLnZ / IsNaturalSLnZ test whether G is GLn(Z) / SLn(Z) in natural representation. InvariantLattice returns a Z-basis invariant under G acting from the right for unimodular rational matrix groups; NormalizerInGLnZ and CentralizerInGLnZ store normalizer/centralizer in GLn(Z). ZClassRepsQClass returns integer-conjugacy class representatives; BravaisGroup-related attributes test and return Bravais group, BravaisSubgroups, BravaisSupergroups, and NormalizerInGLnZBravaisGroup.",
+        "guidance": "Use these attributes for integer-matrix-group lattice/Bravais/normalizer/centralizer computations; note some computations assume unimodularity or finiteness."
+      },
+      {
+        "name": "Action conventions: OnRight vs OnLeft and CrystGroupDefaultAction",
+        "description": "By convention GAP matrices act on row vectors from the right; crystallography uses action from the left. For functions whose result depends on action, versions SomeThingOnRight and SomeThingOnLeft exist and a generic SomeThing returns either depending on global CrystGroupDefaultAction which can be RightAction or LeftAction (initially RightAction).",
+        "guidance": "Be explicit about action conventions; change CrystGroupDefaultAction with SetCrystGroupDefaultAction(action) where action is RightAction or LeftAction when using crystallography-related functions."
+      }
+    ]
+  }
+}

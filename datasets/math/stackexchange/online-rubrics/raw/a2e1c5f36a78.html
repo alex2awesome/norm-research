@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="https://nhigham.com/xmlrpc.php">
+
+<title>Handbook of Writing for the Mathematical Sciences, Third Edition &#8211; Nick Higham</title>
+<meta name='robots' content='max-image-preview:large' />
+<meta name="google-site-verification" content="qxd-gpqMp8_WgCaMJPkiAM3TmUxARODV9d-moz7eawg" />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=5154'
+					+ '&is_singular=1';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9uaGlnaGFtLmNvbQ%3D%3D"
+		+ "&wpcomid=43828396"
+		+ "&time=" + Math.floor( Date.now() / 1000 );
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//widgets.wp.com' />
+<link rel='dns-prefetch' href='//fonts-api.wp.com' />
+<link rel="alternate" type="application/rss+xml" title="Nick Higham &raquo; Feed" href="https://nhigham.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Nick Higham &raquo; Comments Feed" href="https://nhigham.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Nick Higham &raquo; Handbook of Writing for the Mathematical Sciences, Third&nbsp;Edition Comments Feed" href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??-eJxtzN0KQEAQQOEXssaKcCHPsq1Jy+xPZjavL1JKLr86HTiSsjEIBgGfVaK8uMCwoiRjt8fAOYCPcyZk2JGM4KxSZPmotMwF/B/Jbfh+b1355EfdddWg26av1xMpeTR5&cssminify=yes' type='text/css' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/common.min.css */
+</style>
+<style id="wp-block-library-inline-css-extra">
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+<style id="classic-theme-styles-inline-css">
+.wp-block-button__link{background-color:#32373c;border-radius:9999px;box-shadow:none;color:#fff;font-size:1.125em;padding:calc(.667em + 2px) calc(1.333em + 2px);text-decoration:none}.wp-block-file__button{background:#32373c;color:#fff}.wp-block-accordion-heading{margin:0}.wp-block-accordion-heading__toggle{background-color:inherit!important;color:inherit!important}.wp-block-accordion-heading__toggle:not(:focus-visible){outline:none}.wp-block-accordion-heading__toggle:focus,.wp-block-accordion-heading__toggle:hover{background-color:inherit!important;border:none;box-shadow:none;color:inherit;padding:var(--wp--preset--spacing--20,1em) 0;text-decoration:none}.wp-block-accordion-heading__toggle:focus-visible{outline:auto;outline-offset:0}.wp-block-tab:not(.has-text-color){color:inherit!important}.wp-block-tab:not(.has-background){background-color:inherit!important}.wp-block-tab:focus,.wp-block-tab:hover{text-decoration:none}.wp-block-tab:focus-visible{outline:auto;outline-offset:0}
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/classic.min.css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??/wp-content/mu-plugins/core-compat/wp-mediaelement.css,/wp-content/mu-plugins/wpcom-bbpress-premium-themes.css?m=1432920480j&cssminify=yes' type='text/css' media='all' />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.css?m=1777406400i&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='verbum-gutenberg-css-css' href='https://widgets.wp.com/verbum-block-editor/block-editor.css?ver=1771405207' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/wp-content/mu-plugins/jetpack-plugin/sun/_inc/genericons/genericons/genericons.css?m=1771607505i&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='colinear-open-sans-lora-css' href='https://fonts-api.wp.com/css?family=Open+Sans%3A400%2C700%2C400italic%2C700italic%7CLora%3A400%2C700%2C400italic%2C700italic&#038;subset=latin%2Clatin-ext&#038;ver=7.0-RC2-62280' media='all' />
+<link rel='stylesheet' id='colinear-inconsolata-css' href='https://fonts-api.wp.com/css?family=Inconsolata%3A400%2C+700&#038;subset=latin%2Clatin-ext&#038;ver=7.0-RC2-62280' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-16-1' href='/_static/??-eJyFi0EKAjEMAD9kDevKigfxLd0QayRNSpuy+HtXvCiC3mZgBpYS0NRJHfxKmRqUPgOasFKs0PwutMXWNvCnZMVXHZaClr+e3EORnlgbVJrF0ooJ1upNf02JLIhhdDb9kHCRyPW5nvNpOOyH6TiOu+n2AKDTUTE=&cssminify=yes' type='text/css' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='print-css-17-1' href='/wp-content/mu-plugins/global-print/global-print.css?m=1465851035i&cssminify=yes' type='text/css' media='print' />
+<style id="jetpack-global-styles-frontend-style-inline-css">
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+/*# sourceURL=jetpack-global-styles-frontend-style-inline-css */
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-20-1' href='/_static/??-eJyNjcsKAjEMRX/IGgaqgwvxU6TTlDZjmhTTIv69D9yIG3f3wOUcuDUXVXqSDnW4xiOTGKyptxAvHwYbAlVxcDKwEq4JA+L9PUnyNppt4G/RmSTCMogRTCMFdqxZ7Qt+lL2k+owXD5l1Cfw6nOpxmme/837aH9YHfvpKpw==&cssminify=yes' type='text/css' media='all' />
+<script id="jetpack_related-posts-js-extra">
+var related_posts_js_options = {"post_heading":"h4"};
+//# sourceURL=jetpack_related-posts-js-extra
+</script>
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"43828396","postID":"5154","siteURL":"https://nhigham.com","xhrURL":"https://nhigham.com/wp-admin/admin-ajax.php","nonce":"0d227c72f5","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https://s0.wp.com/wp-content/js/wpcom-proxy-request.js?m=1513050504i&amp;ver=20211021","shortlink":"https://wp.me/p2XTLC-1l8","i18n":{"followedText":"New posts from this site will now appear in your \u003Ca href=\"https://wordpress.com/reader\"\u003EReader\u003C/a\u003E","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+//# sourceURL=wpcom-actionbar-placeholder-js-extra
+</script>
+<script id="jetpack-mu-wpcom-settings-js-before">
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https://s0.wp.com/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/"};
+//# sourceURL=jetpack-mu-wpcom-settings-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJx1jcEOwiAQRH9IunJo2ovxU0yFTQPCguyS2r8XE0zqwdNkMi9vYMvKJBIkgVhVDnV1xOBR8mIevQNXgpsjA/fqgoWCYRG0KicW/m1DdDR4PsHB6xsTROWSXvt3a7JQLfJn9M+KZe9xFPyFVHRraacdvsaLnsbxrPU0z/4NC+ROAA=='></script>
+<script id="rlt-proxy-js-after">
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+//# sourceURL=rlt-proxy-js-after
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://nickhigham.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+<link rel="canonical" href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/" />
+<link rel='shortlink' href='https://wp.me/p2XTLC-1l8' />
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/?format=json&amp;url=https%3A%2F%2Fnhigham.com%2F2020%2F02%2F11%2Fhandbook-of-writing-for-the-mathematical-sciences-third-edition%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/?format=xml&amp;url=https%3A%2F%2Fnhigham.com%2F2020%2F02%2F11%2Fhandbook-of-writing-for-the-mathematical-sciences-third-edition%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Handbook of Writing for the Mathematical Sciences, Third Edition" />
+<meta property="og:url" content="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/" />
+<meta property="og:description" content="The third edition of Handbook of Writing for the Mathematical Sciences was published by SIAM in January 2020. It is SIAM&#8217;s fourth best selling book of all time if sales for the first edition …" />
+<meta property="article:published_time" content="2020-02-11T09:45:00+00:00" />
+<meta property="article:modified_time" content="2020-02-11T09:58:40+00:00" />
+<meta property="og:site_name" content="Nick Higham" />
+<meta property="og:image" content="https://nhigham.com/wp-content/uploads/2020/01/hwms3_cover_front.jpg" />
+<meta property="og:image:width" content="266" />
+<meta property="og:image:height" content="377" />
+<meta property="og:image:alt" content="hwms3_cover_front.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom" />
+<meta name="twitter:creator" content="@nhigham" />
+<meta name="twitter:site" content="@nhigham" />
+<meta name="twitter:text:title" content="&lt;em&gt;Handbook of Writing for the Mathematical Sciences&lt;/em&gt;, Third&nbsp;Edition" />
+<meta name="twitter:image" content="https://nhigham.com/wp-content/uploads/2020/01/hwms3_cover_front.jpg?w=144" />
+<meta name="twitter:image:alt" content="hwms3_cover_front.jpg" />
+<meta name="twitter:card" content="summary" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel='openid.server' href='https://nhigham.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://nhigham.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://nhigham.com/osd.xml" title="Nick Higham" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<meta name="theme-color" content="#4c5c68" />
+<style>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>		<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="description" content="The third edition of Handbook of Writing for the Mathematical Sciences was published by SIAM in January 2020. It is SIAM&#039;s fourth best selling book of all time if sales for the first edition (1993) and second edition (1998) are combined, and it is in my top ten most cited outputs. As well as being&hellip;" />
+	<style type="text/css">
+			.site-title,
+		.site-description {
+			position: absolute;
+			clip: rect(1px, 1px, 1px, 1px);
+		}
+		</style>
+	<style id="custom-background-css">
+body.custom-background { background-color: #4c5c68; }
+</style>
+<style type="text/css" id="custom-colors-css">	#comments #respond p.form-submit input#comment-submit {
+		background: #222 !important;
+	}
+	#comments #respond .form-submit input#comment-submit:active,
+	#comments #respond .form-submit input#comment-submit:focus,
+	#comments #respond .form-submit input#comment-submit:hover {
+		background: #777 !important;
+	}
+body { background-color: #4c5c68;}
+button,
+		input[type="button"],
+		input[type="reset"],
+		input[type="submit"],
+		.main-navigation ul,
+		.menu-toggle.toggled,
+		.dropdown-toggle,
+		.widget_akismet_widget .a-stats a,
+		.main-navigation a:active,
+		.main-navigation a:focus,
+		.main-navigation a:hover,
+		.main-navigation li:hover > a,
+		.main-navigation ul ul,
+		.main-navigation .current_page_item > a,
+		.main-navigation .current-menu-item > a,
+		.main-navigation .current_page_ancestor > a { background-color: #1E1E1E;}
+.main-navigation { border-bottom-color: #1E1E1E;}
+.comment-meta { border-left-color: #1E1E1E;}
+.rtl .comment-meta { border-right-color: #1E1E1E;}
+.site-main .post-navigation,
+		.widget,
+		.sticky,
+		.page-header,
+		.comment-reply-title,
+		.comments-title,
+		.no-comments,
+		.hentry div#jp-relatedposts.entry-related { border-top-color: #1E1E1E;}
+body,
+		input,
+		textarea,
+		cite,
+		input[type="text"],
+		input[type="email"],
+		input[type="url"],
+		input[type="password"],
+		input[type="search"],
+		textarea,
+		a:hover,
+		a:focus,
+		a:active,
+		.post-navigation .post-title,
+		.page-links > span,
+		.comment-author a,
+		#infinite-footer .blog-info,
+		#infinite-footer .blog-info a,
+		#infinite-handle span button:active,
+		#infinite-handle span button:focus,
+		#infinite-handle span button:hover,
+		.hentry div#jp-relatedposts.entry-related h3.jp-relatedposts-headline,
+		.hentry div#jp-relatedposts.entry-related div.jp-relatedposts-items p,
+		.hentry div#jp-relatedposts.entry-related div.jp-relatedposts-items-visual h4.jp-relatedposts-post-title,
+		.widget_goodreads div[class^="gr_custom_title"] a:active,
+		.widget_goodreads div[class^="gr_custom_title"] a:focus,
+		.widget_goodreads div[class^="gr_custom_title"] a:hover,
+		#comments #respond .comment-form-fields p.comment-form-posting-as,
+		#comments #respond .comment-form-fields p.comment-form-log-out,
+		#comments #respond #comment-form-identity #comment-form-nascar p,
+		#comments #respond #comment-form-load-service p,
+		#comments #respond #comment-form-comment textarea,
+		#comments #comment-form-share-text-padder textarea,
+		#comments #respond .comment-form-fields label,
+		#comments #respond .comment-form-fields label span.required,
+		#comments #respond .comment-form-fields label span.nopublish,
+		#comments #respond .comment-form-fields div.comment-form-input input,
+		#comments #respond .comment-form-service a:active,
+		#comments #respond .comment-form-service a:focus,
+		#comments #respond .comment-form-service a:hover,
+		.widget_flickr #flickr_badge_uber_wrapper td a:last-child:active,
+		.widget_flickr #flickr_badge_uber_wrapper td a:last-child:focus,
+		.widget_flickr #flickr_badge_uber_wrapper td a:last-child:hover { color: #1E1E1E;}
+::input-placeholder { color: #1E1E1E;}
+::-webkit-input-placeholder { color: #1E1E1E;}
+:-moz-placeholder { color: #1E1E1E;}
+::-moz-placeholder { color: #1E1E1E;}
+:-ms-input-placeholder { color: #1E1E1E;}
+.dropdown-toggle { border-color: #515151;}
+.main-navigation li,
+		.main-navigation ul ul li { border-bottom-color: #515151;}
+.main-navigation ul ul { border-top-color: #515151;}
+.main-navigation a:active,
+		.main-navigation a:focus,
+		.main-navigation a:hover,
+		.main-navigation .current_page_item > a,
+		.main-navigation .current-menu-item > a,
+		.dropdown-toggle:active,
+		.dropdown-toggle:focus,
+		.dropdown-toggle:hover,
+		.main-navigation ul ul a:active,
+		.main-navigation ul ul a:focus,
+		.main-navigation ul ul a:hover,
+		.main-navigation ul ul .current_page_item > a,
+		.main-navigation ul ul .current-menu-item > a,
+		.main-navigation ul ul .current_page_ancestor > a { background-color: #303030;}
+.main-navigation a:hover,
+		.dropdown-toggle:hover { color: #6D6D6D;}
+mark,
+		ins,
+		button:active,
+		input[type="button"]:active,
+		input[type="reset"]:active,
+		input[type="submit"]:active,
+		button:hover,
+		button:focus,
+		input[type="button"]:focus,
+		input[type="reset"]:focus,
+		input[type="submit"]:focus,
+		input[type="button"]:hover,
+		input[type="reset"]:hover,
+		input[type="submit"]:hover,
+		.toggled .menu-toggle:active,
+		.toggled .menu-toggle:focus,
+		.toggled .menu-toggle:hover,
+		.widget_calendar tbody a,
+		.widget_akismet_widget .a-stats a:active,
+		.widget_akismet_widget .a-stats a:focus,
+		.widget_akismet_widget .a-stats a:hover,
+		.milestone-widget .milestone-header { background-color: #0074D9;}
+input[type="text"]:focus,
+		input[type="email"]:focus,
+		input[type="url"]:focus,
+		input[type="password"]:focus,
+		input[type="search"]:focus,
+		textarea:focus,
+		#comments #respond #comment-form-comment.active,
+		#comments #respond .comment-form-fields div.comment-form-input.active { border-color: #0074D9;}
+.bypostauthor .comment-meta { border-left-color: #0074D9;}
+.rtl .bypostauthor .comment-meta { border-right-color: #0074D9;}
+a,
+		.post-navigation a:active .post-title,
+		.post-navigation a:focus .post-title,
+		.post-navigation a:hover .post-title,
+		.site-title a:active,
+		.site-title a:focus,
+		.site-title a:hover,
+		.site-footer a:active,
+		.site-footer a:active,
+		.site-footer a:hover,
+		.entry-title a:active,
+		.entry-title a:focus,
+		.entry-title a:hover,
+		.page-title a:active,
+		.page-title a:focus,
+		.page-title a:hover,
+		.entry-footer a:active,
+		.entry-footer a:focus,
+		.entry-footer a:hover,
+		.entry-author a:active,
+		.entry-author a:focus,
+		.entry-author a:hover,
+		.comment-metadata a:active,
+		.comment-metadata a:focus,
+		.comment-metadata a:hover,
+		.comment-author a:active,
+		.comment-author a:focus,
+		.comment-author a:hover,
+		#infinite-footer .blog-credits a:active,
+		#infinite-footer .blog-credits a:focus,
+		#infinite-footer .blog-credits a:hover,
+		#infinite-footer .blog-info a:active,
+		#infinite-footer .blog-info a:focus,
+		#infinite-footer .blog-info a:hover,
+		#infinite-handle span button,
+		#infinite-handle span button:focus,
+		#infinite-handle span button:hover,
+		.widget_goodreads div[class^="gr_custom_title"] a,
+		.widget_goodreads div[class^="gr_custom_container"] div[class^="gr_custom_author"] a:active,
+		.widget_goodreads div[class^="gr_custom_container"] div[class^="gr_custom_author"] a:focus,
+		.widget_goodreads div[class^="gr_custom_container"] div[class^="gr_custom_author"] a:hover,
+		#comments #respond .comment-form-service a,
+		.widget_flickr #flickr_badge_uber_wrapper td a:last-child { color: #0074D9;}
+input[type="text"]:focus,
+		input[type="email"]:focus,
+		input[type="url"]:focus,
+		input[type="password"]:focus,
+		input[type="search"]:focus,
+		textarea:focus,
+		.site,
+		.page-links a,
+		#comments .comment #respond #comment-form-comment,
+		#comments .comment #comment-form-share-text-padder,
+		#comments .comment #respond .comment-form-fields div.comment-form-input,
+		#comments #respond #comment-form-comment.active,
+		#comments #respond .comment-form-fields div.comment-form-input.active { background-color: #ffffff;}
+mark,
+		ins,
+		button,
+		input[type="button"],
+		input[type="reset"],
+		input[type="submit"],
+		.main-navigation a,
+		.main-navigation ul ul,
+		.menu-toggle.toggled,
+		.dropdown-toggle,
+		.dropdown-toggle:active,
+		.dropdown-toggle:focus,
+		.dropdown-toggle:hover,
+		.widget_calendar tbody a,
+		.main-navigation a:active,
+		.main-navigation a:focus,
+		.main-navigation a:hover,
+		.main-navigation li:hover > a,
+		.main-navigation ul ul a,
+		.main-navigation .current_page_item > a,
+		.main-navigation .current-menu-item > a,
+		.main-navigation .current_page_ancestor > a,
+		#comments #respond p.form-submit input#comment-submit,
+		#comments #respond .form-submit input#comment-submit:active,
+		#comments #respond .form-submit input#comment-submit:focus,
+		#comments #respond .form-submit input#comment-submit:hover,
+		.widget_akismet_widget .a-stats a { color: #ffffff;}
+hr,
+		.entry-footer:before,
+		.entry-author:before,
+		.page-links:before,
+		.sd-block:before,
+		.hentry div#jp-relatedposts:not(.entry-related):before { background-color: #D1D1D1;}
+input[type="text"],
+		input[type="email"],
+		input[type="url"],
+		input[type="password"],
+		input[type="search"],
+		textarea,
+		.page-links a,
+		.page-links > span,
+		.site .widget_wpcom_social_media_icons_widget a,
+		#comments #respond #comment-form-comment,
+		#comments #comment-form-share-text-padder,
+		#comments #respond .comment-form-fields div.comment-form-input { border-color: #D1D1D1;}
+.post-navigation .nav-next,
+		.post-navigation .nav-previous,
+		.widget-title,
+		.widget_calendar caption,
+		.hentry,
+		.page-header,
+		.comment-reply-title,
+		.comments-title,
+		.no-comments,
+		.wp-caption,
+		.hentry div#jp-relatedposts.entry-related h3.jp-relatedposts-headline,
+		.sticky,
+		.hentry .wpcom-reblog-snapshot .reblogger-note { border-bottom-color: #D1D1D1;}
+.site-footer,
+		.main-navigation { border-top-color: #D1D1D1;}
+code,
+		kbd,
+		pre,
+		tt,
+		var,
+		input[type="text"],
+		input[type="email"],
+		input[type="url"],
+		input[type="password"],
+		input[type="search"],
+		textarea,
+		.sticky,
+		.page-links a,
+		.page-links > span,
+		.page-links a:active,
+		.page-links a:focus,
+		.page-links a:hover,
+		#infinite-footer,
+		.site .widget_wpcom_social_media_icons_widget a:active,
+		.site .widget_wpcom_social_media_icons_widget a:focus,
+		.site .widget_wpcom_social_media_icons_widget a:hover,
+		#comments #respond #comment-form-comment,
+		#comments #comment-form-share-text-padder,
+		#comments #respond .comment-form-fields div.comment-form-input { background-color: #EAEAEA;}
+table,
+		.gallery,
+		.widget.top_rated .pd_top_rated_holder_posts > p,
+		.widget.top_rated ul { border-color: #EFEFEF;}
+td,
+		th,
+		.widget_authors ul ul,
+		.widget_recent_comments tr,
+		.widget_recent_comments td { border-bottom-color: #EFEFEF;}
+td,
+		th,
+		.comment-metadata .edit-link { border-left-color: #EFEFEF;}
+.rtl td,
+		.rtl th,
+		.rtl .comment-metadata .edit-link { border-right-color: #EFEFEF;}
+.site-main .comment-navigation,
+		.site-main .posts-navigation,
+		.comment-list .comment,
+		.comment-list .pingback,
+		.comment-list .trackback,
+		#infinite-handle,
+		.infinite-loader,
+		.widget_goodreads div[class^="gr_custom_each_container"],
+		.widget_authors ul ul { border-top-color: #EFEFEF;}
+.widget_calendar tbody a:active,
+		.widget_calendar tbody a:focus,
+		.widget_calendar tbody a:hover { background-color: #6D6D6D;}
+blockquote,
+		.post-navigation .meta-nav,
+		.widget_recent_entries .post-date,
+		.widget_rss cite,
+		.widget_rss .rss-date,
+		.site-description,
+		.site-footer,
+		.entry-footer,
+		.entry-author,
+		.page-links > .page-links-title,
+		.comment-metadata,
+		.wp-caption-text,
+		#infinite-footer .blog-credits,
+		.site-content .jetpack-recipe .jetpack-recipe-meta,
+		.hentry div.sharedaddy h3.sd-title,
+		.rating-msg,
+		.hentry div#jp-relatedposts h3.jp-relatedposts-headline,
+		.hentry div#jp-relatedposts div.jp-relatedposts-items p,
+		.hentry div#jp-relatedposts div.jp-relatedposts-items-visual h4.jp-relatedposts-post-title,
+		.hentry div#jp-relatedposts.entry-related div.jp-relatedposts-items .jp-relatedposts-post-context,
+		.widget_goodreads div[class^="gr_custom_author"],
+		.widget.top_rated #top_posts { color: #6D6D6D;}
+</style>
+<link rel="icon" href="https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=32" sizes="32x32" />
+<link rel="icon" href="https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=192" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=180" />
+<meta name="msapplication-TileImage" content="https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=270" />
+			<link rel="stylesheet" id="custom-css-css" type="text/css" href="https://s0.wp.com/?custom-css=1&#038;csblog=2XTLC&#038;cscache=6&#038;csrev=54" />
+					<!-- Jetpack Google Analytics -->
+		<script async src='https://www.googletagmanager.com/gtag/js?id=G-PS4BYPH15N'></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push( arguments ); }
+			gtag( 'js', new Date() );
+			gtag( 'config', "G-PS4BYPH15N" );
+					</script>
+		<!-- End Jetpack Google Analytics -->
+		<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-3' href='/_static/??-eJylzNEKwjAMheEXsosTZXohPopsbRiZbRqWlOLbW1QQ7wTv8ofDB1Wcz2zIBqk4iWUmVljQZPS3d4MWhiuxh6lQDC0n9SuJUW7br+oScedVN/AznHIoERUqhRlNwbI4ydoutXvEP7Wa1yArqj5N93p/5Es698OwPfWH/XG3PAAp+GaU&cssminify=yes' type='text/css' media='all' />
+
+</head>
+
+<body class="wp-singular post-template-default single single-post postid-5154 single-format-standard custom-background wp-custom-logo wp-theme-pubcolinear customizer-styles-applied has-menu jetpack-reblog-enabled has-site-logo custom-colors">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-branding">
+			<a href="https://nhigham.com/" class="site-logo-link" rel="home" itemprop="url"><img width="480" height="79" src="https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=480" class="site-logo attachment-colinear-logo" alt="" data-size="colinear-logo" itemprop="logo" decoding="async" srcset="https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=480 480w, https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=960 960w, https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=150 150w, https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=300 300w, https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=768 768w" sizes="(max-width: 480px) 100vw, 480px" data-attachment-id="7418" data-permalink="https://nhigham.com/logo-blue-on-white_narrower/" data-orig-file="https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg" data-orig-size="1666,273" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="Logo &amp;#8211; blue on white_narrower" data-image-description="" data-image-caption="" data-large-file="https://nhigham.com/wp-content/uploads/2021/01/logo-blue-on-white_narrower.jpg?w=863" /></a>
+								<p class="site-title"><a href="https://nhigham.com/" rel="home">Nick Higham</a></p>
+									<p class="site-description">Applied mathematics, numerical linear algebra and software.</p>
+						</div><!-- .site-branding -->
+
+				<nav id="site-navigation" class="main-navigation" role="navigation">
+			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><span class="screen-reader-text">Primary Menu</span></button>
+			<div class="menu-primary-container"><ul id="primary-menu" class="menu"><li id="menu-item-6719" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-6719"><a href="https://nhigham.com/">Home</a></li>
+<li id="menu-item-6713" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-6713"><a href="https://nhigham.com/blog/">Blog</a></li>
+<li id="menu-item-6714" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-6714"><a href="https://nhigham.com/papers/">Papers</a>
+<ul class="sub-menu">
+	<li id="menu-item-6755" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6755"><a href="https://nhigham.com/linear-systems-and-condition-estimation/">Linear Systems and Condition Estimation</a></li>
+	<li id="menu-item-6733" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6733"><a href="https://nhigham.com/least-squares-problems/">Least Squares Problems</a></li>
+	<li id="menu-item-6715" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6715"><a href="https://nhigham.com/correlation-matrices/">Correlation Matrices</a></li>
+	<li id="menu-item-6728" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6728"><a href="https://nhigham.com/eigenvalue-problems/">Eigenvalue Problems</a></li>
+	<li id="menu-item-6752" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6752"><a href="https://nhigham.com/matrix-functions-and-nonlinear-matrix-equations/">Matrix Functions and Nonlinear Matrix Equations</a></li>
+	<li id="menu-item-6753" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6753"><a href="https://nhigham.com/miscellaneous-papers/">Miscellaneous Papers</a></li>
+	<li id="menu-item-6754" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6754"><a href="https://nhigham.com/articles-and-book-reviews/">Articles and Book Reviews</a></li>
+</ul>
+</li>
+<li id="menu-item-6716" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-6716"><a href="https://nhigham.com/books/">Books</a>
+<ul class="sub-menu">
+	<li id="menu-item-6963" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6963"><a href="https://nhigham.com/accuracy-and-stability-of-numerical-algorithms/">Accuracy and Stability of Numerical Algorithms</a></li>
+	<li id="menu-item-6976" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6976"><a href="https://nhigham.com/functions-of-matrices-theory-and-computation/">Functions of Matrices: Theory and Computation</a></li>
+	<li id="menu-item-6965" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6965"><a href="https://nhigham.com/handbook-of-writing-for-the-mathematical-sciences/">Handbook of Writing for the Mathematical Sciences</a></li>
+	<li id="menu-item-6964" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6964"><a href="https://nhigham.com/matlab-guide/">MATLAB Guide</a></li>
+	<li id="menu-item-6975" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6975"><a href="https://nhigham.com/the-princeton-companion-to-applied-mathematics/">The Princeton Companion to Applied Mathematics</a></li>
+	<li id="menu-item-6991" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6991"><a href="https://nhigham.com/penguin-dictionary-of-mathematics/">Penguin Dictionary of Mathematics</a></li>
+</ul>
+</li>
+<li id="menu-item-6811" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6811"><a href="https://nhigham.com/conferences/">Conferences</a></li>
+<li id="menu-item-6759" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6759"><a href="#">Talks</a>
+<ul class="sub-menu">
+	<li id="menu-item-6792" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6792"><a href="https://nhigham.com/videos/">Videos</a></li>
+	<li id="menu-item-6769" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6769"><a href="https://nhigham.com/slides/">Slides</a></li>
+</ul>
+</li>
+<li id="menu-item-6826" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6826"><a href="https://nhigham.com/resources/">Resources</a></li>
+<li id="menu-item-6848" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6848"><a href="https://nhigham.com/people/">People</a></li>
+<li id="menu-item-9372" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9372"><a href="https://nhigham.com/photos-2/">Photos</a></li>
+<li id="menu-item-6866" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6866"><a href="https://nhigham.com/miscellanea/">Miscellanea</a></li>
+<li id="menu-item-7313" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-7313"><a href="https://nhigham.com/popular-posts/">Popular Posts</a></li>
+<li id="menu-item-7355" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-7355"><a href="#">SIAM News</a>
+<ul class="sub-menu">
+	<li id="menu-item-8646" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-8646"><a href="https://nhigham.com/posts-at-siam-news/">Posts at SIAM News</a></li>
+	<li id="menu-item-7356" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-7356"><a href="https://sinews.siam.org/">SIAM News home page</a></li>
+</ul>
+</li>
+<li id="menu-item-8035" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8035"><a href="https://nhigham.com/index-of-what-is-articles/">&#8220;What Is&#8221;</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+		
+			</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+<article id="post-5154" class="post-5154 post type-post status-publish format-standard hentry category-books category-latex category-writing">
+	<header class="entry-header">
+		<h1 class="entry-title"><em>Handbook of Writing for the Mathematical Sciences</em>, Third&nbsp;Edition</h1>
+			</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<div class="figure">
+<img class="alignright" src="https://nhigham.com/wp-content/uploads/2020/01/hwms3_cover_front.jpg?w=266&#038;h=377" alt="hwms3_cover_front.jpg" width="266" height="377"></div>
+<p>The third edition of <a href="https://www.maths.manchester.ac.uk/~higham/hwms/index.php">Handbook of Writing for the Mathematical Sciences</a> was published by SIAM in January 2020. It is SIAM&#8217;s fourth best selling book of all time if sales for the first edition (1993) and second edition (1998) are combined, and it is in my top ten <a href="https://scholar.google.com/citations?user=EYlMkOgAAAAJ#d=gs_md_cita-d&amp;u=%2Fcitations%3Fview_op%3Dview_citation%26hl%3Den%26user%3DEYlMkOgAAAAJ%26citation_for_view%3DEYlMkOgAAAAJ%3AqjMakFHDy7sC%26tzom%3D0">most cited outputs</a>. As well as being used by individuals from students to faculty, it is a course text on transferable skills modules in many mathematics departments. A number of publishers cite the book as a reference for recommended style—see, for example, the <a href="http://www.ams.org/publications/authors/authors">AMS Author Handbook</a>, the <a href="https://www.siam.org/publications/journals/about-siam-journals/information-for-authors">SIAM Style Manual</a> and, outside mathematics and computing, the <a href="http://www.chicagomanualofstyle.org/16/bib2.html">Chicago Manual of Style</a>.</p>
+<p>Parts of the second edition were becoming out of date, as they didn&#8217;t reflect recent developments in publishing (open access publishing, DOIs, ORCID, etc.) or workflow (including modern LaTeX packages, version control, and markup languages). I&#8217;ve also learned a lot more about writing over the last twenty years.</p>
+<p>I made a variety of improvements for the third edition. I reorganized the material in a way that is more logical and makes the book easier to use for reference. I also improved the design and formatting and checked and updated all the references.</p>
+<p>I removed content that was outdated or is now unnecessary. For example, nowadays there is no need to talk about submitting a hard copy manuscript, or one not written in LaTeX, to a publisher. I removed the 20-page appendix <i>Winners of Prizes for Expository Writing</i>, since the contents can now be found on the web, and likewise for the appendix listing addresses of mathematical organizations.</p>
+<p>I also added a substantial amount of new material. Here are some of the more notable changes.</p>
+<div class="figure">
+<img class="alignright" src="https://nhigham.com/wp-content/uploads/2020/01/hwms1to3spines.jpg?w=96&#038;h=413" alt="hwms1to3spines.jpg" width="96" height="413"></div>
+<ul class="org-ul">
+<li>A new chapter <i>Workflow</i> discusses how to organize and automate the many tasks involved in writing.  With the increased role of computers in writing and the volume of digital material we produce it is important that we make efficient use of text editors, markup languages, tools for manipulating plain text, spellcheckers, version control, and much more.</li>
+<li>The chapter on <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" /> has been greatly expanded, reflecting both the many new and useful packages and my improved knowledge of typesetting.</li>
+<li>I used the enumitem <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" /> package to format all numbered and bulleted lists.  This results in more concise lists that make better use of the page, as explained in <a href="https://nhigham.com/2019/12/17/lists-in-latex-with-the-enumitem-package/">this blog post</a>.</li>
+<li>I wrote a new chapter on indexing at the same time as I was reading the literature on indexing and making an improved index for the book. Indexing is an interesting task, but most of us do it only occasionally so it is hard to become proficient.  This is my best index yet, and the indexing chapter explains pretty much everything I&#8217;ve learned abut the topic.</li>
+<li>Since the second edition I have changed my mind about how to typeset tables. I am now a convert to minimizing the use of rules and to using the booktabs <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" /> package, as explained in <a href="https://nhigham.com/2019/11/19/better-latex-tables-with-booktabs/">this blog post</a>.</li>
+<li>The chapter <i>Writing a Talk</i> now illustrates the use of the Beamer <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" /> package.</li>
+<li>The book uses color for syntax highlighted <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" /> listings and examples of slides.</li>
+<li>Sidebars in gray boxes give brief diversions on topics related to the text, including several on &#8220;Publication Peculiarities&#8221;.</li>
+<li>An expanded chapter <i>English Usage</i> includes new sections on <i>Zombie Nouns</i>; <i>Double Negatives</i>; <i>Serial, or Oxford, Comma</i>; and <i>Split Infinitives</i>.</li>
+<li>There are new chapters on <i>Writing a Blog Post</i>; <i>Refereeing and Reviewing</i>; <i>Writing a Book</i>; and, as discussed above, <i>Preparing an Index</i> and <i>Workflow</i>.</li>
+<li>The bibliography now uses the backref <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" /> package to point back to the pages on which entries are cited, hence I removed the author index.</li>
+<li>As well as updating the bibliography I have added DOIs and URL links, which can be found in the online version of the bibliography in bbl and PDF form, which is available from <a href="https://www.maths.manchester.ac.uk/~higham/hwms/index.php">the book&#8217;s website</a>.</li>
+</ul>
+<p>At 353 pages, and allowing for the appendices removed and the more efficient formatting, the third edition is over 30 percent longer than the second edition.</p>
+<p>As always, working with the SIAM staff on the book was a pleasure.  A special thanks goes to <a href="https://www.linkedin.com/in/sam-clark-2b024a9/?originalSubdomain=uk">Sam Clark</a> of <a href="http://tandtproductions.com/2017/">T&amp;T Productions</a>, who copy edited the book. Sam, with whom I have worked on two previous book projects, not only edited for SIAM style but found a large number of improvements to the text and showed me some things I did not know about <img src="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002" srcset="https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002 1x, https://s0.wp.com/latex.php?latex=%5CLaTeX&#038;bg=ffffff&#038;fg=222222&#038;s=0&#038;c=20201002&#038;zoom=4.5 4x" alt="&#92;LaTeX" class="latex" />.</p>
+<p>SIAM News has <a href="https://sinews.siam.org/Details-Page/nick-higham-talks-mathematical-writing-and-publishing-with-siam">published an interview with me</a> about the book and mathematical writing and publishing.</p>
+<p>Here is a word cloud for the book, generated in MATLAB using the <a href="https://nhigham.com/2017/10/23/whats-new-in-matlab-r2017b/">wordcloud function</a>, based on words of 6 or more characters. <img src="https://nhigham.com/wp-content/uploads/2020/02/wordcloud2.jpg?w=863" alt="wordcloud2.jpg"></p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-print"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-print-5154"
+				class="share-print sd-button share-icon"
+				href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/#print?share=print"
+				target="_blank"
+				aria-labelledby="sharing-print-5154"
+				>
+				<span id="sharing-print-5154" hidden>Print (Opens in new window)</span>
+				<span>Print</span>
+			</a></li><li class="share-email"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-email-5154"
+				class="share-email sd-button share-icon"
+				href="mailto:?subject=%5BShared%20Post%5D%20%3Cem%3EHandbook%20of%20Writing%20for%20the%20Mathematical%20Sciences%3C%2Fem%3E%2C%20Third%20Edition&#038;body=https%3A%2F%2Fnhigham.com%2F2020%2F02%2F11%2Fhandbook-of-writing-for-the-mathematical-sciences-third-edition%2F&#038;share=email"
+				target="_blank"
+				aria-labelledby="sharing-email-5154"
+				data-email-share-error-title="Do you have email set up?" data-email-share-error-text="If you&#039;re having problems sharing via email, you might not have email set up for your browser. You may need to create a new email yourself." data-email-share-nonce="2236202c35" data-email-share-track-url="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/?share=email">
+				<span id="sharing-email-5154" hidden>Email a link to a friend (Opens in new window)</span>
+				<span>Email</span>
+			</a></li><li class="share-twitter"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-twitter-5154"
+				class="share-twitter sd-button share-icon"
+				href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/?share=twitter"
+				target="_blank"
+				aria-labelledby="sharing-twitter-5154"
+				>
+				<span id="sharing-twitter-5154" hidden>Share on X (Opens in new window)</span>
+				<span>X</span>
+			</a></li><li><a href="#" class="sharing-anchor sd-button share-more"><span>More</span></a></li><li class="share-end"></li></ul><div class="sharing-hidden"><div class="inner" style="display: none;"><ul><li class="share-facebook"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-facebook-5154"
+				class="share-facebook sd-button share-icon"
+				href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/?share=facebook"
+				target="_blank"
+				aria-labelledby="sharing-facebook-5154"
+				>
+				<span id="sharing-facebook-5154" hidden>Share on Facebook (Opens in new window)</span>
+				<span>Facebook</span>
+			</a></li><li class="share-reddit"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-reddit-5154"
+				class="share-reddit sd-button share-icon"
+				href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/?share=reddit"
+				target="_blank"
+				aria-labelledby="sharing-reddit-5154"
+				>
+				<span id="sharing-reddit-5154" hidden>Share on Reddit (Opens in new window)</span>
+				<span>Reddit</span>
+			</a></li><li class="share-linkedin"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-linkedin-5154"
+				class="share-linkedin sd-button share-icon"
+				href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/?share=linkedin"
+				target="_blank"
+				aria-labelledby="sharing-linkedin-5154"
+				>
+				<span id="sharing-linkedin-5154" hidden>Share on LinkedIn (Opens in new window)</span>
+				<span>LinkedIn</span>
+			</a></li><li class="share-end"></li></ul></div></div></div></div></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div></div>			</div><!-- .entry-content -->
+
+	
+	<footer class="entry-footer">
+		<span class="date-author"><span class="posted-on">Posted on <a href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/" rel="bookmark"><time class="entry-date published" datetime="2020-02-11T09:45:00+00:00">February 11, 2020</time><time class="updated" datetime="2020-02-11T09:58:40+00:00">February 11, 2020</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="https://nhigham.com/author/nickhigham/">Nick Higham</a></span></span></span><span class="cat-links">Posted in <a href="https://nhigham.com/category/books/" rel="category tag">books</a>, <a href="https://nhigham.com/category/latex/" rel="category tag">LaTeX</a>, <a href="https://nhigham.com/category/writing/" rel="category tag">writing</a></span>	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" aria-label="Posts">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://nhigham.com/2020/02/03/accurately-computing-the-softmax-function/" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Accurately Computing the Softmax&nbsp;Function</span></a></div><div class="nav-next"><a href="https://nhigham.com/2020/03/19/what-is-series/" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">&#8220;What Is&#8221; Series</span></a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+	
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://nhigham.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+
+
+<div class="comment-form__verbum transparent"></div><div class="verbum-form-meta"><input type='hidden' name='comment_post_ID' value='5154' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+
+			<input type="hidden" name="highlander_comment_nonce" id="highlander_comment_nonce" value="29565ae90c" />
+			<input type="hidden" name="verbum_show_subscription_modal" value="" /></div><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="9e3340e6f4" /></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="170"/><script>
+document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+</script>
+</p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+<div id="secondary" class="widget-area" role="complementary">
+
+	
+	
+	
+		<div class="right-sidebar">
+		<aside id="search-4" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://nhigham.com/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit screen-reader-text" value="Search" />
+			</form></aside>
+		<aside id="recent-posts-4" class="widget widget_recent_entries">
+		<h2 class="widget-title">Recent Posts</h2>
+		<ul>
+											<li>
+					<a href="https://nhigham.com/2024/01/12/what-is-the-spectral-radius-of-a-matrix/">What Is the Spectral Radius of a&nbsp;Matrix?</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/12/05/what-is-a-hessenberg-matrix/">What Is a Hessenberg&nbsp;Matrix?</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/11/22/the-power-of-bidiagonal-matrices/">The Power of Bidiagonal&nbsp;Matrices</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/10/24/what-is-an-invariant-subspace/">What Is an Invariant&nbsp;Subspace?</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/10/11/what-is-a-submatrix/">What Is a&nbsp;Submatrix?</a>
+									</li>
+					</ul>
+
+		</aside><aside id="recent-comments-5" class="widget widget_recent_comments"><h2 class="widget-title">Recent Comments</h2>				<ul id="recentcomments">
+											<li class="recentcomments">
+							Sarah on <a href="https://nhigham.com/2024/01/12/what-is-the-spectral-radius-of-a-matrix/comment-page-1/#comment-61591">What Is the Spectral Radius of a&nbsp;Matrix?</a>						</li>
+
+												<li class="recentcomments">
+							<a href="https://nickhigham.wordpress.com" class="url" rel="ugc external nofollow">Nick Higham</a> on <a href="https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/comment-page-1/#comment-61590">What is the Polar&nbsp;Decomposition?</a>						</li>
+
+												<li class="recentcomments">
+							Dileep on <a href="https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/comment-page-1/#comment-61589">What is the Polar&nbsp;Decomposition?</a>						</li>
+
+												<li class="recentcomments">
+							Yi Chen on <a href="https://nhigham.com/2013/02/13/the-nearest-correlation-matrix/comment-page-1/#comment-61570">The Nearest Correlation&nbsp;Matrix</a>						</li>
+
+												<li class="recentcomments">
+							<a href="https://nickhigham.wordpress.com" class="url" rel="ugc external nofollow">Nick Higham</a> on <a href="https://nhigham.com/2023/01/24/what-is-the-trace-of-a-matrix/comment-page-1/#comment-61569">What Is the Trace of a&nbsp;Matrix?</a>						</li>
+
+										</ul>
+				</aside><aside id="categories-4" class="widget widget_categories"><h2 class="widget-title">Categories</h2>
+			<ul>
+					<li class="cat-item cat-item-178"><a href="https://nhigham.com/category/books/">books</a>
+</li>
+	<li class="cat-item cat-item-9204"><a href="https://nhigham.com/category/conferences/">conferences</a>
+</li>
+	<li class="cat-item cat-item-11362"><a href="https://nhigham.com/category/emacs/">Emacs</a>
+</li>
+	<li class="cat-item cat-item-8800"><a href="https://nhigham.com/category/latex/">LaTeX</a>
+</li>
+	<li class="cat-item cat-item-3190887"><a href="https://nhigham.com/category/matrix-computations/">matrix computations</a>
+</li>
+	<li class="cat-item cat-item-875"><a href="https://nhigham.com/category/miscellaneous/">miscellaneous</a>
+</li>
+	<li class="cat-item cat-item-660"><a href="https://nhigham.com/category/people/">people</a>
+</li>
+	<li class="cat-item cat-item-10531061"><a href="https://nhigham.com/category/princeton-companion/">Princeton Companion</a>
+</li>
+	<li class="cat-item cat-item-418582872"><a href="https://nhigham.com/category/publication-peculiarities/">publication peculiarities</a>
+</li>
+	<li class="cat-item cat-item-3330"><a href="https://nhigham.com/category/publishing/">publishing</a>
+</li>
+	<li class="cat-item cat-item-668"><a href="https://nhigham.com/category/research/">research</a>
+</li>
+	<li class="cat-item cat-item-581"><a href="https://nhigham.com/category/software/">software</a>
+</li>
+	<li class="cat-item cat-item-73129"><a href="https://nhigham.com/category/what-is/">what-is</a>
+</li>
+	<li class="cat-item cat-item-349"><a href="https://nhigham.com/category/writing/">writing</a>
+</li>
+			</ul>
+
+			</aside><aside id="wp_tag_cloud-4" class="widget wp_widget_tag_cloud"><h2 class="widget-title">Tags</h2><a href="https://nhigham.com/tag/adobe_acrobat/" class="tag-cloud-link tag-link-72735520 tag-link-position-1" style="font-size: 8pt;" aria-label="Adobe_Acrobat (1 item)">Adobe_Acrobat</a>
+<a href="https://nhigham.com/tag/algol/" class="tag-cloud-link tag-link-337112 tag-link-position-2" style="font-size: 8pt;" aria-label="Algol (1 item)">Algol</a>
+<a href="https://nhigham.com/tag/ascii_art/" class="tag-cloud-link tag-link-15924774 tag-link-position-3" style="font-size: 8pt;" aria-label="ASCII_art (1 item)">ASCII_art</a>
+<a href="https://nhigham.com/tag/basic/" class="tag-cloud-link tag-link-5352 tag-link-position-4" style="font-size: 11.230769230769pt;" aria-label="Basic (3 items)">Basic</a>
+<a href="https://nhigham.com/tag/beamer/" class="tag-cloud-link tag-link-308121 tag-link-position-5" style="font-size: 9.9384615384615pt;" aria-label="Beamer (2 items)">Beamer</a>
+<a href="https://nhigham.com/tag/bfloat16/" class="tag-cloud-link tag-link-655624603 tag-link-position-6" style="font-size: 9.9384615384615pt;" aria-label="bfloat16 (2 items)">bfloat16</a>
+<a href="https://nhigham.com/tag/bibtex/" class="tag-cloud-link tag-link-415984 tag-link-position-7" style="font-size: 12.307692307692pt;" aria-label="BibTeX (4 items)">BibTeX</a>
+<a href="https://nhigham.com/tag/blogs/" class="tag-cloud-link tag-link-460 tag-link-position-8" style="font-size: 11.230769230769pt;" aria-label="blogs (3 items)">blogs</a>
+<a href="https://nhigham.com/tag/bohemian_matrices/" class="tag-cloud-link tag-link-652228642 tag-link-position-9" style="font-size: 9.9384615384615pt;" aria-label="bohemian_matrices (2 items)">bohemian_matrices</a>
+<a href="https://nhigham.com/tag/c/" class="tag-cloud-link tag-link-2426 tag-link-position-10" style="font-size: 8pt;" aria-label="C (1 item)">C</a>
+<a href="https://nhigham.com/tag/cmyk/" class="tag-cloud-link tag-link-1638737 tag-link-position-11" style="font-size: 8pt;" aria-label="CMYK (1 item)">CMYK</a>
+<a href="https://nhigham.com/tag/comma/" class="tag-cloud-link tag-link-480580 tag-link-position-12" style="font-size: 8pt;" aria-label="comma (1 item)">comma</a>
+<a href="https://nhigham.com/tag/commodore_64/" class="tag-cloud-link tag-link-7250160 tag-link-position-13" style="font-size: 8pt;" aria-label="Commodore_64 (1 item)">Commodore_64</a>
+<a href="https://nhigham.com/tag/commodore_pet/" class="tag-cloud-link tag-link-484624349 tag-link-position-14" style="font-size: 8pt;" aria-label="Commodore_Pet (1 item)">Commodore_Pet</a>
+<a href="https://nhigham.com/tag/correlations/" class="tag-cloud-link tag-link-666875 tag-link-position-15" style="font-size: 13.169230769231pt;" aria-label="correlations (5 items)">correlations</a>
+<a href="https://nhigham.com/tag/creativity/" class="tag-cloud-link tag-link-789 tag-link-position-16" style="font-size: 13.169230769231pt;" aria-label="creativity (5 items)">creativity</a>
+<a href="https://nhigham.com/tag/dictionary/" class="tag-cloud-link tag-link-2760 tag-link-position-17" style="font-size: 9.9384615384615pt;" aria-label="dictionary (2 items)">dictionary</a>
+<a href="https://nhigham.com/tag/doi/" class="tag-cloud-link tag-link-442840 tag-link-position-18" style="font-size: 8pt;" aria-label="DOI (1 item)">DOI</a>
+<a href="https://nhigham.com/tag/ellipsis/" class="tag-cloud-link tag-link-417218 tag-link-position-19" style="font-size: 8pt;" aria-label="ellipsis (1 item)">ellipsis</a>
+<a href="https://nhigham.com/tag/error_analysis/" class="tag-cloud-link tag-link-148536595 tag-link-position-20" style="font-size: 11.230769230769pt;" aria-label="error_analysis (3 items)">error_analysis</a>
+<a href="https://nhigham.com/tag/forth/" class="tag-cloud-link tag-link-279796 tag-link-position-21" style="font-size: 8pt;" aria-label="Forth (1 item)">Forth</a>
+<a href="https://nhigham.com/tag/fortran/" class="tag-cloud-link tag-link-9865 tag-link-position-22" style="font-size: 11.230769230769pt;" aria-label="Fortran (3 items)">Fortran</a>
+<a href="https://nhigham.com/tag/fp16/" class="tag-cloud-link tag-link-116835380 tag-link-position-23" style="font-size: 9.9384615384615pt;" aria-label="fp16 (2 items)">fp16</a>
+<a href="https://nhigham.com/tag/github/" class="tag-cloud-link tag-link-5603054 tag-link-position-24" style="font-size: 8pt;" aria-label="GitHub (1 item)">GitHub</a>
+<a href="https://nhigham.com/tag/helm/" class="tag-cloud-link tag-link-498519 tag-link-position-25" style="font-size: 8pt;" aria-label="Helm (1 item)">Helm</a>
+<a href="https://nhigham.com/tag/householder_symposium/" class="tag-cloud-link tag-link-294943951 tag-link-position-26" style="font-size: 8pt;" aria-label="Householder_symposium (1 item)">Householder_symposium</a>
+<a href="https://nhigham.com/tag/ieee_arithmetic/" class="tag-cloud-link tag-link-151047205 tag-link-position-27" style="font-size: 13.169230769231pt;" aria-label="IEEE_arithmetic (5 items)">IEEE_arithmetic</a>
+<a href="https://nhigham.com/tag/ill_posed_problem/" class="tag-cloud-link tag-link-397102378 tag-link-position-28" style="font-size: 8pt;" aria-label="ill_posed_problem (1 item)">ill_posed_problem</a>
+<a href="https://nhigham.com/tag/ima/" class="tag-cloud-link tag-link-448848 tag-link-position-29" style="font-size: 8pt;" aria-label="IMA (1 item)">IMA</a>
+<a href="https://nhigham.com/tag/julia/" class="tag-cloud-link tag-link-32011 tag-link-position-30" style="font-size: 11.230769230769pt;" aria-label="Julia (3 items)">Julia</a>
+<a href="https://nhigham.com/tag/lambert_w_function/" class="tag-cloud-link tag-link-221355592 tag-link-position-31" style="font-size: 9.9384615384615pt;" aria-label="Lambert_W_function (2 items)">Lambert_W_function</a>
+<a href="https://nhigham.com/tag/lanczos/" class="tag-cloud-link tag-link-20407774 tag-link-position-32" style="font-size: 8pt;" aria-label="Lanczos (1 item)">Lanczos</a>
+<a href="https://nhigham.com/tag/linpack/" class="tag-cloud-link tag-link-7663922 tag-link-position-33" style="font-size: 8pt;" aria-label="LINPACK (1 item)">LINPACK</a>
+<a href="https://nhigham.com/tag/lisp/" class="tag-cloud-link tag-link-11457 tag-link-position-34" style="font-size: 8pt;" aria-label="Lisp (1 item)">Lisp</a>
+<a href="https://nhigham.com/tag/lists/" class="tag-cloud-link tag-link-1832 tag-link-position-35" style="font-size: 8pt;" aria-label="lists (1 item)">lists</a>
+<a href="https://nhigham.com/tag/logarithm/" class="tag-cloud-link tag-link-873937 tag-link-position-36" style="font-size: 8pt;" aria-label="logarithm (1 item)">logarithm</a>
+<a href="https://nhigham.com/tag/mac/" class="tag-cloud-link tag-link-808 tag-link-position-37" style="font-size: 8pt;" aria-label="Mac (1 item)">Mac</a>
+<a href="https://nhigham.com/tag/machine_learning/" class="tag-cloud-link tag-link-622525 tag-link-position-38" style="font-size: 8pt;" aria-label="machine_learning (1 item)">machine_learning</a>
+<a href="https://nhigham.com/tag/manchester/" class="tag-cloud-link tag-link-38468 tag-link-position-39" style="font-size: 13.169230769231pt;" aria-label="Manchester (5 items)">Manchester</a>
+<a href="https://nhigham.com/tag/mathematician/" class="tag-cloud-link tag-link-661869 tag-link-position-40" style="font-size: 18.015384615385pt;" aria-label="mathematician (16 items)">mathematician</a>
+<a href="https://nhigham.com/tag/matlab/" class="tag-cloud-link tag-link-7770 tag-link-position-41" style="font-size: 22pt;" aria-label="MATLAB (39 items)">MATLAB</a>
+<a href="https://nhigham.com/tag/matrix_function/" class="tag-cloud-link tag-link-219963736 tag-link-position-42" style="font-size: 16.4pt;" aria-label="matrix_function (11 items)">matrix_function</a>
+<a href="https://nhigham.com/tag/moler/" class="tag-cloud-link tag-link-2092980 tag-link-position-43" style="font-size: 8pt;" aria-label="Moler (1 item)">Moler</a>
+<a href="https://nhigham.com/tag/nag/" class="tag-cloud-link tag-link-107209 tag-link-position-44" style="font-size: 13.169230769231pt;" aria-label="NAG (5 items)">NAG</a>
+<a href="https://nhigham.com/tag/org/" class="tag-cloud-link tag-link-136077 tag-link-position-45" style="font-size: 12.307692307692pt;" aria-label="Org (4 items)">Org</a>
+<a href="https://nhigham.com/tag/orthogonal_matrix/" class="tag-cloud-link tag-link-695096232 tag-link-position-46" style="font-size: 8pt;" aria-label="orthogonal_matrix (1 item)">orthogonal_matrix</a>
+<a href="https://nhigham.com/tag/pandoc/" class="tag-cloud-link tag-link-29819099 tag-link-position-47" style="font-size: 8pt;" aria-label="Pandoc (1 item)">Pandoc</a>
+<a href="https://nhigham.com/tag/paper/" class="tag-cloud-link tag-link-19368 tag-link-position-48" style="font-size: 8pt;" aria-label="paper (1 item)">paper</a>
+<a href="https://nhigham.com/tag/pcam/" class="tag-cloud-link tag-link-7136448 tag-link-position-49" style="font-size: 8pt;" aria-label="PCAM (1 item)">PCAM</a>
+<a href="https://nhigham.com/tag/pdf/" class="tag-cloud-link tag-link-47759 tag-link-position-50" style="font-size: 8pt;" aria-label="PDF (1 item)">PDF</a>
+<a href="https://nhigham.com/tag/pdf_viewers/" class="tag-cloud-link tag-link-137076430 tag-link-position-51" style="font-size: 8pt;" aria-label="PDF_viewers (1 item)">PDF_viewers</a>
+<a href="https://nhigham.com/tag/pencil/" class="tag-cloud-link tag-link-22956 tag-link-position-52" style="font-size: 8pt;" aria-label="pencil (1 item)">pencil</a>
+<a href="https://nhigham.com/tag/performance_profile/" class="tag-cloud-link tag-link-148536596 tag-link-position-53" style="font-size: 8pt;" aria-label="performance_profile (1 item)">performance_profile</a>
+<a href="https://nhigham.com/tag/photocopying/" class="tag-cloud-link tag-link-229736 tag-link-position-54" style="font-size: 8pt;" aria-label="photocopying (1 item)">photocopying</a>
+<a href="https://nhigham.com/tag/photography/" class="tag-cloud-link tag-link-436 tag-link-position-55" style="font-size: 11.230769230769pt;" aria-label="photography (3 items)">photography</a>
+<a href="https://nhigham.com/tag/princeton_university_press/" class="tag-cloud-link tag-link-274154655 tag-link-position-56" style="font-size: 8pt;" aria-label="Princeton_University_press (1 item)">Princeton_University_press</a>
+<a href="https://nhigham.com/tag/punctuation/" class="tag-cloud-link tag-link-165960 tag-link-position-57" style="font-size: 9.9384615384615pt;" aria-label="punctuation (2 items)">punctuation</a>
+<a href="https://nhigham.com/tag/python/" class="tag-cloud-link tag-link-832 tag-link-position-58" style="font-size: 12.307692307692pt;" aria-label="Python (4 items)">Python</a>
+<a href="https://nhigham.com/tag/rounding/" class="tag-cloud-link tag-link-669162 tag-link-position-59" style="font-size: 8pt;" aria-label="rounding (1 item)">rounding</a>
+<a href="https://nhigham.com/tag/scanning/" class="tag-cloud-link tag-link-101333 tag-link-position-60" style="font-size: 8pt;" aria-label="scanning (1 item)">scanning</a>
+<a href="https://nhigham.com/tag/siam/" class="tag-cloud-link tag-link-1037188 tag-link-position-61" style="font-size: 19.846153846154pt;" aria-label="SIAM (24 items)">SIAM</a>
+<a href="https://nhigham.com/tag/siam_news/" class="tag-cloud-link tag-link-564910622 tag-link-position-62" style="font-size: 8pt;" aria-label="SIAM_News (1 item)">SIAM_News</a>
+<a href="https://nhigham.com/tag/softmax/" class="tag-cloud-link tag-link-112496 tag-link-position-63" style="font-size: 8pt;" aria-label="softmax (1 item)">softmax</a>
+<a href="https://nhigham.com/tag/spreadsheets/" class="tag-cloud-link tag-link-22397 tag-link-position-64" style="font-size: 8pt;" aria-label="spreadsheets (1 item)">spreadsheets</a>
+<a href="https://nhigham.com/tag/stationery/" class="tag-cloud-link tag-link-118696 tag-link-position-65" style="font-size: 8pt;" aria-label="stationery (1 item)">stationery</a>
+<a href="https://nhigham.com/tag/talk/" class="tag-cloud-link tag-link-739 tag-link-position-66" style="font-size: 11.230769230769pt;" aria-label="talk (3 items)">talk</a>
+<a href="https://nhigham.com/tag/twitter/" class="tag-cloud-link tag-link-599182 tag-link-position-67" style="font-size: 9.9384615384615pt;" aria-label="Twitter (2 items)">Twitter</a>
+<a href="https://nhigham.com/tag/typesetting/" class="tag-cloud-link tag-link-11864 tag-link-position-68" style="font-size: 9.9384615384615pt;" aria-label="typesetting (2 items)">typesetting</a>
+<a href="https://nhigham.com/tag/unwinding_function/" class="tag-cloud-link tag-link-221355594 tag-link-position-69" style="font-size: 9.9384615384615pt;" aria-label="unwinding_function (2 items)">unwinding_function</a>
+<a href="https://nhigham.com/tag/vandermonde/" class="tag-cloud-link tag-link-18997497 tag-link-position-70" style="font-size: 8pt;" aria-label="Vandermonde (1 item)">Vandermonde</a>
+<a href="https://nhigham.com/tag/video/" class="tag-cloud-link tag-link-412 tag-link-position-71" style="font-size: 8pt;" aria-label="video (1 item)">video</a>
+<a href="https://nhigham.com/tag/wilkinson/" class="tag-cloud-link tag-link-1459261 tag-link-position-72" style="font-size: 12.307692307692pt;" aria-label="wilkinson (4 items)">wilkinson</a>
+<a href="https://nhigham.com/tag/windows/" class="tag-cloud-link tag-link-800 tag-link-position-73" style="font-size: 8pt;" aria-label="Windows (1 item)">Windows</a></aside><aside id="blog_subscription-5" class="widget widget_blog_subscription jetpack_subscription_widget"><h2 class="widget-title"><label for="subscribe-field">Subscribe to Blog via Email</label></h2>
+
+			<div class="wp-block-jetpack-subscriptions__container">
+			<form
+				action="https://subscribe.wordpress.com"
+				method="post"
+				accept-charset="utf-8"
+				data-blog="43828396"
+				data-post_access_level="everybody"
+				id="subscribe-blog"
+			>
+				<p>Enter your email address to subscribe to this blog and receive notifications of new posts by email.</p>
+				<p id="subscribe-email">
+					<label
+						id="subscribe-field-label"
+						for="subscribe-field"
+						class="screen-reader-text"
+					>
+						Email Address:					</label>
+
+					<input
+							type="email"
+							name="email"
+							autocomplete="email"
+							
+							style="width: 95%; padding: 1px 10px"
+							placeholder="Email Address"
+							value=""
+							id="subscribe-field"
+							required
+						/>				</p>
+
+				<p id="subscribe-submit"
+									>
+					<input type="hidden" name="action" value="subscribe"/>
+					<input type="hidden" name="blog_id" value="43828396"/>
+					<input type="hidden" name="source" value="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/"/>
+					<input type="hidden" name="sub-type" value="widget"/>
+					<input type="hidden" name="redirect_fragment" value="subscribe-blog"/>
+					<input type="hidden" id="_wpnonce" name="_wpnonce" value="9450d9fc53" />					<button type="submit"
+													class="wp-block-button__link"
+																	>
+						Subscribe					</button>
+				</p>
+			</form>
+							<div class="wp-block-jetpack-subscriptions__subscount">
+					Join 525 other subscribers				</div>
+						</div>
+			
+</aside><aside id="archives-5" class="widget widget_archive"><h2 class="widget-title">Archives</h2>
+			<ul>
+					<li><a href='https://nhigham.com/2024/01/'>January 2024</a></li>
+	<li><a href='https://nhigham.com/2023/12/'>December 2023</a></li>
+	<li><a href='https://nhigham.com/2023/11/'>November 2023</a></li>
+	<li><a href='https://nhigham.com/2023/10/'>October 2023</a></li>
+	<li><a href='https://nhigham.com/2023/09/'>September 2023</a></li>
+	<li><a href='https://nhigham.com/2023/08/'>August 2023</a></li>
+	<li><a href='https://nhigham.com/2023/07/'>July 2023</a></li>
+	<li><a href='https://nhigham.com/2023/06/'>June 2023</a></li>
+	<li><a href='https://nhigham.com/2023/04/'>April 2023</a></li>
+	<li><a href='https://nhigham.com/2023/03/'>March 2023</a></li>
+	<li><a href='https://nhigham.com/2023/02/'>February 2023</a></li>
+	<li><a href='https://nhigham.com/2023/01/'>January 2023</a></li>
+	<li><a href='https://nhigham.com/2022/12/'>December 2022</a></li>
+	<li><a href='https://nhigham.com/2022/11/'>November 2022</a></li>
+	<li><a href='https://nhigham.com/2022/10/'>October 2022</a></li>
+	<li><a href='https://nhigham.com/2022/09/'>September 2022</a></li>
+	<li><a href='https://nhigham.com/2022/07/'>July 2022</a></li>
+	<li><a href='https://nhigham.com/2022/06/'>June 2022</a></li>
+	<li><a href='https://nhigham.com/2022/05/'>May 2022</a></li>
+	<li><a href='https://nhigham.com/2022/04/'>April 2022</a></li>
+	<li><a href='https://nhigham.com/2022/03/'>March 2022</a></li>
+	<li><a href='https://nhigham.com/2022/02/'>February 2022</a></li>
+	<li><a href='https://nhigham.com/2022/01/'>January 2022</a></li>
+	<li><a href='https://nhigham.com/2021/12/'>December 2021</a></li>
+	<li><a href='https://nhigham.com/2021/11/'>November 2021</a></li>
+	<li><a href='https://nhigham.com/2021/10/'>October 2021</a></li>
+	<li><a href='https://nhigham.com/2021/09/'>September 2021</a></li>
+	<li><a href='https://nhigham.com/2021/08/'>August 2021</a></li>
+	<li><a href='https://nhigham.com/2021/07/'>July 2021</a></li>
+	<li><a href='https://nhigham.com/2021/06/'>June 2021</a></li>
+	<li><a href='https://nhigham.com/2021/05/'>May 2021</a></li>
+	<li><a href='https://nhigham.com/2021/04/'>April 2021</a></li>
+	<li><a href='https://nhigham.com/2021/03/'>March 2021</a></li>
+	<li><a href='https://nhigham.com/2021/02/'>February 2021</a></li>
+	<li><a href='https://nhigham.com/2021/01/'>January 2021</a></li>
+	<li><a href='https://nhigham.com/2020/12/'>December 2020</a></li>
+	<li><a href='https://nhigham.com/2020/11/'>November 2020</a></li>
+	<li><a href='https://nhigham.com/2020/10/'>October 2020</a></li>
+	<li><a href='https://nhigham.com/2020/09/'>September 2020</a></li>
+	<li><a href='https://nhigham.com/2020/08/'>August 2020</a></li>
+	<li><a href='https://nhigham.com/2020/07/'>July 2020</a></li>
+	<li><a href='https://nhigham.com/2020/06/'>June 2020</a></li>
+	<li><a href='https://nhigham.com/2020/05/'>May 2020</a></li>
+	<li><a href='https://nhigham.com/2020/04/'>April 2020</a></li>
+	<li><a href='https://nhigham.com/2020/03/'>March 2020</a></li>
+	<li><a href='https://nhigham.com/2020/02/'>February 2020</a></li>
+	<li><a href='https://nhigham.com/2019/12/'>December 2019</a></li>
+	<li><a href='https://nhigham.com/2019/11/'>November 2019</a></li>
+	<li><a href='https://nhigham.com/2019/08/'>August 2019</a></li>
+	<li><a href='https://nhigham.com/2019/06/'>June 2019</a></li>
+	<li><a href='https://nhigham.com/2019/05/'>May 2019</a></li>
+	<li><a href='https://nhigham.com/2019/01/'>January 2019</a></li>
+	<li><a href='https://nhigham.com/2018/12/'>December 2018</a></li>
+	<li><a href='https://nhigham.com/2018/11/'>November 2018</a></li>
+	<li><a href='https://nhigham.com/2018/10/'>October 2018</a></li>
+	<li><a href='https://nhigham.com/2018/08/'>August 2018</a></li>
+	<li><a href='https://nhigham.com/2018/06/'>June 2018</a></li>
+	<li><a href='https://nhigham.com/2018/04/'>April 2018</a></li>
+	<li><a href='https://nhigham.com/2018/01/'>January 2018</a></li>
+	<li><a href='https://nhigham.com/2017/12/'>December 2017</a></li>
+	<li><a href='https://nhigham.com/2017/11/'>November 2017</a></li>
+	<li><a href='https://nhigham.com/2017/10/'>October 2017</a></li>
+	<li><a href='https://nhigham.com/2017/08/'>August 2017</a></li>
+	<li><a href='https://nhigham.com/2017/07/'>July 2017</a></li>
+	<li><a href='https://nhigham.com/2017/06/'>June 2017</a></li>
+	<li><a href='https://nhigham.com/2017/05/'>May 2017</a></li>
+	<li><a href='https://nhigham.com/2017/04/'>April 2017</a></li>
+	<li><a href='https://nhigham.com/2017/03/'>March 2017</a></li>
+	<li><a href='https://nhigham.com/2017/02/'>February 2017</a></li>
+	<li><a href='https://nhigham.com/2017/01/'>January 2017</a></li>
+	<li><a href='https://nhigham.com/2016/12/'>December 2016</a></li>
+	<li><a href='https://nhigham.com/2016/11/'>November 2016</a></li>
+	<li><a href='https://nhigham.com/2016/10/'>October 2016</a></li>
+	<li><a href='https://nhigham.com/2016/09/'>September 2016</a></li>
+	<li><a href='https://nhigham.com/2016/08/'>August 2016</a></li>
+	<li><a href='https://nhigham.com/2016/06/'>June 2016</a></li>
+	<li><a href='https://nhigham.com/2016/05/'>May 2016</a></li>
+	<li><a href='https://nhigham.com/2016/04/'>April 2016</a></li>
+	<li><a href='https://nhigham.com/2016/03/'>March 2016</a></li>
+	<li><a href='https://nhigham.com/2016/02/'>February 2016</a></li>
+	<li><a href='https://nhigham.com/2016/01/'>January 2016</a></li>
+	<li><a href='https://nhigham.com/2015/12/'>December 2015</a></li>
+	<li><a href='https://nhigham.com/2015/11/'>November 2015</a></li>
+	<li><a href='https://nhigham.com/2015/10/'>October 2015</a></li>
+	<li><a href='https://nhigham.com/2015/09/'>September 2015</a></li>
+	<li><a href='https://nhigham.com/2015/08/'>August 2015</a></li>
+	<li><a href='https://nhigham.com/2015/07/'>July 2015</a></li>
+	<li><a href='https://nhigham.com/2015/06/'>June 2015</a></li>
+	<li><a href='https://nhigham.com/2015/05/'>May 2015</a></li>
+	<li><a href='https://nhigham.com/2015/04/'>April 2015</a></li>
+	<li><a href='https://nhigham.com/2015/02/'>February 2015</a></li>
+	<li><a href='https://nhigham.com/2014/12/'>December 2014</a></li>
+	<li><a href='https://nhigham.com/2014/11/'>November 2014</a></li>
+	<li><a href='https://nhigham.com/2014/09/'>September 2014</a></li>
+	<li><a href='https://nhigham.com/2014/08/'>August 2014</a></li>
+	<li><a href='https://nhigham.com/2014/07/'>July 2014</a></li>
+	<li><a href='https://nhigham.com/2014/06/'>June 2014</a></li>
+	<li><a href='https://nhigham.com/2014/05/'>May 2014</a></li>
+	<li><a href='https://nhigham.com/2014/04/'>April 2014</a></li>
+	<li><a href='https://nhigham.com/2014/03/'>March 2014</a></li>
+	<li><a href='https://nhigham.com/2014/02/'>February 2014</a></li>
+	<li><a href='https://nhigham.com/2014/01/'>January 2014</a></li>
+	<li><a href='https://nhigham.com/2013/12/'>December 2013</a></li>
+	<li><a href='https://nhigham.com/2013/11/'>November 2013</a></li>
+	<li><a href='https://nhigham.com/2013/10/'>October 2013</a></li>
+	<li><a href='https://nhigham.com/2013/09/'>September 2013</a></li>
+	<li><a href='https://nhigham.com/2013/08/'>August 2013</a></li>
+	<li><a href='https://nhigham.com/2013/07/'>July 2013</a></li>
+	<li><a href='https://nhigham.com/2013/06/'>June 2013</a></li>
+	<li><a href='https://nhigham.com/2013/05/'>May 2013</a></li>
+	<li><a href='https://nhigham.com/2013/04/'>April 2013</a></li>
+	<li><a href='https://nhigham.com/2013/03/'>March 2013</a></li>
+	<li><a href='https://nhigham.com/2013/02/'>February 2013</a></li>
+	<li><a href='https://nhigham.com/2013/01/'>January 2013</a></li>
+			</ul>
+
+			</aside><aside id="rss_links-4" class="widget widget_rss_links"><h2 class="widget-title">RSS Feed</h2><ul><li><a href="https://nhigham.com/feed/" title="Subscribe to Posts">RSS - Posts</a></li><li><a href="https://nhigham.com/comments/feed/" title="Subscribe to Comments">RSS - Comments</a></li></ul>
+</aside>	</div><!-- .right-sidebar -->
+	
+	
+</div><!-- #secondary -->
+	</div><!-- #content -->
+
+	
+<div id="tertiary" class="widget-area-footer" role="complementary">
+
+		<div class="footer-widget">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://nhigham.com/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit screen-reader-text" value="Search" />
+			</form></aside>
+		<aside id="recent-posts-2" class="widget widget_recent_entries">
+		<h2 class="widget-title">Recent Posts</h2>
+		<ul>
+											<li>
+					<a href="https://nhigham.com/2024/01/12/what-is-the-spectral-radius-of-a-matrix/">What Is the Spectral Radius of a&nbsp;Matrix?</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/12/05/what-is-a-hessenberg-matrix/">What Is a Hessenberg&nbsp;Matrix?</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/11/22/the-power-of-bidiagonal-matrices/">The Power of Bidiagonal&nbsp;Matrices</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/10/24/what-is-an-invariant-subspace/">What Is an Invariant&nbsp;Subspace?</a>
+									</li>
+											<li>
+					<a href="https://nhigham.com/2023/10/11/what-is-a-submatrix/">What Is a&nbsp;Submatrix?</a>
+									</li>
+					</ul>
+
+		</aside><aside id="recent-comments-3" class="widget widget_recent_comments"><h2 class="widget-title">Recent Comments</h2>				<ul id="recentcomments">
+											<li class="recentcomments">
+							Sarah on <a href="https://nhigham.com/2024/01/12/what-is-the-spectral-radius-of-a-matrix/comment-page-1/#comment-61591">What Is the Spectral Radius of a&nbsp;Matrix?</a>						</li>
+
+												<li class="recentcomments">
+							<a href="https://nickhigham.wordpress.com" class="url" rel="ugc external nofollow">Nick Higham</a> on <a href="https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/comment-page-1/#comment-61590">What is the Polar&nbsp;Decomposition?</a>						</li>
+
+												<li class="recentcomments">
+							Dileep on <a href="https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/comment-page-1/#comment-61589">What is the Polar&nbsp;Decomposition?</a>						</li>
+
+												<li class="recentcomments">
+							Yi Chen on <a href="https://nhigham.com/2013/02/13/the-nearest-correlation-matrix/comment-page-1/#comment-61570">The Nearest Correlation&nbsp;Matrix</a>						</li>
+
+												<li class="recentcomments">
+							<a href="https://nickhigham.wordpress.com" class="url" rel="ugc external nofollow">Nick Higham</a> on <a href="https://nhigham.com/2023/01/24/what-is-the-trace-of-a-matrix/comment-page-1/#comment-61569">What Is the Trace of a&nbsp;Matrix?</a>						</li>
+
+										</ul>
+				</aside><aside id="categories-2" class="widget widget_categories"><h2 class="widget-title">Categories</h2>
+			<ul>
+					<li class="cat-item cat-item-178"><a href="https://nhigham.com/category/books/">books</a> (19)
+</li>
+	<li class="cat-item cat-item-9204"><a href="https://nhigham.com/category/conferences/">conferences</a> (32)
+</li>
+	<li class="cat-item cat-item-11362"><a href="https://nhigham.com/category/emacs/">Emacs</a> (9)
+</li>
+	<li class="cat-item cat-item-8800"><a href="https://nhigham.com/category/latex/">LaTeX</a> (16)
+</li>
+	<li class="cat-item cat-item-3190887"><a href="https://nhigham.com/category/matrix-computations/">matrix computations</a> (8)
+</li>
+	<li class="cat-item cat-item-875"><a href="https://nhigham.com/category/miscellaneous/">miscellaneous</a> (19)
+</li>
+	<li class="cat-item cat-item-660"><a href="https://nhigham.com/category/people/">people</a> (17)
+</li>
+	<li class="cat-item cat-item-10531061"><a href="https://nhigham.com/category/princeton-companion/">Princeton Companion</a> (12)
+</li>
+	<li class="cat-item cat-item-418582872"><a href="https://nhigham.com/category/publication-peculiarities/">publication peculiarities</a> (7)
+</li>
+	<li class="cat-item cat-item-3330"><a href="https://nhigham.com/category/publishing/">publishing</a> (2)
+</li>
+	<li class="cat-item cat-item-668"><a href="https://nhigham.com/category/research/">research</a> (31)
+</li>
+	<li class="cat-item cat-item-581"><a href="https://nhigham.com/category/software/">software</a> (30)
+</li>
+	<li class="cat-item cat-item-73129"><a href="https://nhigham.com/category/what-is/">what-is</a> (95)
+</li>
+	<li class="cat-item cat-item-349"><a href="https://nhigham.com/category/writing/">writing</a> (16)
+</li>
+			</ul>
+
+			</aside>	</div><!-- .footer-widget -->
+	
+		<div class="footer-widget">
+		<aside id="top-posts-3" class="widget widget_top-posts"><h2 class="widget-title">Top Posts in Last 2 Days</h2><ul><li><a href="https://nhigham.com/2021/03/09/eigenvalue-inequalities-for-hermitian-matrices/" class="bump-view" data-bump-view="tp">Eigenvalue Inequalities for Hermitian Matrices</a></li><li><a href="https://nhigham.com/2022/06/29/what-is-the-pascal-matrix/" class="bump-view" data-bump-view="tp">What Is the Pascal Matrix?</a></li><li><a href="https://nhigham.com/2021/05/04/singular-value-inequalities/" class="bump-view" data-bump-view="tp">Singular Value Inequalities</a></li><li><a href="https://nhigham.com/2021/07/06/what-is-the-kac-murdock-szego-matrix/" class="bump-view" data-bump-view="tp">What Is the Kac--Murdock--Szegö Matrix?</a></li><li><a href="https://nhigham.com/2021/07/13/what-is-the-perron-frobenius-theorem/" class="bump-view" data-bump-view="tp">What Is the Perron--Frobenius Theorem?</a></li><li><a href="https://nhigham.com/2020/06/16/what-is-the-adjugate-of-a-matrix/" class="bump-view" data-bump-view="tp">What Is the Adjugate of a Matrix?</a></li><li><a href="https://nhigham.com/2023/07/11/what-is-the-numerical-range-of-a-matrix/" class="bump-view" data-bump-view="tp">What Is the Numerical Range of a Matrix?</a></li><li><a href="https://nhigham.com/2019/11/19/better-latex-tables-with-booktabs/" class="bump-view" data-bump-view="tp">Better LaTeX Tables with Booktabs</a></li><li><a href="https://nhigham.com/2022/12/06/what-is-the-inertia-of-a-matrix/" class="bump-view" data-bump-view="tp">What Is the Inertia of a Matrix?</a></li><li><a href="https://nhigham.com/2020/10/27/what-is-the-cs-decomposition/" class="bump-view" data-bump-view="tp">What Is the CS Decomposition?</a></li></ul></aside>	</div><!-- .footer-widget -->
+	
+		<div class="footer-widget">
+		<aside id="jetpack_display_posts_widget-5" class="widget widget_jetpack_display_posts_widget"><p>Cannot load blog information at this time.</p></aside>	</div><!-- .footer-widget -->
+	
+</div><!-- #tertiary -->
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="https://wordpress.com/?ref=footer_custom_powered" rel="nofollow">Website Powered by WordPress.com</a>.
+			
+					</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/files/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/pub/colinear/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="grofiles-cards-js" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202619d1133547e8a1f2801609f51cef12522abe7f6647d869e9fbc974fe356a37e613"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+//# sourceURL=wpgroho-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-pub-colinear actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-comment" href="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/#respond">
+							<svg class="gridicon gridicons-comment" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M12 16l-5 5v-5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-7z"/></g></svg>							<span>Comment						</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://nhigham.com">
+				<img loading='lazy' alt='' src='https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=50' srcset='https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=50 1x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=75 1.5x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=100 2x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=150 3x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=200 4x' class='avatar avatar-50' height='50' width='50' />				Nick Higham			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 525 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="43828396" />
+										<input type="hidden" name="source" value="https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="9450d9fc53" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fnhigham.com%252F2020%252F02%252F11%252Fhandbook-of-writing-for-the-mathematical-sciences-third-edition%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="https://nhigham.com">
+				<img loading='lazy' alt='' src='https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=50' srcset='https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=50 1x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=75 1.5x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=100 2x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=150 3x, https://nhigham.com/wp-content/uploads/2020/12/cropped-200302-1351-14_9943_2979_rot_square_1600px.jpg?w=200 4x' class='avatar avatar-50' height='50' width='50' />				Nick Higham			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fnhigham.com%252F2020%252F02%252F11%252Fhandbook-of-writing-for-the-mathematical-sciences-third-edition%252F">Log in</a></li>
+																<li class="actnbr-shortlink">
+										<a href="https://wp.me/p2XTLC-1l8">
+											<span class="actnbr-shortlink__text">Copy shortlink</span>
+											<span class="actnbr-shortlink__icon"><svg class="gridicon gridicons-checkmark" height="16" width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M9 19.414l-6.707-6.707 1.414-1.414L9 16.586 20.293 5.293l1.414 1.414"/></g></svg></span>
+										</a>
+									</li>
+																<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/blogs/43828396/posts/5154">
+										View post in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+	
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https://nhigham.com/2020/02/11/handbook-of-writing-for-the-mathematical-sciences-third-edition/":5154};
+	</script>
+				
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/likes/queuehandler.js?m=1741961244i'></script>
+<script id="wp-hooks-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/hooks/index.min.js?m=1778170586i&#038;ver=7496969728ca0f95732d"></script>
+<script id="wp-i18n-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/i18n/index.min.js?m=1778170586i&#038;ver=125448662852c5e18937"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="verbum-settings-js-before">
+window.VerbumComments = {"Log in or provide your name and email to leave a reply.":"Log in or provide your name and email to leave a reply.","Log in or provide your name and email to leave a comment.":"Log in or provide your name and email to leave a comment.","Receive web and mobile notifications for posts on this site.":"Receive web and mobile notifications for posts on this site.","Name":"Name","Email (address never made public)":"Email (address never made public)","Website (optional)":"Website (optional)","Leave a reply. (log in optional)":"Leave a reply. (log in optional)","Leave a comment. (log in optional)":"Leave a comment. (log in optional)","Log in to leave a reply.":"Log in to leave a reply.","Log in to leave a comment.":"Log in to leave a comment.","Logged in via %s":"Logged in via %s","Log out":"Log out","Email":"Email","(Address never made public)":"(Address never made public)","Instantly":"Instantly","Daily":"Daily","Reply":"Reply","Comment":"Comment","WordPress":"WordPress","Weekly":"Weekly","Notify me of new posts":"Notify me of new posts","Email me new posts":"Email me new posts","Email me new comments":"Email me new comments","Cancel":"Cancel","Write a comment...":"Write a comment...","Write a reply...":"Write a reply...","Website":"Website","Optional":"Optional","We'll keep you in the loop!":"We'll keep you in the loop!","Loading your comment...":"Loading your comment...","Discover more from":"Discover more from Nick Higham","Subscribe now to keep reading and get access to the full archive.":"Subscribe now to keep reading and get access to the full archive.","Continue reading":"Continue reading","Never miss a beat!":"Never miss a beat!","Interested in getting blog post updates? Simply click the button below to stay in the loop!":"Interested in getting blog post updates? Simply click the button below to stay in the loop!","Enter your email address":"Enter your email address","Subscribe":"Subscribe","Comment sent successfully":"Comment sent successfully","Save my name, email, and website in this browser for the next time I comment.":"Save my name, email, and website in this browser for the next time I comment.","hovercardi18n":{"Edit your profile \u2192":"Edit your profile \u2192","View profile \u2192":"View profile \u2192","Contact":"Contact","Send money":"Send money","Gravatar not found.":"Gravatar not found.","This profile is private.":"This profile is private.","Too Many Requests.":"Too Many Requests.","Internal Server Error.":"Internal Server Error.","Sorry, we are unable to load this Gravatar profile.":"Sorry, we are unable to load this Gravatar profile."},"siteId":43828396,"postId":5154,"mustLogIn":false,"requireNameEmail":true,"commentRegistration":false,"connectURL":"https://nickhigham.wordpress.com/public.api/connect/?action=request\u0026domain=nhigham.com","logoutURL":"https://nickhigham.wordpress.com/wp-login.php?action=logout\u0026_wpnonce=9959f1b468","homeURL":"https://nhigham.com/","subscribeToBlog":true,"subscribeToComment":true,"isJetpackCommentsLoggedIn":false,"jetpackUsername":"","jetpackUserId":0,"jetpackSignature":"","jetpackAvatar":"https://0.gravatar.com/avatar/?s=96\u0026amp;d=identicon\u0026amp;r=G","enableBlocks":true,"enableSubscriptionModal":true,"currentLocale":"en","isJetpackComments":false,"allowedBlocks":["core/paragraph","core/list","core/code","core/list-item","core/quote","core/image","core/embed","core/quote","core/code"],"embedNonce":"97b07cb0c6","verbumBundleUrl":"/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/features/verbum-comments/dist/index.js","isRTL":false,"vbeCacheBuster":1771405207,"iframeUniqueId":0,"colorScheme":false}
+//# sourceURL=verbum-settings-js-before
+</script>
+<script data-wp-strategy="defer" defer id="verbum-dynamic-loader-js" src="/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/assets/dynamic-loader.js?m=1772522099i&#038;minify=false&#038;ver=8b5296f9195db92c42e4"></script>
+<script id="colinear-navigation-js-extra">
+var screenReaderText = {"expand":"\u003Cspan class=\"screen-reader-text\"\u003Eexpand child menu\u003C/span\u003E","collapse":"\u003Cspan class=\"screen-reader-text\"\u003Ecollapse child menu\u003C/span\u003E"};
+//# sourceURL=colinear-navigation-js-extra
+</script>
+<script id="sharing-js-js-extra">
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+//# sourceURL=sharing-js-js-extra
+</script>
+<script id="jetpack-script-data-js-before">
+window.JetpackScriptData = {"site":{"host":"wpcom","is_wpcom_platform":true}};
+//# sourceURL=jetpack-script-data-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJyNkNtuwjAMhl9oqakmxm6mPQoySVrcJk4UOzDeflmBCmnSxp3zH+xPgXM2NrF6VtCjj14g1wPYFIg9FpgEGE80olLibpIX+L8gM2XTnrMZkq1iBvp6sjlUtj+H5J4ntqG6lmymTTG2rik+h0sX6RdOrCaHOhK3uNeMdjZNOudWvBkgle/e/uTZpQJYNUVUJbu2UMSrwKFScKsotlBW41Dxj8M4k0Sv5rXbwL7Rr8JQlrB7AvqBdVlx5ZAjFu/QucsyEo+3P/iMH/1ut31777ebfvoG1qetvA=='></script>
+<script id="sharing-js-js-after">
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-twitter' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-twitter' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-facebook' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-facebook' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-linkedin' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-linkedin' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomlinkedin', 'menubar=1,resizable=1,width=580,height=450' );
+						return false;
+					}
+				} );
+			} )();
+//# sourceURL=sharing-js-js-after
+</script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/","ext":".png","svgUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?m=1764078722i&ver=7.0-RC2-62280"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
+</script>
+<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'43828396','blog_tz':'0','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+		// Prevent sending pageview tracking from WP-Admin pages.
+		_stq.push(['view', {'blog':'43828396','v':'wpcom','tz':'0','user_id':'0','post':'5154','subd':'nickhigham'}]);
+		_stq.push(['extra', {'crypt':'UE5tW3cvZGQ9cG1YN2FWaX5wZWt3VEZhRkZ8PW55VStjOFR4Y29bLGRvYnNGemYrQStBNEV3QmQuRV9GaiUxJi9Ba3pCW2ZJSlI/YTlZMH4rY0NXcWtualo5fi5zOXU0YnIvMjVWfFBUZ2JRU1glZFR8dytdVSZSYjI5RS1LMHJTY1FQdVZIRHhfSCxjVk9yLXdGX3R4cnImYTdqJlhyNDRpQWV4dnJufmx0UXFHbjU2LURnMjU9NHllSzFEQklDYkJ0ZmtMMmdnak56OU9IM3Ivbm93aVRIdls0L3h3UElpWS1MOV9tWDlLNGlbPUVqYl9mWz09TnlbZEZQfFhneTFUZVh6Y2lIZ0FWUVFzN0s3Qy9PUjFESzFyalFXWEEvQT1+QVIwd0hwTEMvXU5afi8uJXwuVmN1PWNSWHZNNF1Na1pRSGVbWTBk'}]);
+_stq.push([ 'clickTrackerInit', '43828396', '5154' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="Etc/GMT-0" data-custom-props="{&quot;enq_jquery&quot;:&quot;1&quot;,&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;pub\/colinear&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202619"></script> 	
+<script>
+(function() {
+	'use strict';
+
+	const fetches = {};
+	const promises = {};
+	const urls = {
+		'wp-polyfill': '/wp-includes/js/dist/vendor/wp-polyfill.min.js?m=1775575011i&ver=3.15.0',
+		'verbum': '/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.js?m=1777406400i&minify=false&ver=daa565a7d230e522cf9c'
+	};
+	const loaders = {
+		'verbum': () => {
+			fetchExternalScript('wp-polyfill');
+			fetchExternalScript('verbum');
+			promises['wp-polyfill'] = promises['wp-polyfill'] || loadWPScript('wp-polyfill');
+			promises['verbum'] = promises['verbum'] || promises['wp-polyfill'].then( () => loadWPScript('verbum') );
+			return promises['verbum'];
+		},
+		
+	};
+	const scriptExtras = {
+		
+	};
+
+	window.WP_Enqueue_Dynamic_Script = {
+		loadScript: (handle) => {
+			if (!loaders[handle]) {
+				console.error('WP_Enqueue_Dynamic_Script: unregistered script `' + handle + '`.');
+			}
+			return loaders[handle]();
+		}
+	};
+
+	function fetchExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		fetches[handle] = fetches[handle] || fetch(urls[handle], { mode: 'no-cors' });
+		return fetches[handle];
+	}
+
+	function runExtraScript(handle, type, index) {
+		const id = 'wp-enqueue-dynamic-script:' + handle + ':' + type + ':' + (index + 1);
+		const template = document.getElementById(id);
+		if (!template) {
+			return Promise.reject();
+		}
+
+		const script = document.createElement( 'script' );
+		script.innerHTML = template.innerHTML;
+		document.body.appendChild( script );
+		return Promise.resolve();
+	}
+
+	function loadExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		return fetches[handle].then(() => {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement('script');
+				script.onload = () => resolve();
+				script.onerror = (e) => reject(e);
+				script.src = urls[handle];
+				document.body.appendChild(script);
+			});
+		});
+	}
+
+	function loadExtra(handle, pos) {
+		const count = (scriptExtras[handle] && scriptExtras[handle][pos]) || 0;
+		let promise = Promise.resolve();
+
+		for (let i = 0; i < count; i++) {
+			promise = promise.then(() => runExtraScript(handle, pos, i));
+		}
+
+		return promise;
+	}
+
+	function loadWPScript(handle) {
+		// Core loads scripts in this order. See: https://github.com/WordPress/WordPress/blob/a59eb9d39c4fcba834b70c9e8dfd64feeec10ba6/wp-includes/class-wp-scripts.php#L428.
+		return loadExtra(handle, 'translations')
+			.then(() => loadExtra(handle, 'before'))
+			.then(() => loadExternalScript(handle))
+			.then(() => loadExtra(handle, 'after'));
+	}
+} )();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_aa9b8b6543f9.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8249,
+  "output_tokens": 3542,
+  "elapsed_s": 1410.470162875019,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers/engineers working on LLM-based autoformalization, NLP evaluation, and automated theorem proving",
+    "subtask_short": "evaluating autoformalization robustness",
+    "subtask_description": "Empirical evaluation protocol for testing robustness of LLM-based autoformalization systems to semantically similar paraphrased natural-language statements, using MiniF2F (Isabelle/HOL) and ProofNet (Lean 4) benchmarks and cross-model evaluation. Includes metric definitions, prompts, generation settings, and Pass@K evaluation.",
+    "subtask_keywords": [
+      "autoformalization",
+      "llm",
+      "formal_verification",
+      "isabelle",
+      "lean4",
+      "benchmarks"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "BLEU (sentence-level) for formalization",
+        "description": "BLEU score computed at sentence level between a reference sequence r and a candidate sequence c to measure semantic fidelity of generated formal statements relative to references.",
+        "guidance": "BLEU = BP \u00b7 exp( sum_{n=1}^N w_n log p_n ), where p_n is modified n-gram precision up to order N and w_n typically = 1/N. Brevity penalty BP = 1 if clen > rlen, otherwise exp(1 - rlen/clen). Follow MiniF2F and ProofNet protocol by computing sentence-level BLEU with smoothing (method 1 from NLTK) to account for sparse n-gram overlap in short formal proofs."
+      },
+      {
+        "name": "Lexical diversity (Type\u2013Token Ratio, TTR)",
+        "description": "Quantify variation in word usage across paraphrased and reference natural-language statements using type\u2013token ratio.",
+        "guidance": "TTR = |V| / |W| where |V| is number of unique tokens and |W| is total number of tokens in the NL statement. Used to detect increased lexical diversity introduced during Formal\u2192NL paraphrasing."
+      },
+      {
+        "name": "Cosine similarity of sentence embeddings (SBERT)",
+        "description": "Measure semantic equivalence between paraphrased and reference NL statements via cosine similarity of sentence embeddings.",
+        "guidance": "Sim_cos(r,c) = E(r)\u00b7E(c) / (||E(r)|| ||E(c)||) where E(\u00b7) denotes the SBERT embedding function (Reimers & Gurevych 2019). Used to establish semantic validity of paraphrases before NL\u2192Formal evaluation; reported typical ranges (e.g., 62\u201378%)."
+      },
+      {
+        "name": "Pass@K BLEU Accuracy (K \u2208 {1,2,5,10})",
+        "description": "Aggregate semantic-fidelity accuracy measured as Pass@K using BLEU: whether any of the top-K generated formalizations for an NL input achieves target BLEU thresholds (reported as percent).",
+        "guidance": "Pass@K reported across K \u2208 {1,2,5,10} and computed separately for different model/formulation conditions (ground-truth NL, GPT-paraphrased NL, Claude-paraphrased NL) following the paper's table/figures."
+      },
+      {
+        "name": "Pass@K Compilation Accuracy (K \u2208 {1,2,5,10})",
+        "description": "Aggregate syntactic/executable validity measured as Pass@K: fraction of top-K generated formalizations that successfully compile/execute in the target proof assistant.",
+        "guidance": "Compilation accuracy is defined by the successful execution of the generated proof code with the respective compilers (Isabelle for Isabelle/HOL, Lean 4 for ProofNet). Reported for K \u2208 {1,2,5,10} and compared across paraphrase sources and formalization models."
+      },
+      {
+        "name": "Semantic validity / fidelity of paraphrases",
+        "description": "Paraphrased NL statements should preserve the same logical meaning as the ground-truth NL statements; semantic validity is assessed before feeding paraphrases to NL\u2192Formal.",
+        "guidance": "The paper enforces this by measuring high SBERT cosine similarity (reported ~62\u201378%) and by selecting paraphrases that maintain semantic equivalence to reduce meaning-drift as a confound when testing sensitivity to linguistic variation."
+      },
+      {
+        "name": "Syntactic validity / compilation as criterion",
+        "description": "Generated formal statements must not only be semantically faithful but must also be syntactically/executable valid in the target proof assistant (Isabelle/Lean 4).",
+        "guidance": "Compilation accuracy (Pass@K) operationalizes this: successful compilation/execution is required to count as syntactic validity; small syntactic shifts in paraphrases can reduce compilation even when BLEU increases."
+      },
+      {
+        "name": "Two-stage evaluation pipeline (Formal\u2192NL then NL\u2192Formal)",
+        "description": "Evaluate robustness via a two-stage, roundtrip pipeline: (1) Formal \u2192 Natural Language paraphrasing to generate semantically similar NL variants, (2) NL \u2192 Formal formalization of those paraphrases, cross-evaluating outputs.",
+        "guidance": "Stage 1 establishes semantic validity of paraphrases; Stage 2 cross-evaluates paraphrases across formalization models. The pipeline is context-independent: no conversational context retained between requests."
+      },
+      {
+        "name": "Context independence for LLM requests",
+        "description": "Each LLM request in the evaluation must be context-independent (no context carried between tasks).",
+        "guidance": "All model generations were executed with no context between tasks in a roundtrip to avoid history influencing paraphrases or formalizations; this controls for contextual leakage across requests."
+      },
+      {
+        "name": "Cross-model paraphrase/formalizer cross-evaluation",
+        "description": "Evaluate sensitivity by cross-feeding paraphrases generated by different LLMs (GPT-4o-mini and Claude-3.7-sonnet) into both formalization models.",
+        "guidance": "Pass paraphrases from each paraphraser into each formalization model and compare BLEU and compilation Pass@K to reveal source-specific and model-specific dependencies."
+      },
+      {
+        "name": "Benchmarks and formal systems selection",
+        "description": "Use established formal-benchmarks MiniF2F (Isabelle/HOL) and ProofNet (Lean 4) to evaluate autoformalization robustness.",
+        "guidance": "Follow benchmark-specific evaluation protocols (e.g., sentence-level BLEU smoothing) and report separate analyses per benchmark (Isabelle vs Lean 4) because formal systems' strictness affects compilation sensitivity."
+      },
+      {
+        "name": "Generation hyperparameters for reproducibility",
+        "description": "Specify deterministic generation settings to minimize sampling variance in experiments.",
+        "guidance": "All generations: temperature = 0.0, top_p = 1.0; max_tokens = 500 for single generation, max_tokens = 5000 for multiple generations; no context between tasks. Use same model versions (GPT-4o-mini, Claude-3.7-sonnet)."
+      },
+      {
+        "name": "Prompt output-format constraints (Lean 4 multi-generation)",
+        "description": "When requesting multiple Lean 4 translations, the output must be exactly 10 clear, valid Lean 4 theorems formatted as a Python list assigned to the output field message, with strict element/content rules.",
+        "guidance": "Requirements: (1) Output must be a Python list assigned to the output field message. (2) Exactly 10 string elements. (3) Each element must begin with 'theorem', be a single self-contained Lean 4 statement, include no import lines, and must not include 'by', 'sorry', or 'import'. (4) Encode necessary assumptions in variable names or hypotheses. (5) Make reasonable assumptions if NL is underspecified. (6) Do not add any commentary or explanations."
+      },
+      {
+        "name": "Prompt output-format constraints (Lean 4 single-generation)",
+        "description": "When requesting a single Lean 4 translation, the output must be a single string assigned to the output message and satisfy syntactic/content constraints.",
+        "guidance": "Translated statement must: begin with 'theorem'; be a self-contained Lean 4 statement; omit import lines; not include 'by', 'sorry', or 'import'; encode necessary assumptions in variable names/hypotheses; make reasonable assumptions if underspecified; include no commentary/explanations."
+      },
+      {
+        "name": "Prompt output-format constraints (Isabelle NL\u2192Formal)",
+        "description": "For Isabelle formalization requests, the model must produce only the Isabelle formal statement with no additional commentary.",
+        "guidance": "System/User instructions: 'Generate only the [Isabelle] Formal Statement, without any additional commentary or explanation.'"
+      },
+      {
+        "name": "Prompt output-format constraints (Formal\u2192NL)",
+        "description": "When translating formal statements to natural language, produce a clear natural-language question written in LaTeX and nothing else.",
+        "guidance": "System/User instructions: 'Translate the following [Isabelle/Lean 4] statement into a clear natural language question that conveys the exact same logical meaning. Generate only the natural language question written in LaTeX, without any additional commentary or explanation.'"
+      },
+      {
+        "name": "No commentary / no explanatory text in outputs",
+        "description": "All model outputs used in evaluation must contain only the requested artifact (formal statement(s) or NL statement) with no extra commentary or explanations.",
+        "guidance": "Prompts repeatedly require 'no additional commentary or explanation' to ensure parsable, machine-checkable outputs and avoid contamination of downstream automatic checks."
+      },
+      {
+        "name": "Reasonable assumption policy for underspecified inputs",
+        "description": "Models are allowed/required to make reasonable assumptions if the natural language statement is underspecified, but must encode them in the formal output.",
+        "guidance": "Prompt instructions: 'Make reasonable assumptions if the natural language statement is underspecified' and 'Encode any necessary assumptions in variable names or hypotheses.' This is a production guideline used to obtain complete formal statements."
+      },
+      {
+        "name": "Analysis visualizations & diagnostic measures",
+        "description": "Report and plot diagnostic measures such as sentence length, lexical diversity (TTR), and SBERT semantic similarity per paraphraser to inspect distributional effects introduced by paraphrasing.",
+        "guidance": "Use panels/plots to show how paraphrasers differ in sentence length, TTR, and cosine similarity relative to ground truth; these diagnostics support interpretation of BLEU/compilation differences."
+      },
+      {
+        "name": "Report limitations and recommended extensions",
+        "description": "Explicitly state experimental limitations and recommended directions for broader validation.",
+        "guidance": "Paper-level guidance: expand to more models to test generality, evaluate low-semantic-similarity or ambiguous requests, and perform systematic categorization of semantic vs compilation error types for deeper insight."
+      }
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a0d5c1717da8.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17316,
+  "output_tokens": 4381,
+  "elapsed_s": 1431.6478909580037,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on automated theorem proving, formal verification, and machine-learning-for-code (especially those using Isabelle/HOL and transformer LLMs)",
+    "subtask_short": "whole-proof generation for Isabelle/HOL",
+    "subtask_description": "Designing, training, and evaluating large-language-model methods to generate and repair complete Isabelle/HOL proofs (proof synthesis and repair), including use of theory-file context and comparisons to search-based methods.",
+    "subtask_keywords": [
+      "isabelle_hol",
+      "theorem_proving",
+      "llm",
+      "proof_generation",
+      "proof_repair",
+      "formal_verification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Proof generation input/output",
+        "description": "Input: theorem statement. Output: candidate proof (entire proof generated at once).",
+        "guidance": "Fine-tune an LLM to generate an entire proof given only the theorem statement; sample multiple candidate proofs from the model and check them with Isabelle. Example: input the lemma statement, target is human-written proof. (Section 2.1)"
+      },
+      {
+        "name": "Proof repair input/output",
+        "description": "Input: theorem statement, incorrect proof, error message. Output: candidate repaired proof.",
+        "guidance": "Use the error message returned by the proof assistant and the failed proof attempt as additional input to a repair model that is fine-tuned to produce the correct proof. Example pipeline shown in Figure 2. (Section 2.2)"
+      },
+      {
+        "name": "Proof generation training data creation",
+        "description": "Create training examples by reconstructing whole proofs: concatenate the proof steps of each theorem and use theorem statement as input and the concatenated proof as target.",
+        "guidance": "Starting from datasets of individual proof steps, drop the intermediate proof states and concatenate human-written proof steps to form full-proof targets. Rationale: Isabelle uses a declarative, human-readable proof language making this feasible; contrast with procedural proof assistants like Coq. (Section 2.1)"
+      },
+      {
+        "name": "Proof repair training data creation",
+        "description": "Generate repair training examples by sampling failed proofs from the generation model, recording corresponding error messages, and forming inputs as theorem + failed proof + error message with target the ground-truth proof.",
+        "guidance": "Procedure: sample one proof with temperature 0 per problem from the generation model, check with Isabelle, collect failed proofs and their error messages, concatenate theorem statement + incorrect proof + error message for input, reuse ground-truth human proof as target. (Figure 3, Section 2.2)"
+      },
+      {
+        "name": "Adding theory-file context",
+        "description": "Augment input with the lines from the theory file that immediately precede the theorem (up to a fixed limit) to provide richer local context for the model.",
+        "guidance": "Add up to 50 preceding statements from the same theory file; tokenize and truncate on the left to fit input length. Context can include previous theorems, definitions, proofs, and comments. Empirically increases proof rate (e.g., 40.7% -> 47.5% at 64 samples). (Section 2.3)"
+      },
+      {
+        "name": "Premise selection vs context",
+        "description": "Distinguish premise selection (explicitly selecting relevant premises) from adding local theory-file context (simple inclusion of preceding lines).",
+        "guidance": "Adding context is simpler and only provides a small fraction of possible premises (mostly proofs). Premise-selection systems (e.g., HOList) focus on selecting relevant premises explicitly and can be complementary. (Section 2.3)"
+      },
+      {
+        "name": "Inference sampling strategy",
+        "description": "Sample a fixed number of sequences from the fine-tuned LLM (commonly 16 or 64 samples) and tune the sampling temperature; use top-K sampling.",
+        "guidance": "Typical settings: sample 16 or 64 sequences; tune temperature between 0.0 and 1.4 in increments of 0.2; restrict next-token choices to top K=40; sample sequences with maximal length 256 tokens (though model trained to 512). Deduplicate identical samples before repair. (Sections 2.1, 2.4)"
+      },
+      {
+        "name": "Proof checking procedure and acceptance criteria",
+        "description": "Validate candidate proofs by replacing the original proof in the theory and running the Isabelle proof assistant; a proof is successful if Isabelle accepts it without errors.",
+        "guidance": "When checking, load the surrounding project context, replace the proof with the candidate, and run Isabelle. Discard proofs containing 'sorry' or 'oops' (which skip proofs but would pass checker). Apply a timeout of 10 seconds per proof step in the checker. Report theorem as proven only if Isabelle accepts fully. (Section 3.1)"
+      },
+      {
+        "name": "Handling spurious/skipped proofs ('sorry'/'oops')",
+        "description": "Do not count proofs that use 'sorry' or 'oops' as valid proofs even if the proof checker accepts them.",
+        "guidance": "Extend the proof checker to discard any proofs containing 'sorry' or 'oops' which are keywords that skip proofs but otherwise pass. (Section 3.1)"
+      },
+      {
+        "name": "Model architecture and fine-tuning hyperparameters",
+        "description": "Use a decoder-only transformer LLM (Minerva) fine-tuned on proof data; specific architecture and training hyperparameters affect performance.",
+        "guidance": "Models used: Minerva 8B and 62B. Max sequence length 2048; rotary position encodings; multi-query attention; inputs use bidirectional attention, targets causal (PrefixLM). Training details: batch size 32, dropout 0.1, fine-tune up to 100k steps but overfitting observed after 50-70k steps, select checkpoints before overfitting. (Section 2.4)"
+      },
+      {
+        "name": "Input/target length and truncation policy",
+        "description": "Specify maximum input and target lengths and how to truncate/pad sequences to fit model constraints.",
+        "guidance": "Typical settings: max input length 1536 and max target length 512 (repair experiments used 1024/1024). Tokenize and truncate left of inputs (dropping earlier context) and truncate right of targets (proofs). Pad shorter sequences with zeros. Rationale: preserve theorem statement and recent context. (Section 2.4)"
+      },
+      {
+        "name": "Evaluation metric: proof rate and inference-cost-normalized comparisons",
+        "description": "Primary metric is proof rate: percentage of theorems proven fully automatically. Also consider inference cost (number of model samples, TPU time) for fair comparisons.",
+        "guidance": "Report proof rates (e.g., Baldur variants achieving 34.8%\u201347.9%; union with Thor 65.7%). When comparing to search-based methods, normalize for inference cost (e.g., compare TPU core-seconds or number of model calls) because search based methods may require many more model invocations. Use plots of proven ratio vs number of proof attempts. (Section 3)"
+      },
+      {
+        "name": "Repair model effectiveness depends on error messages",
+        "description": "Including the proof assistant's error message in the repair model input is crucial for observed improvements; removing the error message reduces gains.",
+        "guidance": "Empirical observation: a repair model that does not see the error message still proves additional theorems but does not surpass performance of generation model when normalized for inference cost. Error messages point to first-occurring errors and are important training signal. (Section 3.4)"
+      },
+      {
+        "name": "Contextual copying/adaptation behavior",
+        "description": "Models with theory-file context often copy and adapt nearby proofs or leverage premises in context, contributing to improved proof success rates.",
+        "guidance": "Qualitative inspection: in sampled examples the model copied/adapted nearby proofs (3/5 examples), reused premises in different tactical forms, or found simpler proofs; thus context provides both quantitative and qualitative improvements beyond premise selection. (Section 3.5, Appendix A)"
+      },
+      {
+        "name": "Combining LLM methods with search/hammers",
+        "description": "LLM-based whole-proof generation and search-based/hybrid approaches (like Thor with Sledgehammer) are complementary; their union can increase total coverage.",
+        "guidance": "Example: Thor alone proves 57.0% of problems, Baldur up to 47.9%, but union of Baldur and Thor proves 65.7%, indicating orthogonal strengths and that ensemble or combined pipelines can yield better overall proof rates. (Section 3.7)"
+      },
+      {
+        "name": "Learnable proof search via generate-and-repair",
+        "description": "A potential search strategy: iteratively generate candidate proofs, repair them, and repair the repairs, using models as learnable search operators.",
+        "guidance": "Proof-of-concept: sample once with generation, repair, then repair again; inference cost measured as number of model calls (e.g., cost 3 for two repairs). Observed gains but noted that repair model mainly learns to fix the first-occurring error because proof checker returns the first error. Suggests future work on crafting repair training data to mirror multi-step repair needs. (Section 4)"
+      },
+      {
+        "name": "Training sampling choices for repair data collection",
+        "description": "When collecting failed proofs for repair training, sample generation outputs deterministically (temperature 0) to obtain failed proofs and their error messages.",
+        "guidance": "Procedure used: sample one proof with temperature 0 for each problem in original training set to construct the repair training set. Use the proof assistant to record failed proofs and their error messages. (Section 2.2)"
+      },
+      {
+        "name": "Deduplication before repair",
+        "description": "Deduplicate identical generated proofs before issuing repair attempts to avoid redundant repair effort.",
+        "guidance": "Observation: the generation approach tends to produce multiple copies of the same proofs; deduplicate before repair and only generate one repair attempt per unique failed proof. This affects accounting of inference cost vs benefit. (Section 3.4)"
+      },
+      {
+        "name": "Dataset curation and test split considerations",
+        "description": "Filter out non-theorem entries and be mindful of data-split semantics (theorem-wise vs project-wise) and possible leakage from pretraining data.",
+        "guidance": "Example: filter out entries starting with 'lemmas' (not proper theorems). PISA provides a 95%/1%/4% train/val/test split; the paper uses the full test of 6,336 theorems after filtering. Note potential leakage: LLM pretraining may include code with Isabelle/HOL proofs, so interpret results cautiously. Consider project-wise splits when evaluating generalization to unseen projects. (Section 3.2, Discussion)"
+      },
+      {
+        "name": "Hardware, runtime, and cost accounting",
+        "description": "Account for hardware resources and runtime when comparing methods: measure TPU core-hours and wall-clock inference time for sampling and compare to search methods.",
+        "guidance": "Example comparison: Thor-like search approach required a TPUv3 with 8 cores for ~216s per proof vs Baldur sampling 64 proofs requiring ~35s on same hardware, a factor ~6 difference; proof checking runs on CPUs and is cheaper. Use such cost-normalized comparisons when claiming efficiency. (Section 3.3, 3.1)"
+      },
+      {
+        "name": "Evaluation breakdown by topic and problem type",
+        "description": "Report proof rates stratified by AFP topic (computer science, logic, mathematics, tools) to understand strengths/weaknesses across domains.",
+        "guidance": "Example: Baldur and Thor have different relative performance across topics (Baldur better on tools and logic; Thor better on mathematics & CS), suggesting different methods may excel on different problem distributions. (Table 7, Section 3.7)"
+      }
+    ]
+  }
+}

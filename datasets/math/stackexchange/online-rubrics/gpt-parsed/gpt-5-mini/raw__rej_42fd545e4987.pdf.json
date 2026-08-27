@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_42fd545e4987.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 13823,
+  "output_tokens": 4822,
+  "elapsed_s": 2056.311585499905,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers in graph theory and computational mathematics implementing or analyzing graph-coloring algorithms",
+    "subtask_short": "Kempe algorithm evaluation",
+    "subtask_description": "Empirical and algorithmic study of Kempe's (flawed) four-coloring method, its recursive implementation, and a randomized Kempe\u2013Kittell modification tested on benchmark plane graphs. Focuses on algorithm definitions (gadgets), failure modes, randomization strategies, and performance metrics.",
+    "subtask_keywords": [
+      "four_color_theorem",
+      "kempe_algorithm",
+      "kempe-kittell",
+      "plane_graphs",
+      "graph_coloring",
+      "randomization"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "C1C2-Kempe chain (Definition 1)",
+        "description": "Let G be a plane graph whose vertices have been properly colored and suppose v \u2208 V(G) is colored C1. The C1C2-Kempe chain containing v is the maximal connected component of G that contains v and contains only vertices colored C1 or C2.",
+        "guidance": "Maximality guarantees that interchanging all occurrences of C1 and C2 preserves the proper coloring of G. This notion underlies all Kempe chain switches used in the algorithm."
+      },
+      {
+        "name": "C1C2-Kempe chain switch (Definition 2)",
+        "description": "Let K be a C1C2-Kempe chain. A C1C2-Kempe chain switch interchanges all values of C1 and C2 in K.",
+        "guidance": "Performing a chain switch on a Kempe chain changes colors on that connected component; used to make a color available for a currently uncolorable vertex without violating properness elsewhere (subject to tangles)."
+      },
+      {
+        "name": "Irrevocable Kempe chain tangle (Definition 3)",
+        "description": "Given a plane graph where all vertices except one vertex v of degree 5 are properly colored, with neighbors v1..v5 colored G, R, G, B, Y respectively and with certain Kempe chain containments (RB-Kempe chain of v2 contains v4 and RY-Kempe chain of v2 contains v5), Algorithm Kempe causes an irrevocable Kempe chain tangle on v if either: (a) following a GB-Kempe chain switch on K1 then a GY-Kempe chain switch on K2 causes v5 to be recolored G, or (b) following a GY switch on K2 then a GB switch on K1 causes v4 to be recolored G.",
+        "guidance": "An irrevocable tangle means the procedure has reintroduced a neighbor colored with the desired color (here G), so the vertex v still cannot be colored with that color; under the initial hypotheses the tangle may be forced and Algorithm Kempe halts with failure. This formalizes the classical flaw in Kempe's proof and is the failure mode the implementations seek to detect and (in the Kittell extension) circumvent."
+      },
+      {
+        "name": "Algorithm Kempe: input/output and success criterion",
+        "description": "INPUT: a connected plane graph with n labeled vertices and an ordering (C1,C2,C3,C4) of permissible colors. OUTPUT: either a proper vertex coloring with colors from {R,G,B,Y} or the message that Kempe's algorithm has encountered an irrevocable Kempe chain tangle at vertex v and hence has failed to properly four-color the graph.",
+        "guidance": "The algorithm recursively removes and labels vertices of degree \u22645 and attempts to color greedily, using specific gadgets (4, 51, 52) when a greedy color is not available. Success is defined as obtaining a proper 4-coloring; failure is halting at an irrevocable Kempe chain tangle."
+      },
+      {
+        "name": "Gadget relabel (vertex ordering rule)",
+        "description": "Search G for the first occurrence of a vertex of degree five or less dictated by the given ordering of the vertices; call this v1. Recursively label the other n\u22121 vertices, choosing for vi+1 (0 \u2264 i < n) the first occurrence of a vertex of degree five or less in G_i := G \\ {v1,...,vi}.",
+        "guidance": "The chosen vertex ordering (first occurrences under the given labeling) determines the recursive labeling and can affect whether Algorithm Kempe will succeed or encounter tangles; historically the order of labeling was shown to be important."
+      },
+      {
+        "name": "Gadget greed (greedy coloring rule)",
+        "description": "Color vn in G_{n\u22121} with the available color of lowest index from C. In general, color vi in G_{i\u22121} with the available color of lowest index from C whenever possible.",
+        "guidance": "The algorithm always attempts a lowest-index available color first (C1 preferred). Examples: vn will be C1 since no neighbors colored yet; if vn\u22121 not adjacent to vn then it may also be C1, else C2, etc. Greedy coloring handles degree \u22643 trivially and often degree 4 when combined with Gadget 4."
+      },
+      {
+        "name": "Gadget 4 (degree-four Kempe chain resolution)",
+        "description": "When encountering a vertex vi of degree 4 whose neighbors are colored R,G,B,Y in counterclockwise order: if there is an RB-Kempe chain containing both the R and B neighbors of vi, there cannot be a YG-Kempe chain that contains both the Y and G neighbors; in that case a YG-Kempe chain switch leaves a color available for vi. Otherwise, if there is no RB-Kempe chain containing both R and B neighbors, perform an RB-Kempe chain switch to make a color available for vi.",
+        "guidance": "Gadget 4 guarantees degree-4 vertices can be colored by choosing an appropriate pairwise Kempe chain switch; the rule depends on the presence/absence of blocking Kempe chains that join opposite neighbors."
+      },
+      {
+        "name": "Gadget 51 (degree-five configuration 1)",
+        "description": "For degree vi = 5 with two G neighbors adjacent (configuration G G Y B R up to rotation), if there is no RY-Kempe chain containing both Y and R neighbors then an RY switch leaves a color available. If there is such an RY chain, then a GB-Kempe chain containing the B neighbor contains neither G neighbor and a GB-Kempe chain switch makes B available. In all cases vi can be properly colored.",
+        "guidance": "This gadget handles the configuration where the twice-used color appears on adjacent neighbors; it reduces to Gadget 4-type reasoning and guarantees coloring success in this configuration."
+      },
+      {
+        "name": "Gadget 52 (degree-five configuration 2 and potential order-dependence)",
+        "description": "For degree vi = 5 with two G neighbors separated (configuration Ga R Gb B Y), if there is an RB-Kempe chain that does not contain both R and B neighbors then an RB switch leaves a color available; if there is an RY chain that does not contain both R and Y then an RY switch makes a color available. Otherwise, attempt both a GaB-Kempe chain switch followed by a GbY-Kempe chain switch (or vice versa). If no irrevocable Kempe chain tangle occurs, color vi with G and continue; otherwise halt and return an error that the offending vertex is vi.",
+        "guidance": "Gadget 52 is the configuration responsible for Kempe's failure: it may require two successive switches and the order of switches can matter (noncommutativity), possibly producing an irrevocable tangle and algorithmic failure. Implementations should attempt both orders when needed."
+      },
+      {
+        "name": "Order-dependence of Gadget 52 (Theorem 4)",
+        "description": "Gadget 52 is sometimes noncommutative: the order in which one chooses to execute the Kempe chain switches on K1 and K2 may matter; in one order an irrevocable Kempe chain tangle can occur, whereas in the other no Kempe chain tangle occurs.",
+        "guidance": "The paper exhibits the Fritsch graph labeling as an explicit witness. Implementations must account for noncommutativity by trying both orders (or randomizing order) to reduce failure rate."
+      },
+      {
+        "name": "Gadget Kittell (Kempe\u2013Kittell chain set)",
+        "description": "When Gadget 52 fails, invoke Gadget Kittell which identifies eight Kempe\u2013Kittell chains (\u03b1..\u03b8): \u03b1 = RB switch beginning at v2 or v4; \u03b2 = RY switch beginning at v2 or v5; \u03b3 = GY beginning at v1 or v5; \u03b4 = GB beginning at v3 or v4; \u03b5 = BY beginning at v4 or v5; \u03b6 = GB beginning at v1 or v4; \u03b7 = GY beginning at v3 or v5; \u03b8 = RG beginning at v2 or v1.",
+        "guidance": "These eight chain-switch operations define the impasse group of possible switches affecting the five neighbors of vi; they provide additional operations (beyond basic Kempe switches) intended to resolve irreversible tangles. Implementations may randomly choose among these chains to attempt resolution."
+      },
+      {
+        "name": "Algorithm Kempe\u2013Kittell (randomized resolution and termination)",
+        "description": "Modified algorithm: perform Gadget relabel; for i = n down to 1 attempt greedy coloring or the appropriate gadget (4, 51, 52). If Gadget 52 reaches an irrevocable tangle, select a random Kempe\u2013Kittell chain (from Gadget Kittell) and execute randomly until vi is colored or 100 attempts have failed.",
+        "guidance": "Randomized selection among Kempe and Kempe\u2013Kittell choices is used to improve success; a fixed upper limit (100) on Kempe\u2013Kittell switches is imposed because it is unknown whether a sequence always exists. Implementers should record how many Kittell switches are required and possibly tune the limit if necessary."
+      },
+      {
+        "name": "Randomization points and strategy",
+        "description": "Randomize choice among multiple Kempe chains in Gadget 4 and Gadget 51 when more than one viable chain exists; in Gadget 52 randomize the order of the two required switches, trying the alternative only if the first order fails; upon tangle, randomly choose among the eight Kempe\u2013Kittell chains and execute random sequences.",
+        "guidance": "Randomization is justified because order and choice can change outcome (Theorem 4). The implementation in the paper randomly selects chains and orders, and in tests used random attempt sequences (up to the fixed cap) to resolve impasses; practical implementations should log attempts and consider repeated randomized trials."
+      },
+      {
+        "name": "Fixed upper limit for Kempe\u2013Kittell chain-switch attempts",
+        "description": "Use an upper limit of 100 Kempe\u2013Kittell chain switches when attempting to resolve an irrevocable tangle.",
+        "guidance": "The limit is pragmatic: the impasse group has a known lower bound of 120 relevant combinations [Kittell 1935], and the upper bound is impractical to determine. Empirically, fewer than 12 random choices were usually sufficient; Errera graph exceptions required >70 attempts for two vertices."
+      },
+      {
+        "name": "Testing methodology for labelings and implementations",
+        "description": "For graphs with nine vertices or fewer, each group explored Algorithm Kempe's results for all n! labelings. For graphs with more than nine vertices, each group independently tested a random subset of at least 9! labelings. Five independent groups implemented and tested the algorithm to compare results.",
+        "guidance": "This methodology is used to estimate failure rates and to detect consensus on which vertices cause failures; implementations that test only one order in Gadget 52 (as Group 2 did) will report higher failure rates than implementations that try both orders."
+      },
+      {
+        "name": "Benchmark graph selection and role",
+        "description": "Use historically motivated benchmark graphs (Fritsch, Soifer, Heawood, Poussin, Errera, Kittell, and the edge graphs of icosahedron, dodecahedron, octahedron, cube) to evaluate algorithm performance. Platonic-solid-derived graphs serve as no-failure controls.",
+        "guidance": "Choose graphs that are known counterexamples to Kempe's method under some labelings (e.g., Heawood, Errera) alongside graphs that must always succeed (degree \u22644 vertices) to validate algorithms and compare implementations."
+      },
+      {
+        "name": "Performance metrics to report",
+        "description": "Report failure rates per graph (min/avg/max across implementations), percentage use of Kempe\u2013Kittell (i.e., % of node colorings requiring Kittell), number of Kempe\u2013Kittell chain switches required per offending vertex (min/max/avg), max number of Kittell switches observed, and empirical success rate over repeated runs (e.g., 500 runs).",
+        "guidance": "The paper tabulates these metrics (Tables 1\u20133, 4) and uses them to compare the original deterministic implementations to the randomized Kempe\u2013Kittell version. Record per-vertex statistics and consensus across independent implementations to identify recurring failing vertices."
+      },
+      {
+        "name": "Empirical findings as evaluative criteria",
+        "description": "Algorithm Kempe always succeeds for graphs with \u22648 vertices and for the platonic-solid-derived benchmarks; randomized Kempe\u2013Kittell implementation achieved 100% successful four-colorings in 500 runs per graph using randomized Kittell switches (with fewer than 12 random choices most of the time).",
+        "guidance": "These empirical outcomes are used as evaluation criteria of algorithmic effectiveness: lower failure rates and fewer Kittell-switch attempts indicate better practical performance. Note trade-offs: randomization can increase the frequency of encountering Gadget Kittell (as on the Poussin graph) but still resolves impasses."
+      },
+      {
+        "name": "Consensus and per-vertex failure identification",
+        "description": "Identify vertices that consistently cause irrevocable Kempe chain tangles across independent implementations and labelings; in figures, color vertices red if all groups found them to produce a tangle for at least one labeling, yellow if some groups found failures, white if none.",
+        "guidance": "Per-vertex consensus is an evaluation dimension: vertices that repeatedly cause tangles are candidates for characterization and targeted algorithmic improvements. For graphs where all n! labelings were tested (Fritsch, Soifer), white vertices are guaranteed never to fail."
+      }
+    ]
+  }
+}

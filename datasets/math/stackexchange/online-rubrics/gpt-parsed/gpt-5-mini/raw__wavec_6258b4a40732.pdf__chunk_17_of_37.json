@@ -1,0 +1,220 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 17,
+  "n_chunks": 37,
+  "chunk_chars": 39984,
+  "model": "gpt-5-mini",
+  "elapsed_s": 219.14227820800443,
+  "input_tokens": 12757,
+  "output_tokens": 6862,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users and macro writers (people typesetting documents with Plain TeX who need to construct leaders, write to files, use \\special, and make alignments/tables)",
+    "subtask_short": "tex alignment and whatsits",
+    "subtask_description": "Guidance and rules for TeX whatsits (deferred \\write\\/file output and \\special) and for making aligned/tabular material (\\settabs, \\+, \\halign, tabskip, \\noalign, \\omit, etc.). Intended to teach correct usage, pitfalls, and idiomatic techniques.",
+    "subtask_keywords": [
+      "tex",
+      "typesetting",
+      "alignment",
+      "whatsits",
+      "halign"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Constructing repeatable arrow leaders",
+        "description": "Use \\cleaders with a repeatable box consisting of the middle 10 units of a minus sign (one unit = 1/18 em), preceded and followed by \u2212 and \u2192, and provide enough backspacing to compensate for up to 5 units of extra space that \\cleaders might leave blank.",
+        "guidance": "This lets \\hbox to 100pt{\\rightarrowfill} produce a visually even run of minus signs ending in an arrow. The macro in Appendix B implements this idea; the middle-of-minus-box is repeated by \\cleaders and the surrounding backspacing compensates for fractional leftover space."
+      },
+      {
+        "name": "Whatsits are TeX extension mechanism",
+        "description": "Whatsits are a general mechanism for handling special printing applications as extensions to TeX, allowing new features to be accommodated without major program changes.",
+        "guidance": "Whatsits let you incorporate new things into boxes without bending existing conventions too much, but using them can reduce portability across systems; the author warns against proliferating incompatible pseudo-TeX extensions."
+      },
+      {
+        "name": "Two built-in whatsit kinds: file output and device specials",
+        "description": "Two whatsit-like mechanisms are provided: one for output to text files (\\openout, \\closeout, \\write, \\immediate) and one for device-special instructions via \\special.",
+        "guidance": "They are coded like extensions so they serve as models for other extensions."
+      },
+      {
+        "name": "Deferred nature of \\openout/\\closeout/\\write",
+        "description": "Commands \\openout, \\closeout, and \\write are not performed when TeX reads them; TeX puts these commands into whatsit items and they are executed later when the whatsit is shipped out (during \\shipout).",
+        "guidance": "Deferral is necessary because page numbers and exact page placement are often unknown when \\write occurs in mid-paragraph; deferred writes ensure valid page-number references. Note that \\openout and \\closeout are deferred too, preserving relative ordering unless boxes are shipped out in a different order due to insertions."
+      },
+      {
+        "name": "\\write token list expansion timing",
+        "description": "The token list of a \\write is stored in a whatsit without macro expansion; the expansion happens later at the time of \\shipout.",
+        "guidance": "Thus control sequences in a \\write will be expanded when the box is shipped, not when \\write is seen \u2014 e.g., \\write can record the page number at shipout time. Be careful which macros you include in a deferred \\write because their values may have changed by shipout."
+      },
+      {
+        "name": "Use \\newwrite and stream numbering rules",
+        "description": "Plain TeX's \\newwrite allocates output stream numbers from 0 to 15; filenames are usually extended with '.tex' if no extension given; if hnumberi is negative or >15 or stream has no file open, output goes to the log file and to the terminal unless the number is negative.",
+        "guidance": "Keep stream numbers in range and open files appropriately. Output streams are independent from input streams."
+      },
+      {
+        "name": "Use \\immediate to force immediate file ops",
+        "description": "Prefix \\write, \\openout, or \\closeout with \\immediate to cause the operation to be performed immediately rather than deferred (no whatsit is made).",
+        "guidance": "Example: \\immediate\\write16{Goodbye} prints immediately on the terminal. \\immediate avoids the need to use constructs like \\shipout\\hbox{\\write...} which could insert unwanted pages. Note: \\immediate\\write differs from \\message because \\write prints its text on a line by itself."
+      },
+      {
+        "name": "Limit length of \\write token lists; use \\newlinechar for newlines",
+        "description": "The token list of a \\write should be short because it makes one output line; some TeX implementations cannot write very long lines.",
+        "guidance": "If you need multiple lines, use several \\write commands or set \\newlinechar to an ASCII code for a character to represent 'begin a new line' (TeX will begin a new line at that character when output). Example: \\newlinechar=`\\^^J then \\immediate\\write16{Two^^Jlines.}"
+      },
+      {
+        "name": "Symbolic form of \\write output",
+        "description": "Each \\write produces output in the form TeX uses to display token lists symbolically: characters mostly represent themselves; unexpandable control sequences produce their names preceded by \\escapechar and followed by a space (unless active or single-nonletter).",
+        "guidance": "Be aware of how special tokens and macro parameter characters (##) will be represented in the output text."
+      },
+      {
+        "name": "TeX ignores \\write/\\openout/\\closeout inside leaders-governed boxes",
+        "description": "TeX ignores \\write, \\openout, and \\closeout whatsits that appear within boxes governed by leaders.",
+        "guidance": "If you rely on writes inside leader-regions, they will be ignored \u2014 and the author bluntly notes 'If you are upset about this, you shouldn\u2019t be.'"
+      },
+      {
+        "name": "Control macro expansion for deferred writes",
+        "description": "Because deferred \\write expansion happens at shipout, you should control which control sequences appear in deferred writes using macro-expansion techniques (e.g., techniques from Chapter 20).",
+        "guidance": "If some part should be expanded immediately and other parts at shipout, use appropriate expansion/boxing strategies (see Exercise 21.10 for mixing immediate expansion of \\chapno with deferred expansion of \\the\\count0)."
+      },
+      {
+        "name": "\\special writes are expanded immediately and copied to dvi",
+        "description": "The \\special{htoken listi} command expands its token list immediately (like \\message) and puts the resulting token list into the dvi file with other typesetting commands; it is implicitly associated with the current reference point on the page.",
+        "guidance": "The token list should start with a keyword and optional arguments (e.g., \\special{halftone pic1}). Do not make the list too long (risk of overflowing TeX's string memory)."
+      },
+      {
+        "name": "Keep \\specials device-portable and non-position-changing",
+        "description": "Specials should never do anything that changes the current position and should be kept reasonably short and standardized; otherwise output may not be printable on all devices.",
+        "guidance": "Software converting dvi files should fail gracefully on unknown special keywords. Expect that standards for common graphical operations may eventually emerge, but using \\specials carries portability risk."
+      },
+      {
+        "name": "Use \\badness to inspect glue badness in boxes",
+        "description": "After making a box you can ask for the numeric quantity \\badness to report the badness of glue setting in that box.",
+        "guidance": "Badness values range 0\u201310000; if a box is overfull, \\badness=1000000. Example usage: \\setbox0=\\line{...}\\ifnum\\badness>250 \\setbox0=\\line{alternate}\\fi to choose an alternative line if badness is large."
+      },
+      {
+        "name": "Use \\settabs n \\columns for equal-width tabbing columns",
+        "description": "The command \\settabs n \\columns makes it easy to produce lines divided into n equal-size columns; each line is specified by \\+ text1 & text2 & ... \\cr where text1 starts at left margin, text2 at second column, etc.",
+        "guidance": "The macro \\+ begins a tabbed line and \\cr ends it. This is convenient for simple tabular layouts similar to typewriter tabs."
+      },
+      {
+        "name": "Meaning and behavior of '&' in \\+ lines",
+        "description": "In \\+ lines, '&' advances to the next tab position but first backs up to the beginning of the current column; spaces after '&' are ignored.",
+        "guidance": "Because '&' backs up to the column start first, counting &s tells you which column you'll be in even with variable-width text. Ignoring spaces after '&' lets you break input lines without introducing extra spaces. The last column entry (followed by \\cr) uses natural width."
+      },
+      {
+        "name": "Implicit bracing of alignment entries and \\+ spacing behavior",
+        "description": "Each individual entry of an alignment (\\+ line) is implicitly enclosed in braces, so local declarations (e.g., \\it) affect only that entry; plain TeX also ignores spaces after \\+.",
+        "guidance": "You can change typography of a single column entry without explicit braces."
+      },
+      {
+        "name": "Tabs persist until reset; group-local \\settabs",
+        "description": "Tabs set by \\settabs remain in effect until you reset them; if you enclose \\settabs in {...}, tabs defined inside the group do not affect those outside. Note: '\\global\\settabs' is not permitted.",
+        "guidance": "Use grouping to limit scope of tab settings."
+      },
+      {
+        "name": "Use \\settabs sample-line form to set arbitrary tab positions",
+        "description": "Instead of equally spaced columns, you can say '\\settabs\\+sample line\\cr' so that tabs are placed where &'s appear in the sample line; the sample line itself is not printed.",
+        "guidance": "Construct the sample line using the widest expected entries for each column and include extra space between columns so columns won't touch."
+      },
+      {
+        "name": "Set flush-right or centered column entries using \\hfill",
+        "description": "To put something flush right in its column, put '\\hfill' before it and include '&' after it; to center, put '\\hfill' before and '\\hfill&' after.",
+        "guidance": "\\hfill is stronger than \\hss; when used, it will force right justification or centering within the column (ensure you include the following '&' so TeX knows to move to next column)."
+      },
+      {
+        "name": "Implementation model of \\+ macro (\\hbox to column width{...\\hss})",
+        "description": "The \\+ macro builds each column entry (except the last) into \\hbox to hcolumnwidth {htext \\hss}, so \\hss makes the text flush left and stretch to the right; the last column is boxed at its natural width.",
+        "guidance": "Because \\hss can shrink, oversize text may stick out; adding '\\hskip 0pt minus -1fil' will force an overfull box instead. To allow symmetric extension, use '\\hss' before the text and '&' after it to center."
+      },
+      {
+        "name": "Use \\hfill vs \\hss implications",
+        "description": "\\hfill is 'more infinite' than \\hss (it will not shrink), so it right-justifies or centers more forcefully; \\hss can shrink, allowing content to stick out if too large.",
+        "guidance": "Choose \\hfill when you want strong justification behavior; be mindful of shrinking/overfull consequences."
+      },
+      {
+        "name": "Create adaptive tabs for computer-program-like material using new tabs and \\cleartabs",
+        "description": "If you type '&' to the right of all existing tabs, TeX sets a new tab there whose column will have natural width; use '\\cleartabs' to reset all tab positions to the right of the current column.",
+        "guidance": "This is convenient for typing program fragments where tab positions vary line by line."
+      },
+      {
+        "name": "Inspect current tabs with \\showbox\\tabs",
+        "description": "Plain TeX keeps tab positions in \\box\\tabs as a box full of empty boxes (widths are column widths in reverse order); use '\\showbox\\tabs' to print these widths into the log file.",
+        "guidance": "Example: after certain \\settabs, \\showbox\\tabs will show a sequence of \\hbox lines with their widths."
+      },
+      {
+        "name": "Don't nest \\+ lines (no \\+ inside another \\+)",
+        "description": "You must never use \\+ inside another \\+ line; the \\+ macro is intended for simple applications only.",
+        "guidance": "For more complex nested alignment needs, use \\halign or user-defined macros rather than nesting \\+."
+      },
+      {
+        "name": "Use \\halign with templates (#) for versatile alignments",
+        "description": "\\halign{preamble\\cr rows...} uses templates (each containing a single '#') specifying how each column entry is placed; TeX reads the entire \\halign, computes the maximum natural width of each column, then inserts each entry into its template and sets glue so all column boxes have the maximum width.",
+        "guidance": "Templates let you encode indentation, centering, typeface, and stretching behavior succinctly; e.g., '\\indent#\\hfil & \\quad#\\hfil\\cr' for two columns."
+      },
+      {
+        "name": "Advantages of \\halign vs \\+: automatic column-width calculation",
+        "description": "\\halign calculates maximum column widths automatically so you don't have to guess longest entries (unlike \\settabs sample-line method).",
+        "guidance": "Use \\halign when you prefer automatic width computation and consistent column widths across a single table."
+      },
+      {
+        "name": "Independence of separate \\halign operations",
+        "description": "Each \\halign computes its column widths independently; different \\halign tables will not automatically share identical alignments unless you explicitly arrange for that.",
+        "guidance": "If you need multiple tables with identical column widths, you must take special measures to enforce uniformity."
+      },
+      {
+        "name": "Suitability of \\halign for table size",
+        "description": "\\halign is unsuitable for huge tables that fill several pages because it reads an entire table into memory before typesetting.",
+        "guidance": "For very large multi-page tables, consider processing line-by-line (e.g., \\+ with custom macros) or designing a special-purpose macro to avoid huge memory usage."
+      },
+      {
+        "name": "\\halign is computationally cheaper than macro \\+",
+        "description": "\\halign takes less computer time than \\+ because \\halign is a primitive built-in while \\+ is implemented as a macro in terms of \\halign and other primitives.",
+        "guidance": "Use \\halign when performance matters and table size is manageable in memory."
+      },
+      {
+        "name": "Templates save typing but don't replace tabs for varying positions",
+        "description": "Templates are versatile and can reduce keystrokes by encoding common formatting, but they are no substitute for tabs when tab positions vary from line to line (as in computer code examples).",
+        "guidance": "Choose templates when entries have consistent formatting; rely on tabs or dynamic tab-setting when positions vary."
+      },
+      {
+        "name": "Use \\noalign{vertical material} for non-alignment vertical adjustments",
+        "description": "You can put '\\noalign{vertical-mode-material}' just after any \\cr in a \\halign to insert vertical material (extra space, penalties, lines of text) that is copied into the output without alignment.",
+        "guidance": "Use \\noalign{\\smallskip} for added space after title lines, or insert penalties affecting page-breaking; definitions inside \\noalign braces are local to that group."
+      },
+      {
+        "name": "Control inter-column spacing with \\tabskip and \\halign to/spread",
+        "description": "\\tabskip glue is placed before the first column, after the last column, and between columns; you can set \\tabskip to control spacing (e.g., '\\tabskip=1em plus2em minus.5em') and use '\\halign to\\hsize{...}' or '\\halign spread\\hsize{...}' to make lines fill a specified width.",
+        "guidance": "If \\tabskip has no stretch/shrink, '\\halign to\\hsize' will do nothing except report underfull/overfull boxes. Overfull boxes produce a warning and a 'prototype row' in the log but no visual overfull rule in output."
+      },
+      {
+        "name": "Tabskip glue values are set as preamble tokens are read",
+        "description": "The particular \\tabskip glue used before/between/after columns is the value in effect when TeX reads specified tokens: the value at the '{' after \\halign for before-first, at the '&' after a template for between columns, and at the \\cr after last template for after-last.",
+        "guidance": "Assignments to \\tabskip that occur in the preamble are local to that \\halign (unless \\globaldefs is positive); note that these \\tabskip assignments are removed from templates (i.e., they are not included as tokens in the template)."
+      },
+      {
+        "name": "Preamble tokens passed to templates with limited expansion",
+        "description": "Tokens of the preamble are copied into templates without macro expansion except that the tokens following '\\tabskip' are scanned (with macro expansion) and not included in the template.",
+        "guidance": "Spaces after such scanned tokens can disappear; a '\\global' placed before '\\tabskip' is copied into the template rather than making a global assignment at that time."
+      },
+      {
+        "name": "Effect of \\span in a preamble",
+        "description": "When '\\span' appears in a preamble, it causes the next token to be expanded (i.e., 'ex-span-ded') before TeX continues reading the preamble.",
+        "guidance": "Use \\span to force an expansion at the appropriate point when constructing complex preambles."
+      },
+      {
+        "name": "Escape a template for a single entry with \\omit (must be first)",
+        "description": "If the very first token of an alignment entry (after macro expansion) is '\\omit', TeX omits the template for that column and uses the trivial template '#' instead.",
+        "guidance": "Use '\\omit' when one or two entries need a completely different formatting than the preamble's template (e.g., title 'B.C.' without a colon while the template supplies ':'). \\omit must be the first token of the entry."
+      },
+      {
+        "name": "Be careful with \\if... at the start of alignment entries",
+        "description": "Avoid beginning an alignment entry with '\\if...' (or any macro that expands to a token sequence starting with '\\if...'), because the condition will be evaluated before the template has been read, which may produce unintended behavior.",
+        "guidance": "Because TeX looks ahead for \\omit or \\noalign before reading the template, early \\if expansion can confuse the alignment machinery; restructure entries to avoid leading conditionals or ensure expansion timing is suitable."
+      }
+    ]
+  }
+}

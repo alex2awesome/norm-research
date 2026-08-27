@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_08ac41f94387.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17257,
+  "output_tokens": 4037,
+  "elapsed_s": 1420.874911250081,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML/NLP researchers and practitioners developing or evaluating large language models on math reasoning benchmarks",
+    "subtask_short": "meta-reasoning evaluation for LLMs",
+    "subtask_description": "Designing, annotating, and evaluating a benchmark that asks LLMs to judge provided question\u2013solution pairs (i.e., to 'reason about reasoning') by predicting solution correctness, locating the first erroneous step, and explaining the error reason.",
+    "subtask_keywords": [
+      "llm",
+      "math_benchmark",
+      "meta_reasoning",
+      "solution_scoring",
+      "gsm8k"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Meta-reasoning evaluation paradigm (solution-scoring teacher role)",
+        "description": "Instead of solving questions, evaluated models are presented with question\u2013solution pairs and tasked with determining solution correctness, identifying potential first error steps, and providing reasons for errors.",
+        "guidance": "This paradigm shifts models from a student (question-answering) role to a teacher (solution-scoring) role to emphasize reasoning-process assessment and to reduce vulnerability to data contamination/overfitting. It is applied to GSM8K instances transformed into MR-GSM8K (original, POT, reversed)."
+      },
+      {
+        "name": "Solution correctness labeling rule",
+        "description": "Solutions that yield a final output differing from the established ground truth are automatically marked as incorrect. If the solution\u2019s final output aligns with the ground truth, annotators review the entire reasoning path to ascertain whether the correct output is the result of a logical and sensible reasoning process.",
+        "guidance": "Even when final answers match ground truth, the solution can still be marked 'wrong' if the reasoning path is flawed. Annotators must read steps carefully and mark correctness of the solution process (not merely final answer)."
+      },
+      {
+        "name": "First-error-step identification",
+        "description": "Annotators identify the initial step in the reasoning process where the logic deviates from correctness; steps are segmented (newline-delimited), indexed, and categorized as positive, neutral, or negative.",
+        "guidance": "Positive/neutral steps represent stages where the correct final output remains attainable; negative steps indicate divergence from the correct solution path. The first negative step (first error) is the reported first-error-step. If steps are not properly segmented, manually segment into Step1, Step2, etc., before annotating."
+      },
+      {
+        "name": "Error-reason annotation guideline",
+        "description": "Annotators must conduct an in-depth analysis of the reasoning that led to the first error and explain what the correct line of reasoning should have been at that point.",
+        "guidance": "Explain errors comprehensively as if explaining to another person; describe the erroneous process, what misunderstanding led to the incorrect inference, and then provide the correct reasoning/answer (not just a terse label). Mention possible viewpoints if multiple interpretations exist. This detailed reasoning is used to evaluate model-provided error reasons."
+      },
+      {
+        "name": "Step classification and non-error rules",
+        "description": "Each step may be categorized as positive, neutral, or negative; steps that are unnecessary, redundant, or repetitive but do not directly cause an error or prevent reaching the final result should not be judged as an error.",
+        "guidance": "Annotators should not mark harmless or redundant steps as errors. Steps must be judged by their impact on the attainability of the correct final result."
+      },
+      {
+        "name": "Annotation format and required fields",
+        "description": "Annotation record must include: problem, ground-truth-solution, model-output-steps, model-output-answer-correctness, model-output-solution-correctness, model-output-solution-first-error-step, and model-output-solution-first-error-reason.",
+        "guidance": "If solution process is correct, first-error-step and error-reason fields should be 'N/A'. Follow provided data/JSON format strictly for consistency (examples provided in Appendix/Manual)."
+      },
+      {
+        "name": "Annotator qualification and quality control procedure",
+        "description": "Annotators must review the annotation manual, watch a demonstration video, and pass a trial labeling process; QC involves double annotation, supervisor review of discrepancies, random rechecks, and author inspections.",
+        "guidance": "Each question is labeled twice by different annotators; discrepancies (particularly on correctness and first-error-step) are flagged for supervisor review. 50% of labels are randomly selected for a second QC pass; ~10% of questions are manually inspected by the authors before inclusion."
+      },
+      {
+        "name": "Dataset construction: question type composition",
+        "description": "MR-GSM8K consists of three question types: (1) original GSM8K instances, (2) Program-of-Thought (POT) transformations requesting code solutions, and (3) reversed reasoning (conceal one input and ask to compute it using the original answer).",
+        "guidance": "These variations are selected to broaden the scope of reasoning methodologies the benchmark probes (e.g., forward/backward reasoning, code-based solutions)."
+      },
+      {
+        "name": "Solution generation design (targeted error balance)",
+        "description": "Solutions for collected questions were generated (e.g., with MetaMath-7B at temperature 1) targeting approximately 50% result accuracy to ensure a balance between correct and flawed reasoning processes.",
+        "guidance": "Choose model and sampling parameters that yield realistic, nuanced mistakes so annotators and evaluated models can diagnose errors; intentionally include both correct and plausible-but-wrong solutions."
+      },
+      {
+        "name": "Evaluation task sequence (three sub-tasks)",
+        "description": "Evaluation comprises three sequential sub-tasks for the evaluated model: (Task 1) predict solution correctness (binary), (Task 2) for incorrect solutions predict the first-error-step (multiclass over step indices), (Task 3) for incorrect solutions provide the error-reason (free-form).",
+        "guidance": "Only when the model correctly identifies an incorrect solution and its first-error-step will its error-reason be further examined (manually or via proxy automatic labeling)."
+      },
+      {
+        "name": "Task 1 metric: use Matthews Correlation Coefficient (MCC) for solution-correctness",
+        "description": "Use MCC for the binary classification of solution-correctness: MCC = (TP * TN - FP * FN) / sqrt((TP+FP)(TP+FN)(TN+FP)(TN+FN)), with range -1 to +1.",
+        "guidance": "MCC chosen over F1 or balanced-accuracy because models often show extreme imbalances (very high TPR or TNR); MCC captures overall correlation. In MR-Score, negative MCC values are interpreted as no better than random and 0 is used as cutoff (i.e., max(0, MCC))."
+      },
+      {
+        "name": "Task 2 metric: ACCstep (accuracy of first-error-step)",
+        "description": "ACCstep = N_correct_first_error_step / N_incorrect_sols \u2014 the proportion of incorrect solutions for which the model predicts the same first-error-step as annotators.",
+        "guidance": "Treats first-error-step localization as a multiclass accuracy problem. Steps must be indexed consistently; if segmentation differs, pre-process to standard segmentation."
+      },
+      {
+        "name": "Task 3 metric: ACCreason (accuracy of error reason)",
+        "description": "ACCreason = N_correct_error_reason / N_incorrect_sols \u2014 the proportion of incorrect solutions for which the model provides a correct error reason (compared to annotations).",
+        "guidance": "Error-reason evaluation is a free-form generation task; accuracy here is a coarse measure and may be evaluated manually or via an automatic proxy evaluator (e.g., GPT-4) with reported limitations."
+      },
+      {
+        "name": "MR-Score aggregation and weighting",
+        "description": "MR-Score = w1 * max(0, MCC) + w2 * ACCstep + w3 * ACCreason \u2014 a weighted combination of the three sub-metrics, with weights chosen empirically to maximize differentiation between models.",
+        "guidance": "Weights (w1, w2, w3) are chosen by considering task difficulty and discrepancy between manual labeling and automatic labeling of error reasons. See Appendix for weight selection details. Negative MCC values are clamped to 0 before weighting."
+      },
+      {
+        "name": "Scoring policy for error-reason examination",
+        "description": "A model's error-reason is only examined (manually or automatically) if the model correctly identifies an incorrect solution and its first-error-step.",
+        "guidance": "This policy prevents spurious or irrelevant error-reasons from contributing to ACCreason and ensures error-reason scoring focuses on cases where the model localized the error correctly."
+      },
+      {
+        "name": "Choice of zero-shot vs few-shot evaluation and inference settings",
+        "description": "Evaluate models in zero-shot and few-shot settings; inference temperature is set to zero for reproducibility and to minimize variance.",
+        "guidance": "Carefully select few-shot example distributions: few-shot examples can bias models (observed increase in true-positive rate and decrease in true-negative rate when examples contain more correct solutions). Report both settings because few-shot may harm or help different models inconsistently."
+      },
+      {
+        "name": "Step segmentation and pre-processing rule",
+        "description": "If solution steps are not correctly segmented (steps sometimes not newline-separated), manually segment them into Step1, Step2, etc., in the same format before annotating.",
+        "guidance": "Consistent step segmentation is essential for reliable first-error-step indexing and comparisons between annotations and model predictions."
+      },
+      {
+        "name": "Error taxonomy examples for labeling reasons",
+        "description": "Common error reason categories include calculation errors (e.g., arithmetic mistakes), formula/unit errors (e.g., multiplying incompatible units), conceptual misunderstandings (misreading the problem), missing sign errors, and others.",
+        "guidance": "When writing error reasons, include the nature of the mistake (category), the effect on the reasoning, and the corrected step/approach. Use examples provided in the annotation manual as templates for phrasing."
+      },
+      {
+        "name": "Automatic proxy evaluation of error reasons (use with caution)",
+        "description": "Automatic evaluators (e.g., GPT-4-Turbo) can be used to auto-label or compare error reasons; authors report GPT-4 achieved ~82% accuracy vs manual labels in one test.",
+        "guidance": "Despite decent performance, automatic labeling exhibits biases (higher false positive than false negative rates). The paper recommends manual labeling when resources permit and releasing manual labels for rigor; automatic labeling can be used as a pragmatic proxy but results should be interpreted carefully."
+      },
+      {
+        "name": "Synthetic diagnostic data creation procedure (prompted generation of incorrect solutions)",
+        "description": "Procedure for creating in-domain diagnostic training data: present a correct solution, instruct an LLM (e.g., GPT-4) to randomly fabricate a realistic student-like error at a chosen step, produce a coherently incorrect solution, and provide an independent analysis and summary of the error.",
+        "guidance": "Formatting must be strict: include Error Step, Error Reason, Incorrect Solution (do not state it's incorrect), Independent Step-by-Step Analysis, Independent Error Reason. Use such synthetic data to augment training (authors generated 5k incorrect and 4k correct synthetic solutions) but verify quality with expert annotation (authors verified >90% on subsample)."
+      }
+    ]
+  }
+}

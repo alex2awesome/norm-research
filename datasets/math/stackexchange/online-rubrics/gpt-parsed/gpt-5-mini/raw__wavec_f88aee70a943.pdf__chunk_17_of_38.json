@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 17,
+  "n_chunks": 38,
+  "chunk_chars": 39787,
+  "model": "gpt-5-mini",
+  "elapsed_s": 217.92539166699862,
+  "input_tokens": 15568,
+  "output_tokens": 5519,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of PARI/GP (mathematicians, numerical analysts, GP programmers)",
+    "subtask_short": "PARI/GP numerical routines usage",
+    "subtask_description": "Guidance and requirements for using PARI/GP special-function and numerical-integration routines (teichmuller, zeta, zetamult, intnum, intnumgauss, etc.), including input constraints, precomputation recommendations, endpoint/decay coding, accuracy caveats, and performance tips.",
+    "subtask_keywords": [
+      "pari_gp",
+      "numerical_integration",
+      "special_functions",
+      "gp_programming",
+      "precision_and_performance"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Teichmuller precomputation rule of thumb",
+        "description": "If more than p / 2 (log2(p) + hammingweight(p)) values of teichmuller are to be computed, then it is worthwhile to initialize a teichmuller table (teichmuller([p,n])) to speed up repeated evaluations.",
+        "guidance": "Example: for p=101, n=100 precomputing T = teichmuller([p,n]) made repetitive teichmuller calls ~21.5\u00d7 faster (time 1,293 ms vs 60 ms). Use teichmuller(x, T) to exploit cached data."
+      },
+      {
+        "name": "Teichmuller tab accuracy vs x precision (caveat)",
+        "description": "If the accuracy of tab (the argument n in teichmuller([p,n])) is lower than the precision of x, the cached value is not refined to higher accuracy; if the accuracy of tab is larger, then the precision of x is used.",
+        "guidance": "Example: using Tlow = teichmuller([101,2]) then teichmuller(2 + O(101^5), Tlow) yields only limited coefficients; using Thigh with higher accuracy yields full precision. Choose tab precision at least as large as intended x precision."
+      },
+      {
+        "name": "Zeta computation method selection",
+        "description": "For complex s \u2260 1, \u03b6(s) is computed using the Euler\u2013Maclaurin summation formula, except when s is an integer: for integer s \u2264 0 or s > 0 even use Bernoulli numbers; for s > 0 odd use modular forms. Power series inputs are allowed for complex s.",
+        "guidance": "Examples: zeta(2) computed via Bernoulli numbers yields Pi^2/6 to precision; zeta(1+x+O(x^3)) returns Laurent expansion. For p-adic s use Kubota\u2013Leopoldt zeta with different rules (power series not allowed). Use suitable method implicitly provided by gzeta(s, prec)."
+      },
+      {
+        "name": "p-adic zeta (Kubota\u2013Leopoldt) input restrictions",
+        "description": "For s a p-adic number, the Kubota\u2013Leopoldt zeta is the unique continuous p-adic function interpolating (1 \u2212 p^{\u2212k})\u03b6(k) at certain negative integers k; power series inputs are not allowed in this case.",
+        "guidance": "Be aware you cannot pass power series for p-adic zeta evaluation. To check p-adic values use gzeta(s, prec) and verify interpolation properties (examples provided)."
+      },
+      {
+        "name": "zetahurwitz domain constraints and derivative option",
+        "description": "zetahurwitz(s,x,{der=0}) requires s \u2260 1 and x not a non-positive integer; s may be polynomial, rational, or power series; if der>0 compute the der'th derivative with respect to s.",
+        "guidance": "Note derivative with respect to x is simply \u2212s * zetahurwitz(s+1, x). Examples show numerical evaluations and power-series expansions. Use zetahurwitz(GEN s, GEN x, long der, long bitprec)."
+      },
+      {
+        "name": "Multiple zeta values (zetamult) input constraints",
+        "description": "zetamult(s) requires s to be a vector of positive integers with s[1] \u2265 2; other formats (evec, index) are accepted as alternate encodings.",
+        "guidance": "If the bit precision is B, runtime ~ O(k B^2). If provided, T must be output of zetamultinit(w) with w \u2265 sum(s_i) to get a small (~10%) speedup. Errors occur when weight > precomputed maxw (e.g., domain error). Use zetamultconvert to move between formats."
+      },
+      {
+        "name": "Use zetamultinit precomputation for repeated MZV computations",
+        "description": "zetamultinit(maxw) initializes inexpensive data to compute multiple zeta values for all weights \u2264 maxw and gives a small speedup (typically ~10%) for repeated computations at given accuracy.",
+        "guidance": "For small weights, zetamultall may be much more efficient. Example: calling zetamultinit(102) yields reasonably small memory even for huge weights. Use T returned from zetamultinit in subsequent zetamult calls."
+      },
+      {
+        "name": "intnum applicability: double-exponential integration assumptions",
+        "description": "intnum uses the double-exponential univariate integration method and assumes the integrand is regular on the integration interval; integrals with singularities must be split into subintegrals where the function has no singularities except possibly at endpoints.",
+        "guidance": "Polynomials in logarithms are not considered singular; singularities considered are algebraic (asymptotic to C(x \u2212 a)^\u2212\u03b1 with \u03b1 > \u22121) or simple derivative discontinuities. Split integrals around singularities (example: handle abs(x) singularity at 0)."
+      },
+      {
+        "name": "intnum tab argument and precomputation",
+        "description": "The tab argument to intnum can be (i) a non-negative integer m to multiply sampling points by 2^m, or (ii) a precomputed integration table from intnuminit to skip an O(D log D) precomputation step and speed up repeated/inner integrations.",
+        "guidance": "Using intnuminit is particularly useful for multivariate integrals where many internal integrations share the same structure; increasing m increases runtime roughly by factor 2^m. Try increasing m until consecutive results agree within desired tolerance."
+      },
+      {
+        "name": "Specifying endpoint behavior in intnum (finite endpoints)",
+        "description": "For finite endpoint a, coding as [a, \u03b1] means the integrand has a singularity of the form (x \u2212 a)^\u03b1 up to logarithms; if \u03b1 \u2265 0 the function is assumed regular.",
+        "guidance": "Using a wrong singularity exponent degrades accuracy. Example: intnum(x=[0,c],1,x^c) can restore full accuracy when c = -9/10. Choose \u03b1 carefully; if omitted default regularity is assumed."
+      },
+      {
+        "name": "Specifying endpoint behavior in intnum (infinite endpoints & decay/oscillation coding)",
+        "description": "[\u00b1oo, \u03b1] encodes asymptotic behavior at infinity: \u03b1 = 0 (or omitted) assumes moderate decay (at least O(x^{-2}) but not exponential); \u03b1 > 0 assumes exponential decay roughly exp(\u2212\u03b1 x); \u03b1 < \u22121 assumes slow polynomial decay x^{\u03b1} and requires sharp \u03b1; \u03b1 = k * I encodes oscillation like cos(kx)g(x) and \u03b1 = \u2212k * I encodes sin(kx)g(x).",
+        "guidance": "It is critical to supply exact k for oscillatory coding. If integrand is product of exponential decay and oscillation you may choose either coding: choose [\u00b1oo, \u03b1] if exponential dominates, otherwise [\u00b1oo, k*I]. Examples show wrong choice yields nonsense while correct choice gives high precision."
+      },
+      {
+        "name": "Power-series endpoints and valuation restriction",
+        "description": "Endpoints a and b may be power series of non-negative valuation, giving a power-series expansion for the integral, but the valuation cannot be negative.",
+        "guidance": "Polynomials and rational functions are converted to power series using current seriesprecision. intnum fails if integral is singular with constant coefficient of the series as limit; in that case use explicit [limit, exponent] coding and only integer tab (not precomputed table)."
+      },
+      {
+        "name": "Handling apparent singularities",
+        "description": "Apparent singularities may often be ignored but can cause enormous local loss of accuracy; remedy by defining the function differently near special points (e.g., using a Taylor expansion) and using a piecewise definition with thresholds chosen by the user.",
+        "guidance": "Example: f(x)=1/(exp(x)-1)-exp(-x)/x is numerically dangerous near 0; create F = truncate(f(t+O(t^10))) and define g(x)=if(x>1e-18,f(x),subst(F,t,x)). The user must choose cutoff constants appropriately (e.g., 10^-18)."
+      },
+      {
+        "name": "True singularities require explicit exponent coding",
+        "description": "For true singularities at endpoints, providing the endpoint as [a, \u03b1] with correct \u03b1 yields accurate results; omitting or giving wrong \u03b1 degrades accuracy.",
+        "guidance": "Example: intnum(x=[0,-1/2],1,x^(-1/2)) gives full precision while naive intnum without coding yields far fewer correct decimals. Use exact exponents for true singularities."
+      },
+      {
+        "name": "Oscillating integrands: linearization and exact k requirement",
+        "description": "For oscillating integrals, it is often necessary to linearize trigonometric polynomials and express as sum of pure cos(kx) or sin(kx) terms to use [\u00b1oo, k*I] coding; otherwise results will be nonsense unless exact k is provided.",
+        "guidance": "Examples: sin(x)^3 must be expanded as (3*sin(x)-sin(3*x))/4 to use correct k values. Using incorrect k yields large errors; splitting into several oscillatory integrals with correct k values or change of variables can fix the issue."
+      },
+      {
+        "name": "Warning about divergent integrals",
+        "description": "intnum may assign a reasonable value to diverging integrals; such values should be used at your own risk.",
+        "guidance": "Example: intnum(x = 0, [oo, -I], x^2*sin(x)) produced a finite-looking value that corresponds to analytic continuation rather than an absolutely convergent integral. Do not rely blindly on outputs for divergent cases."
+      },
+      {
+        "name": "Multivariate integration performance advice",
+        "description": "For multivariate integrals, use successive univariate integration and precompute intnuminit tables for internal integrations; precomputing tab for inner integrals gives significant speedups because the internal integral matters most.",
+        "guidance": "Example: computing double integral on unit disc: using tab = intnuminit(-1,1) and passing tab to inner intnum reduced time from ~3,092 ms to ~252 ms. Precompute when doing many inner integrations at same precision and interval type."
+      },
+      {
+        "name": "intnumgauss usage and tab option",
+        "description": "intnumgauss performs Gauss\u2013Legendre quadrature on a compact interval [a,b]; tab may be omitted, precomputed with intnumgaussinit, or given as integer n to call intnumgaussinit(n) and use n-point quadrature.",
+        "guidance": "Testing examples show accuracy improves with n; however, for large intervals it's better to split and change variables rather than drastically increase n. Use intnumgaussinit to precompute nodes/weights."
+      },
+      {
+        "name": "intnumgaussinit default n and error growth with interval length",
+        "description": "intnumgaussinit(n) initializes n-point Gauss\u2013Legendre tables; if n is omitted, default n \u2248 realprecision is chosen, suitable for analytic functions on [-1,1]. Error bound depends exponentially on n and on interval length, so n should increase with interval length.",
+        "guidance": "Error bounded by ((b-a)^{2n+1} (n!)^4 f^{(2n)}(\u03be)) / ((2n+1)[(2n)!]^3). Recommendation: split the integral and change variables rather than increasing n too much for long intervals."
+      },
+      {
+        "name": "intnuminit encoding of interval behavior",
+        "description": "intnuminit(a,b,{m=0}) initializes tables describing compactness, singularities at endpoints, speed of decrease, or oscillations at infinity for integration from a to b; order of endpoints matters when exponents are specified.",
+        "guidance": "intnuminit returns internal parameters [h, x0, w0, xp, wp, xm, wm] used by intnum (step h, \u03c6(0), \u03c6'(0), sampled \u03c6(nh) and \u03c6'(nh) values). If m present, multiply default sampling points by 2^m. Note equivalences: intnuminit(-1,1) == intnuminit(0,Pi); but intnuminit([0,-1/2],[1,-1/3]) is not symmetric \u2014 order matters."
+      },
+      {
+        "name": "intnumromb suitability and flags",
+        "description": "intnumromb (Romberg integration) is suitable for low-to-moderate accuracy and very regular functions; flags control behavior: flag=0 default for smooth functions on bounded intervals; flag=1 general slow driver; flag=2 tailored for infinite endpoints using t=1/x change (requires ab>0); flag=3 allows integrand undefined at an endpoint (one-sided continuity).",
+        "guidance": "Do not require too much accuracy (\u224830 decimal digits is reasonable). Perform analytic cleanup to remove singularities; for improper integrals ensure sufficient decay. Representing infinity by a large finite number is okay but watch for underflow with rapidly decreasing functions."
+      },
+      {
+        "name": "laurentseries domain requirement",
+        "description": "laurentseries(f,{M},{x}) expands f as a Laurent series around x=0 to order M; it requires the ability to evaluate f on a power series with zero constant term (series valuation = 0).",
+        "guidance": "If series valuation != 0, laurentseries fails (domain error). Individual Laurent coefficients can be retrieved from the result with polcoeff; laurentseries is faster and often more precise than repeated derivnum calls for series coefficients."
+      },
+      {
+        "name": "asympnum heuristic algorithm and alpha handling",
+        "description": "asympnum(expr,{k=20},{alpha=1}) attempts a heuristic asymptotic expansion assuming u(n) \u2248 \u03a3 a_i n^{\u2212i\u03b1}; the algorithm is heuristic, performs repeated calls to limitnum, and may fail.",
+        "guidance": "If alpha is non-integer expect loss of accuracy; precompute alpha to double accuracy where needed. Normalizing by a limit computed to high precision often improves term extraction (example: Stirling expansion). Use asympnum0 when passing a precomputed vector."
+      },
+      {
+        "name": "limitnum requirements and vector/closure guidance",
+        "description": "limitnum(expr,{k=20},{alpha=1}) performs Lagrange\u2013Zagier numerical extrapolation to estimate limits of sequences; if given a vector it must be long enough (at least k times realprecision), otherwise prefer a closure n->u(n); extrapolating from u(kn) for k>1 may improve results.",
+        "guidance": "When vector is too short limitnum errors (non-existent component). Examples show using vectors of size matching precision and sub-sampling (u(10*n)) yields better accuracy. limitnum is heuristic and depends on assumed asymptotic form."
+      },
+      {
+        "name": "derivnum behavior depending on evaluation point type",
+        "description": "derivnum(X=a, expr, {ind=1}) performs numerical differentiation: when a is a numerical type perform numerical derivation; when a is a polynomial or power series compute derivatives via series substitution; ind may be integer m to return f^{(m)}(x) or a vector of orders to return multiple derivatives.",
+        "guidance": "Examples show derivnum on series and high-order derivatives; for high-order derivatives or many derivative evaluations laurentseries may be faster/more precise. Library variants accept function pointers for use in compiled code."
+      }
+    ]
+  }
+}

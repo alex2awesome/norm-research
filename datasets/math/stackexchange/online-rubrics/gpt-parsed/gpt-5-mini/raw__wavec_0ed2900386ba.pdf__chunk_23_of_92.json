@@ -1,0 +1,181 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 23,
+  "n_chunks": 92,
+  "chunk_chars": 39991,
+  "model": "gpt-5-mini",
+  "elapsed_s": 137.39147391699953,
+  "input_tokens": 13328,
+  "output_tokens": 5905,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and developers working with integer matrices, lattice algorithms, and the GAP vector/matrix object API",
+    "subtask_short": "gap matrix objects & normal forms",
+    "subtask_description": "Reference specifications for GAP operations on integer matrices (Hermite/Smith/triangular forms, determinants, decompositions, LLL, shortest vectors, orthogonal embeddings) and the API/concepts for vector and matrix objects including constructors, attributes, and representation rules.",
+    "subtask_keywords": [
+      "gap",
+      "matrix",
+      "vector_objects",
+      "normal_forms",
+      "lll",
+      "smith_hermite"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "HermiteNormalFormIntegerMatTransform",
+        "description": "HermiteNormalFormIntegerMatTransform(mat) computes the Hermite normal form of an integer matrix mat and returns a record with components normal (a matrix H) and rowtrans (a matrix Q) such that Q*A = H.",
+        "guidance": "Example shows returned record includes normal, rank, rowC, rowQ, rowtrans, signdet. Use rowtrans*m = normal to verify. Function is documented as an operation; returned record may contain additional transformation-related components."
+      },
+      {
+        "name": "SmithNormalFormIntegerMat",
+        "description": "SmithNormalFormIntegerMat(mat) computes the Smith normal form (SNF) of an integer matrix mat and returns a new immutable matrix in Smith normal form.",
+        "guidance": "Use when only the normal form is required and not the transformation matrices. Example: SmithNormalFormIntegerMat(m) returns the diagonal SNF matrix."
+      },
+      {
+        "name": "SmithNormalFormIntegerMatTransforms",
+        "description": "SmithNormalFormIntegerMatTransforms(mat) computes the Smith normal form of an integer matrix mat and returns a record with components normal (matrix S), rowtrans (matrix P), and coltrans (matrix Q) such that P*A*Q = S.",
+        "guidance": "Returned record contains additional components (e.g., colC, colQ, rowQ, signdet, rank). Use returned transforms to verify: rowtrans*m*coltrans = normal. Useful when transformation matrices are required."
+      },
+      {
+        "name": "DiagonalizeIntMat (destructive SNF)",
+        "description": "DiagonalizeIntMat(mat) converts mat to its Smith normal form destructively (modifies mat) and returns the result; will trigger an error if mat is immutable.",
+        "guidance": "This is a destructive variant of SmithNormalFormIntegerMat, intended to use less memory by changing the input in place. Use when mutability is allowed and memory is a concern."
+      },
+      {
+        "name": "NormalFormIntMat (general normal forms)",
+        "description": "NormalFormIntMat(mat, options) computes a triangular, Hermite or Smith normal form of an integer matrix A, optionally producing unimodular transforming matrices Q and/or P satisfying Q*A = H or Q*A*P = S. The options parameter is an integer (0..15) where bit flags select form and additional behaviors.",
+        "guidance": "Options bits control: whether triangular vs Smith/Hermite form is computed, whether to reduce off-diagonal entries, whether to compute row transforms, whether to compute column transforms, and whether operation is destructive. If an option makes no sense it is ignored. The function returns a record with component normal and optional rowtrans and/or coltrans, plus signdet and rank. Examples: NormalFormIntMat(m,0) -> triangular (no transforms); NormalFormIntMat(m,6) -> Hermite with row transforms; NormalFormIntMat(m,13) -> Smith with both transforms. Use these option combinations to get desired form and transforms."
+      },
+      {
+        "name": "AbelianInvariantsOfList",
+        "description": "AbelianInvariantsOfList(list) given a list of nonnegative integers returns a sorted list containing the prime power factors of the positive entries and preserves zeros from the original list.",
+        "guidance": "Example: AbelianInvariantsOfList([4,6,2,0,12]) -> [0,2,2,3,3,4,4]. Useful for computing abelian invariants from elementary divisors."
+      },
+      {
+        "name": "DeterminantIntMat (determinant strategy & threshold)",
+        "description": "DeterminantIntMat(mat) computes the determinant of an integer matrix using the same strategy as NormalFormIntMat. For matrices larger than about 20\u00d720 this method is faster; for smaller matrices it delegates to DeterminantMat.",
+        "guidance": "Choose DeterminantIntMat for generally larger integer matrices; aware that implementation picks the faster approach by size threshold."
+      },
+      {
+        "name": "Decomposition (p-adic/arithmetical decomposition)",
+        "description": "Decomposition(A, B, depth) for an m\u00d7n matrix A of cyclotomics (rank m \u2264 n) and a list B of cyclotomic vectors tries to find integral solutions x to x*A = B[i] by computing p-adic series of hypothetical solutions. depth is a nonnegative integer or the string \"nonnegative\".",
+        "guidance": "Returns a list X where X[i] is the computed solution vector if found, otherwise fail. Prime p starts at 83 and is incremented if reduction modulo p is singular. If depth is \"nonnegative\", function assumes solutions have only nonnegative entries and first column of A positive; then it attempts to determine the necessary number of iterations and returns fail if no nonnegative integral solution exists. If A lacks full rank, result is a list of fail even when some individual systems might have unique integral solutions. Preprocessing is necessary when entries are cyclotomic (use IntegralizedMat)."
+      },
+      {
+        "name": "LinearIndependentColumns",
+        "description": "LinearIndependentColumns(mat) returns a maximal list of column positions such that the restriction of mat to these columns has the same rank as mat.",
+        "guidance": "Use to select a basis set of independent columns (positions) for subsequent computations that require an independent column set."
+      },
+      {
+        "name": "PadicCoefficients",
+        "description": "PadicCoefficients(A, Amodpinv, b, prime, depth) returns the p-adic approximation list [x0, x1, ..., xl, bl+1] describing the prime-adic approximation of solution x to x*A = b, where Amodpinv is an inverse of A mod prime and depth is nonnegative.",
+        "guidance": "l equals depth or minimal index with bl+1 = 0. Use when reconstructing integral solutions via p-adic expansions."
+      },
+      {
+        "name": "IntegralizedMat (cyclotomic -> integral encoding)",
+        "description": "IntegralizedMat(A[, inforec]) for a matrix A of cyclotomics returns a record intmat with components mat and inforec. Each family of algebraic conjugate columns of A is encoded in sets of columns of rational matrix intmat.mat by replacing cyclotomics with their coefficients relative to an integral basis. intmat.inforec records encoding information.",
+        "guidance": "If only A provided, inforec is computed so it can be reused in a later call to encode another matrix B compatibly with A. Use this preprocessing before p-adic decomposition operations on cyclotomic data."
+      },
+      {
+        "name": "DecompositionInt",
+        "description": "DecompositionInt(A, B, depth) is the same as Decomposition but requires A and B to be integral matrices and depth to be a nonnegative integer.",
+        "guidance": "Use when input matrices are already integral to avoid cyclotomic preprocessing."
+      },
+      {
+        "name": "LLLReducedBasis (LLL algorithm implementation)",
+        "description": "LLLReducedBasis([L,] vectors[, y][, \"linearcomb\"][, lllout]) implements the LLL algorithm and returns a record whose component basis is a list of LLL-reduced linearly independent vectors spanning the same lattice as vectors. L is an optional lattice object giving scalar product; otherwise ScalarProduct(v,w) is used.",
+        "guidance": "Optional \"linearcomb\" causes the result to also include relations (a basis of relation space of vectors) and transformation (matrix expressing new basis in terms of old). Optional y is sensitivity rational in (1/4,1], default 3/4. Optional lllout is a record with components mue and B allowing incremental calls; when provided, first k vectors in vectors are known to form an LLL reduced basis and lllout.mue and lllout.B supply their scalar products and norms. Implementation follows standard references (Lenstra\u2013Lenstra\u2013Lov\u00e1sz). Example usage shown in manual."
+      },
+      {
+        "name": "LLLReducedGramMat",
+        "description": "LLLReducedGramMat(G[, y]) computes an LLL-reduced Gram matrix for the input Gram matrix G (square symmetric or lower triangular) and returns a record whose remainder is the Gram matrix of the reduced basis, plus relations and transformation.",
+        "guidance": "If G given as lower triangular, remainder is lower triangular. relations is basis of vectors x with sum x_i b_i = 0; transformation is matrix T such that T * G * T^tr equals remainder. Optional y is sensitivity in (1/4,1], default 3/4. Use when Gram matrix is available rather than explicit vectors. Can interoperate with LLLReducedBasis."
+      },
+      {
+        "name": "OrthogonalEmbeddings",
+        "description": "OrthogonalEmbeddings(gram[, \"positive\"][, maxdim]) computes all integral solutions X of X^tr * X = gram for a regular symmetric integer Gram matrix; returns a record with components vectors (list L of vectors that may be rows up to sign), norms (xi\u00b7gram^{-1}\u00b7xtr_i values) and solutions (index lists describing each solution as selection of vectors).",
+        "guidance": "The vectors returned are exactly those with xi\u00b7gram^{-1}\u00b7xtr_i \u2264 1 (see ShortestVectors). Optional argument \"positive\" restricts to vectors with nonnegative entries (useful in character contexts). Optional maxdim limits computed solutions to dimension \u2264 maxdim to accelerate computation. Example shows returned vectors, norms, and solutions and how to extract solution rows."
+      },
+      {
+        "name": "ShortestVectors",
+        "description": "ShortestVectors(G, m[, \"positive\"]) computes the nonzero vectors x with x\u00b7G\u00b7xtr \u2264 m (only one of each \u00b1 pair) for a regular matrix of a symmetric bilinear form G and returns a record with components vectors and norms.",
+        "guidance": "Optional \"positive\" restricts to vectors with nonnegative entries. Use as subroutine for OrthogonalEmbeddings and lattice/search tasks. Example illustrates returned list of vectors and norms."
+      },
+      {
+        "name": "Vector and Matrix object concept: typed representations",
+        "description": "GAP's vector and matrix object interface allows representations that store their type (representation filters) so GAP's method selection can work; such objects are created by Objectify and are distinct from plain lists of lists.",
+        "guidance": "Terminology: 'vector' (abstract element of vector space), 'row vector' (coordinate vector represented by GAP list), 'matrix' (list of lists). There is no default mapping between matrix object representations and vector representations; code should construct new objects using template objects to preserve representation. Representations may be mutable or immutable; operations that change objects are only allowed for mutable variants."
+      },
+      {
+        "name": "Equality semantics for vector/matrix objects",
+        "description": "Vector objects are equal (with respect to \\=) if they have the same length and same entries (base domain need not be identical). Matrices are equal if they have same dimensions and same entries.",
+        "guidance": "Equality does not require same base domain; embedding of entries is allowed where arithmetic works. Be aware list-like semantics are not guaranteed for non-list objects."
+      },
+      {
+        "name": "Row list matrix representation rules",
+        "description": "Row list matrix objects (IsRowListMatrix) behave like lists of rows: list access M[i] yields i-th row (an IsVectorObj) and rows may be shared between matrices; rows in same representation are compatible and vector operations apply.",
+        "guidance": "Rows of a row list matrix may have different vector types in general, but rows of two matrices in the same representation are compatible so new matrices in same representation can be formed. Row access returns a reference (no copy). Row list matrices may not be IsList and need not obey general list rules."
+      },
+      {
+        "name": "BaseDomain attribute",
+        "description": "BaseDomain(vector) or BaseDomain(matrix) returns the domain R over which the vector/matrix object is defined.",
+        "guidance": "Entries need not be elements of R with \\in but must either lie in R or naturally embed so addition/multiplication work (e.g., coefficient ring entries in polynomial ring)."
+      },
+      {
+        "name": "ConstructingFilter attribute",
+        "description": "ConstructingFilter(v) or ConstructingFilter(M) returns a filter f such that NewVector/NewMatrix called with f will produce objects in the same representation as v or M.",
+        "guidance": "If ConstructingFilter implies IsCopyable then mutable versions can be created; this attribute is required to create compatible new objects and to preserve representation."
+      },
+      {
+        "name": "CompatibleVectorFilter attribute",
+        "description": "CompatibleVectorFilter(M) returns a filter f such that vector objects with ConstructingFilter value f are compatible with M for multiplication, or fail if no such filter is known.",
+        "guidance": "Use to determine a vector representation suitable for multiplication with a given matrix object; necessary when creating ZeroVector from a matrix representation."
+      },
+      {
+        "name": "Length attribute (vector)",
+        "description": "Length(v) returns the length (number of entries) of the vector object v.",
+        "guidance": "Standard attribute for vector objects; entry access expected to work for indices 1..Length(v)."
+      },
+      {
+        "name": "NumberRows and NumberColumns attributes",
+        "description": "NumberRows(M)/NrRows(M) and NumberColumns(M)/NrCols(M) return the number of rows and columns of a matrix object M respectively.",
+        "guidance": "These are the canonical attributes to query matrix dimensions for matrix objects (not necessarily IsList)."
+      },
+      {
+        "name": "NewVector and NewZeroVector constructors",
+        "description": "NewVector(filt, R, list) creates a vector object with ConstructingFilter filt, BaseDomain R and entries from list; NewZeroVector(filt, R, n) creates a length-n zero vector object with given filt and R.",
+        "guidance": "The input list is guaranteed not to be changed. If global option 'check' is false, consistency checks can be skipped. Returned object is mutable iff filt implies IsCopyable. NewZeroVector fills all positions with zero of R."
+      },
+      {
+        "name": "Vector (overloaded constructor) semantics",
+        "description": "Vector has many overloads (Vector(filt,R,list), Vector(R,list), Vector(list), Vector(v1,v2), etc.) and returns a vector object with guessed or specified ConstructingFilter and BaseDomain; when a template vector or filter is provided the resulting representation and base domain follow that template.",
+        "guidance": "If ConstructingFilter implies IsCopyable, a result is mutable iff the argument supplying entries is mutable. If global 'check' disabled, consistency checks may be omitted. Default methods delegate to NewVector."
+      },
+      {
+        "name": "ZeroVector variants and compatibility",
+        "description": "ZeroVector(filt,R,len), ZeroVector(R,len), ZeroVector(len,v), ZeroVector(len,M) return zero vector objects in an appropriate representation: guessed from R, same representation as v, or the CompatibleVectorFilter of M (if exists).",
+        "guidance": "If ConstructingFilter of result implies IsCopyable, result is mutable. Default methods delegate to NewZeroVector."
+      },
+      {
+        "name": "NewMatrix / NewZeroMatrix / NewIdentityMatrix constructors",
+        "description": "NewMatrix(filt, R, ncols, list) creates a matrix object with ConstructingFilter filt and BaseDomain R using list (rows as vector objects or plain lists or flat row-major entries). NewZeroMatrix(filt,R,m,n) and NewIdentityMatrix(filt,R,n) create zero/identity matrices similarly.",
+        "guidance": "If list contains vector objects they are copied. If global 'check' false, consistency checks may be skipped. Returned object is mutable iff filt implies IsCopyable. NewIdentityMatrix contains 1 on diagonal and 0 elsewhere."
+      },
+      {
+        "name": "Matrix (overloaded constructor) semantics",
+        "description": "Matrix has many overloads (Matrix(filt,R,list,ncols), Matrix(R,list), Matrix(list,ncols), Matrix(M1,M2), etc.) producing matrix objects with specified or guessed ConstructingFilter and BaseDomain or inheriting representation from a template matrix object.",
+        "guidance": "If ConstructingFilter implies IsCopyable, the result is mutable iff argument determining entries is mutable. For mutable results, the given list is ShallowCopied; nested entries may not be copied. Default methods delegate to NewMatrix."
+      },
+      {
+        "name": "ZeroMatrix and IdentityMatrix variants",
+        "description": "ZeroMatrix(m,n,M), ZeroMatrix(R,m,n), ZeroMatrix(filt,R,m,n) and IdentityMatrix(n,M), IdentityMatrix(R,n), IdentityMatrix(filt,R,n) create zero or identity matrices in the same representation and base domain as a template matrix M, guessed from R, or using specified filter and R.",
+        "guidance": "If ConstructingFilter implies IsCopyable, results are fully mutable. Default methods delegate to NewZeroMatrix/NewIdentityMatrix."
+      }
+    ]
+  }
+}

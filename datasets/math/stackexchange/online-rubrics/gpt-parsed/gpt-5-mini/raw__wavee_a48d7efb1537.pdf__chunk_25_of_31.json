@@ -1,0 +1,161 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 25,
+  "n_chunks": 31,
+  "chunk_chars": 39976,
+  "model": "gpt-5-mini",
+  "elapsed_s": 143.35909287499817,
+  "input_tokens": 13427,
+  "output_tokens": 5909,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "LaTeX/TikZ package authors and advanced TikZ users who implement custom shapes, anchors, matrices, and transformations",
+    "subtask_short": "defining tikz shapes and matrices",
+    "subtask_description": "Guidance for implementing custom PGF/TikZ shapes (anchors, border points, background/foreground paths, inheritance) and for creating/alignment/spacing of matrices and coordinate-transform behavior. Covers required code semantics, ordering, callbacks, spacing algorithms, and transform commands.",
+    "subtask_keywords": [
+      "tikz",
+      "pgf",
+      "shapes",
+      "anchors",
+      "matrices",
+      "transformations"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Anchor code must set \\pgf@x and \\pgf@y",
+        "description": "The effect of the code is to set the values of \\pgf@x and \\pgf@y to the coordinates of the anchor.",
+        "guidance": "When the anchor code is executed all saved anchor macros will be defined, so you can reference them. Example: \\anchor{north east}{\\upperrightcorner} where \\upperrightcorner sets \\pgf@x and \\pgf@y. Anchor code runs in the shape's private coordinate system; outer transformations are applied automatically to the returned coordinates."
+      },
+      {
+        "name": "Always define a center anchor",
+        "description": "It is a good idea to always define a center anchor, which will be the default location for a shape.",
+        "guidance": "Example: \\anchor{center}{\\pgfpointorigin}. Center anchor acts as default for node placement."
+      },
+      {
+        "name": "Text anchor determines lower-left of text label; avoid relying on text box size",
+        "description": "The text node part needs a text anchor used to determine the lower left corner of the text label (within the private coordinate system). By default the text anchor is at the origin but may be changed.",
+        "guidance": "Do not compute the text anchor using \\pgfnodeparttextbox dimensions (anti-pattern): \\anchor{text}{\\pgfpoint{-.5\\wd\\pgfnodeparttextbox}{-.5\\ht\\pgfnodeparttextbox}} is wrong because the box \\pgfnodeparttextbox may not have the correct size when the anchor is computed. Instead, set the anchor in terms of known shape anchors (e.g., center text by negating \\upperrightcorner values)."
+      },
+      {
+        "name": "Border anchors (\\anchorborder) must compute border intersection",
+        "description": "A border anchor is an anchor point on the border of the shape. When \\pgfpointshapeborder is requested, the code will be executed to discern the point.",
+        "guidance": "When execution starts, \\pgf@x and \\pgf@y are set to a location p in the shape's coordinate system; the code must set \\pgf@x and \\pgf@y to the point on the border lying on the straight line from the shape's center to p. This often requires case distinctions and math. Example for rectangle: save \\pgf@x/\\pgf@y to temps and call \\pgfpointborderrectangle."
+      },
+      {
+        "name": "Background path must construct path; drawn behind text",
+        "description": "\\backgroundpath{code} specifies the path that 'makes up' the background of the shape and should contain path construction commands.",
+        "guidance": "The path may be drawn, shaded, filled, or thrown away; the shape cannot force a particular use. Anchors are available when code executes. Background path is used before text labels are drawn. Example: \\backgroundpath{\\pgfpathrectanglecorners{\\upperrightcorner}{\\pgfpointscale{-1}{\\upperrightcorner}}}."
+      },
+      {
+        "name": "Foreground path executed after text",
+        "description": "\\foregroundpath{code} works like \\backgroundpath but is invoked after the text labels have been drawn.",
+        "guidance": "Foreground path can obscure parts of the text labels."
+      },
+      {
+        "name": "Behind/background/before hooks ordering and behavior",
+        "description": "There are hooks that execute drawing code at specific times relative to background/foreground and text: \\behindbackgroundpath, \\beforebackgroundpath, \\behindforegroundpath, \\beforeforegroundpath.",
+        "guidance": "\\behindbackgroundpath: must use the constructed path (e.g., fill) and is executed before the background path; it is protected with {pgfscope}. \\beforebackgroundpath: executed after background path but before text. \\behindforegroundpath: executed after text but before foreground path. \\beforeforegroundpath: executed at the very end. Use these to guarantee certain drawing occurs at the desired stacking order."
+      },
+      {
+        "name": "Inheritance of saved anchors and path-code",
+        "description": "\\inheritsavedanchors[from=another shape] allows inheriting saved anchors; similar inherit... commands exist for background/foreground path code.",
+        "guidance": "Inheriting saved anchors has same effect as calling \\savedanchor and \\saveddimen for each saved anchor/dimension declared in another shape: you must inherit all saved anchors together (cannot selectively inherit). You can inherit saved anchors from multiple shapes by calling multiple times. For normal anchors use \\inheritanchor[from=...]{name} to inherit a specific anchor; saved anchors and normal anchors have different inheritance semantics."
+      },
+      {
+        "name": "Use \\inheritanchor to inherit specific anchors",
+        "description": "\\inheritanchor[from={another shape name}]{name} inherits the code of one specific anchor.",
+        "guidance": "Unlike saved anchors, normal anchors can and must be inherited individually. There is also \\inheritanchorborder[from=...] for border anchors."
+      },
+      {
+        "name": "When defining shapes, store temporary dims and compute corners carefully",
+        "description": "When computing complex background paths (e.g., 'flipped page' corner), store intermediate corner coordinates in temporary dimensions and compute main path from those values.",
+        "guidance": "Example in 'document' shape: use \\southwest and \\northeast to store coords in \\pgf@xa/\\pgf@ya and \\pgf@xb/\\pgf@yb, compute new coords by advancing dims, then construct path with \\pgfpathmoveto/lineto and \\pgfpathclose. Keep arithmetic and 'parameters' (like 5pt) as configurable parameters."
+      },
+      {
+        "name": "Matrix cells are 'cell pictures' with origins aligned per row/column",
+        "description": "Matrices align several cell pictures horizontally and vertically. Each cell picture has its own bounding box and an origin; on each row the origins are on the same horizontal line, and on each column the origins are on the same vertical line.",
+        "guidance": "Top of a row given by cell whose bounding box max y is largest; bottom by min y most negative; left/right by extreme x positions. Cells may be shifted to meet these constraints; resulting alignment becomes the node's text box."
+      },
+      {
+        "name": "Use \\pgfmatrixnextcell to separate cells and \\\\ to end rows",
+        "description": "Cells in the same row must be separated using \\pgfmatrixnextcell rather than &. Every row including the last must be ended using \\\\.",
+        "guidance": "Using & will result in an error unless you make & active and expand to \\pgfmatrixnextcell (which is possible via pre-code). Both \\pgfmatrixnextcell and \\\\ take an optional argument for spacing. Note: macros inside cells may expand to these separators; they need not be present literally."
+      },
+      {
+        "name": "Matrix parameter (shift) can anchor matrix to inner node anchors",
+        "description": "The (shift) parameter is an additional negative shift for the node interpreted inside the matrix-local coordinate system after typesetting, allowing anchoring at nodes inside the matrix.",
+        "guidance": "Use text as the node anchor and set shift to \\pgfpointanchor{inner node}{some anchor} so the whole matrix moves such that inner_node.some_anchor lies at the origin of the whole picture."
+      },
+      {
+        "name": "Matrix node is not rotated or shifted by CTM (except translation)",
+        "description": "The matrix node is never rotated or shifted because the current coordinate transformation matrix is reset (except for the translational part) at the beginning of \\pgfmatrix.",
+        "guidance": "If you need to rotate a matrix, install a canvas transformation yourself. Nodes inside cell pictures can still be rotated and scaled normally."
+      },
+      {
+        "name": "Matrix callbacks: \\pgfmatrixbegincode, \\pgfmatrixendcode, \\pgfmatrixemptycode",
+        "description": "Three macros are called at the beginning/end of cells: \\pgfmatrixbegincode and \\pgfmatrixendcode for non-empty cells, \\pgfmatrixemptycode for empty cells. They are empty by default and can be redefined.",
+        "guidance": "\\pgfmatrixemptycode runs for empty cells (as determined by pgf's macro magic). \\pgfmatrixbegincode / endcode wrap non-empty cells; pgf adds invisible book-keeping commands between them (\\let, \\gdef), so avoid having \\pgfmatrixbegincode end with \\csname or \\pgfmatrixendcode start with \\endcsname. Example usages show wrapping a cell's contents inside a drawn node group."
+      },
+      {
+        "name": "Matrix macro expansion quirks due to \\halign",
+        "description": "Matrices are typeset using \\halign, which does unusual expansion of the first macro of every cell; macros that expand eventually to \\pgfmatrixnextcell or \\\\ are acceptable.",
+        "guidance": "You can create macros that insert columns/rows dynamically. You do not need to literally write separators if your macros expand to them."
+      },
+      {
+        "name": "Control column spacing with \\pgfsetmatrixcolumnsep and optional sep lists",
+        "description": "\\pgfsetmatrixcolumnsep{sep list} sets the default separation list for columns; \\pgfmatrixnextcell[additional sep list] can provide a local modifier.",
+        "guidance": "Algorithm: process default list then additional list; both lists may contain dimensions and keywords 'between origins' / 'between borders'. Sum all dimensions to get d. Locate last occurrence of either keyword (default to 'between borders' if none). If mode is 'between borders' add horizontal space d between columns; if 'between origins' set spacing so horizontal distance between the origins of adjacent columns is exactly d. 'between origins' may only be used between columns already introduced in the first row. Example: \\pgfsetmatrixcolumnsep{1cm,between origins}."
+      },
+      {
+        "name": "Optional sep-list for a column only applies when starting a new column and only once",
+        "description": "The optional argument of \\pgfmatrixnextcell may only be provided when it starts a new column; once a column has been started subsequent uses of the optional argument for that column have no effect.",
+        "guidance": "This matters when later rows have more elements than the first row: optional sep-lists in later-row \\pgfmatrixnextcell commands may start new columns and thus be allowed; otherwise ignored."
+      },
+      {
+        "name": "Row spacing analogous to column spacing via \\pgfsetmatrixrowsep and \\\\[sep list]",
+        "description": "\\pgfsetmatrixrowsep{sep list} sets default row separation; \\\\[additional sep list] ends a row and can specify spacing to the next row (ignored for last row).",
+        "guidance": "Modes and computation of d mirror the column algorithm. These commands are defined specially only inside matrices."
+      },
+      {
+        "name": "Use \\pgfmatrixcurrentrow and \\pgfmatrixcurrentcolumn to access current indices (do not change)",
+        "description": "Two counters store the current row and column of the current cell: \\pgfmatrixcurrentrow and \\pgfmatrixcurrentcolumn.",
+        "guidance": "These counters allow callbacks to vary behavior by row/column. The documentation warns: 'Do not even think of changing this counter.'"
+      },
+      {
+        "name": "Prefer coordinate transformations over canvas transformations for most effects",
+        "description": "pgf offers coordinate transformations (apply to coordinates only) and canvas transformations (apply to entire canvas incl. text/lines/shadings).",
+        "guidance": "Prefer coordinate transformations: canvas transforms make pgf lose track of node/shape coordinates and often have undesirable effects like changing text size. pgf makes coordinate transforms easy and canvas transforms harder to change."
+      },
+      {
+        "name": "Coordinate transformation matrix semantics (a,b,c,d,s,t)",
+        "description": "pgf's internal coordinate transformation matrix consists of a,b,c,d and two dimensions s,t; it maps (x,y) to (ax+by+s, cx+dy+t). The matrix is identity at the beginning and is local to the current TeX group.",
+        "guidance": "Transformation commands concatenate additional matrices to this matrix. Because the matrix is group-local, transformations last only until the end of the current TeX group."
+      },
+      {
+        "name": "Relative coordinate transformation commands and their effects",
+        "description": "Commands like \\pgftransformshift, \\pgftransformxshift, \\pgftransformyshift, \\pgftransformscale, \\pgftransformxscale, \\pgftransformyscale, \\pgftransformxslant, \\pgftransformyslant, \\pgftransformrotate, \\pgftransformtriangle, \\pgftransformcm, \\pgftransformarrow add transformations relative to the current matrix.",
+        "guidance": "Each command's intended effect is documented (e.g., \\pgftransformrotate{degrees} rotates coordinates CCW; \\pgftransformtriangle maps a triangle to the canonical tiny triangle; \\pgftransformcm applies an arbitrary affine matrix and shift). These transformations apply to coordinates used by path construction commands and similar; they accumulate."
+      },
+      {
+        "name": "At-time transformations may rotate depending on \\ifpgfslopedattime and have related flags",
+        "description": "Commands \\pgftransformlineattime and \\pgftransformcurveattime shift coordinates to a point on a line/curve at a specified time; they may also apply a rotation depending on \\ifpgfslopedattime.",
+        "guidance": "If \\ifpgfslopedattime is true, rotation is applied; \\ifpgfallowupsidedowattime controls whether upside-down text is allowed; \\ifpgfresetnontranslationattime decides whether non-translations are reset between shifting and rotating. These flags alter behavior of 'at time' transformations. Examples show differing text orientation with flags set/unset."
+      },
+      {
+        "name": "Absolute coordinate transformation commands and cautions",
+        "description": "Commands like \\pgftransformreset, \\pgftransformresetnontranslations, \\pgftransforminvert change the coordinate transformation matrix absolutely (not by concatenation).",
+        "guidance": "\\pgftransformreset sets matrix to identity (no transformations till end of scope). \\pgftransformresetnontranslations sets a=b=c=d to identity but preserves translation (useful before \\pgftext). \\pgftransforminvert replaces the matrix by its exact inverse and errors if the determinant is too small (near-singular). Use these commands only if you know what you are doing; they are potentially dangerous and produce unexpected effects."
+      },
+      {
+        "name": "Saving and restoring coordinate transforms (beginning of API)",
+        "description": "There are commands for saving and restoring coordinate transformation matrices (e.g., \\pgfgettransform{macro} is introduced next).",
+        "guidance": "Use these commands to capture the current transformation matrix for later restoration or manipulation. (The documentation continues beyond the chunk.)"
+      }
+    ]
+  }
+}

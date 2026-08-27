@@ -1,0 +1,185 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_d11014c1f6ba.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_d11014c1f6ba.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39949,
+  "model": "gpt-5-mini",
+  "elapsed_s": 84.10530179200578,
+  "input_tokens": 13777,
+  "output_tokens": 5425,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and dataset/benchmark creators working on multimodal mathematical reasoning and vision-language model (VLM) evaluation; dataset annotators and VLM evaluators",
+    "subtask_short": "multimodal math benchmark evaluation",
+    "subtask_description": "Designing, constructing, and evaluating a multimodal (image+text/OCR/scene) benchmark for math word problems (GSM8K-V) and the protocols for evaluating VLMs on it. Includes dataset construction, annotation, evaluation modes, and model hyperparameter settings.",
+    "subtask_keywords": [
+      "multimodal",
+      "math_benchmark",
+      "vlm_evaluation",
+      "dataset_construction",
+      "annotation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Answer Format Prompt",
+        "description": "When providing your final answer: - If the answer can be expressed as a whole number (integer), provide it as an integer - If the answer requires decimals and can be expressed with a finite decimal, use decimal format - Otherwise, use fraction format if appropriate. Please think step by step. After your reasoning, output your final answer on a new line starting with \"FINAL ANSWER: \" followed by the number only.",
+        "guidance": "Always follow the final-answer formatting exactly (one new line with the literal prefix \"FINAL ANSWER: \" then the numeric answer). Models are prompted to show chain-of-thought reasoning but the evaluated final output must match the numeric format for parsing and scoring. Example: include step-by-step reasoning, then a single final line \"FINAL ANSWER: 140\". Use integer/decimal/fraction as specified."
+      },
+      {
+        "name": "Text Only Mode",
+        "description": "Evaluation mode where the model receives only the textual problem (no images) and is prompted to solve step-by-step following the Answer Format Prompt.",
+        "guidance": "Mode Prompt: 'You are an expert at solving mathematical word problems. Please solve the following problem step by step, showing your reasoning.' Include the Answer Format Prompt. Example input and expected final numeric formatting are provided. This mode checks pure text reasoning."
+      },
+      {
+        "name": "Implicit Mode (Images Only)",
+        "description": "Evaluation setting where models are given only visual scenes (images) and a prompt that specifies output format but contains no mathematical information or the actual problem statement.",
+        "guidance": "Models must infer semantic relations directly from images. The prompt asks models to be an expert at solving mathematical problems based on visual information and to output following the Answer Format Prompt. Outputs are parsed and verified; correctness is evaluated against ground truth. This mode tests pure visual-to-math inference."
+      },
+      {
+        "name": "Explicit Mode (Images + Masked Question)",
+        "description": "Evaluation setting where models receive images plus a pre-processed textual representation (a masked question that excludes explicit mathematical details) and a prompt specifying the required output format.",
+        "guidance": "The masked question grounds entities and clarifies semantic roles but still omits direct math info. Example: provide 'masked_question' like 'How much change will Violetta (...) get after buying her crayons?'. Models should analyze images+masked text and output per Answer Format Prompt. This mode reduces ambiguity but preserves visual grounding requirement."
+      },
+      {
+        "name": "OCR Mode (Modality Valid)",
+        "description": "Evaluation setting where the input is a raw OCR transcription of image text; the model is tasked to resolve OCR formatting artifacts and solve the math problem.",
+        "guidance": "Prompt: 'You are an expert at solving mathematical problems extracted from {ocr_text}. The input is a raw OCR transcription of images. Carefully read the text, resolve formatting artifacts (e.g., misplaced line breaks, currency symbols, punctuation), and then solve the math problem it describes.' Models must handle noisy OCR and produce final answer per Answer Format Prompt."
+      },
+      {
+        "name": "Caption/Scene-Description Mode (Modality Valid)",
+        "description": "Evaluation setting where structured scene descriptions (objects, composition, actions, speech bubbles) are provided instead of raw images; models must analyze sequences of scenes and connect information across them.",
+        "guidance": "Prompt instructs: 'Analyze the following sequence of scenes carefully. Each scene provides information that connects to the others, building toward the final question. You need to understand the relationships between scenes and track quantities, actions, and information flow.' Useful for testing reasoning over structured semantic descriptors rather than raw pixels."
+      },
+      {
+        "name": "Single-Image vs Multi-Image Input Considerations",
+        "description": "Distinction and evaluation considerations between single-image (concatenated) inputs and multiple separate scene images, especially for temporal or multi-step problems.",
+        "guidance": "Multi-image inputs better preserve scene-specific and temporal order information; concatenated single-image representations can obscure ordering or key details and lead to different types of model errors. Evaluate model behavior across both formats and analyze failure modes (e.g., misread clocks, lost temporal order). Include ground-truth temporal reasoning examples for comparison."
+      },
+      {
+        "name": "Image Style Robustness (Image Style Effects)",
+        "description": "Assessing model performance across different visual rendering styles (e.g., Pixar vs. Ghibli) to measure robustness to stylistic variation.",
+        "guidance": "Maintain semantic cues across styles; evaluate whether errors arise from style-induced perception issues vs. reasoning faults. Example comparisons in the paper show style often does not cause major differences when semantic cues are preserved; analyze cases where style affects perception (e.g., misread clocks or icons)."
+      },
+      {
+        "name": "Math Information Classification \u2014 Weight",
+        "description": "Category: Weight \u2014 measurement of how heavy an object is, usually expressed in units such as grams, kilograms, or pounds.",
+        "guidance": "Examples: 'An apple weighs 200 g', 'The suitcase shows 15 kg'. When rendering scenes, ensure units and values are clearly visible and unambiguous."
+      },
+      {
+        "name": "Math Information Classification \u2014 Length/Area/Volume",
+        "description": "Category: Length/Area/Volume \u2014 captures spatial dimensions of objects or regions.",
+        "guidance": "Examples: 'The pencil is 12 cm long', 'The field covers 500 m^2', 'The box has a volume of 2 liters'. Ensure units and dimensional context are visually preserved."
+      },
+      {
+        "name": "Math Information Classification \u2014 Distance",
+        "description": "Category: Distance \u2014 denotes the separation between two locations or points.",
+        "guidance": "Examples: 'The school is 3 km from home', 'The two trees are 20 m apart'. Scenes should make pairs/landmarks and distances clear."
+      },
+      {
+        "name": "Math Information Classification \u2014 Speed",
+        "description": "Category: Speed \u2014 rate of motion, often read from a dashboard or speedometer.",
+        "guidance": "Examples: 'The car moves at 60 km/h', 'The bike shows 15 mph'. Visual displays (dials, labels) must be legible and unambiguous."
+      },
+      {
+        "name": "Math Information Classification \u2014 Price",
+        "description": "Category: Price \u2014 expresses the cost of an item, usually displayed on a signboard or tag.",
+        "guidance": "Examples: 'The bread costs $2.50', 'The toy is labeled 15 yuan'. Currency symbols and formatting must be clear for correct parsing."
+      },
+      {
+        "name": "Math Information Classification \u2014 Group",
+        "description": "Category: Group \u2014 use of icons to represent collections or categories; each icon aligns with specific textual meaning.",
+        "guidance": "Examples: icons representing actions/roles (e.g., person holding cloth = 'washing', teacher at board = 'teaching'). Use consistent iconography so semantic meaning is preserved visually."
+      },
+      {
+        "name": "Math Information Classification \u2014 Calendar/Age",
+        "description": "Category: Calendar/Age \u2014 temporal aspects such as dates, years, or personal age.",
+        "guidance": "Examples: 'Today is March 15', 'The child is 8 years old'. Represent dates and ages clearly in scene text or metadata."
+      },
+      {
+        "name": "Math Information Classification \u2014 Clock",
+        "description": "Category: Clock \u2014 specific times of day shown on analog or digital clocks.",
+        "guidance": "Examples: 'The clock shows 7:30', 'The watch displays 12:45'. Ensure clock faces and hands are drawn/readable to avoid misinterpretation in temporal tasks."
+      },
+      {
+        "name": "Math Information Classification \u2014 Graph",
+        "description": "Category: Graph \u2014 depicts ratios, percentages, or quantities visually with bars/lines/pie charts.",
+        "guidance": "Examples: '40% of the pie chart is shaded', 'The bar reaches value 10'. Provide clear axis labels and legends as needed."
+      },
+      {
+        "name": "Math Information Classification \u2014 Statistics",
+        "description": "Category: Statistics \u2014 summaries in tables or charts, highlighting counts or distributions.",
+        "guidance": "Examples: 'The table shows 25 students in Class A', 'The chart lists 300 voters'. Ensure table cells and numeric labels are legible in scenes."
+      },
+      {
+        "name": "Math Information Classification \u2014 Count",
+        "description": "Category: Count \u2014 number of discrete, visible objects in a scene.",
+        "guidance": "Examples: 'There are 8 apples on the table', 'The image shows 3 books'. Avoid occlusion or ambiguous groupings that could change the count."
+      },
+      {
+        "name": "Math Information Classification \u2014 Label",
+        "description": "Category: Label \u2014 direct textual annotations attached to objects, carrying mathematical values.",
+        "guidance": "Examples: 'A box labeled 10 kg', 'A jar with tag 2 L'. Labels must be unambiguous and correctly attached to the intended object."
+      },
+      {
+        "name": "Math Information Classification \u2014 Dialogue",
+        "description": "Category: Dialogue \u2014 characters' speech in bubbles; guideline: the dialogue should never directly provide numbers.",
+        "guidance": "Examples: 'A customer says \"I\u2019d like a large pizza\"', 'A teacher says \"Let\u2019s start the exam\"'. Dialogue can provide contextual cues but must not contain explicit numeric answers or core problem numbers."
+      },
+      {
+        "name": "Assignment / Category Allocation Procedure",
+        "description": "Process by which extracted mathematical information is organized and assigned to categories (carried out with GPT-4.1 assistance) to facilitate accurate visual representation.",
+        "guidance": "This step ensures each element is positioned correctly in generated scenes (see Figure 5). Use automated allocation followed by human inspection to map triples to rendering strategies appropriate for each category."
+      },
+      {
+        "name": "Step 1 Prompt: Problem Decomposition into Triples",
+        "description": "Guideline for information extraction: identify only the mathematical information required to solve the final question and represent it as triples (object, math value, semantic).",
+        "guidance": "Triple definitions: object (entity described), math value (numeric attribute: integer/decimal/ratio/unit), semantic (role/meaning). Use this structured representation to drive scene generation and synthetic rendering."
+      },
+      {
+        "name": "Dual Human Cross-Check Verification",
+        "description": "Each problem and its generated scene are independently reviewed and verified by two human annotators to ensure correctness and fidelity.",
+        "guidance": "Annotators independently review the images and question, solve the problem themselves, and select annotation labels. Dual verification increases reliability and catches generation or allocation errors. Visual examples/documentation (Figure 6) illustrate the process."
+      },
+      {
+        "name": "Annotator Instructions and Annotation Labels",
+        "description": "Annotator workflow and choices: questions are automatically assigned in random order; annotators should review images/questions, solve the problem (Human Solution), add comment (reasons) if choosing Incorrect or Skip, and choose one of: Correct, Incorrect, Skip.",
+        "guidance": "Definitions: Correct = images match the question and ground truth; Incorrect = images do not match the question or ground truth; Skip = uncertain/problematic case. Annotators must provide reasons when marking Incorrect/Skip to support quality control and error taxonomy."
+      },
+      {
+        "name": "3C Principles for Scene Fidelity",
+        "description": "Three explicit criteria used by annotators to judge whether generated scenes faithfully represent the original text problem: Consistency, Completeness, Compliance.",
+        "guidance": "Consistency: preserve entities, quantities, and constraints from the original text. Completeness: ensure all problem-relevant information is visually available. Compliance: adhere to safety and formatting standards. Annotators use these to decide Correct/Incorrect/Skip and to document errors."
+      },
+      {
+        "name": "Annotator Qualifications and Training",
+        "description": "Recommendations/requirements for annotator background and preprocessing training: use annotators with sufficient math/CS background and provide a training session focused on project background, dataset structure, pipeline, and the error taxonomy.",
+        "guidance": "Example implementation: seven annotators (five undergraduates, two doctoral students), one-hour training emphasizing error taxonomy and annotation interface. Training ensures consistent judgments and high-quality verification."
+      },
+      {
+        "name": "Model Hyperparameter Settings for Evaluation",
+        "description": "Standardized hyperparameter settings used during model evaluation to reduce randomness and ensure comparability (different settings for closed-source and open-source models).",
+        "guidance": "Examples from the paper: temperature = 0.2 for closed-source models, temperature = 0.1 for open-source models, specific max token limits per model, and notes that closed-source unspecified settings follow official defaults. Record hyperparameters in Appendix B for reproducibility."
+      },
+      {
+        "name": "Output Parsing, Verification, and Correctness Evaluation",
+        "description": "The evaluation pipeline parses model outputs according to the Answer Format Prompt, verifies the parsed outputs, and compares them to ground truth to compute correctness.",
+        "guidance": "Steps: issue mode-specific prompt, capture model response, parse for the 'FINAL ANSWER:' numeric line, validate numeric format (integer/decimal/fraction), and compare to math_ground_truth. Record whether model output obeyed formatting; treat format violations as parse errors or incorrect depending on policy."
+      },
+      {
+        "name": "Annotation Error Taxonomy and Required Comments",
+        "description": "Annotators must tag and explain errors using a taxonomy (used in training) and provide comments whenever they mark Incorrect or Skip to make error sources traceable.",
+        "guidance": "Encourage detailed error reasons (e.g., 'missing quantity', 'misplaced label', 'wrong units', 'occlusion', 'OCR misread'). This supports downstream analysis and dataset refinement."
+      },
+      {
+        "name": "API Token Usage and Cost Transparency",
+        "description": "Document average token usage and estimated monetary costs for each stage of dataset construction (using specific API rates) to support reproducibility and cost accounting.",
+        "guidance": "Provide tables with avg input/output tokens, avg cost/sample, total cost per stage, and rate sources. Example: Stage 1/2 used GPT-4.1 with listed rates; Stage 3 used GPT-Image-1 with per-image costs. Track and publish these metrics for transparency."
+      }
+    ]
+  }
+}

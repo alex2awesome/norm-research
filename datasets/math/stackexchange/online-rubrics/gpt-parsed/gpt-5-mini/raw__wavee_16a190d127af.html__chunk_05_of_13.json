@@ -1,0 +1,195 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_16a190d127af.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_16a190d127af.html",
+  "chunk_idx": 5,
+  "n_chunks": 13,
+  "chunk_chars": 39436,
+  "model": "gpt-5-mini",
+  "elapsed_s": 57.191889124995214,
+  "input_tokens": 10375,
+  "output_tokens": 5078,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in federated learning, differential privacy, and privacy-preserving ML systems (academics, ML/privacy engineers, system designers, and policy-minded technologists)",
+    "subtask_short": "private_federated_learning_design",
+    "subtask_description": "Designing and evaluating federated learning (FL) systems and protocols with respect to privacy, security, communication, and utility trade-offs, including practical implementation considerations (TEEs, MPC, secure aggregation) and threat models (malicious clients/server).",
+    "subtask_keywords": [
+      "federated_learning",
+      "differential_privacy",
+      "privacy_engineering",
+      "distributed_systems",
+      "secure_aggregation"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Robustness to user availability and dropouts",
+        "description": "Protocols should be robust to nature\u2019s choice (user availability and dropout) when the set of eligible users is dynamic and not known in advance.",
+        "guidance": "Design protocols that tolerate clients dropping out during rounds (common in cross-device FL), enable secure aggregation and distributed noise generation that remain valid when some clients disconnect, and consider structuring protocols so clients can connect multiple times over a long-running round. Be aware that dropouts can lead to too little noise (privacy breach) or scaling bottlenecks."
+      },
+      {
+        "name": "Self-accounting/privacy budget computability",
+        "description": "The server should be able to compute a tight (\u03b5, \u03b4) guarantee using only information available via the protocol (i.e., self-accounting).",
+        "guidance": "Protocols must expose sufficient, protocol-local information to calculate privacy accounting without requiring extra trusted knowledge; this is important for deployable, auditable systems."
+      },
+      {
+        "name": "Local participation decision (no server knowledge assumption)",
+        "description": "Protocols should rely on local participation decisions and not assume the server knows which users are online or can sample from them.",
+        "guidance": "Avoid designs that require the server to enumerate or deterministically pick from online clients; solutions must operate when the server cannot natually sample from available clients."
+      },
+      {
+        "name": "Good privacy-utility trade-offs",
+        "description": "Achieve favorable trade-offs between privacy (e.g., (\u03b5,\u03b4)-DP) and model accuracy/utility under the constraints of cross-device FL.",
+        "guidance": "Explore private architectures, priors, more private data collection, clipping/ bounding user contributions, and algorithmic/engineering improvements; quantify trade-offs rigorously and aim for solutions that work in practice at scale."
+      },
+      {
+        "name": "Distinction between malicious clients and malicious analysts",
+        "description": "Recognize and analyze different threat models: malicious clients who see intermediate iterates vs malicious analysts who only see the final model; privacy guarantees may differ.",
+        "guidance": "Provide stronger DP guarantees w.r.t. malicious analysts than malicious clients; perform theoretical analysis per threat model (e.g., 'privacy amplification via iteration') and explicitly state which adversary model the guarantee targets."
+      },
+      {
+        "name": "Privacy amplification via iteration (threat-model-specific guarantees)",
+        "description": "For some mechanisms, the privacy parameters achievable may differ between adversaries that see iterates during training and those that see only the final model; analyze amplification effects, especially for convex vs non-convex settings.",
+        "guidance": "Leverage results (e.g., Feldman et al.) where applicable but note unclear transfer to non-convex optimization; state assumptions and limits of amplification analyses."
+      },
+      {
+        "name": "Cryptographically secure PRNG for privacy-sensitive randomness",
+        "description": "Entropy/Randomness used for device sampling and additive Gaussian noise must come from a cryptographically secure pseudo-random number generator (PRNG) to meet computational DP guarantees.",
+        "guidance": "Seed PRNGs from available entropy sources (even low-rate) and use robust PRNGs based on standard crypto primitives; log privacy-relevant randomness in the privacy ledger only if it originates from a crypto-PRNG. If non-crypto randomness is used, the best the implementation achieves is computational differential privacy (adversary bounded)."
+      },
+      {
+        "name": "Acknowledge computational vs (information-theoretic) differential privacy",
+        "description": "Implementations using PRNGs satisfy 'computational differential privacy' (indistinguishability vs computationally bounded distinguishers), not the worst-case DP against arbitrary adversaries.",
+        "guidance": "Be explicit about the model: state whether guarantees are computational DP and the implications; justify practicality since computationally bounded adversaries cannot distinguish PRNG output from true entropy."
+      },
+      {
+        "name": "Auditability and testing of DP implementations",
+        "description": "Implementations of privacy/security protocols must be auditable and testable; techniques for black-box testing are needed because organizations may not open-source code.",
+        "guidance": "Research and adopt testing techniques for DP correctness (including black-box tests), use third-party audits when possible, provide verifiable logs/ledgers, and document limitations of tests for non-open code."
+      },
+      {
+        "name": "Conceal iterates from clients using TEEs",
+        "description": "Keep model iterates concealed from clients by running local training inside TEEs, using attestation and encrypted iterates that only the enclave can decrypt and re-encrypt updates.",
+        "guidance": "Validate the FL code is running in the TEE via attestation, transmit encrypted iterates to decrypt only inside the enclave, and encrypt updates before returning to the server. Note TEEs may be unavailable on many clients or lack required computational/RAM capacity; consider techniques that partition computation to reduce enclave requirements."
+      },
+      {
+        "name": "Conceal iterates from clients using MPC/homomorphic encryption",
+        "description": "Use MPC or homomorphic encryption so clients receive encrypted model parameters and compute encrypted updates without decrypting the model.",
+        "guidance": "A key challenge is forcing server-side aggregation before decryption to prevent leakage; performance and resource overheads remain significant for deep networks, so explore algorithmic/hardware improvements."
+      },
+      {
+        "name": "Conceal iterates from the server (server-side protections)",
+        "description": "Conceal iterates from the server by running the server inside a TEE, or encrypting model parameters under keys held by analyst/clients/trusted third parties so decryption only occurs under controlled conditions.",
+        "guidance": "Use server TEE with verifiable release conditions or distributed key-holding to ensure final model release only after criteria are met; consider implications for trust, verification, and key-management."
+      },
+      {
+        "name": "Handling repeated analyses and privacy composition",
+        "description": "Repeated updates/analyses over streaming or evolving data degrade privacy (privacy composition), so update frequency must be managed to preserve privacy and accuracy.",
+        "guidance": "Use fewer updates or alternative approaches (e.g., synthetic data generation, private update mechanisms adapted to dynamic databases) and study how private models trained on dataset D generalize to similar D'."
+      },
+      {
+        "name": "Producing and maintaining synthetic data in federated settings",
+        "description": "Generate synthetic data in a federated manner so it can be reused without additional privacy loss, but the synthetic data itself must be updated privately when outdated.",
+        "guidance": "Use DP post-processing guarantees and ensure synthetic-data-updating procedures are themselves private and federated."
+      },
+      {
+        "name": "Private time-series/data-evolution queries in FL",
+        "description": "Address difficulties of querying and estimating within-subject time-series data in FL where the same users are not regularly queried, which complicates collecting within-subject estimates.",
+        "guidance": "Consider reformulating queries so each within-subject subquery can be answered on-device, apply statistical sampling with privacy tools, or adapt private change-detection/time-series DP methods to the federated setting."
+      },
+      {
+        "name": "Protections against model theft and API-based reconstruction",
+        "description": "Restrict access to model parameters (e.g., using TEEs/MPC) to reduce the ability to inspect, steal, or reconstruct models, but be aware that model parameters can sometimes be reconstructed from inference APIs.",
+        "guidance": "Protect inference endpoints (latency/availability trade-offs), consider additional defenses against model-extraction attacks from prediction APIs, and study what protections are needed at Internet scale (millions/billions of devices)."
+      },
+      {
+        "name": "Secure communication channel assumptions and alternatives",
+        "description": "In cross-device FL, clients typically can only communicate with the server (star topology), so establishing private client-to-client channels may require trusting the server during key distribution or adding a trusted third party/public bulletin board.",
+        "guidance": "Either assume semi-honest server behavior in key distribution phases or incorporate an additional party/public bulletin board that clients trust and that does not collude with the server."
+      },
+      {
+        "name": "Mitigation of Sybil attacks and selection bias by server",
+        "description": "Prevent an adversarial server from simulating many fake client devices or preferentially selecting compromised devices, which undermines MPC security and privacy assumptions.",
+        "guidance": "Develop defenses for Sybil attacks and selection manipulation; quantify reasonable fractions of compromised clients and consider attestation/verification strategies to detect misbehavior."
+      },
+      {
+        "name": "Client attestation to establish correct protocol execution",
+        "description": "Where TEEs are available, clients can remotely attest to one another that the correct protocol is running, enabling privacy guarantees for honest participants even if the server controls updates.",
+        "guidance": "Use attestation to verify that secure MPC, distributed DP contributions, or secure aggregation were executed accurately; design attestation-compatible protocols and consider limitations of TEE availability."
+      },
+      {
+        "name": "Limitations of local differential privacy (LDP)",
+        "description": "LDP removes the need for a trusted server but typically requires much larger noise magnitudes (lower utility) especially for high-dimensional data, so achieving central-model utility is challenging without a larger userbase or larger \u03b5.",
+        "guidance": "Be cautious using LDP in high-dimensional settings; consider shuffling or hybrid models to amplify privacy/utility trade-offs."
+      },
+      {
+        "name": "Limitations and assumptions of hybrid differential privacy models",
+        "description": "Hybrid trust models partition users by trust preference to reduce required userbase size, but current work often assumes all users\u2019 data come from the same distribution regardless of trust preference.",
+        "guidance": "Assess whether the same-distribution assumption holds; relax this assumption for FL where trust preference may correlate with data distribution."
+      },
+      {
+        "name": "Shuf\ufb02e model trade-offs and drawbacks",
+        "description": "The shuf\ufb02e model amplifies locally-added noise via a shuffler but requires a trusted intermediary and its privacy guarantee degrades with the number of adversarial users participating.",
+        "guidance": "Consider TEEs to implement shufflers (e.g., Prochlo), quantify uncertainty introduced by unknown number of adversarial users, and study pure-DP results and multi-message vs single-message trade-offs."
+      },
+      {
+        "name": "Secure Aggregation protocol limitations",
+        "description": "Secure Aggregation provides strong privacy in aggregation and scales well, but has limitations: (a) assumes semi-honest server during key infrastructure phases, (b) server still sees per-round aggregates (which may leak information), (c) inefficiency for sparse vector aggregation, and (d) inability to enforce well-formedness of client inputs.",
+        "guidance": "Research efficient sparse aggregation protocols, mechanisms to enforce input well-formedness, and ways to reduce per-round aggregate leakage; be explicit about the semi-honest assumption."
+      },
+      {
+        "name": "Trade-offs between accuracy, privacy, and communication under distributed DP",
+        "description": "In distributed DP, three performance metrics \u2014 accuracy, privacy, and communication \u2014 must be traded off; characterize possible trade-offs and optimality regimes.",
+        "guidance": "Relate to known results in distributed estimation and local DP; design encoding/privatization schemes that jointly optimize these constraints and seek matching lower/upper bounds."
+      },
+      {
+        "name": "Trade-offs for shuffling in aggregation and frequency estimation",
+        "description": "Study the privacy/accuracy/communication trade-offs in the shuf\ufb02ed model for aggregation and frequency estimation (single-message and multi-message variants).",
+        "guidance": "Open questions include pure DP in the shuf\ufb02ed model and optimal trade-offs for variable selection in multi-message setups; consult summarized tables of state-of-the-art bounds and gaps."
+      },
+      {
+        "name": "Design of communication-efficient A(\u00b7) and estimator g(\u00b7) under DP constraints",
+        "description": "For secure aggregation, design per-user algorithm A(\u00b7) (compression + privatization) and estimator g(\u00b7) to minimize error in estimating the true sum subject to per-user communication B and (\u03b5, \u03b4)-DP of the aggregated result.",
+        "guidance": "Formally: minimize error of g( sum_i A(xi) ) subject to per-user bit budget and aggregated DP; examine candidate algorithms (quantization+binomial noise, discrete Gaussian schemes) and derive lower/upper bounds on achievable error."
+      },
+      {
+        "name": "Privacy accounting for discrete and finite-supported noise distributions",
+        "description": "Discrete noise distributions (Bernoulli, binomial, discrete Gaussian) often used in distributed DP do not naturally admit moments-accountant style composition; tailored privacy accounting techniques are required.",
+        "guidance": "Develop accounting tools adapted to finite-precision and discrete noise schemes used in practical secure shuffling/aggregation implementations; avoid naively applying continuous-Gaussian analyses."
+      },
+      {
+        "name": "Robust distributed noise generation under client dropouts",
+        "description": "Distributed noise schemes must be robust to client dropouts so the final aggregate still meets the target DP epsilon; naive approaches increase per-client noise conservatively, reducing utility when more clients report.",
+        "guidance": "Design dropout-resilient distributed noise protocols that adapt noise to actual participation without excessive conservatism; analyze worst-case and typical participation distributions."
+      },
+      {
+        "name": "Trust model specification and 'trust-but-verify' approaches",
+        "description": "Specify reasonable trust assumptions (fraction of compromised clients, likelihood of server compromise) and consider 'trusted-but-veri\ufb01ed' models where server deviations are detectable and carry reputational/legal consequences.",
+        "guidance": "Develop refined trust models tailored to FL\u2019s computational model and leverage long-lived organization properties to enable verification/deterrence mechanisms."
+      },
+      {
+        "name": "Communication-efficient sub-model training and privacy of sub-model choice",
+        "description": "When clients only interact with a small sub-model (e.g., embedding entries), achieve communication-efficient sub-model training while protecting the privacy of which sub-model a client updates.",
+        "guidance": "Options: run separate FL instances per submodel (parallel/sequence/hybrid) which is communication-efficient but reveals selection; use PIR for private sub-model download and sparse secure aggregation for updates; co-optimize PIR and aggregation for better efficiency."
+      },
+      {
+        "name": "Preserve sparsity under local/distributed DP",
+        "description": "Local/distributed DP often adds noise to all vector elements, transforming sparse updates into dense noisy vectors; this harms communication and utility for sub-model/sparse updates.",
+        "guidance": "Seek distributed-DP instantiations that maintain sparsity (e.g., sparse noise mechanisms or aggregation-aware noise schemes); characterize sparsity regimes where sparse secure aggregation is efficient."
+      },
+      {
+        "name": "User perception, communication, and consent",
+        "description": "Make the benefits and limitations of FL implementations intuitive to average users; avoid giving a false sense of privacy and enable users to choose or understand privacy levels.",
+        "guidance": "Clarify which protections FL provides/does not provide, identify parameters that make FL sufficient (or not) for privacy claims, model user privacy preferences, and consider who decides which techniques to use (provider, user, OS, jurisdiction)."
+      },
+      {
+        "name": "Understanding task-specific privacy needs and relaxations",
+        "description": "Not all inferences from data are equally sensitive to users; tailoring privacy constraints to protect the inferences users care about can permit lower noise and better utility.",
+        "guidance": "Elicit which attributes/users consider sensitive (e.g., exact arrival time vs coarse asleep/awake indicator), model privacy preferences for specific analysis tasks, and exploit weaker information structures when appropriate to reduce noise."
+      }
+    ]
+  }
+}

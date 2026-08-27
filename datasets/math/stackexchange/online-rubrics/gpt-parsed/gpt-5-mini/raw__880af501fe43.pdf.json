@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/880af501fe43.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 18123,
+  "output_tokens": 4515,
+  "elapsed_s": 1960.1103708751034,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "computer scientists, software-verification engineers, and students learning to use the Coq proof assistant",
+    "subtask_short": "coq tutorial for software verification",
+    "subtask_description": "A tutorial introducing the Coq proof assistant and its use for practical software verification: core architecture, basic commands and tactics, inductive definitions, libraries, proof automation (including reflection), and guidelines for verifying programs and using libraries.",
+    "subtask_keywords": [
+      "coq",
+      "proof_assistant",
+      "software_verification",
+      "tutorial",
+      "dependent_types"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Trusted kernel architecture",
+        "description": "Coq is based on a two levels architecture: a relatively small kernel with few primitive constructions and rules for type-checking and computation, and a richer user environment on top of it.",
+        "guidance": "Because proofs and definitions are ultimately checked by the small trusted kernel, one may extend the environment (notations, tactics, libraries) safely: \"This environment can be used and extended safely because ultimately any definition and proof is checked by a safe kernel.\" Example: the kernel checks the term extracted from tactics at Qed/Save."
+      },
+      {
+        "name": "Proof safety: avoid leftover axioms",
+        "description": "Safety in Coq is only guaranteed if there are no axioms left in the proof development.",
+        "guidance": "Using admit or finishing proofs with Admitted introduces axioms and is potentially dangerous: \"Assuming a false property might result in being able to prove \u22a5 and, consequently, everything becomes provable.\" Use Print Assumptions name to list axioms used. Anti-pattern: leaving proofs Admitted in a development intended to be trusted."
+      },
+      {
+        "name": "Ways to verify programs with Coq",
+        "description": "Coq can be used for program verification in multiple ways (each with trade-offs): (1) express program correctness as a mathematical statement and prove it; (2) implement an analyzer in Coq and prove the analyzer correct; (3) represent program as a Coq term whose type encodes the specification (t : T); (4) use an external tool to generate proof obligations and solve them in Coq.",
+        "guidance": "Trade-offs: method (1) guarantees correctness but can be hard; (2) is a huge investment but yields automatic guaranteed results; (3) works well for functional or monadic programs; (4) is less safe unless the generator is certified but can handle undecidable fragments."
+      },
+      {
+        "name": "Use inductive definitions for data and relations",
+        "description": "Inductive definitions capture data-types, logical connectives and primitive relations; they introduce constructors and automatically generate induction principles.",
+        "guidance": "Syntax: Inductive name : sort := c1 : C1 | ... | cn : Cn. Inductive types must obey syntactic restrictions to ensure well-foundedness. Examples: bool, nat, prod; the declaration generates lemmas like nat_ind. Use inductive Prop to define logical connectives (e.g., or, False) so their proofs carry computational content."
+      },
+      {
+        "name": "Pattern-matching and exhaustive cases",
+        "description": "Define functions and case-analysis with match ... with; patterns are examined sequentially and must cover the whole domain.",
+        "guidance": "Generalized pattern-matching compiles to primitive patterns. Example: match n, m with | O, _ => false | _, O => false | _, _ => true end. Anti-pattern: leaving non-exhaustive matches; be aware generalized matches are compiled away."
+      },
+      {
+        "name": "Use Sections, Variables, Hypotheses to structure context",
+        "description": "Use Section name, Variable(s) and Hypothesis to introduce local contexts shared by several definitions; End abstracts definitions over those variables.",
+        "guidance": "This lets you write definitions depending on local parameters and then automatically obtain polymorphic versions after ending the section. Example: Section test. Variable A : Type. Variables x y : A. Definition double : A * A := (x,x). End test."
+      },
+      {
+        "name": "Library and namespace management",
+        "description": "Manage modules and libraries with Require Import, Require, Print Libraries, Print LoadPath, Locate, SearchAbout, About and Qualifed names.",
+        "guidance": "Require Import name loads and opens modules; Require name loads but keeps qualified names; SearchAbout and SearchAbout [names] help find lemmas mentioning identifiers or patterns. Use Print Libraries and Print LoadPath to inspect available modules."
+      },
+      {
+        "name": "Prefer existing standard libraries for domains (numbers, floats, machine integers)",
+        "description": "Use Coq's standard or external libraries for arithmetic, machine integers and floating point (e.g., ZArith, Int31, CompCert Integers, Reals, Flocq) rather than re-implementing them.",
+        "guidance": "Examples: ZArith provides Z and Zabs; CompCert/Int library for machine integers; Flocq for IEEE floating-point. Be aware of modeling differences (e.g., machine integers modulo 2^N) and the need to Open Scope (Z_scope, R_scope) to use usual notations. Anti-pattern: mixing representations without care."
+      },
+      {
+        "name": "Tactic-based backward reasoning",
+        "description": "Use tactics to perform backward reasoning: a tactic turns a goal into subgoals until none remain.",
+        "guidance": "Primary tactics: intros (multiple introductions), apply (use a lemma), destruct (case analysis), assert (forward reasoning). Use tacticals: t1; t2 (apply t2 to subgoals), t1 || t2, try t, repeat t. Examples and the correspondence with natural deduction rules are given in the tutorial."
+      },
+      {
+        "name": "Use automation tactics judiciously",
+        "description": "Coq provides automation tactics (auto, trivial, tauto, intuition, omega, contradiction) that perform proof search for common patterns.",
+        "guidance": "auto searches a lemma database; tauto solves propositional tautologies; omega solves linear arithmetic; contradiction detects False or A and \u00acA. Use these to discharge routine subgoals but be aware limits (e.g., automation on reals is limited)."
+      },
+      {
+        "name": "Equality handling tactics and rewrite strategies",
+        "description": "Use equality tactics (rewrite, rewrite <-, replace, subst, symmetry, transitivity, f_equal) to manipulate equalities and perform substitutions.",
+        "guidance": "rewrite by default replaces all occurrences; rewrite H at occs rewrites selected occurrences. replace u with t generates a subgoal u = t. subst substitutes variables when x = t occurs with x not in t. Use reflexivity for convertible terms. Example: rewrite H to apply an equality hypothesis."
+      },
+      {
+        "name": "Proof finishing and kernel check (Qed/Save)",
+        "description": "After building a proof with tactics, Coq extracts a proof term and the trusted kernel checks \u0393 \u22a2 p : A at Qed or Save.",
+        "guidance": "This extra checking allows freely extending tactics without compromising safety. Use Qed to finalize and record theorem; be aware some checks (universes, termination) happen only at end and rare cases may lead to incorrect finished proof if those checks fail earlier."
+      },
+      {
+        "name": "Use Print Assumptions to audit dependencies",
+        "description": "Print Assumptions name displays all axioms and assumptions used in theorem name.",
+        "guidance": "Use this to ensure that a theorem does not depend on unexpected axioms (e.g., excluded middle) and to verify trustworthiness of a result."
+      },
+      {
+        "name": "Be careful with admit/Admitted",
+        "description": "admit introduces an axiom for the current goal and Admitted records the theorem as an axiom; these undermine soundness if left in final developments.",
+        "guidance": "Admit/Admitted are useful for prototyping but dangerous for trusted developments. Anti-pattern: shipping developments with Admitted theorems when reliability is required."
+      },
+      {
+        "name": "Classical vs intuitionistic logic choices",
+        "description": "Coq implements intuitionistic logic by default (A \u2228 \u00acA is not an axiom); classical reasoning requires adding the excluded middle or importing Classical.",
+        "guidance": "Many constructions are constructive and allow computation from proofs (e.g., \u2203 and \u2228 carry witnesses). If classical logic is needed, import a library like Classical but be aware it adds axioms; prefer constructive proofs when possible."
+      },
+      {
+        "name": "Proof-by-reflection (reification) for automation",
+        "description": "Reflection reduces proving propositions to computation by reifying propositions into data, computing a boolean decision procedure, and checking that the computation yields true.",
+        "guidance": "Key steps: (1) implement a reification mapping from propositions to closed terms p; (2) implement r2b and prove its correctness; (3) ensure r2b p reduces efficiently to true. Reflection is used in tactics like ring, omega, setoid rewrite and for building certified decision procedures. Trade-offs: p should be small and closed to compute; r2b must be efficient and proven correct."
+      },
+      {
+        "name": "Use Ltac for meta-programming and reification",
+        "description": "Ltac can be used to compute an environment and a reified formula from a goal, and to apply change to replace the goal by its reified interpretation.",
+        "guidance": "Example: the paper shows Ltac env_form and reify to turn 0=0 /\ting into a form and environment and then change the goal to f2P e f. Use Ltac to automate pattern-matching and reification steps carefully to avoid duplication (share subterms when possible)."
+      },
+      {
+        "name": "Use interfaces and editors effectively",
+        "description": "Use graphical/textual interfaces like coqide or Emacs+ProofGeneral to interact with Coq; these provide windows for commands, goals, and queries.",
+        "guidance": "coqide includes a Queries window and displays unsolved goals; ProofGeneral offers similar functionality. Recommendation: follow examples while experimenting in an interactive environment rather than reading only."
+      },
+      {
+        "name": "Use Notation and implicit arguments for readable code",
+        "description": "Use Notation, Set Implicit Arguments and Implicit Arguments to make Coq code more concise and readable by letting Coq infer type arguments and provide convenient syntax.",
+        "guidance": "Example: declare Notation \"[ x | y | z ]\" for Triple x y z and Set Implicit Arguments to omit explicit type parameters."
+      },
+      {
+        "name": "Choose a proof assistant based on required features and libraries",
+        "description": "Select Coq or another assistant depending on needs: intuitionistic vs classical logic, need for dependent types, trust base and available libraries.",
+        "guidance": "Practical reasons often drive choice (team use, local expertise, existing libraries). The tutorial notes there is no single right choice; compare requirements (dependent types, libraries) before committing."
+      },
+      {
+        "name": "Integrate external provers via certified traces when possible",
+        "description": "Many automated provers produce traces that can be checked inside Coq\u2014use those traces or certified interfaces rather than trusting external tools unconditionally.",
+        "guidance": "Examples: SAT/SMT solvers producing traces that are then checked by Coq, termination tools integrated via certified witnesses. Why3 platform can translate problems to various provers and produce artifacts suitable for checking."
+      },
+      {
+        "name": "Use computation to discharge trivial proofs",
+        "description": "When proof reduces to a computation on closed terms (e.g., booleans), finishing the proof can be done by computing and using reflexivity.",
+        "guidance": "Example: computing r2b p \u2261 true yields a trivial proof via computation (refl_eq). Use compute, simpl, and reflexivity for such cases; ensure terms are closed for full computation."
+      },
+      {
+        "name": "Design and reuse invariants for finite-state decision procedures",
+        "description": "For finite but large state spaces (like the board example), design invariants and use reflection to build decision procedures that decide \u2200b : board, P(b).",
+        "guidance": "Because the board has a finite number of states, one can implement a reflective tactic that decides the property by computing invariants and verifying reachability. Use reification and decision procedures tailored to the finite domain."
+      },
+      {
+        "name": "Be explicit about scopes when using different numeric notations",
+        "description": "Open the appropriate scope (e.g., Z_scope, R_scope) to have usual arithmetic notations interpreted for the intended numeric type.",
+        "guidance": "Example: after Require Import ZArith, use Open Scope Z_scope to make 0 and + denote integers rather than nat. This avoids confusing notation interpretation between nat, Z, R, etc."
+      }
+    ]
+  }
+}

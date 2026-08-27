@@ -1,0 +1,162 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 26,
+  "n_chunks": 31,
+  "chunk_chars": 39584,
+  "model": "gpt-5-mini",
+  "elapsed_s": 144.38484529199923,
+  "input_tokens": 13138,
+  "output_tokens": 4936,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "TeX/LaTeX (and plain TeX/ConTeXt) users writing graphics with pgf/TikZ \u2014 authors of documents that include programmatic graphics",
+    "subtask_short": "tikz/pgf graphics authoring",
+    "subtask_description": "Practical guidance and rules for producing and managing graphics with the pgf/TikZ system: coordinate/canvas transforms, patterns, images, masking, and externalizing (extracting) graphics into separate files. Covers command semantics, pitfalls, and recommended workflows.",
+    "subtask_keywords": [
+      "tikz",
+      "pgf",
+      "latex",
+      "graphics",
+      "image_externalization",
+      "patterns",
+      "masking"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "\\ifpgfslopedattime",
+        "description": "Decides whether the \u201cat time\u201d transformation commands also rotate coordinates or not.",
+        "guidance": "When true, line-at-time and curve-at-time transformations may apply an additional rotation to align with the curve/line slope. This affects text orientation inserted after such transforms; interacts with \\ifpgfallowupsidedowattime and \\ifpgfresetnontranslationsattime settings."
+      },
+      {
+        "name": "\\ifpgfallowupsidedowattime",
+        "description": "Decides whether the \u201cat time\u201d transformation commands should allow the rotation be down in such a way that \u201cupside-down text\u201d can result.",
+        "guidance": "If false, pgf will ensure text is never upside-down; if true, rotated text may be inverted depending on slope decisions."
+      },
+      {
+        "name": "\\ifpgfresetnontranslationsattime",
+        "description": "Decides whether the \u201cat time\u201d transformation commands should reset the non-translations between shifting and rotating.",
+        "guidance": "If true, pgf calls \\pgftransformresetnontranslations between shifting and rotating; impacts whether rotation/scale from the current CTM affect the placement/orientation when using 'at time' transforms."
+      },
+      {
+        "name": "Absolute coordinate transformation commands are potentially dangerous",
+        "description": "Commands that set the coordinate transformation matrix \u201cabsolutely\u201d (rather than concatenating) can produce unexpected effects.",
+        "guidance": "Use absolute-transform commands only if you really know what you're doing; they override prior transformations and may break assumptions elsewhere in a scope."
+      },
+      {
+        "name": "\\pgftransformreset",
+        "description": "Resets the coordinate transformation matrix to the identity matrix. Once issued, no coordinate transformations are applied until the end of the scope.",
+        "guidance": "Useful to cancel all transforms; example shows resetting after a scale+rotate so subsequent drawing uses plain coordinates."
+      },
+      {
+        "name": "\\pgftransformresetnontranslations",
+        "description": "Sets the a,b,c,d parts of the coordinate transformation matrix to 1,0,0,1 respectively, leaving the shift (translation) unchanged.",
+        "guidance": "Undo rotation/scaling/slanting but keep origin shift. Mostly useful immediately before \\pgftext to ensure text is not scaled or rotated; example contrasts rotated vs shifted-only text."
+      },
+      {
+        "name": "\\pgftransforminvert",
+        "description": "Replaces the current coordinate transformation matrix by its exact inverse (the transform that undoes the original transformation).",
+        "guidance": "Produces an error if the matrix determinant is too small (near-singular). Example: inverts 'scale by 2 then shift right by 1cm' into 'shift left by 1cm then scale by 1/2'."
+      },
+      {
+        "name": "Saving and restoring coordinate transforms (\\pgfgettransform / \\pgfsettransform)",
+        "description": "\\pgfgettransform{\\macro} defines \\macro to a representation of the current CTM; \\pgfsettransform{\\macro} reinstalls a previously saved transform.",
+        "guidance": "Use to capture a CTM and reapply it later; saved macro is local and can be used to restore complex transform states."
+      },
+      {
+        "name": "Canvas vs coordinate transformations \u2014 key distinctions",
+        "description": "Canvas transformations (managed by backend) differ from coordinate transformations: they apply to everything (images, text, line thickness), are local to {pgfscope} (not TEX group), cannot be reset, and pgf does not track them.",
+        "guidance": "Because canvas transforms are applied after the graphic is finished and handled by the driver, pgf cannot correctly save coordinates of shapes/nodes when canvas transforms are used. Be cautious when combining canvas transforms with pgf operations."
+      },
+      {
+        "name": "\\pgflowlevelsynccm",
+        "description": "Concatenates the canvas transformation matrix with the current coordinate transformation matrix, then resets the coordinate transformation matrix.",
+        "guidance": "Effectively synchronizes CTM and canvas TM: transformations previously applied by coordinate transforms become canvas transforms. Useful when you want the backend to perform the transform (affects everything including line widths). Example shows scale then a short draw; coordinate CTM reset afterward."
+      },
+      {
+        "name": "\\pgflowlevel / \\pgflowlevelobj / \\beginpgflowlevelscope",
+        "description": "Commands/environments to concatenate an arbitrary coordinate transformation with the canvas transform (via \\pgflowlevel) for a scoped piece of code.",
+        "guidance": "Allows you to apply a coordinate transform at canvas level (so it affects everything) for just the enclosed drawing; several variants exist including object-wrapping and environment forms for plain TeX/ConTeXt compatibility."
+      },
+      {
+        "name": "Patterns: inherently colored vs form-only patterns",
+        "description": "There are two kinds of tiling patterns: inherently colored patterns (tile has its own color) and form-only patterns (tile is like a rubber stamp; color provided on use).",
+        "guidance": "Form-only patterns accept a color parameter when set; inherently colored patterns ignore the color parameter and must set color via pgf color commands. Once declared, a pattern cannot be changed (size, line width, etc.). Also, pattern phase/origin may differ across backends (pdf/PostScript vs SVG), so expect differences in alignment."
+      },
+      {
+        "name": "\\pgfdeclarepatternformonly requirements",
+        "description": "Declaration form: \\pgfdeclarepatternformonly{name}{lower left}{upper right}{tile size}{code}. The code should be pgf code that can be protocolled and should not contain any color code.",
+        "guidance": "lower-left/upper-right define a bounding box that must encompass the tile; tile size sets the tile rectangle with origin at lower-left. Bounding box may be smaller or larger than tile size causing clipping or bleed. For form-only patterns avoid color setting inside the code; color supplied later via \\pgfsetfillpattern."
+      },
+      {
+        "name": "\\pgfdeclarepatterninherentlycolored requirements",
+        "description": "Declaration for an inherently colored pattern: same parameters as form-only but the pattern contains its own colors.",
+        "guidance": "To set the tile's color use pgf's color commands (e.g., \\pgfsetfillcolor), not \\color, since pattern code is protocolled differently. The color parameter passed to \\pgfsetfillpattern is ignored for inherently colored patterns."
+      },
+      {
+        "name": "\\pgfsetfillpattern behavior",
+        "description": "\\pgfsetfillpattern{name}{color} specifies that fills should use the named pattern with the given color.",
+        "guidance": "For form-only patterns the color argument is used to tint the stamp; for inherently colored patterns the color argument is ignored. Once a pattern is declared its geometry/line widths cannot be changed at use time."
+      },
+      {
+        "name": "Prefer \\includegraphics over pgfbaseimage when possible",
+        "description": "LATEX's \\includegraphics (graphicx) is generally better designed than pgfbaseimage; use it unless you need pgf-specific features.",
+        "guidance": "Use pgfbaseimage only if your format lacks a standard include mechanism (plain TeX) or you need features pgf offers, notably masking. For most workflows, \\includegraphics is recommended."
+      },
+      {
+        "name": "Two-phase image workflow (declare then use) vs immediate use",
+        "description": "pgf suggests declaring images with \\pgfdeclareimage{name}{filename} and later inserting them with \\pgfuseimage{name}; \\pgfimage declares and immediately uses the image.",
+        "guidance": "Declaring first ensures the image data is included only once in the output (reduces file size if the image is reused). Use \\pgfimage when you want a quick declare+use and don't need reuse."
+      },
+      {
+        "name": "Options for \\pgfdeclareimage",
+        "description": "Supported options include height, width (each preserves aspect ratio if the other omitted), page (select page from multipage document), interpolate (true/false for smoothing when zoomed), and mask (a previously declared mask name).",
+        "guidance": "page option tries an alternate filename 'name.pageN.ext' before falling back to page extraction in pdftex; interpolate defaults to false; mask works only for pdf backend and pixel-format images (.jpg/.png)."
+      },
+      {
+        "name": "\\pgfaliasimage (image aliasing)",
+        "description": "\\pgfaliasimage{new}{existing} clones an image name so the new name can be used wherever the existing image is used.",
+        "guidance": "Useful for creating alternate-named variants (e.g., for alternate extensions or accessing the last inserted image pgflastimage). Example: aliasing color-mixin variants."
+      },
+      {
+        "name": "\\pgfuseimage / \\pgfimage fallback and \\pgfalternateextension",
+        "description": "\\pgfuseimage inserts a previously declared image; if \\pgfalternateextension expands to a nonempty alternate extension string, pgf first tries image.name.alternateext and iteratively strips segments up to '!' to try fallbacks before using the original image.",
+        "guidance": "xxcolor sets alternate extension to current color mixin (e.g., '!25!white'); \\pgfimage declares then uses an image and stores it as pgflastimage. Using \\pgfalternateextension allows automatic selection of color-mixed variants."
+      },
+      {
+        "name": "Masking images (\\pgfdeclaremask) requirements and limits",
+        "description": "Declare a transparency mask with \\pgfdeclaremask{name}{filename}. The mask file must be a grayscale (single channel) image same size as the actual image; white pixels correspond to transparent, black to solid.",
+        "guidance": "Masking works only for images in pixel formats (.jpg, .png), not for .pdf images. The mask and image must match dimensions. Option 'matte={color components}' sets the preblend matte color of the masked image (default {1 1 1} white); matte specified in parent's image color space. Not all viewers support masking."
+      },
+      {
+        "name": "Externalizing graphics workflow (declare, generate, include)",
+        "description": "To externalize pictures: (1) mark each picture with \\beginpgfgraphicnamed{fileprefix} ... \\endpgfgraphicnamed, (2) set \\pgfrealjobname{realname} and run TeX with --jobname=graphicname to produce single-file graphics, (3) rerun TeX normally to include the generated graphic files.",
+        "guidance": "Step 2 causes pgf to swallow the full document except the named graphic and produce a single-page file sized to the graphic. Use pdflatex --jobname=... to generate .pdf outputs or latex+dvips for .ps. This workflow speeds compilation and produces standalone figure files acceptable to publishers."
+      },
+      {
+        "name": "Naming external graphics: uniqueness and filesystem safety",
+        "description": "Each graphic that will be externalized should have a unique name which becomes a filename; names should not contain funny characters.",
+        "guidance": "If an external file with that name already exists, \\beginpgfgraphicnamed will include that file (via \\includegraphics) and ignore the code between the begin/end. Note: inclusion ignores the code without macro expansion, so macros used inside needn't be defined when included."
+      },
+      {
+        "name": "Behavior when generating external graphics (\\jobname equals graphic name)",
+        "description": "When \\jobname equals a graphic name and \\pgfrealjobname was declared, pgf collects everything between the matching \\beginpgfgraphicnamed and \\endpgfgraphicnamed into a box and ships out only that box as the document output, with page size equal to the box.",
+        "guidance": "The normal shipout is temporarily replaced to discard other output; at the end the single-page file contains precisely the graphic. This is how pdflatex --jobname=survey-f1 survey.tex produces survey-f1.pdf with just the figure."
+      },
+      {
+        "name": "Including external graphics without pgf installed (pgfexternal.tex)",
+        "description": "To produce a document suitable for publishers without pgf installed, input pgfexternal.tex which redefines \\beginpgfgraphicnamed to \\includegraphics{#1} and gobbles to \\endpgfgraphicnamed.",
+        "guidance": "This lets you keep the original source (with tikz code commented out) but include the pre-generated graphics automatically. Note that the baseline option does not work with pictures written to external graphic files because baseline information cannot be stored in external files."
+      },
+      {
+        "name": "Pattern and image backend portability pitfalls",
+        "description": "Some pattern and image behaviors differ between backends: pattern phase/origin differs (pdf/PostScript define fixed origin; svg may use path's upper-left corner and is vague); masking only works for certain backends and formats.",
+        "guidance": "Expect rendering differences across output formats; avoid relying on precise tile-phase alignment or pattern mutability. For portability prefer simple fills or test on target backend(s)."
+      }
+    ]
+  }
+}

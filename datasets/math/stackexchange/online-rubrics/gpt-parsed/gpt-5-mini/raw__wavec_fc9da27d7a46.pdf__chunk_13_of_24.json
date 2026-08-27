@@ -1,0 +1,250 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 13,
+  "n_chunks": 24,
+  "chunk_chars": 39971,
+  "model": "gpt-5-mini",
+  "elapsed_s": 191.9105484160027,
+  "input_tokens": 15007,
+  "output_tokens": 7213,
+  "extracted": {
+    "orientation": "other",
+    "intended_audience": "users/developers of the PARI/GP library (computational number theorists, algebraic number theory programmers)",
+    "subtask_short": "pari_gp_rnf_pol_reference",
+    "subtask_description": "Reference documentation for PARI/GP library functions dealing with polynomials, number fields and relative number field (rnf) operations, including usage, flags, warnings and examples.",
+    "subtask_keywords": [
+      "pari_gp",
+      "number_fields",
+      "rnf",
+      "polynomial_functions",
+      "library_reference"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "nfsolvemodpr",
+        "description": "Solve linear system a * x = b modulo a prime ideal P in a number field (library syntax: GEN nfsolvemodpr(GEN nf, GEN a, GEN b, GEN P)).",
+        "guidance": "Function is normally useless in library mode; project inputs to the residue field using nfM to FqM and work in the finite field instead. Example: nfsolvemodpr(K, a, b, P) returns a solution vector when appropriate."
+      },
+      {
+        "name": "nfsubfields",
+        "description": "Finds all subfields of given degree d of the number field defined by a monic integral polynomial pol (if d omitted or 0, returns all subfields).",
+        "guidance": "Result is a vector of subfields as [g, h] where g is an absolute equation and h expresses a root of g in terms of the root of the defining polynomial. Uses J. Kl\u00fcners's algorithm in general and B. Allombert's galoissubfields when nf is Galois (with weakly supersolvable Galois group). Library syntax: GEN nfsubfields(GEN pol, long d)."
+      },
+      {
+        "name": "polcompositum / compositum / compositum2",
+        "description": "Given squarefree polynomials P and Q in Z[X], outputs the simple factors of the \u00e9tale Q-algebra A = Q(X,Y)/(P(X),Q(Y)) as polynomials R in Z[X] (defining number fields Q(X)/(R)), sorted by increasing degree.",
+        "guidance": "Returns error if one polynomial not squarefree. More efficient to first reduce P and Q to irreducible factors. If P and Q irreducible, single factor R iff defined number fields are disjoint. Flag=1 returns [R, a, b, k] giving expressions of roots of P and Q inside compositum and an integer k with b+ka = X mod R. Library syntax: GEN polcompositum0(GEN P, GEN Q, long flag); convenience wrappers compositum (flag=0) and compositum2 (flag=1). Example walkthrough provided constructing compositum Q(\u03b65, 5^{1/5}) and reduction with polredbest."
+      },
+      {
+        "name": "polgalois",
+        "description": "Compute the Galois group of a non-constant irreducible polynomial T \u2208 Q[X] (action on the d distinct roots up to conjugacy). In version noted, degree d must be \u22647 (extensions possible up to degree 11 with galdata package).",
+        "guidance": "Output vector [n, s, k, name] where n=cardinality, s=signature (1 if subgroup of Ad, -1 otherwise), name=character string using GAP transitive groups library. The component k historically encoded groups idiosyncratically for d\u22647; new_galois_format can be enabled to use consistent numbering (standard numbering among transitive subgroups of Sn). Warning: method uses resolvent polynomials and is sensitive to internal precision; insufficient initial precision may give wrong results. Library syntax: GEN polgalois(GEN T, long prec); set global new_galois_format in library mode to 1 to enable new format."
+      },
+      {
+        "name": "polred (deprecated)",
+        "description": "Deprecated function: finds polynomials with reasonably small coefficients defining subfields of the number field defined by T (one polynomial will be x-1 for Q and another the same field as T if irreducible).",
+        "guidance": "Accepts inputs allowed by nfinit; recommended format [T, listP] to avoid computing maximal order. Binary digit flags have meanings (1: possibly use suborder; 2: also gives elements as two-column matrix). Examples show usage and minpoly extraction. Library syntax: polred(GEN T) (flag=0). polred0 is deprecated; use polred2 for flag=2."
+      },
+      {
+        "name": "polredabs",
+        "description": "Return a canonical defining polynomial P for the number field Q[X]/(T) minimizing the sum of squares of absolute values of roots (T2-norm). Different T defining isomorphic fields yield same P (canonical).",
+        "guidance": "Warnings: using t_POL T requires full factorization of discriminant (hard). Using [T,listP] may use suborder and result may not be canonical; routine attempts certification and returns 0 if certification fails. Complexity exponential in degree; may be very slow for fields with many subfields. If canonical polynomial not needed, polredbest is recommended (polynomial time). Binary flag bits: 1 returns [P,a] with a root; 4 gives all polynomials of minimal T2 norm (choose canonical representative among \u00b1 and sign), 16 allows using suborder and forces output (non-canonical). Better to use nf_PARTIALFACT, nf_ORIG, nf_RAW, nf_ADDZK, nf_ALL symbolic flags rather than numeric. Library syntax: GEN polredabs0(GEN T, long flag). Examples comparing norms & discriminant sizes between polredabs and polredbest included."
+      },
+      {
+        "name": "polredbest",
+        "description": "Find a polynomial with reasonably small coefficients defining the same number field as T. Runs in polynomial time but no guarantee of minimality.",
+        "guidance": "Method: compute LLL-reduced basis for ring of integers, examine small linear combinations and their characteristic polynomials; return separable polynomial with smallest discriminant (and lexicographically smallest coefficients in ties). Can be iterated to improve result until stability. Flag=1 returns [P,a] where Mod(a,P) is root of original T allowing isomorphism maps. Library syntax: GEN polredbest(GEN T, long flag)."
+      },
+      {
+        "name": "polredord",
+        "description": "Find polynomials with reasonably small coefficients and same degree as x defining suborders of the order defined by x. Deprecated/less useful; polredbest recommended instead.",
+        "guidance": "One polynomial will define Q ((x-1)^n), another will define same order as x if irreducible. Library syntax: GEN polredord(GEN x)."
+      },
+      {
+        "name": "poltschirnhaus",
+        "description": "Apply a random Tschirnhausen transformation to a non-constant separable polynomial x to obtain a new equation for the \u00e9tale algebra defined by x.",
+        "guidance": "Useful when computing resolvents; used by polgalois. Library syntax: GEN tschirnhaus(GEN x)."
+      },
+      {
+        "name": "rnfalgtobasis",
+        "description": "Express an absolute-form element x of a relative number field extension rnf on the relative integral basis. rnf is an extension L/K produced by rnfinit; x given as polynomial or polmod with polmod coefficients.",
+        "guidance": "Library syntax: GEN rnfalgtobasis(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfbasis",
+        "description": "Given bnf representing field K (from bnfinit) and M a projective Z_K-module of rank n given by a pseudo-basis, return either a true Z_K-basis of M (size n) if it exists, or an n+1 element generating set otherwise. Irreducible polynomial P in K[X] may be used to define M as ring of integers of K[X]/(P) viewed as Z_K-module.",
+        "guidance": "Library syntax: GEN rnfbasis(GEN bnf, GEN M)."
+      },
+      {
+        "name": "rnfbasistoalg",
+        "description": "Compute representation of x as a polmod with polmods coefficients where x is originally expressed on the relative integral basis; rnf is relative extension L/K from rnfinit.",
+        "guidance": "Library syntax: GEN rnfbasistoalg(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfcharpoly",
+        "description": "Characteristic polynomial of element a over nf, where a belongs to algebra defined by T over nf, i.e., nf[X]/(T). Returns polynomial in variable v (x by default).",
+        "guidance": "Example: rnfcharpoly(nf, x^2+y*x+1, x+y) returns characteristic polynomial. Library syntax: GEN rnfcharpoly(GEN nf, GEN T, GEN a, long var = -1) with var indicating variable number."
+      },
+      {
+        "name": "rnfconductor",
+        "description": "Given bnf from bnfinit and pol a relative polynomial defining an Abelian extension, compute the class field theory conductor of this Abelian extension.",
+        "guidance": "Returns 3-component vector [conductor, rayclgp, subgroup] where conductor = [f0,f\u221e], rayclgp is full ray class group [h,cyc,gen], and subgroup is HNF matrix defining subgroup on given generators. Library syntax: GEN rnfconductor(GEN bnf, GEN pol)."
+      },
+      {
+        "name": "rnfdedekind",
+        "description": "Apply Dedekind's criterion to order Z_K[X]/(P) for a monic polynomial P \u2208 Z_K[X] irreducible over K, testing maximality at a prime ideal pr (or vector of primes or all primes if omitted).",
+        "guidance": "Default behavior (flag 0, single pr) returns [max, basis, v] where basis is pseudo-basis of enlarged order O, max flag indicates pr-maximal proven (1) or not (0), and v is valuation at pr of order discriminant. If flag non-zero, fast boolean return 1 (pr-maximal) or 0. If pr omitted, tests all primes and sets flag automatically to 1. Returns useful information and examples demonstrate usage and relation with rnfpseudobasis. Library syntax: GEN rnfdedekind(GEN nf, GEN pol, GEN pr = NULL, long flag)."
+      },
+      {
+        "name": "rnfdet",
+        "description": "Given a pseudo-matrix M over the maximal order of nf, compute its determinant.",
+        "guidance": "Library syntax: GEN rnfdet(GEN nf, GEN M)."
+      },
+      {
+        "name": "rnfdisc / rnfdiscf",
+        "description": "Given nf and a polynomial pol with coefficients in nf defining a relative extension L of nf, compute the relative discriminant of L. Returns [D, d] where D is relative ideal discriminant and d is discriminant as element of nf*/nf*^2.",
+        "guidance": "Main variable of nf must be lower priority than that of pol. Library syntax: GEN rnfdiscf(GEN nf, GEN pol)."
+      },
+      {
+        "name": "rnfeltabstorel",
+        "description": "Given rnf (relative L/K) and x an element of L expressed as polynomial modulo the absolute equation rnf.pol, compute x as element of the relative extension L/K as a polmod with polmod coefficients.",
+        "guidance": "Examples show conversions and error messages for inconsistent moduli. Library syntax: GEN rnfeltabstorel(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfeltdown",
+        "description": "Given relative extension rnf L/K and x element of L expressed as polynomial or polmod with polmod coefficients, compute x as an element of K as a polmod assuming x is in K; domain error if not.",
+        "guidance": "Examples show behavior when x in K and when it is not (domain error). Library syntax: GEN rnfeltdown(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfeltnorm",
+        "description": "Given relative extension rnf L/K and x \u2208 L, return relative norm N_{L/K}(x) as element of K.",
+        "guidance": "Examples include norms of algebraic elements and integers. Library syntax: GEN rnfeltnorm(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfeltreltoabs",
+        "description": "Given rnf L/K and x element of L expressed as polynomial or polmod with polmod coefficients (relative form), compute x as element of absolute extension L/Q as polynomial modulo absolute equation rnf.pol.",
+        "guidance": "Examples show conversions of elements of K and of relative polmods to absolute polmods. Library syntax: GEN rnfeltreltoabs(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfelttrace",
+        "description": "Given rnf L/K and x in L, return the relative trace Tr_{L/K}(x) as element of K.",
+        "guidance": "Library syntax: GEN rnfelttrace(GEN rnf, GEN x). Examples included."
+      },
+      {
+        "name": "rnfeltup",
+        "description": "Given rnf L/K and x an element of K, compute x as an element of absolute extension L/Q as polynomial modulo rnf.pol.",
+        "guidance": "Accepts elements of K or lists in terms of K.zk; examples convert y and vectors. Library syntax: GEN rnfeltup(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfequation",
+        "description": "Given nf (or polynomial) and a polynomial pol with coefficients in nf defining a relative extension L of nf, compute an absolute equation of L over Q.",
+        "guidance": "Main variable of nf must have lower priority than pol. Does not check irreducibility over nf except squarefree; if reducible but squarefree, returns absolute equation of \u00e9tale algebra. Raises DOMAIN exception if pol not squarefree. If flag non-zero, returns [z,a,k] where z absolute equation, a expresses root of base field as t_POLMOD mod z, and k is integer with \u03b8 = \u03b2 + k\u03b1 a root of z; examples show how to adjust pol when k\u22600. Library syntaxes: rnfequation0 (flag), rnfequation (flag=0), rnfequation2 (flag=1)."
+      },
+      {
+        "name": "rnfhnfbasis",
+        "description": "Given bnf and either polynomial x with coefficients in bnf defining relative extension L or pseudo-basis x of such extension, return true bnf-basis of L in upper-triangular Hermite normal form if it exists, else return 0.",
+        "guidance": "Library syntax: GEN rnfhnfbasis(GEN bnf, GEN x)."
+      },
+      {
+        "name": "rnfidealabstorel",
+        "description": "Given rnf L/K and x an ideal of the absolute extension L/Q given by a Z-basis of elements of L, return the relative pseudo-matrix in HNF giving ideal x considered as Z_K-module (ideal of L/K).",
+        "guidance": "Input uses absolute Z-basis because no fixed Z-basis for ZL specified. If Labs (absolute nf structure for L) exists, one can convert using Labs.zk * m and call rnfidealabstorel(L, Labs.zk * m). Example demonstrates conversion and verification. Library syntax: GEN rnfidealabstorel(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealdown",
+        "description": "Given rnf L/K and x an ideal of L (relative form or Z-basis), return the ideal of K below x (intersection of x with K).",
+        "guidance": "Library syntax: GEN rnfidealdown(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealhnf",
+        "description": "Given rnf L/K and x a relative ideal (various accepted types), compute the HNF pseudo-matrix associated to x viewed as a Z_K-module.",
+        "guidance": "Library syntax: GEN rnfidealhnf(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealmul",
+        "description": "Given rnf L/K and x,y ideals of relative extension L/K provided as pseudo-matrices, compute their ideal product as a relative ideal.",
+        "guidance": "Library syntax: GEN rnfidealmul(GEN rnf, GEN x, GEN y)."
+      },
+      {
+        "name": "rnfidealnormabs",
+        "description": "Compute norm of a relative ideal x considered as an absolute ideal of L/Q (identical to idealnorm(rnf, rnfidealnormrel(rnf,x)) but faster).",
+        "guidance": "Library syntax: GEN rnfidealnormabs(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealnormrel",
+        "description": "Compute relative norm of a relative ideal x as an ideal of K in HNF.",
+        "guidance": "Library syntax: GEN rnfidealnormrel(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealreltoabs",
+        "description": "Given rnf L/K and x a relative ideal given as Z_K-module pseudo-matrix [A,I], return x as an absolute ideal of L/Q in form of Z-basis given by vector of polynomials modulo rnf.pol.",
+        "guidance": "No fixed Z-basis for ZL specified in relative data; if absolute nf Labs exists one can convert xabs via mathnf(matalgtobasis(Labs, xabs)) to get HNF in fixed basis. Library syntax: GEN rnfidealreltoabs(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealtwoelt / rnfidealtwoelement",
+        "description": "Given rnf L/K and x ideal of relative extension L/K as pseudo-matrix, return two generators of x over Z_L expressed as polmods with polmod coefficients.",
+        "guidance": "Library syntax: GEN rnfidealtwoelement(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfidealup",
+        "description": "Given rnf L/K and x an ideal of K, return the ideal xZ_L as an absolute ideal of L/Q in the form of a Z-basis (vector of polynomials modulo rnf.pol).",
+        "guidance": "To obtain traditional HNF for x with respect to Labs.zk, use xabs = rnfidealup(L, x) then mathnf(matalgtobasis(Labs, xabs)). Library syntax: GEN rnfidealup(GEN rnf, GEN x)."
+      },
+      {
+        "name": "rnfinit",
+        "description": "Given nf base field in nfinit format and pol a polynomial defining relative extension over nf, compute data to work in the relative extension (rnf structure).",
+        "guidance": "Result is row vector with many technical components: rnf.pol (relative polynomial), integer basis of K embedded in L, relative discriminant rnf.disc = [d(L/K), s], index rnf.index, pseudo-basis rnf.zk for maximal order Z_L as Z_K-module, inverse integral basis matrix, rnf.nf reference to base nf, rnf.polabs and related data from rnfequation, and other fields. Caveat about k\u22600 from rnfequation: absolute generator may differ from relative generator; recommend adjusting pol accordingly. Library syntax: GEN rnfinit(GEN nf, GEN pol)."
+      },
+      {
+        "name": "rnfisabelian",
+        "description": "Decide whether a relative polynomial T with coefficients in nf defines an abelian extension (returns 1 if abelian, 0 otherwise).",
+        "guidance": "Example: rnfisabelian(K, x^3 - 3*x - y) returns 1 in given K. Library syntax: long rnfisabelian(GEN nf, GEN T)."
+      },
+      {
+        "name": "rnfisfree",
+        "description": "Given bnf (from bnfinit) and polynomial or pseudo-basis x defining relative extension L, return true (1) if L/bnf is free as module, false (0) otherwise.",
+        "guidance": "Library syntax: long rnfisfree(GEN bnf, GEN x)."
+      },
+      {
+        "name": "rnfisnorm",
+        "description": "Relative version of bnfisnorm: given initialization data T from rnfisnorminit for extension L/K, try to decide whether a \u2208 K is a norm of some x in L (searching for S-integer solutions). Outputs [x, q] with a = Norm(x) * q.",
+        "guidance": "S is list of places including ramified primes, class group generators, primes dividing a. If L/K is Galois, output is guaranteed (q=1 iff a is a norm). Otherwise, under GRH result guaranteed if S contains all primes less than 12 log2|disc(M)| where M is normal closure. Flag modifies inclusion of small primes in S: flag>0 includes places above primes p \u2264 flag, flag<0 includes p|flag. If rnfisnorminit determined L/K is Galois and flag=0 a Warning is issued. Example provided. Library syntax: GEN rnfisnorm(GEN T, GEN a, long flag)."
+      },
+      {
+        "name": "rnfisnorminit",
+        "description": "Compute technical data needed by rnfisnorm to solve norm equations N x = a for given base pol and relative polynomial polrel defining L/K. Flag controls whether to assume Galois or let routine determine.",
+        "guidance": "If flag=0, do not care whether L/K Galois. If flag=1, assume Galois unchecked (speeds up rnfisnorm). If flag=2 (default), let routine decide. pol may be nf/bnf/etc; if base field degree 1 (Q), polrel may be nf, etc. Library syntax: GEN rnfisnorminit(GEN pol, GEN polrel, long flag)."
+      },
+      {
+        "name": "rnfkummer",
+        "description": "Given bnr (output of bnrinit), optional subgroup and degree d, find a relative equation for class field corresponding to module in bnr and congruence subgroup (full ray class field if subgroup omitted). If d>0 outputs list of all relative equations of degree d contained in ray class field with same conductor.",
+        "guidance": "Warning: works only for subgroups of prime index, uses Kummer theory, adjoining roots of unity, requires computing bnfinit and finds generator via Hecke's characterization of ramification in Kummer extensions of prime degree. For non-prime degree extensions user must split tower/compositum by hand. Library syntax: GEN rnfkummer(GEN bnr, GEN subgp = NULL, long d, long prec)."
+      },
+      {
+        "name": "rnflllgram",
+        "description": "Given nf, relative polynomial pol defining L and a suborder order (of maximal rank) of L, produce [[neworder], U] where neworder is reduced order and U unimodular transformation matrix (LLL reduction over relative lattices).",
+        "guidance": "Library syntax: GEN rnflllgram(GEN nf, GEN pol, GEN order, long prec)."
+      },
+      {
+        "name": "rnfnormgroup",
+        "description": "Given bnr (big ray class field from bnrinit) and pol a relative polynomial defining an Abelian extension, compute the norm (Artin/Takagi) group corresponding to the Abelian extension of bnf = bnr.bnf defined by pol, assuming the module of bnr is multiple of the conductor.",
+        "guidance": "Result is HNF defining norm group on given generators of bnr.gen. Note: routine does not check that pol defines Abelian extension or that module is multiple of conductor; result undefined if assumption false. Library syntax: GEN rnfnormgroup(GEN bnr, GEN pol)."
+      },
+      {
+        "name": "rnfpolred (obsolete)",
+        "description": "Obsolete relative version of polred: given monic polynomial pol with coefficients in nf, finds list of relative polynomials defining some (hopefully simpler) subfields containing the original field. Slower and less efficient than rnfpolredbest in present version.",
+        "guidance": "Based on incomplete reduction theory of lattices over number fields implemented by rnflllgram. Library syntax: GEN rnfpolred(GEN nf, GEN pol, long prec). Use rnfpolredbest instead."
+      },
+      {
+        "name": "rnfpolredabs (obsolete)",
+        "description": "Obsolete relative version of polredabs: given monic polynomial pol with coefficients in nf, find a simpler relative polynomial defining same field (or absolute polynomial depending on flags).",
+        "guidance": "Binary flag bits: 1 returns [P,a] where a root of pol; 2 returns absolute polynomial Pabs instead of relative (faster than rnfequation); 3 returns [Pabs,a,b] with roots of nf.pol and pol; 16 possibly use suborder of maximal order (may be faster when relative discriminant not smooth). Warning: rnfpolredabs produces smaller polynomials than rnfpolred and is usually faster but complexity exponential in absolute degree; rnfpolredbest runs in polynomial time and tends to produce polynomials with smaller discriminants. Library syntax: rnfpolredabs(nf, pol, {flag=0})."
+      }
+    ]
+  }
+}

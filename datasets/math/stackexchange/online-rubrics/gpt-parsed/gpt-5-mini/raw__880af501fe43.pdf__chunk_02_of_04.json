@@ -1,0 +1,166 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/880af501fe43.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "880af501fe43.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39528,
+  "model": "gpt-5-mini",
+  "elapsed_s": 88.48435587499989,
+  "input_tokens": 12569,
+  "output_tokens": 5203,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "computer scientists, graduate students, and practitioners in formal methods and software verification learning to use the Coq proof assistant",
+    "subtask_short": "learning Coq for software verification",
+    "subtask_description": "Introduction/tutorial material for using the Coq proof assistant to develop and verify programs and proofs for software verification tasks, including programming patterns, recursion/termination techniques, memory modeling, automation, and tactic programming.",
+    "subtask_keywords": [
+      "coq",
+      "software_verification",
+      "proof_assistant",
+      "functional_programming",
+      "automation",
+      "dependent_types"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Program-and-proof simultaneous development (proof-terms present)",
+        "description": "Both program and proof are developed simultaneously; the specification is available each time the program is used, and programs contain proof-terms internally.",
+        "guidance": "Be aware that proof-terms inside programs can make printing, checking equality and reduction expensive; Coq currently lacks a systematic proof-irrelevance mechanism to remove internal dependencies of terms on proofs. Use the extraction mechanism to remove proof-related parts (to Ocaml/Haskell) when you need executable code. Consider the trade-off: tight integration of program and proof vs runtime/printing inefficiencies."
+      },
+      {
+        "name": "Ensure termination / totality of functions",
+        "description": "All functions in Coq must be total and terminating; primitive fixpoint definitions are based on structural recursion only.",
+        "guidance": "When structural recursion is insufficient, introduce an inductive definition capturing the termination argument and do structural recursion on that argument, or use well-founded fixpoints or Program Fixpoint with a measure. Proof obligations or well-foundedness proofs are needed to certify termination."
+      },
+      {
+        "name": "Use inductive predicates to capture termination arguments (e.g., Event)",
+        "description": "For non-trivial loops or recursion (e.g., let f n = if p n then n else f (n+1)), introduce an inductive predicate that captures the termination condition (e.g., Event P n meaning P holds now or in the future) and recurse on that proof object.",
+        "guidance": "Define the predicate (Inductive ...), prove lemmas (e.g., Event_next) using case analysis on proof objects, and use these proof objects as the decreasing argument for termination. The extracted program matches the desired algorithm when proofs can be removed."
+      },
+      {
+        "name": "Require decidability for certain constructive loops",
+        "description": "To construct certain loop functions (like searching for the first n with P), the predicate P must be decidable: pass a decision procedure dec : forall n, {P n}+{~P n}.",
+        "guidance": "Use the decidability hypothesis in a Fixpoint or Program Fixpoint to perform branching; extraction will yield the expected recursive function (e.g., findP)."
+      },
+      {
+        "name": "Well-founded recursion / Fix combinator",
+        "description": "To express general recursive functions, use a well-founded ordering and the Fix combinator (Fix Rwf P F) which relies on a proof of well_founded R.",
+        "guidance": "Provide the appropriate hypotheses and use the provided fixpoint equation (Fix eq) to reason about the function. The well-foundedness proof is itself a proof that every element is accessible for R."
+      },
+      {
+        "name": "Program Fixpoint with measure for general recursion",
+        "description": "Use Program Fixpoint with a measure (e.g., { measure (length l) }) to write functions where structural recursion is not evident, generating obligations to prove that recursive calls decrease the measure.",
+        "guidance": "Solve obligations using supporting lemmas (e.g., skip_length) proved by induction; Program will generate termination and correctness obligations you must discharge."
+      },
+      {
+        "name": "Capture data-specific properties with inductive predicates (e.g., decrease)",
+        "description": "Define inductive predicates to express structural/data properties (e.g., 'decrease' to express limited decreasing property of an array/list) to enable optimized algorithms and reasoning.",
+        "guidance": "Add Hint Constructors for automation; use these predicates as premises in function specifications and proofs; they can guide allowed optimizations (skipn trick) and enable Program Fixpoint or well-founded reasoning."
+      },
+      {
+        "name": "Use dependent types and proofs-as-arguments for safe accessors (alloc/access)",
+        "description": "Define partiality/validity computationally (e.g., alloc : option A -> Prop) and make accessors depend on proofs of validity (access h a : alloc (val h a) -> node) using dependent pattern matching.",
+        "guidance": "Dependent pattern matching ensures unreachable branches can rely on False_rect; encoding safety as types means many errors become impossible, but adds proof arguments to functions\u2014use these proof arguments as decreasing measures where necessary."
+      },
+      {
+        "name": "Model memory explicitly and consider aliasing/separation",
+        "description": "Represent memory as a functional model (e.g., heap := Z -> option node) with null pointer representation and consider alternative models (separate memories for fields) for alias control.",
+        "guidance": "Use these models to specify validity of addresses, absence of aliases, and, if needed, encode high-level rules like separation logic (e.g., Ynot library) to reason about imperative features and aliasing."
+      },
+      {
+        "name": "Use transparent vs opaque proofs appropriately (Defined vs Qed)",
+        "description": "Decide whether a proof should be transparent (usable in computation) or opaque (not unfolded) \u2014 use Defined for transparency and Qed to make the proof opaque.",
+        "guidance": "If a proof must be used inside Coq to control fixpoint definitions or as part of computation (e.g., LList used for structural recursion), declare it with Defined so it will be unfolded during reduction; otherwise use Qed for normal theorems to avoid expensive unfolding."
+      },
+      {
+        "name": "Derive stronger induction principles when necessary (Scheme)",
+        "description": "The automatically generated induction principle may not be powerful enough when the property to prove depends on the proof object; derive a stronger induction principle using Scheme ... Sort Prop.",
+        "guidance": "Use 'Scheme <Name>_indd := Induction for <Inductive> Sort Prop' to obtain an induction principle that allows proving \u2200a (La : <Inductive> a), P a La, then use 'induction ... using <Name>_indd' in proofs."
+      },
+      {
+        "name": "Write programs with logical parts solved by tactics (Program facility)",
+        "description": "Use the Program facility to write programs whose types include logical properties ({x : A | P}) and let tactics solve proof obligations generated during program construction.",
+        "guidance": "Program integrates programming and proving: it generates obligations for termination and correctness that you discharge with tactics; useful for building correct-by-construction functions whose specifications include invariants."
+      },
+      {
+        "name": "Model imperative/non-functional behavior with monads and type classes",
+        "description": "Capture non-functional behaviors using monadic constructions: define comp A, ret : A -> comp A and bind : comp A -> (A -> comp B) -> comp B, encapsulate these in a Monad type class, and define instances (Error, State, etc.).",
+        "guidance": "Use Notation (X <- A ; B) for bind and 'return' notation; use type classes to let Coq search for the appropriate monad instance and to share notations across monadic structures. This enables functional encodings of errors, state, nondeterminism, and probabilistic computations."
+      },
+      {
+        "name": "Be aware monadic state does not inherently model aliasing",
+        "description": "Monadic state encodings (State monad) simulate references but do not capture aliasing/sharing between references.",
+        "guidance": "If aliasing matters, either enrich the state model to account for sharing or use separation logic frameworks (e.g., Ynot) or more explicit memory representations that reason about aliases."
+      },
+      {
+        "name": "Use existing automated tactics appropriately",
+        "description": "Use built-in and external tactics for common proof patterns: auto, trivial, tauto, firstorder, intuition, ring, field, omega, gappa, interval, Psatz, Nsatz, ergo, AC rewriting libraries, etc.",
+        "guidance": "These tactics can significantly reduce manual proof effort; extend them where needed for new data types and operations. Know the scope and limitations of each tactic (e.g., omega for linear arithmetic), and combine them as appropriate."
+      },
+      {
+        "name": "Prefer plugin/tactic extensions when heavy algorithms are needed (OCaml plugins)",
+        "description": "For complex or performance-sensitive automation, develop plugins/tactics in OCaml and load them dynamically into Coq via the plugin mechanism.",
+        "guidance": "Plugins can implement sophisticated algorithms at the OCaml level; they still must produce proof-terms checked by Coq's kernel, preserving trust. Use plugin mechanism for heavy-duty decision procedures or efficient reduction."
+      },
+      {
+        "name": "Rely on the Coq trusted kernel to check tactic-produced proofs",
+        "description": "Even tactics or external tools produce proof-terms that are ultimately checked by the Coq trusted kernel; thus using third-party tactics does not automatically compromise correctness.",
+        "guidance": "Design external integrations so they emit checkable proof traces (or proof-terms); this retains a small trusted base (the kernel) while enabling sophisticated automation."
+      },
+      {
+        "name": "Write Ltac tactics to automate higher-level proof patterns",
+        "description": "Use Ltac to program complex tactics with pattern-matching on goals, fresh name generation, type-checking, and to compose tactic schemes (examples: triple_force, board_force).",
+        "guidance": "Ltac enables writing reusable custom tactics without OCaml, using constructs like 'match goal with' and 'let ... in' to build higher-level proof strategies. Use it to automate repetitive destructuring and proof applications."
+      },
+      {
+        "name": "Use reflective (re\ufb02exive) tactics for efficient certified decision procedures",
+        "description": "Reify propositions into a concrete syntax/type A and implement a decision algorithm r2b : A -> bool together with a correctness lemma rcor : \u2200a, r2b a = true -> r2P a. Then proving a closed proposition reduces to computing r2b p = true.",
+        "guidance": "Reflection yields very efficient automation because proof-checking reduces to computation; requirements include producing a closed (no free variables) and preferably small reified term p, proving r2b's correctness, and ensuring efficient reduction (bytecode, machine integers). Rei\ufb01cation itself is typically done by Ltac."
+      },
+      {
+        "name": "Reification and its practical challenges",
+        "description": "Reification needs to produce a closed term p : A such that r2P p \u2261 P; p should be small and closed so that r2b p reduces efficiently.",
+        "guidance": "Implement Ltac-based reifiers (env_form/reify examples) to build environment and AST; consider sharing/subterm reuse to avoid duplication; focus on making r2b correct and its reduction efficient to avoid large proof-terms and slow checking."
+      },
+      {
+        "name": "Use re\ufb02exive tactics for finite-state/decidable domains (e.g., board example)",
+        "description": "For problems with finite (but large) state spaces such as 'board' states, design re\ufb02exive tactics that decide \u2200b : board, P(b) by reifying states and implementing decision procedures over the finite domain.",
+        "guidance": "Exploit the decidability and finite character of the domain; invariants and move relations can be encoded and checked by the reflective tactic, enabling full automation for such domains."
+      },
+      {
+        "name": "Choose coarse-grained verification strategy: automated provers vs interactive assistants",
+        "description": "Automated first-order provers/SMT tools are powerful and automatic but may fail or produce questionable traces; proof assistants are interactive, require more expertise/time, but can be more reliable and expressive (e.g., higher-order, dependent types).",
+        "guidance": "Decide based on task: use automated provers for many goals, and fall back to interactive proofs for remaining ones. Prefer proof assistants when you need high assurance, modeling of complex theories, or to avoid inconsistent contexts (you can build models)."
+      },
+      {
+        "name": "Integrate multiple provers via a platform (Why3) when appropriate",
+        "description": "Use platforms like Why3 to describe problems in a high-level logic and translate them to multiple provers (SMT, ATPs) and proof assistants, enabling you to try many tools and focus interactive effort on unsolved goals.",
+        "guidance": "Why3 is useful as a back-end for verification pipelines (e.g., Frama-C). Use automatic provers where they succeed; when they fail, switch to interactive proofs in Coq. Prefer toolchains that produce checkable traces that Coq can verify."
+      },
+      {
+        "name": "Trust and consistency considerations when using external provers",
+        "description": "External automated tools may have bugs or you may have inconsistent modeling/theory, so even successful automated proofs require trust considerations.",
+        "guidance": "When using external solvers, prefer tools that produce traces that can be checked by Coq, or re-prove/verify crucial facts inside Coq. Build models to avoid pitfalls of inconsistent contexts and minimize the trusted code base."
+      },
+      {
+        "name": "Use extraction to obtain executable code (remove proof parts)",
+        "description": "Coq's extraction mechanism removes the parts of programs related to logical proofs and converts the resulting term into equivalent Ocaml/Haskell code.",
+        "guidance": "When the goal is an executable program, structure developments so the computational content is separable from proofs and use Extraction to obtain efficient code; be mindful that proof-terms may have been present during development but are not part of the extracted runtime."
+      },
+      {
+        "name": "Performance: optimize reduction and proof-term checking",
+        "description": "Reflection and heavy computation during type-checking require efficient reduction mechanisms (e.g., byte-code compilation, machine integers, primitive arrays).",
+        "guidance": "To make reflective tactics and large computations feasible, leverage Coq improvements (byte-code, machine integers) and design algorithms to minimize expensive reductions and large proof-terms. Consider efficiency when designing r2b and reification."
+      },
+      {
+        "name": "Select a proof assistant based on logic, features and practical constraints",
+        "description": "Choose a proof assistant (Coq, Isabelle/HOL, PVS, HOL) based on ideological (classical vs intuitionistic), technical (dependent types), trust base, and practical reasons (existing libraries, team expertise, community).",
+        "guidance": "Assess whether you need dependent types, particular libraries, local expertise, or integration with existing tooling. Biodiversity is healthy; pick the tool that best matches your requirements and available resources."
+      }
+    ]
+  }
+}

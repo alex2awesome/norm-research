@@ -1,0 +1,200 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 13,
+  "n_chunks": 31,
+  "chunk_chars": 39754,
+  "model": "gpt-5-mini",
+  "elapsed_s": 265.47929891700187,
+  "input_tokens": 16395,
+  "output_tokens": 9079,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "advanced users of PARI/GP: computational number theorists and mathematicians implementing modular-symbols, p-adic L-functions, and number-field calculations",
+    "subtask_short": "PARI/GP modular-symbols reference",
+    "subtask_description": "Reference documentation for PARI/GP functions implementing L-functions, modular symbols, p-adic objects, and general number-field data structures; describes input formats, preconditions, outputs, and algorithmic/precision notes. Useful for developers and researchers using PARI/GP for advanced computations in analytic and algebraic number theory.",
+    "subtask_keywords": [
+      "pari_gp",
+      "modular_symbols",
+      "p-adic_L_functions",
+      "number_fields",
+      "software_documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "lfunthetainit: tdom default and allowed forms",
+        "description": "Initialization for evaluating m-th derivative of theta functions with argument t in domain tdom; by default (tdom omitted) t is real, t \u2265 1. tdom may be: (1) a positive real scalar \u03c1: t is real, t \u2265 \u03c1; (2) a non-real complex number: compute at this particular t; (3) a pair [\u03c1, \u03b1]: assume |t| \u2265 \u03c1 and |arg t| \u2264 \u03b1.",
+        "guidance": "When tdom is a non-real complex number, the initialization allows computing \u03b8(z) for any complex z satisfying |z| \u2265 |t| and |arg z| \u2264 |arg t|; must have |2 arg z/d| < \u03c0/2 where d is the degree of the \u0393 factor. For the pair [\u03c1,\u03b1] one must have |2\u03b1/d| < \u03c0/2. The initialization is equivalent to giving [abs(t), arg(t)]. Use the library syntax lfunthetainit(L, {tdom}, {m = 0})."
+      },
+      {
+        "name": "lfunthetainit: domain error conditions",
+        "description": "The function enforces argument/angle domain constraints and will raise domain errors (e.g., 'arg t > 0.785398163397448') if constraints are violated.",
+        "guidance": "If you need to compute outside the default cone, initialize with an appropriate tdom (complex number or [\u03c1,\u03b1]) respecting |2\u03b1/d| < \u03c0/2. When encountering domain errors, consider reinitializing with a different tdom."
+      },
+      {
+        "name": "lfunzeros: acceptable lim argument and output",
+        "description": "lim must be either a positive upper limit or a non-empty real interval inside [0,+\u221e[; the function computes an ordered list of zeros of L(s) on the critical line up to the given upper limit or in the given interval.",
+        "guidance": "Call format lfunzeros(L, lim, {divz = 8}). To count zeros in an interval pass lim as [low,high] and use #lfunzeros for the number. The function returns zeros ordered by increasing imaginary part."
+      },
+      {
+        "name": "lfunzeros: naive algorithm assumptions and limitations",
+        "description": "Uses a naive algorithm which may miss zeros: it assumes that two consecutive zeros at height T \u2265 1 differ by at least 2\u03c0/\u03c9 where \u03c9 := divz \u00b7 (d log(T/2\u03c0) + d + 2 log(N/(\u03c0/2)^d) ) (expression in text).",
+        "guidance": "To use a finer search mesh, increase divz above the default (= 8). Be aware the algorithm may miss zeros if spacing is smaller than the assumed bound."
+      },
+      {
+        "name": "lfunzeros: assumptions on multiplicity and poles",
+        "description": "Algorithm assumes all zeros are simple except possibly on the real axis at s = k/2, and that there are no poles in the search interval. The possible zero at s = k/2 is repeated according to its multiplicity.",
+        "guidance": "If you expect multiple zeros/poles in the interval, handle them specially (e.g., use lfunorderzero) and ensure Linit supports required derivative orders."
+      },
+      {
+        "name": "lfunzeros: Linit requirement for reliable detection near upper bound",
+        "description": "If passing an Linit argument, the algorithm needs at least L = lfuninit(Ldata, T+1) where T is the upper bound of lim: this allows detection of zeros near T. Ensure your Linit domain contains this one.",
+        "guidance": "Increase the derivation order in Linit if searching for zeros that might be multiple, but note it is costly \u2014 only increase for low-height zeros or when using lfunorderzero."
+      },
+      {
+        "name": "msinit: supported groups, representations and sign argument",
+        "description": "msinit(G, V, {sign = 0}) creates a full modular symbol space. Currently only supports groups \u03930(N) coded by integer N > 1, and representations Vk = Q[X,Y]^{k\u22122} coded by integer k \u2265 2. If sign is present and non-zero it must be \u00b11 and selects the \u00b1-subspace via Ker(\u03c3 \u2212 sign).",
+        "guidance": "When constructing modular symbol spaces, supply G as integer N>1 and V as integer k\u22652. The function returns an ms structure encoding generators, relations, and basis for computations."
+      },
+      {
+        "name": "msatkinlehner: input preconditions",
+        "description": "msatkinlehner(M, Q, {H}) requires M to be a full modular symbol space as given by msinit, Q | N with (Q, N/Q) = 1, and H (if provided) must be a subspace stable under the Atkin-Lehner involution w_Q.",
+        "guidance": "If H is omitted the involution is computed on M. The function returns the matrix of w_Q acting on H (or M). Verify H stability beforehand."
+      },
+      {
+        "name": "mscuspidal / mseisenstein: outputs and flag meaning",
+        "description": "mscuspidal(M, {flag = 0}) returns the cuspidal part S of a full modular symbol space M; if flag = 1 returns [S, E] the decomposition into cuspidal and Eisenstein parts. mseisenstein(M) returns the Eisenstein subspace (same basis as mscuspidal(M,1)[2]).",
+        "guidance": "Subspaces are returned as structures whose first component is a matrix with integer coefficients whose columns form a Q-basis of the subspace. Use flag=1 when you need both parts."
+      },
+      {
+        "name": "mseval: symbol and path input formats",
+        "description": "mseval(M, s, {p}) expects M a full modular symbol space, s a modular symbol in M, and p = [a,b] \u2208 \u2206 a path between two elements in P1(Q); path extremities may be t_INT, t_FRAC or oo. If p is omitted, s is converted to a vector of s(gi).",
+        "guidance": "The symbol s can be (i) a t_COL coding an element in terms of the fixed basis of HomG(\u2206,V) chosen in M, or (ii) a t_VEC (vi) where vi = s(gi) giving images of chosen generators. If providing a t_VEC, ensure the vi satisfy mspathgens relations (i.e., s is a proper symbol). Returned polynomials are de-homogenized (y=1)."
+      },
+      {
+        "name": "msfromcusp: cusp input forms and sign behavior",
+        "description": "msfromcusp(M, c) returns the modular symbol attached to the cusp c (given as oo or a rational a/b). These symbols span the Eisenstein subspace. If M was initialized with a non-zero sign, the symbol is given in terms of the fixed basis of the whole symbol space, not necessarily the \u00b1 part.",
+        "guidance": "Use msfromcusp to obtain canonical Eisenstein symbols; be aware of the basis used when M was initialized with sign \u2260 0."
+      },
+      {
+        "name": "msfromell: normalization conditions and existence",
+        "description": "msfromell(E, {sign = 0}) returns modular symbols x\u00b1 attached to an elliptic curve E/Q of conductor N normalized by periods \u2126+ and \u2126\u2212 so that F = x+\u2126+ + x\u2212i\u2126\u2212. The symbols x\u00b1 are defined unless L(E,1) = 0 (x\u00b1 determined by x+([0]\u2212[\u221e]) = L(E,1)/\u2126+).",
+        "guidance": "When requesting a single sign (sign = \u00b11) you get x_sign; sign = 0 returns [x+, x\u2212]. The symbols are given as t_COL in the fixed basis of HomG(\u2206,Q) chosen in M. If L(E,1)=0 some normalizations may fail."
+      },
+      {
+        "name": "msfromhecke: input vector format and restrictions",
+        "description": "msfromhecke(M, v, {H}) expects v a vector of pairs [p, P] where p is prime and P a polynomial with integer coefficients; returns basis of modular symbols s such that P(T_p)(s) = 0. If H present, restrict to s \u2208 H. When T_p has rational eigenvalue and P(x)=x\u2212a_p (degree 1) one may pass integer a_p instead of polynomial P.",
+        "guidance": "Use this to locate symbols with prescribed Hecke eigen-relations. If using integer a_p ensure you understand which eigenvalue is intended and whether H restriction applies."
+      },
+      {
+        "name": "mshecke: domain and stability requirement",
+        "description": "mshecke(M, p, {H}) returns matrix of T_p acting on H (or M if omitted); if p divides N it returns U_p. Result is undefined if H is not stable by T_p (resp. U_p).",
+        "guidance": "Always pass an H that is Hecke-stable under the operator you intend to compute. Use mshecke(M,p, N) where N is msnew(M) or a Hecke-stable subspace to compute action on new subspaces."
+      },
+      {
+        "name": "msgetlevel / msgetsign / msgetweight: property accessors",
+        "description": "msgetlevel(M), msgetsign(M), msgetweight(M) return the level N, sign (\u00b11 or 0 unset), and weight k respectively for a full modular symbol space M as returned by msinit.",
+        "guidance": "Use these accessors to inspect msinit-created spaces; they are simple read-only queries on the ms structure."
+      },
+      {
+        "name": "msissymbol: correctness test for symbol vectors",
+        "description": "msissymbol(M, s) checks whether s is a modular symbol attached to M (i.e., whether it satisfies the relations among the generators).",
+        "guidance": "You can test both t_COL and t_VEC representations; perturbing the values to violate relations will cause msissymbol to return 0. Use mspathgens to inspect the relations you must satisfy."
+      },
+      {
+        "name": "msnew / msqexpansion / mssplit: newspace and expansion workflow",
+        "description": "msnew(M) returns the new part of the cuspidal subspace. msqexpansion(M, projH, {B = seriesprecision}) returns Fourier coefficients a_n, n \u2264 B, of the normalized newform attached to projector projH on a Hecke-simple subspace; the shortcut msqexpansion(M, s, B) accepts s a Hecke eigenvector. mssplit(M, H, {dimlim}) splits H into Hecke-simple subspaces.",
+        "guidance": "msqexpansion uses a naive O(B^2 d^3) algorithm with d = O(kN). Use mssplit to obtain Hecke-simple projectors or eigenvectors, optionally restricting to subspaces of dimension \u2264 dimlim. For eigenvector input s ensure it is Hecke eigenvector for the shortcut."
+      },
+      {
+        "name": "msomseval / mspadicL / mspadicseries: p-adic pipeline inputs and outputs",
+        "description": "mspadicinit(M,p,n,{flag}) initializes overconvergent-modular-symbol technical data modulo p^n. mstooms(Mp,phi) lifts a classical eigen symbol to an overconvergent eigensymbol PHI. mspadicmoments(Mp,PHI,{D=1}) computes the distribution \u00b5 = PHID([0]\u2212[\u221e])|Z_p^* (moments). mspadicL(mu,{s=0},{r=0}) returns value (or r-th derivative) of the p-adic L-function on character \u03c7_s. mspadicseries(mu,{i=0}) returns the p-adic power series expansion.",
+        "guidance": "Follow the chain: msinit \u2192 mspadicinit \u2192 mstooms \u2192 mspadicmoments \u2192 mspadicL/mspadicseries. mu must come from mspadicmoments; PHI should be an overconvergent symbol from mstooms (supplying a classical symbol will be lifted but wasteful if many twists are needed). Use mspadicseries to get a power series whose p-adic precision is maximal given \u00b5 precision."
+      },
+      {
+        "name": "mspadicL: character encoding and value-space behavior",
+        "description": "In mspadicL(mu, s, r) the character s = [s1,s2] encodes \u03c7_s := \u03c7^{s1} \u03c4^{s2} (cyclotomic and Teichm\u00fcller parts); s may also be passed as integer for convenience. When a_p is a p-adic unit L_p takes values in Q_p; when a_p is not a unit it takes values in the two-dimensional Q_p-vector space D_cris(M(\u03c6)) and the function returns two p-adic components with respect to a fixed basis.",
+        "guidance": "Choose s according to the described encoding. Be aware that non-unit a_p leads to vector-valued outputs; interpret components as coordinates in D_cris(M(\u03c6))."
+      },
+      {
+        "name": "mspadicinit: flag semantics, restrictions and memory cost",
+        "description": "mspadicinit(M,p,n,{flag}) initializes data to compute with overconvergent symbols modulo p^n. If flag is unset it allows all symbols; if flag = 0 restrict to ordinary symbols; if flag > 0 restrict to symbols \u03c6 with v_p(a_p) \u2265 flag (faster as flag increases). For supersingular eigensymbols (p | a_p) must assume p does not divide the level. Memory usage is O(N^2 (n+k)^2 p) where N is the level of M.",
+        "guidance": "Use flag=0 for fastest initialization if you only need ordinary symbols. If vp(a_p) for your symbol violates the chosen flag you will get errors later (e.g., in mstooms). Ensure p \u2224 N for supersingular cases and plan memory accordingly."
+      },
+      {
+        "name": "mstooms: lifting preconditions and case distinctions",
+        "description": "mstooms(Mp, phi) lifts a classical eigen symbol \u03c6 (eigenvector for T_N(p) with non-zero a_p and v_p(N) \u2264 1) to a p-adic overconvergent eigensymbol \u03a6. If p \u2224 N and a_p divisible by p, returns the lift \u03a6 of (\u03c6, \u03c6|_k V_p) such that T_{N0}(p) \u03a6 = C_p \u03a6. If p \u2224 N and a_p not divisible by p, returns the unit-eigenvalue lift of \u03c6\u2212\u03b1^{\u22121} \u03c6|_k V_p where \u03b1 solves \u03b1^2 \u2212 a_p \u03b1 + p^{k\u22121} = 0.",
+        "guidance": "Ensure \u03c6 satisfies the eigen and valuation hypotheses and that mspadicinit was called with a flag allowing v_p(a_p) (otherwise mstooms will error). Choose appropriate Mp initialization (flag, precision) before lifting."
+      },
+      {
+        "name": "mspadicmoments: inputs and twist parameter",
+        "description": "mspadicmoments(Mp, PHI, {D = 1}) computes the moments of the p\u22121 distributions PHID([0]\u2212[\u221e])|(a+pZ_p) for 0 < a < p, given Mp from mspadicinit and an overconvergent eigensymbol PHI from mstooms. PHI may be given as a classical symbol and will be lifted internally.",
+        "guidance": "If you need many twists, lift once to an overconvergent symbol and reuse; if you pass classical symbol each call will lift again (wasteful). The returned mu feeds mspadicL and mspadicseries for fast evaluation of derivatives and values."
+      },
+      {
+        "name": "mspadicseries: precision and parameters",
+        "description": "mspadicseries(mu, {i = 0}) returns the power series \u02c6L_p(\u00b5, \u03c4^i)(x) = \u222b_{Z_p^*} \u03c4^i(t) (1+x)^{log_p(t)/log_p(u)} d\u00b5(t). The p-adic precision of individual terms is maximal given the precision of the overconvergent symbol \u00b5.",
+        "guidance": "Use the optional parameter i to select Teichm\u00fcller twists. Expect the output precision to be limited by the input \u00b5 precision; for higher precision re-compute \u00b5 with higher mspadicinit precision."
+      },
+      {
+        "name": "msomseval: inputs and purpose",
+        "description": "msomseval(Mp, PHI, path) returns vectors of moments of the p-adic distribution attached to the path by the overconvergent modular symbol PHI, given Mp computed by mspadicinit.",
+        "guidance": "Use this to extract moment data attached to specific paths; ensure PHI is an overconvergent eigensymbol (from mstooms) and path is in the valid path format [a,b]."
+      },
+      {
+        "name": "mspathgens: generators, relations and output format",
+        "description": "mspathgens(M) returns [g,R] where g is a minimal system of Z[G]-generators for \u2206 = Div0(P1(Q)) and R the vector of Z[G]-relations between them. Relations are coded by vectors of pairs [a_i, i] with a_i \u2208 Z[G] and i the index of a generator.",
+        "guidance": "The output depends only on the group G (not the representation V). Use mspathgens to inspect relations (e.g., number of relations, structure, torsion) that symbols must satisfy."
+      },
+      {
+        "name": "mspathlog: path decomposition into generator coefficients",
+        "description": "mspathlog(M, p) returns (p_i) in Z[G] such that the path p = \u03a3_i p_i g_i using the fixed generators g_i of \u2206 encoded in M.",
+        "guidance": "Output depends only on G, not V. Use to express arbitrary paths in terms of chosen generators, useful for verifying symbol evaluations or reconstructing symbols from values."
+      },
+      {
+        "name": "msstar: complex-conjugation involution",
+        "description": "msstar(M, {H}) returns the matrix of the * involution induced by complex conjugation acting on the (stable) subspace H (or M if omitted).",
+        "guidance": "The returned involution squares to identity; verify for correctness (w^2 == 1). Use to access \u00b1 decompositions or study Galois action under conjugation."
+      },
+      {
+        "name": "number-field structures: nf, bnf, bnr distinctions",
+        "description": "Three basic number-field structures: nf (output by nfinit) contains signature, maximal order basis nf.zk, discriminant, defining polynomial, etc.; bnf (output by bnfinit) contains nf plus deeper invariants (units U(K), class group Cl(K), and technical data for discrete log problems); bnr (output by bnrinit) corresponds to ray class group data for a modulus f and contains a bnf plus modulus and ray class group Cl_f(K).",
+        "guidance": "Use the appropriate init routine (nfinit, bnfinit, bnrinit) based on the depth of invariants and operations you need (basic arithmetic vs class field computations)."
+      },
+      {
+        "name": "algebraic number and ideal input formats",
+        "description": "An algebraic number in K = Q[X]/(T) may be given as a t_INT, t_FRAC, t_POL (mod T), t_POLMOD, or a t_COL vector in the integral basis. An ideal may be given as (i) an algebraic number (principal ideal), (ii) a prime ideal 5-component vector from idealprimedec or idealfactor, (iii) a t_MAT square in HNF (preferred), whose columns are a Z-basis, or (iv) an extended ideal [I,t] representing (t)I.",
+        "guidance": "Prefer HNF matrix format for ideals; use idealhnf to convert. Use extended ideals [I,t] to keep track of principal factors in class-group computations. For factorized principal parts use famat to avoid coefficient explosion and nffactorback to expand when needed."
+      },
+      {
+        "name": "finite-abelian-group input conventions and characters",
+        "description": "Finite abelian groups are represented by their Smith Normal Form [h,d] or [h,d,g] with elementary divisors (d_i) and generators (g_i). A character on \u2295 (Z/d_j Z) g_j is given by a row vector \u03c7 = [a1,...,an] with \u03c7(\u2295 g_j^{n_j}) = exp(2\u03c0 i \u03a3 a_j n_j / d_j). Subgroups are input as square HNF matrices whose columns express subgroup generators in the given generators.",
+        "guidance": "Follow the Smith-normal-form conventions to build groups and characters; determinants of subgroup matrices equal the index (G:H)."
+      },
+      {
+        "name": "relative-extensions and pseudo-matrix formats",
+        "description": "For relative extensions L/K, use rnfinit to get rnf structures (rnf.nf is the base nf). Relative matrices are m\u00d7n with entries in K; an ideal list is a row vector of fractional ideals. A pseudo-matrix (A,I) with A a relative matrix and I an ideal list defines a torsion-free projective Z_K-module. Integral pseudo-matrices w(A,I,J) represent modules with torsion and maps between modules.",
+        "guidance": "When defining relative extensions ensure the variable naming has correct priority (base field variable lower priority than extension variable). Use pseudo-matrices/pseudo-bases to represent modules succinctly and avoid expanding large coefficients."
+      },
+      {
+        "name": "pseudo-basis and determinant conventions",
+        "description": "The pair (A,I) is a pseudo-basis if aj are non-zero and columns A_j are K-linearly independent; size is n. If A is square with non-zero determinant it is a pseudo-basis; HNF means upper triangular with diagonal entries equal to 1. The determinant of a pseudo-basis (A,I) is the ideal equal to det(A) times the product of ideals in I; determinant of a pseudo-matrix is determinant of any pseudo-basis of the module it generates.",
+        "guidance": "Use these conventions when constructing/checking modules and computing module determinants; many rnf routines return modules in pseudo-basis form (rnf.zk etc.)."
+      },
+      {
+        "name": "class-field-theory inputs: modulus, bid, and bnr construction",
+        "description": "A modulus in class-field sense is either an ideal I or a pair [I,a] where a indicates infinite part via a vector with r1 {0,1}-components. A 'bid' (big ideal) structure from idealstar is used to compute in (Z_K/I)^*. bnr inputs may be given in various forms [bnr], [bnr, subgroup], [bnr, character], or older forms [bnf, mod] etc.; the bnr is the subfield of the ray class field fixed by the given subgroup.",
+        "guidance": "When building class fields use bnrinit, and supply subgroup matrices in the ray class group format when restricting to subextensions. Use the modern [bnr,...] forms; older [bnf,mod] forms are maintained for compatibility but are less relevant."
+      },
+      {
+        "name": "general-use naming/prefix convention",
+        "description": "Functions specific to relative extensions, number fields, Buchmann's number fields, and Buchmann ray class fields share prefixes rnf, nf, bnf, and bnr respectively and take the corresponding type as first argument (rnfinit, nfinit, bnfinit, bnrinit outputs).",
+        "guidance": "Always pass the precise structure type expected by the prefix; mixing types will lead to incorrect behavior or errors. This convention helps locate the correct routines for a given object type."
+      }
+    ]
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 80,
+  "n_chunks": 92,
+  "chunk_chars": 39415,
+  "model": "gpt-5-mini",
+  "elapsed_s": 510.5382375420013,
+  "input_tokens": 10994,
+  "output_tokens": 6121,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP package authors and maintainers",
+    "subtask_short": "releasing_gap_packages",
+    "subtask_description": "Guidelines and checklists for developing, testing, packaging, releasing and upgrading GAP packages so they integrate well with the GAP distribution and test infrastructure. Covers tests, loading compatibility, documentation, licensing, archives, hosting and release/update checklists.",
+    "subtask_keywords": [
+      "gap",
+      "package",
+      "release",
+      "testing",
+      "documentation",
+      "packaging"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Organisation of tests in tst directory",
+        "description": "The (optional) tst directory of your package may contain as many tests of the package functionality as appears appropriate. These tests should be organised into test files similarly to those in the tst directory of the GAP distribution as documented in 7.10.",
+        "guidance": "Follow the structure and conventions used in GAP's own tst directory (see 7.10). Organise tests into files rather than ad-hoc scripts so they integrate with GAP's testing tooling and can be selected/collected easily."
+      },
+      {
+        "name": "Provide a basic TestFile in PackageInfo.g for deposited packages",
+        "description": "For a deposited package, a test file with a basic test of the package may be specified in the component TestFile in the PackageInfo.g to be included in the GAP standard test suite. This file can either consist of calls of TestDirectory or Test (commonly called testall.g) or be itself a .tst file to be read via Test.",
+        "guidance": "If using a .tst file, it is assumed to be such a file iff it contains the substring \"gap> START_TEST(\" (with exactly one space after the GAP prompt). Choose a single test entrypoint that the GAP Group can run as part of the standard test suite."
+      },
+      {
+        "name": "Minimise output from tests in the GAP standard test suite",
+        "description": "For the efficient testing it is important that the test specified in the PackageInfo.g file does not display any output (e.g. no test progress indicators) except reporting discrepancies if such occur and the completion report.",
+        "guidance": "Tests included in the standard suite should only print failures/discrepancies and a short completion report (example: 'Example package: testall.tst' then 'true'). Do not print verbose progress messages which hinder automated test parsing."
+      },
+      {
+        "name": "Avoid long-running/verbose tests in the standard suite",
+        "description": "Tests which produce extended output and/or require substantial runtime are not supposed to be a part of the GAP standard test suite but may be placed in the tst directory of the packages with further instructions on how to run them elsewhere.",
+        "guidance": "Put heavy or verbose tests outside the standard suite and provide clear instructions on how to run them manually (e.g., separate scripts or a README)."
+      },
+      {
+        "name": "Make test outcomes machine-detectable (exit behavior)",
+        "description": "Automated detection works fine if a package uses a single .tst file or uses TestDirectory with the exitGAP option set to true to run a collection of tests and then exits GAP in a way that allows an automated test setup to determine whether the test passed or failed.",
+        "guidance": "Use TestDirectory(..., rec(exitGAP := true)) or end sophisticated test files with ForceQuitGap(argument) where the argument is true for pass and false/fail for fail (e.g., ForceQuitGap(testresult)). This ensures CI and automated scripts can detect pass/fail status."
+      },
+      {
+        "name": "Test package loading in multiple GAP configurations",
+        "description": "To test that your package may be loaded into GAP without any problems and conflicts with other packages, test that it may be loaded in various configurations.",
+        "guidance": "At minimum test: starting GAP with no packages (-r -A) and calling LoadPackage(\"packagename\"); with OnlyNeeded; starting GAP in default configuration with/without OnlyNeeded; and loading together with all other packages via LoadAllPackages. Repeat tests in separate fresh GAP sessions."
+      },
+      {
+        "name": "Test loading with all packages to detect subtle incompatibilities",
+        "description": "The test of loading all packages is the most subtle one. Quite often it reveals problems which do not occur in the default configuration but may cause difficulties to the users of specialised packages.",
+        "guidance": "Use LoadAllPackages(: reversed) to vary load order for testing. Note: LoadAllPackages is a technical function for compatibility checks and should NOT be used to run anything except tests (it slows GAP and is for testing only)."
+      },
+      {
+        "name": "Check package-created global variables and naming conventions",
+        "description": "Use ShowPackageVariables to see information about variables created by your package to check if any have either short names (no more than three characters) or names breaking a recommended naming convention that the GAP core system. GAP packages also should not use global variables starting in the lowercase.",
+        "guidance": "Ensure package globals follow recommended naming conventions (avoid very short names and avoid globals starting with lowercase). Review variable lists and rename as needed to avoid collisions and maintain readability/consistency."
+      },
+      {
+        "name": "Report loading problems via logging API instead of direct prints",
+        "description": "Packages loading mechanism allows to make loading packages more informative, while avoiding confusing the user with warning and error messages for packages they didn\u2019t know they were loading. For example, many messages are stored but not displayed using the function LogPackageLoadingMessage and there is a function DisplayPackageLoadingLog to show log messages that occur during package loading.",
+        "guidance": "Use LogPackageLoadingMessage during package loading to record issues (e.g., binaries not compiled) and rely on DisplayPackageLoadingLog to present them. Do not print messages directly during loading which may confuse users."
+      },
+      {
+        "name": "Host package in a public repository and enable CI",
+        "description": "We welcome establishing public repositories for new packages and migrating existing package repositories there. The gap-packages organisation can host repositories. GAP developers may help to set up continuous integration so that every commit triggers automated running of package tests and reporting any failures to package maintainers.",
+        "guidance": "Provide a public GitHub (or similar) repository and issue tracker; configure CI to run your test suite on every commit and surface failures to maintainers. This increases visibility and helps maintainers and contributors."
+      },
+      {
+        "name": "State and include an explicit license (include LICENSE file)",
+        "description": "It is advised to make clear in the documentation of the package the basis on which it is being distributed to users. We would encourage you to consider the GPL license for your packages ... We now advise to be more explicit by making the exact reference to the GPL license, for example: 'packagename is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License ...' and also including a copy of the full text of the license.",
+        "guidance": "Include a LICENSE file with full license text and a clear statement in the documentation referencing the exact license and version/terms. Avoid vague statements like 'We adopt the copyright regulations of GAP...' \u2014 be explicit."
+      },
+      {
+        "name": "Provide archives in standard formats and archive from pkg directory",
+        "description": "The GAP distribution provides archives in several different formats (.tar.gz, .tar.bz2, .zip). Because the release of the GAP package is independent of the version of GAP, a GAP package should be wrapped up in separate file that can be installed onto any version of GAP. To ensure this, the package should be archived from the GAP pkg directory, that is all files are archived with the path starting at the package\u2019s name.",
+        "guidance": "Provide at least one of the standard archive formats. Create archives so paths begin at the package name (tar from pkg directory). For .zip ensure UNIX-style line breaks in text files if required."
+      },
+      {
+        "name": "Include compiled documentation files in the package archive",
+        "description": "The archive of a GAP package should contain all files necessary for the package to work. In particular there should be a compiled documentation, which includes the manual.six, manual.toc and manual.lab file in the documentation subdirectory which are created by GAPDoc while TEXing the documentation.",
+        "guidance": "Include compiled documentation (manual.six, manual.toc, manual.lab) in documentation/; use GAPDocManualLab(packagename) to create manual.lab if you use GAPDoc. Include source documentation as well so users and the help system can access it."
+      },
+      {
+        "name": "Do not rely on file timestamps in archives",
+        "description": "Note that wrapping the GAP distribution as a single archive containing the core system and all currently redistributed packages, will change file timestamps, so one should not rely on them anywhere in the package.",
+        "guidance": "Avoid build or runtime logic that depends on file modification timestamps inside the archive; use explicit version metadata instead."
+      },
+      {
+        "name": "Set correct permissions and line breaks; exclude VCS/hidden files",
+        "description": "Package archives: have correct permissions for all files and directories after their unpacking (755 for directories and executables, if any; 644 for other files); contain files with correct line breaks for the given format; contain no hidden system files and directories that are not supposed to be included in the package, e.g. .gitignore, .git etc.",
+        "guidance": "Ensure archive contents have appropriate permissions when extracted. Normalize line endings according to archive type (especially for .zip). Exclude version-control metadata and editor temp files from the distributed archive."
+      },
+      {
+        "name": "Maintain a package homepage with README and PackageInfo.g",
+        "description": "If you want to distribute your package you should create its homepage containing some basic information, archives for download, the README file with installation instructions, and a copy of the package\u2019s PackageInfo.g file. The responsibility to maintain this homepage is with the package authors/maintainers.",
+        "guidance": "Keep an up-to-date homepage or repository landing page with downloads, README/installation, and PackageInfo.g. Notify the GAP Group if you want the package linked from the GAP website or considered for redistribution."
+      },
+      {
+        "name": "Documentation must match PackageInfo.g metadata and be searchable",
+        "description": "Package documentation: is built and included in the package archive together with its source files; states the same version, release date and package authors as specified in the PackageInfo.g file; is searchable using the GAP help system in all formats (text, HTML and PDF); is clear about the license under which the package is distributed, and refers to the LICENSE file which should be included in the package.",
+        "guidance": "Keep documentation metadata (version/date/authors) synchronized with PackageInfo.g. Ensure help-system integration by including the necessary compiled help files and formats so users can search the package manual from GAP."
+      },
+      {
+        "name": "Prefer GAPDoc (and AutoDoc) for new documentation",
+        "description": "Some packages still use the old 'gapmacro' format, support for which may be discontinued in the future. We encourage authors of those packages to eventually convert their documentation to GAPDoc. New packages are recommended to use GAPDoc, which, for example, is capable of creating HTML documentation with MathJax support, allows easy extraction of examples from documentation for testing, etc. One could also use the AutoDoc which simplifies writing documentation by generating most of the GAPDoc code automatically.",
+        "guidance": "Use GAPDoc for maintainable, testable and web-friendly documentation; consider AutoDoc for reducing authoring overhead. GAPDoc allows extraction of examples for inclusion in tests and supports MathJax."
+      },
+      {
+        "name": "Mention non-standard installation locations in install instructions",
+        "description": "Optional ~/.gap directory for user\u2019s customisations which may contain e.g. locally installed packages. If package installation instructions explain how to install the package in a non-standard location, they should mention this.",
+        "guidance": "Document how to install to non-standard locations (e.g., user's ~/.gap) and how that interacts with GAP startup/configuration so users can install locally if needed."
+      },
+      {
+        "name": "PackageInfo.g: accurate metadata and validation",
+        "description": "PackageInfo.g file: correctly specifies package version, release date, and package authors; passes validation using ValidatePackageInfo; besides mandatory components, also has relevant optional components (such as URLs of public source code repository and issue tracker; hints to distinguish binary and text files in case of non-standard file names and extensions, etc.).",
+        "guidance": "Ensure PackageInfo.g validates with ValidatePackageInfo. Provide helpful optional fields like repo and issue tracker URLs and hints for non-standard file types to assist GAP maintainers and automated tooling."
+      },
+      {
+        "name": "Make package and metadata available online",
+        "description": "Package availability: not only the package archive(s), but also the PackageInfo.g and README files are available online.",
+        "guidance": "Host download archives, PackageInfo.g and README on your homepage or public repository so users and the GAP Group can access installation instructions and metadata without unpacking the archive."
+      },
+      {
+        "name": "Checklist for upgrading packages for the next major GAP release",
+        "description": "When the next GAP major release is prepared, package authors will be given a beta version. The checklist helps check how well your package is ready to work with the next major release of GAP.",
+        "guidance": "Actions to take: check functionality and tests run with no discrepancies and manual examples correspond to the new GAP version; revise package dependencies in PackageInfo.g (needed/suggested); revise licensing information and include LICENSING file; rebuild documentation to update cross-references; check reliance on obsolete variables by starting GAP with -O to disable obsoletes; check for specific advice in beta release notes. Use this checklist to prepare for the major release."
+      }
+    ]
+  }
+}

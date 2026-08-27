@@ -1,0 +1,250 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 30,
+  "n_chunks": 42,
+  "chunk_chars": 39996,
+  "model": "gpt-5-mini",
+  "elapsed_s": 213.54154199999903,
+  "input_tokens": 17465,
+  "output_tokens": 8025,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX / plain-TeX users, macro writers, and typesetters implementing or customizing plain.tex",
+    "subtask_short": "plain_TeX_macro_reference",
+    "subtask_description": "Reference and usage guidance for plain TeX control sequences and macros (appendices covering boxes, tabbing, paragraph shapes, math constructions, delimiters, displays, output routine, hyphenation, and character codes). Intended to guide writing or modifying TeX macros and documents.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "macro_reference",
+      "typesetting",
+      "math_macros"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Box-producing macros and zero-width boxes",
+        "description": "Macros \\line, \\leftline, \\rightline and \\centerline produce boxes of the full line width, while \\llap and \\rlap make boxes whose effective width is zero.",
+        "guidance": "Definitions: \\def\\line{\\hbox to\\hsize}, \\def\\leftline#1{\\line{#1\\hss}}, \\def\\rightline#1{\\line{\\hss#1}}, \\def\\centerline#1{\\line{\\hss#1\\hss}}, \\def\\llap#1{\\hbox to0pt{\\hss#1}}, \\def\\rlap#1{\\hbox to0pt{#1\\hss}}."
+      },
+      {
+        "name": "\\underbar uses math mode",
+        "description": "The \\underbar macro puts its argument into an hbox with a straight line at a fixed distance under it and does this by using math mode.",
+        "guidance": "Implementation uses math mode (\\m@th and \\underline) even though operation is non-mathematical in nature; several other macros similarly use math mode, so TeX's math mechanisms are useful outside pure math typesetting. Be aware of mathsurround interactions."
+      },
+      {
+        "name": "Turn off \\mathsurround with \\m@th",
+        "description": "Special control sequence \\m@th sets mathsurround=0 to 'turn off' mathsurround when performing constructions in math mode used for non-mathematical purposes.",
+        "guidance": "Use \\m@th inside macros that momentarily enter math mode to avoid unwanted surrounding space."
+      },
+      {
+        "name": "Strut implementation and alignment-first-entry safety",
+        "description": "A \\strut is implemented as a rule of width zero (a stored box \\strutbox), and some macros include a :\\relax) to handle the case when \\strut appears first in an alignment entry because TeX is in an unpredictable mode at such times.",
+        "guidance": "Definition: \\newbox\\strutbox; \\setbox\\strutbox=\\hbox{\\vrule height8.5pt depth3.5pt width0pt}; \\def\\strut{\\relax\\ifmmode\\copy\\strutbox\\else\\unhcopy\\strutbox\\fi}. The leading \\relax prevents trouble in certain contexts (alignments)."
+      },
+      {
+        "name": "Use \\ialign when \\tabskip must be zero initially",
+        "description": "\\ialign macro provides alignments when it is necessary to be sure that \\tabskip is initially zero; initialized \\halign implementation sets \\everycr={} and \\tabskip=0pt.",
+        "guidance": "Definition: \\def\\ialign{\\everycr={}\\tabskip=0pt \\halign}. Useful for macro implementations that rely on tabskip being zero at the start."
+      },
+      {
+        "name": "Hide width in alignment entries with \\hidewidth",
+        "description": "The \\hidewidth macro acts essentially like \\hfill in alignment entries and permits items to 'stick out' of their column.",
+        "guidance": "Defined as \\def\\hidewidth{\\hskip\\hideskip} and intended for use in alignment entries to allow overhanging content."
+      },
+      {
+        "name": "Span multiple alignment columns with \\multispan",
+        "description": "\\multispan permits alignment entries to span one or more columns by executing \\omit and repeating \\span\\omit the required number of times.",
+        "guidance": "Implementation uses a temporary counter \\mscount and macros \\sp@n and \\@nother to repeat spans; use \\multispan{n} to omit and span n columns."
+      },
+      {
+        "name": "Tabbing macros and \\settabs / \\tabalign behaviour",
+        "description": "The tabbing macros maintain boxes of empty boxes to represent tab positions. \\settabs initializes the tab structure; \\+ (outer) and \\tabalign (inner) start tab-aligned groups; \\+ is declared \\outer so runaway arguments are more easily detected.",
+        "guidance": "Use \\settabs followed by either \\+ or \\tabalign. \\+ is \\outer (better at detecting runaway arguments) and \\tabalign is provided for inner use; details: \\settabs sets up \\tabs box, \\m@ketabbox builds the tab box using an \\ialign whose entries are created by \\t@bbox and \\t@bb@x."
+      },
+      {
+        "name": "Paragraph-shape macros: \\hang, \\item, \\itemitem, \\textindent, \\narrower",
+        "description": "\\hang causes half-line indentation after the first line; \\item and \\itemitem produce paragraph shapes with appropriate hangindent and indentation; \\textindent{stuff} behaves like \\indent but puts 'stuff' into the indentation flushed right; \\narrower increases left and right skip by \\parindent.",
+        "guidance": "Definitions: \\def\\hang{\\hangindent\\parindent}; \\def\\item{\\par\\hang\\textindent}; \\def\\itemitem{\\par\\indent \\hangindent2\\parindent \\textindent}; \\def\\textindent#1{\\indent\\llap{#1\\enspace}\\ignorespaces}; \\def\\narrower{\\advance\\leftskip by\\parindent \\advance\\rightskip by\\parindent}."
+      },
+      {
+        "name": "\\beginsection: section starting behavior",
+        "description": "\\beginsection{title} emits glue and penalties to start a new page if needed, makes a \\bigskip, places the section title flush left in bold on its own line, displays the title on the terminal, issues a \\smallskip with page-break prohibited and a \\noindent to suppress indentation in the next paragraph.",
+        "guidance": "Defined as an \\outer macro: \\outer\\def\\beginsection#1\\par{\\vskip0pt plus.3\\vsize\\penalty-250 ... \\message{#1}\\leftline{\\bf#1}\\nobreak\\smallskip\\noindent}. Note: the next 'paragraph' may be empty if vertical-mode material immediately follows."
+      },
+      {
+        "name": "\\proclaim macro for theorems/lemmas/etc.",
+        "description": "\\proclaim#1. #2\\par prints the proclamation title in boldface followed by the paragraph in slanted type, and it discourages page breaks after the proclamation.",
+        "guidance": "Defined as \\outer\\def\\proclaim #1. #2\\par{\\medbreak\\noindent{\\bf#1.\\enspace}{\\sl#2\\par}% \\ifdim\\lastskip<\\medskipamount \\removelastskip\\penalty55\\medskip\\fi}. Use for theorems/definitions/conjectures to get typographic treatment and page-break preferences."
+      },
+      {
+        "name": "Ragged-right setting constraints",
+        "description": "Do not call \\raggedright until the text font has been specified; it is assumed ragged-right material will not mix many different sizes/fonts. If that assumption fails, adjust fontdimen parameters 3 and 4 of each font to zero.",
+        "guidance": "Definition: \\def\\raggedright{\\rightskip=0pt plus2em \\spaceskip=.3333em \\xspaceskip=.5em\\relax}. For typewriter use \\ttraggedright which sets \\tt and appropriate rightskip; for multi-font ragged-right, set e.g. \\fontdimen3\\tenrm=0pt."
+      },
+      {
+        "name": "Typewriter ragged-right: \\ttraggedright",
+        "description": "\\ttraggedright should be used for ragged-right setting in typewriter style since spaces tend to be larger and already unstretchable in that style.",
+        "guidance": "Definition: \\def\\ttraggedright{\\tt\\rightskip=0pt plus2em\\relax}. Use when switching to \\tt font and ragged-right layout is desired."
+      },
+      {
+        "name": "\\leavevmode semantics",
+        "description": "\\leavevmode starts a new paragraph if TeX is in vertical mode; it does nothing in horizontal mode or math mode.",
+        "guidance": "Definition: \\def\\leavevmode{\\unhbox\\voidb@x}. Call before building boxes for symbols to ensure horizontal mode as needed."
+      },
+      {
+        "name": "Special-symbols and accents must consider font availability",
+        "description": "Symbols and accents depend primarily on characters available in the Computer Modern fonts; different fonts may require different constructions.",
+        "guidance": "When building a symbol by forming a box, call \\leavevmode first. Many accents and special characters are defined in terms of character code positions and math primitives; consult Appendix F for full listings."
+      },
+      {
+        "name": "Restricted usage of \\upbracefill and \\downbracefill",
+        "description": "The \\upbracefill and \\downbracefill macros must appear all by themselves in an hbox or an alignment entry, except for horizontal spacing.",
+        "guidance": "They use leaders and bracket characters to create braces that extend; embedding them in other non-horizontal content can break layout."
+      },
+      {
+        "name": "Use \\bye to finish a document",
+        "description": "\\bye should be used as the recommended way to stop a plain TeX document; it does \\par\\vfill\\supereject\\end.",
+        "guidance": "Definition: \\outer\\def\\bye{\\par\\vfill\\supereject\\end}. It triggers output routine finalization and termination."
+      },
+      {
+        "name": "Fine math spacing primitives and special spacing macros",
+        "description": "There are primitives and macros for fine spacing in math: \\sp (superscript helper), \\sb (subscript helper), \\, (thin space), \\> (med space), \\! (negative thin space), \\; (thick space), and \\* (discretionary times-kerning).",
+        "guidance": "Definitions: \\let\\sp=^ \\let\\sb=_ ; \\def\\,{\\mskip\\thinmuskip} ; \\def\\>{\\mskip\\medmuskip} ; \\def\\!{\\mskip-\\thinmuskip} ; \\def\\;{\\mskip\\thickmuskip} ; \\def\\*{\\discretionary{\\thinspace\\the\\textfont2\\char2}{}{}}."
+      },
+      {
+        "name": "Prime handling for repeated primes",
+        "description": "Macros convert repeated tick characters into sequences of \\prime tokens so constructions like f'' become f^{\\prime\\prime}.",
+        "guidance": "Active-catcode handling: uses active ' to build sequences and futurelet machinery (\\prim@s, \\pr@m@s etc.) to detect repeated primes or primes followed by commas."
+      },
+      {
+        "name": "Greek letters defined to change families with \\fam",
+        "description": "Uppercase Greek letters and others are assigned mathchardef codes so they will change families when \\fam changes (i.e., they behave sensibly under font family changes).",
+        "guidance": "Examples: \\mathchardef\\alpha=\"0110B, \\mathchardef\\Gamma=\"07000, etc. Additional symbols listed in Appendix F."
+      },
+      {
+        "name": "Large operators and integrals default to \\nolimits",
+        "description": "Large operators (\\int, \\sum, \\intop, etc.) are assigned codes and the \\int macro is defined so its limits are not set above/below by default (\\int = \\intop\\nolimits).",
+        "guidance": "Definitions: \\mathchardef\\sum=... ; \\def\\int{\\intop\\nolimits} ; \\def\\oint{\\ointop\\nolimits}. Use \\limits explicitly if you want limits above/below."
+      },
+      {
+        "name": "Zero-width relation-building characters (e.g., \\mapstochar, \\not)",
+        "description": "Some relation characters are zero-width and are intended to combine with other characters (e.g., \\mapstochar combines with arrows to form \\mapsto; \\not places a slash over the following character).",
+        "guidance": "Example: \\mathchardef\\mapstochar=\"322F ; \\def\\mapsto{\\mapstochar\\rightarrow} ; \\def\\longmapsto{\\mapstochar\\longrightarrow} ; \\def\\neq{\\not=}."
+      },
+      {
+        "name": "When two relations are adjacent no math space is inserted",
+        "description": "TeX puts no space between two relations that are adjacent in a math formula.",
+        "guidance": "Be mindful when composing relation symbols; use explicit spacing or \\mathrel/\\mathop wrappers if different spacing is desired."
+      },
+      {
+        "name": "Dots macros for proper spacing: \\ldots, \\cdots, \\vdots, \\ddots",
+        "description": "Dots are defined to give proper spacing depending on context: \\ldots, \\cdots, vertical \\vdots and diagonal \\ddots each have definitions for correct placement.",
+        "guidance": "Examples: \\def\\ldots{\\mathinner{\\ldotp\\ldotp\\ldotp}} ; \\vdots uses a vbox with small baselineskip ; \\ddots uses small raised dot placements. Use these macros rather than literal dots for correct math spacing."
+      },
+      {
+        "name": "Math accents: use \\mathaccent for fixed accents; manually construct variable-width ones",
+        "description": "Most math accents are handled via the \\mathaccent primitive; a few variable-width accents like \\widetilde and \\widehat are constructed manually.",
+        "guidance": "Examples: \\def\\acute{\\mathaccent\"7013} ; \\def\\widetilde{\\mathaccent\"0365} ; variable-width accents use box constructions and leaders where necessary."
+      },
+      {
+        "name": "Arrows/overbars/overbraces implemented via box+leader constructions",
+        "description": "Macros such as \\overrightarrow, \\overleftarrow, \\overbrace and \\underbrace build a vertical box containing a fill (e.g., \\rightarrowfill) and the centered content, and use \\limits where appropriate.",
+        "guidance": "Implementation pattern uses \\vbox{\\ialign{...fill...\\crcr\\nointerlineskip\\hfil\\displaystyle{#1}\\hfil\\crcr}} and \\mathop...\\limits for proper operator placement."
+      },
+      {
+        "name": "Delimiters and size commands must be defined carefully",
+        "description": "Delimiters that change size (24 of them) are defined as \\delimiter with explicit code values. The \\big...\\Bigg macros produce specific sizes using \\left#1...\\right. A helper \\n@space sets \\nulldelimiterspace to 0.",
+        "guidance": "Examples: \\def\\langle{\\delimiter \"1 1426830A} ; \\def\\big#1{{\\hbox{$\\left#1\\vbox to 8.5pt{}\\right.\\n@space$}}} and so on for \\Big, \\bigg, \\Bigg. Use the provided macros to get consistent delimiter sizing."
+      },
+      {
+        "name": "\\mathpalette to write macros that work in all four math styles",
+        "description": "\\mathpalette#1#2 constructs a formula in all four styles (display, text, script, scriptscript) and is used to implement macros that must adapt to the current math style.",
+        "guidance": "Definition: \\def\\mathpalette#1#2{\\mathchoice{#1\\displaystyle{#2}}{#1\\textstyle{#2}}{#1\\scriptstyle{#2}}{#1\\scriptscriptstyle{#2}}}. Use this when building accents or constructs that depend on the math style."
+      },
+      {
+        "name": "Phantom and smash macros: \\phantom, \\vphantom, \\hphantom, \\smash",
+        "description": "\\phantom variations create invisible boxes matching the dimensions of their argument (vertical/horizontal/both); \\smash sets height and depth to zero. Behavior differs in math mode vs text mode.",
+        "guidance": "Definitions include flags \\v@ and \\h@ and helper routines \\ph@nt, \\makeph@nt, \\mathph@nt, and \\finsm@sh. Use \\mathpalette for math phantoms; \\mathstrut is defined as \\vphantom(."
+      },
+      {
+        "name": "Alternate names for common math tokens",
+        "description": "Alternate control sequence names are provided for convenience (e.g., \\le = \\leq, \\to = \\rightarrow, \\land = \\wedge, \\iff = \\;\\Longleftrightarrow\\;).",
+        "guidance": "These \\let aliases make input more readable; be aware of their definitions if redefining primitives."
+      },
+      {
+        "name": "Common math functions defined as \\mathop with appropriate limits behavior",
+        "description": "Common functions (32 listed) such as \\arccos, \\det, \\liminf, \\sup, \\tanh are defined as \\mathop (and \\nolimits where appropriate) so they typeset like operators.",
+        "guidance": "Examples: \\def\\arccos{\\mathop{\\rm arccos}\\nolimits} ; \\def\\det{\\mathop{\\rm det}}. Use these rather than plain text to get proper spacing and limits behavior."
+      },
+      {
+        "name": "Matrix and bordermatrix ensure consistent row heights/depths",
+        "description": "\\matrix constructs matrices with rows given the same height and depth unless a row is unusually big; \\bordermatrix is more complex and uses a constant \\p@renwd representing width of a big extensible left parenthesis to align border entries.",
+        "guidance": "Definitions use \\vcenter, \\ialign, and careful box manipulations (\\setbox0, \\unvbox etc.). \\p@renwd is set from an extensible character (\\tenex B). Use these macros to get consistent matrix box dimensions."
+      },
+      {
+        "name": "Display math macros: \\openup, \\eqalign, \\displaylines, \\eqalignno, \\leqalignno",
+        "description": "\\openup adjusts baseline spacing by adding to \\lineskip and \\baselineskip; \\eqalign and variants create aligned displayed equations with particular tabskip and alignment templates. \\displ@y sets up necessary \\everycr handling for displays.",
+        "guidance": "Example: \\def\\eqalign#1{\\null\\,\\vcenter{\\openup1\\jot \\m@th \\ialign{...}}\\,}. The display macros compensate for the opened-up baselineskip so the first baseline of an alignment is separated correctly from preceding text; observe \\everycr changes and \\tabskip restoration with \\@lign."
+      },
+      {
+        "name": "Page numbering, headlines and footlines primitives",
+        "description": "Page number register \\pageno, headline and footline token registers (\\headline, \\footline) control page headers/footers; \\folio prints page numbers in roman if negative, otherwise arabic; \\nopagenumbers blanks out footline.",
+        "guidance": "Initialization: \\countdef\\pageno=0 \\pageno=1 ; \\newtoks\\headline \\headline={\\hfil} ; \\newtoks\\footline \\footline={\\hss\\tenrm\\folio\\hss}. Use \\advancepageno to increment properly, respecting negative numbering convention."
+      },
+      {
+        "name": "\\raggedbottom and \\normalbottom effects",
+        "description": "\\raggedbottom sets \\topskip and a flag \\r@ggedbottomtrue to allow variable page bottom (via additional stretch); \\normalbottom undoes it.",
+        "guidance": "Definitions: \\def\\raggedbottom{\\topskip10pt plus60pt \\r@ggedbottomtrue} ; \\def\\normalbottom{\\topskip10pt \\r@ggedbottomfalse}. When ragged bottom is active, \\pagecontents inserts \\vfil to push content appropriately."
+      },
+      {
+        "name": "Footnote insertion mechanics and parameters",
+        "description": "\\footnote macro defers reading the text until \\vfootnote. Footnotes use the insertion class \\footins with parameters: \\skip\\footins = \\bigskipamount, \\count\\footins = 1000, \\dimen\\footins = 8in (maximum footnotes per page).",
+        "guidance": "Implementation uses \\insert\\footins with \\splittopskip=\\ht\\strutbox and \\splitmaxdepth=\\dp\\strutbox to handle broken footnotes; \\vfootnote places insertion box with appropriate left/right/space settings and uses \\textindent internally."
+      },
+      {
+        "name": "Floating insertions (top/mid/page) and their resource limits",
+        "description": "Floating insertions are handled via \\newinsert registers (\\topins) and flags for mid/page/top; skip/count/dimen parameters control space and limits. \\endinsert checks whether a mid-insert would overflow the page and defers it if so.",
+        "guidance": "Registers: \\skip\\topins=0pt ; \\count\\topins=1000 ; \\dimen\\topins=\\maxdimen. Entry/exit macros (\\@ins and \\endinsert) set penalties, floating penalties, and use \\insert\\topins to place floats when appropriate. Use top/mid/page insert macros: \\topinsert, \\midinsert, \\pageinsert."
+      },
+      {
+        "name": "Output routine structure and page construction",
+        "description": "The output routine is defined as \\output={\\plainoutput} with \\plainoutput performing \\shipout of a vbox composed of headline, pagebody, footline, then \\advancepageno and possibly a supereject if output penalty indicates.",
+        "guidance": "Components: \\pagebody is vbox to \\vsize containing \\pagecontents; \\makeheadline constructs the headline vbox; \\makefootline sets \\baselineskip and prints the footline; \\dosupereject checks for insert penalties. \\pagecontents unvboxes top insertions, main page contents (box255) and footins and accounts for \\r@ggedbottom by adding \\vfil when ragged bottom is set."
+      },
+      {
+        "name": "Footnoterule appearance",
+        "description": "The footnoterule is a small rule placed above footnotes: \\kern-3pt \\hrule width 2truein \\kern 2.6pt.",
+        "guidance": "Definition: \\def\\footnoterule{\\kern-3pt \\hrule width 2truein \\kern 2.6pt} ; the hrule is .4pt high."
+      },
+      {
+        "name": "Hyphenation parameters and inclusion of hyphen patterns",
+        "description": "Hyphenation minima are set with \\lefthyphenmin=2 and \\righthyphenmin=3 (disallow single-letter fragments or -xx breaks) and the file hyphen.tex containing patterns and exceptions is input.",
+        "guidance": "After setting minima, \\input hyphen to read patterns (see Appendix H). Use \\showhyphens to inspect hyphenation behavior for given text."
+      },
+      {
+        "name": "\\magnification and layout adjustments",
+        "description": "\\magnification macro sets \\mag and adjusts page dimensions (e.g., \\hsize 6.5truein, \\vsize 8.9truein, \\dimen\\footins 8truein) after assignment.",
+        "guidance": "Definition: \\def\\magnification{\\afterassignment\\m@g\\count@} with \\def\\m@g{\\mag=\\count@ \\hsize6.5truein\\vsize8.9truein\\dimen\\footins8truein}. Use to scale output consistently."
+      },
+      {
+        "name": "Tracing and diagnostic helpers",
+        "description": "\\tracingall sets many tracing parameters (online, commands, stats, pages, output, lostchars, macros, paragraphs, restores) and sets \\showboxbreadth and \\showboxdepth to \\maxdimen and \\errorstopmode for debugging; \\showhyphens is provided to show hyphenation points.",
+        "guidance": "Definition: \\def\\tracingall{\\tracingonline=1 \\tracingcommands=2 ... \\errorstopmode}. Use \\tracingall for verbose debugging of TeX processing; \\showhyphens{<text>} boxes the text and shows hyphenation decisions."
+      },
+      {
+        "name": "Final format identifiers and recommended file modification policy",
+        "description": "The format name and version \\fmtname and \\fmtversion are defined (e.g., plain, 3.0) to help diagnose issues. Macro files like plain.tex should not be changed except with respect to preloaded fonts unless authorized by the author of the macros.",
+        "guidance": "Definitions: \\def\\fmtname{plain}\\def\\fmtversion{3.0}. Keep macro files stable to maintain portability and ease of debugging; record changes only when necessary and authorized."
+      },
+      {
+        "name": "TeX's internal character code portability (ASCII-based)",
+        "description": "TeX converts external file character codes to a standard internal code (based on ASCII) so TeX constructions are portable across machines; it converts back when writing files, making dvi output machine-independent.",
+        "guidance": "Appendix C documents TeX's internal code (ASCII-based with octal/hex notation). Users normally need not worry about external code differences because TeX handles conversion; when keyboards expose ASCII, specify codes in terms of the 95 standard characters."
+      }
+    ]
+  }
+}

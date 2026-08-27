@@ -1,0 +1,175 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 84,
+  "n_chunks": 92,
+  "chunk_chars": 39913,
+  "model": "gpt-5-mini",
+  "elapsed_s": 520.8978836660026,
+  "input_tokens": 12792,
+  "output_tokens": 4626,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP package authors / developers implementing new algebraic object types (residue classes) in GAP",
+    "subtask_short": "implementing residue class rings in GAP",
+    "subtask_description": "Guidance for implementing elements and rings Z/nZ in GAP: choices about families, categories, representations, and installing methods so the new objects integrate with GAP operations and existing finite field machinery.",
+    "subtask_keywords": [
+      "gap",
+      "package_development",
+      "residue_class_rings",
+      "ring_implementation",
+      "representation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Family decision for residue classes",
+        "description": "Put the elements of each ring Z/nZ into a family of their own so elements of Z/3Z and Z/9Z lie in different families; the only interesting relation between such families is equality.",
+        "guidance": "Binary arithmetic operations with two residue classes will be admissible only if their families are equal; this choice can eliminate repeated modulus checks inside each function (these checks can be delegated to the method selection mechanism). The declaration part of the package need not encode this distribution; the family is actually constructed at runtime (e.g., in MyZmodnZ)."
+      },
+      {
+        "name": "Create a dedicated category for residue class elements",
+        "description": "Create a new category (IsMyZmodnZObj) in which all elements of all rings Z/nZ lie, and make it a subcategory of IsScalar so arithmetic operations are available.",
+        "guidance": "Declaring a category as a subcategory of IsScalar implies addition, subtraction, multiplication and division (with invertibility restriction) are admissible for objects in this category; create higher-level collection categories before collections arise (use DeclareCategory and CategoryCollections)."
+      },
+      {
+        "name": "Representation choice: positional vs component",
+        "description": "Choose between component object (record-like) and positional object (list-like) representations; decide to store modulus in the family and encode element k + nZ by the unique residue in [0..n-1], with a positional object containing that residue at position 1.",
+        "guidance": "DeclareRepresentation for this choice (e.g., IsMyModulusRep as IsPositionalObjectRep, [1]). Storing modulus in the family avoids storing it in each element; representation choice affects which representation-dependent methods must be installed (access residue as x![1])."
+      },
+      {
+        "name": "Attributes: avoid unnecessary special attributes",
+        "description": "Attributes of types are usually of minor importance for element objects; no special attributes are needed for residue classes in this implementation.",
+        "guidance": "Only add attributes if they encode useful, queryable information about the objects that can't be captured in family/category/representation."
+      },
+      {
+        "name": "Separate declaration and implementation",
+        "description": "Declare global functions and symbols in the declaration part (e.g., DeclareGlobalFunction \"MyZmodnZObj\" and \"MyZmodnZ\") and put installations/implementations in the implementation part.",
+        "guidance": "Follow the package structure (declaration vs implementation) so code can be reloaded and interacts well with GAP's environment; restarting a GAP session may be needed to avoid binding conflicts."
+      },
+      {
+        "name": "Normalize residues in constructor",
+        "description": "Normalize residue explicitly using mod when creating an element (MyZmodnZObj should return residue mod Fam!.modulus).",
+        "guidance": "Ensures consistent representation (residues in canonical range) and simplifies equality/comparison and arithmetic implementations."
+      },
+      {
+        "name": "Store modulus in the family object",
+        "description": "Store the modulus n as a component of the family (F!.modulus) rather than in each element.",
+        "guidance": "Families are represented as component objects, so storing modulus in FamilyObj(element)!.modulus gives centralized access; some methods assume this and use it (e.g., MyZmodnZObj, arithmetic, printing)."
+      },
+      {
+        "name": "Construct ring via RingWithOneByGenerators and mark whole family",
+        "description": "Use RingWithOneByGenerators to construct the domain representing Z/nZ, set SetIsWholeFamily(R, true), and give the ring a name for printing.",
+        "guidance": "RingWithOneByGenerators ensures IsRingWithOne/IsRing properties. Naming (e.g., \"(Integers mod n)\") controls PrintObj output. Marking whole family is useful for membership and certain generic methods that rely on containment of the entire family."
+      },
+      {
+        "name": "Printing: implement PrintObj (and rely on default ViewObj)",
+        "description": "Install a PrintObj method to display residue classes as \"( k mod n )\"; default ViewObj calls PrintObj so implementing PrintObj suffices for read-eval-print output.",
+        "guidance": "PrintObj should be readable and, if reasonable, produce GAP-readable output for domains. Avoid attempting to make families GAP-readable if impossible; prefer a human-readable expression for elements."
+      },
+      {
+        "name": "Equality and ordering methods must enforce family relation",
+        "description": "Install methods for equality (\\=) and ordering (\\<) that are applicable only when both arguments lie in the same family (use IsIdenticalObj relation to require same family).",
+        "guidance": "The third argument in InstallMethod can be a function on families (e.g., IsIdenticalObj). For representations where residues are normalized, simple residue comparison suffices; for cross-representation comparisons additional methods may be needed."
+      },
+      {
+        "name": "Install additive structure methods",
+        "description": "Install methods for + (addition), ZeroOp (zero), and AdditiveInverseOp (additive inverse) for residue class elements, returning normalized MyZmodnZObj results.",
+        "guidance": "Once these are installed, infix + and unary - work. Subtraction is handled generically via addition and additive inverse if no dedicated subtraction method is installed."
+      },
+      {
+        "name": "Allow integer operands by installing mixed-type methods",
+        "description": "Install methods for adding/multiplying an integer with a residue-class element from both left and right so integers are implicitly identifiable with their residues modulo n.",
+        "guidance": "Alternatively rely on generic integer-addition/multiplication methods (successive addition/powering) but explicit methods may be added for efficiency. Ensure semantics are compatible with generic interpretations to avoid conflicting methods."
+      },
+      {
+        "name": "Install multiplicative structure methods and invertibility semantics",
+        "description": "Install methods for * (multiplication), OneOp (multiplicative identity), and InverseOp (multiplicative inverse), having InverseOp return fail for non-invertible elements.",
+        "guidance": "Installations should return MyZmodnZObj with the correct residue; InverseOp should use QuotientMod with modulus. Be cautious about representations and when modulus is taken from FamilyObj or Characteristic depending on prime/nonprime cases."
+      },
+      {
+        "name": "Rely on generic integer multiplication/powering when appropriate",
+        "description": "GAP's generic methods interpret multiplication of an integer and an additive object as successive additions and have a generic powering by integers via multiplications and inverse.",
+        "guidance": "You may implement explicit integer multiplication/powering for efficiency, but avoid installing concurrent methods that change semantics incompatible with existing generic methods, since GAP does not guarantee method choice."
+      },
+      {
+        "name": "Define Int operation for residue elements",
+        "description": "Define Int(element) to return the normalized residue for elements of Z/nZ (implement for IsMyModulusRep).",
+        "guidance": "Ensure Int is representation-independent: if other representations of residue classes are implemented, they must provide compatible Int methods so result is independent of representation."
+      },
+      {
+        "name": "Provide a \\mod construction method for Integers",
+        "description": "Install a \\mod method so a call like Integers mod n returns MyZmodnZ(n) and matches the printed form of the ring.",
+        "guidance": "Also install PrintObj for the ring to print as \"(Integers mod n)\" to make the construction readable/usable interactively."
+      },
+      {
+        "name": "Avoid installing incompatible methods when using naive representations",
+        "description": "Do not install methods in a naive approach that conflict with general operations for built-in types (e.g., don't make adding two-length lists implement Z/nZ addition if that conflicts with generic list addition).",
+        "guidance": "Even if possible to install a method (e.g., Int for a list [k,n]), it may be nonsensical because other interpretations exist; prefer creating distinct categories/representations for new object types."
+      },
+      {
+        "name": "Support matrices of residue classes and be careful with matrix algorithms",
+        "description": "With the chosen implementation, matrices whose entries are residue classes can be handled; however Gaussian elimination and default inversion may fail over rings with zero divisors.",
+        "guidance": "Install a specialized InverseOp for ordinary integer matrices over Z/nZ that reduces the matrix entries and inverts via integer-matrix inversion and modular reduction. Be aware some library functions rely on inverting matrices; provide fallback or alternative algorithms if needed."
+      },
+      {
+        "name": "Provide DefaultFieldOfMatrixGroup for matrix groups over Z/nZ",
+        "description": "Install a method DefaultFieldOfMatrixGroup that finds a domain containing matrix entries, e.g., RingWithOneByGenerators([One(Representative(G)[1][1])]).",
+        "guidance": "This is used by GAP library functions that delegate computations to field/matrix domain logic."
+      },
+      {
+        "name": "Implement Enumerator, Random, Size, Units only for full-family rings",
+        "description": "Install Enumerator, Random, Size, Units methods for full collection Z/nZ (rings that contain their whole family) and ensure these methods assume the ring contains the full family.",
+        "guidance": "Enumerator can list elements as MyZmodnZObj(F, x) for x in [0..Size(R)-1]. Units may return a list of prime residues or be improved to return a group (GroupByGenerators) using GeneratorsPrimeResidues. Methods that assume whole family produce wrong results for proper subrings."
+      },
+      {
+        "name": "Use InstallTrueMethod to declare IsFinite for domain families",
+        "description": "Install a logical implication method (InstallTrueMethod) so IsFinite is true for domains consisting of IsMyZmodnZObj elements (CategoryCollections(IsMyZmodnZObj) and IsDomain).",
+        "guidance": "This lets every such domain automatically report finiteness without computing elements explicitly."
+      },
+      {
+        "name": "Introduce separate categories for prime vs nonprime moduli",
+        "description": "Introduce IsMyZmodnZObjNonprime (for composite moduli) and IsMyZmodpZObj (for prime moduli) and declare IsMyZmodpZObj as synonym with IsMyZmodnZObj and IsFFE so prime-field elements are also regarded as finite field elements.",
+        "guidance": "This separation helps give prime modulus rings field-like behaviour, and enables cross-representation interoperability with existing finite field element representation IsFFE/IsInternalRep."
+      },
+      {
+        "name": "Make MyZmodnZ(p) return a field for prime p and handle family containment",
+        "description": "When n is prime, MyZmodnZ(n) should construct a field (FieldOverItselfByGenerators), call SetIsPrimeField(R, true) and note that such a field does not contain the whole family of its elements (finite field elements of fixed characteristic share one family).",
+        "guidance": "For prime fields, modulus access may need to use Characteristic(Fam) rather than Fam!.modulus to avoid forcing changes in existing code handling FFE families."
+      },
+      {
+        "name": "Install equality methods independent of prime/nonprime",
+        "description": "Install equality (\\=) for IsMyZmodnZObj in general (not separately for prime/nonprime) since a single residue-based equality suffices.",
+        "guidance": "Equality compares normalized residues and thus works uniformly across prime and nonprime cases; additional methods are needed to compare cross-representation objects (e.g., IsMyZmodpZObj with internal FFE)."
+      },
+      {
+        "name": "Ensure comparison (<) is compatible with existing FFE ordering",
+        "description": "For nonprime moduli define < by residue order; for prime fields ensure < is compatible with the predefined comparison of internal finite field elements (which may use discrete logarithms).",
+        "guidance": "For prime-field representation, ordering can be implemented by comparing discrete logs relative to a primitive root: return LogMod(x,residue_root,p) < LogMod(y,residue_root,p). Also install cross-representation comparison methods that reduce to comparing x![1]*One(y) < y or x < y![1]*One(x)."
+      },
+      {
+        "name": "Install arithmetic and conversion methods between representations",
+        "description": "Install methods to allow operations between IsMyZmodpZObj (modulus rep) and internal FFE (IsInternalRep) for +, *, and other relevant operations, converting appropriately between residue integer and internal finite field representation.",
+        "guidance": "Examples: for x in IsMyZmodpZObj and y in IsFFE/IsInternalRep, define x + y as x![1] + y and vice versa, and similarly for multiplication; ensure DegreeFFE and IntFFE consistency where needed."
+      },
+      {
+        "name": "Carefully implement InverseOp, division, and powering across representations",
+        "description": "Provide InverseOp implementations for nonprime and prime representations using QuotientMod with FamilyObj(x)!.modulus or Characteristic(FamilyObj(x)), returning fail when not invertible; ensure division and powering interact correctly across representations.",
+        "guidance": "These methods require careful handling of modulus source and cross-representation cases. Test invertibility using QuotientMod and wrap result in MyZmodnZObj. Ensure consistency when interacting with existing FFE internal inverses."
+      },
+      {
+        "name": "Provide DegreeFFE for prime-field representation",
+        "description": "Install DegreeFFE method for IsMyZmodpZObj to return 1 (prime fields are degree 1 finite fields).",
+        "guidance": "No IsMyModulusRep requirement is necessary since DegreeFFE is independent of representation details."
+      },
+      {
+        "name": "Recognize limitations of methods installed for whole-family assumption in prime case",
+        "description": "Methods that assumed the ring contains the whole family (Enumerator, Random, Size, Units) make sense only in the nonprime case; for prime cases rely on existing field methods in GAP.",
+        "guidance": "Do not overwrite or duplicate library field methods for prime fields; instead ensure compatibility and provide bridging methods only where necessary."
+      }
+    ]
+  }
+}

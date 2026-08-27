@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_2184c4a279db.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_2184c4a279db.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 7,
+  "chunk_chars": 39041,
+  "model": "gpt-5-mini",
+  "elapsed_s": 57.94839779099857,
+  "input_tokens": 12855,
+  "output_tokens": 4717,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners developing or evaluating physics-informed neural networks (PINNs) for scientific computing / PDE problems",
+    "subtask_short": "PINN design and evaluation",
+    "subtask_description": "Guidelines and evaluation criteria for designing, training, and analyzing physics-informed neural networks (PINNs) applied to partial differential equations and scientific computing problems. Includes architecture choices, loss composition, optimization, derivative computation, and theoretical error components.",
+    "subtask_keywords": [
+      "pinn",
+      "physics_informed_nn",
+      "scientific_computing",
+      "pde",
+      "deep_learning"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Suitability of CNNs for irregular geometries",
+        "description": "Because CNNs were originally created for image recognition, they are better suited to handling image-like data and may not be directly applicable to scientific computing problems, as most geometries are irregular with non-uniform grids; for example, Euclidean-distance-based convolution filters lose their invariance on non-uniform meshes.",
+        "guidance": "Use coordinate transformations (e.g., PhyGeoNet) to map irregular physical domains to rectangular reference domains and strictly enforce boundary conditions; alternatively compute convolution on meshes/graphs, use padding data as boundary conditions, and avoid pooling if data do not require compression (Fang [44])."
+      },
+      {
+        "name": "Encoder\u2013decoder / Autoencoder architecture for dimensionality reduction",
+        "description": "Autoencoders (encoder\u2013decoders) are commonly used to reduce dimensionality in a nonlinear way and have been used as convolutional encoder\u2013decoder networks in PINNs for stochastic PDEs and theory-guided frameworks.",
+        "guidance": "Consider CNN-based encoder\u2013decoders or theory-guided auto-encoders (TgAE) to incorporate physical constraints and improve processing efficiency versus FC\u2013NNs (e.g., Zhu et al [200], Wang et al [177])."
+      },
+      {
+        "name": "Use of RNNs for time-dependent / dynamical systems",
+        "description": "Recurrent neural networks (RNNs) accept sequential data and are ideal for time-dependent tasks; they process inputs sequentially, maintain a state vector as memory, and can model time-dependent responses.",
+        "guidance": "Enhance with LSTM/GRU units for long-term dependencies; design RNN cells to implement numerical integration schemes (Euler, Runge\u2013Kutta, etc.) to perform numerical integration within physics-informed recurrent networks (Viana et al [174])."
+      },
+      {
+        "name": "LSTM/GRU architecture choices for long-term memory",
+        "description": "Long short-term memory (LSTM) units include memory cells and gates (input, forget, output) to selectively propagate relevant information; GRUs provide similar capability with fewer parameters.",
+        "guidance": "Use LSTM for sequence-to-sequence state-space modeling augmented by numerical differentiators (e.g., PhyLSTM architectures) or GRU where parameter efficiency is important; connect multiple LSTMs via differentiators as needed (Zhang et al [197])."
+      },
+      {
+        "name": "Choice of derivative computation method (AD preferred)",
+        "description": "There are four methods for calculating derivatives: hand-coded, symbolic, numerical, and automatic. Automatic differentiation (AD) is the main technique used in literature and by all PINN implementations because symbolic and numerical methods perform poorly on complex functions.",
+        "guidance": "Prefer AD for exact expressions without approximation error; hand-coded or local fitting methods may be used when one needs to verify convergence (Fang [44]) or when chain rule does not directly apply (fractional operators)."
+      },
+      {
+        "name": "Definition and use of PDE and boundary residuals in loss",
+        "description": "Incorporate differential equation residual rF[\u00fb\u03b8](z) = F(\u00fb\u03b8(z); \u03b3) \u2212 f and boundary residual rB[\u00fb\u03b8](z) := B(\u00fb\u03b8(z)) \u2212 g(z) into the loss to assess how well approximation \u00fb\u03b8 satisfies the PDE and BCs; for the exact solution these residuals are zero.",
+        "guidance": "Embed residuals via AD into the network loss so predictions inherit physical attributes imposed by PDE constraints (Raissi et al [140,146])."
+      },
+      {
+        "name": "Loss composition and weighting (\u03c9F, \u03c9B, \u03c9d)",
+        "description": "Overall loss L(\u03b8) = \u03c9F LF(\u03b8) + \u03c9B LB(\u03b8) + \u03c9d Ldata(\u03b8) combines PDE residual, boundary/initial condition loss, and data loss with weights that balance their relative importance.",
+        "guidance": "Choose \u03c9F to account for PDE model fidelity (low-fidelity PDE \u2192 lower \u03c9F); choose \u03c9d to account for measurement quality. Weight selection strongly affects learning efficiency and there is no general theory to set them."
+      },
+      {
+        "name": "Formulation of losses (MSE vs integral / energy-based)",
+        "description": "Losses are often defined as mean square error (MSE) sums but can also be formulated as integrals or energy-based losses (variational).",
+        "guidance": "Energy-based (variational) loss functions can be simpler to minimize and may perform better; PDE-based losses have more hyperparameters and integral/energy methods may be more computationally efficient or sensitive depending on sample size/resolution (Li et al [94], [52], Galerkin\u2013Method approaches)."
+      },
+      {
+        "name": "Collocation points: number and distribution",
+        "description": "LF enforces the PDE at collocation points which can be chosen uniformly or unevenly; the number and position (distribution) of residual/collocation points are crucial and can change the design of the loss function.",
+        "guidance": "Be aware computational cost grows with number of residual points; sampling strategies (e.g., higher frequency in specific domain areas) and minibatch sampling are practical considerations (NVIDIA Modulus [123])."
+      },
+      {
+        "name": "Supervised vs unsupervised (PDE-only) training modes",
+        "description": "If PINN is employed as supervised, parameters minimize difference between observations and predictions; otherwise only PDE residuals are used.",
+        "guidance": "In forward problems data loss may coincide with BC/IC; in inverse problems data loss refers to solution values inside domain; choose mode based on available measurements and problem type."
+      },
+      {
+        "name": "Soft versus hard enforcement of boundary/initial conditions",
+        "description": "BC constraints can be regarded as penalty terms (soft BC enforcement) or encoded into the network design (hard BC enforcement).",
+        "guidance": "Soft enforcement disadvantages: (1) satisfying BCs accurately is not guaranteed, (2) assigned weight of BC loss might affect learning efficiency and there is no theory to determine weights. Use hard approaches (e.g., specific network components to meet Dirichlet BC) when exact enforcement is required (Zhu et al [199])."
+      },
+      {
+        "name": "Optimization algorithm selection and training schedule",
+        "description": "Common optimizers include Adam (stochastic) and quasi-Newton L-BFGS; training often uses minibatch sampling with Adam or two-step approaches (Adam followed by L-BFGS-B).",
+        "guidance": "Use Adam to increase convergence speed especially with random collocation points; for small data/L-BFGS-B often converges faster and more cheaply; consider two-step (Adam then L-BFGS-B) and tune stop criteria (He et al [60])."
+      },
+      {
+        "name": "Dealing with nonconvex optimization and local minima",
+        "description": "The loss landscape is nonconvex with many local minima; gradient-based optimizers will likely be trapped in local minima and finding global minima is NP-hard.",
+        "guidance": "Expect optimization error (EO) and use engineering practices, careful initialization, and multiple restarts; empirical evidence shows gradient methods often work but cannot guarantee global optimum."
+      },
+      {
+        "name": "Regularization and overparameterization risks",
+        "description": "Number of network parameters is often substantially greater than measurements, so regularization is required; deeper/wider networks increase expressivity but can increase generalization error.",
+        "guidance": "Control hyperparameters (learning rate, iterations, weight decay, etc.), use regularization, and choose network capacity informed by solution regularity; cPINN allows varying hyperparameters per subdomain."
+      },
+      {
+        "name": "Activation slope recovery and contribution to loss",
+        "description": "Adding layers modifies activation slopes which can improve training speed; slope recovery terms can be added to the loss to influence these activation slopes.",
+        "guidance": "Consider including slope-based regularization or recovery terms when beneficial (Jagtap et al [71] discussion)."
+      },
+      {
+        "name": "Initialization strategies for improved convergence",
+        "description": "Initialization affects convergence speed; poor initialization leads to slow convergence and good initialization to fast convergence.",
+        "guidance": "Use low-fidelity/limited-iteration preliminary solutions to solve inverse problems approximately and use optimized parameters from the low-fidelity problem as a suitable initialization for full training (Pang et al [128])."
+      },
+      {
+        "name": "AD computational graph and chain rule considerations",
+        "description": "Repeated differentiation and composition of networks results in a large computational graph approximating the PDE; AD computes derivatives hierarchically via chain rule but chain rule may not apply in some cases (e.g., fractional operators).",
+        "guidance": "Expect increased computational cost and memory usage for deep compositions; where chain rule fails, substitute discrete operators or other strategies (Pang et al [128])."
+      },
+      {
+        "name": "Bayesian PINNs and posterior estimation method choice",
+        "description": "Bayesian neural networks (BNNs) use distributions over weights; B-PINNs place PDE constraints as priors. Posterior estimation methods include Hamiltonian Monte Carlo (HMC) and variational inference (VI).",
+        "guidance": "HMC was found more appropriate than mean-field Gaussian VI for B-PINNs; alternatives like Karhunen\u2013Lo\u00e8ve expansion or deep normalizing flows (DNF) have tradeoffs (KL is faster but limited in high-dimensions; DNF more powerful but computationally expensive)."
+      },
+      {
+        "name": "Using generative adversarial architectures (PI\u2013GANs) to embed physics",
+        "description": "PI\u2013GANs combine GANs with physics by embedding governing stochastic differential equations via automatic differentiation into the architecture; discriminator can be a FFNN and generators combinations of FFNNs and SDE-induced networks.",
+        "guidance": "GAN-based approaches can address forward, inverse, and mixed stochastic problems but require stability measures (e.g., WGAN\u2013GP found more stable than vanilla GANs for stochastic processes)."
+      },
+      {
+        "name": "Combining multiple PINNs / domain decomposition",
+        "description": "Combine several PINNs, each for subdomains, and patch solutions using interface conditions (conservative PINN cPINN, Mortar PINN) to reconstruct full solution; allows parallelization and different architectures per subdomain.",
+        "guidance": "Use domain segmentation for computational efficiency and to tailor network complexity to local solution regularity; GatedPINN uses a gating network to select/combine experts per space-time point (Jagtap et al [71], Stiller et al [167])."
+      },
+      {
+        "name": "Finite-volume / mesh/graph convolution equivalence with differential operators",
+        "description": "A Laplacian operator can be discretized using finite volume approach and the discretization procedure is equivalent to convolution; convolution can be computed on a mesh or graph instead of Cartesian grid.",
+        "guidance": "Design CNN-inspired techniques to compute convolutions on meshes/graphs, use padding as boundary conditions, and omit pooling when no compression is needed (Fang [44])."
+      },
+      {
+        "name": "Choice of loss evaluation: collocation MSE definitions",
+        "description": "Common explicit MSE loss definitions: LF = (1/Nc) \u03a3i (F(\u00fb\u03b8(zi)) \u2212 f(zi))^2, LB = (1/Nb) \u03a3i (B(\u00fb\u03b8(zi)) \u2212 g(zi))^2, Ldata = (1/Nd) \u03a3i (\u00fb\u03b8(zi) \u2212 u*_i)^2.",
+        "guidance": "These MSE formulations penalize mismatch with PDE, BC/IC, and observed data respectively; integral formulations are an alternative and may be implemented by packages supporting sampling strategies."
+      },
+      {
+        "name": "Error decomposition for PINNs (approximation, optimization, generalization)",
+        "description": "Global error can be decomposed: R[\u00fb*\u03b8] \u2264 EO + 2EG + EA, where EO is optimization error, EG is generalization error (difference between true risk and empirical risk), and EA is approximation error (dependent on architecture).",
+        "guidance": "Focus research and practical mitigation on reducing EO (better optimization), EG (more/better training points or bounds), and EA (architectural choices); empirical/theoretical results link training error, number of training points, and generalization bounds for specific PDE classes."
+      },
+      {
+        "name": "Generalization error dependence and curse of dimensionality",
+        "description": "Generalization error EG measures how well the loss integral is approximated; bounds often relate R[\u00fb\u03b8] to training error and number of training points and may suffer from curse of dimensionality (CoD).",
+        "guidance": "For some PDE classes (Kolmogorov-type), bounds can be independent of spatial dimension; for others, reducing error may require exponentially more training points and larger networks unless special structure is exploited (De Ryck et al, Mishra/Molinaro results)."
+      },
+      {
+        "name": "Practical advice on optimizer/sample size tradeoffs",
+        "description": "Adam is useful for stochastic collocation and increases convergence speed, while L-BFGS-B can perform better for small datasets and fewer residual points; increasing sample size helps when monitoring noisy data.",
+        "guidance": "Consider two-step training (Adam then L-BFGS-B), adjust minibatch sizes, and increase samples when dealing with noisy measurements (Mathews et al [106], Zhu et al [199])."
+      }
+    ]
+  }
+}

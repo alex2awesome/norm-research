@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/3e4dfddb50ed.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18624,
+  "output_tokens": 4466,
+  "elapsed_s": 1955.3044522919226,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Lean 4 users / theorem provers / library authors writing modules, namespaces, and sections",
+    "subtask_short": "lean4 namespaces and sections",
+    "subtask_description": "Guidance and rules for organizing names, scoping variables, and controlling the section/namespace behavior in Lean 4 source files. Covers commands such as namespace, section, variable, open, export, include, omit, and related options.",
+    "subtask_keywords": [
+      "lean4",
+      "namespaces",
+      "sections",
+      "variables",
+      "open_export",
+      "scoping"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Namespaces group related names and attach features",
+        "description": "Names are organized into hierarchical namespaces, which are collections of names. Namespaces are the primary means of organizing APIs in Lean: they provide an ontology of operations, grouping related items. In addition, the effects of features such as syntax extensions, instances, and attributes can be attached to a namespace.",
+        "guidance": "Use namespaces to group related definitions, theorems, types, and other declarations. Treat namespaces as the main conceptual organization mechanism for libraries. Note namespaces are orthogonal to modules."
+      },
+      {
+        "name": "Sections provide a local scoped view and control options",
+        "description": "Sections provide a means of ordering a local view of the globally-available collection of names, as well as a way to precisely control the scope of compiler options along with language extensions, instances, and attributes. They also allow parameters shared by many declarations to be declared centrally and propagated as needed using the variable command.",
+        "guidance": "Use section/ end pairs to confine changes to opens, variables, set_option, local commands, and to group related declarations that share parameters."
+      },
+      {
+        "name": "variable command declares typed variables and controls implicitness",
+        "description": "Declares one or more typed variables, or modifies whether already-declared variables are implicit. Introduces variables that can be used in definitions within the same namespace or section block.",
+        "guidance": "Variables declared become arguments of definitions that mention them; they can be explicit, implicit, or instance implicit (and anonymous). You can change implicitness, e.g. variable {x}, but avoid changing how variables are bound and declaring new variables at the same time."
+      },
+      {
+        "name": "Variables can be explicit, implicit, or instance implicit (anonymous allowed)",
+        "description": "Variable declarations have the same flexibility as regular function parameters. In particular they can be explicit, implicit, or instance implicit (in which case they can be anonymous).",
+        "guidance": "Use the appropriate binder form ({ } for implicit, [ ] for instance implicit). Instance implicits may be anonymous; name instance implicits if you need to refer to them explicitly. Example: [instBEq : BEq \u03b1] vs [Hashable \u03b1]."
+      },
+      {
+        "name": "In theorem bodies variables are not included based on usage",
+        "description": "In theorems (proof bodies), variables are not included based on usage in order to ensure that changes to the proof cannot change the statement of the overall theorem. Instead, variables are only available to the proof if they have been mentioned in the theorem header or in an include command or are instance implicit and depend only on such variables.",
+        "guidance": "To avoid changing a theorem's statement by editing its proof, ensure necessary section variables are mentioned in the theorem header or explicitly included. Be mindful that some variables will not be available in proofs unless they appear in the header or are included."
+      },
+      {
+        "name": "Section variables are automatically added as parameters to declarations that mention them",
+        "description": "Section variables are names (or instance implicit parameters) that are automatically added as parameters to definitions. They are also added as universally-quantified assumptions to theorems when they occur in the theorem's statement.",
+        "guidance": "When a definition or theorem mentions a section variable by name (in its statement), Lean will automatically add it as a parameter/assumption. This behavior occurs whether or not autoImplicit is true."
+      },
+      {
+        "name": "Section variables are added only when they occur in a theorem's statement (not proofs)",
+        "description": "Section variables are added only when they occur in the statement of a theorem. Otherwise, modifying the proof of a theorem could change its statement if the proof term made use of a section variable.",
+        "guidance": "Design variable placement so that only theorems that depend on a variable follow it, or use include/omit to control inclusion."
+      },
+      {
+        "name": "Order of section variables: added before other parameters in declaration order",
+        "description": "All section variables are added in the order in which they are declared, before all other parameters.",
+        "guidance": "Be aware parameter ordering in generated declarations/theorems: section variables will appear first in the parameter list in the same order declared."
+      },
+      {
+        "name": "Included section variables (include) are added to all theorems in the remainder of the section",
+        "description": "include eeny meeny instructs Lean to include the section variables eeny and meeny in all theorems in the remainder of the current section, differing from the default behavior of conditionally including variables based on use in the theorem header.",
+        "guidance": "Prefer using include in combination with 'in theorem ...' to limit scope. Excessively including variables may insert spurious assumptions and trigger warnings; restructure variables or use omit if needed."
+      },
+      {
+        "name": "omit removes inclusion of previously include-d variables (can omit by instance type)",
+        "description": "omit instructs Lean to not include a variable previously include'd. Apart from variable names, it can also refer to typeclass instance variables by type using the syntax omit [TypeOfInst], in which case all instance variables that unify with the given type are omitted.",
+        "guidance": "Use omit (often with in) to keep section structure simple and avoid adding unnecessary assumptions to theorems."
+      },
+      {
+        "name": "Warning/linter for unused included section variables",
+        "description": "After elaboration of the proof, Lean will generate a warning like: included section variable '[ToString \u03b1]' is not used in 'ex', consider excluding it. This highlights unused hypotheses inserted by include.",
+        "guidance": "When this warning occurs, move the offending variable declaration down into a narrower scope or omit it for the theorem. The linter can be disabled with set_option linter.unusedSectionVars false."
+      },
+      {
+        "name": "namespace command affects naming and scope similarly to section",
+        "description": "`namespace <id>` opens a section with label `<id>` that influences naming and name resolution inside the section: declarations names are prefixed; names starting with `<id>.` become available without the prefix; declarations can be protected. namespace also acts like section in delimiting the scope of variable, open, and other scoped commands.",
+        "guidance": "Use namespace to create hierarchical name prefixes; remember namespace scope ends with end <id> or end of file. Namespaces can be nested."
+      },
+      {
+        "name": "Current namespace and root namespace precedence (_root_ qualifier)",
+        "description": "There is a root namespace (omitted to denote root). Names in the current namespace take precedence over names in the root namespace. References to root names from inside a namespace must be qualified with _root_.",
+        "guidance": "When a local name shadows a root name, use _root_.name to refer to the root version. Example: inside namespace Forest, use _root_.color to access root color if Forest.color exists."
+      },
+      {
+        "name": "protected modifier prevents bringing declarations into scope when opening namespace",
+        "description": "Within a namespace, declarations can be protected, which excludes them from the effects of opening the namespace. Protected declarations are not brought into scope when their namespace is opened.",
+        "guidance": "Mark declarations protected when you do not want them to become unqualified free names upon open."
+      },
+      {
+        "name": "open command makes names from other namespaces visible (many variants)",
+        "description": "Makes names from other namespaces visible without writing the namespace prefix. Names that are made available with open are visible within the current section or namespace block. The open command can be used in different ways: open path1 path2; open path hiding def1 def2; open path (def1 def2); open path renaming def1 \u2192 def1'; open scoped path1 path2; open ... in (only next command).",
+        "guidance": "Choose the appropriate open form to control what is brought into scope: use hiding to exclude, parentheses to restrict to specific names (works even if protected), renaming to avoid collisions, open scoped to bring only scoped instances/notations/attributes, and open ... in for one-off opens."
+      },
+      {
+        "name": "open scoped opens only scoped instances, notations, and attributes",
+        "description": "`open scoped Some.Namespace.Path1 Some.Namespace.Path2 only opens scoped instances, notations, and attributes from Namespace1 and Namespace2; it does not make any other name available.",
+        "guidance": "Use open scoped when you only want notations/instances/attributes to be active without polluting the identifier namespace."
+      },
+      {
+        "name": "open ... in limits an open to the next command or expression",
+        "description": "`open <any of the open shapes above> in makes the names open-ed visible only in the next command or expression.",
+        "guidance": "Use open ... in for one-off convenience in a single theorem/definition without changing the surrounding section scope."
+      },
+      {
+        "name": "Opening nested/iterated namespaces: sequence is considered relative to current opens",
+        "description": "A sequence of one or more identifiers results in each namespace in the sequence being opened. Namespaces to be opened are considered relative to the currently-open namespaces. Every namespace in this set is opened before the next namespace in the sequence is processed.",
+        "guidance": "When opening nested namespaces, be careful with relative paths and current opens; opening A.B will bring in A.B.C as C in some cases depending on context."
+      },
+      {
+        "name": "Hiding, renaming, and restricted opening requirements",
+        "description": "Hiding: the provided identifier must uniquely designate a namespace to be opened. Renaming: the provided identifier must uniquely designate a namespace; parentheses/restricted opening require all listed names be unambiguous.",
+        "guidance": "Ensure names listed in hiding/renaming/parentheses forms are unambiguous in the set of considered namespaces to avoid errors."
+      },
+      {
+        "name": "export adds names from other namespaces to the current namespace as transparent aliases",
+        "description": "The export command adds names from other namespaces to the current namespace, as if they had been declared in it. Exported names are registered as aliases of their targets; from outside, they appear as N.name. The command export Some.Namespace (name\u2081 name\u2082) makes name\u2081 and name\u2082 visible in the current namespace without prefix and visible from outside as N.name\u2081 and N.name\u2082.",
+        "guidance": "Use export to create transparent aliases of frequently-used names so they can be referenced from the exporting namespace. Understand that the kernel treats these as aliases (no new kernel objects)."
+      },
+      {
+        "name": "section header modifiers change defaults for declarations in the section",
+        "description": "A section header may include modifiers: @[expose], public, noncomputable, meta. If the header includes noncomputable, then the definitions in the section are all considered to be noncomputable and no compiled code is generated for them. @[expose] exposes all definitions in the section. public makes declarations public by default. meta places section's declarations in the meta phase.",
+        "guidance": "Use section header modifiers to set sensible defaults for groups of related declarations (e.g., noncomputable for proofs relying on choice)."
+      },
+      {
+        "name": "set_option changes revert at end of section scope",
+        "description": "Compiler options changed in a section are reverted to their original values at the end of the scope in which they were modified.",
+        "guidance": "Temporarily change options inside sections; Lean will restore previous values automatically at scope exit."
+      },
+      {
+        "name": "autoImplicit option affects automatic implicit parameters",
+        "description": "When automatic implicit parameters are disabled (set_option autoImplicit false), parameters that would otherwise be implicit are not automatically treated as such. This affects whether names may be omitted as implicit parameters in definitions.",
+        "guidance": "If autoImplicit is false, you must explicitly bind parameters that would otherwise be inferred implicitly; be mindful when writing definitions expecting implicit binding."
+      },
+      {
+        "name": "Instance-implicit section variables are treated specially and dependencies are iterated",
+        "description": "Section variables may be implicit, strict implicit, or explicit; instance implicit section variables are treated specially. When the name of a section variable is encountered in a non-theorem declaration, it is added as a parameter. Any instance implicit section variables that mention the variable are also added. If any of the variables that were added depend on other variables, then those variables are added as well; this process is iterated until no more dependencies remain.",
+        "guidance": "Be aware that adding a section variable can pull in dependent instance implicits transitively; declare variables in an order that avoids surprising dependencies."
+      }
+    ]
+  }
+}

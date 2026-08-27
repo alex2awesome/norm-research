@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_d11014c1f6ba.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17956,
+  "output_tokens": 4643,
+  "elapsed_s": 1422.441435832996,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML researchers, dataset creators, and practitioners working on vision-language models and multimodal mathematical reasoning benchmarks",
+    "subtask_short": "creating visual math benchmark",
+    "subtask_description": "Designing and constructing a purely-visual, multi-scene dataset (GSM8K-V) by converting text-based grade-school math word problems into images and establishing evaluation protocols for VLMs. Includes automated parsing, scene allocation, description templating, image generation, human validation, and evaluation/analysis pipelines.",
+    "subtask_keywords": [
+      "vision_language_models",
+      "dataset",
+      "benchmark",
+      "math_word_problems",
+      "multimodal",
+      "dataset_construction"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Problem decomposition into (object, math value, semantic) triples",
+        "description": "Parse each textual GSM8K instance into a set of triples (object, math value, semantic) to form a structured mathematical representation for image construction.",
+        "guidance": "Use an LLM parser (the authors use GPT-4.1) to extract object (entity), math value (numerical attribute), and semantic (contextual role). This structured representation is the systematic foundation for subsequent allocation, description generation, and image synthesis."
+      },
+      {
+        "name": "Math information classification (13 classes)",
+        "description": "Categorize mathematical elements in GSM8K samples into 13 typical classes so they can be rendered in distinct visual forms.",
+        "guidance": "Map each extracted math element to one of the pre-specified classes (details in Appendix C.1). Each class has a corresponding visual rendering strategy to preserve the original mathematical information while aligning with realistic visual scenes."
+      },
+      {
+        "name": "Scene allocation (1\u20132 math facts per scene) with allocation principles",
+        "description": "Allocate decomposed mathematical information across multiple scenes so each scene contains only 1\u20132 pieces of information.",
+        "guidance": "Follow three guiding principles during allocation: (1) Contextual grouping \u2014 group information referring to the same object type, spatial setting, or functional purpose into one scene; (2) Final isolation \u2014 reserve the problem question for the last scene (contains no additional numerical values or objects); (3) Atomic fidelity \u2014 retain only atomic math facts (do not infer or merge values during allocation). The authors employ GPT-4.1 for allocation; see Appendix C.2 for details."
+      },
+      {
+        "name": "Introduce multi-dimensional interference",
+        "description": "Intentionally add controlled visual and semantic distractors to scenes to increase task difficulty and probe reasoning robustness.",
+        "guidance": "Perception interference: add irrelevant but visually salient objects. Semantic interference: add distractors contextually close to the math problem. These strategies make benchmark items more challenging and reduce shortcut solutions. Details in Appendix D.4."
+      },
+      {
+        "name": "Meta description strategy mapping and templating",
+        "description": "Map each math-information category to a corresponding meta description strategy with pre-specified prompts/templates used to generate scene descriptions.",
+        "guidance": "Design high-level templates (e.g., time & clock, percentage, measurement, signboard & icon) so generated textual scene descriptions preserve the mathematical intent. Complete templates and strategies are provided in Appendix D.2; these templates guide subsequent LLM-based description generation."
+      },
+      {
+        "name": "Scene description schema: object, action, composition",
+        "description": "Produce structured scene descriptions following a tripartite schema: Object, Action, Composition.",
+        "guidance": "Object: concrete entities that carry math information; Action: state/activity that conveys semantic cues; Composition: spatial arrangement/positional relations. Use an LLM (GPT-4.1 in the paper) to generate these structured descriptions to ensure consistency for image generation."
+      },
+      {
+        "name": "Multi-scene image generation specifications",
+        "description": "Generate multi-scene images from structured scene descriptions using an image-generation model with specified resolution and prompts.",
+        "guidance": "The authors use GPT-Image-1 to produce 1024\u00d71024 pixel images for each scene. Category-specific generation prompts are provided (Appendix D.3) to ensure reproducibility. Produce one image per scene; an instance may contain multiple scene images per problem."
+      },
+      {
+        "name": "Human cross-check and iterative refinement loop",
+        "description": "All generated images must pass a dual human cross-validation process and be refined iteratively until they meet benchmark requirements.",
+        "guidance": "Fully trained annotators perform a two-person cross-check. If violations are found (consistency/completeness/compliance), images are refined; severe issues trigger manual correction of scene descriptions. Repeat the generate\u2013verify loop until all problem\u2013image pairs meet standards. Detailed cross-check protocols in Appendix C.3."
+      },
+      {
+        "name": "Cross-check principle \u2014 Consistency",
+        "description": "Visual scenes must faithfully preserve the entities, quantities, and constraints specified in the original text to ensure semantic equivalence across modalities.",
+        "guidance": "During human validation, verify that every entity and numeric attribute in the textual source is represented accurately in the images \u2014 no missing or altered values that would change solvability."
+      },
+      {
+        "name": "Cross-check principle \u2014 Completeness",
+        "description": "All information necessary to solve the problem must be visually accessible in the images without requiring extra assumptions.",
+        "guidance": "Ensure no implicit or external assumptions are required; if critical info was omitted or obscured, refine images/descriptions so the solver can proceed using only the provided visual evidence."
+      },
+      {
+        "name": "Cross-check principle \u2014 Compliance (safety & formatting)",
+        "description": "Images must adhere to safety and formatting standards: exclude sensitive content, maintain clarity of object identities, and ensure legibility of numerical symbols.",
+        "guidance": "Annotators must flag and correct any safety issues, ambiguous object depictions, or illegible numbers. Compliance also covers style/formatting constraints enforced across the dataset."
+      },
+      {
+        "name": "Preserve semantic fidelity for within-item cross-modal comparisons",
+        "description": "Construct visual counterparts that preserve the exact set of problems as the text benchmark so models can be compared on the same item across modalities.",
+        "guidance": "GSM8K-V renders GSM8K problems into visual form without changing problem semantics; this allows clean within-item comparisons (text vs visual) to isolate modality effects on reasoning."
+      },
+      {
+        "name": "Scene granularity constraint: 1\u20132 math pieces per scene",
+        "description": "Each scene should contain only a small number of atomic math facts (typically 1\u20132) to isolate information and preserve reasoning order.",
+        "guidance": "This granularity helps VLMs track temporal/sequential dependencies and reduces confounding visual clutter; it's enforced by the allocation step and human checks."
+      },
+      {
+        "name": "Dataset answer-type constraint",
+        "description": "Specify and enforce answer formats for the benchmark (integer / decimal / fraction).",
+        "guidance": "In GSM8K-V the Answer type is listed as Integer. During evaluation, models are instructed to output only the final numeric answer in the required format; prompt templates and format definitions are in Appendix B.2."
+      },
+      {
+        "name": "Evaluation instruction protocol: step-by-step with final numeric answer only",
+        "description": "During evaluation, instruct models to reason step-by-step over images but report only the final numeric answer in the required format.",
+        "guidance": "Provide representative prompt templates (Appendix B.2). The explicit instruction to output only the final numeric answer standardizes scoring and comparison across models."
+      },
+      {
+        "name": "Input-mode ablation: implicit vs explicit question presentation",
+        "description": "Two input modes are considered: implicit (only images) and explicit (images paired with a masked question linking visual entities to semantics).",
+        "guidance": "Explicitly providing a textual mask or question linkage reduces ambiguity and yields slightly higher accuracy; evaluations should report both modes to measure the modality gap."
+      },
+      {
+        "name": "Multi-image vs single-image input formatting",
+        "description": "Evaluate models under multi-image (separate sequential scenes) and concatenated single-image settings since input format affects performance.",
+        "guidance": "Multi-image input tends to preserve temporal/logical order and gives slightly better accuracy; concatenation can obscure sequential dependencies. Appendix B.4 details input formats."
+      },
+      {
+        "name": "Image style sensitivity testing",
+        "description": "Assess whether visual rendering style affects model reasoning by testing multiple render styles (e.g., Pixar-style, Giphli-style).",
+        "guidance": "The authors chose Pixar-style for clarity; ablations show marginal performance differences across styles, but style-agnostic testing is recommended to ensure robustness (Appendix B.5)."
+      },
+      {
+        "name": "Modality validation: test text-only, image-only, OCR, and caption inputs",
+        "description": "Validate that the benchmark genuinely requires vision by comparing performance on text-only, image-only, OCR transcriptions, and structured captions.",
+        "guidance": "OCR inputs performed very poorly (models cannot rely on text transcriptions), while caption inputs (structured scene descriptions) help but do not close the gap to text-only. Include these modalities in evaluation to confirm visual grounding requirements (results in Table 5 and Appendix B.3)."
+      },
+      {
+        "name": "Error taxonomy \u2014 Perception\u2013Calculation errors",
+        "description": "Recognize and document errors where misperception of visual quantities or object counts leads to downstream calculation mistakes.",
+        "guidance": "These errors are frequent when visually similar objects coexist or fine-grained details are required (e.g., count misreads, mismapping quantities to prices). Include representative cases and quantify prevalence (Appendix E.1)."
+      },
+      {
+        "name": "Error taxonomy \u2014 Instrument-reading errors",
+        "description": "Recognize and document errors arising from failures to read/interpret instruments (clocks, gauges, dashboards) used to encode numeric values.",
+        "guidance": "Instrument-reading errors often break downstream arithmetic even when underlying math is simple; include case studies and analyses (Appendix E.2)."
+      },
+      {
+        "name": "Annotator training and human evaluation guidelines",
+        "description": "Provide thorough training for annotators, restrict tasks to objective judgments, and ensure fair compensation.",
+        "guidance": "Annotators should be trained to apply consistency/completeness/compliance checks and to answer problems directly from images. The paper states annotators received training and fair compensation and reported the task was manageable."
+      },
+      {
+        "name": "Reproducibility requirements (hyperparameters, prompts, dataset/code release)",
+        "description": "Release all hyperparameter settings, generation prompts, templates, and dataset/code to ensure reproducibility of benchmark construction and evaluations.",
+        "guidance": "The authors provide hyperparameters in Appendix B, generation prompts in Appendix D.3, and host dataset/code on GitHub and HuggingFace (links in the paper). Follow similar open practices for reproducibility."
+      },
+      {
+        "name": "Pipeline component specification and usage",
+        "description": "Specify the automated components used in the pipeline: LLM for parsing and description generation (GPT-4.1), image generator (GPT-Image-1), and inference frameworks (vLLM for open-source models; official APIs for closed-source models).",
+        "guidance": "Document model versions, API usage, and inference/back-end frameworks so evaluations are reproducible and comparable. The paper details these choices and related appendices (e.g., Appendix B)."
+      }
+    ]
+  }
+}

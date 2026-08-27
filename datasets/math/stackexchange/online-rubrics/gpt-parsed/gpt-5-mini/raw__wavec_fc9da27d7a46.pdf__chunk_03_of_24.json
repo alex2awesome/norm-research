@@ -1,0 +1,305 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 24,
+  "chunk_chars": 39819,
+  "model": "gpt-5-mini",
+  "elapsed_s": 108.07184995900025,
+  "input_tokens": 12026,
+  "output_tokens": 7228,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "users of PARI/GP (mathematicians, computational number theorists, GP script authors and interactive users)",
+    "subtask_short": "using PARI/GP interactive environment",
+    "subtask_description": "Guidelines and reference for interacting with the PARI/GP calculator: understanding error messages, debugging with break loop and iferr, customizing defaults and preferences, using readline and metacommands, interfacing with other languages, and the conventions used in the function reference.",
+    "subtask_keywords": [
+      "pari-gp",
+      "gp_manual",
+      "interactive_debugging",
+      "scripting",
+      "readline"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Parser error messages",
+        "description": "Parser messages indicate unexpected end-of-input and list expected continuations (e.g. \")-> or ',' or ')'\"), showing what token the parser expected and where input ended.",
+        "guidance": "The manual explains that when the parser reaches end-of-input it reports the tokens it would have accepted next; sometimes the message lists continuations that are syntactically possible but semantically odd (e.g. allowing an inline closure '(x)->sin(x)'). The caret pointing shows the location."
+      },
+      {
+        "name": "Runtime evaluator error messages",
+        "description": "Runtime errors from the evaluator report evaluation-time failures (e.g. undefined function called) with a caret pointing to the failing token and an explanatory message such as \"not a function in function call\".",
+        "guidance": "Runtime errors occur after successful parsing/compilation; messages identify the failing operation (e.g. siN vs sin) and show the expression and caret location."
+      },
+      {
+        "name": "Library runtime errors with mathematical context",
+        "description": "Library/runtime errors include the operator or library function name and explain the mathematical cause (e.g. \"_/_: impossible inverse in Fp_inv: Mod(2,4).\"), and provide deeper call-chain context when applicable.",
+        "guidance": "When the error is deeper in the call chain the debugger prints frames like 'in function g: ...' and 'in function f: ...' to help locate the origin. The surrounding context shows which operator/library function raised the error."
+      },
+      {
+        "name": "Call-stack/frame reporting in error traces",
+        "description": "When an error occurs inside nested user functions or loops, gp reports enclosed frames (innermost first) showing the top-level, function bodies and loop frames that existed at the error.",
+        "guidance": "The trace shows lines like 'in function g: for(i=-N,N,f(i))' and 'in function f: 1/x' with carets indicating positions; loop bodies define extra frames and lexically scoped variables are available in their frames."
+      },
+      {
+        "name": "Break loop behavior and entry conditions",
+        "description": "A break loop is entered on Control-C (user interrupt) or a runtime/library/user error (not syntax errors), freezing gp state and presenting a 'break>' prompt for interactive inspection.",
+        "guidance": "Inside break>, gp accepts gp commands (with history if using readline) and does not terminate on further errors. If break loop started by Control-C, an empty line resumes the computation; if started by a fatal error, empty line does nothing to avoid losing debugging data. Exit with next, break, return, or C-d (C-d twice may exit shell)."
+      },
+      {
+        "name": "Using break loop to inspect and modify state",
+        "description": "While in a break loop you can inspect variables (including lexically-scoped ones preserved in frames), evaluate gp commands, change state (increase debug level, set variables, start logging) and then resume or abort the computation.",
+        "guidance": "Examples show typing variable names to print values, and modifying gp's state before continuing. The break loop prints the standard error message first and then the 'break>' prompt."
+      },
+      {
+        "name": "Debugging commands available in break loop",
+        "description": "dbg_up(n), dbg_down(n), dbg_x(t), dbg_err() are available to navigate frames, examine objects, and retrieve the current error context t_ERROR.",
+        "guidance": "dbg_up goes up n frames, dbg_down cancels dbg_up, dbg_x is like \\x but more flexible, and dbg_err() returns a t_ERROR object whose components can be inspected (e.g. Vec(ERR))."
+      },
+      {
+        "name": "Debugger default and non-interactive behavior",
+        "description": "The debugger (break loop) is enabled by default; it can be disabled by setting the default 'breakloop' to 0 in gprc. In non-interactive mode (stdin not a terminal) the break loop is automatically disabled and a runtime error simply sends you back to the prompt.",
+        "guidance": "When a PARI stack overflow starts a break loop, the PARI stack is reset so commands can run; otherwise the stack would immediately overflow again. Disabling break loop changes runtime error behavior."
+      },
+      {
+        "name": "iferr: basic protected evaluation form",
+        "description": "iferr(statements, ERR, recovery) evaluates statements and returns its value unless an error occurs, in which case recovery is returned and ERR is a lexically-scoped variable set by the exception handler.",
+        "guidance": "statements are partially evaluated and may have side effects. The ERR parameter helps the recovery code decide how to handle the error."
+      },
+      {
+        "name": "iferr with predicate and selective trapping",
+        "description": "iferr(statements, ERR, recovery, predicate) only catches the exception if predicate is non-zero, enabling selective trapping based on ERR (e.g. errname(ERR) == \"e_INV\").",
+        "guidance": "Recommended practice: only trap errors of a specific kind; rethrow unexpected errors with error(ERR). Examples: inv2 that traps division-by-zero and rethrows type errors, and the simplified inv3."
+      },
+      {
+        "name": "ERR object contents and inspection",
+        "description": "The ERR formal parameter (a t_ERROR object) contains data beyond the error name; components accessible by component(ERR,1), component(ERR,2), ... or Vec(ERR), and errname(ERR) returns the error name string.",
+        "guidance": "Use the components to make fine-grained decisions in recovery code. See Section 3.11.17 for the list of exception types and contents."
+      },
+      {
+        "name": "Using iferr to build fault-tolerant functions (example patterns)",
+        "description": "Typical pattern: try computation in statements, return recovery on expected error type, rethrow for unexpected types, or use predicate to only catch the desired exception.",
+        "guidance": "Examples given: inv(x) = iferr(1/x, ERR, \"oo\") and inv2/ inv3 illustrating checking errname(ERR) and rethrowing with error(ERR) when the error is not expected."
+      },
+      {
+        "name": "Using iferr for staged recovery/retry strategies",
+        "description": "iferr enables recovery strategies like restarting part of a computation at higher precision or attempting alternate computations when an anticipated error arises (e.g. lazy factorization revealing a factor).",
+        "guidance": "The manual suggests using iferr to implement retry or fallback logic rather than letting the program terminate and lose intermediate results."
+      },
+      {
+        "name": "Interfacing GP with C and other languages",
+        "description": "PARI library is intended to be interfaced with C; gp provides convenient scripting for prototyping; install imports foreign functions for use under gp; GP2C can ease transition to C.",
+        "guidance": "Recommendation: test and debug algorithms in gp scripts for simplicity and robustness, then code performance-critical parts in C if needed. Known external interfaces include SAGE (Python), Math::Pari (Perl), and a CLISP integration; these are third-party and not endorsed."
+      },
+      {
+        "name": "Defaults mechanism and default(def, value) usage",
+        "description": "Use default(def, value) to set internal gp defaults; typing default by itself lists all defaults and current values. Defaults are often set once (colors, prompt) or used interactively (timer, precision).",
+        "guidance": "Default names in manual include initial values in parentheses; the second argument is subject to string context expansion (run-time values can be concatenated into the string)."
+      },
+      {
+        "name": "String context expansion and numeric suffixes in defaults",
+        "description": "Second argument to default supports string context expansion (e.g. default(logfile, \"file\" a \".log\")). Numeric suffixes k, M, G can be appended to numeric arguments to multiply by 10^3, 10^6, 10^9 respectively.",
+        "guidance": "Case-insensitive suffixes (30k or 30K). Some defaults corresponding to filenames or prompts also perform time expansion and environment variable expansion."
+      },
+      {
+        "name": "Time and environment expansions for certain defaults",
+        "description": "Some defaults (prompt, psfile, logfile) are subjected to time expansion via strftime (e.g. %H, %M) and environment expansion for $VARNAME and ~ home directory expansion.",
+        "guidance": "Example: default(prompt,\"(%H:%M) ? \") prepends the time; environment expansion replaces $HOME or ~ with actual paths at the time they are set."
+      },
+      {
+        "name": "Preferences file (gprc) purpose and semantics",
+        "description": "gprc is gp's preferences file read at startup to customize defaults, load common user functions/aliases; explicit command-line switches override gprc values.",
+        "guidance": "If gprc doesn't exist gp proceeds with initialization; the gprc file is processed before user interaction and after initializing defaults."
+      },
+      {
+        "name": "gprc file syntax and allowed constructs",
+        "description": "gprc is read line by line with comments removed and supports multiline constructions using braces, \\, or =. Two preprocessor-style constructs are special: lines starting with #if boolean used as conditional comments; after preprocessing only two kinds of expressions are recognized: default = value and read \"some GP file\".",
+        "guidance": "Use quotes for strings; read delays file input until gprc fully loaded. Example shows conditional blocks using #if VERSION > 2.2.3 and #if EMACS."
+      },
+      {
+        "name": "gprc preprocessor conditionals",
+        "description": "Lines starting with '#if boolean' are treated as comments if boolean evaluates to false, otherwise read normally; tests available: EMACS, READL (readline), and 'VERSION op number' where op is >, <, <=, or >=.",
+        "guidance": "The directive applies to the current line; if rest of line is empty the test applies to next line. Negation allowed (#if not or #if !)."
+      },
+      {
+        "name": "gprc lookup order / location",
+        "description": "When gp starts it looks for gprc in this order: file named by $GPRC, $HOME/.gprc (Unix) or $HOME\\gprc.txt (Windows), /etc/gprc (system-wide), and finally pari's datadir (.gprc or gprc.txt). Only the first found is loaded.",
+        "guidance": "On Unix the default user gprc is hidden (starts with .); use ls -a to view it. Environment variable GPRC can be used to point to a custom file."
+      },
+      {
+        "name": "Simple metacommands: purpose and script-use prohibition",
+        "description": "Simple metacommands (mostly starting with \\) are shortcuts for interactive use and should not be used in GP scripts. They are case sensitive and braces denote optional args with defaults.",
+        "guidance": "Whitespace between metacommand and arguments is optional (can cause problems for some commands). Example: \\Q, \\q are distinct."
+      },
+      {
+        "name": "Online help metacommands (? , ?? , ??? )",
+        "description": "?n lists functions in Section 3.n; ?function gives short explanation; ?? keyword yields the function description as in the manual and supports operators and chapter selection (using @n); ??? pattern lists sections of Chapter 3 related to query.",
+        "guidance": "Use quotes for queries containing dangerous characters. ?? without argument opens a dvi previewer of the manual. ??tutorial and ??refcard open tutorial and reference card previews. Extended help requires perl/gphelp installation."
+      },
+      {
+        "name": "Comment syntax",
+        "description": "Block comments: /* ... */ span lines and are ignored. One-line comments: \\\\ (backslash-backslash) cause the rest of the line to be ignored by gp.",
+        "guidance": "These comment syntaxes apply generally; multiline comments are recognized in gprc too."
+      },
+      {
+        "name": "\\a metacommand: raw object printing",
+        "description": "\\a {n} prints the object number n (%n) in raw format; if n omitted prints latest computed object (%).",
+        "guidance": "Useful to inspect internal representation of history objects in raw form."
+      },
+      {
+        "name": "\\c metacommand: list hardcoded functions",
+        "description": "\\c prints the list of all available hardcoded functions under gp, excluding operators written as special symbols.",
+        "guidance": "More information about functions can be obtained with ?function. For user-defined functions/member functions see \\u and \\um."
+      },
+      {
+        "name": "\\d metacommand: print defaults",
+        "description": "\\d prints the defaults (shortcut for default()).",
+        "guidance": "Shows available defaults and their current values."
+      },
+      {
+        "name": "\\e metacommand: echo mode",
+        "description": "\\e {n} switches echo mode on (1) or off (0); if n omitted, toggles or prints current state.",
+        "guidance": "Control whether commands are echoed as they execute."
+      },
+      {
+        "name": "\\g metacommand: set debugging level",
+        "description": "\\g {n} sets the debugging level debug to non-negative integer n.",
+        "guidance": "Use to control general debugging verbosity."
+      },
+      {
+        "name": "\\gf metacommand: set file usage debugging level",
+        "description": "\\gf {n} sets debugfiles to non-negative integer n.",
+        "guidance": "Used for file-related debugging."
+      },
+      {
+        "name": "\\gm metacommand: set memory debugging level",
+        "description": "\\gm {n} sets debugmem to non-negative integer n.",
+        "guidance": "Used to debug memory-related issues."
+      },
+      {
+        "name": "\\h metacommand: hashtable debugging/info",
+        "description": "\\h {m-n} outputs debugging info about the hashtable; a single number n outputs cell n; m-n prints a range; a function name prints internal structure of that hash cell; '-' prints statistics.",
+        "guidance": "Useful for low-level debugging and inspecting internal hash structures."
+      },
+      {
+        "name": "\\l metacommand: logging control",
+        "description": "\\l {logfile} switches log mode on/off; if logfile given, sets the default logfile and turns logging on.",
+        "guidance": "Use to start/stop session logging; related to default logfile setting."
+      },
+      {
+        "name": "\\m metacommand: prettymatrix print",
+        "description": "\\m prints the object %n but using prettymatrix format.",
+        "guidance": "Like \\a but in prettier matrix form."
+      },
+      {
+        "name": "\\o metacommand: set output mode",
+        "description": "\\o {n} sets output mode (0 raw, 1 prettymatrix, 3 external prettyprint).",
+        "guidance": "Controls how gp displays results."
+      },
+      {
+        "name": "\\p metacommand: set precision",
+        "description": "\\p {n} sets realprecision to n decimal digits; prints current value if n omitted.",
+        "guidance": "Use to change default numeric precision interactively."
+      },
+      {
+        "name": "\\ps metacommand: set series precision",
+        "description": "\\ps {n} sets seriesprecision to n significant terms; prints current value if n omitted.",
+        "guidance": "Controls precision for series expansions."
+      },
+      {
+        "name": "\\q metacommand: quit session",
+        "description": "\\q quits the gp session and returns to the system (shortcut for quit()).",
+        "guidance": "Use to exit gp interactively."
+      },
+      {
+        "name": "\\r metacommand: read file into gp",
+        "description": "\\r {filename} reads all commands from filename as if typed from keyboard; if filename omitted re-reads previously used input file.",
+        "guidance": "If a gp binary file is read it is silently loaded; accepts compressed files (.Z, .gz, .z) and decompresses on the fly. Note: \\r stores history entry per input line, different from read() function."
+      },
+      {
+        "name": "\\s metacommand: PARI stack/heap state",
+        "description": "\\s prints the state of the PARI stack and heap for debugging.",
+        "guidance": "Primarily a developer/debugging tool to inspect PARI memory."
+      },
+      {
+        "name": "\\t metacommand: internal format display",
+        "description": "\\t prints internal longword format of all PARI types; detailed bit/byte format covered in Chapter 4.",
+        "guidance": "Used for low-level inspection of internal representations; typical gp users need not know the format."
+      },
+      {
+        "name": "\\u and \\um metacommands: user-defined functions",
+        "description": "\\u prints definitions of all user-defined functions; \\um prints definitions of all user-defined member functions.",
+        "guidance": "Helpful to inspect functions you defined during a session."
+      },
+      {
+        "name": "\\v metacommand: version info",
+        "description": "\\v prints the version number and implementation architecture (e.g. 680x0, Sparc, Alpha) of the gp executable.",
+        "guidance": "Useful to determine which gp build you are running."
+      },
+      {
+        "name": "\\w metacommand: write object to file",
+        "description": "\\w {n} {filename} writes object number n (%n) into named file in raw format; if n omitted writes latest object; if filename omitted appends to logfile.",
+        "guidance": "Underlying write() is more powerful for arbitrary filenames; \\w is a convenience for basic raw dumps."
+      },
+      {
+        "name": "\\x metacommand: print complete internal tree",
+        "description": "\\x {n} prints the complete tree with addresses and hexadecimal contents of internal representation of object n (%n); if n omitted uses latest object.",
+        "guidance": "Mainly used for debugging; dbg_x is a more versatile underlying function."
+      },
+      {
+        "name": "\\y metacommand: toggle simplify",
+        "description": "\\y {n} switches simplify on (1) or off (0); if n given sets simplify to n.",
+        "guidance": "Controls automatic simplification behavior of printed results."
+      },
+      {
+        "name": "# and ## metacommands: timer toggle and last time",
+        "description": "# toggles the timer on/off; ## prints time taken by latest computation.",
+        "guidance": "Useful for ad-hoc timing; remember to turn timer on before long computations if you want the timing shown."
+      },
+      {
+        "name": "Metacommand \\o and completion interaction",
+        "description": "When Tab completes defaults it will append an ending comma; when completing a function name it appends parentheses and a second Tab will show argument list as given by online help.",
+        "guidance": "Completion is context-dependent and may add a comma or parentheses automatically to save keystrokes."
+      },
+      {
+        "name": "Using readline: line editing and history",
+        "description": "Readline provides line editing, history (multiline commands stored as a single concatenated line), incremental search (C-r/C-s), movement (C-a/C-e, M-b/M-f), kill/yank, undo, transpose and Vi mode toggle (M-C-j).",
+        "guidance": "Readline keybindings can be customized in .inputrc; C-x C-r rereads the init file. Meta key may be Alt or Esc depending on system."
+      },
+      {
+        "name": ".inputrc customization for gp",
+        "description": "Create .inputrc in home directory to change readline bindings and behavior for gp; example shows conditional $if Pari-GP and custom bindings (e.g. show-all-if-ambiguous, custom key sequences).",
+        "guidance": "C-x C-r re-reads .inputrc during a session. Use bindings to tune behavior like backward-delete-char or to avoid interfering with copy-paste."
+      },
+      {
+        "name": "Electric parentheses and pari-matched-insert",
+        "description": "By default '(' and '[' are bound to pari-matched-insert which, when 'electric parentheses' is enabled (default off), automatically inserts the matching closure ')' or ']' and can be toggled with numeric arguments (M--2 to toggle, M--0/M--1 to explicitly off/on).",
+        "guidance": "Electric insertion is useful but may interfere with copy-paste; toggle as needed."
+      },
+      {
+        "name": "Readline completion and online help",
+        "description": "TAB performs context-dependent completion; if only one completion is meaningful gp inserts it plus context-specific endings (comma for defaults, parentheses for functions). Hitting TAB again lists possible completions. M-h shows short online help for the word under the cursor; M-H shows extended help.",
+        "guidance": "Completion uses gp's knowledge of defaults, filenames, functions, operators, member keywords, etc. Example: def<TAB>se<TAB>10 expands to default(seriesprecision,10)."
+      },
+      {
+        "name": "PariEmacs integration (using PariEmacs package)",
+        "description": "PariEmacs lets you run gp as a subprocess in GNU Emacs; add autoload lines for gp-mode and gp-script-mode to .emacs and associate .gp files with gp-script-mode.",
+        "guidance": "Once set up, M-x gp starts a special shell launching gp; you get Emacs editor facilities while interacting with gp. See PariEmacs docs for menus and customizations."
+      },
+      {
+        "name": "Function documentation and argument-convention conventions",
+        "description": "Function entries are documented with syntax like foo(x, {flag = 0}): short description. '{}' denotes optional arguments; {}* denotes any number of such arguments. Commas or closing parenthesis can signal using defaults (foo(x,) accepted).",
+        "guidance": "Optional arguments are placed at end in order of decreasing usefulness; the 'empty arg' trick foo(6,,1) allows skipping middle defaults. A function with no mandatory arguments may be invoked without parentheses as a standalone name (not recommended for scripts)."
+      },
+      {
+        "name": "Flags: meaning and documentation convention",
+        "description": "Flags are optional arguments that change default behavior (e.g. return more/less information); the manual distinguishes flag kinds and documents valid values (e.g. 'If flag is equal to 1, then...').",
+        "guidance": "Flags are described per-function in the reference; they are optional and intended to alter output verbosity/behavior rather than convey primary data."
+      }
+    ]
+  }
+}

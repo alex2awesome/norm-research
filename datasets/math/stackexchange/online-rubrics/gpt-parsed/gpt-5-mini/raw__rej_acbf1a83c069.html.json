@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_acbf1a83c069.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 25630,
+  "output_tokens": 5443,
+  "elapsed_s": 2069.751731541939,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers in analytic number theory and computational lattice algorithms (people working on the Mertens conjecture / zeta zero computations / lattice-based Diophantine approximation)",
+    "subtask_short": "searching counterexamples to Mertens conjecture",
+    "subtask_description": "Computational/analytic procedure to find real x (via y = log x) witnessing |M(x)| \u2265 x^{1/2}, by turning a weighted simultaneous inhomogeneous Diophantine approximation problem (built from zeta zero data) into lattice problems solved via lattice-reduction or lattice-point enumeration. The work combines analytic criteria (Pintz / Saouter\u2013te Riele theorems) with practical lattice algorithms and pruning heuristics.",
+    "subtask_keywords": [
+      "mertens_conjecture",
+      "lattice_enumeration",
+      "analytic_number_theory",
+      "zeta_zeroes",
+      "lattice_reduction",
+      "computational_experiment"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pintz criterion for upper bound on smallest counterexample",
+        "description": "If there exists y \u2208 [e^7, e^{50000}] with |h_P(y)| > 1 + e^{-40}, then mathfrak{x} < exp(y + sqrt(y)). Here h_P(y) := 2 \u2211_{\u03b3<14000} \u03b1 exp(-1.5\u00b710^{-6} \u03b3^2) cos(\u03b3 y - \u03c8).",
+        "guidance": "This is the central analytic sufficient condition used to convert a found y into a rigorous upper bound on the smallest counterexample. One must compute h_P using the specified truncation (\u03b3<14000) and weight exp(-1.5\u00b710^{-6} \u03b3^2). Verifying |h_P(y)| exceeds 1+e^{-40} (a tiny margin over 1) yields the bound exp(y+\u221ay). Ensure y lies in the stated interval [e^7, e^{50000}]."
+      },
+      {
+        "name": "Saouter\u2013te Riele (StR) refinement criterion",
+        "description": "Replace h_P by h_{StR}(y) := 2 \u2211_{\u03b3<74000} \u03b1 exp(-3\u00b710^{-9} \u03b3^2) cos(\u03b3 y - \u03c8). For practical y, |h_{StR}(y)| > 1 + 6\u00b710^{-8} implies the same type of upper bound mathfrak{x} < exp(y + sqrt(y)).",
+        "guidance": "Use the larger truncation (\u03b3<74000) and the much smaller Gaussian damping constant. Because |h_{StR}| tends to be larger than |h_P|, some near-misses for h_P become hits for h_{StR}. For computational application, check the stronger threshold 1+6\u00b710^{-8}. One may use Lemma E of StR14 to replace the simpler bound exp(y+sqrt(y)) by exp(y + 2 sqrt(k y)) with k = 3\u00b710^{-9} (see the paper for details)."
+      },
+      {
+        "name": "Construct lattice from zeta-zero parameters (matrix (2.3)/(2.5))",
+        "description": "Build an integer lattice whose basis rows encode the \u03b1_i, \u03c8_i, \u03b3_i (derived from zeta zeros) scaled by powers of 2^{\u03bd} to approximate real entries: see the explicit block-matrix in (2.3) and (2.5). The \u03b1_i are ordered descending (\u03b1_1 > \u03b1_2 > ...).",
+        "guidance": "Entries are discretized by multiplying by 2^{\u03bd} (or 2^{\u03bd-10} for \u03b3-rows) and taking floors; the parameter \u03bd controls the significance of base-2 digits kept. The construction targets aCVP/closest-target problems so that short lattice vectors correspond to simultaneous approximations of the phases \u03b3 y - \u03c8. Ensure ordering of \u03b1_i and consistent scaling for all columns. The penultimate large entry (2^{\u03bd} N^4) is used to force certain basis vector shapes\u2014account for this when analyzing reduction output."
+      },
+      {
+        "name": "Link from short lattice vectors to good y (LLL/Babai interpretation)",
+        "description": "A reduced basis of the constructed lattice must contain a vector whose first N entries are approximately 2^{\u03bd} sqrt(\u03b1_i) \u00b7 |\u03b3_i y - \u03c8|_{2\u03c0}, so a short vector (or lattice point close to the target) yields small phase residues and hence a large partial sum q_N(x) or h_P/h_{StR}.",
+        "guidance": "Interpreting lattice reduction as solving an approximate CVP (aCVP) via Babai's nearest plane heuristic explains LLL/BKZ success beyond theoretical guarantees. Use this link to translate short vectors / close lattice points to candidate y values; compute y from the last coordinate (y = \u00b12^{10} z in the authors' setup) and evaluate h_P/h_{StR} directly to confirm."
+      },
+      {
+        "name": "Use appropriate lattice algorithm: LLL, BKZ, enumeration",
+        "description": "Choice of algorithm matters: LLL (classical) was used historically; BKZ gives better aCVP approximations; lattice-point enumeration (with pruning) permits enumerating many lattice points in moderate dimensions to find better candidates than repeated reduction.",
+        "guidance": "For moderate N (e.g., N up to a few hundreds), BKZ or enumeration with pruning can outperform LLL. Enumeration is preferable when one wants to search many lattice points near a target or when tails (omitted terms) matter. Consider computational cost: high-quality reduction (or enumeration) becomes very expensive when N\u2265100; choose algorithm according to N and available compute."
+      },
+      {
+        "name": "Enumeration with pruning (cylinder pruning P_f(B,R))",
+        "description": "Define pruning set P_f(B,R) via a profile f:{1..n}\u2192[0,1] and radius R: P_f(B,R) = {x \u2208 R^n : ||\u03c0_{n+1-i}(x)|| \u2264 f(i) R for all i}. Enumeration with this pruning outputs L \u2229 (t + P_f(B,R)).",
+        "guidance": "Cylinder pruning (GNR10) significantly reduces enumeration cost while covering most lattice points inside the full ball under mild heuristics. Choose f and R based on basis B and expected search radius; practical pruning functions are those used in extreme pruning literature. Treat P as a random variable depending on basis choice; test heuristically that pruned enumeration still captures hits."
+      },
+      {
+        "name": "Depth-first enumeration tree and projection strategy",
+        "description": "Enumeration is implemented as a depth-first search of an enumeration tree: nodes at depth n+1-k correspond to \u03c0_k(L) \u2229 S. Projections \u03c0_k onto span(b_1,..,b_{k-1})^\u22a5 are used to reduce dimension during search.",
+        "guidance": "Implement efficient DFS with early pruning checks via projected norms. The running time depends heavily on R and the orthogonality of the basis; use Gram\u2013Schmidt orthogonalization information to guide bounds. Enumeration cost typically grows super-exponentially in n; apply pruning to keep it feasible."
+      },
+      {
+        "name": "Choose N (number of zeta zeros included) balancing completeness vs complexity",
+        "description": "Larger N includes more summands and (in principle) increases achievable h_P/h_{StR}, but lattice tasks (reduction/enumeration) become exponentially harder with N. High-quality lattice reduction becomes extremely time-consuming for N \u2265 100.",
+        "guidance": "Select N as large as computationally feasible; experiment to find tradeoff sweet spot. The paper uses N up to values like 120 for figures and discusses N up to several hundreds in related work. Use enumeration (not repeated reduction) when raising N would make reduction infeasible but enumeration in moderate dimension still possible."
+      },
+      {
+        "name": "Choose \u03bd (bit-precision scaling) with care (\u03bd vs \u03bd_y)",
+        "description": "\u03bd controls the number of significant base-2 digits kept in discretization of matrix entries; heuristics (3.6) and (3.7) suggest \u03bd should be considerably large, but one must maintain \u03bd \u226b \u03bd_y (the magnitude related to y) to preserve efficiency and lattice shape assumptions.",
+        "guidance": "Increasing \u03bd improves approximation fidelity but affects lattice shape and may break efficiency conditions. There may be a 'sweet spot' balancing \u03bd and computation time\u2014determine experimentally. Monitor \u03bd_y relative to \u03bd to ensure \u03bd \u226b \u03bd_y when relying on the paper's efficiency arguments."
+      },
+      {
+        "name": "Randomization / basis perturbation and many trials",
+        "description": "Running many trials with randomized perturbations of the basis (or randomized preprocessing) increases the chance of finding lower y; KR23 ran tens of thousands of trials for this reason.",
+        "guidance": "Perturb the basis (e.g., random small changes) and rerun BKZ/LLL or enumeration; collect multiple candidate y values. This strategy allows exploiting algorithmic randomness and LLL/BKZ sensitivities. Ensure reproducibility by recording seeds / perturbation parameters and storing data."
+      },
+      {
+        "name": "Verification of candidate y by direct evaluation of h_P / h_{StR}",
+        "description": "Even if a lattice vector suggests a candidate y, one must directly evaluate h_P(y) or h_{StR}(y) (with the full truncated sum and damping) to confirm the threshold >1+\u03b5 and then apply the analytic theorem to bound mathfrak{x}.",
+        "guidance": "Do not rely on lattice output heuristics alone: compute h_P/h_{StR} numerically with sufficient precision and summation range specified by the theorem. Small margins (e.g., 1.0034 or 1.001) matter; use high-precision arithmetic and verify signs/magnitudes robustly (interval arithmetic recommended)."
+      },
+      {
+        "name": "Use of refined bound exp(y + 2 sqrt(k y)) when available",
+        "description": "Instead of the simple upper bound exp(y + sqrt(y)), one can use the refined bound mathfrak{x} < exp(y + 2 sqrt(k y)), where k = 1.5\u00b710^{-6} for h_P and k = 3\u00b710^{-9} for h_{StR} (via Lemma E of StR14).",
+        "guidance": "When computing the rigorous upper bound on mathfrak{x}, track constants precisely and use the refined formula to tighten the exponent. Choose k corresponding to which weighted sum (h_P or h_{StR}) was used and follow the referenced lemma's hypotheses when applying the sharpened bound."
+      },
+      {
+        "name": "Sanity checks: correlation of partial sums and lattice-based partial sum",
+        "description": "Check correlations between h_{StR}(y) (or full sum) and its value restricted to terms corresponding to the lattice (partial sum) \u2014 e.g., figure evidence for N=120 shows high values of h_{StR} are found among high partial sums.",
+        "guidance": "Use scatter/correlation plots and diagnostics to confirm that partial lattice-based optimization is predictive of full-sum performance. If correlation is weak, reconsider N, pruning radius, or basis selection. Such diagnostics guide how large a ball to enumerate: enumerate a ball but not too large."
+      },
+      {
+        "name": "Enumerate a ball of moderate radius (not too large) around the target",
+        "description": "Values maximizing h_{StR}(y) are not necessarily those minimizing lattice distance; empirically, h_P(y) > 1 is unlikely when the distance is beyond some threshold, so enumerate a ball that is large enough to include good candidates, but not so large as to explode cost.",
+        "guidance": "Determine radius R by heuristic experiments: start small and increase until marginal yield of hits drops. Use pruning to focus search and avoid enumerating overwhelmingly large balls. Monitor candidate quality vs distance to tune R."
+      },
+      {
+        "name": "Account for omitted tail terms and estimate their effect",
+        "description": "When maximizing truncated sums (h_P or h_{StR}), omitted terms (the tails) can be large enough to change outcomes; tails behave like a coin toss and must be considered when interpreting lattice-based partial-sum hits.",
+        "guidance": "Either include more zeros (increase N) or incorporate analytic tails bounds/estimates to quantify how much the omitted terms could alter h(y). Use the distribution of square-free numbers and related estimates (e.g., to control M(x\u00b1n) behavior) to refine robustness of a candidate hit."
+      },
+      {
+        "name": "Exploit special lattice geometry (extreme orthogonality / unusually short vector)",
+        "description": "If the constructed lattices are extremely orthogonal with one unusually short vector, adapt the enumeration algorithm to exploit this shape, which can speed up search by orders of magnitude.",
+        "guidance": "Detect special geometry via Gram\u2013Schmidt norms and adjust pruning/profile and enumeration order accordingly. Tailor enumeration parameters to handle one short vector (e.g., treat corresponding coordinate earlier/later) to improve practical performance."
+      },
+      {
+        "name": "Numerical precision and interval arithmetic for reliability",
+        "description": "High-precision arithmetic (and interval arithmetic) should be used to evaluate h_P/h_{StR} and to manage rounding errors in lattice construction (floors of scaled reals), since small numerical differences decide whether the threshold is exceeded.",
+        "guidance": "Use libraries for arbitrary-precision and midpoint-radius interval arithmetic (e.g., Arb/Johansson) when verifying near-threshold values. Store and publish numerics and code to allow independent verification."
+      },
+      {
+        "name": "Use theoretical results and literature thresholds exactly as hypotheses require",
+        "description": "When applying theorems from Pintz, StR14, etc., follow their exact truncation ranges, damping constants, and numerical thresholds (e.g., \u03b3 cutoff, exponent constants, required margin above 1) to ensure rigor of derived bounds.",
+        "guidance": "Do not change constants ad hoc if claiming a rigorous bound; if experimenting with modified parameters, treat conclusions as heuristic unless corresponding theorem modifications are proven. Cite and follow the referenced lemmas when tightening bounds."
+      },
+      {
+        "name": "Reproducibility: publish data and source code",
+        "description": "Provide data files and/or source codes allowing reproduction of computational results \u2014 the authors made these available at a stated Zenodo record.",
+        "guidance": "Upload datasets, basis matrices, seeds, perturbation parameters, and scripts used for evaluation and verification to a persistent repository (Zenodo, GitHub). Document computational environment, libraries (e.g., fplll, NTL), and machine resources to aid reproducibility."
+      },
+      {
+        "name": "Record and justify parameter search strategy (N, \u03bd, pruning profile, trials)",
+        "description": "When reporting improved bounds, document the parameter ranges explored (e.g., values of N, \u03bd, number of trials, basis perturbation strategy), and justify choices or note that they were determined empirically by trial and error.",
+        "guidance": "Include heuristics (like (3.6) and (3.7) in the paper), plots illustrating correlation and distance diagnostics, and a rationale for stopping criteria. This transparency helps others assess whether further computational effort is likely to improve results."
+      },
+      {
+        "name": "Assess computational cost and time complexity realistically",
+        "description": "Enumeration and reduction runtimes typically grow super-exponentially in lattice dimension n; provide realistic time/space estimates (e.g., references to Hurst's time estimates) and scale experiments according to available resources.",
+        "guidance": "Report wall-clock times, CPU/memory used, and estimated scaling for attempting stronger targets (e.g., pushing |q(x)|\u22652). Use these estimates to plan experiments (e.g., run on clusters, or adjust N/\u03bd) and to explain why some prior methods (repeated reduction) were infeasible."
+      },
+      {
+        "name": "Use diagnostics and sanity checks on final claimed bounds",
+        "description": "After finding a candidate y that (via theorem) implies an upper bound on mathfrak{x}, perform sanity checks: slight perturbations of y, evaluation of h_{StR} sign/magnitude, effect of nearby x\u00b1n via M(x\u00b1n) inequalities, and verify that analytic remainder estimates hold.",
+        "guidance": "Test nearby y values to ensure result is not an artifact of discrete rounding; compute \u03b1 = h_{StR}(y) - (1 + 6\u00b710^{-8}) and propagate this into the refined exponent bound; use bounds on M(x\u00b1n) (e.g., \u03c0^2 n / 6 improvements) to show the bound is stable under small shifts; present these checks in the report."
+      },
+      {
+        "name": "Document dependencies on zeta-zero data and assumptions about zeroes",
+        "description": "All constructions depend on computed zeta zeros (\u03b3_i) and derived \u03b1_i, \u03c8_i. The method assumes zeros are on the critical line and simple (as implied by the Mertens conjecture in historical reductions); ordering and accuracy of zero data affect weights and success.",
+        "guidance": "State source and precision of zeta-zero data used; check for stability under small numerical perturbations of \u03b3, \u03b1, \u03c8. If using zeros computed to finite precision, quantify the induced uncertainty in h_P/h_{StR} and in the resulting exponent bound."
+      },
+      {
+        "name": "Follow community best practices and cite relevant algorithmic literature",
+        "description": "When using lattice algorithms and enumeration/pruning strategies, follow methods and parameterizations from the literature (LLL82, SE94, GNR10, LN13, CN11, etc.) and cite implementations/libraries used (e.g., fplll, NTL, Arb).",
+        "guidance": "Adopt tested pruning profiles, BKZ/blocksize heuristics, and enumeration parameter choices from prior work; reference the algorithmic papers for correctness and performance expectations. Indicate versions of libraries and any modifications."
+      }
+    ]
+  }
+}

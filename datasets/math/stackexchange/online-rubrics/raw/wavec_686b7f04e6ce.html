@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>MathJax Accessibility Extensions Documentation | MathJax-a11y</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="MathJax Accessibility Extensions Documentation" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="MathJax Accessibility extensions" />
+<meta property="og:description" content="MathJax Accessibility extensions" />
+<link rel="canonical" href="https://mathjax.github.io/MathJax-a11y/docs/" />
+<meta property="og:url" content="https://mathjax.github.io/MathJax-a11y/docs/" />
+<meta property="og:site_name" content="MathJax-a11y" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MathJax Accessibility Extensions Documentation" />
+<script type="application/ld+json">
+{"description":"MathJax Accessibility extensions","url":"https://mathjax.github.io/MathJax-a11y/docs/","@type":"WebPage","headline":"MathJax Accessibility Extensions Documentation","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/MathJax-a11y/assets/css/style.css?v=9696058df427a2ef21a9b73c7f8f1a0618c8ceac">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://mathjax.github.io/MathJax-a11y/">MathJax-a11y</a></h1>
+      
+
+      <h1 id="mathjax-accessibility-extensions-documentation">MathJax Accessibility Extensions Documentation</h1>
+
+<ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#quick-start">Quick Start</a></li>
+  <li><a href="#reader-guide">Reader Guide</a>
+    <ul>
+      <li><a href="#keyboard-exploration">Keyboard Exploration</a></li>
+      <li><a href="#bookmarklet">Bookmarklet</a></li>
+    </ul>
+  </li>
+  <li><a href="#configuration-and-use">Configuration and use</a>
+    <ul>
+      <li><a href="#accessibility-menu.js">accessibility-menu.js</a></li>
+      <li><a href="#explorer.js">explorer.js</a></li>
+      <li><a href="#auto-collapse.js">auto-collapse.js</a></li>
+      <li><a href="#collapsible.js">collapsible.js</a></li>
+      <li><a href="#semantic-enrich.js">semantic-enrich.js</a></li>
+      <li><a href="#mathjax-sre.js-and-its-components">mathjax-sre.js and its components</a></li>
+      <li><a href="#compatibility">Compatibility</a></li>
+    </ul>
+  </li>
+  <li><a href="#support">Support</a>
+    <ul>
+      <li><a href="#browser-support">Browser support</a></li>
+      <li><a href="#mobile-support">Mobile support</a></li>
+      <li><a href="#mathjax-output-support">MathJax output support</a></li>
+      <li><a href="#screenreader-support">Screenreader support</a>
+        <ul>
+          <li><a href="#using-the-explorer">Using the explorer</a></li>
+          <li><a href="#browse-and-focus-mode">Browse and Focus mode</a></li>
+          <li><a href="#missing-and-excessive-voicing">Missing and excessive voicing</a></li>
+          <li><a href="#summary-of-test-results">Summary of test results</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#demos">Demos</a></li>
+  <li><a href="#videos">Videos</a></li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>The MathJax Accessibility Extensions provide several features for enabling accessible rendering of equations. These come in the form of several <a href="http://docs.mathjax.org/en/latest/advanced/extension-writing.html">MathJax extensions</a>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">accessibility-menu.js</code>, a lightweight (&lt;1kb zipped) extension to extend the MathJax Menu with opt-in functionality for assistive features.</li>
+  <li><code class="language-plaintext highlighter-rouge">explorer.js</code>, an extension that provides speech-text generation as well as expression exploration and highlighting functionality.</li>
+  <li><code class="language-plaintext highlighter-rouge">auto-collapse.js</code>, an extension that provides a responsive rendering mode that collapses subexpressions to fit equations on smaller screens.</li>
+  <li><code class="language-plaintext highlighter-rouge">collapsible.js</code>, an extension that adds the ability to collapse expressions based on estimates of the complexity of the expressions and their subexpressions [used by <code class="language-plaintext highlighter-rouge">auto-collapse.js</code> and <code class="language-plaintext highlighter-rouge">explorer.js</code>].</li>
+  <li><code class="language-plaintext highlighter-rouge">semantic-enrich.js</code>, an extension that coordinates between MathJax and <code class="language-plaintext highlighter-rouge">mathjax-sre.js</code> to enrich MathJax’s internal representations with semantic information about the expressions [used by all the extensions above].</li>
+  <li><code class="language-plaintext highlighter-rouge">mathjax-sre.js</code> (and its components), a custom build of <a href="https://github.com/zorkow/speech-rule-engine/">speech-rule-engine</a>, providing semantic enrichment and speech-text generation.</li>
+</ul>
+
+<h3 id="quick-start">Quick start</h3>
+
+<p>The easiest way to get started is by adding the Accessibility Menu Extension to your MathJax configuration. This adds very little load to your site while providing your visitors with an accessible opt-in for all features.</p>
+
+<p>Version 2.7.0 included the Accessibility Menu Extension in its combined configuration files, so users of most websites that load MathJax will have access to the new menu automatically.</p>
+
+<p>For MathJax v2.6, you need to load the extensions from a v2.7 distribution.</p>
+
+<p><strong>Note</strong>. The extensions require MathJax v2.6 or higher.</p>
+
+<p>To load the Accessibility Menu Extension, you set the custom configuration path and add the extensions to your configuration’s <code class="language-plaintext highlighter-rouge">extensions</code> array, e.g., add</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/x-mathjax-config"</span><span class="nt">&gt;</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="dl">"</span><span class="s2">a11y</span><span class="dl">"</span><span class="p">]</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/extensions/a11y</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+  <span class="c1">// ...your configuration options...</span>
+  <span class="na">extensions</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">[a11y]/accessibility-menu.js</span><span class="dl">"</span><span class="p">]</span>
+<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p><strong>before</strong> you load <code class="language-plaintext highlighter-rouge">MathJax.js</code> itself.</p>
+
+<p>By default, the Accessibility Menu will not load any of the other extensions, but merely extends the menu with options for users to opt-in to the other extensions.</p>
+
+<p>Of course, you can activate the sub-extensions by loading them directly in the extensions array or by using the <code class="language-plaintext highlighter-rouge">menuSettings</code> configuration option, e.g.,</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/x-mathjax-config"</span><span class="nt">&gt;</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="dl">"</span><span class="s2">a11y</span><span class="dl">"</span><span class="p">]</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/extensions/a11y</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+  <span class="c1">// ...your other configuration options...</span>
+  <span class="na">extensions</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">[a11y]/accessibility-menu.js</span><span class="dl">"</span><span class="p">]</span>
+  <span class="na">menuSettings</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">collapsible</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">autocollapse</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">explorer</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h3 id="local-installation">Local installation</h3>
+
+<p>The MathJax accessibility extensions require a more complex build process than other MathJax extensions. You can download pre-compiled packages from the <a href="https://github.com/mathjax/MathJax-a11y/releases">GitHub release page</a> or  build your own copy using Grunt, see the <a href="https://github.com/mathjax/MathJax-a11y/">repository’s README</a>).</p>
+
+<h2 id="reader-guide">Reader Guide</h2>
+
+<p>On a site that loads any of the MathJax Accessibility Extensions, you will find three additional items in the “Accessibility” submenu of the MathJax Menu. These items control the respective extensions:</p>
+
+<ul>
+  <li>“Collapsible Math” (toggle)</li>
+  <li>“Auto-Collapse” (toggle)</li>
+  <li>“Explorer” (submenu)</li>
+</ul>
+
+<p><img src="/MathJax-a11y/docs/menu1.png" alt="MathJax Menu with additional Accessibility Menu options" /></p>
+
+<p>If the Explorer Extension is not active, its submenu will only list one toggle “Activate” and a hint that more options will appear in this submenu when the Explorer Extension is active.</p>
+
+<p><img src="/MathJax-a11y/docs/menu2.png" alt="MathJax Menu with inactive Explorer submenu" /></p>
+
+<p>If the Explorer Extension is active, you will see a submenu structure exposing all its options:</p>
+
+<ul>
+  <li>Active (toggle)</li>
+  <li>(separator)</li>
+  <li>Walker (submenu of radio buttons)
+    <ul>
+      <li>No Walker</li>
+      <li>Syntax Walker (default)</li>
+      <li>Semantic Walker</li>
+    </ul>
+  </li>
+  <li>Highlight (submenu of radio buttons)
+    <ul>
+      <li>None (default)</li>
+      <li>hover</li>
+      <li>flame</li>
+    </ul>
+  </li>
+  <li>Background (submenu of radio buttons)
+    <ul>
+      <li>Blue (default)</li>
+      <li>Red</li>
+      <li>Green</li>
+      <li>Yellow</li>
+      <li>Cyan</li>
+      <li>Magenta</li>
+      <li>White</li>
+      <li>Black</li>
+    </ul>
+  </li>
+  <li>Foreground (submenu of radio buttons)
+    <ul>
+      <li>Black (default)</li>
+      <li>White</li>
+      <li>Magenta</li>
+      <li>Cyan</li>
+      <li>Yellow</li>
+      <li>Green</li>
+      <li>Red</li>
+      <li>Blue</li>
+    </ul>
+  </li>
+  <li>(separator)</li>
+  <li>Speech Output (toggle)</li>
+  <li>Generation (submenu of radio buttons)
+    <ul>
+      <li>Eager</li>
+      <li>Mixed</li>
+      <li>Lazy (default)</li>
+    </ul>
+  </li>
+  <li>(separator)</li>
+  <li>MathSpeak Rules
+    <ul>
+      <li>Verbose (default)</li>
+      <li>Brief</li>
+      <li>Superbrief</li>
+    </ul>
+  </li>
+  <li>ChromeVox Rules
+    <ul>
+      <li>Verbose</li>
+      <li>Short</li>
+      <li>Alternative</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/MathJax-a11y/docs/menu3.png" alt="MathJax Menu with active Explorer submenu" /></p>
+
+<p>Let us quickly describe their function:</p>
+
+<ul>
+  <li>“Walker”: controls the style of exploration.</li>
+  <li>“Highlight”: adds a highlight to indicate the complexity measure for subexpressions (especially useful in combination with collapsed expressions)</li>
+  <li>“Background/Foreground”: set the color for Highlight which is also used when using the walker to explore an expression</li>
+  <li>“Speech Output” activates the generation of speech-text in both top-level ARIA labels as well as synchronized speech-text when exploring</li>
+  <li>“Generation” determines if the speech output on the outer element provides a short summary, a longer summary or a speech string for the entire expression</li>
+  <li>“MathSpeak/ChromeVox Rules”: allows you to choose between the different rule sets for speech-text generation.</li>
+</ul>
+
+<h3 id="keyboard-exploration">Keyboard Exploration</h3>
+
+<p>The Explorer’s Walker option enables keyboard navigation for exploring sub-expressions simultaneously visually and aurally. The application uses the following keys bindings:</p>
+
+<ul>
+  <li><kbd>SHIFT+SPACE</kbd>: start application (requires focus)
+    <ul>
+      <li><strong>NOTE:</strong> Depending on the implementation quality of the particular browser/screenreader/OS combination (especially Chrome and IE), users might have to disable screenreader reading modes (e.g., “browse mode” in NVDA, “virtual cursor” in JAWS) before being able to launch the application.</li>
+    </ul>
+  </li>
+  <li><kbd>ESC</kbd>: stop application.
+    <ul>
+      <li><strong>NOTE:</strong> When restarted, the application will continue where the user left off.</li>
+    </ul>
+  </li>
+  <li><kbd>UP</kbd>/<kbd>DOWN</kbd>: move up or down the sub-expression tree.
+    <ul>
+      <li>When moving down, navigation will start at the left-most sub-expression of the level.</li>
+      <li>The application plays an aural indicator (earcon) if the user is at the bottom/top level of the tree.</li>
+    </ul>
+  </li>
+  <li><kbd>LEFT</kbd>/<kbd>RIGHT</kbd>: navigate the current level in the sub-expression tree horizontally.</li>
+  <li><kbd>ENTER</kbd>:  switch collapsed state of the current sub-expression and regenerate speech-text to match (e.g., provide summary upon collapsing).</li>
+  <li><kbd>SPACE</kbd>: get positional information, i.e., the current level in the sub-expression tree as well as collapsibility/expandability of the current subexpression.</li>
+</ul>
+
+<p>For information on the keyboard navigation of the Explorer’s walker, please see the <a href="">configuration section</a> and the <a href="">support section</a> below.</p>
+
+<h3 id="bookmarklet">Bookmarklet</h3>
+
+<p>If you encounter a page without the Accessibility extension, you can sideload the extensions via a bookmarklet, e.g., the following would load the Accessibility Menu:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">MathJax</span><span class="p">){</span>
+  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="dl">"</span><span class="s2">a11y</span><span class="dl">"</span><span class="p">]</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/extensions/a11y</span><span class="dl">"</span><span class="p">;</span>
+  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Ajax</span><span class="p">.</span><span class="nx">Require</span><span class="p">(</span><span class="dl">"</span><span class="s2">[a11y]/accessibility-menu.js</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Or simply <a href="javascript:if(window.MathJax){ MathJax.Ajax.config.path[&quot;a11y&quot;] = &quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/extensions/a11y&quot;; MathJax.Ajax.Require(&quot;[a11y]/accessibility-menu.js&quot;); }"> drag this link to your bookmarks</a>.</p>
+
+<h2 id="configuration-and-use">Configuration and Use</h2>
+
+<h3 id="accessibility-menujs">accessibility-menu.js</h3>
+
+<p>This extension has no configuration block of its own but is controlled via the MathJax Menu settings. Below are the options in their default setting.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">menuSettings</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nl">collapsible</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// true, false</span>
+  <span class="nx">autocollapse</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// true, false</span>
+  <span class="nx">explorer</span><span class="p">:</span> <span class="kc">false</span>      <span class="c1">// true, false</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">collapsible</code>: if set to <code class="language-plaintext highlighter-rouge">true</code>, this loads and enables the extension <code class="language-plaintext highlighter-rouge">collapsible.js</code> (cf. below)</li>
+  <li><code class="language-plaintext highlighter-rouge">autocollapse</code>: if set to <code class="language-plaintext highlighter-rouge">true</code>, this loads and enables the extension <code class="language-plaintext highlighter-rouge">auto-collapse.js</code> (cf. below).</li>
+  <li><code class="language-plaintext highlighter-rouge">explorer</code>: if set to <code class="language-plaintext highlighter-rouge">true</code>, this loads and enables the extension <code class="language-plaintext highlighter-rouge">explorer.js</code> (cf. below).</li>
+</ul>
+
+<p>Note that all of these extensions will trigger a re-rendering of the output as the underlying MathML will be modified to reflect the semantic analysis. This can lead to small changes in visual rendering such as properly matching fence sizes.</p>
+
+<h3 id="explorerjs">explorer.js</h3>
+
+<p>The Explorer extension provides exploration tools for sub-expressions. It is the largest piece of the accessibility extensions.</p>
+
+<p>The extension provides highlighting of sub-expressions and top-level speech-text generation, as well as an application providing accessible keyboard navigation for sub-expressions with on-the-fly, synchronized highlighting and speech-text generation.</p>
+
+<p>The highlighting can provide highlights on hover or permanent highlights using opacity to represent complexity.</p>
+
+<p>The top-level speech-text generation adds an aria-label to the outermost element of MathJax’s output.  The menu allows the user to control various length options (so as to provide short summaries).</p>
+
+<p>The application for keyboard navigation allows users to explore sub-expressions simultaneously visually and aurally. The application uses the following keys bindings:</p>
+
+<ul>
+  <li><kbd>SHIFT+SPACE</kbd>: start application (requires focus)
+    <ul>
+      <li><strong>NOTE:</strong> Depending on the implementation quality of the particular browser/screenreader/OS combination (especially Chrome and IE), users might have to disable screenreader reading modes (e.g., “browse mode” in NVDA, “virtual cursor” in JAWS) before being able to launch the application.</li>
+    </ul>
+  </li>
+  <li><kbd>ESC</kbd>: stop application.
+    <ul>
+      <li><strong>NOTE:</strong> When restarted, the application will continue where the user left off.</li>
+    </ul>
+  </li>
+  <li><kbd>UP</kbd>/<kbd>DOWN</kbd>: move up or down the sub-expression tree.
+    <ul>
+      <li>When moving down, navigation will start at the left-most sub-expression of the level.</li>
+      <li>The application plays an aural indicator (earcon) if the user is at the bottom/top level of the tree.</li>
+    </ul>
+  </li>
+  <li><kbd>LEFT</kbd>/<kbd>RIGHT</kbd>: navigate the current level in the sub-expression tree horizontally.</li>
+  <li><kbd>ENTER</kbd>:  switch collapsed state of the current sub-expression and regenerate speech-text to match (e.g., provide summary upon collapsing).</li>
+  <li><kbd>SPACE</kbd>: get positional information, i.e., the current level in the sub-expression tree as well as collapsibility/expandability of the current subexpression.</li>
+</ul>
+
+<p>Below are the configuration options for the extension set to their defaults (with in-depth explanations in their comments).</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">explorer</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nl">walker</span><span class="p">:</span> <span class="dl">'</span><span class="s1">syntactic</span><span class="dl">'</span><span class="p">,</span>         <span class="c1">// none, syntactic, semantic</span>
+  <span class="nx">highlight</span><span class="p">:</span> <span class="dl">'</span><span class="s1">none</span><span class="dl">'</span><span class="p">,</span>           <span class="c1">// none, hover, flame</span>
+  <span class="nx">background</span><span class="p">:</span> <span class="dl">'</span><span class="s1">blue</span><span class="dl">'</span><span class="p">,</span>          <span class="c1">// blue, red, green, yellow, cyan, magenta, white, black</span>
+  <span class="nx">foreground</span><span class="p">:</span> <span class="dl">'</span><span class="s1">black</span><span class="dl">'</span><span class="p">,</span>         <span class="c1">// black, white, magenta, cyan, yellow, green, red, blue</span>
+  <span class="nx">speech</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>                <span class="c1">// true, false</span>
+  <span class="nx">generation</span><span class="p">:</span> <span class="dl">'</span><span class="s1">lazy</span><span class="dl">'</span><span class="p">,</span>          <span class="c1">// eager, mixed, lazy</span>
+  <span class="nx">subtitle</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>              <span class="c1">// true, false</span>
+  <span class="nx">ruleset</span><span class="p">:</span> <span class="dl">'</span><span class="s1">mathspeak-default</span><span class="dl">'</span> <span class="c1">// mathspeak-default, mathspeak-brief, mathspeak-sbrief, chromevox-default, chromevox-short, chromevox-alternative</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">walker</code>: specifies the rules for the exploration tool. The <code class="language-plaintext highlighter-rouge">semantic</code> mode tries to group sub-expressions into meaningful parts (e.g., plus and the following summand together).</li>
+  <li><code class="language-plaintext highlighter-rouge">highlight</code>: specifies the highlighting of sub-expression complexity. If set to <code class="language-plaintext highlighter-rouge">hover</code>, hovering the pointer will highlight the sub-expression. If set to <code class="language-plaintext highlighter-rouge">flame</code>, highlighting will use opacity of the background color to indicate the complexity of a sub-expression.</li>
+  <li><code class="language-plaintext highlighter-rouge">background</code>:  determines the background color used for highlighting.</li>
+  <li><code class="language-plaintext highlighter-rouge">foreground</code>:  determines the foreground color used for highlighting.</li>
+  <li><code class="language-plaintext highlighter-rouge">speech</code>: controls whether speech text is generated.</li>
+  <li><code class="language-plaintext highlighter-rouge">generation</code>: controls the level of detail in the top-level speech text (as opposed to the walker).</li>
+  <li><code class="language-plaintext highlighter-rouge">subtitle</code>: controls whether subtitles containing speech text are shown below the expression.</li>
+  <li><code class="language-plaintext highlighter-rouge">ruleset</code>: determines the ruleset used for speech-text generation.</li>
+</ul>
+
+<h3 id="auto-collapsejs">auto-collapse.js</h3>
+
+<p>This extension will automatically collapse sub-expressions to allow the resulting equation to fit in the viewport width and will react to changes in viewport width. It will automatically load <code class="language-plaintext highlighter-rouge">collapsible.js</code> (see below).</p>
+
+<p>The extension only offers a configuration option to disable it.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="dl">"</span><span class="s2">auto-collapse</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nl">disabled</span><span class="p">:</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="collapsiblejs">collapsible.js</h3>
+
+<p>This extension generates a complexity metric (using semantic enrichment, cf. <code class="language-plaintext highlighter-rouge">semantic-enrich.js</code>) and inserts elements that allow the expressions to be collapsed by the user by clicking on the expression based on that metric.</p>
+
+<p>The extension only offers a configuration option to disable it.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">collapsible</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nl">disabled</span><span class="p">:</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="semantic-enrichjs">semantic-enrich.js</h3>
+
+<p>This extension coordinates the creation and embedding of semantic information generated by the enrichment process (cf. <code class="language-plaintext highlighter-rouge">mathjax-sre.js</code> below) within the MathJax output for use by the other extensions.</p>
+
+<p>The extension only offers a configuration option to disable it.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="dl">"</span><span class="s2">semantic-enrich</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+  <span class="nl">disabled</span><span class="p">:</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="mathjax-srejs-and-its-components">mathjax-sre.js and its components</h3>
+
+<p>The remaining files part of the accessibility extensions contain a custom build of the <a href="https://github.com/zorkow/speech-rule-engine/">speech-rule-engine</a>, which provides semantic analysis of MathML as well as speech-text generation.</p>
+
+<h3 id="compatibility">Compatibility</h3>
+
+<p>When a user activates the Accessibility Extension’s speech generation, the extension will disable the <code class="language-plaintext highlighter-rouge">AssistiveMML</code> extension (automatically loaded with MathJax v2.6+); otherwise, some screenreaders would read the math twice.</p>
+
+<p>Accordingly, if a page author configures the MathJax Accessibility extensions to <strong>always</strong> produce speech text, then they should disable the AssistiveMML extension.</p>
+
+<h2 id="support">Support</h2>
+
+<p>Our test results for the accessibility extensions vary significantly, depending on the combinations of browser, OS, and screenreaders. While we cannot claim universal support for any combination the extensions should provide good results when only 1 or 2 out of 3 requirements are fixed.</p>
+
+<h3 id="browser-support">Browser support</h3>
+
+<p>Support is focused on the currently maintained browsers, i.e.,</p>
+
+<ul>
+  <li>IE 10+ and Edge</li>
+  <li>Chrome</li>
+  <li>Safari</li>
+  <li>Firefox</li>
+</ul>
+
+<p>Except for IE, older versions should work as well. Due to severe browser bugs, we cannot support IE 9 and below.</p>
+
+<h3 id="mobile-support">Mobile support</h3>
+
+<p>Basic voicing (via aria-labels) should work using Apple VoiceOver and Android Talkback. The explorer tool does not yet support sub-expression exploration on mobile browsers / touchscreen interfaces.</p>
+
+<h3 id="mathjax-output-support">MathJax output support</h3>
+
+<p>While the extensions generally work with any MathJax setup, the explorer only works with MathJax’s CommonHTML, SVG, and HTML-CSS output.</p>
+
+<p><strong>Note</strong>. The extensions require MathJax v2.6 or higher.</p>
+
+<h3 id="screenreader-support">Screenreader support</h3>
+
+<p>We have tested the following screenreaders with the supported browsers on various OS versions.</p>
+
+<ul>
+  <li>NVDA 2016.2 (Win XP, 7, 8, 10)</li>
+  <li>JAWS 17 (Win 7, 8, 10)</li>
+  <li>WindowEyes 9.4 (Win 7, 8, 10)</li>
+  <li>ChromeVox 50 (any)</li>
+  <li>VoiceOver (OS 10.10, iOS 9.1)</li>
+  <li>TalkBack (Android Marshmallow)</li>
+  <li>[ORCA (3.18, Ubuntu 16.04)]</li>
+  <li>[Dolphin Screenreader (Windows 10)]</li>
+</ul>
+
+<p>Not all combinations of screenreader and browser are usable but for each one (except ORCA and Dolphin) should find some combination that works. In particular, the basic speech-text via ARIA lables should be widely supported.</p>
+
+<p>Other screenreaders and/or assistive technologies were tested but failed due to lack of support for ARIA labels and/or live regions.</p>
+
+<h4 id="using-the-explorer">Using the explorer</h4>
+
+<p>The application for keyboard navigation allows users to explore sub-expressions simultaneously visually and aurally. The application uses the following keys bindings:</p>
+
+<ul>
+  <li><kbd>SHIFT+SPACE</kbd>: start application (requires focus)
+    <ul>
+      <li><strong>NOTE:</strong> Depending on the implementation quality of the particular browser/screenreader/OS combination (especially Chrome and IE), users might have to disable screenreader reading modes (e.g., “browse mode” in NVDA, “virtual cursor” in JAWS) before being able to launch the application.</li>
+    </ul>
+  </li>
+  <li><kbd>ESC</kbd>: stop application.
+    <ul>
+      <li><strong>NOTE:</strong> When restarted, the application will continue where the user left off.</li>
+    </ul>
+  </li>
+  <li><kbd>UP</kbd>/<kbd>DOWN</kbd>: move up or down the sub-expression tree.
+    <ul>
+      <li>When moving down, navigation will start at the left-most sub-expression of the level.</li>
+      <li>The application plays an aural indicator (earcon) if the user is at the bottom/top level of the tree.</li>
+    </ul>
+  </li>
+  <li><kbd>LEFT</kbd>/<kbd>RIGHT</kbd>: navigate the current level in the sub-expression tree horizontally.</li>
+  <li><kbd>ENTER</kbd>:  switch collapsed state of the current sub-expression and regenerate speech-text to match (e.g., provide summary upon collapsing).</li>
+  <li><kbd>SPACE</kbd>: get positional information, i.e., the current level in the sub-expression tree as well as collapsibility/expandability of the current subexpression.</li>
+</ul>
+
+<h4 id="browse-and-focus-mode">Browse and Focus mode</h4>
+
+<p>Most screenreaders have at least two modes for interaction: Browse (or virtual) and Focus (or forms) mode. For more information see <a href="http://tink.uk/understanding-screen-reader-interaction-modes/">Leonie Watson’s introduction</a>. Some combinations of browsers and screenreaders do not automatically switch to Focus mode on an element with ARIA Role <code class="language-plaintext highlighter-rouge">application</code>.</p>
+
+<p>In this situation, a user will have to manually switch from Browse mode to Focus mode to enable interaction with our explorer application. As an additional complication, MathJax’s different outputs can change the behavior; e.g., SVG output might trigger some screenreader behavior specific to SVGs or images.</p>
+
+<ul>
+  <li>NVDA (Browse/Focus Mode) is switched via <kbd>NVDA+SPACE</kbd> (default: <kbd>INS</kbd> or <kbd>CapsLock</kbd>). If MathJax’s SVG output is used, NVDA might switch to Focus Mode automatically (in particular on older Windows Versions).</li>
+  <li>JAWS (“Virtual PC Cursor”) is switched via <kbd>JAWS+Z</kbd> (default: <kbd>INS</kbd>)</li>
+  <li>Window Eyes (Browse/Focus Mode) is switched via <kbd>CTRL+SHIFT+A</kbd></li>
+  <li>VoiceOver has no modes but <kbd>SHIFT+CTRL+CMD+ARROW</kbd> will trigger direct input</li>
+  <li>ChromeVox requires no extra switching</li>
+  <li>ORCA: <kbd>ORCA+A</kbd> (default: <kbd>INS</kbd>)</li>
+</ul>
+
+<p>A key UX problem is to combine the browse mode experience with the Explorer tool.</p>
+
+<p>Readers the screenreader to generate some output while reading the page in browse mode; ARIA labels work reliably here.</p>
+
+<p>But, e.g., when encountering a very long and complex equation, readers want to switch from browse mode to the Explorer tool to explore in detail. For this, readers need to put the relevant equation into focus so they can start the Explorer tool; usually this would be when the screenreader in browse mode reads (or has just read) the label of an equation.</p>
+
+<p>If the screenreader tracks the tabindex while in browse mode, then <kbd>TAB</kbd>/<kbd>SHIFT+TAB</kbd> might enable this; the screenreader may also have specialized features for this behavior.</p>
+
+<p>The second challenge occurs when exiting the Explorer tool. Readers want to continue in browse mode, in particular find themselves where they left off. In combinations of browsers and screenreaders, manually switching to (or cycling) browse mode helps, but oftentimes there are complications and too often browse mode and tabindex are not kept in sync; screenreaders often track the position of browse-mode when manually switching out of it; then readers have to try to keep the tabindex and browse mode position manually in sync.</p>
+
+<p>We continue to work on improving this interaction to enable a better user experience for everyone.</p>
+
+<h4 id="missing-and-excessive-voicing">Missing and excessive voicing</h4>
+
+<p>Verbosity settings of screenreaders might change how elements are announced or labels are spoken.</p>
+
+<ul>
+  <li>WindowEyes offers a configuration option for voicing common mathematical symbols (+, - etc); it is disabled by default.</li>
+  <li>Some screenreaders will voice (some) unexpected dashes, e.g., speaking “left-parenthesis” as “left dash paranthesis”.</li>
+</ul>
+
+<h4 id="summary-of-test-results">Summary of test results</h4>
+
+<table>
+    <thead>
+        <tr>
+            <th>Screenreader</th>
+            <th>Browser</th>
+            <th>OS</th>
+            <th>Usability</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>ChromeVox</td>
+            <td>Chrome</td>
+            <td>any</td>
+            <td>+1</td>
+            <td>Occasionally: when exploring very quickly, ChromeVox might read "d i v" instead of the speech text (the aria live region is on a <code>&lt;div&gt;</code>).</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>Firefox</td>
+            <td>Win XP/7/8/10</td>
+            <td>+0</td>
+            <td>In browse mode, speaks "application clickable" before the ARIA label on each expression. In Explorer tool, speaks "space" when <kbd>SPACE</kbd> is pressed. Difficult to continue in browse mode after using Explorer.</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>Chrome</td>
+            <td>Win XP/7/8/10</td>
+            <td>+0</td>
+            <td>In browse mode speaks "application" before the ARIA label on each expression. Requires manual switch to Focus mode. In Explorer tool, speaks "space" when <kbd>SPACE</kbd> is pressed. Difficult to continue in browse mode after using Explorer. Occasionally requires refreshing of virtual buffer to register all labels.</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>Edge</td>
+            <td>Win10</td>
+            <td>DNA</td>
+            <td>Issues in Edge prevent basic support by NVDA.</td>
+        </tr>
+        <tr>
+            <td>NVDA</td>
+            <td>IE 10/11</td>
+            <td>Win 7/8/10</td>
+            <td>+0</td>
+            <td>In browse mode speaks "application" before the ARIA label on each expression. Difficult to continue in browse mode after using Explorer.</td>
+        </tr>
+        <tr>
+            <td>JAWS</td>
+            <td>Firefox</td>
+            <td>Win 7/8/10</td>
+            <td>+1</td>
+            <td>In browse mode speaks "empty application" after the ARIA label on each expression. Requires cycling Browse/Focus mode to continue in browse mode after using Explorer. Occassionally, tabbing stops working.</td>
+        </tr>
+        <tr>
+            <td>JAWS</td>
+            <td>Chrome</td>
+            <td>Win 7/8/10</td>
+            <td>+0</td>
+            <td>In browse mode speaks "empty application" after the ARIA label on each expression. Requires manual switch to Focus mode. In Explorer tool, speaks "space" when <kbd>SPACE</kbd> is pressed. Difficult to continue in browse mode after using Explorer. Might require refreshing of virtual buffer to register all labels.</td>
+        </tr>
+        <tr>
+            <td>JAWS</td>
+            <td>MS Edge</td>
+            <td>Win10</td>
+            <td>DNA</td>
+            <td>Issues in Edge prevent basic support by JAWS.</td>
+        </tr>
+        <tr>
+            <td>JAWS</td>
+            <td>IE 11</td>
+            <td>Win 7/8/10</td>
+            <td>-1</td>
+            <td>In browse mode, JAWS's custom math hack (targeted at MathJax output) overrides the ARIA label on each equation; unfortunately, JAWS does not support the MathML constructs generated by the accessibility extensions, leading to broken speech output. For the Explorer tool, JAWS requires manual switch to Focus mode. While  exploring, speaks "blank" before each step.</td>
+        </tr>
+        <tr>
+            <td>JAWS</td>
+            <td>IE 10</td>
+            <td>Win 7/8/10</td>
+            <td>-1</td>
+            <td>In browse mode, JAWS stops at each equation, then needs two additional steps (of repetitions of the equation) to move passed it; after the ARIA label on each expression, JAWS speaks "empty application" after first and "application end" after third repetition. JAWS does not detect the ARIA live-region of the Explorer tool. Requires cycling Browse/Focus mode to continue in browse mode after using Explorer.</td>
+        </tr>
+        <tr>
+            <td>VoiceOver</td>
+            <td>Safari</td>
+            <td>OSX 10.10</td>
+            <td>+1</td>
+            <td>Using "read next" mode (<kbd>CTRL+OPTION+ARROW</kbd>), speaks "application" before the ARIA label on each expression. Using "read all page" (<kbd>CTRL+OPTION+A</kbd>), VoiceOver speaks "application 0 items" instead of ARIA labels. Start Explorer tool <kbd>SHIFT+SPACE</kbd>  and pass navigation keystrokes through using <kbd>CTRL+SHIFT+CMD+ARROW</kbd>. After exiting the Explorer with <kbd>ESC</kbd>, continue using "read next" mode.</td>
+        </tr>
+        <tr>
+            <td>VoiceOver</td>
+            <td>Safari</td>
+            <td>iOS 9.1</td>
+            <td>+1</td>
+            <td>In "read all" mode (two finger swipe up), VoiceOver speaks "math ... application landmark" around the ARIA label on each expression. In "read-next" mode (swipe left/right), might jump back to a preceding element after reading the ARIA label on each expression. Explorer is not supported on mobile.</td>
+        </tr>
+        <tr>
+            <td>VoiceOver</td>
+            <td>Chrome</td>
+            <td>OSX</td>
+            <td>+1</td>
+            <td>In "read all" mode, VoiceOver speaks "application ... 0 items" around the ARIA label on each expression and might stop at an equation. Otherwise, like Safari.</td>
+        </tr>
+        <tr>
+            <td>VoiceOver</td>
+            <td>Firefox</td>
+            <td>OSX</td>
+            <td>DNA</td>
+            <td>VoiceOver skips the ARIA labels. Firefox does not expose ARIA live regions on Firefox, cf. <a href="https://www.marcozehe.de/2015/08/25/improvements-in-accessibility-for-mac-os-x-in-firefox-41/">Marco Zehe's article</a>.</td>
+        </tr>
+        <tr>
+            <td>Talkback</td>
+            <td>Chrome</td>
+            <td>Android 6</td>
+            <td>+1</td>
+            <td>In "read all" mode (shake), TalkBack speaks "application" after the ARIA label on each expression. In "read-next" mode (swipe left/right), might jump back to a preceding element after reading the ARIA label on each expression. Explorer is not supported on mobile.</td>
+        </tr>
+        <tr>
+            <td>Window Eyes</td>
+            <td>Firefox</td>
+            <td>Win 7/8/10</td>
+            <td>-1</td>
+            <td>In browse mode speaks "application landmark ... end application landmark" around the ARIA label on each expression. Ignores `aria-hidden` and thus speaks characters from visual output (before "end application landmark"). When leaving Explorer tool, requires manual switch back to Browse mode and will repeat current equation. Occassionally, will get stuck on a focused equation. Occassionally, will stop accessing the tab order.</td>
+        </tr>
+        <tr>
+            <td>Window Eyes (9.1)</td>
+            <td>Chrome</td>
+            <td>Win 7/8/10</td>
+            <td>0</td>
+            <td>In browse mode speaks "application landmark ... end application landmark" around the ARIA label on each expression. Requires manual switch to Focus Mode. When leaving Explorer tool, requires manual switch back to Browse mode, and speaks "end application landmark". Occassionally, will jump to previous text segment when switching on Browse Mode. Occassionally, will drop all equations from tab order.</td>
+        </tr>
+        <tr>
+            <td>Window Eyes</td>
+            <td>MS Edge</td>
+            <td>Win10</td>
+            <td>DNA</td>
+            <td>Issues in Edge prevent basic support by WindowEyes.</td>
+        </tr>
+        <tr>
+            <td>Window Eyes</td>
+            <td>IE 11</td>
+            <td>Win 7, 8, 10</td>
+            <td>-1</td>
+            <td>In browse mode speaks "application landmark ... end application landmark" around the ARIA label on each expression. Ignores `aria-hidden` and thus speaks characters from visual output (before "end application landmark"). When leaving Explorer tool, requires manual switch back to Browse mode, and speaks "end application landmark". Occassionally, will jump to previous text segment when switching on Browse Mode. Occassionally, will drop all equations from tab order.</td>
+        </tr>
+        <tr>
+            <td>Window Eyes</td>
+            <td>IE 10</td>
+            <td>Win 7, 8</td>
+            <td>-1</td>
+            <td>In browse mode does not speak the ARIA label on each expression. Requires manual switch to Focus Mode. When leaving Explorer tool, requires manual switch back to Browse mode.</td>
+        </tr>
+        <tr>
+            <td>Orca</td>
+            <td>Firefox</td>
+            <td>Ubuntu 16.04</td>
+            <td>-1</td>
+            <td>Does not voice ARIA labels on any equation and ignores `aria-hidden` attribute (thus reading characters from the visual output); occasionally adds "clickable" after each of those characters). For Explorer tool, requires manual switch to Focus Mode; frequently gets stuck while exploring.</td>
+        </tr>
+        <tr>
+            <td>Dolphin Screenreader</td>
+            <td>IE11</td>
+            <td>Win10</td>
+            <td>-1</td>
+            <td>Speaks ARIA labels on each equation but ignores `aria-hidden`, thus speaks characters in the visual output. Does not seem to support ARIA live regions, thus breaking Explorer tool.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="demos">Demos</h3>
+
+<ul>
+  <li>A demo for testing individual equations is available at https://mathjax.github.io/MathJax-a11y/Semantics-Lab/walker.</li>
+  <li>A demonstration with real-world content is available at https://mathjax.github.io/MathJax-a11y/examples/Struik-speech.html; note that the input was not optimized and contains common authoring mistakes not all of which can be compensated.</li>
+</ul>
+
+<h3 id="videos">Videos</h3>
+
+<p>We have been creating short videos to demonstrate how the accessibility tool works on various combinations of browsers, operating system, and screenreaders.</p>
+
+<p>The videos can be found at https://www.youtube.com/playlist?list=PL1ATLkPgTEBoIBkY6Ee9rdgAJaJtISOE8.</p>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/mathjax/MathJax-a11y/edit/master/docs/README.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  </body>
+</html>

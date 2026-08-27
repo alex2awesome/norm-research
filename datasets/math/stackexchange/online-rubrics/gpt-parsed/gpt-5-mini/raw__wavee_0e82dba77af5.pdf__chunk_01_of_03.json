@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_0e82dba77af5.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_0e82dba77af5.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39532,
+  "model": "gpt-5-mini",
+  "elapsed_s": 54.042450959001144,
+  "input_tokens": 17397,
+  "output_tokens": 4724,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "researchers and practitioners implementing the cross-entropy (CE) method for stochastic/combinatorial optimization (e.g., max-cut, TSP)",
+    "subtask_short": "cross-entropy optimization implementation",
+    "subtask_description": "Guidance for applying and implementing the Cross-Entropy (CE) method to (discrete and continuous) multi-extremal optimization problems, including sample generation, parameter updating, smoothing, stopping, and adaptive (FACE) variants, with concrete examples (max-cut, TSP).",
+    "subtask_keywords": [
+      "cross_entropy",
+      "stochastic_optimization",
+      "combinatorial_optimization",
+      "algorithm_parameters",
+      "sampling"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Required algorithm inputs",
+        "description": "The stopping criterion, the initial vector \u02c6v0, the sample size N and the number \u03c1 have to be specified in advance, but the rest of the algorithm is 'self-tuning'.",
+        "guidance": "These four items must be set before running Algorithm 2.3; other aspects (e.g., reference parameter updates) are determined by the procedure."
+      },
+      {
+        "name": "Stopping criterion (quantile stability)",
+        "description": "Stop if for some t \u2265 d we have \u02c6\u03b3t = \u02c6\u03b3t\u22121 = \u00b7 \u00b7 \u00b7 = \u02c6\u03b3t\u2212d (equation (34)); denote the final iteration by T.",
+        "guidance": "d is chosen in advance (examples use d=3 or d=5). This detects convergence of the (1\u2212\u03c1)-quantile estimate across d iterations."
+      },
+      {
+        "name": "Smoothed updating (smoothing parameter \u03b1)",
+        "description": "Instead of replacing \u02c6vt\u22121 by \u02c6w t directly use \u02c6vt = \u03b1 \u02c6w t + (1 \u2212 \u03b1) \u02c6vt\u22121 (equation (35)).",
+        "guidance": "Smoothing prevents entries reaching 0 or 1 permanently. Empirically \u03b1 between 0.4 and 0.9 gives best results; \u03b1 = 1 recovers the original update (no smoothing)."
+      },
+      {
+        "name": "Avoid 0/1 entries in parameter vectors",
+        "description": "Occurrences of 0s and 1s in the parameter vectors are undesirable because once an entry is 0 or 1 it often will remain so forever, which is undesirable.",
+        "guidance": "Use smoothing (see previous item) especially for discrete random variables to keep parameters away from exact 0 or 1."
+      },
+      {
+        "name": "Two essential ingredients to apply CE",
+        "description": "For each problem one must (1) specify how the samples are generated (the family of pdfs { f(\u00b7; v) }), and (2) calculate the updating rules for the parameters, based on cross-entropy minimization.",
+        "guidance": "Many ways to generate samples exist; choice affects performance and tractability of updating formulas."
+      },
+      {
+        "name": "Parameter updates via MLE on elite samples",
+        "description": "\u02c6vt is equal to the MLE based only on the sample vectors xi for which performance S(xi) \u2265 \u02c6\u03b3t (connection between CE update (33) and maximum likelihood estimation (MLE)).",
+        "guidance": "Implement updating by maximizing the (weighted) log-likelihood over the elite subset. In examples this yields closed-form updates (e.g., Bernoulli case (36))."
+      },
+      {
+        "name": "Sample size selection relative to number of parameters",
+        "description": "Choose sample size N proportional to the number of ASP parameters to estimate: for an SNN-type problem N = c n (n = number of nodes), for SEN-type N = c n^2 (n^2 = number of edges); generally to estimate k parameters take N = c k with c > 1.",
+        "guidance": "Typical constant choices: 5 \u2264 c \u2264 10 for SNN; choose c>1; ensure enough samples to reliably estimate parameters."
+      },
+      {
+        "name": "Choice of rarity parameter \u03c1",
+        "description": "Guidelines: take \u03c1 around 0.01 provided n is reasonably large (n \u2265 100); for n < 100 take a larger \u03c1, e.g. \u03c1 \u2248 ln(n)/n.",
+        "guidance": "\u03c1 controls the (1\u2212\u03c1)-quantile used to define elite samples; choose according to problem size and parameter dimensionality."
+      },
+      {
+        "name": "Alternative performance (weighting) functions \u03d5(s;\u03b3)=\u03c8(s)I{s\u2265\u03b3}",
+        "description": "Replace the indicator I{s\u2265\u03b3} by \u03d5(s;\u03b3)=\u03c8(s)I{s\u2265\u03b3} with \u03c8(s) increasing to favor higher-performing samples more.",
+        "guidance": "Numerical evidence suggests \u03c8(s)=s can speed up convergence; avoid high-power polynomials \u03c8(s)=s^\u03b2 with large \u03b2 and Boltzmann \u03c8(s)=e^{\u2212s/\u03b2}, which may lead to local minima."
+      },
+      {
+        "name": "FACE: use elite-count N_elite to adapt N and \u03c1",
+        "description": "In the Fully Adaptive CE (FACE) algorithm adapt sample size Nt and rarity implicitly by fixing the number of elite samples N_elite; \u03c1t = N_elite/Nt.",
+        "guidance": "Recommended N_elite = c0 n for SNN and N_elite = c0 n^2 for SEN, where c0 typically in [0.01,0.1]. Replace fixed (N,\u03c1) by (Nt, N_elite) and adapt Nt between N_min and N_max each iteration."
+      },
+      {
+        "name": "FACE sampling plan and improvement checks",
+        "description": "Design the sampling plan so with high probability S*_{t} > S*_{t\u22121} (best elite performance improves). Use two improvement checks: (53) S*_{t} > S*_{t\u22121} and (54) \u02c6\u03b3t > \u02c6\u03b3t\u22121.",
+        "guidance": "Start each iteration with N_min samples and increase Nt if improvement checks are violated, up to N_max. If checks hold, perform parameter updating using the N_elite best samples."
+      },
+      {
+        "name": "FACE stopping rules and 'hard' problem detection",
+        "description": "Stop if the best elite sample S* has not changed over the last d iterations (S*_{t} = \u00b7\u00b7\u00b7 = S*_{t\u2212d}); if Nt reaches N_max and improvement checks persistently fail for c iterations (e.g., c=3), stop and declare a 'hard' problem with an unreliable estimate.",
+        "guidance": "Typical choices: N_min = n, N_max = 20 n for SNN; c default = 3; this procedure flags pathological cases where CE can no longer improve."
+      },
+      {
+        "name": "Max-cut sampling and updating (Bernoulli model)",
+        "description": "Generate cuts by independent Bernoulli variables X2,...,Xn with success probabilities p2,...,pn (x1 fixed=1). Update p_j via p\u0302_{t,j} = sum_{i} I{S(X_i)\u2265\u03b3\u0302_t} I{X_{i,j}=1} / sum_{i} I{S(X_i)\u2265\u03b3\u0302_t} (equation (39)).",
+        "guidance": "This is the MLE on elite samples for the Bernoulli family; extend to r-partitions by using independent r-point distributions instead of Bernoulli."
+      },
+      {
+        "name": "TSP sampling via Markov chain and transition-matrix updates",
+        "description": "Represent tours as permutations; generate random tours using a Markov chain with transition matrix P (diagonal elements 0). Update p_{i j} by the fraction of transitions from i to j among elite tours (equations (48)/(49)).",
+        "guidance": "In practice use Algorithm 3.1 to generate valid tours (zero-out the visited column and normalize rows) to avoid generating irrelevant paths. The update has the natural interpretation: pi j = (count of i\u2192j in elite tours)/(count of i-occurrences in elite tours)."
+      },
+      {
+        "name": "Initialization guidance for reference parameters",
+        "description": "Choose sensible initial \u02c6v0 appropriate for the problem (examples: for max-cut use p0 = (1, 1/2, ..., 1/2); for TSP take \u02c6P0 with all off-diagonal elements 1/(n\u22121)).",
+        "guidance": "Good initialization helps convergence; stopping criterion still uses quantile-stability (34)."
+      },
+      {
+        "name": "Example/default CE parameter settings (practical recommendations)",
+        "description": "Typical example choices used in experiments: rarity parameter \u03c1 = 0.1 or 0.01, smoothing \u03b1 = 0.7 (or \u03b1=1 for no smoothing), stopping constant d = 3 or d = 5, sample size N = 10 n^2 (for some TSP examples) or N = 1000 (max-cut synthetic example).",
+        "guidance": "Empirical observations: decreasing N from 10 n^2 to 5 n^2 increases relative experimental error by at most a factor of 1.5 in reported case studies; adjust parameters by problem size and desired accuracy/CPU budget."
+      }
+    ]
+  }
+}

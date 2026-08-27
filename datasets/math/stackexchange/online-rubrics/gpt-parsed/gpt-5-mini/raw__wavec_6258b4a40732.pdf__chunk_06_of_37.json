@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 37,
+  "chunk_chars": 39899,
+  "model": "gpt-5-mini",
+  "elapsed_s": 285.671087540999,
+  "input_tokens": 12194,
+  "output_tokens": 6284,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Users/readers of The TeXbook; TeX users, typographers, and programmers learning TeX internals and line-breaking",
+    "subtask_short": "tex_modes_and_line_breaking",
+    "subtask_description": "Rules and algorithms for TeX modes (vertical/horizontal/math) and for how TeX breaks paragraphs into lines (ties, discretionary breaks, penalties, badness, demerits, hyphenation, tracing). Intended to guide correct TeX input and tuning of parameters.",
+    "subtask_keywords": [
+      "tex",
+      "typesetting",
+      "modes",
+      "line_breaking",
+      "hyphenation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Modes (vertical / horizontal / math)",
+        "description": "TeX is in one of the vertical modes when preparing a vertical list of boxes and glue for a page; in horizontal modes when preparing boxes/glue to be placed side-by-side for a paragraph; and in math modes when reading a formula.",
+        "guidance": "Understanding which mode TeX is in explains many errors (e.g., 'You can't do such-and-such in restricted horizontal mode'). The current mode influences interpretation of tokens; only the innermost active mode affects calculations while outer modes are suspended."
+      },
+      {
+        "name": "Implicit mode switching triggers",
+        "description": "When TeX is in vertical mode, the first token of a new paragraph changes the mode to horizontal. Typing any character or tokens like \\char, \\accent, \\hskip, control-space (\\ ), \\vrule, or a math shift ($) cause the mode to switch automatically from vertical to horizontal, inserting paragraph indentation as appropriate.",
+        "guidance": "You can rely on these implicit switches, but knowing them helps diagnose behavior. A control space begins a paragraph and the paragraph will start with a blank space after indentation."
+      },
+      {
+        "name": "Explicit paragraph-start: \\indent and \\noindent",
+        "description": "\\noindent tells TeX to enter horizontal mode if the current mode is vertical or internal vertical without creating an indentation box; \\indent is similar but also creates an empty box of width \\parindent and puts it into the horizontal list. Plain TeX sets \\parindent=20pt.",
+        "guidance": "If you say \\indent\\indent you get double indentation; if you say \\noindent\\noindent, the second \\noindent does nothing. Use \\indent to force indentation when automatic switching is insufficient."
+      },
+      {
+        "name": "Paragraph termination rules",
+        "description": "A paragraph is completed by typing \\par or by a blank line (which is converted to \\par). A paragraph also ends when certain commands incompatible with horizontal mode (e.g., \\vskip) are encountered.",
+        "guidance": "Commands that introduce vertical material implicitly terminate a paragraph; this can be used to avoid typing explicit \\par in many cases."
+      },
+      {
+        "name": "Math mode entry/exit ($ vs $$) and interaction with paragraphs",
+        "description": "A single $ in horizontal mode enters inline math mode and TeX returns to horizontal mode at the closing $. Two consecutive $'s ($$) interrupt the paragraph, contribute the paragraph-so-far to the enclosing vertical list, switch to display math mode for the displayed formula, then return to horizontal mode for the remainder of the paragraph.",
+        "guidance": "Display math must end with '$$'. In restricted horizontal mode two consecutive $'s denote an empty math formula; behavior depends on current mode."
+      },
+      {
+        "name": "End of manuscript: \\bye semantics",
+        "description": "\\bye in plain TeX is an abbreviation for \\vfill\\eject\\end: \\vfill gets TeX into vertical mode and inserts enough space to fill the last page; \\eject outputs that last page; \\end starts endgame.",
+        "guidance": "It is usually best to finish a TeX manuscript with \\bye to ensure final page output and proper termination."
+      },
+      {
+        "name": "Internal vertical and restricted horizontal modes",
+        "description": "TeX enters internal vertical mode for constructs built from vertical lists (\\vbox, \\vtop, \\vcenter, \\valign, \\vadjust, \\insert) and restricted horizontal mode for constructs built from horizontal lists (\\hbox, \\halign).",
+        "guidance": "These modes are similar to ordinary vertical/horizontal modes but not identical because they have different goals. Knowing which commands create these modes helps reason about nesting and token meaning."
+      },
+      {
+        "name": "Mode-dependent token meanings",
+        "description": "A token's effect can depend on the current mode: e.g., \\kern specifies vertical spacing in vertical mode but horizontal spacing in horizontal mode; a math shift ($) enters math mode from horizontal but exits math mode when in math mode; two $$ in horizontal mode start display math but in restricted horizontal denote empty formula.",
+        "guidance": "Use mode-awareness to understand why commands behave differently in different contexts and to troubleshoot errors."
+      },
+      {
+        "name": "Nested modes and innermost-mode principle",
+        "description": "TeX may suspend work in one mode to do a task in another mode; multiple modes can be active simultaneously but only the innermost mode influences current calculations.",
+        "guidance": "Recognize that constructs like \\hbox{...} force TeX to suspend outer work and operate in restricted horizontal mode; when the hbox is closed, outer work resumes."
+      },
+      {
+        "name": "Diagnostics: \\tracingcommands and \\showlists",
+        "description": "\\tracingcommands logs every command TeX receives; \\showlists displays the lists being worked on in the current and enclosing modes, informing about current mode levels and list contents.",
+        "guidance": "Use these diagnostics to learn what TeX is doing internally and to debug mode/nesting issues; the manual gives sample modes.log and showlists output for study."
+      },
+      {
+        "name": "Blank spaces and blank lines in vertical modes",
+        "description": "TeX ignores blank spaces and blank lines (or \\par commands) when in vertical or internal vertical mode, so they do not change the mode or affect the printed document.",
+        "guidance": "You need not worry about stray blank lines in vertical mode, but control space (\\ ) at the start will begin a paragraph."
+      },
+      {
+        "name": "Ties (~) to prevent line breaks",
+        "description": "Typing '~' is like typing a space except TeX will not break a line at that space; do not leave blanks next to ~ since they count as additional spaces. A ~ at the end of an input line can produce an extra wide space because the following end-of-line also yields a space.",
+        "guidance": "Use ~ after abbreviations (Chapter~12), between document-part references (Chapter~12, Appendix~A, Figure~3), within multi-part names (Donald~E. Knuth, van~der~Waerden), between symbols in series (1,~2, or~3), between prepositions and symbols (of~$x$, from 0 to~1), for mathematical phrases rendered in words (equals~$n$), and in enumerated cases within a paragraph. Use judgment; these rules are semantic rather than purely syntactic."
+      },
+      {
+        "name": "Use of \\hbox to prevent breaks at hyphens/dashes",
+        "description": "\\hbox makes its contents indecomposable, so TeX will not split the contents at a line break. Example: \\hbox{13--22}. prevents breaking '13--22.' across lines.",
+        "guidance": "Use \\hbox to protect sequences (like page ranges) from being split. Often hyphens are not broken by TeX anyway, so \\hbox is only needed when correcting a bad break."
+      },
+      {
+        "name": "\\obeylines for literal line-for-line output (poetry mode)",
+        "description": "\\obeylines causes each end-of-line in the input to be treated like \\par, so output will have one line per input line (unless the input line ends with '%' or is so long it must be broken).",
+        "guidance": "Enclose \\obeylines in a group unless you want this behavior to continue to the end of the document. Useful for typesetting poems and similar fixed-line material."
+      },
+      {
+        "name": "Forcing line breaks: \\break and \\hfil\\break",
+        "description": "Use \\break to force TeX to break the line at a chosen point. Use \\hfil\\break to fill the right-hand part of the line with blank space before the forced break and not indent the next line.",
+        "guidance": "Forced breaks may lead to undesirable spacing; use with care."
+      },
+      {
+        "name": "Discretionary breaks: syntax and purpose",
+        "description": "A discretionary break consists of pre-break, post-break, and no-break texts written as \\discretionary{pre}{post}{no-break}; if a break occurs the pre appears at the end of the current line and post at the start of the next, otherwise the no-break text appears in the line. The common case is a discretionary hyphen \\discretionary{-}{}{} (abbreviated \\-).",
+        "guidance": "TeX's hyphenation algorithm inserts discretionaries as needed, and explicit discretionaries can be used to override automatic hyphenation or to control splits that involve ligatures."
+      },
+      {
+        "name": "Empty discretionary insertion after hyphens/ligatures",
+        "description": "Plain TeX automatically inserts empty discretionaries \\discretionary{}{}{} after '-' and after every ligature that ends with '-'. Each font has an associated \\hyphenchar (assumed '-').",
+        "guidance": "This mechanism allows TeX to treat hyphens/dashes appropriately for hyphenation without you manually inserting discretionary breaks in many cases."
+      },
+      {
+        "name": "Hyphenation interplay with explicit discretionaries",
+        "description": "When TeX hyphenates words it inserts discretionary breaks. TeX does not apply its hyphenation algorithm to any word that already contains a discretionary break, so explicit discretionaries can override automatic hyphenation.",
+        "guidance": "Use explicit discretionary breaks to force or prevent certain hyphenation behaviors when automatic hyphenation is undesirable."
+      },
+      {
+        "name": "Two-pass line-breaking with \\pretolerance and \\tolerance",
+        "description": "TeX first tries to break a paragraph without inserting discretionary hyphens; this succeeds if breakpoints yield lines whose badness \u2264 \\pretolerance. If the first pass fails, TeX hyphenates words (inserting discretionaries) and retries using \\tolerance. Plain TeX defaults: \\pretolerance=100, \\tolerance=200.",
+        "guidance": "Setting \\pretolerance=10000 essentially prevents hyphenation (first pass always succeeds); \\pretolerance=-1 omits the first pass and forces immediate hyphenation. Tune these parameters to control hyphenation aggressiveness."
+      },
+      {
+        "name": "Places where line breaks are permitted (five cases)",
+        "description": "Line breaks are permitted: (a) at glue, provided the glue is immediately preceded by a non-discardable item and not inside a math formula; (b) at a kern provided it is immediately followed by glue and not in math; (c) at a math-off immediately followed by glue; (d) at a penalty (explicit or automatic in formulas); (e) at a discretionary break.",
+        "guidance": "If two globs of glue are adjacent, the second will never be selected as a breakpoint because it is preceded by discardable glue. Understanding these cases clarifies where TeX can and cannot break."
+      },
+      {
+        "name": "Penalties and their aesthetic cost",
+        "description": "Each potential breakpoint has an associated numeric penalty representing the aesthetic cost of breaking there. In cases (a)-(c) the penalty is zero; in case (d) an explicit penalty p is used; in case (e) the penalty is \\hyphenpenalty if the pre-break text is nonempty, or \\exhyphenpenalty if the pre-break text is empty. Plain TeX sets \\hyphenpenalty=50 and \\exhyphenpenalty=50.",
+        "guidance": "Use \\penalty n to influence break desirability; negative penalties are bonuses (encourage breaks)."
+      },
+      {
+        "name": "\\penalty semantics and special values",
+        "description": "A penalty \u2265 10000 is treated as infinite (TeX will never break there); a penalty \u2264 \u221210000 is treated as \u2212infinite (TeX will always break there). The \\nobreak macro is an abbreviation for \\penalty10000. A tie in plain TeX is equivalent to \\nobreak\\ , preventing a break at that glue.",
+        "guidance": "Use \\penalty10000 (\\nobreak) to prohibit breaks and \\penalty-10000 to force breaks. Remember ties combine \\nobreak with a glue token to prevent break at that space."
+      },
+      {
+        "name": "Removal of discardable items at a chosen break",
+        "description": "When a line break occurs, TeX removes all discardable items (glue, leaders, kerns, penalties, math-on/math-off spacing) that follow the break until a non-discardable item or another chosen breakpoint is reached.",
+        "guidance": "This behavior can affect spacing when formulas or penalties occur near line ends; math-on/math-off act like kerns with spacing specified by \\mathsurround and may disappear at a line break."
+      },
+      {
+        "name": "Badness calculation for a line",
+        "description": "Badness is an integer approximately 100 \u00d7 (r)^3, where r is the ratio by which the glue must stretch or shrink to make the line the required size. If computed badness exceeds 10000 the value 10000 is used. Overfull boxes are considered infinitely bad (avoided when possible). If glue has infinite stretch/shrinkability the badness is zero.",
+        "guidance": "Badness quantifies line ugliness due to spacing adjustments; it feeds into the demerits computation used for global optimization."
+      },
+      {
+        "name": "Line classification: tight / loose / very loose / decent",
+        "description": "A line with badness \u226513 has glue-set ratio >50%. Terminology: tight = glue had to shrink; loose = glue had to stretch; very loose if badness \u2265100; decent if badness \u226412. Two adjacent lines are visually incompatible if their classifications are not adjacent (e.g., tight next to loose is incompatible).",
+        "guidance": "Avoid visually incompatible adjacent lines; TeX accounts for this via extra demerits (\\adjdemerits)."
+      },
+      {
+        "name": "Demerits and the demerit-oriented objective",
+        "description": "TeX assigns demerits to lines and seeks sequence of breakpoints that minimizes total demerits. For a line with badness b and associated penalty p, demerits d are:\n- (l + b)^2 + p^2 if 0 \u2264 p < 10000;\n- (l + b)^2 \u2212 p^2 if \u221210000 < p < 0;\n- (l + b)^2 if p \u2264 \u221210000.\nHere l is \\linepenalty (plain TeX sets \\linepenalty=10).",
+        "guidance": "Demerits essentially minimize squared badnesses and penalties, leading to globally optimal breakpoints rather than greedy local choices."
+      },
+      {
+        "name": "Additional demerits: \\adjdemerits, \\doublehyphendemerits, \\finalhyphendemerits",
+        "description": "Extra demerits are added for pairs of adjacent lines (\\adjdemerits) when visually incompatible, for consecutive lines ending with discretionaries (\\doublehyphendemerits), and if the second-last line of the paragraph ends with a discretionary (\\finalhyphendemerits). Plain TeX sets \\adjdemerits=10000, \\doublehyphendemerits=10000, \\finalhyphendemerits=5000.",
+        "guidance": "These parameters are large because demerits are in units of badness squared; adjust them to penalize certain undesirable line adjacency or hyphenation patterns."
+      },
+      {
+        "name": "\\tracingparagraphs output and feasible breakpoint trace interpretation",
+        "description": "Setting \\tracingparagraphs=1 produces a trace of line-breaking computations with feasible breakpoints labeled @@n and candidate ways to reach them. Trace lines show badness b, penalty p, and cumulative demerits t, e.g., '@ via @@1 b=131 p=0 d=29881' and lines like '@@2: line 2.0 t=32481 -> @@1'.",
+        "guidance": "Read the trace to see which breakpoints are feasible (feasible = none of the intermediate lines exceed tolerance) and how the shortest-path style selection is made. Suffixes .0/.1/.2/.3 denote very loose/loose/decent/tight; a trailing '-' means hyphenated or final line; 't=' gives total demerits; arrows show chosen predecessors."
+      },
+      {
+        "name": "Feasible and infeasible breakpoints and 'b=*' indicator",
+        "description": "Feasible breakpoints are those reachable without any intermediate line's badness exceeding tolerance; they are numbered @@1, @@2, ... The trace may show 'b=*' for an infeasible breakpoint that had to be chosen because no feasible way kept total demerits small.",
+        "guidance": "Understanding feasible vs infeasible breakpoints helps diagnose why TeX made certain compromises (e.g., accepting a bad line because no feasible alternative existed)."
+      },
+      {
+        "name": "Glue-set ratio and glue set order effects",
+        "description": "Badness computation refers to glue set ratio r and glue set order i (see chapter 12). If i \u2260 0, there is infinite stretchability or shrinkability making badness zero; otherwise badness \u2248 min(100 r^3, 10000).",
+        "guidance": "Knowledge of glue set order is important when using glue with different orders of infinity (fil, fill, filll) which can change badness behavior."
+      },
+      {
+        "name": "Use \\slash to allow optional breaks after '/'",
+        "description": "Plain TeX's \\slash typesets '/' and allows an optional break there (like a hyphen) so constructs like 'input\\slash output' produce 'input/output' with an optional break.",
+        "guidance": "Use \\slash instead of a literal '/' when you want TeX to be able to break after the slash if needed."
+      },
+      {
+        "name": "Hyphenation and ligature-splitting via discretionary breaks",
+        "description": "TeX can hyphenate words requiring splitting ligatures by inserting complex discretionary sequences (example given for 'difficult' with discretionary that breaks 'ffi' ligature). The hyphenation algorithm will insert appropriate discretionaries as necessary.",
+        "guidance": "You usually need not craft such discretionaries by hand; use TeX's hyphenation, or explicit \\- when you want to force a hyphenation point."
+      }
+    ]
+  }
+}

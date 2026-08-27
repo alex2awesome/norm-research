@@ -1,0 +1,166 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 30,
+  "n_chunks": 37,
+  "chunk_chars": 39455,
+  "model": "gpt-5-mini",
+  "elapsed_s": 368.6966055410012,
+  "input_tokens": 13641,
+  "output_tokens": 7147,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users / macro writers / typesetters (readers of The TeXbook)",
+    "subtask_short": "tex macro programming",
+    "subtask_description": "Advanced techniques and practical \u201cdirty tricks\u201d for plain TeX macro programming and document-formatting: handling verbatim/tab characters, table rules, index dot-leaders, hanging punctuation, footnote formatting, output-routine communication, fast syntax checking, and an example business-letter format.",
+    "subtask_keywords": [
+      "tex",
+      "macro_programming",
+      "typesetting",
+      "plain_tex",
+      "output_routines",
+      "footnotes"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Verbatim listings that preserve htabi (^^I) characters",
+        "description": "When a file contains the three symbols ^^I, plain TeX normally inputs them as a single character (ASCII 9), but in verbatim listings we want them to print as the three-character sequence ^^I.",
+        "guidance": "Redefine \\setupverbatim to keep the line-so-far in an hbox that can be measured; make ^^I active (\\catcode\u2018\\^^I=\\active) and define it to close the current box, compute the width so far, round up to the next tab stop, set \\wd0 accordingly, output the box, and start a new box. Important parts: redefine \\par to output box0, use \\everypar to \\startbox, set \\w to a multiple of a test \\space box to define tab amount, and define ^^I to compute and extend to the next multiple of \\w. This approach lets verbatim listings show ^^I characters rather than converting them into character 9."
+      },
+      {
+        "name": "Simulating tab operations by boxing and unboxing",
+        "description": "Tab operations (e.g., \\settabs and \\+) can be simulated by boxing the text up to tab positions and then measuring and manipulating boxes.",
+        "guidance": "Appendix B macros (\\settabs/\\+) provide examples: keep partial line in a box, measure widths, and set glue/kernels based on box widths. Use boxing/unboxing to emulate tab stops when native tab handling is insufficient."
+      },
+      {
+        "name": "Inserting vertical rules by treating rules as separate columns",
+        "description": "Vertical rules that run full table height can be implemented by treating rules as separate columns in the alignment and then superimposing rule boxes on the alignment.",
+        "guidance": "Wrap the alignment in \\beginvrulealign (\\setbox0=\\vbox\\bgroup) and \\endvrulealign which: unvboxes the alignment, isolates the bottom row, examines alternating tabskip glue items there (they will be bisected by a vertical rule), builds box1 containing the vertical rules positioned with computed \\skip0 halves and \\vrule of width .4pt, and then superimposes the alignment on the rules using \\hbox{\\rlap{\\box0}\\box1}. Works for all \\halign{...}; for \\halign to100pt{...} it only works if bottom row contains all columns and you adapt to \\hbox to100pt{\\unhbox1}."
+      },
+      {
+        "name": "Index entries with mixed ragged-right title and ragged-left references (dot leaders)",
+        "description": "Index entries that have a long title followed by dot leaders and a possibly long list of review numbers should: make title ragged-right with hanging indentation if it wraps, make references ragged-left if they wrap, and place dot leaders where they fit (left of first ref line, end of last title line, or middle of a line).",
+        "guidance": "Achieve this by representing interword spaces in the title, references, and the leader transition as explicit sequences of penalties and glue so TeX's line-breaking algorithm can choose breaks intelligently. Use carefully chosen \\penalty, \\hskip with plus/minus stretch/shrink, \\vadjust{} to preserve certain items at line breaks, and \\leaders for dot sequences. See the exact sequences in the text (title: \\penalty10000 \\hskip.5em plus3em \\penalty0 \\hskip-.17em plus-3em minus.11em; references: \\penalty1000 \\hskip.33em plus-3em minus.11em \\vadjust{}\\penalty10000 \\hskip0pt plus3em; transition: long sequence with \\leaders\\copy\\dbox\\hskip3.3\\wd\\dbox plus1fil minus.3\\wd\\dbox etc)."
+      },
+      {
+        "name": "Using penalty+glue sequences to control breakpoints and raggedness",
+        "description": "Fine control of where lines may break and how much interword space stretches or shrinks is achieved by explicit sequences of \\penalty and \\hskip glue with plus/minus components.",
+        "guidance": "Example: putting \\penalty10000 before a glue makes breaks there forbidden; a \\penalty0 is a permissible break encouraging stretchability only if that breakpoint is used; designing sequences with stretchability present only at certain breakpoints yields ragged-right or ragged-left effects. The text explains how a \\penalty0 acts as a breakpoint with stretchability and how net interword spaces change depending on whether a break occurs."
+      },
+      {
+        "name": "Leader placement controlled by penalty breakpoints",
+        "description": "Positioning dot leaders (or other leaders) can be controlled by inserting specific \\penalty items: the configuration of breakpoints determines whether leaders appear at the left of the first reference line, at the end of the last title line (short of margin), or in the middle.",
+        "guidance": "Use two permissible breakpoints (\\penalty600 in the example) in the long transition sequence; first breakpoint causes leaders at beginning of the following line, second causes them at the end but shifted by a specified amount (here 3 ems). Ensure leader width at least three times the leader box (\\dbox) so at least two copies appear. The code also uses precomputed skip registers and constants (\\rlpen, \\leadpen) to implement behavior efficiently."
+      },
+      {
+        "name": "Using \\uppercase and active characters to obtain \u2018random\u2019 active characters",
+        "description": "You can obtain special active characters by exploiting \\uppercase transformations to set catcodes and definitions flexibly.",
+        "guidance": "Example: the trick with \\uccode and \\uppercase used to convert ~13 into 13 and thereby obtain random active characters. Useful when creating macros that rely on unusual active-character sequences."
+      },
+      {
+        "name": "Hanging punctuation via kern sequences",
+        "description": "Allow punctuation (commas, periods, closing quotes, opening quotes) to stick into the margin next to line breaks by representing them with kern adjustments that disappear appropriately at breaks.",
+        "guidance": "Represent each comma as \",\\kern-\\commahang\\kern\\commahang\" and similar for period and quotes; opening quotes need a longer sequence with \\vadjust{} and \\allowhyphens so following words may be hyphenated. Define dimensions (\\commahang, \\periodhang, \\quotehang, \\qquotehang) from the width of punctuation boxes and set appropriate active catcodes (\\catcode`,=\\active etc). Partial hanging punctuation is obtained by decreasing the hang dimensions. Use a special font with zero-width \\hyphenchar for hanging hyphenation. Note: kerns do not affect space factor, so hanging punctuation doesn't change intra-line spacing conventions."
+      },
+      {
+        "name": "Protecting ligatures and paragraph-begin behavior when using active punctuation macros",
+        "description": "Macros for hanging punctuation must detect ligature sequences and take special actions when a paragraph begins with an opening quote.",
+        "guidance": "The macro definitions in the text (\\rqtest, \\lqtest, \\rquotes, \\lquotes) check following tokens and choose appropriate expansions; when a paragraph begins with an opening quote macros use \\leavevmode, \\kern, \\vadjust{}, and set \\allowhyphens to preserve hyphenation behavior. Also provide a mechanism to deactivate (e.g., \\catcode\\lq,=12) when needed."
+      },
+      {
+        "name": "Formatting many short footnotes into multiple narrow columns",
+        "description": "When many footnotes are short, reformatting them into multiple narrow columns at the foot of the page (e.g., three columns) yields better appearance than many short lines.",
+        "guidance": "Generate footnote insertions as narrow \\hsize boxes (e.g., \\eightpoint \\hsize=9pc \\parindent=1pc \\leftskip=0pt \\raggedright ...) and set \\count\\footins appropriately (e.g., 333 so each footnote line ~ 1/3 of a line). The output routine will see a rigid vbox for \\box\\footins; use balancing routines (see rigidbalance) or other reformatting to split into columns or paragraph-ify the footnotes."
+      },
+      {
+        "name": "Rigid balancing of a rigid vbox into k columns (\\rigidbalance)",
+        "description": "Given a rigid vbox with n lines (baseline distance b, top baseline offset h), distribute n lines into k roughly equal columns by letting the first column contain m = ceil(n/k) lines; split the box to height H' = H/k + h (where H is total height), which will split after the maximum number of lines producing box \u2264 H'.",
+        "guidance": "Assumptions: rigid content (no stretch/shrink) and a valid break after every line. Implement with \\splittopskip=\\h, set \\vbadness=10000 to silence underfull reports, compute \\dimen0=\\ht0; \\divide\\dimen0 by\\k; \\advance\\dimen0 by\\h; then \\vsplit0 to \\dimen0. The supplied \\rigidbalance macro uses this idea, recursively splitting into k columns and placing them in a \\valign for top alignment. Caveat: this method can create club/widow lines; alternative ragged-bottom methods may be preferable in some cases."
+      },
+      {
+        "name": "Prefer distribution 6+5+5 over 6+6+4 when splitting 16 into 3 columns",
+        "description": "When distributing lines into columns, choose initial column sizes that minimize awkward leading/trailing lines (e.g., 16 \u2192 6+5+5 rather than 6+6+4).",
+        "guidance": "The ceil(n/k) rule for the first column and then reducing to (k-1) columns naturally yields favorable distributions under the rigidbalance method."
+      },
+      {
+        "name": "Alternative footnote approach: combine footnotes into a single paragraph of unjustified hboxes",
+        "description": "Instead of rigidly balancing lines, collect footnotes into unjustified hboxes whose heights are set to estimates of their contribution, then reformat into a paragraph for final setting; this avoids club/widow columns.",
+        "guidance": "Set \\dp0=0pt and \\ht0 to an estimate (based on \\fudgefactor = \\baselineskip / \\hsize times scaling) so the vbox of hboxes estimates final paragraph height. Use \\count\\footins large (e.g., 1000) to estimate sizes. Insert each footnote as an hbox containing numbering, text, \\penalty-10 to favor breaks between footnotes, and \\hskip\\footglue controlling spacing. Later convert the vbox-of-hboxes to an hbox-of-hboxes and then to a paragraph by unboxing operations (see \\makefootnoteparagraph)."
+      },
+      {
+        "name": "Converting vbox-of-hboxes into a paragraph (\\makefootnoteparagraph / \\removehboxes)",
+        "description": "To build a footnote paragraph from a vbox of hboxes: convert the vbox into an hbox of hboxes, then unbox inner boxes and convert the outer hbox's horizontal list into a paragraph.",
+        "guidance": "Use \\unvbox\\footins then build an hbox via looping with \\lastbox to assemble an hbox-of-hboxes (\\makehboxofhboxes). Use a recursive \\removehboxes that uses the save stack to hold hboxes before unboxing them. Finally set \\baselineskip to \\footnotebaselineskip and \\unhbox0\\par to make the paragraph. Note: \\removehboxes recursion uses input/save stack cells; each level uses one input and three save cells; safe for >100 footnotes. Performance is O(n^2) in the worst case, but constants are small and acceptable in practice."
+      },
+      {
+        "name": "Memory and efficiency: put interword glue into skip registers",
+        "description": "Explicit hskip glue items take more box memory cells than skip registers; using skip registers reduces memory and speeds processing.",
+        "guidance": "Example: 'hskip explicit glue' occupies six cells of TeX's box memory, but 'hskip <skip register>' occupies only two. Therefore define \\newskip registers for the commonly used interword glue values (as in the dot-leader/index example) to save memory and time when typesetting many such paragraphs."
+      },
+      {
+        "name": "Caveats about unboxing across modes and top-level list length",
+        "description": "TeX doesn't allow a vbox to be unboxed in horizontal mode or vice versa directly; unboxing tricks can create extremely long top-level lists that are inefficient to process.",
+        "guidance": "Avoid constructs like \\setbox0=\\hbox{\\unhbox2\\unhbox0} that produce very long top-level lists. Use \\removehboxes and careful staged unboxing to avoid exhausting list capacities. Note that \\makehboxofhboxes cannot use the same 'removehboxes' trick as it must convert a vbox to an hbox with minimal overhead; its running time is O(n^2) but acceptable due to small constants."
+      },
+      {
+        "name": "Communicating with output routines via \\outputpenalty and box255",
+        "description": "Output routines often need to know why they were invoked; global \\mark operations are sometimes insufficient, so use \\outputpenalty and properties of \\box255 to pass signals.",
+        "guidance": "Any \\outputpenalty of \u221210000, \u221210001, \u221210002, or less forces the output routine to act, so distinct negative penalty values can carry different messages. If output was forced, the output routine can use \\vbox{\\unvcopy255} to inspect how full the page-so-far actually is. Set \\holdinginserts positive to detect when \\box255 will be returned through the page builder again if insertions exist."
+      },
+      {
+        "name": "Communicating messages via the depth (\\dp) of \\box255",
+        "description": "The depth (\\dp255) of the current page box can be used as a covert communication channel to the output routine by inserting invisible extra depth values.",
+        "guidance": "If each paragraph ends with a special strut (\\specialstrut) that is 1 sp deeper than normal, then \\dp255 will have a recognizable small integer value when a page ends simultaneously with a paragraph. Ensure \\maxdepth is large enough to allow the extra depth. Many message values can be encoded because small distances (1000 sp) are invisible visually."
+      },
+      {
+        "name": "Forcing line-by-line output (small \\vsize) to allow output routine per-line processing",
+        "description": "If \\vsize is very small, TeX constructs paragraphs as usual but sends them to the output routine one line at a time, enabling the output routine to inspect or annotate each line.",
+        "guidance": "Use temporary small \\vsize to have the page builder send paragraphs line-by-line so the output routine can attach marginal notes or other per-line processing. Rebuilt paragraphs sent back from the output routine will then allow normal page breaks if \\vsize is restored."
+      },
+      {
+        "name": "Two-pass communication via writes and reads",
+        "description": "An output routine can write notes to an auxiliary file during the first pass; the second pass can \\read that information to drive final typesetting.",
+        "guidance": "Design the program so TeX gathers information in the first pass (writing to a file) and uses \\read in a second pass to retrieve that info for final layout decisions. Useful for complex layout decisions that need knowledge of global structure."
+      },
+      {
+        "name": "Fast syntax-only run of TeX (disable typesetting to check syntax quickly)",
+        "description": "To run TeX mainly to catch syntax errors without full typesetting cost, select a dummy font and disable expensive checks and outputs.",
+        "guidance": "Steps: (1) \\font\\dummy=dummy (dummy.tfm defines a font with no characters but valid fontdimens); (2) set all font identifiers to \\dummy (\\let\\tenrm=\\dummy, \\textfont0=\\dummy, etc.) and say \\dummy to select it; (3) set \\tracinglostchars=0; (4) set \\output={\\setbox0=\\box255\\deadcycles=0} so nothing ships out; (5) \\newtoks\\output to prevent other output routine definitions; (6) \\frenchspacing to skip space factor work; (7) \\hbadness=10000 to avoid underfull reports; (8) disable immediate \\write via Frank Yellin trick: \\let\\immediate=\\relax \\def\\write#1#{{\\afterassignment}\\toks0=}. These changes can make TeX run signifcantly faster (often >4x) when only checking syntax."
+      },
+      {
+        "name": "Business-letter format macros and document structure (letterformat.tex)",
+        "description": "A macro package can format many business letters in a single run. Each letter has a structure: letterhead, \\address, \\body, \\closing, optional \\annotations, optional \\ps, \\endletter, and optional \\makelabel.",
+        "guidance": "Typical usage: set \\magnification as desired, \\input letterformat, then list n letter blocks each starting with a letterhead control sequence followed by \\address, \\body (paragraph mode), \\closing (line mode), optional \\annotations and \\ps, then \\endletter and optionally \\makelabel. The \\address and \\closing are often produced line-for-line (obeying lines), while \\body and \\ps are set as paragraphs with TeX choosing breaks and justification."
+      },
+      {
+        "name": "Page layout parameters for letterformat: ragged bottom, penalties and headline",
+        "description": "Letterformat sets up page layout suitable for letters: ragged bottom, relatively large interline penalty to encourage breaks between paragraphs, specific \\hsize and \\voffset adjustments, and a headline that shows addressee/date/page for pages > 1.",
+        "guidance": "Example settings: \\raggedbottom; \\interlinepenalty=1000; \\hsize=6.25truein; \\voffset=24pt and \\advance\\vsize by-\\voffset; \\parindent=0pt; \\parskip=0pt; \\nopagenumbers; \\headline uses \\ifnum\\pageno>1 to print 'To \\addressee\\hfil\\today\\hfil Page \\folio'. Adjust as needed for particular letter conventions."
+      },
+      {
+        "name": "Line mode vs paragraph mode macros (\\beginlinemode, \\beginparmode, \\endmode)",
+        "description": "Letterformat provides mode-control macros so some parts of a letter are typeset line-for-line (obeying input lines) and others as justified paragraphs.",
+        "guidance": "Implement \\beginlinemode by setting \\obeylines in a group and redefining \\endmode to close that group; \\beginparmode sets \\parskip and redefines \\endmode accordingly; \\endletter calls \\endmode\\vfill\\supereject to finish the letter. Use these macros to control which parts of the letter are literal-line vs paragraph-justified."
+      },
+      {
+        "name": "longindentation parameter and address/label handling",
+        "description": "The \\longindentation parameter controls indentation for closings, dates, and parts of the letterhead; addresses are boxed so they can be reused for the letter and for label printing.",
+        "guidance": "Define \\longindentation (e.g., 4truein) and store address in a box register (\\theaddress) using \\address macros that set \\everypar to put hanging indentation on lines that wrap. The \\makelabel macro ejects the letter and produces a postal label using the boxed address. Ensure \\longindentation is consistent between letter body and label layout."
+      },
+      {
+        "name": "Closing macros prevent page breaks between body and ps",
+        "description": "Closings and postscript blocks must not be separated by a page break from the preceding body text.",
+        "guidance": "In \\closing and \\ps definitions use \\nobreak and high \\interlinepenalty values (e.g., \\interlinepenalty5000 and \\penalty5000 between paragraphs in \\ps) to forbid page breaks between the end of the body and the beginning of \\ps or closing material. This preserves logical grouping of letter end material."
+      },
+      {
+        "name": "Letterhead and label generation: load fonts at true sizes and small refinements",
+        "description": "Letterhead and label macros should load special fonts at true sizes so magnification doesn't change their design; small typographic refinements (e.g., raised brackets in telephone numbers) improve appearance.",
+        "guidance": "Load fonts (e.g., \\font\\smallheadfont=cmr8 at 8truept) at true sizes; use helper macros like \\up (\\raise.16ex\\hbox{#1}) to raise brackets in phone numbers; build letterhead boxes combining logo font and name font, and construct \\makelabel to place return address and recipient box inside ruled frames for mailing labels."
+      }
+    ]
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 18,
+  "n_chunks": 42,
+  "chunk_chars": 39629,
+  "model": "gpt-5-mini",
+  "elapsed_s": 101.24365270799899,
+  "input_tokens": 15185,
+  "output_tokens": 5459,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, macro writers, and programmers implementing/using plain TeX",
+    "subtask_short": "plain tex boxes and leaders",
+    "subtask_description": "Rules and behavioral specifications for plain TeX primitives related to input (\nread/\nclosein), looping and recursion macros, box and rule construction (\nhrule/\nvrule, \\hbox, \\vbox, \\lastbox), leaders, write/special whatsits, and related utilities (\\immediate, \\badness, \\newlinechar). Targeted at people writing TeX macros or advanced documents.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "boxes",
+      "leaders",
+      "macros",
+      "dvi_output"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "\\read behavior and semantics",
+        "description": "To get input from an open file you say \\read(number) to (control sequence). The control sequence is defined to be a parameterless macro whose replacement text is the contents of the next line read from the designated file. This line is converted to a token list using the procedure of Chapter 8 based on the current category codes. Additional lines are read if necessary until an equal number of left and right braces has been found. An empty line is implicitly appended to the end of a file that is being \\read.",
+        "guidance": "If {number} is not between 0 and 15, or if no such file is open, or if the file has ended, input will be from the terminal; TeX will prompt the user unless the {number} is negative. The macro definition will be local unless you say \\global \\read. Example: \\message{Please type your name:} \\read16 to\\myname \\message{Hello. \\myname!} \u2014 \\read prints \":\\myname=)\" and waits for response. Beware: the return at the end of the line gets translated into a space (exercise points out how to fix this)."
+      },
+      {
+        "name": "\\closein behavior",
+        "description": "The command \\closein{number} closes the input stream associated with that input stream number and the file associated with that input stream number will be closed (returned to its initial condition) if such a file was open.",
+        "guidance": "Use \\closein{number} to release the input stream. This pairs with \\openin from Chapter 20; ensure the number is valid and the file was open."
+      },
+      {
+        "name": "Use of \\message with input dialogs",
+        "description": "\\message writes an expanded token list on the terminal and in the log file; combining \\message with \\read provides dialog-like user interaction.",
+        "guidance": "In the example, \\message{Please type your name:} then \\read16 to\\myname causes TeX to echo the prompt and the response to the log. A negative stream number suppresses the prompt. \\message expands its argument immediately; it's suitable for prompts, but differences exist between \\immediate\\write and \\message with regard to line formatting."
+      },
+      {
+        "name": "\\loop ... \\repeat macro semantics",
+        "description": "Plain TeX contains a \\loop ... \\repeat construction: you say \\loop o: \\if ... \\repeat where o: and ,3 are sequences of commands and \\if ... is any conditional test (without a matching \\fi). TeX does o:, then if the condition is true it does f/ and repeats the whole process again starting with o:. If the condition ever turns out to be false, the loop stops.",
+        "guidance": "The implementation in plain TeX sets the loop body into a control sequence \\body and iterates by calling \\iterate; tail-recursive technique is used so TeX removes \\iterate from memory before invoking the next iteration, avoiding memory growth. Use \\newif and macros to parse input in interactive loops (example: yes/no dialog)."
+      },
+      {
+        "name": "Recursion vs iteration for certain tasks",
+        "description": "Recursion is sometimes preferable to simple \\loop iteration when the task discovers information from right to left but must output left to right (e.g., converting a count register to hexadecimal digits).",
+        "guidance": "Example \\hex macro uses recursion to compute digits in reverse order and outputs them correct left-to-right. Recursion can create many active copies simultaneously; account for grouping/braces and use \\global when setting conditionals that must persist across groups."
+      },
+      {
+        "name": "Constructing macros that inspect tokens (e.g., token counting)",
+        "description": "Macros like \\length and \\getlength demonstrate how to iterate over the tokens of an argument and count nonblank tokens by testing token equality and using \\let\\next and recursive jumps.",
+        "guidance": "Technique: initialize a counter, call a recursive helper that tests for a sentinel token (e.g., \\end), advance counter on each token, and use \\let to select the next action. Useful pattern for parsing macro arguments at the token level."
+      },
+      {
+        "name": "Rules (\\hrule and \\vrule) specification rules",
+        "description": "To make a rule box type \\hrule in vertical mode or \\vrule in horizontal mode followed by any or all of: width{dimen}, height{dimen}, depth{dimen} in any order. If you specify a dimension twice the second specification overrules the first.",
+        "guidance": "Defaults: for \\hrule width=* (depends on enclosing), height=0.4pt, depth=0.0pt; for \\vrule width=0.4pt, height=* , depth=*. '*' means actual dimension depends on context (extends to boundary of smallest enclosing box). A rule is invisible unless (height+depth)>0 and width>0. Negative dimensions allowed; negative width acts like a backspace in horizontal lists. \\vrule in vertical mode starts a new paragraph; \\hrule in horizontal mode ends the paragraph and returns to vertical mode. If all three dimensions specified, \\hrule and \\vrule produce the same black box, but you must use the one appropriate to the current mode."
+      },
+      {
+        "name": "Mode-dependence and effects of \\hrule vs \\vrule",
+        "description": "You must call it an \\hrule if you want to put it in a vertical list, and \\vrule if you want it in a horizontal list, regardless of appearance. If you say \\vrule in vertical mode, TeX starts a new paragraph; if you say \\hrule in horizontal mode, TeX stops the current paragraph and returns to vertical mode.",
+        "guidance": "Choose rule primitive according to current mode to get intended list behavior even when visual result is similar."
+      },
+      {
+        "name": "Seven box forms and box specifications",
+        "description": "A (box) has one of seven forms: \\hbox(box specification){horizontal material}, \\vbox(box specification){vertical material}, \\vtop(box specification){vertical material}, \\box(register number), \\copy(register number), \\vsplit(register number) to {dimen}, and \\lastbox. A (box specification) may be :to{dimen} or :spread{dimen} or empty; governs glue setting in lists inside the box.",
+        "guidance": "A register number is between 0 and 255; after \\box(register) that register becomes void, but after \\copy the register is unchanged. In math mode an additional \\vcenter(box specification){vertical material} box is available. See relevant chapters for full behavior."
+      },
+      {
+        "name": "\\lastbox behavior and restrictions",
+        "description": "If the last item on the current horizontal or vertical list is an hbox or vbox, it is removed from the list and becomes \\lastbox; otherwise \\lastbox is void.",
+        "guidance": "Operation is allowed in internal vertical mode, horizontal mode, and restricted horizontal mode, but you cannot use it to take a box from the current page in vertical mode. In math modes \\lastbox is always void. Example: at beginning of paragraph, {\\setbox0=\\lastbox} removes the indentation box."
+      },
+      {
+        "name": "\\unskip semantics and limitations",
+        "description": "\\unskip removes the last glue item on the current list (or as explained, certain other applicable items).",
+        "guidance": "You cannot remove glue from the current page by using \\unskip in vertical mode, but you can say \\vskip-\\lastskip to achieve almost the same effect. \\unskip is somewhat analogous to \\lastbox but for glue instead of boxes; it cannot remove glue from leaders."
+      },
+      {
+        "name": "Leaders: \\leaders(box or rule)\\hskip(glue) behavior",
+        "description": "\\leaders(box or rule)\\hskip(glue) repeats a given box as many times as necessary to fill the given glue; the glue stretches or shrinks as usual. TeX treats leaders as a special case of glue (or vice versa): leaders fill space with copies of a box instead of nothing.",
+        "guidance": "Replicated boxes are aligned as if an infinite row were windowed by the available space; aligned leaders produce identical visible positions across lines. Boxes are only typeset when their entire width falls into the available space; if repeated-box width L and the space is at least 2L you'll always see at least one copy; if less than 2L boxes may not appear. Example macro: \\def\\leaderfill{\\leaders\\hbox to 1em{\\hss.\\hss}\\hfill} used in \\line contexts."
+      },
+      {
+        "name": "Nonaligned leaders: \\cleaders and \\xleaders semantics",
+        "description": "There are two kinds of nonaligned leaders: \\cleaders (centered leaders) and \\xleaders (expanded leaders). Centered leaders pack the boxes tightly next to each other leaving equal blank space at left and right; expanded leaders distribute extra space equally between the q+1 positions adjacent to the q boxes.",
+        "guidance": "Example: with a 10pt box filling 56pt, \\cleaders produce 3pt left padding, five boxes, then 3pt padding; \\xleaders produce 1pt spacing before and between boxes and after. Compute q = floor(space / box_width) and position accordingly. Use \\cleaders or \\xleaders when you want nonaligned replication and centering/distribution properties."
+      },
+      {
+        "name": "Leaders in vertical mode",
+        "description": "Leaders also work in vertical mode where vertical glue (e.g., \\vskip or \\vfill) is used and leaders produce boxes aligned so that the top of each repeated box has the same vertical position as the top of the smallest enclosing box plus multiples of height+depth of the repeated box.",
+        "guidance": "No interline glue is placed between boxes in vertical leaders; boxes are stacked directly on top of each other. Vertical leaders have width when TeX calculates enclosing box size. If height+depth of repeated box isn't positive, TeX silently ignores vertical leaders and produces ordinary glue."
+      },
+      {
+        "name": "Leaders with rules vs boxes",
+        "description": "Instead of giving a (box) in leaders you can give a (rule) (i.e., \\hrule or \\vrule followed by optional specs). The rule will then be made as wide as the corresponding glue.",
+        "guidance": "When a rule is used, it fills the space completely, so there's no difference between \\leaders, \\cleaders, and \\xleaders. In horizontal mode \\leaders\\vrule\\hfill will produce a continuous rule across the space. Consider using rules when you want uniform continuous fills (e.g., dotted lines vs solid rules)."
+      },
+      {
+        "name": "When leaders are ignored",
+        "description": "If you specify horizontal leaders with a box whose width isn't positive, or vertical leaders with a box whose height+depth isn't positive, TeX silently ignores the leaders and produces ordinary glue instead.",
+        "guidance": "Check box dimensions before using in leaders; using zero or negative dimensions yields no replicated boxes and just glue, often silently, which can be confusing."
+      },
+      {
+        "name": "How \\write/\\openout/\\closeout are handled (whatsit deferral)",
+        "description": "The \\openout, \\closeout, and \\write commands are not performed immediately when TeX sees them. Instead TeX puts these commands into whatsit items and places them into the current horizontal/vertical/math list; no actual output occurs until this whatsit is shipped out to the dvi file as part of a larger box (i.e., at \\shipout time). The token list of a \\write is first stored in a whatsit without performing any macro expansion; expansion occurs later when TeX is in the middle of a \\shipout operation.",
+        "guidance": "This deferral ensures correct page-number references for indexes, tables of contents, etc., because page assignment is unknown at write time. The relative order of output commands is preserved unless boxes are shipped out in different order. Plain TeX provides \\newwrite to allocate stream numbers 0\u201315; output streams are independent of input streams; file names usually get \".tex\" appended if no extension is present. Beware that \\write token lists are expanded at shipout, so control macro-expansion timing carefully (techniques from Chapter 20 helpful). Also, \\write whatsits that appear within boxes governed by leaders are ignored. If you need immediate effect use \\immediate preceding \\write/\\openout/\\closeout."
+      },
+      {
+        "name": "\\immediate effect for write/openout/closeout",
+        "description": "If you type \\immediate just before \\write or \\openout or \\closeout the operation will be performed immediately and no whatsit will be made.",
+        "guidance": "Use \\immediate\\write16{Goodbye} to print immediately to terminal/log. \\immediate\\write differs from \\message: \\write prints the text on a line by itself; several \\message commands may appear on same line separated by spaces. Avoid \\immediate when you need page-number-correct deferred output (e.g., table of contents entries)."
+      },
+      {
+        "name": "Newline handling and \\newlinechar for \\write",
+        "description": "The token list of a \\write ought to be rather short since it makes one line of output. Some implementations cannot write long lines; if you want several lines, give several \\write commands or set TeX's \\newlinechar parameter to the ASCII code of a character that stands for 'begin a new line'; TeX will begin a new line whenever it would ordinarily output that character to a file.",
+        "guidance": "Example: \\newlinechar='\\n (set to ASCII code) then \\immediate\\write16{Two\\nlines.} produces two lines. Be aware of implementation limits on line length and choose appropriate splitting or newline char."
+      },
+      {
+        "name": "Symbolic representation and expansion semantics in \\write outputs",
+        "description": "Each \\write command produces output in the form TeX uses to display token lists symbolically: characters represent themselves (with duplication for macro parameter chars), unexpandable control sequence tokens produce their names preceded by the \\escapechar and followed by a space (unless the name is an active character or a single-nonletter control sequence).",
+        "guidance": "Because expansion of the token list occurs at shipout, contents like \\the\\count0 will be expanded at that later time, enabling e.g., writing page numbers via deferred expansion. Use \\immediate or expansion control where needed to force some tokens to expand earlier (exercise: expand chapter number immediately but page number at shipout)."
+      },
+      {
+        "name": "\\special semantics and portability cautions",
+        "description": "The \\special{(token list)} command can be given in any mode; like \\write it puts its token list into a whatsit, and like \\message it expands the token list immediately. This token list will be output to the dvi file with other typesetting commands and is implicitly associated with a particular position on the page (a zero-sized placeholder box).",
+        "guidance": "The token list should consist of a keyword optionally followed by a space and arguments (e.g., \\special{halftone pic1}). TeX does not interpret the token list; it copies it to the output. Keep specials reasonably short to avoid overflowing TeX's string memory. Specials should never do anything that changes the current position; device drivers and dvi-converters should fail gracefully when they don't recognize special keywords. Using \\special reduces portability of output across devices; prefer emerging community standards for common graphic operations."
+      },
+      {
+        "name": "Badness reporting for glue setting in a box",
+        "description": "TeX will report the badness of glue setting in a box if you ask for the numeric quantity \\badness after making a box. The badness is between 0 and 10000 unless the box is overfull, when \\badness=1000000.",
+        "guidance": "Example usage: \\setbox0=\\line{\\trialtexta} \\ifnum\\badness>250 \\setbox0=\\line{\\trialtextb}\\fi \u2014 use \\badness to detect poor glue fit and select alternative typesetting. Remember the special sentinel value for overfull boxes."
+      }
+    ]
+  }
+}

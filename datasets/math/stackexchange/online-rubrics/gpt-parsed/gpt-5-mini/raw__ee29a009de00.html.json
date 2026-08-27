@@ -1,0 +1,79 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/ee29a009de00.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 4920,
+  "output_tokens": 2812,
+  "elapsed_s": 2057.695002207998,
+  "extracted": {
+    "orientation": "stylebook",
+    "intended_audience": "Isabelle/HOL users and contributors (proof authors, AFP contributors, formal verification engineers)",
+    "subtask_short": "isabelle/hol proof style guide",
+    "subtask_description": "A concise style-and-requirements guide for writing readable, maintainable Isabelle/HOL proofs (targeting proofs that will be shared or contributed to the Archive of Formal Proofs or similar projects). Covers content/maintenance rules for proof scripts and Isar proofs.",
+    "subtask_keywords": [
+      "isabelle_hol",
+      "proof_style",
+      "machine_checked",
+      "archive_of_formal_proofs",
+      "formal_verification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Do not use sorry",
+        "description": "You should not leave proofs unfinished by using the sorry command; proofs should be finished before you call them proofs.",
+        "guidance": "Old experiments left as sorry lemmas are unacceptable. Use oops to ensure unfinished experiments are not accidentally used, or make them explicit assumptions of a locale if needed. Proofs containing sorry would not be accepted at the Archive Of Formal Proofs."
+      },
+      {
+        "name": "Do not use back",
+        "description": "Avoid the back command: it single-steps Isabelle\u2019s backtracking mechanism and can make proofs hard to maintain.",
+        "guidance": "Backtracking spans many places in Isabelle and internal order can change; when it does, it is very hard to infer what the proof script attempted. Eliminate back in final proofs by using implicit backtracking or explicit instantiations. Examples show a bad script with multiple back steps vs. a good script that composes erule applications rather than relying on back."
+      },
+      {
+        "name": "Indent apply scripts by subgoal",
+        "description": "Indent apply commands according to the number of outstanding subgoals: an apply to a state with n+1 subgoals must be indented by n spaces relative to the first apply in the sequence; usual indentation for 0 subgoals is 2 spaces for a top-level proof.",
+        "guidance": "This textual indentation indicates which line solved which subgoal and how many new subgoals were generated, helping debugging and showing nesting depth. Examples contrast a 'bad' flat script where it's impossible to tell which tactic solved a goal vs. a 'good' indented script. There is an experimental jEdit bean shell macro to auto-indent. From Isabelle2015 you can mark that a tactic should solve its goal (covered in Part 2), but that does not remove the need for indentation."
+      },
+      {
+        "name": "Never give an unnamed lemma a global attribute for automated methods",
+        "description": "Do not attach global attributes like [simp] to unnamed (anonymous) lemmas.",
+        "guidance": "Such anonymous lemmas are very hard to remove from global sets (e.g., the simp set) later. Instead, give the lemma a name so it can be referred to or removed later. Example: bad: lemma [simp]: \"(A \u2227 B) = (B \u2227 A)\" \u2014 good: give the lemma an explicit name."
+      },
+      {
+        "name": "Instantiations must not use Isabelle-generated names such as xa",
+        "description": "Avoid instantiating or introducing names that are Isabelle-generated (e.g., xa, ba17), because such names can change across Isabelle releases.",
+        "guidance": "Generated names change between releases and make proof maintenance painful. Use Isar naming (proof/assume/fix) or rename_tac to choose stable, meaningful names. Examples show a bad apply with rule_tac x=\"ba17\" in exI vs. a good apply with rename_tac and then using x in rule_tac. Note: rename_tac works right-to-left for new names. A fully structured proof form is presented as an even better alternative."
+      },
+      {
+        "name": "Do not use axiomatization (except to introduce existence only)",
+        "description": "Avoid axiomatization because it can introduce inconsistency into the logic; use locale or explicit assumptions instead unless you are bootstrapping a new logic or extending basic HOL axioms.",
+        "guidance": "Automated tools may exploit inconsistencies introduced by axiomatization. It is safe to use axiomatization only to state the mere existence of a constant (i.e., not to assert properties). Examples: bad axiomatization that states both all_true and all_false vs. ok axiomatization that only asserts existence of P :: 'a \u21d2 bool."
+      },
+      {
+        "name": "Annotate long-running proof steps with a short comment",
+        "description": "If proof steps take significant time (longer than roughly 1 minute), add a short comment to that step so future maintainers know what to expect.",
+        "guidance": "Use comments like (* takes long *) next to long by/apply invocations. For Isar proofs, prefer by for long-running terminal proof methods because by runs asynchronously (you can continue working) whereas apply does not."
+      },
+      {
+        "name": "Use unrestricted auto only as a terminal proof method",
+        "description": "Do not use auto (unrestricted) inside apply scripts across multiple subgoals because it acts globally on all subgoals and changes in its internal composition make the proof state hard to understand.",
+        "guidance": "Acceptable uses: auto as a terminal method when it fully solves goals, or documented in a structured proof. Prefer replacing an initial auto with more predictable clarsimp or similar single-goal methods, then use goal-restricted auto (e.g., apply (auto: ..)[n]) to solve specific subgoals. Example: bad pattern shows multiple apply(auto ...) followed by other steps; good pattern uses apply (auto simp: some_rules x) done or goal-restricted auto with [2]. Larry Paulson's approach: use auto to start, then treat the resulting subgoals as separate lemmas and recombine with auto."
+      },
+      {
+        "name": "Do not switch from apply into proof in the middle of a proof",
+        "description": "Avoid mixing apply-style scripts and structured proof (proof ... qed) halfway through a proof because it makes the control flow hard to follow and brittle to small changes in apply output.",
+        "guidance": "A mixed proof where you start with apply sequence and then switch to proof is hard for readers and will break if apply output changes. Prefer turning the proof around (i.e., use apply inside a structured proof) or otherwise structure the proof so the apply-phase is clearly separated or converted into Isar fragments. The guide gives an intermediate workaround that uses note/lemma combination to make the apply fragment more robust, and suggests fully structured proofs as the best option."
+      },
+      {
+        "name": "Keep initial proof methods simple in structured proofs",
+        "description": "When starting a structured proof, keep the initial proof method simple (avoid complex, monolithic methods at the start) so readers can see how the rest of the proof connects.",
+        "guidance": "Complex initial methods make it hard to understand how the remaining proof steps rely on the initial outcome. Prefer doing less initially and shift work into the show ?thesis part, or use a simpler rule-focused starting method followed by localized proofs and a final by(...) combining necessary methods. Examples contrast a bad proof with auto/simp/intro!: complex invocation at the start vs. better proofs that use a small initial block and then a by(...) combining complex methods at the end of a subproof."
+      },
+      {
+        "name": "Do not use the implicit apply rule",
+        "description": "Avoid using bare apply rule (implicit rule selection) because the specific rule Isabelle picks can change across versions, making the proof brittle and unreadable.",
+        "guidance": "Write explicit rule names such as apply (rule conjI) apply (rule ballI) apply (rule exI) apply clarsimp. It is acceptable inside an Isar proof block where the surrounding structured text makes the intent clear (e.g., proof without arguments is equivalent to proof rule). The guide gives a bad example with multiple bare apply rule lines and a good explicit example. Note also the Isar proof variant where proof without arguments corresponds to proof rule."
+      }
+    ]
+  }
+}

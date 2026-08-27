@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 22,
+  "n_chunks": 42,
+  "chunk_chars": 39789,
+  "model": "gpt-5-mini",
+  "elapsed_s": 135.8212386249943,
+  "input_tokens": 14869,
+  "output_tokens": 6448,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users / format designers / macro programmers",
+    "subtask_short": "tex vertical_mode reference",
+    "subtask_description": "Reference-summary of TeX's vertical-mode primitives, syntax rules, internal quantities and parameters, and example output-routine behavior \u2014 aimed at people designing formats or writing low-level TeX macros.",
+    "subtask_keywords": [
+      "tex",
+      "vertical_mode",
+      "primitive_reference",
+      "format_design",
+      "macro_programming"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Index-entry dispatching (\\inxentry / \\next cases)",
+        "description": "When \\inxentry is invoked it examines the token named \\next to decide among three cases: if \\next is :\\sub then the line is treated as a subsidiary entry; if \\next is :\\endindex then the next commands executed are :\\vfill\\mark{}\\break\\endgroup; otherwise the line is treated as a main entry.",
+        "guidance": "This is the exact dispatch rule used by the example index macros: the behavior of an index-entry macro must be decided by peeking at the next token and handling the three cases accordingly."
+      },
+      {
+        "name": "Main-entry processing (\\mainentry)",
+        "description": "The text of a main entry is put into parameter #1 of \\mainentry; this parameter is delimited by a comma. \\mainentry first issues a \\mark (clearing the mark if a break occurs), then \\noindent (entering horizontal mode and emitting \\parskip glue), and then puts another \\mark into the paragraph containing the main-entry text; a \\toks register called \\maintoks is used to inhibit expansion of the mark text.",
+        "guidance": "Because the mark placed inside the paragraph immediately follows the box for the paragraph's first line, that mark becomes the \\botmark if a page break occurs within the paragraph. Use \\maintoks to prevent unwanted expansion of mark text."
+      },
+      {
+        "name": "Subsidiary-entry processing (\\subentry)",
+        "description": "A similar construction is used for subsidiary entries: \\maintoks still contains the main entry while the subsidiary text is placed into another token list register \\subtoks; note that \\sub is defined equal to \\indent so it will not expand in the mark.",
+        "guidance": "Keep subsidiary text separate (e.g., in \\subtoks) so both main and sub entries can be recovered from marks; be aware of which control sequences are expandable in marks."
+      },
+      {
+        "name": "Output-routine continuation insertion (\\inxcheck)",
+        "description": "The example output routine runs \\normaloutput and then invokes \\inxcheck by expanding \\botmark into components: \\output={\\dimen0=\\dp255 \\normaloutput \\expandafter\\inxcheck\\botmark\\sub\\end} and \\def\\inxcheck#1\\sub#2\\end{...}. If \\botmark is empty nothing is added; otherwise it inserts a 'Main entry (continued):' line and, when a subsidiary part exists, an indented subsidiary line. The macro adjusts spacing by computing a \\kern from the difference between the previous box depth and the inserted box (\\advance\\dimen0 by-\\prevdepth \\kern\\dimen0).",
+        "guidance": "This pattern shows how to separate \\botmark into components and insert continuation lines at a page break while compensating for depth so interline glue remains correct. The depth-compensating \\kern is essential to avoid bad spacing when inserting boxes between lines."
+      },
+      {
+        "name": "Compensating for box depth at page breaks",
+        "description": "When an output routine inserts new boxes at a page break there will already be interline glue computed based on the depth of the preceding box (the depth of \\box255). The routine must insert a \\kern to compensate for the difference in depth between the old box and the one inserted before the interline glue, otherwise spacing will be wrong.",
+        "guidance": "Compute the difference between the depth of the existing shipped box and \\prevdepth, then \\kern by that amount before inserting additional lines or boxes."
+      },
+      {
+        "name": "End-of-job behavior and output-routine 'endgame' handling",
+        "description": "TeX only terminates on \\end if the main vertical list has been entirely output and \\deadcycles=0. Otherwise it inserts items equivalent to a special very-negative penalty (\\penalty-'10000000000) plus glue and re-invokes the output routine repeatedly until everything ships out. An output routine can recognize it is being invoked during this 'endgame' because of the highly negative \\outputpenalty and should modify its actions then so termination can succeed.",
+        "guidance": "Design output routines to detect the endgame via the special \\outputpenalty value and avoid leaving persistent residue on the main vertical list (otherwise TeX may never finish)."
+      },
+      {
+        "name": "Mode semantics and chapter scope (vertical/internal vertical mode)",
+        "description": "TeX is always in one of six modes; commands may mean different things in different modes. This chapter surveys TeX's primitives when they occur in vertical mode (and internal vertical mode, which is almost the same).",
+        "guidance": "When writing macros or formats, take into account mode-dependent meanings: a token's effect can vary drastically between vertical, horizontal and math modes."
+      },
+      {
+        "name": "Argument-reading behavior of commands",
+        "description": "Some commands take arguments: tokens that follow a command may be treated as arguments and are not considered commands themselves. Example: when TeX processes the sequence corresponding to \\dimen2=2.5pt it treats only \\dimen as the command; the following tokens are swept up as the argument specifying which \\dimen and what value.",
+        "guidance": "Be conscious of which tokens are consumed as arguments (and of optional spaces) when defining macros and when writing syntax rules."
+      },
+      {
+        "name": "Grammar/syntax notation conventions",
+        "description": "The text uses a formal grammar-style notation (angle brackets, --t means 'is defined to be', '|' means 'or'), with conventions for optional spaces and keywords. Keywords like pt are represented as (optional spaces)(p or P)(t or T). When a control sequence like \\dimen is used in syntax rules it denotes any token whose current meaning equals the meaning \\dimen had when TeX started up.",
+        "guidance": "This notation lets the book state precise syntax for quantities like {number},{dimen},{glue}. Remember that \\dimen in a syntax rule refers to the primitive meaning at TeX startup, not dynamically to a redefined \\dimen name."
+      },
+      {
+        "name": "Implicit characters and their limitations",
+        "description": "Control sequences can be made to act like characters by \\let or \\futurelet (called 'implicit characters', e.g. \\bgroup and \\egroup for '{' and '}'). They are interpreted like characters when TeX acts on them as commands, but they are not always acceptable substitutes in syntax rules (for example \\let\\p=p does not make \\p acceptable as part of the keyword pt).",
+        "guidance": "Be explicit in syntax rules about whether implicit characters are allowed; do not assume \\let-made tokens substitute everywhere a literal character is expected."
+      },
+      {
+        "name": "Special token-category notation (:c, :}, :$)",
+        "description": "The symbols ':c', ':}', and ':$' stand for any explicit or implicit character tokens of categories 11, 21, and 31 respectively (whether or not the actual character codes are braces or dollar signs).",
+        "guidance": "Use these notations when reading the formal syntax to understand which token categories are being referenced."
+      },
+      {
+        "name": "Definition and parsing rules for {number}",
+        "description": "{number} is defined by grammar: (optional signs)(unsigned number), where (optional signs) can be spaces or plus/minus signs; {unsigned number} may be a normal integer or coerced integer. A normal integer can be an internal integer, integer constant, octal/hex constant, or a character token. Rules: an integer constant must not be immediately followed by a digit (consecutive digits counted in same constant).",
+        "guidance": "Alphabetic constants denote character codes and are not expanded. Internal dimensions and glue can be coerced to integers (e.g., \\hsize used as a {number} converts to scaled points). TeX allows arbitrarily many spaces before a {number} and at most one space after it; no optional space after a {number} that ends with an unexpandable control sequence."
+      },
+      {
+        "name": "Definition and parsing rules for {dimen} and {mudimen}",
+        "description": "{dimen} grammar: (optional signs)(unsigned dimen) where unsigned dimen is either a normal dimen or coerced dimen; normal dimen can be an internal dimen or (factor}{unit of measure}; factor can be integer or decimal. {mudimen} is similar but uses mu units. When 'true' is present the factor is multiplied by 1000 and divided by the \\mag parameter. Physical units and mu units are defined (pt, pc, in, bp, em, mm, dd, cc, sp, mu, ...).",
+        "guidance": "Understand coercion: internal glue can be coerced to a dimen etc. Be careful with 'true' units which scale by \\mag, and with mu units which are relative to math spacing."
+      },
+      {
+        "name": "Glue and muglue syntax",
+        "description": "(glue) grammar: (optional signs)(internal glue) or (dimen)(stretch)(shrink) with stretch and shrink possibly plus/minus fil dimensions. (muglue) similarly defined using mu units and fil dimen variants.",
+        "guidance": "Glue components (stretch/shrink) may be specified with fil, fill, etc.; muglue uses mu units and is used in math mode contexts."
+      },
+      {
+        "name": "Internal quotaables: internal integer/dimen/glue/muglue definitions",
+        "description": "The book lists what counts as (internal integer), (internal dimen), (internal glue) and (internal muglue). Examples: internal integers include integer parameters and special integers and tokens like \\count, \\tolerance, \\hyphenchar(font), \\parshape, \\inputlineno, \\badness; internal dimen includes \\prevdepth, \\pagegoal, \\pagetotal, \\pagestretch, \\pagefilstretch, \\scriptspace, \\predisplaysize, \\displaywidth, \\parindent, \\hoffset, etc.; internal glue includes \\lastskip and skip registers; internal muglue includes mu skips like \\thinmuskip.",
+        "guidance": "Format designers can use many internal quantities to influence TeX's behavior; know which tokens are interpreted as which internal kind, and that coercion is possible (e.g., internal dimen coerced to integer by using scaled points)."
+      },
+      {
+        "name": "Spaces around numeric/dimen quantities",
+        "description": "From the syntax rules TeX allows arbitrarily many spaces before a {number} or {dimen}, and at most one space after; however there is no optional space after a {number} or {dimen} that ends with an unexpandable control sequence. Examples: \\space\\space24\\space\\space when reading a {number} gobbles up the first three spaces and leaves the fourth; 24pt\\space\\space leaves one space.",
+        "guidance": "Careful placement of spaces matters when numeric quantities are followed by control sequences; use explicit space tokens or braces where necessary."
+      },
+      {
+        "name": "Parameter cataloging (integer parameters and meanings)",
+        "description": "The text enumerates TeX's integer parameters with brief explanatory notes: \\pretolerance (badness tolerance before hyphenation), \\tolerance (badness tolerance after hyphenation), \\hbadness/\\vbadness (badness thresholds to show bad boxes), \\linepenalty, \\hyphenpenalty, \\exhyphenpenalty, \\binoppenalty, \\relpenalty, \\clubpenalty, \\widowpenalty, \\displaywidowpenalty, \\brokenpenalty, \\predisplaypenalty, \\postdisplaypenalty, \\interlinepenalty, \\floatingpenalty, \\outputpenalty, \\doublehyphendemerits, \\finalhyphendemerits, \\adjdemerits, \\looseness, \\pausing, \\holdinginserts, various \\tracing... parameters, \\language, \\uchyph, \\lefthyphenmin, \\righthyphenmin, \\globaldefs, \\defaulthyphenchar, \\defaultskewchar, \\escapechar, \\endlinechar, \\newlinechar, \\maxdeadcycles, \\hangafter, \\fam, \\mag, \\delimiterfactor, \\time, \\day, \\month, \\year, \\showboxbreadth, \\showboxdepth, \\errorcontextlines, etc.",
+        "guidance": "Integer parameters control line/page breaking algorithms, demerits, tracing/debugging, hyphenation settings, global-definition behavior, and various internal bookkeeping values. Use them to tune TeX's breaking and diagnostic behavior."
+      },
+      {
+        "name": "Dimen parameters (names and purposes)",
+        "description": "Dimen parameters listed include \\hfuzz (allowable overrun before overfull hbox messages), \\vfuzz, \\overfullrule (rule width appended to overfull boxes), \\emergencystretch (reduces badness on final pass), \\hsize (line width in horizontal mode), \\vsize (page height in vertical mode), \\maxdepth, \\splitmaxdepth, \\boxmaxdepth, \\lineskiplimit, \\delimitershortfall, \\nulldelimiterspace, \\scriptspace, \\mathsurround, \\predisplaysize, \\displaywidth, \\displayindent, \\parindent, \\hangindent, \\hoffset, \\voffset, etc.",
+        "guidance": "Dimen parameters determine layout measures (page/line sizes, skips, offsets) and thresholds used by TeX's layout engine; they are crucial for format design and fine-tuning."
+      },
+      {
+        "name": "Glue parameters (names and purposes)",
+        "description": "Glue parameters listed include \\baselineskip (desired glue between baselines), \\lineskip, \\parskip, \\abovedisplayskip, \\abovedisplayshortskip, \\belowdisplayskip, \\belowdisplayshortskip, \\leftskip, \\rightskip, \\topskip, \\splittopskip, \\tabskip, \\spaceskip, \\xspaceskip, \\parfillskip, plus word/sentence spacing controls when nonzero.",
+        "guidance": "Glue parameters control the spacing rules around lines, paragraphs and displays; altering them changes global spacing behavior and must be done deliberately."
+      },
+      {
+        "name": "Muglue parameters",
+        "description": "Three permissible muglue parameters are \\thinmuskip, \\medmuskip, \\thickmuskip used for thin/medium/thick spaces in math formulas.",
+        "guidance": "Use these to control spacing in math mode; they are separate from regular glue."
+      },
+      {
+        "name": "Token-list parameters (\\output and \\every... hooks)",
+        "description": "Token parameters include \\output (the user's output routine), \\everypar (tokens inserted when a paragraph begins), \\everymath, \\everydisplay, \\everyhbox, \\everyvbox, \\everyjob, \\everycr, and \\errhelp (tokens inserted after every \\cr or to supplement an \\errmessage).",
+        "guidance": "These token-list parameters are the standard hook points for inserting behavior at key events (beginning of paragraph, display, hbox/vbox creation, every \\cr, job start, and custom output routines)."
+      },
+      {
+        "name": "Total parameter count and grouping",
+        "description": "The text states there are a total of 103 parameters of the five kinds (integer, dimen, glue, muglue, token).",
+        "guidance": "This is a useful sanity-check for format authors enumerating or documenting parameters."
+      },
+      {
+        "name": "Assignment and macro-definition syntax (prefixes and global behavior)",
+        "description": "Every assignment can be prefixed by \\global; only macro-definition assignments may be prefixed by \\long or \\outer. An equals sign is optional in assignments. If \\globaldefs is positive a prefix of \\global is automatically implied; if \\globaldefs is negative a prefix of \\global is ignored. Macro definitions use \\def, \\gdef, \\edef, \\xdef etc and definition text has form (parameter text)(left brace)(balanced text)(right brace).",
+        "guidance": "Understand prefix rules when writing assignments and definitions; be careful with \\globaldefs and with which prefixes are allowed for non-macro assignments. Macro parameter text must be balanced and follows usual TeX def syntax."
+      }
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 87,
+  "n_chunks": 92,
+  "chunk_chars": 39949,
+  "model": "gpt-5-mini",
+  "elapsed_s": 518.6577829590024,
+  "input_tokens": 13243,
+  "output_tokens": 3893,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP library authors and developers implementing partition-based backtracking and automorphism/enumerator support (computational group theory programmers)",
+    "subtask_short": "partition-based backtrack implementation",
+    "subtask_description": "Implement backtrack search routines in GAP using the partition technique: supply an R-base (with nextLevel), write Refinements functions for image-partition refinements, use StratMeetPartition/MeetPartitionStrat where appropriate, and provide enumerator-aware automorphism objects so stabilizer-chain algorithms (e.g., Schreier-Sims variants) work on coset-enumerators.",
+    "subtask_keywords": [
+      "gap",
+      "backtrack",
+      "partition",
+      "r-base",
+      "refinement",
+      "enumerator",
+      "automorphism"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Cell splitting and reuniting procedure",
+        "description": "The m-th cell of a partition P is expressed as P.points[ P.firsts[m] .. P.firsts[m] + P.lengths[m] - 1 ]. Splitting a cell: (1) sort the points of the cell so the points that remain inside occupy positions [P.firsts[m] .. last]; (2) points at positions [last+1 .. P.firsts[m] + P.lengths[m] - 1] form the additional cell; (3) add entries to P.firsts (last+1) and P.lengths (P.firsts[m] + P.lengths[m] - last - 1); (4) set P.cellno entries for the new sublist to the new cell number and reduce P.lengths[m] to last - P.firsts[m] + 1. Reuniting two cells is done by reversing steps 2\u20134. The list P.points need not be rearranged.",
+        "guidance": "Follow the four-step sequence precisely when splitting; when merging, reverse those steps. Keep P.points static if possible to avoid expensive rearrangements. Maintain consistent updates to P.firsts, P.lengths and P.cellno so other routines (e.g., IsolatePoint, FixpointCellNo) see a coherent partition."
+      },
+      {
+        "name": "R-base record components",
+        "description": "An R-base R is a record composed of: domain \u2014 the set \u03a9 on which the group G operates; base \u2014 the sequence (a1,..,ar) of base points; partition \u2014 an ordered partition, initially \u03a00, refined to \u03a01,..,\u03a0r during backtrack; where \u2014 list such that ai lies in cell number where[i] of \u03a0i; rfm \u2014 list of refinements taking \u03a3i to \u03a3i+1 (structure described below); chain \u2014 a copy of a stabilizer chain for G (not if G is symmetric group); fix \u2014 only if G symmetric: list whose i entry contains Fixcells(\u03a0i); level \u2014 initially equal to chain and changed during backtrack; lev \u2014 list remembering level entry for Ga1...ai\u22121; level2, lev2 \u2014 similar for second group (used in intersections); nextLevel \u2014 function described below.",
+        "guidance": "Treat R as a black box passed to backtrack routines; populate all components consistently when constructing R (e.g., via EmptyRBase). If constructing as EmptyRBase([G,H], \u03a9, \u03a00) and G=H, GAP sets level2=true. Only nextLevel and refinement-related components need explicit implementation for custom backtrack procedures."
+      },
+      {
+        "name": "Responsibilities of R.nextLevel",
+        "description": "R.nextLevel(\u03a0, R) is invoked whenever \u03a0i does not yet contain enough base points in one-point cells; it must choose a new base point ai+1 (not yet in one-point cell and moved by the current stabilizer), refine \u03a0i to \u03a0i+1 (by changing the \u03a0 argument), and store all necessary information in R.",
+        "guidance": "NextRBasePoint(\u03a0, rbase) may be used to select the next base; an optional preference list of points can be passed to prefer particular points (e.g., those in long cycles). After choosing a base point, call ProcessFixpoint for any implicitly or explicitly registered fixpoints, and register corresponding refinements via AddRefinement so that image-partition refinements can mirror the changes."
+      },
+      {
+        "name": "Fixcells / IsolatePoint / ProcessFixpoint behavior",
+        "description": "Fixcells(\u03a0) returns the list of points in one-point cells of \u03a0 ordered as the cells are ordered in \u03a0. IsolatePoint(\u03a0, q) places point q into a one-point cell, returning the number of the cell from which q was taken (or false if q was already singleton). ProcessFixpoint(I, p[, q]) does bookkeeping to prescribe an extra base or image fixpoint and returns false if that point was already fixed, true otherwise (and may adjust coset-mapping element).",
+        "guidance": "Use Fixcells to iterate current fixpoints; if IsolatePoint returns a numeric 'where', remember to add corresponding entries to R.firsts/lengths/cellno and call ProcessFixpoint to register the extra base/image in the R or I black box. ProcessFixpoint may also replace the current coset representative element with one that maps the new fixpoint appropriately, or return false if impossible."
+      },
+      {
+        "name": "AddRefinement and the Refinements record contract",
+        "description": "AddRefinement(R, name, args) registers a named refinement function (Refinements.name) with specified arguments so that when a base/image is chosen, GAP will call Refinements.name(R, I, ...). Refinement functions must perform the necessary refinements on I.partition to yield \u03a3i+1 corresponding to the changes made to \u03a0i+1.",
+        "guidance": "When registering AddRefinement, ensure the refinement function exists in the global Refinements record and that it accepts R and I as first two arguments followed by the values captured at registration time. Refinement functions should call ProcessFixpoint(I, p, q) where appropriate and must ensure cell sizes match between \u03a0i+1 and \u03a3i+1 (see next criterion)."
+      },
+      {
+        "name": "Refinement function success condition (true/false contract)",
+        "description": "Refinement functions must return false if the refinement is unsuccessful (e.g., it would lead to \u03a3i+1 having different cell sizes from \u03a0i+1) and true otherwise.",
+        "guidance": "Use the return value to allow PartitionBacktrack to abandon branch early when discrepancies occur. Example: Refinements.Centralizer returns IsolatePoint(Sigma, q) = where and ProcessFixpoint(I, p, q); only if both tests succeed does it return true."
+      },
+      {
+        "name": "PartitionBacktrack invocation and argument contract",
+        "description": "PartitionBacktrack is started with arguments: the group to iterate, a predicate/property function to test elements, a boolean (false for subgroup search, true for representative search), the R-base, a list of data to be stored in I.data (position 1 is \u03a30, position 2 may store element to be centralized), and two known subgroups L \u2264 CG(g) and R \u2264 CG(h) if applicable.",
+        "guidance": "When calling PartitionBacktrack for centralizer calculation, pass Pi_0 and g in I.data so refinement functions can access them. For conjugacy/representative searches, pass both g and h (and possibly a different \u03a30). Ensure the predicate and subgroup arguments match the intended search mode (subgroup vs representative)."
+      },
+      {
+        "name": "StratMeetPartition / MeetPartitionStrat meet-strategy semantics",
+        "description": "StratMeetPartition(R, \u03a0, \u039b[, g]) replaces \u03a0 by \u03a0 \u2227 \u039b and returns a 'meet strategy' strat. MeetPartitionStrat(R, I{, \u039b'}[, {g'}], strat) uses strat to perform the corresponding meet on I.partition efficiently. The strategy records intersection sizes so that only non-empty intersections must be calculated and allows early abandonment if observed behavior doesn't match the strategy. If \u039b is a subset, it is interpreted as the partition (\u039b, \u03a9 \\ \u039b). An optional g argument means the meet is taken with \u039b.g^{-1} (cellwise setwise action).",
+        "guidance": "Use StratMeetPartition during R.nextLevel to record a strategy that speeds computation of corresponding meets on image partitions in refinement functions. If you only need a one-time meet without recording a strategy, call StratMeetPartition(\u03a0, \u039b) and ignore the returned strategy. Remember to apply g/g' appropriately when passing group actions."
+      },
+      {
+        "name": "Automatic reversal of partition changes by PartitionBacktrack",
+        "description": "Changes to partitions (\u03a0 and I.partition) made by StratMeetPartition/MeetPartitionStrat and other refinement calls are undone automatically by PartitionBacktrack when backtracking to earlier nodes.",
+        "guidance": "Do not attempt to manually reverse partition changes made inside refinement functions; rely on PartitionBacktrack's stack to restore previous partition state when a branch is abandoned or when trying the next image."
+      },
+      {
+        "name": "Enumerator representation for cosets of characteristic factors",
+        "description": "An enumerator for coset gN/M is built from: (1) a pcgs for G, (2) a range = [start..stop] indicating N = <pcgs[start..n]> and M = <pcgs[stop+1..n]>, and (3) the representative g. The enumerator should behave as a list of group elements (coset representatives), so implement Length, [] and Position operations accordingly.",
+        "guidance": "Declare a representation (e.g., IsCosetSolvableFactorEnumeratorRep) and store pcgs, range, representative in the record. Implement Length as product of RelativeOrdersPcgs over range; implement [] by converting pos-1 into exponents using RelativeOrderOfPcElement, reconstructing element, and returning representative * elm; implement Position by computing exponent vector via ExponentsOfPcElement and accumulating positional index. Keep implementations consistent with GAP enumerator conventions (AsList, PositionCanonical, etc.)."
+      },
+      {
+        "name": "PermOnEnumerator operation and automorphisms-on-enumerators contract",
+        "description": "Provide PermOnEnumerator(model, aut) which returns an object behaving like a permutation acting on positions of model (an enumerator). The returned object must have the enumerator set (SetEnumerator) and expose permutation-like operations (product, power, inverse) with types reflecting the enumerator domain.",
+        "guidance": "Declare a category IsPermOnEnumerator and a default rep (e.g., IsPermOnEnumeratorDefaultRep storing field 'perm'). Install methods such that PermOnEnumerator(enum, a) wraps 'a' into the new type, sets its enumerator, and returns it. Also provide InstallMethod for multiplication (\\*) of two IsPermOnEnumeratorDefaultRep objects that multiplies the underlying perms, sets SetIsBijective(perm, true), and returns PermOnEnumerator(Enumerator(a), perm). Implement powering and division (p ^ a, p / aut) so they map positions via PositionCanonical(Enumerator(a), Enumerator(a)[p] ^ a!.perm) or analogous calls."
+      },
+      {
+        "name": "Ensure enumerator-aware methods when computing stabilizer chains (StabChainStrong)",
+        "description": "When extending a stabilizer chain to work on automorphisms acting on enumerators, convert new generators via AutomorphismOnEnumerator(S.identity, gen) so each new generator has the right EnumeratorDomainPermutation/type before extending Schreier trees and recursing on stabilizers.",
+        "guidance": "Before passing newgens to Extend the Schreier tree, map each newgens[i] := AutomorphismOnEnumerator(S.identity, newgens[i]). Ensure identity element at each level has the type corresponding to that level. This keeps basic-orbit computations in small enumerator domains (e.g., coset sizes) rather than the full group, making Schreier-Sims practical for such bases."
+      }
+    ]
+  }
+}

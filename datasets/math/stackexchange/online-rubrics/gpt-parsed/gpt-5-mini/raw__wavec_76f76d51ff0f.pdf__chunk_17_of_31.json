@@ -1,0 +1,169 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 17,
+  "n_chunks": 31,
+  "chunk_chars": 39879,
+  "model": "gpt-5-mini",
+  "elapsed_s": 279.8570324589964,
+  "input_tokens": 14692,
+  "output_tokens": 7520,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "mathematicians and developers using PARI/GP for computational number theory (number field computations)",
+    "subtask_short": "pari_gp_number_field_reference",
+    "subtask_description": "Reference-style guidance for using PARI/GP number-field and relative-number-field library functions: inputs, allowed formats, flags, algorithmic behavior, complexity warnings, and recommended usage patterns.",
+    "subtask_keywords": [
+      "pari_gp",
+      "number_field",
+      "library_reference",
+      "computational_number_theory"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Representation of automorphisms",
+        "description": "An automorphism of a number field can be given either in basistoalg form (polynomial in the root) or as a column vector representing the image in the integral basis (algtobasis).",
+        "guidance": "algtobasis (column vector) representation is more efficient and should be preferred if a given automorphism will be applied many times; example timings show algtobasis significantly faster for repeated nfgaloisapply calls. Include conversion functions (nfalgtobasis / nfbasistoalg) when appropriate."
+      },
+      {
+        "name": "nfgaloisapply usage and syntax",
+        "description": "Apply a Galois automorphism to an element of a number field. Library syntax: GEN galoisapply(GEN nf, GEN aut, GEN x).",
+        "guidance": "Inputs: nf from nfinit, aut in either basistoalg or algtobasis form, x an element/vector. Prefer algtobasis aut for repeated calls for performance. Use provided wrapper functions for consistent formats."
+      },
+      {
+        "name": "nfgaloisconj: compute conjugates and flag semantics",
+        "description": "Compute the conjugates of a root of the defining polynomial (as polynomials in the root). Signature: nfgaloisconj(nf, {flag=0}, {d}).",
+        "guidance": "flag=0 (default) combines algorithms of flags 4 and 1 and returns a complete result. flag=1 uses nfroots: guaranteed to work in polynomial time but slower. flag=4 uses galoisinit: very fast but applies only to (most) Galois fields \u2014 if group not weakly super-solvable it may return only the identity. Other flags are historical/pointless. If d present, it should be a multiple of the common denominator of conjugates expressed as polynomials in a root."
+      },
+      {
+        "name": "nfgaloisconj limitation: Q-automorphisms only; use rnfgaloisconj for K-automorphisms",
+        "description": "nfgaloisconj computes only Q-automorphisms. To get K-automorphisms (for an arbitrary base field K) one must transform the problem and call nfgaloisconj on an absolute polynomial (example rnfgaloisconj pseudocode provided).",
+        "guidance": "The page supplies a full recipe (rnfgaloisconj) to compute K-automorphisms by reducing to Q-automorphisms, including handling of substituted polynomials, root lifting, and selection of valid images. Use that routine rather than expecting nfgaloisconj to handle non-Q bases."
+      },
+      {
+        "name": "nfgrunwaldwang: construct cyclic extensions with local conditions",
+        "description": "Given nf, list of primes Lpr and local-degree constraints Ld, and a sign vector pl for real places, compute a polynomial defining a cyclic extension whose local degrees are multiples of the Ld constraints and which is complex at specified real places.",
+        "guidance": "The extension degree equals the LCM of local degrees. Current search/construction restricted: search allows prime power degree, construction restricted to prime degree (rnfkummer restriction). For nf = Q, integer primes accepted but their primality is not checked. Warning: if nf does not contain n-th roots of unity (n = degree), the routine will compute bnf(nf(\u03b6n)) which can be costly. Provide variable index v when needed."
+      },
+      {
+        "name": "nfhilbert: global and local quadratic Hilbert symbol",
+        "description": "Compute the global quadratic Hilbert symbol (a,b) in nf (1 if x^2 \u2212 a y^2 \u2212 b z^2 has a nontrivial solution in nf, \u22121 otherwise) or the local symbol modulo a prime ideal pr.",
+        "guidance": "Two forms available: global long nfhilbert(GEN bnf, GEN a, GEN b) and library nfhilbert0 with optional pr. Use local mode for testing solvability modulo a prime ideal as returned by idealprimedec."
+      },
+      {
+        "name": "nfhnf: Hermite normal form for pseudo-matrices",
+        "description": "Given a pseudo-matrix (A,I) in a number field, find a pseudo-basis (B,J) in Hermite normal form of the module it generates. If flag \u2260 0 also return transformation matrix U such that AU=[0|B].",
+        "guidance": "Input must be in the integral pseudo-matrix format described elsewhere. If you need the change-of-basis/transformation, use non-zero flag; otherwise use default for speed. Use rnfsimplifybasis to simplify pseudo-bases."
+      },
+      {
+        "name": "nfhnfmod: HNF with determinant modulus to avoid coefficient explosion",
+        "description": "Given pseudo-matrix (A,I) and an ideal detx (an integral multiple of the determinant), computes HNF of the module while avoiding coefficient explosion.",
+        "guidance": "Provide detx (e.g., via nfdetint) to control coefficients. Use this variant when coefficient growth is problematic in plain nfhnf."
+      },
+      {
+        "name": "nfinit: polynomial input rules, resulting nf structure fields",
+        "description": "nfinit(pol,{flag=0}) initializes a number-field structure from a non-constant (preferably monic) irreducible polynomial in Z[X] and returns an nf row vector with components nf[1]..nf[9] (defining polynomial, signature, discriminant, index, matrices, roots, integral basis, change-of-basis matrix, multiplication table).",
+        "guidance": "Prefer accessing components via member functions/fields (nf.pol, nf.disc, nf.zk, nf.sign, etc.) rather than relying on positional layout (it may change). If input polynomial is non-monic, nfinit will make it monic and apply reduction (see flag=3). Allowed inputs include pol, nf, bnf, or rnf (in which case returns absolute polynomial). The integral basis nf.zk is LLL-reduced with first element 1. Use different nfinit variants (nfinitred, nfinitred2) or nfinitall with flags described below for specific behaviors."
+      },
+      {
+        "name": "nfinit: alternative input [pol,B] formats and use of nfcertify",
+        "description": "nfinit accepts special input [pol, B] where B is either an explicit integer basis (useful when maximal order known) or a listP specifying primes at which to compute a maximal order (useful to avoid full discriminant factorization). nfcertify can be used to certify such conditional computations.",
+        "guidance": "When discriminant is huge and factoring is hard, providing a primes list or basis yields a conditional nf structure that is polynomial-time computable. Always run nfcertify to certify correctness; if nfcertify fails the nf may be untrustworthy and may cause routines to fail. Some functions (e.g., idealprimedec for primes included in listP) remain trustworthy even for conditional nf."
+      },
+      {
+        "name": "nfinit flags via nfinitall constants",
+        "description": "Use nfinitall(GEN x, long flag, long prec) with named flags rather than numeric codes. Relevant flags: nf_RED (find simpler defining polynomial), nf_ORIG (also return change of variable), nf_ROUND2 (deprecated), nf_PARTIALFACT (deprecated, lazy factorization).",
+        "guidance": "Avoid deprecated flags; prefer nf_RED and nf_ORIG as needed. Do not use nf_ROUND2 or nf_PARTIALFACT; prefer explicit [pol,listP] format and nfcertify for safe computations."
+      },
+      {
+        "name": "Handling huge discriminants and maximal order computation caveat",
+        "description": "If the defining polynomial has a huge discriminant which is difficult to factor, computing the maximal order from scratch is hard.",
+        "guidance": "Use input format [pol,B] with either a known integer basis or a list of primes to compute an order maximal at given primes. Use nfcertify to attempt to prove correctness. Be aware that failing to certify means the nf structure may be conditional and may cause unpredictable failures in some routines."
+      },
+      {
+        "name": "nfisincl and nfisisom: subfield and isomorphism tests",
+        "description": "nfisincl(x,y) tests whether polynomial x defines a field conjugate to a subfield of polynomial y; nfisisom(x,y) tests isomorphism. If either input is an nf (number field structure) a much faster algorithm is used (factoring x over y via nffactor).",
+        "guidance": "Output for nfisincl: 0 if not, otherwise vector of polynomials representing embeddings. Older versions missed embeddings; current version returns all. Use nf inputs when possible for speed."
+      },
+      {
+        "name": "nfislocalpower: test n-th power in local completions",
+        "description": "nfislocalpower(nf, pr, a, n) returns 1 if a \u2208 K is an n-th power in the completion Kv at the maximal ideal v corresponding to pr, else 0.",
+        "guidance": "pr must be a prid attached to a maximal ideal (from idealprimedec). The routine accepts vector a (e.g., [0,32]~) and large exponents; use to test local power properties. Examples illustrate typical behavior (e.g., -1 is a square in Q(i) at prime above 2)."
+      },
+      {
+        "name": "nfmodpr, nfmodprinit, nfmodprlift: residue-field projections and lifts",
+        "description": "nfmodpr maps number-field elements to the residue field modulo a prime ideal pr (returns t_FFELT). nfmodprinit converts a prime ideal into a modpr structure used for residue-field operations. nfmodprlift lifts elements from the residue field back to ZK (or to representative elements).",
+        "guidance": "Prefer passing a modpr structure from nfmodprinit rather than an idealprimedec structure for speed. The functions act on number-field elements (not on recursive vectors) \u2014 use apply to map vectors. There are no compatibility checks between x and pr: invoking nfmodprlift with an x not attached to the same residue field yields undefined results."
+      },
+      {
+        "name": "nfnewprec: increase numeric precision of an nf/bnf/bnr and performance caveats",
+        "description": "nfnewprec(nf) recomputes the nf structure at the current (usually larger) precision. This updates many internal objects but may be slow, especially for bnf/bnr where many generators of principal ideals must be computed; bnf must contain fundamental units for correct behavior.",
+        "guidance": "Use with caution \u2014 this may be expensive. For bnfs/bnrs also consider bnfnewprec and bnrnewprec analogues. Only use when higher precision is necessary for subsequent computations."
+      },
+      {
+        "name": "nfroots: compute roots of polynomials in a number field and conditional-nf caveat",
+        "description": "nfroots({nf}, x) returns roots of polynomial x with coefficients in the given number field nf (or in Q if nf omitted). Input may be polynomial or nf structure.",
+        "guidance": "If using a conditional nf produced by nfinit([T,listP]) (i.e., maximal order not fully known), prefer running nfcertify first. nfroots can sometimes recover factors in polynomial time even when nf is conditional, but relying on this is risky; prefer providing a genuine nf.pol when possible."
+      },
+      {
+        "name": "nfrootsof1: compute roots of unity and algorithmic cost",
+        "description": "nfrootsof1(nf) returns [w,z] where w is number of roots of unity and z a primitive w-th root in nf. The algorithm estimates w and searches roots of the w-th cyclotomic polynomial in nf.",
+        "guidance": "Algorithm is polynomial in field degree and bitsize of multiplication table and practical up to degree ~100 (under one minute). Alternative rootsof1_kannan may be faster when roots of unity present but can be exponentially slower in general."
+      },
+      {
+        "name": "nfsnf: Smith normal form of torsion ZK-modules and integrality requirements",
+        "description": "Given a torsion ZK-module described by a square integral invertible pseudo-matrix (A,I,J), nfsnf returns the Smith normal form ideal list D = [d1,...,dn] such that the module \u2245 \u2295 ZK/di, with di | di-1. If flag \u2260 0 it also returns transformation matrices U,V with U A V = identity.",
+        "guidance": "Input must satisfy integrality conditions ai,j \u2208 b_i a_j^{-1} for all i,j, otherwise the computed di may not be integral. Every finitely generated torsion module can be represented in this input format (even with bi = ZK for all i). Use flag to get additional transformations when needed."
+      },
+      {
+        "name": "nfsplitting: splitting-field defining polynomial and degree bound usage",
+        "description": "nfsplitting(nf, {d}) returns a defining polynomial over Q for the splitting field of nf. If d provided it should be a multiple of the splitting-field degree (speeds up computation).",
+        "guidance": "The algorithm complexity is polynomial in the splitting-field degree d and bitsize of T; if d is large the result may be unusable (e.g., producing extremely large-degree polynomials that cannot be handled by nfinit). Providing a correct degree bound can massively speed up computation. Incorrect degree bound is ignored with a warning."
+      },
+      {
+        "name": "nfsubfields: enumeration of subfields (degree d or all)",
+        "description": "nfsubfields(pol, {d=0}) finds all subfields of degree d (or all subfields if d omitted) of the number field defined by monic integral polynomial pol. Each subfield is returned as [g,h] where g is absolute equation and h expresses a root of g in terms of x.",
+        "guidance": "Uses J. Kl\u00fcners\u2019s algorithm in general and B. Allombert\u2019s galoissubfields for Galois fields with weakly supersolvable groups. Expect potentially high cost for fields with many subfields."
+      },
+      {
+        "name": "polcompositum: compositum of two \u00e9tale Q-algebras and preconditions",
+        "description": "polcompositum(P,Q,{flag=0}) outputs the simple factors R of the compositum algebra A = Q(X,Y)/(P(X),Q(Y)), assuming P and Q are squarefree polynomials (same variable).",
+        "guidance": "If P and Q are reducible it is more efficient to factor them first. If P is irreducible (and smaller degree than Q) a faster workflow is: nf = nfinit(P); L = nffactor(nf,Q)[,1]; then use rnfequation. Flag bit meanings: bit 1 returns extra data [R,a,b,k]; bit 2 assumes P and Q define linearly disjoint irreducible fields and returns single factor (saves factorization). After compositum computation, reduce the (often complicated) polynomial (e.g., polredbest). For many use-cases prefer composing irreducible inputs and using nfinit+nffactor approach."
+      },
+      {
+        "name": "polgalois: compute Galois group (degree limits, output format, precision caveats)",
+        "description": "polgalois(T) computes the Galois group of irreducible polynomial T \u2208 Q[X] (action on roots) and returns [n,s,k,name] where n=group order, s=signature \u00b11, k=index/label, name=string label (format historically inconsistent for d\u22647).",
+        "guidance": "In version cited T must be irreducible and degree \u22647 (degrees up to 11 available if galdata package installed). Method uses resolvent polynomials and is sensitive to numeric precision; wrong results possible if initial precision insufficient. To get a consistent k numbering, set global variable new_galois_format=1 in library mode."
+      },
+      {
+        "name": "polred, polredabs, polredbest: polynomial reduction functions and recommendations",
+        "description": "polred (deprecated), polredabs (canonical minimal-T2 polynomial), polredbest (polynomial-time heuristic returning a polynomial with reasonably small coefficients) transform defining polynomials to nicer forms.",
+        "guidance": "Prefer polredbest in most cases: polynomial time, tends to give small discriminants and small denominators in power-basis representations. polredabs returns a canonical minimal-T2 polynomial but may require factoring the discriminant (expensive) and can be exponential in degree when many subfields exist. Use flags: polredbest flag=1 returns [P,a] giving isomorphism Mod(a,P) mapping; polredabs flags control canonical behavior and optional outputs (e.g., return ZK basis). Iterating polredbest can improve results until stabilization."
+      },
+      {
+        "name": "poltschirnhaus: random Tschirnhausen transform for resolvent computations",
+        "description": "poltschirnhaus(x) applies a random Tschirnhausen transformation to separable polynomial x, producing another equation for the same \u00e9tale algebra.",
+        "guidance": "Useful when computing resolvent polynomials (used by polgalois); use to randomize/perturb equations to aid algorithms sensitive to specific coordinate choices."
+      },
+      {
+        "name": "rnfalgtobasis / rnfbasis / rnfbasistoalg / rnfcharpoly (relative-field helpers)",
+        "description": "rnfalgtobasis(rnf,x) expresses x (given in absolute form) on the relative integral basis. rnfbasis(bnf,M) returns a true ZK-basis of projective ZK-module M when possible (or an n+1 generating set). rnfbasistoalg(rnf,x) computes representation of x as polmod with polmod coefficients. rnfcharpoly(nf,T,a,{var=x}) returns characteristic polynomial of a over nf (element of nf[X]/(T)).",
+        "guidance": "These routines are for relative extensions L/K (rnf/bnf inputs). rnfbasis allows also passing an irreducible polynomial P in K[X] to interpret the ring of integers of K[X]/(P) as a ZK-module. Use appropriate function depending on whether you need basis conversion, polynomial representation, or characteristic polynomial computation; supply variable index when necessary."
+      },
+      {
+        "name": "rnfconductor: class-field-theory conductor of Abelian relative extensions",
+        "description": "rnfconductor(bnf, pol) computes the conductor of an Abelian relative extension defined by pol, returning [conductor, bnr, subgroup] where conductor=[f0,f\u221e], bnr attached bnr structure and subgroup is matrix in HNF defining subgroup of ray class group on bnr.gen.",
+        "guidance": "Use when working with class field theory to obtain conductor, associated ray-class data and subgroup generators. Interpretation of returned data follows the bnr/bnf conventions."
+      },
+      {
+        "name": "rnfdedekind: Dedekind criterion for relative extensions and outputs",
+        "description": "rnfdedekind(nf, pol, {pr}, {flag=0}) applies Dedekind\u2019s criterion to order ZK[X]/(P) at prime pr (or at all primes if pr omitted).",
+        "guidance": "Default behavior (flag 0, single pr) returns [max,basis,v] where basis is a pseudo-basis of an enlarged order O, max indicates if O proven pr-maximal (1) or not (0), and v is valuation at pr of order discriminant. If flag \u2260 0, function returns boolean 1/0 indicating pr-maximality (faster because enlarged order is not computed). For testing maximality at many primes, pass vector of primes or omit pr to test all relevant primes (flag becomes 1 automatically). Prefer rnfpseudobasis if you need more information."
+      }
+    ]
+  }
+}

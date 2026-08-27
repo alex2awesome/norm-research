@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 33,
+  "n_chunks": 160,
+  "chunk_chars": 39963,
+  "model": "gpt-5-mini",
+  "elapsed_s": 194.96143612499873,
+  "input_tokens": 16329,
+  "output_tokens": 4123,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "users of the Singular computer algebra system (mathematicians, computational algebraists, and programmers writing Singular scripts)",
+    "subtask_short": "using Singular for Groebner computations",
+    "subtask_description": "Practical examples and recommendations for defining rings/monomial orderings, computing Groebner/standard bases, handling large coefficients, parallelizing computations, elimination, saturation, finite-field computations, and related Singular-specific procedures and options.",
+    "subtask_keywords": [
+      "singular",
+      "groebner",
+      "standard_basis",
+      "computer_algebra",
+      "polynomial_rings"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Monomial ordering implements localization",
+        "description": "Choosing a monomial ordering > implements the localization of the polynomial ring with respect to the multiplicatively closed set of polynomials whose leading monomial is 1; precisely those elements with leading monomial 1 are considered units.",
+        "guidance": "If > is global (1 smallest monomial) the ring is the polynomial ring; if > is local (1 largest monomial) the implemented ring is the localization at the homogeneous maximal ideal; mixed orderings give intermediate rings. Use appropriate ordering in ring(...) to obtain the desired mathematical ring (e.g., (K[y]_<y>)[x] vs K[x,y]_<x>)."
+      },
+      {
+        "name": "Detecting units via leading monomial",
+        "description": "In computations with respect to a monomial ordering, an element is treated as a unit if and only if its leading monomial is 1.",
+        "guidance": "Use leadmonom(...) to inspect leading monomials and predict whether terms behave as units under the current ordering; examples show 1+x may be unit or not depending on ordering."
+      },
+      {
+        "name": "Avoid char-0 coefficient blowup by computing in positive characteristic or deforming",
+        "description": "Complicated examples can produce extremely long coefficients in characteristic 0; a small deformation or computing first in positive characteristic (e.g., p=32003) may avoid huge coefficient growth.",
+        "guidance": "More than 95% of time in complicated standard basis computations can be spent computing coefficients in char 0. Strategies: introduce a small deformation (e.g., add small rational perturbation) or perform computations modulo a large prime; later lift or normalize coefficients if needed. Example shows deformation i2 vs i1 and computing over ZZ/32003."
+      },
+      {
+        "name": "Normalize long coefficients for readable/displayable output",
+        "description": "When coefficients are huge, normalize and map to a real ring or convert to strings for compact, readable representation.",
+        "guidance": "Example: divide polynomial by a large integer factor, set ring real, imap and set short=0 to force long output format or use scientific notation. Use size(string(poly)) and vdim(...) to measure average coefficient length."
+      },
+      {
+        "name": "Use parameters (Q(t)) to compute generic behaviour",
+        "description": "Introduce a parameter t and compute over Q(t) to get dimension (or other invariants) at the generic point; for almost all a in Q the specialization t=a yields the same result.",
+        "guidance": "Define ring with parameter (0,t),(x,y),lp to get coefficients QQ(t), compute vdim(std(j)) to get dimension over Q(t); can substitute random integer a to verify specialization."
+      },
+      {
+        "name": "Format and insert results into text using strings",
+        "description": "Use string(...) and string concatenation to insert computational results into textual output and control spacing/format.",
+        "guidance": "Examples show looping, computing string(n), building padding spaces, and concatenating to produce aligned printed lines. Use short variable to control abbreviated vs full polynomial display."
+      },
+      {
+        "name": "Construct benchmark examples (cyclic roots) programmatically",
+        "description": "Create ideals programmatically (e.g., cyclic(n)) to generate standard benchmark examples for standard/Groebner basis computations.",
+        "guidance": "Provide procedure that builds the ideal as a string, execute it to create ideal i and compute std(i) to benchmark performance (timing, size, degree). Useful for testing algorithm performance."
+      },
+      {
+        "name": "Parallelize competing algorithms with ssi links",
+        "description": "Run multiple Groebner/standard-basis routines (e.g., stdhilb and stdfglm) in parallel using ssi links; use waitfirst to take the first result and terminate the other process.",
+        "guidance": "Use link l = \"ssi:fork\" or \"ssi:tcp\"; open links, write quoted commands to children, collect links in a list, use waitfirst(L) to get index of winner, close/kill children appropriately. Tips: prefer ssi:tcp for true parallelism across machines, quote to avoid local evaluation, and kill remaining remote child explicitly."
+      },
+      {
+        "name": "Dynamic modules require kernel/C/C++ knowledge",
+        "description": "Writing dynamic modules for Singular is more involved than writing library procedures and requires knowledge of C/C++ and the Singular kernel.",
+        "guidance": "Use LIB(\"kstd.so\") to load dynamic modules; procedures from the module become available under a package name (e.g., Kstd::kstd). See cited technical reference for module development. Example shows kstd to restrict components considered in pair-formation."
+      },
+      {
+        "name": "Choose std vs groebner depending on ordering and heuristics",
+        "description": "The std command implements Buchberger\u2019s algorithm for standard bases; the groebner command (from standard.lib) uses heuristics to choose std or other algorithms depending on the ring ordering and problem.",
+        "guidance": "Use option(redSB) to force reduced bases. For rings with ordering dp groebner may call std; for other cases it may call conversion or specialized routines. Inspect library standard.lib for heuristics. For long computations set option(prot) to monitor progress."
+      },
+      {
+        "name": "Use Groebner-basis conversion and Hilbert-driven strategies to handle slow orderings",
+        "description": "If a target monomial order is slow (e.g., lex), compute a Groebner basis with respect to a faster order (e.g., dp) and convert it (FGLM for zero-dimensional ideals or Groebner walk for general ideals). Alternatively, homogenize and use Hilbert-driven Buchberger (stdhilb) to speed up lex computations.",
+        "guidance": "Stdfglm applies only to zero-dimensional ideals. stdhilb implements Hilbert-driven Buchberger which homogenizes, computes with fast order, reads Hilbert function and speeds up slow-order computation. Use these conversion routines to avoid direct expensive std computations in lex."
+      },
+      {
+        "name": "Set option(prot) and timer for long computations and interpret progress output",
+        "description": "Enable option(prot) and timer to display progress markers and timings for long Groebner/std computations so the user can monitor and interpret criteria like product/chain/hilbert-series counts.",
+        "guidance": "Example shows prot output and later turning option(noprot). Use system(\"--ticks-per-sec\",100) and timer to report timing in 1/100 seconds. prot output includes product and chain criterion counts and other status markers."
+      },
+      {
+        "name": "Use slimgb to keep polynomials short (slim Groebner bases)",
+        "description": "Use slimgb to compute Groebner bases while keeping polynomials short (small coefficients) \u2014 particularly useful over function fields or rationals.",
+        "guidance": "slimgb is an algorithm designed to keep polynomials slim; it can be much faster than std in certain settings. See Section 5.1.141 for limitations and details; it is still under development (Brickenstein's thesis/paper)."
+      },
+      {
+        "name": "Compute saturation via sat(i,j) to check geometric properties",
+        "description": "Compute sat(i,j) to obtain the saturation of ideal i with respect to j; sat returns [saturated_ideal, number_of_iterations]. Use saturation to test geometric properties such as absence of singular points outside the origin.",
+        "guidance": "Example: to check that V(i) has no singular point outside origin, compute sat(j + (f), maxideal(1)) and check whether result equals the whole ring (generated by 1). sat is implemented in elim.lib and performs iterated ideal quotients."
+      },
+      {
+        "name": "Use finite-field and extension-field tricks for counting/solving",
+        "description": "To find zeros over finite fields or their extensions, define rings over GF(p) or GF(p^k), test points on the torus by enumeration, and convert ideals to strings to execute them in new rings when direct maps are not implemented.",
+        "guidance": "Example: create dense homogeneous ideals with random coefficients over ZZ/p, enumerate nonzero points to find solutions on torus, then move to extension fields by defining ring rpk=(p^k,z),(vars) and execute the ideal string there. Use primitive element z and show solutions as exponents of z."
+      },
+      {
+        "name": "Elimination via product ordering or eliminate command; treat local/mixed orderings with care",
+        "description": "Elimination (projection) can be achieved by computing a Groebner basis for J with a product ordering where t-variables precede x-variables and then selecting polynomials without t, or by using eliminate which may be faster but not necessarily produce a standard basis. For local/mixed orderings elimination needs special care: compute closure of the image in kr \u00d7 (kn,0).",
+        "guidance": "Use a global product ordering or extra weight vector (wp) to perform elimination. For weighted-homogeneous input, compute weights via weight(...) or qhweight(...) and use them. Warning: in local/mixed orderings eliminate computes closure of projection and may include components meeting fibers outside the origin; understand geometric implications."
+      },
+      {
+        "name": "Use qhweight and weight to obtain variable weights for quasihomogeneous inputs",
+        "description": "If input is (quasi)homogeneous, use qhweight to check and get correct integer weights for variables, or weight to propose integer weights that make the input as homogeneous as possible.",
+        "guidance": "qhweight returns an intvec of correct weights if input is quasihomogeneous and zeros otherwise; weight may be slow for many variables but helpful for choosing weights before elimination/homogenization."
+      },
+      {
+        "name": "Prefer conversion algorithms (stdfglm, stdhilb) over straight std for lexicographic when possible",
+        "description": "In examples, stdfglm and stdhilb can be orders of magnitude faster than std for producing lexicographic Groebner bases: use stdfglm for zero-dimensional ideals and stdhilb for a Hilbert-driven approach.",
+        "guidance": "Examples show stdfglm >100x faster and stdhilb ~10x faster than std on a cyclic example. Use option(prot) and timing to compare. After conversion, the size(number of polynomials) of resulting GBs can be small (e.g., 5)."
+      },
+      {
+        "name": "Use imap, fetch, and string conversion for ring mappings between different coefficient rings",
+        "description": "When moving ideals between rings (e.g., from a ring over Q to a finite field or extension field) use imap, fetch, or convert the ideal to a string and execute it in the target ring.",
+        "guidance": "imap is convenient for inclusions and projections. If no direct map exists (e.g., Z/p to GF(p^k)), stringify the ideal and execute in the new ring. Use fetch(P,i) to import ideals across ring declarations."
+      }
+    ]
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 15,
+  "n_chunks": 37,
+  "chunk_chars": 39943,
+  "model": "gpt-5-mini",
+  "elapsed_s": 195.74278904200037,
+  "input_tokens": 12692,
+  "output_tokens": 6171,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Experienced TeX users and macro programmers (authors of plain-TeX macros and formats)",
+    "subtask_short": "TeX macro programming",
+    "subtask_description": "Rules, conventions, and practical guidance for defining, debugging, and using macros and conditionals in TeX (plain TeX). Covers parameter syntax, argument parsing, expansion behavior, debugging aids, and related primitives.",
+    "subtask_keywords": [
+      "tex",
+      "macro_programming",
+      "plain_tex",
+      "typesetting",
+      "advanced_users"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Macro definition form and #-parameter rules",
+        "description": "A definition has the general form '\\def\u27e8control sequence\u27e9\u27e8parameter text\u27e9{\u27e8replacement text\u27e9}', where the parameter text contains no braces and the replacement text has properly nested { and }. The # symbol in the parameter text must appear as #1, #2, \u2026 in sequence up to nine; in the replacement text each # must be followed by a digit that appeared in the parameter text or by another # (which stands for a single # token when expanded).",
+        "guidance": "When writing macros, ensure parameters are numbered sequentially in the parameter text and use '##' to get a literal '#' in replacement text. The replacement text's braces must be balanced; otherwise definitions misbehave."
+      },
+      {
+        "name": "Delimited vs undelimited parameter parsing",
+        "description": "Delimited parameter: followed in the parameter text by one or more non-parameter tokens; the corresponding argument is the shortest (possibly empty) sequence of tokens with properly nested {...} that is followed by that delimiter token list. Undelimited parameter: followed immediately by another parameter token or at end of parameter text; the argument is the next nonblank token (or the full {...} group if the next token is '{').",
+        "guidance": "Understand which parameters are delimited to predict where arguments end. Category codes and control sequence names must match delimiters. Example: arguments may have outer braces removed except when their removal would leave unmatched tokens (see example with \\cs and {And\\$ }{look})."
+      },
+      {
+        "name": "Removal of outer braces from arguments",
+        "description": "If an argument found has the form '{\u27e8nested tokens\u27e9}', the outermost braces are removed and the nested tokens remain \u2014 except when removing them would leave unnested tokens (i.e., removing would break nesting).",
+        "guidance": "Be careful: arguments starting and ending with braces usually have those braces stripped; design your macros taking this automatic removal into account."
+      },
+      {
+        "name": "Special extension: trailing # before a brace",
+        "description": "If the very last character of the parameter text is # and it is immediately followed by '{', TeX behaves as if a '{' had been inserted at the right end of both the parameter text and the replacement text. Example: '\\def\\a#1#{\\hbox to #1}' so '\\a3pt{x}' expands to '\\hbox to 3pt{x}'.",
+        "guidance": "Use this extension to create macros whose argument is delimited by a following brace-delimited group without writing the brace explicitly in the parameter text."
+      },
+      {
+        "name": "Tokens before first parameter token become part of control-sequence name",
+        "description": "Tokens that precede the first parameter token in the parameter text are required to follow the control sequence and effectively become part of the control-sequence name (e.g., '\\def\\TeX/{...}' requires typing '\\TeX/' to invoke it).",
+        "guidance": "Use this to define macros that include a punctuation or trailing character so spaces after the macro are preserved (avoid accidental removal of space after control word)."
+      },
+      {
+        "name": "Debugging macro expansions with tracing",
+        "description": "Set '\\tracingmacros=1' (or higher) to have TeX write log entries whenever it expands a macro or reads a macro argument; '\\tracingcommands' similarly shows commands executed; '\\tracingcommands=2' also shows conditionals and outcomes. '\\tracingonline=1' sends tracing output to the terminal.",
+        "guidance": "When a macro behaves unexpectedly, enable tracing to inspect expansions and arguments in the log; the manual shows example log output for an example macro \\cs."
+      },
+      {
+        "name": "Runaway-argument protection: \\par forbiddance in arguments",
+        "description": "TeX forbids the token '\\par' from occurring as part of an argument (unless explicitly allowed), because a missing closing '}' might otherwise cause TeX to consume to end-of-file. When TeX is about to include '\\par' as part of an argument it aborts the current macro expansion and reports a 'runaway argument'.",
+        "guidance": "This rule helps confine missing-brace errors to a paragraph. If you need paragraph tokens in an argument, use a 'long' macro (see next item)."
+      },
+      {
+        "name": "Allowing paragraph tokens in arguments: use \\long",
+        "description": "Prefix a definition with '\\long' (i.e., '\\long\\def...') to allow arguments containing '\\par' tokens. Example: '\\long\\def\\bold#1{{\\bf#1}}' can set several paragraphs in boldface.",
+        "guidance": "Be careful: using long arguments can consume lots of memory if used unwisely. Alternative: use begin/end group macros (\\beginbold/\\endbold) implemented without long arguments to avoid large memory usage."
+      },
+      {
+        "name": "Using \\outer to restrict where a macro may appear",
+        "description": "An '\\outer' macro is not allowed to appear where tokens are being absorbed at high speed: not in arguments, not in parameter or replacement text of definitions, not in alignment preambles, nor in conditionals being skipped. If an '\\outer' macro appears in such places TeX reports a 'runaway' or 'incomplete' conditional. The end of input is treated as '\\outer'.",
+        "guidance": "Define macros that should appear only at 'quiet times' (e.g., theorem proclamations) as '\\outer' to help users detect misplacements early; Appendix B defines \\proclaim as \\outer for this reason."
+      },
+      {
+        "name": "Prefixes \\long, \\outer, \\global and \\gdef equivalence",
+        "description": "The three prefixes '\\long', '\\outer', and '\\global' may precede '\\def' in any order and may be repeated; '\\gdef' is equivalent to '\\global\\def'. E.g., '\\long\\outer\\global\\long\\def' is the same as '\\outer\\long\\gdef'.",
+        "guidance": "Use these prefixes appropriately to control argument behavior, placement restrictions, and grouping scope of definitions."
+      },
+      {
+        "name": "\\let semantics and caveats for character tokens",
+        "description": "'\\let\\cs=\u27e8token\u27e9' gives \\cs the token's current meaning. If the token is a control sequence, \\cs acquires its behavior; if it is a character token (character code, category code pair), the control sequence behaves to some extent like that character but with differences (e.g., after '\\let\\zero=0' you cannot use \\zero inside numeric constants because TeX requires actual digit tokens in numeric constants after expansion).",
+        "guidance": "Use \\let to alias primitives or macros for efficiency. Beware differences between an actual character token and a control sequence that stands for it when used in contexts like numbers."
+      },
+      {
+        "name": "Lookahead with \\futurelet",
+        "description": "The construction '\\futurelet\\cs\u27e8token1\u27e9\u27e8token2\u27e9' sets \\cs to the token that follows the macro and then executes \u27e8token2\u27e9; effectively, it performs a lookahead: '\\futurelet' is roughly equivalent to '\\let\\cs=\u27e8token2\u27e9\u27e8token1\u27e9\u27e8token2\u27e9' behaviorally.",
+        "guidance": "Use \\futurelet to inspect the next token and branch accordingly (common idiom for making macros context-sensitive)."
+      },
+      {
+        "name": "Conditional structure and nesting independence",
+        "description": "Conditionals have the form '\\if\u27e8condition\u27e9\u27e8true text\u27e9\\else\u27e8false text\u27e9\\fi' (\\else optional). All conditionals begin with '\\if...' and end with a matching '\\fi'; the nesting of '\\if...\\fi' is independent of brace-group nesting (you can start or end a group inside a conditional and vice versa).",
+        "guidance": "Because nesting of conditionals is tracked separately from groups, be careful when writing conditionals and when causing commands that look like conditionals to appear in skipped text."
+      },
+      {
+        "name": "Put a blank space after numeric constants",
+        "description": "Always put a blank space after a numeric constant; otherwise TeX may begin expanding subsequent tokens to complete the numeric token (e.g., '\\=0\\fullypaid' vs '\\=0 \\fullypaid'). Missing space can cause unwanted macro expansion and inefficiency.",
+        "guidance": "For correctness and efficiency, place a space after numeric constants; aesthetic exceptions exist, but be aware of the potential for subtle errors."
+      },
+      {
+        "name": "Use appropriate conditional primitives (\\ifnum, \\ifdim, \\ifodd, etc.)",
+        "description": "TeX provides many conditional primitives: '\\ifnum\u27e8number1\u27e9\u27e8relation\u27e9\u27e8number2\u27e9' (compare integers), '\\ifdim' (compare dimensions), '\\ifodd' (test odd integer), '\\ifvmode', '\\ifhmode', '\\ifmmode', '\\ifinner', '\\if' (token-character code compare), '\\ifcat' (category code compare), '\\ifx' (token equivalence test), '\\ifvoid/\\ifhbox/\\ifvbox' (test box registers), '\\ifeof' (test input stream), '\\iftrue'/'\\iffalse', and '\\ifcase' (multiway branch).",
+        "guidance": "Select the primitive that matches the kind of test required; understand token-expansion behavior of each (for example, '\\if' expands macros until two unexpandable tokens are found; '\\ifx' does not expand). Example uses shown in text (page parity example using \\ifodd)."
+      },
+      {
+        "name": "Create boolean switches via \\newif and avoid unsafe \\let in skipped text",
+        "description": "'\\newif\\ifabc' defines three control sequences: '\\ifabc' (test), '\\abctrue', and '\\abcfalse'; the new conditional is initially false. Caution: do not write '\\let\\ifabc=\\iftrue' in conditional text because if TeX skips that text it will still see an '\\if' token and get nesting confused; keep such manipulations inside macros so they are executed only when not skipped.",
+        "guidance": "Use \\newif for robust boolean flags and avoid aliasing \\if... primitives by \\let in places TeX might skip over."
+      },
+      {
+        "name": "Token list registers, \\toks, \\toksdef and assignment idioms",
+        "description": "TeX has 256 token list registers '\\toks0'..'\\toks255'. '\\toksdef\\name=\u27e8number\u27e9' makes \\name equivalent to '\\toks\u27e8number\u27e9'. Plain TeX provides '\\newtoks' to allocate new token registers. Token list registers behave like token-list parameters such as '\\everypar', '\\everyhbox', '\\output', etc. Assignments can be '\u27e8token variable\u27e9={\u27e8replacement text\u27e9}' or '\u27e8token variable\u27e9=\u27e8token variable\u27e9'.",
+        "guidance": "Use token lists to pass larger token sequences around without re-parsing; use \\toksdef/\\newtoks to create readable names for token registers."
+      },
+      {
+        "name": "Tracing commands: \\tracingcommands and \\tracingmacros levels and uses",
+        "description": "'\\tracingcommands=1' shows each command TeX executes; '=2' also shows conditional commands and their outcomes. '\\tracingmacros=1' logs macro expansions and arguments; '=2' traces \\output, \\everypar, etc. '\\tracingonline=1' makes tracing go to the terminal.",
+        "guidance": "Increase tracing levels to diagnose complex behavior, especially conditionals and macro argument handling. Avoid leaving high tracing levels enabled in production runs."
+      },
+      {
+        "name": "Expansion inhibition contexts",
+        "description": "There are many occasions when tokens are not expanded: e.g., during parsing of a '\\def' the control sequence, parameter text and replacement text are not expanded; the two tokens after '\\ifx' are never expanded; other contexts are listed later in the chapter.",
+        "guidance": "Be mindful of when TeX will or will not expand tokens \u2014 mistakes often come from unexpected expansions or lack thereof. Consult the reference list of non-expansion contexts when debugging."
+      },
+      {
+        "name": "Macro expansion behavior (macros, conditionals, and token-producing primitives)",
+        "description": "When expanded (if expansion not inhibited), macros are replaced by their replacement text after their arguments are determined (arguments are not expanded when accepted). Conditionals read ahead to decide which text to skip; their expansion is empty. Some primitives expand to character-token sequences or token lists (see entries for specific primitives).",
+        "guidance": "Design macros knowing that arguments are not expanded while being read and that conditionals reduce token flow. This affects how and when \\expandafter, \\noexpand, etc., are needed."
+      },
+      {
+        "name": "Numeric and roman conversion primitives: \\number and \\romannumeral",
+        "description": "'\\number\u27e8number\u27e9' expands to the decimal representation of the number (with '-' if negative). '\\romannumeral\u27e8number\u27e9' expands to lowercase Roman numerals, or to empty if the number is zero or negative (example: '\\romannumeral 1984' -> 'mcmlxxxiv').",
+        "guidance": "Use these when converting internal numeric values to printable token sequences; note that expansion reads and expands tokens as it reads the number."
+      },
+      {
+        "name": "Token-to-string primitives: \\string, \\jobname, \\fontname, \\meaning",
+        "description": "'\\string\u27e8token\u27e9' reads \u27e8token\u27e9 without expansion: for control sequences it produces the control-sequence name (with \\escapechar if non-active), otherwise produces the character token. '\\jobname' expands to the job/file base name. '\\fontname\u27e8font\u27e9' expands to the external file name of the font (including 'at size' if scaled). '\\meaning\u27e8token\u27e9' expands to the textual description of the token's current meaning (like what \\show would display).",
+        "guidance": "Use these to obtain textual representations of tokens, job names, or font names for diagnostics or to build control sequences."
+      },
+      {
+        "name": "\\csname...\\endcsname, \\expandafter, and \\noexpand behaviors",
+        "description": "'\\csname...\\endcsname' reads to matching '\\endcsname', expanding tokens as it goes, then produces a single control-sequence token (created if undefined). '\\expandafter\u27e8t\u27e9' reads the token after \u27e8t\u27e9 and expands it (possibly with its arguments) then puts \u27e8t\u27e9 back in front of the expansion. '\\noexpand\u27e8token\u27e9' yields the token itself but suppresses its expansion (treat it as if its meaning were '\\relax' for the expansion stage).",
+        "guidance": "These are essential tools for controlled expansion: build dynamic control-sequence names with \\csname, reorder expansion with \\expandafter, and prevent expansion with \\noexpand."
+      },
+      {
+        "name": "Marks and \\input/\\endinput expansion semantics",
+        "description": "'\\topmark', '\\firstmark', '\\botmark', '\\splitfirstmark', and '\\splitbotmark' expand to the token lists stored in the corresponding mark registers. '\\input\u27e8file\u27e9' has null expansion but causes TeX to begin reading from the specified file; '\\endinput' has null expansion and causes TeX to stop reading from the current input file at the next input line end.",
+        "guidance": "Use marks to pass information between pages/boxes; remember that input and endinput do not expand to tokens but change TeX's input stack."
+      },
+      {
+        "name": "The \\the primitive and its many subcases",
+        "description": "'\\the\u27e8internal quantity\u27e9' expands to a token sequence representing the current value of various internal quantities: integer parameters (e.g., '\\the\\widowpenalty'), dimension parameters ('\\the\\parindent'), glue/muglue parameters, register values (\\count, \\dimen, \\skip, \\muskip), various code tables (e.g., '\\the\\mathcode' gives integer math-code), special registers (\\prevgraf, \\pagetotal, etc.), fontdimen parameters ('\\the\\fontdimen6\\tenrm' -> '10.0pt'), '\\the\\hyphenchar\\font', '\\the\\lastpenalty'/'\\the\\lastkern'/'\\the\\lastskip', and named integer values (\\chardef'd control sequences). In many cases \\the produces ASCII character tokens (category 12), except when it produces a font identifier or arbitrary token list.",
+        "guidance": "Use '\\the' to serialize internal registers and parameters into token lists for output or further macro processing. Pay attention to whether \\the yields character tokens or non-character tokens like font identifiers."
+      }
+    ]
+  }
+}

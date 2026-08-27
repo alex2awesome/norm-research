@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 35,
+  "n_chunks": 42,
+  "chunk_chars": 39850,
+  "model": "gpt-5-mini",
+  "elapsed_s": 439.4638523750036,
+  "input_tokens": 16235,
+  "output_tokens": 5025,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "authors/programmers preparing books with TeX using the manmac macro format (macro writers, typesetters, book designers)",
+    "subtask_short": "manmac TeX book formatting",
+    "subtask_description": "Guidelines and macro-based conventions for preparing a book (The TeXbook) using the manmac macro package: page layout, output routines, chapter/section handling, displays/verbatim, indexing, exercises/answers, and font conventions.",
+    "subtask_keywords": [
+      "tex",
+      "manmac",
+      "book_formatting",
+      "indexing",
+      "typesetting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Page layout parameters",
+        "description": "Basic page layout parameters (vsize, hsize, parindent, maxdepth, skips) must be set appropriately for the document.",
+        "guidance": "Examples given: vsize=44pc, hsize=29pc, parindent=3pc, maxdepth=2.2pt; abovedisplayskip=6pt plus 3pt minus 1pt; belowdisplayskip=6pt plus 3pt minus 1pt; abovedisplayshortskip=0pt plus 3pt; belowdisplayshortskip=4pt plus 3pt. (The curious value of \\maxdepth was chosen only as an example in Chapter 15.)"
+      },
+      {
+        "name": "Footnote formatting and macro",
+        "description": "Footnotes are indented and set in 8-point type; the plain TeX \\footnote macro needs modification to implement that behavior.",
+        "guidance": "manmac provides a \\footnote definition that inserts into \\footins, switches to eightpoint, sets interlinepenalty and paragraph behavior, leftskip/rightskip, splittopskip, floatingpenalty, and uses \\item{#1} with a trailing \\@foot. Also set \\skip\\footins=12pt plus 2pt minus 4pt and \\dimen\\footins=30pc (maximum footnotes per page)."
+      },
+      {
+        "name": "Footnote numbering convention",
+        "description": "Footnotes should be numbered consecutively throughout an article or by chapters in a book, rather than restarting numbering on each page.",
+        "guidance": "This approach is recommended because it is impracticable to foresee how footnotes will come out in the make-up; numbering per-page is avoided."
+      },
+      {
+        "name": "Running headlines and titlepage behavior",
+        "description": "Running headlines are stored in control sequence \\rhead; some pages (e.g., title pages) should suppress headlines.",
+        "guidance": "\\titlepage macro sets a flag to suppress the headline on the next page; \\rhead contains the running headline text. The output routine consults this to place left/right running heads via \\leftheadline and \\rightheadline definitions."
+      },
+      {
+        "name": "Output routine responsibilities (onepageout)",
+        "description": "The output routine (\\onepageout) must attach headlines, marginal notes, footnotes, registration marks, and page number info as appropriate when shipping out a page.",
+        "guidance": "Special registration marks are typeset at the top of title pages for camera alignment and are erased before final printing; marginal inserts are placed with \\insert\\margin; if footnotes exist the routine adds a vertical skip and prints a rule above the footnote area."
+      },
+      {
+        "name": "Marginal notes / proof margin reminders",
+        "description": "Authors' markup for index reminders and other proof notes are handled via a margin insertion class (\\margin) so proof annotations appear on proofsheets without taking space in the main text.",
+        "guidance": "\\newinsert\\margin with \\dimen\\margin=\\maxdimen allows no limit on number of marginal notes; \\count\\margin=0 and \\skip\\margin=0pt means marginal inserts take up no space in the page layout."
+      },
+      {
+        "name": "Two-column index output & column balancing",
+        "description": "For the index (Appendix I) a different output routine is used that handles two-column formatting via \\vsplit after collecting more material than needed for a page, and balances columns on the last page.",
+        "guidance": "Strategy: set \\hsize for columns, use \\vsplit to create two boxes, assemble them side-by-side. The balancing routine sets \\vbadness=10000 (effectively infinite) while searching for appropriate column height; when glue isn't flexible it's acceptable to allow the right-hand column to be a little short and a suggested trick is to replace \\unvbox3 by a kern-adjust sequence (\\dimen2=\\dp3 \\unvbox3 \\kern-\\dimen2 \\vfil). Splitting parameters: \\splittopskip, \\splitmaxdepth, \\maxdepth must be handled."
+      },
+      {
+        "name": "Chapter macros: title page and first-paragraph behavior",
+        "description": "Each chapter begins with \\beginchapter and ends with \\endchapter; the chapter macro prepares a special chapter title page and establishes running head and initial paragraph formatting.",
+        "guidance": "\\beginchapter sets counters (\\exno, \\subsecno), shows the chapter title on the terminal, sets \\rhead, formats the title with \\titlefont and a reserved titlepage, and makes the first paragraph unindented (\\tenpoint\\noindent\\ignorespaces). \\endchapter ensures closing quotations appear on a right-hand page and sets up quoted epigraph formatting (flush right, eightpoint, slanted every paragraph)."
+      },
+      {
+        "name": "Quotations/epigraph formatting and page parity",
+        "description": "Closing quotations/epigraphs should occur on a right-hand page; an extra page may be ejected at end of chapter if necessary.",
+        "guidance": "Logic implemented in \\endchapter: if the page is even then \\vfill\\eject\\null is used so quotes finish on a right-hand page; quoting lines are set flush right by using \\obeylines together with a stretchable \\leftskip and appropriate font switches (\\eightpoint, \\everypar{\\sl})."
+      },
+      {
+        "name": "Dangerous/bend warning markers and usage",
+        "description": "'Dangerous' and 'doubly dangerous' bends (warnings) are signified by macros (\\danger, \\ddanger) that insert special symbols before a paragraph that should display a warning symbol.",
+        "guidance": "\\d@nger and \\dd@nger define the symbol placement and set paragraph behavior (\\clubpenalty, local \\par change), use \\hang and \\hangafter, and print one or two bend symbols. Use \\enddanger only rarely when a medium space is not desired after the paragraph; examples given for embedding itemized lists within the dangerous bend scope."
+      },
+      {
+        "name": "Subsection and answer numbering conventions",
+        "description": "Numbered subsections are specified with \\subsection which increments a \\subsecno counter and prints an italic numbered heading; appendix answer numbers are generated automatically by \\answer which writes into answers.tex.",
+        "guidance": "\\subsection uses an outer definition that does \\medbreak, \\advance\\subsecno by 1, then prints the number and heading in italics. \\answer writes the answer text to an external file (answers.tex) with an \\ansno marker; each answer must end with a blank line and \\par must be used between paragraphs of a long answer."
+      },
+      {
+        "name": "Exercise macros and marking dangerous exercises",
+        "description": "Exercises are introduced with \\exercise (and variants) which increments the exercise number and prints a margin triangle; dangerous exercises use \\dangerexercise and \\ddangerexercise to combine warning signs with the exercise format.",
+        "guidance": "\\exercise does \\global\\advance\\exno by 1 and prints a triangle in the margin followed by 'EXERCISE \\chapno.\\the\\exno'. \\dexercise and the danger variants use the non-outer \\d@nger / \\dd@nger macros to allow appropriate scoping."
+      },
+      {
+        "name": "Answer-file workflow for exercises",
+        "description": "Answers are written to a separate file (answers.tex) via \\answer; that file is later input into the appendix to display answers. The answer-writing is immediate (\\immediate\\write) and the file must be closed appropriately.",
+        "guidance": "Setup: \\newwrite\\ans ; \\immediate\\openout\\ans=answers. \\answer issues \\immediate\\write commands and uses a verbatim-copying routine (\\copytoblankline) to capture lines until a blank line. The galley example closes answers file (\\immediate\\closeout\\ans) and later \\input answers to typeset them; a trailing blank line stops an unfinished \\answer."
+      },
+      {
+        "name": "Verbatim and display macros behavior (\\begintt, \\endtt, \\begindisplay, \\beginlines)",
+        "description": "There are specialized macros for verbatim/typewriter displays (\\begintt...\\endtt), indented displays (\\begindisplay...\\enddisplay), and quoted format file blocks (\\beginlines...\\endlines) with specific behaviors (catcode changes, no page breaks, rules before/after, local defs, multiline displays).",
+        "guidance": "\\begintt switches many characters to 'other', obeys spaces and lines, places the verbatim lines into a vbox so they cannot be broken between pages; within \\begintt a vertical line acts as an escape character allowing exit from verbatim. \\begindisplay allows local definitions immediately after it and supports multiline displays with \\cr following each line; \\beginlines inserts rules above and below and uses \\obeylines and \\everypar{\\strut} to set up spacing. Use \\ttverbatim and \\dospecials as appropriate to set catcodes efficiently."
+      },
+      {
+        "name": "Display environment characteristics and local definitions",
+        "description": "The \\begindisplay macro sets up displays that are indented and may include text and local definitions that only apply within the display.",
+        "guidance": "Implementation detail: \\begindisplay expands to \\obeylines\\startdisplay so that \\startdisplay sets catcodes for display with $$ and \\halign\\bgroup semantics; the display ends with \\crcr\\egroup$$. Local definitions placed immediately after \\begindisplay apply only within the display."
+      },
+      {
+        "name": "Index entry notation and generation (in-text marks)",
+        "description": "Index-worthy words or phrases in the manuscript are marked with the notation ,..{...} to cause an entry to be written into index.tex and produce margin reminders on proofsheets.",
+        "guidance": "The mark ,..{...} not only writes an entry into index.tex but also prints the word in the margin of proofsheets using \\insert\\margin so the author can see what's been marked for indexing. The silent entry notation ,..,..{...} creates an index entry that does not appear in the text (spaces are ignored after the closing brace)."
+      },
+      {
+        "name": "Index entry kinds and encoding (codes 0,1,2,3)",
+        "description": "Indexing macros produce four kinds of entries assigned to codes 0,1,2,3 depending on how the argument is delimited: braces, vertical bars, a form with backslash, and angle brackets respectively.",
+        "guidance": "The generated lines in index.tex take the form 'text !code page.' Example mappings: {word} -> code 0, |par| -> code 1, !plus! -> code 2 (vertical-bar with backslash handling), <stuff> -> code 3. A code number is used to reinstate characters like backslash after sorting and to indicate typewriter formatting of an entry. The macros \\vxref, \\anglexref, \\normalxref, etc., manage these cases."
+      },
+      {
+        "name": "Indexing catcode and active-character handling",
+        "description": "manmac makes the ',' (hat) character active to produce index entries, but ensures it still behaves correctly in math mode (superscripts) using \\ifmmode tests and different branches for silent vs normal xref.",
+        "guidance": "Mechanism: \\catcode'\\,..=\\active and \\let ,..=\\specialhat; \\specialhat uses \\ifmmode to choose between producing ',' (for superscripts) or invoking \\beginxref. The macros \\beginxrefswitch and \\silentxref handle branching to \\silenttrue or \\silentfalse before calling \\xref, so indexing works properly both inside and outside math mode."
+      },
+      {
+        "name": "Proofmode vs camera-ready indexing control",
+        "description": "Indexing is suppressed unless the proofmode switch is true, so index material is gathered only during trial runs and not during final camera-ready typesetting.",
+        "guidance": "Set \\proofmodetrue during proof runs (default in examples); set \\proofmode false when making camera-ready copy. The \\makexref macro checks \\ifproofmode and only then inserts margin reminders and writes to index file; otherwise it emits a kern in horizontal mode to maintain layout consistency."
+      },
+      {
+        "name": "Index quality practice: manual review recommended",
+        "description": "The author prefers not to generate indexes fully automatically; instead he recommends manual re-reading and checking of collected index material to produce a high-quality index.",
+        "guidance": "Indexing macros provide only the clues needed to make a real index; the author likes to reread his books while checking cross-references, rethink material, and catch errors before finalizing the index. Automatic comprehensive indexing is possible but the human review yields better results."
+      },
+      {
+        "name": "Macro library usage philosophy",
+        "description": "Use macro libraries rather than defining every macro yourself; levels of specialization mirror subroutine libraries in programming languages and it's easier to use macros than to define them.",
+        "guidance": "Macro libraries range from public shared macros to program-specific ones; the author notes an analogy to subroutine libraries and suggests employing established macros to simplify work rather than reinventing definitions."
+      },
+      {
+        "name": "Computer Modern font family conventions",
+        "description": "Plain TeX uses a specific set of Computer Modern fonts with exactly 128 characters per font (though TeX can support up to 256); the first pages summarize font contents and the last pages show math symbol naming conventions.",
+        "guidance": "List of sixteen basic fonts is provided (cmr10, cmr7, cmr5, cmbx10, ... cmex10). Text fonts include ligatures and accents; ASCII-visible characters appear in their ASCII positions except certain characters not present in printer's fonts. Ten digits have width 0.5em in text fonts."
+      },
+      {
+        "name": "Typewriter font (cmtt10) characteristics and spacing",
+        "description": "The typewriter font cmtt10 contains all visible ASCII characters in their correct positions, has fixed character width (0.5em) for every character, and spaces between words have fixed width and will not stretch or shrink.",
+        "guidance": "Fourteen positions differ from normal text layout; ligatures are absent (except Spanish), some accent characters removed. TeX will put two spaces at the end of each sentence when typesetting with a typewriter font. These spacing conventions can be changed by assigning values to \\spaceskip, \\xspaceskip, or fontdimen parameters."
+      },
+      {
+        "name": "Math italic and special glyph placements (cmmi10)",
+        "description": "The math italic font cmmi10 differs from text italic: it contains lowercase and uppercase Greek, changed proportions and spacing for math use, oldstyle numerals, and special characters intended to combine with others.",
+        "guidance": "Examples: math italic contains Greek for mathematicians, digits and letters adjusted for math mode; some characters occupy positions intended for 'resting place' glyphs (e.g., portions of \\hookrightarrow); oldstyle numerals are available (\\mit1984 and \\oldstyle1984 both yield oldstyle digits). The font fills all positions to avoid incompatible filling by users."
+      }
+    ]
+  }
+}

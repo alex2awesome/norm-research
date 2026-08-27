@@ -1,0 +1,159 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_bddf6a7268eb.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18872,
+  "output_tokens": 4190,
+  "elapsed_s": 1414.7497275827918,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on autoformalization, automated theorem proving (ATP), and benchmark curation for formal mathematics (LLM+Lean community)",
+    "subtask_short": "autoformalization_and_theorem_proving",
+    "subtask_description": "Evaluating and improving an end-to-end informal\u2192formal\u2192prove pipeline on the miniF2F benchmark: diagnosing failure modes, correcting formal/informal statements, and defining rigorous evaluation practices for autoformalizers and theorem provers.",
+    "subtask_keywords": [
+      "autoformalization",
+      "theorem_proving",
+      "benchmarks",
+      "lean",
+      "nl_to_formal"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Autoformalization failure",
+        "description": "The autoformalizer fails to write a formal statement that passes the formal verification compiler (e.g., Lean).",
+        "guidance": "If the autoformalizer output does not compile in Lean the output cannot be passed to the prover and the AI pipeline fails automatically. Such outputs should be excluded from downstream proving or counted as autoformalization failures."
+      },
+      {
+        "name": "Translation failure (semantic mismatch)",
+        "description": "The autoformalizer produces a formal statement that passes the compiler error-free but the formal statement does not match the informal one (i.e., the translation is not accurate).",
+        "guidance": "If the prover succeeds on a mismatching formal statement, judges should not give credit because the proof does not correspond to the original problem. This failure is 'most prone to being neglected' and must be explicitly checked by human experts."
+      },
+      {
+        "name": "Prover failure",
+        "description": "The theorem prover fails to prove the (compiled) formal statement.",
+        "guidance": "If the formal statement is a correct translation, this indicates a prover shortcoming. If the formal statement was mistranslated, the failure may be attributable to the autoformalizer. Evaluate provenance of failure before assigning blame."
+      },
+      {
+        "name": "Formal statements must correspond exactly to informal statements",
+        "description": "A proof only gets credit if the formal proof corresponds to the original informal statement presented to the model.",
+        "guidance": "Match formal and informal statements strictly \u2014 small differences that change meaning must not be treated as negligible. The authors corrected formal/informal mismatches across the benchmark (miniF2F-v2)."
+      },
+      {
+        "name": "Provability requirement for benchmark items",
+        "description": "Benchmarks must contain provable theorems; unprovable problems invalidate reliable evaluation of theorem provers.",
+        "guidance": "Identify and fix unprovable statements (paper found 16 such problems). Provide formal proofs (or ensure provability) for all benchmark items to ensure fair evaluation of provers."
+      },
+      {
+        "name": "No excessive simplification (Olympiad scoring policy)",
+        "description": "Excessively simplified versions of problems that lower difficulty should not receive credit in an Olympiad-style evaluation.",
+        "guidance": "Define two evaluation settings: 'full score' (gives credit even for excessively simplified proofs) and 'Olympiad setting' (gives no credit for excessively simplified proofs). For realistic Olympiad-style evaluation, give no credit to proofs of excessively simplified modifications."
+      },
+      {
+        "name": "Handling multiple-choice problems",
+        "description": "Treatment of MCQ problems must reflect the intended competition format: either simplify (v2s) or include all choices and require selection (v2c).",
+        "guidance": "miniF2F-v2s filters out multiple-choice options to reflect only the final goal; miniF2F-v2c includes all choices in the formal statement and removes the correct answer from the informal statement so the model must choose then prove."
+      },
+      {
+        "name": "Handling given solutions in statements",
+        "description": "If the formal statement contains the solution but the informal statement does not (or vice versa), align them appropriately depending on desired difficulty.",
+        "guidance": "For miniF2F-v2s, add the solution to the informal statements when the formal contains it (simplified). For miniF2F-v2c, remove the solution from the formal statement so the ATP model must find and prove the solution (competition-level)."
+      },
+      {
+        "name": "Completeness of informal statements (variables, types, hypotheses)",
+        "description": "Informal statements must be complete: mention types of variables and all critical hypotheses; incomplete informal statements lead to incorrect or unprovable formalizations.",
+        "guidance": "When original competition statements differ or omit crucial details, use the original informal statements to restore completeness. Fix incomplete or altered informal statements in the benchmark."
+      },
+      {
+        "name": "Effective accuracy (end-to-end metric)",
+        "description": "Effective accuracy: the final accuracy after autoformalizer formalizes the problem statements and the theorem prover attempts to prove them.",
+        "guidance": "Report two effective-accuracy metrics: (i) percentage of proofs that pass REPL verification giving credit even for excessively simplified proofs ('full score'); (ii) percentage of proofs that both pass verification and align with the original problem statement ('Olympiad setting')."
+      },
+      {
+        "name": "Evaluator type: LLM vs human verification",
+        "description": "Distinguish evaluation by LLM automated judges from human (expert) verification: LLM evaluators tend to produce false positives compared to human-verified judgments.",
+        "guidance": "Report both LLM-based and human-verified accuracies. The paper shows LLM judges can inflate autoformalization accuracy (reported 97% by LLM vs 66% human-verified for Herald @128). Human verification should be performed by Lean experts."
+      },
+      {
+        "name": "Compiler verification gate (exclude syntactically invalid translations)",
+        "description": "Exclude autoformalization outputs that fail to pass the Lean compiler (LEPL/REPL) from the syntax-correct evaluation pool.",
+        "guidance": "Only consider translations that compile successfully in the chosen Lean version for downstream proving evaluation."
+      },
+      {
+        "name": "Sampling and stopping policy for translators",
+        "description": "Define sampling budgets and stopping criteria: e.g., @1 or @128 for dedicated translators; for o4-mini, use up to @10 but stop at first correctly compiled attempt.",
+        "guidance": "For fair comparisons, unify whether evaluations use first successful compilation (stop-at-first) or rank over samples; indicate human evaluation strategy (for @128 human verification performed only on first successful compilation)."
+      },
+      {
+        "name": "Keep the first REPL-verified and semantically faithful translation",
+        "description": "For each informal problem, keep the first formal output that both passes REPL verification and remains semantically faithful to the source as judged by human experts.",
+        "guidance": "This is the pipeline the authors used: feed informal statement \u2192 autoformalizer \u2192 keep first passing & faithful formalization \u2192 prover attempts proof \u2192 compare derived theorem with original problem."
+      },
+      {
+        "name": "Benchmark quality: platinum benchmarks (human-verified, error-free)",
+        "description": "High-quality (platinum) benchmarks should be minimally erroneous and verified by human experts to accurately assess model capabilities.",
+        "guidance": "Adopt rigorous and transparent evaluation practices; fix errors, discrepancies, and simplifications; release corrected datasets to reduce noisy training/evaluation signals."
+      },
+      {
+        "name": "Transparency in reporting both LLM and human-verified results",
+        "description": "Publish both LLM-based automated evaluation results and human-verified results to reveal discrepancies in automatic judging.",
+        "guidance": "The paper provides both numbers and emphasizes that LLM judges often mark small but semantically significant discrepancies as negligible."
+      },
+      {
+        "name": "Provide (or ensure) formal proofs for benchmark items",
+        "description": "Provide formal proofs (or ensure theorems are provable) for benchmark items so provers can be properly evaluated and users can validate provability.",
+        "guidance": "The authors provide formal proofs for miniF2F-v2 items and note that having proofs guarantees provability and supports reproducible evaluation."
+      },
+      {
+        "name": "Error taxonomy for autoformalization failures",
+        "description": "Classify autoformalization failures into categories such as wrong/missing/incomplete statements, type wrong/mismatch, max/min misformalized, incomplete assumptions, not validated by Lean4 REPL, digits, finite sets, additional/hardcoded assumptions, common divisors, sequences, Euclidean spaces, modulus, etc.",
+        "guidance": "Manually categorize failure modes (performed by Lean experts) to guide dataset corrections and model improvement; the paper reports frequency tables for Herald/Kimina/o4-mini."
+      },
+      {
+        "name": "Evaluation sampling budgets for provers",
+        "description": "Define the sampling budget for theorem provers (e.g., @32 used by authors for whole-proof generation runs).",
+        "guidance": "Keep consistent sampling (@32 for provers in this work) and specify Lean version used for each prover; use multiple seeds/hardware to ensure reproducibility."
+      },
+      {
+        "name": "Account for dataset contamination in model evaluation",
+        "description": "Check for and report possible training/validation contamination that might inflate autoformalizer performance on a benchmark.",
+        "guidance": "Compare performance across corrected datasets (v2s/v2c) to detect signs of data contamination (the paper notes declines/increases suggesting contamination for some models)."
+      },
+      {
+        "name": "Scoring policy for simplified vs excessively simplified subsets",
+        "description": "Separate subsets into 'simplified' and 'excessively simplified' categories and report how prover accuracy changes across these subsets.",
+        "guidance": "The authors show that performance drops substantially for excessively simplified problems when restored to original difficulty, and that reporting both subset-level results is informative."
+      },
+      {
+        "name": "Human verification must be performed by Lean experts",
+        "description": "Human evaluation of semantic faithfulness and correctness should be performed by people familiar with Lean/formal proof assistants.",
+        "guidance": "To avoid mistaken acceptance of incorrect translations, recruit Lean experts for manual checks; the authors used Lean experts for human verification."
+      },
+      {
+        "name": "Pipeline failure-mode auditing (three-stage diagnosis)",
+        "description": "Diagnose end-to-end failures at the pipeline stages: (1) autoformalization failure (doesn't compile), (2) translation failure (compiles but mismatches), (3) prover failure (fails to prove).",
+        "guidance": "Track and report the source of failures separately rather than attributing all pipeline failure to the prover; this enables targeted improvements."
+      },
+      {
+        "name": "Restore original competition difficulty for 'competition' variant",
+        "description": "For a competition-level benchmark (v2c), change informal statements to reflect exact original competition problems (e.g., include all multiple-choice options), and require models to first choose the correct option where applicable.",
+        "guidance": "When original informal statements ask participants to find solutions (no provided answer), do not provide the solution in formal/informal statements for v2c."
+      },
+      {
+        "name": "Exclude/flag added helpful assumptions in formalizations",
+        "description": "Detect and remove extra or helpful assumptions that appear in formal statements but are not present in the informal/original problem (these simplify the task unfairly).",
+        "guidance": "Examples: extra nonzero hypotheses, wrong type declarations (e.g., restricting to nonnegative reals), or adding functions not present in informal problem. Remove such assumptions to restore intended difficulty."
+      },
+      {
+        "name": "Report versioning details (Lean versions, prover versions) for reproducibility",
+        "description": "Declare the versions of Lean and prover models used during evaluation to ensure reproducibility and fair comparison.",
+        "guidance": "The authors evaluated different provers against specific Lean versions (e.g., Lean v4.9.0 vs v4.17.0) and reported hardware used; include these details in benchmark papers."
+      },
+      {
+        "name": "Strict semantic alignment for autoformalization evaluation",
+        "description": "Semantic alignment between informal and formal statements must be strict; small syntactic or notational differences that change semantics should be considered mismatches.",
+        "guidance": "LLM judges may treat small discrepancies as negligible; prefer strict human assessment and conservative equivalence checks (back-translation plus human/Large-LM review)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/d4c976021752.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "d4c976021752.pdf",
+  "chunk_idx": 11,
+  "n_chunks": 17,
+  "chunk_chars": 39987,
+  "model": "gpt-5-mini",
+  "elapsed_s": 75.34861458300293,
+  "input_tokens": 12977,
+  "output_tokens": 5010,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of Isabelle (Isabelle/HOL, Isabelle/ZF); theorem-proving practitioners implementing proofs and proof automation",
+    "subtask_short": "isabelle_proof_tools_and_strategies",
+    "subtask_description": "Guidance for using Isabelle's generic tools and packages (Splitter, Simpli\ufb01er, Classical Reasoner, automated methods, wrappers, object-logic setup, and inductive/coinductive definitions) when developing and automating proofs. Covers when to apply tactics, how to declare rules, how to control search, and debugging/unification options.",
+    "subtask_keywords": [
+      "isabelle",
+      "theorem_proving",
+      "classical_reasoner",
+      "simplifier",
+      "proof_search"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Case splitting: conclusion vs premises",
+        "description": "There is a distinction between case splitting in the conclusion and in the premises of a subgoal: splitting in the conclusion is performed by Splitter.split_tac (rules like if_split or option.split) which do not split the subgoal, while splitting in premises is done by Splitter.split_asm_tac (rules like if_split_asm or option.split_asm) which split the subgoal. Splitter.add_split automatically chooses which tactic to call, analysing the form of the rules given as argument.",
+        "guidance": "Case splits should be allowed only when necessary; they are expensive and hard to control. Case-splitting on if-expressions in the conclusion is usually beneficial and is enabled by default in Isabelle/HOL and Isabelle/FOL/ZF. Warning: With Splitter.split_asm_tac as looper component, the Simpli\ufb01er may split subgoals, possibly causing unexpected problems in tactic expressions that silently assume 0 or 1 subgoals after simplification."
+      },
+      {
+        "name": "Use of simpli\ufb01ed attribute (forward simplification)",
+        "description": "The simpli\ufb01ed attribute causes a theorem to be simplified, either by exactly the specified rules a1...an or by the implicit Simpli\ufb01er context; the result is fully simplified by default, including assumptions and conclusion.",
+        "guidance": "Forward simplification restricts the Simpli\ufb01er to basic term rewriting; solver and looper tactics are not involved. The simpli\ufb01ed attribute should be only rarely required under normal circumstances. Options like no_asm tune the Simpli\ufb01er similarly to the simp method."
+      },
+      {
+        "name": "Prefer sequent-style reasoning for automation",
+        "description": "The sequent calculus (\u0393 \u27f9 \u0394 with multiple conclusions) generalizes natural deduction and is easier to automate; sequent rules are classified as right (introduction-like) or left (elimination-like).",
+        "guidance": "Simulate sequents in natural-deduction based Isabelle by representing P1,...,Pm \u27f9 Q1,...,Qn as P1 =\u21d2 ... =\u21d2 Pm =\u21d2 \u00acQ2 =\u21d2 ... =\u21d2 \u00acQn =\u21d2 Q1, using elim-resolution and swapped introduction rules to operate on right-side formulae. Use sequent-style elimination rules instead of destruction rules for certain connectives; be aware that the simulation affects how (\u00acL) and other rules behave."
+      },
+      {
+        "name": "Swapped forms for introduction rules when simulating sequents",
+        "description": "To operate on negated right-side formulae in the sequent simulation, each introduction rule is converted into a swapped form (resolved with the swap principle \u00acP =\u21d2 (\u00acR =\u21d2 P) =\u21d2 R).",
+        "guidance": "Examples: swapped form of (\u2227I) becomes \u00ac(P \u2227 Q) =\u21d2 (\u00acR =\u21d2 P) =\u21d2 (\u00acR =\u21d2 Q) =\u21d2 R; the swapped form of (\u2212\u2192I) is \u00ac(P \u2212\u2192 Q) =\u21d2 (\u00acR =\u21d2 P =\u21d2 Q) =\u21d2 R. Swapped introduction rules are applied using elim-resolution, which deletes the negated formula."
+      },
+      {
+        "name": "Extra sequent rules for classical equivalences and quantifiers",
+        "description": "Some connectives and quantifier behaviour require dedicated sequent-style rules: e.g. (\u00acQ =\u21d2 P) =\u21d2 P \u2228 Q simulates (\u2228R), and (P \u2212\u2192 Q) =\u21d2 (\u00acP =\u21d2 R) =\u21d2 (Q =\u21d2 R) =\u21d2 R replaces (\u2212\u2192E). Quantifier replication requires special rules to reflect classical dualities.",
+        "guidance": "Use dual rules for quantifiers (\u2203R and \u2200L duality) and consider replication rules (e.g. \u2200x.Px =\u21d2 (Pt =\u21d2 \u2200x.Px =\u21d2 Q) =\u21d2 Q) when completeness is needed. Forgoing replication gains decidability by making the search space finite; replication makes the search infinite and must be applied with care."
+      },
+      {
+        "name": "Safe vs unsafe rule classification",
+        "description": "Rules declared to the Classical Reasoner are classified as introduction, elimination or destruction and as safe or unsafe. In general, safe rules can be attempted blindly, while unsafe rules must be used with care.",
+        "guidance": "A safe rule must never reduce a provable goal to an unprovable set of subgoals. Examples of unsafe rules: P =\u21d2 P \u2228 Q (premature choice), any rule whose premises contain new unknowns, \u2200x.Px =\u21d2 (Pt =\u21d2 Q) =\u21d2 Q (unsafe because elim-resolution discards \u2200x.Px), Pt =\u21d2 \u2203x.Px. The safe/unsafe distinction is fuzzy and used to give priority; any inference that instantiates an unknown shared with other subgoals is unsafe."
+      },
+      {
+        "name": "Declaring rules and attributes for the Classical Reasoner",
+        "description": "Commands/attributes: intro, elim, dest, rule, iff, swapped; print_claset prints the rule collection. By default rules are unsafe; prefix '!' classifies as safe; '?' marks coincide with Isabelle/Pure declarations.",
+        "guidance": "The optional natural number is a weight for single-step rule method ordering (ignored by automated tools). Introduction rules generate swapped forms internally. Rules are sorted by the number of new subgoals they yield (fewer subgoals tried first); later declarations take precedence. rule del deletes a rule regardless of classification."
+      },
+      {
+        "name": "Use of iff declarations",
+        "description": "iff declares logical equivalences to the Simpli\ufb01er and the Classical reasoner simultaneously.",
+        "guidance": "Non-conditional iff rules result in a safe introduction and elimination pair; conditional ones are considered unsafe. Rules with negative conclusions are automatically inverted. The '?' version of iff declares rules to the Isabelle/Pure context only (omits Simpli\ufb01er declaration)."
+      },
+      {
+        "name": "swapped attribute to turn introduction into elimination",
+        "description": "swapped turns an introduction rule into an elimination by resolving with the classical swap principle in the second position.",
+        "guidance": "This is mainly illustrative: the Classical Reasoner already swaps rules internally, but swapped can be used to create explicit elimination forms for demonstration or special use."
+      },
+      {
+        "name": "Choosing structured methods: rule and contradiction",
+        "description": "The classical version of rule observes the classical rule context in addition to Isabelle/Pure. contradiction solves a goal by deriving A and \u00acA; chained facts may appear in either order.",
+        "guidance": "Use the classical rule method when you need the classical rule context. Use contradiction when a goal can be closed by contradiction; it will locate and use chained facts as needed."
+      },
+      {
+        "name": "Pick fully-automated method based on goal character",
+        "description": "Fully automated methods include blast (separate classical tableau prover), auto (combines classical reasoning with simplification), force (exhaustive proof for first subgoal), fast/best/slow (sequent-style searches with different search strategies), fastforce/slowsimp/bestsimp (variants with Simpli\ufb01er), and deepen (exhaustive search up to limited depth).",
+        "guidance": "blast is faster/powerful but has limitations (no classical wrapper tacticals, no higher-order unification, function-variable restrictions); it can take an optional bound for unsafe steps. auto is good for many mostly-trivial subgoals; force is exhaustive but can be long or diverge; fast uses depth-first, best uses best-first guided by heuristics (proof-state size), slow does broader search and may undo assumption-proofs on backtracking. Use the *_simp or *_force variants when integration with the Simpli\ufb01er is needed. If blast runs slowly, try fast or other tools, or supply an explicit search bound (blast lim) when a successful bound is known."
+      },
+      {
+        "name": "Use deepen for exhaustive depth-bounded search",
+        "description": "deepen performs exhaustive search up to a certain depth (start depth 4, increased iteratively up to 10), modifying unsafe rules to preserve the formula they act on.",
+        "guidance": "deepen can prove more goals than fast but is much slower, especially when assumptions have many universal quantifiers. Use deepen when deeper exhaustive search is required and you can tolerate long runtimes."
+      },
+      {
+        "name": "Partially automated methods for simplifying hard goals",
+        "description": "safe repeatedly performs safe steps deterministically; clarify performs safe steps without splitting subgoals; clarsimp acts like clarify but also does simplification.",
+        "guidance": "Use safe when you want deterministic safe-step transformation. Use clarify when you want to avoid splitting (e.g., leave A \u2227 B as a conjunction). clarsimp is useful to combine safe steps and simplifier, but may still split if the Simpli\ufb01er context includes a splitter for premises."
+      },
+      {
+        "name": "Single-step tactics for fine control",
+        "description": "Primitive tactics: safe_step (safe step on first subgoal, no instantiation), inst_step (allows unknown instantiation), step (basic step applying unsafe wrapper tacticals and rules), slow_step (allows backtracking between instantiation and unsafe rules), clarify_step (safe step without splitting).",
+        "guidance": "Call these primitives to execute the classical reasoner procedures one step at a time when fully/partially automated methods fail or when interactive control is needed. safe_step applies safe wrapper tacticals and avoids instantiating unknowns; inst_step is like safe_step but permits instantiation; step may apply unsafe rules."
+      },
+      {
+        "name": "Modify proof search with safe/unsafe wrappers and simpset integration",
+        "description": "The Classical Reasoner applies two lists of wrapper tacticals (safe wrappers affect safe_step; unsafe wrappers affect step/slow_step). Wrappers transform each search step by attempting tactics before/after the original step tactic. Functions: addSWrapper/addSbefore/addSafter/delSWrapper for safe wrappers; addWrapper/addbefore/addafter/delWrapper for unsafe wrappers. addSss/addss add the context simpset to the classical set.",
+        "guidance": "Initially wrapper lists are empty. Use ctxt addSbefore/addSafter to try tactics before/after safe steps, and addbefore/addafter for unsafe steps. del* deletes wrappers. addSss causes the assumptions and goal to be simplified after each safe step; addss simplifies before each unsafe step. Use wrappers sparingly to customize search behaviour."
+      },
+      {
+        "name": "Object-logic setup: judgment, atomize, and rule_format",
+        "description": "Declare a truth judgment for the object-logic using judgment; atomize (method/attribute) rewrites non-atomic premises using meta-level equations to make nested goals amenable to resolution; rule_format (attribute) rewrites a theorem by rulify equalities, normalizing \u2200 and \u2212\u2192 into rule statements over meta-level connectives.",
+        "guidance": "Only atomize (method) and rule_format are occasionally required by end-users; other commands are for writing object-logics. Use atomize (with (full) option if desired) to internalize nested object-level constructs for automated reasoning (important for locales). Use rule_format to get rules in a form suitable for the Classical Reasoner and Simpli\ufb01er (no_asm restricts to conclusion)."
+      },
+      {
+        "name": "Tracing and bounds for higher-order uni\ufb01cation",
+        "description": "Tracing options: unify_trace, unify_trace_simp, unify_trace_types control printing of unification tracing; unify_trace_bound controls when tracing prints (depth threshold); unify_search_bound bounds unification search depth. These options are global (not local to a context).",
+        "guidance": "Enable tracing to diagnose higher-order unification problems; unify_search_bound prevents unification from searching past the given depth (avoids infinite/infeasible searches) but may cut off solutions and cause a \"Uni\ufb01cation bound exceeded\" warning. Default bounds are high; adjust only when necessary for debugging."
+      },
+      {
+        "name": "Inductive and coinductive definitions: monotonicity and declarations",
+        "description": "inductive / coinductive define the least / greatest predicate or set closed under provided introduction rules; the optional monos declaration contains monotonicity theorems required for operators applied to recursive sets. for fixes lists parameters fixed across the definition.",
+        "guidance": "Monotonicity of recursion schemes must be proven as a prerequisite: provide or rely on existing monotonicity lemmas (default Isabelle/HOL declarations handle common cases). Use inductive_set / coinductive_set for native HOL predicates simulating multiple arguments by tuples. print_inductives prints definitions and monotonicity rules; use the '!' option for extra verbosity. Derived theorems include R.intros, R.cases, and R.induct/R.coinduct."
+      }
+    ]
+  }
+}

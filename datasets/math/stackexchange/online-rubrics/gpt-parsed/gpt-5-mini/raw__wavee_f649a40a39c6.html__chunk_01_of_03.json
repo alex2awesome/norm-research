@@ -1,0 +1,106 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_f649a40a39c6.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_f649a40a39c6.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39976,
+  "model": "gpt-5-mini",
+  "elapsed_s": 33.51092854199669,
+  "input_tokens": 14410,
+  "output_tokens": 2978,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and benchmark designers evaluating LLM mathematical reasoning",
+    "subtask_short": "evaluating LLM math reasoning",
+    "subtask_description": "Designing and running evaluations of large language models as grade-school mathematical problem solvers (variants of GSM8K), including dataset variants, prompting, decoding, statistical testing, and analyses of robustness and failure modes.",
+    "subtask_keywords": [
+      "llm",
+      "math_reasoning",
+      "benchmark",
+      "gsm8k",
+      "evaluation",
+      "chain_of_thought"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Distributional evaluation over multiple instantiations",
+        "description": "Assess performance across many different instantiations of the same question rather than relying on a single-point accuracy metric.",
+        "guidance": "The paper stresses that single-point accuracy is unreliable: measure performance variability (e.g., run 50 different templates/instantiations) and report distributions (means, standard deviations) to capture sensitivity to phrasing/templating."
+      },
+      {
+        "name": "Robustness to inconsequential (No-Op) information",
+        "description": "Evaluate whether models ignore seemingly relevant but operationally inconsequential statements (No-Op) added to problems.",
+        "guidance": "GSM-NoOp was introduced to test this; large drops in accuracy on GSM-NoOp indicate models convert statements to operations without understanding (e.g., treating a 'discount' mention as multiplication regardless of context). Report accuracy drop relative to baseline (GSM8K\u2192GSM-NoOp accuracy drop %)."
+      },
+      {
+        "name": "Sensitivity to numerical value changes vs proper names",
+        "description": "Measure how model performance changes when question numerical values change versus when proper names or surface tokens change.",
+        "guidance": "Authors observed LLMs are relatively robust to changes in proper names but more sensitive to variations in numerical values; include tests that isolate these factors when constructing variants."
+      },
+      {
+        "name": "Sensitivity to question difficulty / complexity",
+        "description": "Evaluate how model accuracy and variance change as question difficulty increases.",
+        "guidance": "Performance tends to deteriorate and variance increases with higher difficulty; include difficulty-graded variants (e.g., GSM-P1 vs GSM-P2) and report trends and per-difficulty distributions."
+      },
+      {
+        "name": "Effectiveness of few-shot chain-of-thought (8-shot CoT) prompting",
+        "description": "Use chain-of-thought prompting with eight demonstration shots to probe reasoning; evaluate whether CoT shots recover performance across variants.",
+        "guidance": "The paper uses an 8-shot CoT prompt template for evaluations; authors found that providing reasoning-chain shots (NoOp-Symb \u2014 8 shots of the same question from GSM-Symbolic) did not recover performance on GSM-NoOp, indicating CoT shots may not fix spurious reasoning behaviors."
+      },
+      {
+        "name": "Impact of shot source and selection",
+        "description": "Test different sources of in-context shots (original GSM8K, GSM-Symbolic, GSM-NoOp shots of same/different questions) to see how shot choice influences target accuracy.",
+        "guidance": "They evaluate NoOp-Symb (shots are GSM-Symbolic variants of the same question) and NoOp-NoOp (shots are GSM-NoOp from different questions). Despite using exact-question symbolic shots, performance on NoOp variants remained within standard deviation; document shot provenance and expected/observed effects."
+      },
+      {
+        "name": "Prompt format and explicit reply structure",
+        "description": "Specify and use a consistent prompt template that includes a preamble system instruction and shot Q/A format with 'Let's think step by step.' for chain-of-thought.",
+        "guidance": "Prompt format used: preamble ('As an expert problem solver, solve step by step the following mathematical questions.'), then 8 Q/A shots with 'Let\u2019s think step by step. {{solution}}. The final answer is {{final answer}}.' and the target question followed by 'Let\u2019s think step by step.'; report exact prompt used for reproducibility (Figure 9)."
+      },
+      {
+        "name": "Decoding strategy control and exceptions",
+        "description": "Control and report the decoding method used when generating model responses (greedy, sampling, etc.).",
+        "guidance": "All reported evaluations use greedy decoding except when API constraints prevent controlling decoding (noted for o1-mini and o1-preview); explicitly state exceptions and that some APIs returned non-deterministic outputs."
+      },
+      {
+        "name": "Generation stopping criteria",
+        "description": "Define when model generation is considered finished during evaluation.",
+        "guidance": "Stop generation when context size limit is reached, when an end-of-response token (e.g., '</s>' or '<|endoftext|>') is generated, or when the model finishes answering the current question and moves on (indicated by generation of another 'Q:')."
+      },
+      {
+        "name": "Reporting metrics: accuracy, mean/std, and accuracy drop",
+        "description": "Report main metrics such as accuracy on full test sets and subsets, distributional statistics (mean and standard deviation), and relative drops (e.g., GSM8K\u2192GSM-NoOp accuracy drop %).",
+        "guidance": "Provide both full-test accuracy (e.g., GSM8K full set) and subset accuracy (e.g., 100-question subset used to make templates), plus distribution plots and tables (Table 1, Figures 8\u201312) and \u00b1 standard deviations for distributional runs."
+      },
+      {
+        "name": "Statistical testing and choice of test",
+        "description": "Use and report statistical tests for significance with clear assumptions and alternatives.",
+        "guidance": "Authors used one-sample t-test (two-sided) to test whether 50 GSM-Symbolic scores differ from the original 100-question GSM8K mean, verified normality of distributions (skewness/kurtosis test, p=0.1), but note criticisms (Ivanova et al.) that a two-sample z-test may be more appropriate; explicitly state assumptions (i.i.d., normality) and sensitivity of conclusions to test choice."
+      },
+      {
+        "name": "Dataset variant construction and documentation",
+        "description": "Construct and document dataset variants (GSM-Symbolic, GSM-NoOp, GSM-P1, GSM-P2, Symbolic-M1/P1/P2/NoOp) that target specific perturbations (symbolic replacements, No-Op additions, difficulty changes).",
+        "guidance": "Provide descriptions of each variant and how templates are derived (e.g., adding No-Op clauses to GSM-Symbolic templates to form GSM-NoOp), include the number of templates/samples, and share examples and failure cases in appendices."
+      },
+      {
+        "name": "Ablation: effect of fine-tuning on easier tasks",
+        "description": "Test whether fine-tuning on easier variants improves performance on harder variants.",
+        "guidance": "Authors show finetuning Phi-3.5 on GSM-P1 slightly improves P1 but decreases performance on GSM-P2; include controlled finetuning experiments (e.g., 10k generated examples from 50 templates) and report epoch/shot details and cross-task transfer effects."
+      },
+      {
+        "name": "Inspect qualitative failure modes and exemplar outputs",
+        "description": "Collect and present failure cases and example model outputs to illustrate error modes (e.g., naive application of inflation, misapplied operations).",
+        "guidance": "Include examples like o1-preview applying 10% inflation incorrectly because it treated the phrase as operationally relevant; show step-by-step model outputs to reveal pattern-matching behaviors."
+      },
+      {
+        "name": "Interpretation criterion: distinguishing genuine reasoning vs pattern matching",
+        "description": "Use behavioral evidence (high variance across instantiations, sensitivity to No-Op info, common mis-conversions) to judge whether model performance reflects genuine mathematical reasoning or sophisticated pattern matching.",
+        "guidance": "Authors argue that large variance, catastrophic drops with inconsequential info, and consistent mistaken operation conversions (e.g., 'discount'\u2192multiplication) indicate fragile, pattern-matching-like reasoning rather than robust logical reasoning; use this as a qualitative evaluation axis."
+      }
+    ]
+  }
+}

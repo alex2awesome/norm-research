@@ -1,0 +1,181 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 37,
+  "chunk_chars": 39982,
+  "model": "gpt-5-mini",
+  "elapsed_s": 47.961612082996,
+  "input_tokens": 12456,
+  "output_tokens": 4928,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users and designers of TeX/Plain TeX systems (authors, typists, format designers, implementers)",
+    "subtask_short": "tex character and dimension rules",
+    "subtask_description": "Rules and conventions for how TeX reads input characters, tokenizes them, maps character codes and accents, handles fonts/ligatures, and accepts dimension specifications and magnification. Covers control-sequence scanning, category codes, special notations (\\char, ^^), accent conventions, and dimension syntax/limits.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "characters",
+      "fonts",
+      "dimensions",
+      "input_parsing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Uppercase/lowercase transformations use \\uccode/\\lccode",
+        "description": "The character is replaced by its \\uccode value (unless zero), and conversion to lowercase uses \\lccode.",
+        "guidance": "When INITEX begins most \\uccode and \\lccode values are zero except letters a\u2013z and A\u2013Z; \\uppercase and \\lowercase are performed during final scanning ('in its stomach') while some operations (\\string, \\number, \\romannumeral, \\csname) are carried out earlier (en route to the stomach)."
+      },
+      {
+        "name": "Access any font character with \\charhnumberi",
+        "description": "Use \\charhnumberi where hnumberi is 0\u2013255 to obtain the corresponding character from the current font.",
+        "guidance": "Append an optional space after the number. Example: \\char37 is a percent sign; plain format defines \\% as abbreviation for \\char\u2018\\% (i.e., \\chardef\\%=\u2018\\%). Use when a needed symbol isn't available as a control sequence."
+      },
+      {
+        "name": "Internal character codes based on ASCII",
+        "description": "TeX uses ASCII internal character codes (0\u2013255) regardless of external file encoding; letters like 'b' are 98 internally.",
+        "guidance": "TeX converts external files to its internal code and back on output so results are machine-independent; Appendix C gives full details. Implementations should map external encodings to TeX's internal ASCII codes."
+      },
+      {
+        "name": "Alternative numeric notations for character codes",
+        "description": "Character numbers may be given in octal (leading '), hexadecimal (leading \"), or as plain decimal.",
+        "guidance": "Examples: \\char'142, \\char\"62, \\char98 are equivalent. Valid octal range '0 to '377; hexadecimal range \"0 to \"FF. The manual sometimes uses typographic conventions for octal vs hexadecimal digits."
+      },
+      {
+        "name": "^^ notation for character codes",
+        "description": "The token \u2018' when followed by a character or single-character control sequence stands for TeX's internal code for that character; ^^ sequences also permit ^^^^hex forms (^^00\u2013^^ff).",
+        "guidance": "Examples: \\char\u2018b equals \\char98; ^^? is code 127; ^^M denotes ASCII return (13) and is significant; ^^I denotes tab. The ^^ convention is sometimes used in TeX's output."
+      },
+      {
+        "name": "\\chardef for associating names to character codes",
+        "description": "Use \\chardef\\<control sequence>=<hnumberi> to efficiently associate a control sequence name with a character code (0\u2013255).",
+        "guidance": "Format designers often use \\chardef to define special symbols (e.g., \\chardef\\%=\u2018\\%). It's more efficient than \\def for this purpose."
+      },
+      {
+        "name": "\\char cannot appear in the middle of a control sequence name",
+        "description": "You cannot use \\char inside a control sequence name; e.g., \\\\char98 is parsed as \\\\ then letters c,h,a,r, etc., not as a single control sequence.",
+        "guidance": "This limits some dynamic naming techniques; use other constructs (e.g., \\csname) when building names."
+      },
+      {
+        "name": "Category codes (\\catcode) determine tokenization and are fixed when tokenized",
+        "description": "Each character has one of sixteen category codes which determine TeX's action; once characters become tokens their category is fixed.",
+        "guidance": "Changing \\catcode is powerful but delicate: arguments to macros are tokenized with current categories, so changing categories after tokenization does not affect already-created token lists. The author discourages frequent \\catcode changes except in unusual circumstances."
+      },
+      {
+        "name": "States N, M, S determine input scanning behavior",
+        "description": "TeX's reader is in one of three states: N (beginning of line), M (middle of line), or S (skipping blanks); these states affect how characters are handled (especially spaces and end-of-line).",
+        "guidance": "At beginning of every line TeX is in N; most of the time M; after control word or a space it is in S. Many rules about converting characters to tokens depend on current state."
+      },
+      {
+        "name": "End-of-line handling depends on state",
+        "description": "When TeX sees an end-of-line character (category 5): in state N it becomes control sequence token 'par' (end of paragraph); in M it becomes a space token (code 32, category 10); in S it is dropped.",
+        "guidance": "TeX first deletes trailing spaces on a line then inserts an endlinechar (\\endlinechar, normally 13) unless the line arose during error recovery. You can change \\endlinechar; if negative or >255 nothing is appended (acts like a comment char)."
+      },
+      {
+        "name": "Spaces are handled by state-dependent rules",
+        "description": "A character of category 10 (space) is ignored in states N or S; in state M it becomes a space token (code 32) and TeX enters state S.",
+        "guidance": "Spaces after control words are never turned into space tokens because state transitions ensure they are skipped; this explains why spaces after control words are ignored."
+      },
+      {
+        "name": "Comment and ignored characters behaviors",
+        "description": "Category 14 (comment) causes TeX to throw away that character and the rest of the line; category 9 (ignored) is bypassed as if not present.",
+        "guidance": "Use % (as defined in plain TeX) for comments. Ignored characters produce no effect and leave the state unchanged."
+      },
+      {
+        "name": "Invalid character handling (category 15)",
+        "description": "If TeX sees an invalid character it bypasses it, issues an error message, and remains in the same state.",
+        "guidance": "Some high-numbered codes may be invalid until their catcode is changed (e.g., character 127 often has category 15)."
+      },
+      {
+        "name": "Control-sequence name scanning rules",
+        "description": "Upon seeing an escape (category 0): (a) if end of line, name is empty (like \\csname\\endcsname); (b) if next char is non-letter, name is that single symbol; (c) otherwise name is the sequence of letters up to the first nonletter or line end.",
+        "guidance": "After case (c) TeX goes into state S; after case (b) TeX goes into state M except when the non-letter is a space (category 10) in which case it goes into S. The whole name becomes a single control sequence token."
+      },
+      {
+        "name": "Special superscript (^^) sequences produce character codes",
+        "description": "If TeX sees two superscript characters (category 7) followed by a character with code c<128, the two carets are deleted and 64 is added/subtracted to/from c; if followed by two lowercase hex digits 0\u20139 or a\u2013f, the quartet is replaced by the single character with that hex code.",
+        "guidance": "Replacement is done even during control-sequence-name scanning. If a superscript is not the first of such a trio/quartet it is handled by the general rules."
+      },
+      {
+        "name": "General tokenization rule for most characters",
+        "description": "If TeX sees a character of categories 1,2,3,4,6,8,11,12,13, or a category-7 not part of a special sequence, it converts the character to a token attaching the category code and goes into state M.",
+        "guidance": "This is the normal case: almost every nonblank character is handled this way."
+      },
+      {
+        "name": "^ notation with two hex digits gives uniform 256-character access",
+        "description": "^^ followed by two lowercase hexadecimal digits (0\u20139 or a\u2013f) denotes characters from ^^00 to ^^ff uniformly.",
+        "guidance": "Character 127 is ^^7f. Most ^^ codes are unimportant except in unusual applications; ^^M (^^13) and ^^I (tab) are noteworthy."
+      },
+      {
+        "name": "Do not rely on keyboard layout; format designers can remap characters",
+        "description": "Local formats can define \\catcode and control sequences so that nonstandard keyboards (e.g., Norwegian \u00e6 at code 241) work, and may provide replacements (e.g., ^^f1) to make files portable.",
+        "guidance": "Also arrange fonts so that the internal code prints as the desired glyph, and adapt hyphenation rules. For portability provide the format used to friends/machines without the keyboard symbols."
+      },
+      {
+        "name": "Ligature and punctuation conventions in roman fonts",
+        "description": "Plain TeX's roman font treats sequences such as ff, fi, fl, ffi, ffl as ligatures; \u2018\u2018 and \u2019\u2019 as opening/closing double quotes; -- as en-dash, --- as em-dash; ?\u2018 and !\u2018 for inverted punctuation.",
+        "guidance": "Use math mode for + and = in formulas to get proper spacing; hyphen and slash usage differs between text and math modes. Ligature behavior is font dependent (\\tt disables these ligatures)."
+      },
+      {
+        "name": "Reserved characters in plain TeX and how to type them",
+        "description": "Plain TeX reserves $ # % & ^ \\ ~ { } _; to typeset the visible symbols type respectively \\$ \\# \\% \\& etc.",
+        "guidance": "Braces and backslashes are available via control sequences in math mode; some symbols (\", |, <, >) are not wanted in text and are handled differently or only in typewriter font."
+      },
+      {
+        "name": "Accents and special letters via control sequences and \\accent primitive",
+        "description": "Plain TeX provides accent control sequences (\\`o, \\'o, \\^o, \\\"o, \\~o, \\=o, \\.o, \\\\u o, \\\\v o, \\H o, \\t oo) and under-accents (\\c o, \\d o, \\b o); these are implemented using \\accent< number> applied to the next character.",
+        "guidance": "Accents are positioned for a character of x-height; TeX raises/lowers accents for taller/shorter characters and accounts for slantedness. The width of the constructed accented character equals the width of the base character. Mode-independent commands may appear between accent number and character but grouping must not intervene. If no suitable character is present the accent appears alone (e.g., \\'{} produces \u00b4). Use \\i and \\j for dotless i/j before accents."
+      },
+      {
+        "name": "Why accent macros use braces around argument",
+        "description": "Plain TeX defines \\'#1 as '{\\accent19 #1}', not simply an abbreviation for \\accent19, to ensure proper grouping and argument handling.",
+        "guidance": "The braces protect the accent/argument grouping so the accent applies to exactly the intended token(s)."
+      },
+      {
+        "name": "Font-specific conventions may differ; plain TeX conventions are not universal",
+        "description": "Accent and special-letter conventions described belong to the plain TeX format and Computer Modern fonts; different fonts/formats should provide their own rules and may, for instance, treat accents as ligatures.",
+        "guidance": "For large-scale multilingual typesetting, designers should prefer font-specific treatments (e.g., ligatures for accented letters) rather than the plain TeX backslash conventions."
+      },
+      {
+        "name": "Typewriter font (\\tt) differs: no ligatures and fixed-width characters",
+        "description": "In \\tt ff, fi, etc., are not treated as ligatures; dashes and double-quotes are ordinary characters; some accent commands and certain letters (\\H, \\. , \\l, \\L) are unavailable.",
+        "guidance": "In \\tt you can type \", |, <, >; all characters in \\tt have the same width, suitable for monospaced output or code imitation."
+      },
+      {
+        "name": "Certain symbols are shared across families via math symbol font",
+        "description": "\\dag, \\ddag, \\S, \\P produce dagger, double dagger, section sign, paragraph sign and come from the math symbols font, appearing identically in \\rm, \\sl, \\bf, \\it, \\tt.",
+        "guidance": "See Appendix B for more non-math symbols; these specific symbols are available in all styles because they are taken from a math symbol font."
+      },
+      {
+        "name": "Dimension syntax: form and allowed units",
+        "description": "A dimension is specified as optional-sign number unit (e.g., 3in or -.013837in) or optional-sign digitstring . digitstring unit; units: pt, pc, in, bp, cm, mm, dd, cc, sp.",
+        "guidance": "Decimal point may be '.' or ','. Spaces optional before sign/number/unit but not within digit strings or unit letters. Examples: 3 in, -.013837in, 0.mm, 29 pc, +42,1 dd, 123456789sp. When dimension is zero you must include a unit (0pt)."
+      },
+      {
+        "name": "Exact unit conversion ratios and internal unit sp",
+        "description": "Definitions: pt point (manual baseline 12pt), pc pica (1pc=12pt), in inch (1in=72.27pt), bp big point (72bp=1in), cm (2.54cm=1in), mm (10mm=1cm), dd didot (1157dd=1238pt), cc cicero (1cc=12dd), sp scaled point (65536 sp = 1pt).",
+        "guidance": "TeX represents dimensions internally as integer multiples of sp for machine-independent arithmetic. 'pt' is slightly larger than the classical point to make conversion efficient; differences are negligible."
+      },
+      {
+        "name": "Maximum legal dimension limit",
+        "description": "TeX will not handle dimensions whose absolute value is 230 sp or more (i.e., maximum legal dimension slightly less than 16384pt, about 18.892 feet / 5.7583 meters).",
+        "guidance": "This bound is due to internal integer representation; be mindful when setting very large skips or sizes."
+      },
+      {
+        "name": "\\magnification usage and constraints",
+        "description": "To magnify output use \\magnification=<number> where the number is 1000 times the factor f (e.g., \\magnification=1200 for 1.2x); this instruction must be given before the first page of output is completed and you cannot apply two different magnifications to the same document.",
+        "guidance": "Typical magnifications: 1200 for 1.2\u00d7, 2000 for 2\u00d7. Magnification scales heights and widths, affecting area quadratically."
+      },
+      {
+        "name": "Be careful with control words vs control symbols and spacing",
+        "description": "Spaces after control words are ignored (they never become space tokens), and control symbols (escape followed by a non-letter) form single-character control sequences; this difference affects state transitions and spacing behavior.",
+        "guidance": "To get a space after a control word you can insert an explicit space or use braces; understanding state rules clarifies why plain TeX ignores spaces in some contexts."
+      }
+    ]
+  }
+}

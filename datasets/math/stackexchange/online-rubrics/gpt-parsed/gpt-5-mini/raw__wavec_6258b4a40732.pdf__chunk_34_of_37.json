@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 34,
+  "n_chunks": 37,
+  "chunk_chars": 38922,
+  "model": "gpt-5-mini",
+  "elapsed_s": 369.9903308749999,
+  "input_tokens": 15670,
+  "output_tokens": 4961,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, implementers, and typesetters who need to understand or control TeX's hyphenation behavior",
+    "subtask_short": "tex_hyphenation_specification",
+    "subtask_description": "Specification and operational rules for TeX's hyphenation algorithm: pattern format, pattern/exception dictionaries, word-recognition rules, language handling, and related primitives/macros. Useful for configuring hyphenation, adding exceptions, or implementing TeX-compatible hyphenation.",
+    "subtask_keywords": [
+      "tex",
+      "hyphenation",
+      "patterns",
+      "exception_dictionary",
+      "typesetting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pattern-based interletter values and hyphen decision",
+        "description": "Each pattern (a subword) defines k+1 small integer values for a subword of length k; those integers attach to interletter positions adjacent to the subword's letters. TeX computes, for each interletter position, the maximum interletter value arising from all matching patterns that touch that position.",
+        "guidance": "A hyphen is acceptable between two letters iff the associated interletter value is odd. Example: with patterns contributing values the maximization may produce e.g. '.0h0y3p0h0e2n5a4t2i0o2n0.' and odd values mark permissible hyphen points as in 'hy-phen-ation'. The algorithm uses the maximum of contributions from all matching patterns touching a position."
+      },
+      {
+        "name": "Pattern dictionary contents and effect on coverage",
+        "description": "Plain TeX's shipped pattern dictionary contains a fixed set of patterns (4447 patterns in plain TeX) whose interletter values are small integers (0\u20135 in the shipped set).",
+        "guidance": "Large odd values (e.g., 5) force desirable hyphen points; large even values (e.g., 4) suppress undesirable hyphens. Liang's patterns derived from a word list find ~89.3% of hyphens in the source dictionary and insert no hyphens that are not present. Weighting common words more heavily increases practical coverage (e.g., guaranteeing hyphenation for the ~700 most common English words)."
+      },
+      {
+        "name": "Patterns generalize but language-specific patterns are recommended",
+        "description": "Patterns derived from a language's common words tend to generalize to uncommon or newly coined words, and sometimes work on related foreign words, but they can fail badly on languages with different syllabification conventions.",
+        "guidance": "Examples: Liang's English patterns handle 'supercalifragilisticexpialidocious' well and reasonable subsets of hyphens for many pseudo-German words, but they produce many errors on Welsh place-names. Recommendation: derive appropriate pattern values for other languages by applying Liang's method to suitable hyphenation dictionaries for that language."
+      },
+      {
+        "name": "Dictionary authority differences and default conventions",
+        "description": "Dictionaries may disagree about syllable/ hyphenation boundaries (e.g., American Heritage vs Webster).",
+        "guidance": "Plain TeX generally follows Webster except in a few situations where other authorities are preferred; be aware that pattern/exception choices reflect such editorial decisions."
+      },
+      {
+        "name": "Exception dictionary (\u0005hyphenation) matching rules and effects",
+        "description": "The \u0005hyphenation command provides an exception dictionary of explicit discretionary hyphenation positions for complete words. A \u0005hyphenation entry contains words with explicit hyphens placed where discretionary hyphens should be inserted.",
+        "guidance": "Rules: entries must match the lowercase form after TeX's \u0005lccode conversion to match; the exception dictionary affects only complete matches (so singular and plural forms must be entered separately if both needed). Exceptions are global (do not disappear at group end). If a word's exception is specified multiple times, the most recent specification is used. Plain TeX blocks hyphens after the first letter or before the last or second-last letter of a word; to allow those, insert explicit discretionary hyphens directly in the source. A \u0005hyphenation entry may contain no hyphens (which suppresses hyphenation for that word)."
+      },
+      {
+        "name": "Diagnostic usage: \\showhyphens",
+        "description": "The \\showhyphens macro prints the hyphen positions TeX would find for a string to the terminal and log.",
+        "guidance": "The macro builds an intentionally underfull \u0005hbox and triggers an 'Underfull \\hbox (badness 10000)' message; this warning is spurious and should be ignored when using \\showhyphens. Example output shows the hyphenated forms as TeX would find them."
+      },
+      {
+        "name": "\\patterns command and pattern token format (INITEX-only)",
+        "description": "The \\patterns{...} command (available only in INITEX) sets the pattern dictionary; patterns are given as sequences of items each consisting of alternating numeric hvalue and hletter tokens, terminated possibly by an hvalue.",
+        "guidance": "Pattern token rules: hvalue is a digit (0\u20139) or empty (empty means zero); an hletter is a character token with category code 11 or 12 whose \\lccode is nonzero; the character '.' is treated as an hletter of code 0 to represent word boundaries. Example pattern forms: '0a1b0' may be written 'a1b' or '0a1b'. Patterns are intended to be prepared by experts; INITEX compresses/massages them into a format file for production TeX."
+      },
+      {
+        "name": "Pattern dictionary is static; exception dictionary is dynamic",
+        "description": "Once the pattern dictionary is set (via \\patterns in INITEX and stored in a format file), production TeX loads that static set; by contrast, the exception dictionary (\\hyphenation entries) is dynamic and can change during a run.",
+        "guidance": "To change patterns you must supply a new complete set (typically done in INITEX when building formats). Exceptions added during a job affect subsequent paragraphs immediately."
+      },
+      {
+        "name": "Word-recognition rules for hyphenation (starting letter and scanning)",
+        "description": "TeX searches forward from each glue item (not in math) to find a 'starting letter' to begin hyphenation trials; it bypasses characters whose \\lccode is zero and ligatures that begin with such characters, and it bypasses implicit kern items.",
+        "guidance": "If an encountered character has nonzero \\lccode (or a ligature beginning with such), that character is the starting letter. If any other type of item (e.g., a box, rule, explicit kern inserted by \\kern, or math) intervenes before finding a suitable starting letter, hyphenation is abandoned for that location (until after the next glue). If the starting letter is not lowercase (i.e., it does not equal its own \\lccode), hyphenation is abandoned unless \\uchyph is positive."
+      },
+      {
+        "name": "Font hyphenchar and admissible-item restrictions",
+        "description": "Hyphenation proceeds only if the font f containing the starting letter has a \\hyphenchar between 0 and 255; admissible items that compose the trial word are (1) characters in font f with nonzero \\lccode, (2) ligatures formed entirely from such characters, and (3) implicit kerns.",
+        "guidance": "Scanning stops at the first inadmissible item; the trial word consists of the letters found in admissible items, and all letters are in font f. This enforces that TeX will not hyphenate across changes in font or other intervening non-admissible items."
+      },
+      {
+        "name": "Minimum-length constraints (\\lefthyphenmin and \\righthyphenmin) and post-word conditions",
+        "description": "Hyphenation is abandoned unless the trial word length n satisfies n >= \u0003 + \u0004 where \u0003 = max(1, \\lefthyphenmin) and \u0004 = max(1, \\righthyphenmin). Plain TeX uses \\lefthyphenmin=2 and \\righthyphenmin=3 (so lambda=2, rho=3).",
+        "guidance": "Additionally, the items immediately following the trial word must be zero or more characters/ligatures/implicit kerns followed immediately by glue, an explicit kern, a penalty, a whatsit, or a vertical-mode item from \\mark, \\insert, or \\vadjust. If a box, rule, or math formula occurs too close after the word, hyphenation is inhibited. These rules also imply that already-hyphenated compound words (which have discretionary items) will not be further hyphenated by the algorithm."
+      },
+      {
+        "name": "Placement limits on hyphens and insertion of discretionaries",
+        "description": "TeX will not insert hyphens before the position l_{\\lefthyphenmin} (i.e., not before l_lambda) or after l_{n+1-\\righthyphenmin}. If other acceptable hyphenation points remain, TeX inserts one or more discretionary items at those points.",
+        "guidance": "When discretionary items are inserted, ligatures and implicit kerns are reconstituted so the typeset word after hyphenation has the correct glyph/spacing behavior. This process respects the minimum-distance constraints and the odd-value rule from the patterns."
+      },
+      {
+        "name": "Implicit vs explicit kern handling and implications",
+        "description": "Implicit kerns (kern items inserted by font metrics or TeX internals) differ from explicit kerns (inserted by \\kern or \\/): implicit kerns are recomputed when TeX finds at least one hyphen point in a word.",
+        "guidance": "In TeX's internal listings an implicit kern appears as '\\kern2.0' (no space) while an explicit kern shows as '\\kern 2.0'. The italic correction command \\/ inserts an explicit kern. Be aware that recomputation of implicit kerns can change spacing when hyphenation occurs."
+      },
+      {
+        "name": "\\- (discretionary-hyphen) semantics",
+        "description": "The control sequence \\- is equivalent to \\discretionary{\\char h}{}{} where h is the \\hyphenchar of the current font if that \\hyphenchar value lies between 0 and 255.",
+        "guidance": "If \\hyphenchar is outside 0\u2013255, \\- is equivalent to an empty discretionary \\discretionary{}{}{}. Thus \\- inserts an explicit discretionary hyphen using the font's designated hyphen character when allowed."
+      },
+      {
+        "name": "Language selection and multiple hyphenation rule sets (\\language and whatsits)",
+        "description": "TeX can remember up to 256 distinct language rule sets; an integer \\language selects which set is used. Every \\hyphenation and \\patterns specification appends rules to the current \\language. If \\language is negative or >255, TeX acts as if \\language=0.",
+        "guidance": "All \\patterns for all languages must be given before typesetting paragraphs if INITEX is used to build formats. TeX also supports per-character language changes within a paragraph: when a character is added and the current language differs from \\language, TeX resets current language and inserts a whatsit node recording the language (and its lefthyphenmin and righthyphenmin) before that character. \\setlanguage changes the current language (and inserts a whatsit) but does not change the integer \\language parameter."
+      }
+    ]
+  }
+}

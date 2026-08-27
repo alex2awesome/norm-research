@@ -1,0 +1,96 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/be24afdabb15.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "be24afdabb15.html",
+  "chunk_idx": 3,
+  "n_chunks": 5,
+  "chunk_chars": 39686,
+  "model": "gpt-5-mini",
+  "elapsed_s": 93.21309408300294,
+  "input_tokens": 13941,
+  "output_tokens": 4827,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Metamath users, contributors to the set.mm database, and formal proof authors/maintainers",
+    "subtask_short": "metamath proof and definition authoring",
+    "subtask_description": "Guidance and standards for writing Metamath theorems, definitions, and notations in the set.mm database, and for selecting/inspecting axiom subsystems and proof dependencies.",
+    "subtask_keywords": [
+      "metamath",
+      "set.mm",
+      "definitions",
+      "notation",
+      "proof_authoring",
+      "predicate_calculus"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Distinct variable conditions must be explicit",
+        "description": "The Metamath language spec requires distinct variable conditions ($d statements) accompanying theorems to be explicit.",
+        "guidance": "Although theoretically redundant (a verifier could in principle infer and propagate them from axioms), explicit $d statements speed up the verifier and allow proofs to be verified in isolation. Tools like the Metamath Solitaire applet and mmj2 can infer $d statements while developing proofs, but the database entries themselves should include the explicit distinct variable conditions so a reader can determine them by inspection."
+      },
+      {
+        "name": "Unnecessary distinct variable groups are allowed but weaken theorems",
+        "description": "Introducing unnecessary distinct variable groups in a theorem is always allowed and doesn't affect its proof, but it weakens the theorem.",
+        "guidance": "The practical effect is that later theorems that reference this weakened theorem may themselves have to be weaker to use it. This is occasionally done intentionally to create a weaker starting axiom, but it can confuse readers\u2014comments or documentation (example: ax6v) are suggested when doing so."
+      },
+      {
+        "name": "Definitions are axioms in Metamath; soundness must be verified externally",
+        "description": "The Metamath language has no separate mechanism for introducing definitions; the only way to add a definition is to introduce it as a new axiom ($a).",
+        "guidance": "Because definitions are axiomatic in the database, an unsound 'definition' can lead to inconsistency and the proof verifier will accept it without error. Therefore the soundness of definitions must be verified outside the Metamath verifier, either manually or with an external tool tailored to the logic of the database. Example anti-pattern: making a self-referential df-2 into '2 = ( 1 + 2 )' yields a contradiction (0 = 1) and is accepted by the verifier unless checked externally."
+      },
+      {
+        "name": "Definitional soundness criteria (eliminability and conservativity)",
+        "description": "A definition is sound provided (1) it is eliminable and (2) it is conservative.",
+        "guidance": "Eliminable: for any theorem containing the defined symbol, the wff can be converted to an equivalent wff without that defined symbol. Conservative: after elimination, the theorem should be provable from the original axioms. Note: whether a definition is eliminable or conservative can depend on the strength of the axiom system (e.g., recursive definitions may fail eliminability in weak systems), so metalogical justification external to Metamath is often required."
+      },
+      {
+        "name": "Definitions should match conventional/human meaning and be human-reviewed",
+        "description": "Beyond formal soundness, a definition should match the generally understood meaning of the concept it names.",
+        "guidance": "Even if a definition is formally sound, swapping conventional symbols (e.g., swapping 4 and 5) could produce formally valid but misleading theorems like (2 + 2) = 5. Such issues require careful human scrutiny by competent mathematicians and cannot be fully automated."
+      },
+      {
+        "name": "Use mmj2 definition checker to automate most definition checks",
+        "description": "mmj2 includes an enhancement that can verify the soundness of most definitions in set.mm (all but four).",
+        "guidance": "Specification for the checker is in the 'additional rules for definitions' section of the conventions page. To enable it, add the RunParms.txt entry: SetMMDefinitionsCheckWithExclusions,ax-*,df-bi,df-clab,df-cleq,df-clel. The four excluded definitions (df-bi, df-clab, df-cleq, df-clel) need metalogical justification outside mmj2's capabilities and may be considered additional axioms if desired."
+      },
+      {
+        "name": "Notation for function values: use left-apostrophe (F' A)",
+        "description": "Function values are expressed using the left-apostrophe notation '(F' A)', where F is the function-class and A is the argument-class; this notation is unambiguous and context-independent.",
+        "guidance": "Textbook notation F(A) can be ambiguous (it might mean substitution into an expression). The left-apostrophe notation was chosen to be unambiguous and to allow reuse of theorems about function values. Examples: (\u221a'2) for square root, (\u211c'A) for real part, (*'A) for conjugate, (!'A) for factorial. A trade-off: some very common cases (e.g., unary minus) were given special syntactic sugar ('- A') for readability, but then some general-purpose theorems may need separate proofs (e.g., negeq instead of reusing fveq2)."
+      },
+      {
+        "name": "Notation for operation values and exceptions",
+        "description": "Operation values (the function value of an ordered pair as per df-ov) use a conventional juxtaposition notation with three class expressions in parentheses, e.g. '( 3 + 2 )'.",
+        "guidance": "Although this appears similar to other parenthesized expressions like '(A \u222a B)', operation value notation is syntactically distinguished because the center token must be a class expression (e.g., '+' is a class expression caddc, whereas '\u222a' as a stand-alone is not). The union of two classes is not defined as an operation for reasons including handling proper classes and circularity of definitions. Be aware of these syntactic/semantic differences when authoring expressions."
+      },
+      {
+        "name": "Parentheses and binding conventions",
+        "description": "Prefix expressions (constants like unary minus, logical negation, 'for all') bind tighter than infix expressions and do not require parentheses; infix expressions that are predicates (class arguments but evaluating to a wff) likewise do not require parentheses for disambiguation.",
+        "guidance": "A (non-exhaustive) list of infix predicates that may appear without parentheses includes: 'A = B', 'x = y', 'A e. B', 'x e. y', 'A =/= B', 'A e/ B', 'A C_ B', 'A C. B', 'A R B', 'R Po A', 'R Or A', 'R Fr A', 'R We A', 'A Fn B', 'R _Se A', 'R _FrSe A'. Other infix forms used without parentheses include function-type annotations and arrows like 'F : A --> B', 'F : A -1-1-> B', 'F : A -onto-> B', and 'H Isom R , S ( A , B )'. The objective is to keep the syntax unambiguous while avoiding excessive parentheses."
+      },
+      {
+        "name": "List axioms a proof depends on (trace_back) for auditing and debugging",
+        "description": "At the end of each proof the database shows 'This theorem was proved from these axioms', which lists the axioms needed to prove the theorem from scratch if definitions are eliminated.",
+        "guidance": "You can reproduce this inside the Metamath program (e.g., 'show trace_back tfr2 /essential /axioms'). Expect that the relationship between a proof and its axioms may not be obvious and computing the minimal axiom set can be CPU-intensive. This trace is useful for debugging when you suspect an undesired axiom crept into a proof; you can also trace back only to a particular axiom (e.g., 'show trace_back tfr2 /to ax-rep') to find the exact path where an axiom was introduced. Example: tfr2 required ax-rep but not ax-ac."
+      },
+      {
+        "name": "Selecting predicate-calculus subsystems by omitting axioms",
+        "description": "Different choices of which axiom schemes to omit produce subsystems with different logical/metalogical properties (completeness, scheme-completeness, simplicity of substitution, proof length, etc.).",
+        "guidance": "Examples from the database: omitting the ten obsolete axiom schemes yields a scheme-complete subsystem equivalent to S3'; omitting ax-5 yields logical completeness but loses metalogic advantages and often lengthens proofs; omitting all predicate-calculus axioms except ax-4..ax-9 and ax-gen yields Tarski's S2 (logically complete but not scheme-complete); a subsystem with no distinct variable conditions (omitting certain axioms) simplifies substitution and proof verification but tends to produce longer proofs and requires treating 'distinctors' specially. The appendix documents which omissions yield which properties and conjectures/theorems about derivability among schemes\u2014use this when designing or studying tailored logical subsystems."
+      },
+      {
+        "name": "Be aware of axiom renumbering and obsolete axioms",
+        "description": "Predicate-calculus axiom schemes were renumbered on 20-Dec-2018 to remove gaps and reorder schemes; obsolete 'ax-c*' axioms are kept for historical reasons in a deprecated section and should not be used outside that section.",
+        "guidance": "Older papers and resources may reference old numbering; a cross-reference table is provided showing derivations between old and new numbers. The 'Proof' column in the renumbering table shows derivations of new axioms from old ones and vice versa, demonstrating equivalence to the system in Megill. When consulting external references or reproducing older proofs, use the cross-reference to map names correctly."
+      },
+      {
+        "name": "Notation design principle: prefer simplicity and consistency over strict convention",
+        "description": "When choosing notations, the compiler/author weighed conventional/familiar notation against ambiguity and notational bloat, often favoring simplicity and consistency.",
+        "guidance": "Practical consequences: adopt a single, unambiguous syntax for function values rather than multiple textbook positional idioms; accept occasional unfamiliarity in order to keep the language linear and context-independent. Understand that some conventional choices were intentionally set aside to reduce ambiguity and to make proof development simpler."
+      }
+    ]
+  }
+}

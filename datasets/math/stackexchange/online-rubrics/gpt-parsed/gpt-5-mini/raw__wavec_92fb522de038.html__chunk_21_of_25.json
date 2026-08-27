@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_92fb522de038.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_92fb522de038.html",
+  "chunk_idx": 21,
+  "n_chunks": 25,
+  "chunk_chars": 38836,
+  "model": "gpt-5-mini",
+  "elapsed_s": 130.69245337499888,
+  "input_tokens": 14754,
+  "output_tokens": 5138,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "implementers of MathML processors / authors converting Content MathML to Strict Content MathML",
+    "subtask_short": "rewrite Content MathML to Strict",
+    "subtask_description": "Guidelines and rewrite rules for converting non\u2011strict/Content/Presentation MathML constructs into Strict Content MathML equivalents, covering qualifiers, operators, tokens, containers, and special cases. Intended to be followed by MathML processor implementers.",
+    "subtask_keywords": [
+      "mathml",
+      "content_mathml",
+      "strict_content",
+      "markup_conversion",
+      "specification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Integration interval qualifier handling",
+        "description": "When an interval qualifier is used to specify the domain of integration, integration is assumed to proceed from the left endpoint to the right endpoint. Multiple integrands are treated analogously.",
+        "guidance": "When rewriting to Strict Content MathML, interval qualifiers specifying integration domains must be translated to appropriate domain representations (see Rewrite: int / Rewrite: defint). Example shows binding with cartesian product for multivariate domains."
+      },
+      {
+        "name": "condition qualifier extends to multivariate domains",
+        "description": "The condition qualifier extends to multivariate domains by using extra bound variables and a domain corresponding to a Cartesian product.",
+        "guidance": "Translate a multivariate condition by introducing extra bvar entries and make the domain an explicit cartesian product; then bind a lambda over the bound variables and apply the function over that domain (example provided with x and y and bounds 0..1)."
+      },
+      {
+        "name": "Special treatment for condition qualifier",
+        "description": "Use of the condition qualifier requires special treatment when rewriting to Strict Content MathML; it is rewritten to a domainofapplication by converting the Boolean condition into a suchthat/map/lambda construct as needed.",
+        "guidance": "Rewrite multiple condition qualifiers to a single conjunction and then apply Rewrite: condition to create domainofapplication (see detailed rule examples)."
+      },
+      {
+        "name": "Use of tendsto in limits rewriting",
+        "description": "The usage of tendsto to qualify a limit is formally defined by writing the expression in Strict Content MathML via Rewrite: limits condition; more idiomatic uses are not formally defined and should be rewritten to an annotated identifier.",
+        "guidance": "Rewrite tendsto to a Strict form using semantics/annotation-xml when necessary; when tendsto appears as a qualifier use Rewrite: limits condition to produce a bind/limit representation with a null choice depending on type attribute."
+      },
+      {
+        "name": "Rewrite limits with 'tendsto' via limits condition rule",
+        "description": "Limits using a tendsto condition must be written in Strict Content MathML using the Rewrite: limits condition rule which encodes the bound variable, tendsto target, and the expression as a lambda.",
+        "guidance": "Example: <limit> with <condition> containing <tendsto/> x 0 is rewritten to an explicit limit symbol with 0, null, and a bind/lambda wrapping expression-in-x; note the null choice depends on type attribute."
+      },
+      {
+        "name": "Sums and products require lambda when bound variables used",
+        "description": "When bound variables are used in sum or product qualifiers, it is necessary to introduce a lambda construction to rewrite the expression in the bound variables as a function.",
+        "guidance": "If no explicit bound variables used, use generic qualifier rewriting; if bvar present, produce an apply of sum/product to an integer_interval (or other domain) and bind a lambda over the bound variable(s) returning the expression-in-x. Examples for sum and product 0..100 of x^i provided."
+      },
+      {
+        "name": "Roots use two-argument root symbol in Strict Content",
+        "description": "In Strict Content markup, the root symbol is always used with two arguments, with the second indicating the degree of the root being extracted.",
+        "guidance": "Rewrite <root> x </root> to root(x,2) and <root degree=n> a </root> to root(a,n). Always supply the degree as second argument."
+      },
+      {
+        "name": "Logarithm base mapping and default base handling",
+        "description": "When mapping log to Strict Content, use the log symbol that returns the log of its second argument with respect to the base specified by the first argument. When logbase is present it determines the base; otherwise the default base of 10 must be explicitly provided in Strict markup.",
+        "guidance": "Example: plus(log(logbase 2, x), log(y)) rewrites to plus(log(2,x), log(10,y)). Implementer must ensure default base 10 is explicitly inserted when no logbase provided."
+      },
+      {
+        "name": "Moments: choose content dictionary by argument kind",
+        "description": "When rewriting moments, use the moment symbol from s_data1 when applied to an explicit list of arguments; use the moment symbol from s_dist1 when applied to a distribution. Both operators take degree as first argument, point as second, then data set or random variable.",
+        "guidance": "Rewrite <moment degree=3 momentabout p> X </moment> to s_dist1:moment(3,p,X) when X is a distribution; otherwise use s_data1. Ensure argument order degree, point, data/random variable."
+      },
+      {
+        "name": "Rewrite qualifiers to domainofapplication",
+        "description": "Rewrite all apply constructions using bvar and qualifiers to those using only the general domainofapplication qualifier (Rewrite Qualifiers to domainofapplication).",
+        "guidance": "This is a general normalization step: convert interval/condition/lowlimit/uplimit qualifiers into domainofapplication elements before applying further special-case rules."
+      },
+      {
+        "name": "Intervals qualifier rewritten to interval/domain mapping and symbol choice",
+        "description": "Rewrite qualifiers given as interval and lowlimit/uplimit to intervals via Rewrite: interval qualifier; the symbol used depends on the head of the application (default interval, oriented_interval if head is int, integer_interval for sum/product).",
+        "guidance": "Interval is only interpreted as qualifier if it immediately follows bvar. Replace lowlimit/uplimit qualifiers with domainofapplication wrapping interval. Use specific interval1 CD symbols based on closure attribute in later steps (interval_oo, interval_cc, etc.)."
+      },
+      {
+        "name": "Multiple condition qualifiers -> conjunction then domainofapplication",
+        "description": "Rewrite multiple condition qualifiers to a single one by taking their conjunction; the resulting compound condition is then rewritten to domainofapplication using Rewrite: condition.",
+        "guidance": "Form compound condition via Boolean and applications; produce apply suchthat with a lambda encoding the predicate over R and place R determined by existing domainofapplication or type attribute; if unspecified introduce an unspecified domain identifier R."
+      },
+      {
+        "name": "Multiple domainofapplication qualifiers -> intersection",
+        "description": "Rewrite multiple domainofapplication qualifiers to a single one by taking the intersection of the specified domains.",
+        "guidance": "Combine multiple domain specifications by intersecting their domains before further rewriting."
+      },
+      {
+        "name": "Sets and lists: rewrite to map and set/list constructors",
+        "description": "Rewrite sets and lists by rule Rewrite: n-ary setlist domainofapplication using map and an appropriate set/list constructor; when arguments given explicitly use Rewrite: element; when qualifiers used produce map + lambda + D.",
+        "guidance": "If D is already the appropriate set/list and the lambda is identity, rewrite the container directly as D. For 'set', choose multiset symbol if any argument type attribute is multiset; otherwise use set. If non-standard type attribute present, annotate arguments with types via Rewrite: attributes."
+      },
+      {
+        "name": "Intervals/vectors/matrices mapping and interval closure mapping",
+        "description": "Rewrite interval, vectors, matrices, and matrix rows per F.4.2. In Strict markup, interval element corresponds to one of four symbols in interval1 depending on closure attribute: open->interval_oo, closed->interval_cc, open-closed->interval_oc, closed-open->interval_co.",
+        "guidance": "Qualifiers will already have been rewritten to domainofapplication; ensure correct interval1 symbol selection according to closure attribute and element semantics (interval vs oriented_interval vs integer_interval depending on head)."
+      },
+      {
+        "name": "Lambda expressions without qualifiers -> bind lambda",
+        "description": "If the lambda element does not contain qualifiers, the lambda expression is directly translated into a bind expression with csymbol cd='fns1' lambda and the expression as body.",
+        "guidance": "Rewrite <lambda><bvar>x</bvar> expression </lambda> to <bind><csymbol fns1 lambda/><bvar>x/></bvar> expression </bind>."
+      },
+      {
+        "name": "Lambda with domainofapplication qualifiers -> restriction over lambda",
+        "description": "If the lambda contains qualifiers (domainofapplication), rewrite the qualifier to domainofapplication and translate to a function term constructed with lambda and restricted to the specified domain using restriction.",
+        "guidance": "Rewrite <lambda bvar... domainofapplication D> expr </lambda> to apply restriction( bind(lambda(...), expr), D ). This encodes the domain restriction on the function term."
+      },
+      {
+        "name": "Piecewise functions -> piece1 CD mapping",
+        "description": "Rewrite piecewise, piece, and otherwise to applications of the constructor symbols of the same names in the piece1 content dictionary; mapping is straightforward aside from their combined use.",
+        "guidance": "Each <piece> and <otherwise> maps to an apply of piece/piecewise/otherwise csymbol in piece1 with the condition and expression translated accordingly (example provided)."
+      },
+      {
+        "name": "N-ary/unary stats/minmax operators: rewrite using set/map or unary application",
+        "description": "Rewrite min, max, mean and similar n-ary/unary operators: if applied to explicit list of 0 or >=2 args, translate to unary application of the csymbol to a set of arguments (set or map); if applied with domainofapplication, rewrite using map to construct the set; if single argument, apply symbol directly to argument.",
+        "guidance": "When D is already a set and lambda is identity, rewrite domainofapplication term directly as D. For statistical functions choose the CD depending on interpretation (explicit data vs random variable). Historical ambiguity note: if single-argument application cannot be applied, consider using the n-ary set rule as error recovery."
+      },
+      {
+        "name": "Quantifiers rewrite to logical forms with in/and/implies",
+        "description": "Rewrite quantifiers forall and exists used with domainofapplication to expressions using implication and conjunction by rule Rewrite: quantifier. For exists, include an 'and' combining (in x D) with expression; for forall use 'implies' with antecedent being the conjunction of membership constraints.",
+        "guidance": "If no domainofapplication present, translation is direct to bind forall/exists. If condition qualifier present for forall, construct implication where antecedent is the conjunction (in p Q) and consequent is the body. Examples demonstrate bind/exists and bind/forall encodings."
+      },
+      {
+        "name": "Integrals with domainofapplication -> Rewrite: int / defint",
+        "description": "Rewrite integrals used with a domainofapplication element (with or without bvar) according to the rules Rewrite: int and Rewrite: defint (see F.2.2 Integrals).",
+        "guidance": "Handle integrals similarly to sums/products: domains must be made explicit then mapped to restricted function applications or definite integral constructs as specified; follow earlier example patterns."
+      },
+      {
+        "name": "Sums and products with domainofapplication -> use N-ary Sum/Product rules",
+        "description": "Rewrite sums and products used with a domainofapplication (with or without bvar) as described in N-ary Sum and N-ary Product rules (introducing lambda/map as needed).",
+        "guidance": "See F.2.4 and earlier sum/product lambda examples; ensure mapping to integer_interval when head indicates integer summation for sum/product."
+      },
+      {
+        "name": "Eliminate domainofapplication -> restricted function (restriction) if no bvar",
+        "description": "An application qualified by domainofapplication and not containing a bvar is converted to an application of a function term constructed with the restriction symbol (i.e., restriction(F, C) applied to args).",
+        "guidance": "Rewrite <apply><ci>F</ci><domainofapplication><ci>C</ci></domainofapplication> a1 ... an</apply> to apply( apply(csymbol fns1 restriction, F, C), a1, ..., an )."
+      },
+      {
+        "name": "Eliminate domainofapplication -> predicate_on_list for n-ary relations",
+        "description": "When a relation (n-ary relation class) is used with domainofapplication, rewrite to an application of predicate_on_list with a list/map of arguments (or mapped list when bvar used).",
+        "guidance": "Example: apply lt a b c d -> predicate_on_list(lt, list(a,b,c,d)). For bvar/domain forms, produce predicate_on_list(reln, map(lambda(x) expression-in-x, R)). Choose set1 vs multiset1 depending on type attribute."
+      },
+      {
+        "name": "Eliminate domainofapplication -> apply_to_list for general n-ary operators",
+        "description": "Any use of qualifier elements for general n-ary operators is expressed in Strict Content MathML by explicitly applying the function to a list of arguments using apply_to_list, with map(lambda(...), D) producing the list.",
+        "guidance": "Rewrite apply union with bvar/domain to apply_to_list(union, map(bind(lambda x expression-in-x), D)). For nary-set.class constructors use analogous constructor syntax adjustments; choose set1 vs multiset1 per type attribute."
+      },
+      {
+        "name": "Suchthat mapping for bound-variable applications",
+        "description": "Applications involving bound variables and domainofapplication are rewritten to make the domain the first positional argument of the application and use lambda to encode variable bindings; use the suchthat symbol from set1 for apply with bound variables.",
+        "guidance": "Rewrite apply H bvar v1...vn domainofapplication D A1 ... Am to apply(H, D, bind(lambda v1..vn A1), ..., bind(lambda v1..vn Am)). If no domainofapplication present omit D. Certain operator classes have alternative rules."
+      },
+      {
+        "name": "Rewrite numbers (cn) based on type attribute and sep/base handling",
+        "description": "Rewrite cn elements whose type attribute is one of e-notation, rational, complex-cartesian, complex-polar, constant as strict cn via rules Rewrite: cn sep, Rewrite: cn based_integer and Rewrite: cn constant. sep children split numerator/denominator into rational(...) etc; base attribute handled via based_integer/based_float.",
+        "guidance": "If cn has sep children and base attribute, copy base to resulting integer cn arguments. Table maps type attribute to OpenMath symbol: e-notation->bigfloat, rational->rational, complex-cartesian->complex_cartesian, complex-polar->complex_polar. For bigfloat a specific 3-arg symbol usage described."
+      },
+      {
+        "name": "cn based_integer rule for non-decimal bases",
+        "description": "A cn with a base attribute other than 10 is rewritten using based_integer (or based_float) symbol: based_integer(base, cs) or based_float depending on content.",
+        "guidance": "Example: <cn type='integer' base='16'>FF60</cn> -> apply(nums1:based_integer, 16, <cs>FF60</cs>). If content is alphanumeric and type integer or unspecified, choose based_integer; otherwise based_float."
+      },
+      {
+        "name": "cn constant -> csymbol mapping for named constants",
+        "description": "Numbers represented as cn type='constant' should be represented as csymbol elements; known constants (pi,e,i,gamma,infinity) map to nums1:pi, e, i, gamma, infinity respectively.",
+        "guidance": "Replace cn constant elements with csymbol referencing nums1 and the corresponding symbol name as tabulated."
+      },
+      {
+        "name": "Rewrite token elements containing Presentation MathML to semantics annotations",
+        "description": "Rewrite any ci, csymbol or cn containing presentation MathML to semantics elements with annotation-xml encoding='MathML-Presentation', mapping the presentation content to an annotated identifier name.",
+        "guidance": "Determine identifier names (like p, q) from presentation content in a system-defined way (e.g., character data stripping markup). Ensure consistent mapping: same Presentation MathML -> same ci names, different presentation -> different ci names. If cn contains non-text or illegal characters, rewrite to semantics/ci; if annotation would add no rendering info, rewrite as ci."
+      },
+      {
+        "name": "Rewrite remaining operator elements to csymbol per syntax table",
+        "description": "Rewrite any remaining operator defined in Content MathML for Specific Structures to a csymbol referencing the symbol identified in the syntax table via Rewrite: element.",
+        "guidance": "Use the syntax table to choose the correct csymbol and content dictionary. Special cases: selector requires argument order rewrite and symbol depends on argument type; minus operator choice depends on arity (unary_minus vs minus); some set/statistical operators depend on type attributes; emptyset choice depends on context."
+      },
+      {
+        "name": "Minus operator: choose unary_minus or minus by arity",
+        "description": "The minus element can be used as a unary arithmetic operator or as a binary arithmetic operator. If used with one argument, it corresponds to unary_minus; if with two arguments, it corresponds to minus.",
+        "guidance": "Translation to Strict Content markup is direct per Rewrite: element, but implementers must choose the symbol based on the number of supplied arguments."
+      }
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_d9d86c33bf0e.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13211,
+  "output_tokens": 4219,
+  "elapsed_s": 1417.7437197498512,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning / NLP researchers and practitioners working on math word-problem solving, dataset creation, and verification methods for large language models",
+    "subtask_short": "grade_school_math_word_problems",
+    "subtask_description": "Creation, curation, and evaluation of a grade-school math word-problem dataset (GSM8K) and methods for training/verifying language-model solutions via a sample-and-rank verifier pipeline.",
+    "subtask_keywords": [
+      "gsm8k",
+      "math_word_problems",
+      "dataset",
+      "verification",
+      "language_models",
+      "grade_school"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "High Quality (dataset design principle)",
+        "description": "We avoid error-prone scraping procedures and instead rely on human workers to create problems. After extensive quality control based on workers' answer agreement, we estimate that less than 2 percent of problems contain breaking errors.",
+        "guidance": "Collect problems from human contractors; have workers re-solve problems (with no original writer re-solving their own problems); check agreement between solutions and repair/discard disagreements; perform additional rounds of agreement checks (authors report ~1.7% remaining disagreements)."
+      },
+      {
+        "name": "High Diversity (dataset design principle)",
+        "description": "We strive for high diversity among problems and actively avoid designing problems that are drawn from the same linguistic template or differ only in superficial details.",
+        "guidance": "Create each problem to be relatively unique so held-out test performance is a more relevant metric; compute pairwise similarity scores between problems and provide feedback to contractors to avoid template reuse; allow workers to use GPT-3 seed questions as inspiration but not to re-use templates."
+      },
+      {
+        "name": "Moderate Difficulty (dataset design principle)",
+        "description": "Choose a problem distribution challenging for state-of-the-art language models but tractable: problems require 2\u20138 steps, involve elementary calculations and early-algebra-level concepts, and a bright middle-school student should be able to solve every problem.",
+        "guidance": "Avoid extremely hard examples (e.g., MATH-level) and problems that require advanced concepts; ensure most problems can be solved without explicitly defining variables."
+      },
+      {
+        "name": "Natural Language Solutions (dataset format requirement)",
+        "description": "Collect solutions in natural language rather than pure math expressions, instructing problem writers to explain their work as much as possible while allowing diverse linguistic styles.",
+        "guidance": "Natural language solutions enable interpretability and help probe models' internal monologues; prefer explanation-rich responses over terse equation-only answers."
+      },
+      {
+        "name": "Label correctness by final answer (verifier/generator labeling rule)",
+        "description": "Training solutions are labeled correct or incorrect solely based on whether they reach the correct final answer.",
+        "guidance": "Be aware this labeling yields false positives where the final numeric answer is correct despite flawed reasoning; these false positives are an accepted limitation of this labeling scheme."
+      },
+      {
+        "name": "Sample-and-rank verification pipeline",
+        "description": "At test time, sample many candidate solutions from a generator and select the one ranked highest by a verifier which outputs a probability that a candidate solution is correct.",
+        "guidance": "Train a generator (finetuned LM) to produce diverse completions, sample (e.g., 100) high-temperature solutions, score with a verifier, and return the highest-scoring solution; training verifier on generator outputs improves performance compared to baseline finetuning."
+      },
+      {
+        "name": "Limit generator finetuning to preserve coverage (recommended: 2 epochs)",
+        "description": "Train the generator only for a small number of epochs (authors use 2) to retain coverage/diversity of generated solutions; longer finetuning leads to overconfidence and collapse in diversity.",
+        "guidance": "Monitor test@N behavior: test@1 may improve with more epochs but test@100 (coverage) can degrade sharply; select generator checkpoints that maximize coverage for verifier training (authors use 2 epochs)."
+      },
+      {
+        "name": "Test@N evaluation metric (test solve rate)",
+        "description": "Use test@N = percentage of problems solved correctly at least once when allowing N separate guesses per problem. Test performance is measured by checking whether the final answer matches the correct answer.",
+        "guidance": "Report test@1 for single low-temperature samples and test@100 for multi-sample/verification settings; present means and standard deviations across multiple runs where applicable."
+      },
+      {
+        "name": "Sampling temperature choices for evaluation",
+        "description": "Use low temperature (T = 0) to generate deterministic test@1 samples and higher temperature (T = 0.7) to generate diverse samples for test@100/verification.",
+        "guidance": "Temperatures were chosen empirically; alternatives (e.g., T=1.0) had negligible effect in ablations, but T=0 for single-sample evaluation and ~0.7 for multi-sample search worked well in the authors' experiments."
+      },
+      {
+        "name": "Token-level verifier vs solution-level verifier",
+        "description": "Verifiers can predict correctness after each token (token-level) or only after the final token (solution-level); token-level verifiers act like a per-token value function.",
+        "guidance": "Token-level verifiers are more challenging/noisy to train but ultimately outperform solution-level verifiers and are less prone to overfitting; token-level predictions also provide an interpretable, fine-grained signal across a solution."
+      },
+      {
+        "name": "Joint verifier objective (verification + language modeling)",
+        "description": "Train the verifier with a joint objective: the verification loss (predict correctness) plus a standard language modeling objective.",
+        "guidance": "Including the language modeling objective is a strict improvement versus verification-only objectives; implement by mixing language data and verifier-labeled data in training (authors mix equally, effectively upsampling language data when many verifier examples exist)."
+      },
+      {
+        "name": "Residual dropout regularization (use dropout)",
+        "description": "Apply residual dropout (authors use 20%) during finetuning and verifier training to reduce overfitting and improve performance.",
+        "guidance": "Because GPT-3 pretraining did not use dropout, perform additional pretraining with dropout before finetuning to mitigate distribution shift; dropout significantly improves finetuning baseline and helps solution-level verifiers avoid overfitting; token-level verifiers also gain slightly."
+      },
+      {
+        "name": "Calculator annotations to mitigate arithmetic errors",
+        "description": "Inject calculation annotations into training so models can call a calculator; at test time, override sampling when a well-formatted annotation exists to evaluate the expression and insert the numeric result.",
+        "guidance": "Annotations were auto-generated by a mix of hard-coded logic and a finetuned LM; simulate calculator by evaluating expressions (authors used python eval); imperfect annotation logic may ignore some lines but rarely generates incorrect annotations; fixing minor calculator bugs improved reported test performance by ~1%."
+      },
+      {
+        "name": "Separate generator and verifier models (to avoid overfitting)",
+        "description": "Train separate networks for generator and verifier to limit generator training and prevent overfitting and collapse of diversity.",
+        "guidance": "Although in principle combination is possible, authors found better empirical results initializing the verifier from the generator checkpoint but keeping them as distinct models."
+      },
+      {
+        "name": "Determining number of completions at test time (compute-vs-performance tradeoff)",
+        "description": "Test-time performance depends on how many completions are sampled and scored: performance typically improves up to some point and then can degrade due to adversarial solutions that fool the verifier.",
+        "guidance": "Authors observe improvement up to ~400 completions for a 6B model, with decrease beyond; they use 100 completions as a practical tradeoff capturing most benefits with modest compute."
+      },
+      {
+        "name": "Majority-vote among top-ranked solutions (voting scheme)",
+        "description": "Instead of selecting only the single top-ranked solution, take a majority vote among the final answers of the top-K verifier-ranked solutions.",
+        "guidance": "Optimal K depends on the total number of samples: for 100 samples allow ~3\u20135 top samples to vote; for 3200 samples allow ~30 top samples; votes consider only the final numeric answer, not full reasoning."
+      },
+      {
+        "name": "Verifier training dataset generation (100 completions per training example)",
+        "description": "Generate many (authors use 100) completions from the generator for each training problem, label each completion correct/incorrect by final answer, and train the verifier on this dataset (authors train verifier for 1 epoch).",
+        "guidance": "Using many completions per training example provides a rich negative set and enables the joint objective (LM+verifier). When mixing LM and verifier data equally, this procedure effectively up-samples original LM data by the number of completions per problem."
+      },
+      {
+        "name": "Verifier architecture and prediction head",
+        "description": "Implement the verifier as a language model with a small scalar head that outputs predictions on a per-token basis by shifting and scaling the logit for a special token (using a bias and gain).",
+        "guidance": "This lets the LM logits continue to represent the language modeling objective while a reserved special token is used for verification predictions; initialize verifier from generator checkpoint for slightly better performance."
+      },
+      {
+        "name": "Evaluation criterion: final answer correctness (finite, deterministic check)",
+        "description": "Both finetuning baseline and verification success are measured by whether the returned solution's final answer equals the ground-truth final answer.",
+        "guidance": "For finetuning, generating intermediate natural-language steps is crucial: training a finetuned model to directly output only the final answer drastically reduces performance (authors report drop from 20.6% to 5.2% for a 6B model)."
+      },
+      {
+        "name": "Model size impacts: generator size matters more than verifier size",
+        "description": "Increasing generator size yields larger gains than increasing verifier size; having a large generator with a small verifier outperforms a small generator with a large verifier.",
+        "guidance": "This suggests verifiers rely on coarse heuristics to discriminate solutions from a given generator; verification nevertheless remains effective even when the verifier is much smaller than the generator."
+      },
+      {
+        "name": "Hyperparameter choices used as practical recommendations",
+        "description": "Authors report specific hyperparameters that work well: batch size ~3.2e4 tokens, max sample length 400 tokens, Adam optimizer with \u03b21=0.9, \u03b22=0.95, residual dropout default 0.0 (0.2 for dropout experiments), learning rate schedules, finetuning epochs=20 (but 2 for generator when producing samples for verification), verifier epochs=1, verifier loss=MSE, completions per train/test problem=100.",
+        "guidance": "The authors swept learning rate and batch size by orders of magnitude and found no significant improvements; for verification they recommend generator trained 2 epochs to produce diverse samples, sampling temperature 0.7 when generating many completions, and using 100 completions at train and test time as a practical default."
+      },
+      {
+        "name": "Quality control measures for data collection",
+        "description": "Use multiple rounds of human agreement checks, re-solving by independent workers, and compute similarity metrics to prevent template reuse; allow workers to use GPT-3 generated seeds but require explanation-rich solutions.",
+        "guidance": "Discard or repair problems with disagreement; estimate residual error rate (authors report ~1.7% disagreements after QC) and be transparent about possible subtle remaining errors."
+      }
+    ]
+  }
+}

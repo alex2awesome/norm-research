@@ -1,0 +1,171 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 79,
+  "n_chunks": 92,
+  "chunk_chars": 39881,
+  "model": "gpt-5-mini",
+  "elapsed_s": 488.2875060830047,
+  "input_tokens": 10698,
+  "output_tokens": 4878,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Authors/developers of GAP packages (GAP package maintainers)",
+    "subtask_short": "writing GAP packages",
+    "subtask_description": "Guidance and mandatory requirements for creating, structuring, naming, testing, and distributing GAP packages, including PackageInfo.g metadata, naming conventions, dependencies, extensions, handling binaries, testing, and versioning.",
+    "subtask_keywords": [
+      "gap",
+      "package_development",
+      "packageinfo",
+      "naming_conventions",
+      "testing",
+      "binaries"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "PackageInfo fields and formats",
+        "description": "PackageInfo.g must include specific metadata components with precise types and formats (e.g., Subtitle, Date, ArchiveURL, ArchiveFormats, README_URL, PackageInfoURL, AbstractHTML, PackageWWWHome, ArchiveURLSubset, HTMLStart, PDFFile, SixFile, LongTitle).",
+        "guidance": "ValidatePackageInfo can be used to detect missing or wrongly-typed fields. Examples of requirements: Subtitle must be a string; Date must be a string of the form 'dd/mm/yyyy'; ArchiveURL/README_URL/PackageInfoURL/PackageWWWHome must start with http://, https:// or ftp://; ArchiveURLSubset must be a list of relative paths to readable files or directories; HTMLStart/PDFFile/SixFile must be relative paths to readable files. Ensure all required details (contact info, archive URLs, README URLs, status, overview text, etc.) are present before redistribution with GAP."
+      },
+      {
+        "name": "Use a template or PackageMaker to create PackageInfo.g",
+        "description": "Authors should base their PackageInfo.g on the Example package template or use the PackageMaker tool to produce a basic package skeleton.",
+        "guidance": "Either copy the distributed Example PackageInfo.g or run PackageMaker (https://github.com/gap-system/PackageMaker), then adjust fields for your package. Within GAP, you can inspect template files (e.g., Pager(StringFile(Filename(DirectoriesLibrary(), '../pkg/example/PackageInfo.g')))). This avoids hand-populating all entries and reduces errors."
+      },
+      {
+        "name": "Avoid defining globals via simple assignment at load time",
+        "description": "Do not create global functions/variables with interactive-style assignments (e.g., Squared := x -> x^2;;) in package load code because they can be silently overwritten.",
+        "guidance": "Prefer using BindGlobal (if needed) or better DeclareGlobalFunction/InstallGlobalFunction and DeclareGlobalVariable/InstallValue pairs to protect definitions and allow ordering flexibility. Using Declare/Install pairs also makes inter-file ordering irrelevant and avoids accidental overwrites."
+      },
+      {
+        "name": "Prefix package globals to avoid name clashes",
+        "description": "Choose names for package functions and variables that begin with a package-identifying prefix (e.g., Eg for the Example package) to reduce accidental overwriting and clashes with other packages or the GAP library.",
+        "guidance": "Use consistent package prefixes especially for globals intended for users to modify. This reduces chance of silent overwrites when users define similarly named identifiers. Adhere to broader GAP naming conventions (see 5.6) so users can guess or remember function names."
+      },
+      {
+        "name": "Use local namespace feature (identifiers ending with @) for globals",
+        "description": "Since GAP 4.5 a package can place global variables into a local namespace by using identifiers ending with @ (e.g., xYz@), making them accessible externally only by their full names xYz@YourPackageName.",
+        "guidance": "This feature helps prevent clashes between packages and the GAP library. Use it for globals that should be package-local but must be globally visible in a controlled way."
+      },
+      {
+        "name": "Avoid names that look like attribute/property testers or setters (SetXXX/HasXXX)",
+        "description": "Do not define functions or variables named with SetXXX or HasXXX forms because they may clash with attribute/property-related objects.",
+        "guidance": "Even if defined as operations, these names conflict with associated attribute/property testers and setters. Choose alternative names to avoid ambiguous clashes with GAP attributes/properties."
+      },
+      {
+        "name": "Conventions for internal (non-user) identifiers",
+        "description": "Adopt a convention for internal functions/variables you do not intend users to call (e.g., use entirely CAPITALISED names).",
+        "guidance": "Clearly distinguish internal identifiers from public API names to reduce misuse and accidental dependencies. Follow package and GAP community conventions where possible."
+      },
+      {
+        "name": "Do not use global variables starting with lowercase and avoid very short global names",
+        "description": "Package global variables should not start with lowercase letters (these are reserved for interactive user variables) and must avoid very short names (e.g., cs, exp, ngens, pc, pow).",
+        "guidance": "Short or lowercase-starting globals are likely to be overwritten by users or conflict with user code; even writable globals starting with uppercase should not use very short names (e.g., C1, ORB) because they can collide. Use longer, namespaced identifiers."
+      },
+      {
+        "name": "Organise declarations (.gd) and implementations (.gi/.g) correctly",
+        "description": "Declare... statements should go in .gd files (read early), Install... definitions in .gi files (read after .gd files), and other package code in .g files; init.g should ReadPackage the .gd/.g files and read.g (if used) should be read later.",
+        "guidance": "Placing Declare and Install in the right file extensions ensures proper load ordering and that declarations exist before implementations. .gd files should be loaded by init.g via ReadPackage; .gi files loaded by read.g to ensure .gi files are read after .gd files. This separation helps with circular dependencies and bootstrapping."
+      },
+      {
+        "name": "Use ShowPackageVariables and NamesUserGVars to inspect globals introduced by the package",
+        "description": "Use ShowPackageVariables(pkgname) to list global variables and methods bound when the package is loaded; NamesUserGVars() (after starting GAP with -r -A and loading the package) lists global variable names currently bound that were created since the library was read.",
+        "guidance": "ShowPackageVariables marks undocumented variables with *. It omits default setter methods and Setattr/Hasattr type variables. Use these tools to detect undesired globals, short names, or naming convention violations. Be aware ShowPackageVariables actually loads the package (call only once per session for that package). NamesUserGVars may include variables from dependencies; use it to spot 'phantom' globals left after loading."
+      },
+      {
+        "name": "Document all package dependencies in PackageInfo.g",
+        "description": "All package dependencies must be explicitly documented in the Dependencies component of PackageInfo.g, distinguishing NeededOtherPackages (required) from SuggestedOtherPackages (optional but used if available).",
+        "guidance": "Declare a package as 'needed' only when it is essential; declare as 'suggested' when optional enhancements are provided. Incorrectly labelling a dependency as needed when it can be suggested may prevent loading on some platforms (e.g., Windows). Do not call LoadPackage at package load time to force dependencies; instead use the Dependencies fields. If you must call LoadPackage inside functions (not at load time), then the dependency need not be suggested/needed."
+      },
+      {
+        "name": "Use OnlyNeeded to test suggested-vs-needed dependency correctness",
+        "description": "Use the OnlyNeeded global option to load a package without loading its suggested packages in order to detect whether suggested packages are actually required at load time.",
+        "guidance": "Run checks with OnlyNeeded to see if errors/warnings arise when suggested packages are absent. If problems appear, either turn the package into a needed package or change code to avoid needing the suggested package at load time. OnlyNeeded is for testing only \u2014 do not use it in normal sessions."
+      },
+      {
+        "name": "Use Extensions component for conditional package extensions",
+        "description": "Use the Extensions component in PackageInfo.g to declare conditional extensions: records with 'needed' lists ([ [pkgname, version], ... ]) and 'filename' (relative path to load the extension file).",
+        "guidance": "GAP will automatically load extension files when the required packages (and versions) are present, regardless of load order. Use this mechanism to provide additional functionality if other packages are present without making them needed dependencies. List extension-related packages among suggested packages if the extension benefits your package's functionality."
+      },
+      {
+        "name": "Separate declaration and implementation parts across init.g and read.g to handle circular dependencies",
+        "description": "You can emulate library-style separation for packages by having init.g only read declaration files and read.g read implementation files; read.g is read only after all init.g files of required packages are read.",
+        "guidance": "This approach avoids bootstrapping problems when packages require each other. GAP computes package sets to avoid cyclic dependencies across sets and then reads init.g files first and read.g files afterwards. Note that if packages autoload before the library implementation is read, only init.g is read initially; read.g will be read later."
+      },
+      {
+        "name": "Avoid calling functions from other packages' implementation parts at load time",
+        "description": "Code in a package's implementation part cannot assume that implementation parts of other packages are already read; therefore avoid calling such functions or accessing records' components during loading unless guarded.",
+        "guidance": "If you need to call functions (e.g., f) or access records (e.g., r) from package B in package A, put that code into an extension that loads only after B is loaded, or delay such computations via autoreadable variables or runtime checks. Use DeclareAutoreadableVariables to delay initialization until after all required packages are loaded."
+      },
+      {
+        "name": "Use DeclareAutoreadableVariables to delay initialization requiring other packages",
+        "description": "If initialisations in your package require other packages (especially in cyclic dependencies), declare and implement such variables via DeclareAutoreadableVariables so they are read only when accessed and after required packages are loaded.",
+        "guidance": "Move computations that require other packages into separate files and declare the variables in init.g using DeclareAutoreadableVariables. This avoids dependency-order issues during package loading."
+      },
+      {
+        "name": "Use autoreadable mechanism for non-method package files (data files)",
+        "description": "For package files not containing method installations (e.g., data files), use the autoreadable variable mechanism to delay reading these files until the data are actually accessed rather than at package load time.",
+        "guidance": "Refer to DeclareAutoreadableVariables (76.3.10) and related sections to implement this. This reduces load-time overhead and avoids unnecessary attempts to read large data until needed."
+      },
+      {
+        "name": "If package uses external binaries, provide installation, checks, and communication code",
+        "description": "Packages including standalone programs must provide build/install scripts for binaries, test for their availability at load time, and implement reliable communication with the external program from GAP.",
+        "guidance": "Include a bin subdirectory with architecture-specific subdirs named as in GAP's main bin layout (use sysinfo.gap/GAParch to determine name). Provide a configure script that reads sysinfo.gap and sets up compilation (can use Example package scripts or PackageMaker templates). Implement AvailabilityTest in PackageInfo.g to verify binaries exist and compiled for the current architecture; if binaries are essential, inhibit package loading when absent."
+      },
+      {
+        "name": "Design binary-using packages as two packages when appropriate",
+        "description": "If the package is not solely an interface bundle, consider splitting into two packages: one providing the binary and interface, and another requiring the first and providing the main GAP functionality.",
+        "guidance": "This reduces duplication when multiple packages require the same external program and eases dependency management."
+      },
+      {
+        "name": "Implement AvailabilityTest properly and log warnings, do not print directly",
+        "description": "AvailabilityTest should check for compiled binaries (e.g., using Filename with DirectoriesPackagePrograms) and return true/false; use LogPackageLoadingMessage to record warnings rather than Print or Info.",
+        "guidance": "AvailabilityTest can issue warnings via LogPackageLoadingMessage (PACKAGE_WARNING) and should return file <> fail when checking existence. For kernel modules, use IsKernelExtensionAvailable() and log warnings similarly. Avoid printing in AvailabilityTest; use the package loading log which can be displayed with DisplayPackageLoadingLog."
+      },
+      {
+        "name": "Two principal ways to call external binaries: file-based or IO streams",
+        "description": "When interfacing to an external standalone, either write input to files and call the program with Process or Exec and read output files, or use input-output streams (Section 10.8) for direct piping.",
+        "guidance": "Choose the method that best fits the external program's interface and performance/robustness needs. File-based approach is simple; IO streams may be more efficient for interactive protocols."
+      },
+      {
+        "name": "Declare an InfoClass for your package to control verbosity/debugging",
+        "description": "DeclareInfoClass(InfoPkgname) and optionally SetInfoLevel(InfoPkgname, level) to provide Info(...) statements that users can enable to control verbosity or debugging output.",
+        "guidance": "Typical initial InfoLevel is 1. Use Info(InfoPkgname, level, expr1, expr2, ...) for conditional printing/execution: expressions are only printed/executed if the InfoLevel of InfoPkgname is at least level. This provides a standard way for customers to obtain debug/info output."
+      },
+      {
+        "name": "Provide a useful package banner and point to documentation",
+        "description": "GAP displays a default banner built from PackageInfo.g; alternatively set BannerString or BannerFunction to show a custom banner (BannerFunction may use runtime information).",
+        "guidance": "Include in the banner a hint on how to access package documentation (e.g., 'For help, type: ?Example package'). Ensure the manual index contains matching entries (e.g., <Index>Example package</Index> before introduction paragraph) so the help system resolves the query."
+      },
+      {
+        "name": "Version numbering rules and semantics",
+        "description": "Version numbers are strings of nonnegative integers separated by non-numeric characters compared by splitting at non-digits and lexicographically comparing integer lists. Choose a scheme that allows increment for tiny changes and ensures successive versions increase.",
+        "guidance": "Do not start version numbers with '=' (it is used to select exact versions in LoadPackage). Prefer semantic-versioning style over date-based versions for clarity. Archive file names should follow name-version.tar.gz etc. Never publish two different archives with the same package version number. Consider defining version and release date entities in GAPDoc to avoid duplication across docs."
+      },
+      {
+        "name": "Include automated tests and integrate with GAP's test suite",
+        "description": "Provide tests in the optional tst directory and specify a basic test file in TestFile of PackageInfo.g for inclusion in the GAP standard test suite. Tests should verify functionality and manual examples and be the package author's responsibility to maintain.",
+        "guidance": "Tests intended for the standard test suite must not display output except discrepancies and a completion report. Use TestDirectory(..., rec(exitGAP := true)) or a .tst file with 'gap> START_TEST(' to allow automated detection. For complex tests, end with ForceQuitGap(true/false) to indicate pass/fail. Place long-running or verbose tests outside the standard suite with instructions on how to run them."
+      },
+      {
+        "name": "Test package loading under multiple configurations",
+        "description": "Verify package loads cleanly in several GAP start configurations and with/without suggested packages to detect conflicts: -r -A then LoadPackage('name'); -r -A then LoadPackage('name' : OnlyNeeded); default GAP then LoadPackage('name'); default GAP then LoadPackage('name' : OnlyNeeded); and test together with all packages via LoadAllPackages in various start options and reversed orders.",
+        "guidance": "Testing loading with all packages loaded often reveals subtle conflicts. Use ShowPackageVariables and NamesUserGVars to look for unwanted globals or naming issues. The OnlyNeeded option can simulate suggested packages being absent; use it only for testing."
+      },
+      {
+        "name": "Use LoadAllPackages(: reversed) for compatibility testing only",
+        "description": "LoadAllPackages loads all packages (alphabetical order) to test compatibility; the reversed option loads in reverse alphabetical order to vary load order for testing.",
+        "guidance": "This is a technical testing function and should not be used in normal operation because it slows GAP. Use it to detect load-order-related issues across packages."
+      },
+      {
+        "name": "Ensure tests for deposited packages integrate with GAP standard test suite",
+        "description": "For packages deposited with GAP, the test file specified in TestFile will be run regularly by the GAP Group as part of the standard test suite; ensure it is non-verbose and reliable.",
+        "guidance": "Design TestFile to be short and noninteractive; long or resource-heavy tests should be excluded from the standard suite and documented separately. Respond to reports from GAP developers if tests reveal issues with integration."
+      }
+    ]
+  }
+}

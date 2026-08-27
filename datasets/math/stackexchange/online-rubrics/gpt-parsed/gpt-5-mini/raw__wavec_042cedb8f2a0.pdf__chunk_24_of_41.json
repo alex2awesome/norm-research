@@ -1,0 +1,161 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 24,
+  "n_chunks": 41,
+  "chunk_chars": 39917,
+  "model": "gpt-5-mini",
+  "elapsed_s": 247.2519835829953,
+  "input_tokens": 14424,
+  "output_tokens": 5799,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "Users of the Magma computer algebra system (mathematicians, computational algebra programmers, researchers)",
+    "subtask_short": "Magma real/complex and vector spaces",
+    "subtask_description": "Reference and guidance for creating and manipulating fixed/free precision real and complex numbers, advanced real/complex functions, and vector/matrix spaces in the Magma system. Covers precision rules, coercion, constructors, arithmetic, special functions, summation, continued fractions, and linear-algebra operations.",
+    "subtask_keywords": [
+      "magma",
+      "real_field",
+      "complex_field",
+      "vector_space",
+      "matrix_space",
+      "precision"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Fixed-precision real precision vs decimal significant figures",
+        "description": "Precision of fixed precision reals is not exactly the same as the number of decimal significant figures; digits on left and right of the decimal point are stored separately in blocks/part-blocks of 4 digits, and each block (on each side) requires 4 digits of precision.",
+        "guidance": "Example: 61532.61437 stored with p=8 rounds to 61533, p=12 rounds to 61532.6144, p=16 preserves full digits. Recommendation: set precision at least 6 digits higher than the required number of significant figures to store a fixed precision real successfully."
+      },
+      {
+        "name": "Coercion behavior between real fields (rounding and padding)",
+        "description": "Coercion into a fixed precision real field changes representation depending on new precision: if new precision < old precision then rounding occurs; if new precision > old precision then the number is padded with trailing zeros.",
+        "guidance": "Once precision is reduced and digits are lost by coercion to lower precision, those digits cannot be recovered by coercing into a higher precision. Examples: Sqrt(3.0p12) coerced to RealField(8) gives rounded 1.7321; coercing that 8-prec value back to higher precision keeps trailing zeros (1.7321)."
+      },
+      {
+        "name": "Use of elt constructor when exponent/precision are expressions",
+        "description": "The e and p literal notations are limited to contexts where exponent and precision are known as literals; when exponent/precision are expressions (e.g., inside a function), use elt< RealField(p) | t, s > to construct the real number t * 10^s of precision p.",
+        "guidance": "Be careful about the precision of t when t is given as a real literal in the default real field \u2014 ensure t has sufficient precision. The coercion expression R!t is equivalent to elt< R | t, 0 >. Example: elt< RealField(prec) | 42/9, 7 > to create 42/9 * 10^7 in the specified precision."
+      },
+      {
+        "name": "ComplexField construction and parent precision semantics",
+        "description": "Create complex numbers by defining a parent complex field via ComplexField() or ComplexField(p). If the parent is a fixed-precision complex field, both real and imaginary parts belong to the corresponding fixed-precision real field; if parent is free complex, real and imaginary parts belong to the free real field and may have different precisions (including -1).",
+        "guidance": "Construct complex numbers as x + i*y (with i the field identifier) or using F ! [x, y]; these coerce x and y appropriately. Example: C32![2,3] gives 2 + 3*j; default free real field preserves exact rationals like 5/7."
+      },
+      {
+        "name": "Coercion into complex vs real fields from algebraic fields",
+        "description": "All elements of quadratic and cyclotomic fields are coercible into a complex field; only those elements with zero imaginary part are coercible into a real field.",
+        "guidance": "Example: an element sev from CyclotomicField(7) coerced into C yields a nonzero imaginary part and is thus accepted; coercion into a real field would only succeed if imaginary part is zero."
+      },
+      {
+        "name": "PolarToComplex and Pi(R) precision behaviour; principal argument convention",
+        "description": "PolarToComplex(m,a) returns m * e^{i a} with Pi(R) giving \u03c0 to the precision of real field R. ComplexToPolar returns modulus and principal argument a with -\u03c0 < a \u2264 \u03c0.",
+        "guidance": "Use Pi(R) to obtain \u03c0 at the same precision before converting degrees to radians. Example: PolarToComplex(8, Pi(R32)/6) gives 8(cos \u03c0/6 + i sin \u03c0/6). The principal argument avoids 2\u03c0 ambiguity by returning values in (-\u03c0, \u03c0]."
+      },
+      {
+        "name": "Boolean tests and ordering depend on precision; complex fields unordered",
+        "description": "Customary Boolean functions (IsZero, IsOne, IsMinusOne), equality/inequality and membership operators examine numbers as stored with their given precision; ordering operators (lt, gt, etc.) are applicable to real fields but not to complex fields.",
+        "guidance": "All Boolean tests require the property to hold within the precision of the argument(s). Example: IsZero examines the number at its current precision; comparisons may be affected by rounding."
+      },
+      {
+        "name": "Standard real constants return values to field precision",
+        "description": "Functions Pi(F), EulerGamma(F), Catalan(F) return standard constants approximated to the precision of the provided real or complex field F. If F is complex the imaginary part of the return is zero.",
+        "guidance": "Example: Pi(RealField(28)) returns \u03c0 to 28-digit precision; Catalan(RealField(52)) returns Catalan's constant at 52-digit precision."
+      },
+      {
+        "name": "Advanced function precision and default-field rules",
+        "description": "Advanced real/complex functions return results with the same precision as the precision of their arguments. If integer or rational arguments are given, the return value will belong to the default real field (or its complex version).",
+        "guidance": "These functions are designed to be fast, numerically stable, and accurate to the last digit for the precision used. Be aware of the default real field when using integer/rational inputs."
+      },
+      {
+        "name": "Choosing summation routine based on series type",
+        "description": "For infinite series use InfiniteSum, PositiveSum, or AlternatingSum where m(n) maps integers to free real terms and summation starts at term i; InfiniteSum evaluates successive terms until result is within default free real precision; PositiveSum and AlternatingSum employ specialized techniques for positive-term or alternating-sign series respectively.",
+        "guidance": "Use PositiveSum for series with all positive terms and AlternatingSum for alternating series to get more effective/accurate convergence. Examples: AlternatingSum for Leibniz series for \u03c0/4; InfiniteSum for e = \u03a3 1/n!."
+      },
+      {
+        "name": "Continued fraction functions limited by precision",
+        "description": "ContinuedFraction(r) returns partial quotients up to as many as the precision of free real r permits. BestApproximation(r, n) returns best rational approximation with denominator \u2264 n. Convergents(Q) returns a 2\u00d72 integer matrix representing convergents.",
+        "guidance": "Precision limits how many partial quotients are available. Examples: Continued fraction of \u03c0 produced a list of partial quotients; BestApproximation(pi,130) returns 355/113."
+      },
+      {
+        "name": "Prefer LogGamma over Gamma for numerical stability",
+        "description": "When defining functions that involve Gamma for large inputs, use LogGamma (principal value of log \u0393) to avoid overflow and for numerical stability.",
+        "guidance": "Example: implement BetaFunction(r,s) as Exp(LogGamma(r) + LogGamma(s) - LogGamma(r+s)) instead of using Gamma directly."
+      },
+      {
+        "name": "Use of lower-precision real fields for printing/efficiency in examples",
+        "description": "When printing or formatting results for display, it may be convenient to coerce values into lower-precision real fields to control printed width and rounding.",
+        "guidance": "Example in PrimeNumberTheorem: R8 := RealField(8); R4 := RealField(4); values li(n) and R(n) are rounded for printing using these lower-precision fields."
+      },
+      {
+        "name": "Constructing full vector spaces and basis conventions",
+        "description": "Full vector space K^n is constructed by VectorSpace(K, n) (or KSpace). For full vector spaces, Basis(V) returns the standard basis and generators equal basis vectors; the ith generator V.i is the ith basis vector.",
+        "guidance": "You may create the field first or pass the field expression directly. Example: VectorSpace(GF(11), 3) creates a 3-dim vector space over GF(11)."
+      },
+      {
+        "name": "Constructing full matrix spaces and row-major standard basis",
+        "description": "Full m\u00d7n matrix space is KMatrixSpace(K, m, n). The standard basis consists of matrices with a single 1 in each position in row-major order (rows complete before next row).",
+        "guidance": "Matrix spaces can also be considered as vector spaces K^(m\u00d7n) or as homomorphism modules Hom(M,N). Example: basis printed shows 2\u00d73 basis entries in row-major order."
+      },
+      {
+        "name": "Matrix space via Hom and equivalence with KMatrixSpace",
+        "description": "KMatrixSpace(K,m,n) is equivalent to Hom(VectorSpace(K,m), VectorSpace(K,n)) and Magma will equate these spaces (H23 eq M23 returns true).",
+        "guidance": "Use Hom(V,W) to get linear transformations; domain/codomain semantics follow from the vector spaces used to construct Hom."
+      },
+      {
+        "name": "Tuple/matrix spaces over rings: naming and behavior difference",
+        "description": "For rings R (not fields), use RSpace(R,n) and RMatrixSpace(R,m,n). Intrinsics referring to 'Field' in the K-case use 'Ring' in the R-case (e.g., CoefficientRing vs CoefficientField).",
+        "guidance": "If R is actually a field Magma will create the object as a vector or K-matrix space automatically. Example: RSpace(IntegerRing(),4) prints as Full RSpace of degree 4 over Integer Ring."
+      },
+      {
+        "name": "Creating vectors and matrices (coercion and row-major ordering)",
+        "description": "Create vectors by coercing a sequence of components into its parent vector space via V![-2, 3/4, ...]. Matrices are constructed similarly by listing entries in row-major order into the matrix space M![ ... ].",
+        "guidance": "Zero vector is V!0; IsZero(v) tests for zero vector. Use sequence constructors for patterned components. Eltseq(u) returns sequence of components for vectors or matrices."
+      },
+      {
+        "name": "Random(U) only for finite vector/matrix spaces",
+        "description": "Random(U) returns a random element of U only if U is finite (otherwise Magma cannot construct random elements).",
+        "guidance": "Example: Random(V3F11) works since V3F11 over GF(11) is finite; attempting Random on infinite spaces is not possible."
+      },
+      {
+        "name": "Componentwise arithmetic and Normalize behavior",
+        "description": "Addition/subtraction are componentwise for vectors/matrices (must be same size). Scalar multiplication available. Normalize(u) divides u by its first non-zero component so that the first non-zero entry becomes the unit of the field; Normalize(0) = 0.",
+        "guidance": "Example: y := v - 2/5*w; Normalize(y) yields vector with first nonzero entry = 1 (unit)."
+      },
+      {
+        "name": "InnerProduct and space-dependent definitions",
+        "description": "InnerProduct(u,v) returns the inner product according to the inner product defined on the space (usually the Euclidean norm), i.e., sum of products of corresponding components for standard Euclidean spaces.",
+        "guidance": "Example: InnerProduct(v,w) returns a rational in the V5 example; be aware that the exact inner product depends on the space's convention."
+      },
+      {
+        "name": "Indexing conventions for vectors and matrices",
+        "description": "Vector indexing v[i] accesses the ith component; matrix indexing m[i,j] accesses entry at row i and column j; m[i] returns the ith row as a vector. There is no direct column extraction \u2014 use Transpose(m) then extract a row.",
+        "guidance": "Support(u) returns indexes of all non-zero entries; for matrices Support returns tuples <i,j> of nonzero positions. Example: m2[2,6] gives 1.8; m2[3] returns third row vector."
+      },
+      {
+        "name": "Block operations within matrices and their semantics",
+        "description": "Use Submatrix(A,i,j,p,q) to extract p\u00d7q block starting at (i,j); InsertBlock(~A,R,i,j) to replace a p\u00d7q block; HorizontalJoin/VerticalJoin/DiagonalJoin combine matrices horizontally, vertically, or along the diagonal (require compatible dimensions).",
+        "guidance": "Examples show creating ms := Submatrix(m2,2,3,2,4); InsertBlock(~m1, ms, 2,1); VerticalJoin(m1,m2); DiagonalJoin(ms,m2). Ensure matrices in joins have matching row/column counts as required."
+      },
+      {
+        "name": "Creating subspaces and quotients with sub and quo constructors",
+        "description": "sub< V | generators > constructs the subspace of V generated by the given objects (vectors, subspaces, sets). Magma stores the user-supplied generators (even if dependent) but internally uses an echelonized basis for efficiency. quo< V | ... > constructs quotient spaces; constructors can optionally return the inclusion or natural homomorphisms.",
+        "guidance": "Generators supplied are available as U.i; Basis(U) returns Magma's echelonized basis. Example: V5s := sub< V5 | w, V5.3, [-5,5,7,5,-5] >; V5q, phi := quo< V5 | ... > returns quotient and natural map phi. Kernel(phi) equals the subspace used to form the quotient."
+      },
+      {
+        "name": "Transversal, Complement, Morphism utilities for subspaces",
+        "description": "Complement(V,U) returns a complement subspace C of U in V; Transversal(V,U) returns a set of vectors giving a transversal in V for U (V must be over a finite field). Morphism(U,V) returns the inclusion homomorphism mapping when you have U as a subspace of V.",
+        "guidance": "Example: C := Complement(V5, V5s) gives a space C isomorphic to quotient V5/V5s and C@phi equals V5q from the quo constructor."
+      },
+      {
+        "name": "Linear transformation operations: domain/codomain, image, rowspace, rank, kernel",
+        "description": "Hom(V,W) produces the module of linear transformations (KMatrixSpace of appropriate size). A linear map a has Domain(a) and Codomain(a); application v*a maps v in Domain(a) into Codomain(a). Image(a) returns the image subspace equal to Domain(a)*a. RowSpace(a) returns the space generated by rows of the matrix ignoring domain, and may have higher dimension than Image(a). Rank(a) gives the rank. Kernel(a) or NullSpace(a) and Cokernel(a) are provided.",
+        "guidance": "EchelonForm(a) returns e (echelon form) and b (product of elementary matrices) with b*a = e. Example: a := H.2 + 2*H.13; Image(a) dimension may differ from RowSpace(a)'s dimension; verify with Rank(a) and Kernel(a)."
+      }
+    ]
+  }
+}

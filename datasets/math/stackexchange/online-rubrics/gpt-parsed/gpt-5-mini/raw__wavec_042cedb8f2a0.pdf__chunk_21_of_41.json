@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 21,
+  "n_chunks": 41,
+  "chunk_chars": 39832,
+  "model": "gpt-5-mini",
+  "elapsed_s": 191.68332862499665,
+  "input_tokens": 13990,
+  "output_tokens": 4593,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users of the Magma computer algebra system (mathematicians / computational algebraists) working with finite and number fields",
+    "subtask_short": "magma finite and number fields",
+    "subtask_description": "Reference guidance from the Magma handbook for constructing, representing, embedding, and operating on finite fields and algebraic number fields (including orders, bases, and matrix/algebra representations). Covers function semantics, default behaviours, and recommended procedures to avoid ambiguities.",
+    "subtask_keywords": [
+      "magma",
+      "finite_fields",
+      "number_fields",
+      "field_embeddings",
+      "orders_and_bases"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Embedding fields: make diagrams commute / use Embed",
+        "description": "The embedding isomorphism is always chosen so that diagrams \u2018commute\u2019, i.e., so that all the homomorphisms involving the fields are compatible.",
+        "guidance": "The ext constructor generates a different field each time it is called even with identical arguments; two such isomorphic but notionally distinct fields must be related by calling Embed(F1, F2) before equality or coercion is possible. Example: ext<gf9|5> produces distinct fields and without Embed shows 'Arguments have no covering field'. Use Embed(F, F2, x) to embed F in F2 mapping the generator of F to element x in F2."
+      },
+      {
+        "name": "GF produces canonical default fields",
+        "description": "Every call to GF creates the default field of the given size, so GF(p,n) or GF(q) for the same p,n or q = p^n are identical.",
+        "guidance": "Unlike ext, GF(7,3) called repeatedly returns the same (identical) field and generator correspondence holds (F3.1 eq F4.1 true). Use GF when you want canonical identical instances rather than distinct ext instances."
+      },
+      {
+        "name": "MinimalPolynomial semantics (one vs two arguments)",
+        "description": "MinimalPolynomial(a) returns the minimal polynomial of element a \u2208 F over the ground field of F. MinimalPolynomial(a, S) returns the minimal polynomial of a over a specified subfield S.",
+        "guidance": "If the element lies in the given subfield S then the minimal polynomial over S can be linear; the degree of the minimal polynomial indicates the degree of the corresponding extension. Examples show MinimalPolynomial(e), MinimalPolynomial(e, gf9), MinimalPolynomial(e, GF(3)), MinimalPolynomial(e, gf9e4e3)."
+      },
+      {
+        "name": "Degree and default subfield behavior",
+        "description": "Some functions accept one or two arguments; with one argument operations are performed with respect to the ground field, whereas with two arguments they use the specified subfield. Exception: Degree with no subfield is understood to be the prime field, not the ground field.",
+        "guidance": "Be cautious: e.g., Degree(F) vs Degree(F, S) differ in default subfield choice; consult examples to determine which field is used."
+      },
+      {
+        "name": "Conway polynomials: use to avoid embedding ambiguities",
+        "description": "Magma uses a Conway polynomial (Cp,n) whenever a field is being defined as an extension of a prime field, if the Conway polynomial is known, to avoid ambiguities that arise from arbitrary choice of irreducible polynomial/roots.",
+        "guidance": "Functions: ConwayPolynomial(p,n), ExistsConwayPolynomial(p,n), IsConway(F). Example: ConwayPolynomial(5,6) eq DefiningPolynomial(gf5e6) true. Prefer constructions that will use Conway polynomials to get consistent generators across definitions."
+      },
+      {
+        "name": "Power vs polynomial printing of finite-field elements and PowerPrinting attribute",
+        "description": "Elements may be printed either as powers of the generating element or as polynomials in the generator over the ground field. Use the 'PowerPrinting' attribute to control default printing style for subsequently-created small finite fields.",
+        "guidance": "Use AssertAttribute(FldFin, \"PowerPrinting\", b) to set default for the category (b boolean). Use AssertAttribute(F, \"PowerPrinting\", b) to change for a particular small non-prime field F. Query HasAttribute(obj, \"PowerPrinting\") which returns (is_defined, value). Note: attribute not defined for prime fields or fields too large for Zech algorithms; AssertAttribute does not change already-created fields."
+      },
+      {
+        "name": "Eltseq / Seqelt (Element <-> sequence) representation and defaults",
+        "description": "Eltseq(a, S) returns the coefficients of a \u2208 F as a length-d sequence over subfield S (d = degree of F over S). Eltseq(a) defaults to the ground field of F. Seqelt(Q, F) (or SequenceToElement) constructs the element from the coefficient sequence.",
+        "guidance": "If Eltseq is used without S, the subfield is the ground field of F. Example outputs show different coefficient sequences for different choices of S (ground field vs GF(3) etc.). Use Seqelt to go back from sequences."
+      },
+      {
+        "name": "Log(a) / PrimitiveElement / Zech logarithms applicability",
+        "description": "Log(a) returns n such that primitive element w^n = a, where w = PrimitiveElement(F). The Log function only applies to moderately small fields for which Magma can calculate and store the complete table of logarithms (Zech logarithms).",
+        "guidance": "Zech logarithms allow very efficient arithmetic in small fields. Example: pr := PrimitiveElement(gf9e4); Log(alpha) returns 4879 and pr^4879 = alpha. If field is too large, Log may not be available."
+      },
+      {
+        "name": "Standard element operations provided and their meanings",
+        "description": "Magma provides many standard functions on finite-field elements: Norm(a), Norm(a,S), Trace(a), Trace(a,S), Order(a), FactoredOrder(a), Sqrt(a), IsSquare(a), Root(a,n), Eltseq(a), Seqelt(Q,F), etc.",
+        "guidance": "Table 24.3 lists meanings: Norm/Trace relative to prime field or specified subfield S; Order and FactoredOrder for multiplicative order; Sqrt/IsSquare provide a square root if exists; Root gives nth root if exists. Use appropriate form with subfield when you need relative norm/trace."
+      },
+      {
+        "name": "VectorSpace(E, F) and custom basis selection",
+        "description": "VectorSpace(E, F) returns the F-vector space E(d) and the canonical isomorphism mapping E to the vector space using powers of a generator. VectorSpace(E, F, B) returns the isomorphism for a user-supplied basis B.",
+        "guidance": "The mapping converts a field element to its coefficient vector (polynomial in generator). Example: V, phi := VectorSpace(gf9e4, gf9); (g^5*alpha^3+...) @ phi returns vector. Use custom basis to impose a specific representation."
+      },
+      {
+        "name": "Normal bases and their properties / NormalElement / IsNormal",
+        "description": "A normal basis for E over F is of the form a, a^q, ..., a^{q^{d-1}}; exponentiation by a power of q corresponds to rotating the representing vector. IsNormal(a) checks normality; NormalElement(E) returns a normal element.",
+        "guidance": "If generator is not normal (IsNormal(w) false), compute e := NormalElement(K) and build basis B from e to get vector-space isomorphisms with rotation properties. Example constructs a normal basis for a large field and shows rotated vectors match exponentiation: r2tVS eq VS!Rotate(Eltseq(rVS), t)."
+      },
+      {
+        "name": "MatrixAlgebra(E, F): field as matrix algebra via companion matrix",
+        "description": "MatrixAlgebra(E, F) returns a matrix algebra A of degree d over F isomorphic to E, with the generator of E mapping to a generator G of A. G is constructed as the companion matrix of the field's defining polynomial.",
+        "guidance": "Companion matrix has 1s above main diagonal and the negative coefficients of the defining polynomial (mod x^d) in the last row. Example: G eq CompanionMatrix(defgf9e4) true; operations like MinimalPolynomial, CharacteristicPolynomial, Order apply equally to matrix-algebra elements. Use MatrixAlgebra(A, S) to expand entries into block matrices to obtain an algebra over a subfield S."
+      },
+      {
+        "name": "MatrixAlgebra(A, S): expanding entries into block matrices over subfield",
+        "description": "If A is a matrix algebra over finite field E and S is a subfield of E, MatrixAlgebra(A, S) constructs another matrix algebra N over S isomorphic to A by expanding each entry into the corresponding block matrix.",
+        "guidance": "Blocks correspond to images of elements of E under isoM9rel3 mapping (example shows 2x2 blocks for gf9->gf3). Use iso maps to inspect corresponding blocks and verify GN eq isoN(G) etc."
+      },
+      {
+        "name": "NumberField(f): constructing number fields and normalization of polynomial",
+        "description": "NumberField(f) constructs the number field Q(alpha) where alpha is a root of monic irreducible integer polynomial f. If f has non-integral coefficients, an equivalent integral polynomial is used.",
+        "guidance": "Alpha becomes the printname and identifier for the adjoined root. Use Degree(K), DefiningPolynomial(K), Discriminant(K), Signature(K), PrimitiveElement(K), Eltseq(a) to inspect fields and elements. Example: P<x> := PolynomialRing(IntegerRing()); f := x^4 -14*x^2 +9; K<alpha> := NumberField(f)."
+      },
+      {
+        "name": "Representing number-field elements as coefficient sequences (Eltseq/ coercion)",
+        "description": "Elements of a number field K = Q(alpha) may be coerced from a sequence of rationals of length degree(K), representing coefficients a0 + a1*alpha + ... + a_{m-1}*alpha^{m-1}. Eltseq(a) returns this sequence.",
+        "guidance": "Example: K![5,0,1,0] -> alpha^2 + 5; Eltseq(2*t + 3) returns [13,0,2,0] in example. Use coercion from sequences to construct elements reliably."
+      },
+      {
+        "name": "QuadraticField(m): square-free reduction and canonical generator",
+        "description": "QuadraticField(m) creates Q(sqrt(d)) where d is the square-free part of integer m; if m contains square factors they are removed. Generator printed as sqrt-d if no identifier supplied.",
+        "guidance": "Elements printed in canonical form (1/m)*(u + v*sqrt(d)) with denominator positive and gcd(u,v,m)=1. Use Eltseq and coercion [a0,a1] to create elements. Example: QuadraticField(20) yields field with generator equal to sqrt(5)."
+      },
+      {
+        "name": "Quadratic orders: maximal order depends on d mod 4; conductor/suborders",
+        "description": "For a quadratic field Q(sqrt(d)), maximal order M_K equals the equation order E_K when d \u2261 2,3 (mod 4). For d \u2261 1 (mod 4) maximal order equals Z + Z*(1+sqrt(d))/2 and is larger than the equation order. Every suborder of conductor f is [1, f*epsilond].",
+        "guidance": "IntegralBasis(K) or Basis(MK) returns integral basis. Conductor(K) returns conductor f. Create suborders with sub< M | f > and check membership/coercion between order, field, maximal order. Examples illustrate element coercions and Eltseq behaviour across orders."
+      },
+      {
+        "name": "Orders for general number fields: EquationOrder vs MaximalOrder and associated functions",
+        "description": "EquationOrder(K) returns Z[alpha] (powers of primitive element basis). MaximalOrder(K) returns the ring of integers of K. Basis(O), BasisMatrix(O), Eltseq(a) (integer coefficients in basis), IntegralBasis(K), IsIntegral(a), Conductor(K), TransformationMatrix(O,P) are provided for working with orders.",
+        "guidance": "Equation order basis is power basis; in general MaximalOrder may be larger. TransformationMatrix(O,P) returns an integral matrix and common denominator expressing basis change between orders. Examples show coercion of elements between equation order E, maximal order O and field N and retrieving basis matrices and indices (Index(O,E))."
+      },
+      {
+        "name": "CyclotomicField representation and vector-space mapping",
+        "description": "CyclotomicField(m) constructs K = Q(zeta_m) with degree phi(m). Elements are represented uniquely as a0 + a1*zeta_m + ... + a_{d-1}*zeta_m^{d-1} and Eltseq returns the sequence of coefficients.",
+        "guidance": "Functions: CyclotomicOrder(K), Degree(K), DefiningPolynomial(K), Discriminant(K), Signature(K), Conductor(K), RootOfUnity(n,K), VectorSpace(K,E), VectorSpace(K,E,Q). Use VectorSpace(K,E) to map K onto E(n) using powers of the generator as basis. Examples demonstrate coercion, printing and Eltseq outputs."
+      }
+    ]
+  }
+}

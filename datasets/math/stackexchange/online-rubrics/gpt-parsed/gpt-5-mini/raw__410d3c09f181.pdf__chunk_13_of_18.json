@@ -1,0 +1,170 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/410d3c09f181.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "410d3c09f181.pdf",
+  "chunk_idx": 13,
+  "n_chunks": 18,
+  "chunk_chars": 39839,
+  "model": "gpt-5-mini",
+  "elapsed_s": 212.03603991699492,
+  "input_tokens": 12158,
+  "output_tokens": 6247,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "C developers extending or embedding the PARI/GP library (writing PARI library functions, GP-callable wrappers, and I/O/debugging support)",
+    "subtask_short": "PARI C library programming",
+    "subtask_description": "Guidance and conventions for implementing, registering, and using PARI GEN objects and library functions in C (types, variable handling, I/O, error/debug/timing, memory management, and GP parser prototypes). Targeted at programmers adding functions to PARI or using PARI in library mode.",
+    "subtask_keywords": [
+      "pari",
+      "c_programming",
+      "library_mode",
+      "gp_extension",
+      "parser_interface"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Type t_FRAC and t_FRACN (rational number)",
+        "description": "z[1] points to the numerator, and z[2] to the denominator. Both must be of type integer. In principle z[2] > 0, but this rule does not have to be strictly obeyed.",
+        "guidance": "A t_FRACN rational number can be converted to irreducible form using GEN gred(GEN x). Ensure numerator/denominator are integers; prefer positive denominator but code should not rely strictly on it."
+      },
+      {
+        "name": "Type t_COMPLEX (complex number)",
+        "description": "z[1] points to the real part, and z[2] to the imaginary part.",
+        "guidance": "A priori z[1] and z[2] can be of any type, but only certain types are useful and make sense (e.g. real-type components for numeric complex)."
+      },
+      {
+        "name": "Type t_PADIC (p-adic number) representation and helpers",
+        "description": "Second codeword contains p-adic precision (one less than number of significant p-adic digits) and a biased exponent. z[2] points to prime p, z[3] to pprecp(z), and z[4] to the p-adic unit modulo z[3] (or zero if z is zero).",
+        "guidance": "Use long precp(GEN z), void setprecp(GEN z,long), long valp(GEN z), void setvalp(GEN z) to access precision and valuation. Representation satisfies z = p^{valp(z)} * (z[4] + O(z[3]))."
+      },
+      {
+        "name": "Type t_QUAD (quadratic number)",
+        "description": "z[1] points to the polynomial defining the quadratic field, z[2] to the 'real part' and z[3] to the 'imaginary part' (coefficients in canonical basis (1,w)).",
+        "guidance": "Complex numbers are a case of quadratics but deserve separate handling when appropriate."
+      },
+      {
+        "name": "Type t_POLMOD (polmod)",
+        "description": "z[1] points to the modulus, and z[2] to a polynomial representing the class of z. Both must be of type polynomial.",
+        "guidance": "Must obey rules on hierarchical structure of variables of a polymod (see Chapter 2). Ensure modulus and representative polynomial adhere to polymod variable conventions."
+      },
+      {
+        "name": "Type t_POL (polynomial) codeword and layout",
+        "description": "Second codeword encodes a sign (0 if polynomial is 0, 1 otherwise), a variable number, and an effective length. Coefficients are in z[2]..z[lgef(z)-1] in ascending order; degree = effective length - 3; degree(0) = -1.",
+        "guidance": "Use macros/functions signe/setsigne, long lgef(GEN z)/void setlgef(GEN z,long), long varn(GEN z)/void setvarn(GEN z,long), and long gvar(GEN z). Important: a zero polynomial may have sign 0 but effective length > 2 if some coefficient zeros are inexact; handle this carefully."
+      },
+      {
+        "name": "Type t_SER (power/Laurent series)",
+        "description": "Second codeword encodes sign (0 if 0), variable number, and a biased exponent. z[2]..z[lg(z)-1] are coefficients in ascending order with z[2] the first non-zero coefficient. Exponent may be negative (Laurent series).",
+        "guidance": "Use signe/setsigne, varn/setvarn, and valp/setvalp. Beware: do not use expo and setexpo on power series."
+      },
+      {
+        "name": "Type t_RFRAC and t_RFRACN (rational function)",
+        "description": "z[1] points to the numerator and z[2] to the denominator; the denominator must be of type polynomial.",
+        "guidance": "A t_RFRACN rational function can be converted to irreducible form using gred."
+      },
+      {
+        "name": "Type t_QFR (indefinite binary quadratic form)",
+        "description": "z[1], z[2], z[3] point to the three integer coefficients of the form; z[4] is Shanks's distance function (a real).",
+        "guidance": "Coefficients should be of type integer; z[4] of type real."
+      },
+      {
+        "name": "Type t_QFI (definite binary quadratic form)",
+        "description": "z[1], z[2], z[3] point to the three coefficients of the form.",
+        "guidance": "All three coefficients should be of type integer."
+      },
+      {
+        "name": "Type t_VEC and t_COL (vector/column) layout",
+        "description": "z[1], z[2], ... z[lg(z)-1] point to the components of the vector.",
+        "guidance": "Treat vectors as lists of GEN components; use appropriate length macros when iterating."
+      },
+      {
+        "name": "Type t_MAT (matrix) layout",
+        "description": "z[1], z[2], ... z[lg(z)-1] point to the column vectors of z; they must be of type t_COL and of the same length.",
+        "guidance": "Matrices are stored as column vectors. For library-mode programming prefer standard malloc'ed C constructs for performance; these PARI matrix types exist for completeness only."
+      },
+      {
+        "name": "Type t_LIST (list) representation",
+        "description": "Second codeword contains an effective length (handled through lgef/setlgef). z[2]..z[lgef(z)-1] contain list components.",
+        "guidance": "Use lgef/setlgef to manage list size; list components are GEN pointers."
+      },
+      {
+        "name": "Type t_STR (character string) representation",
+        "description": "char * GSTR(z) (= (z+1)) points to the first character of the NULL-terminated string.",
+        "guidance": "Strings are C-style; remember to handle NULL termination and memory ownership."
+      },
+      {
+        "name": "Multivariate object representation and principal variable number",
+        "description": "PARI represents multivariate polynomials as univariate polynomials whose coefficients are polynomials (no sparse multivariate support). The 'principal variable number' (priority) is given by long gvar(GEN z).",
+        "guidance": "Variable number of scalar type is BIGINT. For recursive non-polynomial types it is min variable number of components. For polynomials/series only the outermost variable number matters. Do not place a variable number in components that violates main-variable priority; in library mode such inconsistencies are tricky and error-prone."
+      },
+      {
+        "name": "Creating and registering user variables (fetch_user_var)",
+        "description": "Use long fetch_user_var(char *s) which inspects/creates the user variable named s and returns its variable number. Errors if s is already known as a function name to the interpreter.",
+        "guidance": "Example: long v = fetch_user_var(\"y\"); GEN gy = polx[v]; Avoid creating variables implicitly via flissexpr in library code (dangerous because interpreter state may differ)."
+      },
+      {
+        "name": "Temporary variables (fetch_var/name_var/delete_var) rules",
+        "description": "Use long fetch_var() to obtain an unused temporary variable number (higher priority than previous temporaries). Use void name_var(long n, char *s) to assign a printable name; use long delete_var() to delete the latest temporary variable.",
+        "guidance": "MAXVARN exists and is better left to internal use; temporary variables have no GP identifier and print as #<number>. Temporary variables live on the heap and are not collected by standard garbage collection \u2014 ensure to delete them and that they don't appear in later objects. Never assign values/functions to temporary variables (use user variables for that). Example deletion idiom provided to clean up multiple temporaries."
+      },
+      {
+        "name": "Input API: flisexpr, flisseq, lisGEN behaviors",
+        "description": "GEN flisexpr(char *s) analyzes input string s and computes the result as GP would (one expression). GEN flisseq(char *s) handles a sequence of expressions. GEN lisGEN(FILE *file) reads a line up to newline, applies flisexpr and returns the GEN. lisGEN(stdin) interacts.",
+        "guidance": "These functions strip spaces/comments before calling GP parser. Use lisGEN to avoid manual buffer allocation when reading GENs from files or stdin."
+      },
+      {
+        "name": "Registering C functions for GP: install interface",
+        "description": "Use void install(void *f, char *name, char *code) where f is function address, name is GP name, and code is a parser-code prototype string describing argument/return behavior.",
+        "guidance": "If function returns a GEN, it must satisfy gerepileupto assumptions. See parser code section (Section 4.9.2) for prototype atom syntax and semantics."
+      },
+      {
+        "name": "Output formats and functions (raw, prettymatrix, prettyprint, TeX, string, debugging)",
+        "description": "Three main output modes: brute (raw) with void brute(GEN obj,char x,long n); prettymatrix via matbrute/outmat; prettyprint via sor/outbeaut. Additional: exe for TeX, GENtostr to get malloc'ed string, voir to dump hex tree.",
+        "guidance": "Use outbrute(obj) = brute(obj,'g',-1). output(obj) = outbrute + newline + flush (good for debugging). sor(obj,x,n,m) prettyprint with field width m; outbeaut(obj) = sor(obj,'g',-1,0) + newline. GENtostr returns malloc'ed char*\u2014free it after use. voir(obj,nb) useful for debugging recursive structures; nb = -1 prints all words. Default output stream is outfile (stdout); change with switchout(char *name) and close with switchout(NULL). Errors go to errfile and input to infile (switchin available). For deep customization, pariOut/pariErr structs provide hooks (advanced)."
+      },
+      {
+        "name": "Error reporting via err and conventions",
+        "description": "Use err(talker, \"error message\") to print error and exit in library mode (returns to GP prompt otherwise). err supports printf-like formats. The general form is void err(numerr, ...), where numerr selects message/behavior and predefined messages are in language/errmessages.c.",
+        "guidance": "Keywords starting with warn* issue warnings without aborting (e.g. err(warner, \"Strategy 1 failed.\\nTrying strategy 2\")). err accepts PARI formats where %Z denotes a GEN object (raw format). Use err for consistent GP-style messaging; prefer warn* keywords for non-fatal issues."
+      },
+      {
+        "name": "Debug output conventions and helper f_printf_err",
+        "description": "Global DEBUGLEVEL and DEBUGMEM control diagnostic/debug output across PARI code. Use standard printf, brute/output or special f_printf_err(char *pariformat, ...) to print using PARI formats (including %Z for GEN).",
+        "guidance": "Set DEBUGLEVEL/DEBUGMEM for desired verbosity. f_printf_err allows mixing PARI formats and standard printf semantics, handy during development and when functions are made visible to GP via install."
+      },
+      {
+        "name": "Timing/profiling API and caveats",
+        "description": "long timer() and long timer2() return elapsed milliseconds since last call of same function. void msgtimer(char *format,...) prints 'Time', formatted args, and timer2 output. long gentimer(long id) and long genmsgtimer(long id, char *format,...) do the same for a unique timer id obtained via get_timer(0).",
+        "guidance": "Timers must be deleted when not needed (call get_timer(id) to free identifier). Be cautious: other PARI functions may use the same timers when DEBUGLEVEL is high, rendering timings meaningless."
+      },
+      {
+        "name": "Memory/stack management and gerepile conventions",
+        "description": "Before allocating objects that produce garbage on the PARI stack, save avma in a local ltop. Use gerepile, gerepileupto, and related functions appropriately to reclaim stack objects; set lbot = avma immediately before sequences of allocations so gerepile can work.",
+        "guidance": "Options if stack overflows: increase stack in main (pari_init), use gerepile periodically, or allocatemoremem. In loops that allocate (e.g. repeated squaring), set lbot before allocation and call gerepile/ gerepileupto as appropriate. If final result was built earlier and avma was lost, use tricks like copying result to top of stack before returning or use gerepileupto when safe. Follow 'fundamental dogma on the use of gerepile' illustrated in matexp example."
+      },
+      {
+        "name": "Numeric precision handling and coercion idioms",
+        "description": "Transcendental functions take a precision argument that matters only for exact objects; use setlg to set precision of real results if needed. pariK1 converts decimal digits to longwords: prec = (long)(d*pariK1+3).",
+        "guidance": "To coerce entries to real precision for faster numeric norms, multiply matrix by real 1 at start (e.g. cgetr(prec+1); gaffsg(1,r); p1 = gmul(r,p1)). Initialize accumulators to a real zero (GEN realzero(long prec) or cgetr + gaffsg(0,s)) to avoid slow exact-integer arithmetic. Use expo/bit-exponent to estimate magnitude (expo(s))."
+      },
+      {
+        "name": "Use of fast integer/bit-shift helpers (gmul2n vs gshift)",
+        "description": "GEN gmul2n(GEN x,long n) multiplies x by 2^n (n can be positive or negative) and is faster than gmul/gmulgs. gshift has same syntax; for non-negative n effects coincide, but for negative n gshift does a right shift and may not perform an exact division on integers.",
+        "guidance": "Prefer gmul2n when you need exact multiply/divide by powers of two; know gshift semantics for shifts vs exact arithmetic."
+      },
+      {
+        "name": "Use of existing library helpers when possible (e.g. gnorml2, gscalmat, gsqr, gdivgs)",
+        "description": "Use provided high-level functions (gnorml2 computes L2 norm of vectors/matrices; gscalmat creates scalar matrix; gsqr squares; gdivgs divides GEN by long) to simplify code.",
+        "guidance": "Library helpers are often optimized; example: use s = gnorml2(x) rather than manual loops. When summing series or doing repeated operations, keep track of precision and stop conditions using expo/precision thresholds (example uses while (expo(r) >= -BITS_IN_LONG*(prec-1)))."
+      },
+      {
+        "name": "Parser-code prototype language for install (argument/return conventions)",
+        "description": "Parser code is a character string describing syntax requirements, mandatory atoms (G,&,L,S,V,n,I,E,r,s), optional atoms (s*, s*p, s*t, Dvalue,type,), automatic atoms (f,p,P), and explicit return-type markers (l,v). No more than 8 arguments allowed. During GP calls the prototype is scanned to convert/insert arguments accordingly.",
+        "guidance": "Mandatory atom meanings: G=GEN, &=*GEN, L=long, S=symbol expecting *entree, V=variable (rejects function symbols), n=variable number (long), I=seq string for lisseq, E=expr string for lisexpr, r=raw input string. Optional Dvalue,type sets default values; special optional semantics: DG sends NULL if omitted, D& sends NULL *GEN, DV/DI/Dn behave similarly. Automatic atoms supply current real/series precision or fake long. Use this system to ensure correct signatures when installing C functions for GP and test all default/optional branches. Examples in text map prototypes (\"GGp\" -> GEN name(GEN x,GEN y,long prec); \"vGGp\" -> void name(GEN x,long y,long prec), etc.)."
+      }
+    ]
+  }
+}

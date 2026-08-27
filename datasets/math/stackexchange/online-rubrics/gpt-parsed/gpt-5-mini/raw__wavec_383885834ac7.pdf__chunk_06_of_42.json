@@ -1,0 +1,116 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 42,
+  "chunk_chars": 39633,
+  "model": "gpt-5-mini",
+  "elapsed_s": 64.81437108299724,
+  "input_tokens": 14930,
+  "output_tokens": 3871,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users / typesetters and programmers learning TeX internals",
+    "subtask_short": "tex box and glue",
+    "subtask_description": "Rules and semantics for TeX's boxes, glue, interline spacing, modes, and paragraph line-breaking \u2014 i.e., how to construct hboxes/vboxes, how glue is set, and when modes switch. Useful for implementing, debugging, or authoring precise TeX input/macros.",
+    "subtask_keywords": [
+      "tex",
+      "typesetting",
+      "boxes_and_glue",
+      "hbox",
+      "vbox",
+      "modes"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Glue set order and glue set ratio",
+        "description": "When a box must be adjusted to a target width, TeX computes a 'glue set order' (the highest subscript i of nonzero glue) and a 'glue set ratio' r to decide how much to stretch or shrink glue.",
+        "guidance": "If x < desired width (stretching): glue order is highest subscript i such that JJ_i nonzero and r = (tv - x)/JJ_i. If x > desired width (shrinking): glue order is highest subscript i such that z_k nonzero and r = (x - tv)/z_k, except r is set to 1.0 when i = 0 and x - tv > z_0 to avoid exceeding maximum shrinkability. Every glue item is modified according to whether its order equals the chosen order (then n \u00b1 r*stretch/shrink) or not (keeps natural width). If there is no stretchability (all JJ_i = 0) or shrinkability likewise, no adjustment occurs."
+      },
+      {
+        "name": "\\hbox to{dimen} and \\hbox spread{dimen} semantics",
+        "description": "\\hbox to{dimen}{...} constructs an hbox with the given width; \\hbox spread{dimen}{...} makes a box whose width is a given amount more than the natural width of its contents.",
+        "guidance": "Use \\hbox to\\hsize as shorthand for setting a line width (e.g., \\line macro). For natural-width boxes, simply use \\hbox{...}. \\hbox spread allows explicit control of total width relative to natural width."
+      },
+      {
+        "name": "Baseline, height, depth, and width of constructed hbox",
+        "description": "Baseline of a constructed hbox is the common baseline of boxes inside; height and depth are the maxima above and below that baseline. Resulting hbox never has negative height or negative depth but width can be negative.",
+        "guidance": "Height/depth computed from interior boxes as if they weren't raised/lowered; negative width arises from glue shrinking (e.g., \\rlap/\\llap constructs)."
+      },
+      {
+        "name": "Interline glue primitives: \\baselineskip, \\lineskip, \\lineskiplimit",
+        "description": "TeX uses three primitives to determine vertical spacing between baselines: \\baselineskip (desired baseline distance), \\lineskip (minimum separator when boxes would collide), and \\lineskiplimit (threshold for switching to \\lineskip).",
+        "guidance": "When adding a box, TeX attempts to insert interline glue to make baseline separation equal to \\baselineskip (including its stretch/shrink). If that interline glue would make the top of the new box closer than \\lineskiplimit to the bottom of the previous box, TeX uses \\lineskip instead. Interline glue decisions ignore other explicit vertical glue (e.g., \\vskip); explicit skips simply add on top of interline glue."
+      },
+      {
+        "name": "Recommendation on \\baselineskip stretchability for multi-page documents",
+        "description": "For documents spanning several pages, it's generally best to define \\baselineskip so that it cannot stretch or shrink to drive more uniform pages.",
+        "guidance": "Small variations (even 0.5pt) in baseline distance significantly affect appearance (white/black balance). For one-page documents, giving \\baselineskip some stretchability can help fit copy on the page."
+      },
+      {
+        "name": "No interline glue before/after rule boxes and \\nointerlineskip",
+        "description": "TeX inserts no interline glue before or after a rule box; the user can also suppress interline glue by issuing \\nointerlineskip (which sets \\prevdepth to the sentinel).",
+        "guidance": "Plain \\nointerlineskip expands to \\prevdepth=-1000pt. The sentinel value -1000pt suppresses the next interline glue; this is also set at beginning of a vertical list or after a rule box."
+      },
+      {
+        "name": "Exact rule for interline glue calculation (using \\prevdepth)",
+        "description": "Given a new (non-rule) box of height h to append and \\prevdepth = p, and \\baselineskip = b plus a1 minus z: if p <= -1000pt, no interline glue is added; otherwise if b - p - h >= -1 then interline glue (b - p - h) plus a1 minus z is appended; otherwise \\lineskip is appended.",
+        "guidance": "After appending the interline glue, \\prevdepth is set to the depth of the new box. (The text gives the operational rule in full; use \\prevdepth to control interline behavior.)"
+      },
+      {
+        "name": "Vertical lists: interline glue independent of explicit \\vskip/\\kern",
+        "description": "Interline glue calculations are carried out regardless of other kinds of glue present; explicit vertical spacing commands act independently and always affect final baseline separation.",
+        "guidance": "Example: \\smallskip between lines always increases baseline separation by the \\smallskip amount but does not alter the choice between \\baselineskip or \\lineskip for interline glue."
+      },
+      {
+        "name": "Natural depth rules for \\vbox (four cases) and \\boxmaxdepth",
+        "description": "To determine a vbox's natural depth: (1) if the vertical list contains no boxes the depth is zero; (2) if there's at least one box but the final box is followed by kerning or glue (possibly with penalties) the depth is zero; (3) if final box not followed by kerning or glue the depth is the depth of that box; (4) if the computed depth exceeds \\boxmaxdepth then the depth becomes \\boxmaxdepth and the excess depth is added to the box's natural height.",
+        "guidance": "Plain TeX sets \\boxmaxdepth to the largest possible dimension so rule (4) normally doesn't apply unless user specifies a smaller value."
+      },
+      {
+        "name": "Glue setting inside a \\vbox mirrors \\hbox rules (height-focused)",
+        "description": "Glue inside a vbox is set by determining a glue set ratio and order based on the difference between natural height x and the desired final height and the amounts of stretchability/shrinkability present.",
+        "guidance": "In a \\vbox the dimension refers to the final height; depth is that of the bottom box and is unaffected by glue setting. Width of a computed vbox is the maximum right-extent of enclosed boxes (including shifts) and is always nonnegative."
+      },
+      {
+        "name": "\\vbox to{dimen} and \\vbox spread{dimen} semantics",
+        "description": "\\vbox to{dimen}{...} produces a vbox whose final height is the given dimension; \\vbox spread{dimen}{...} increases the final height by a given amount relative to natural height.",
+        "guidance": "Because vertical boxes have both height and depth, the dimension in \\vbox refers to height only (depth is bottom-box depth). Use these constructs to control vertical packing, remembering glue setting affects height region only."
+      },
+      {
+        "name": "\\vtop construction and baseline behavior",
+        "description": "\\vtop produces a box like \\vbox but with the baseline equal to the top box inside rather than the bottom box.",
+        "guidance": "Implementation: first form a vbox as if \\vtop had been \\vbox; final height x is zero unless the very first item inside is a box (then x is that box's height). Let h and d be height and depth of the vbox; then move the reference point so the resulting box has height x and depth h+d-x. This yields a box whose baseline aligns with the topmost box."
+      },
+      {
+        "name": "Use of struts to simulate dual reference points and ensure spacing",
+        "description": "A 'strut' is an invisible zero-width box extending a fixed amount above and below the baseline so that if every line contained a strut, no interline glue would be needed.",
+        "guidance": "Plain TeX's \\strut is a vertical rule 8.5pt high and 3.5pt deep (0pt width). Putting struts at top and bottom lines inside large vboxes helps maintain correct spacing when boxes butt together (e.g., footnotes macro uses struts)."
+      },
+      {
+        "name": "\\rlap and \\llap overlap macros (zero-width overlapping boxes)",
+        "description": "\\rlap{...} and \\llap{...} create boxes of width 0pt with their contents overlapping to the right (\\rlap) or left (\\llap) of the reference point, implemented using infinite glue shrinking.",
+        "guidance": "Plain definition: \\def\\rlap#1{\\hbox to 0pt{#1\\hss}}. The \\hss has infinite shrinkability so it can shrink to negative width (e.g., to -5pt) to simulate a \\kern-5pt and produce overlap. Use \\llap similarly (backspacing first)."
+      },
+      {
+        "name": "Modes: the six TeX modes and when they apply",
+        "description": "TeX has six modes: vertical, internal vertical, horizontal, restricted horizontal, math, and display math. Each mode governs what tokens mean and how lists of boxes/glue are built (vertical lists for pages, horizontal lists for paragraphs, math lists for formulas).",
+        "guidance": "Mode switching rules: first token of a new paragraph switches vertical/internal vertical to horizontal; typing characters or tokens like \\char, \\accent, \\hskip, \\vrule, or math shift ($) in vertical modes begins a paragraph (horizontal mode). A single $ in horizontal mode enters math mode; $$ interrupts the paragraph and enters display math mode. \\indent and \\noindent explicitly start horizontal mode (\\indent inserts an empty box of width \\parindent). Blank lines and spaces are ignored in vertical/internal vertical mode. Many tokens have mode-dependent meanings (e.g., \\kern is vertical in vertical mode but horizontal in horizontal mode)."
+      },
+      {
+        "name": "Diagnostic commands: \\tracingcommands and \\showlists",
+        "description": "\\tracingcommands=1 logs every command TeX receives, and \\showlists displays the lists being worked on at each mode level and enclosing modes.",
+        "guidance": "Use these commands to inspect nested modes and the state of lists (e.g., to see glue items, \\prevdepth ignored markers, or which mode was entered at which input line). Helpful when debugging mode errors."
+      },
+      {
+        "name": "Paragraph-to-line breaking principles: badness, overfull/underfull, and \\tolerance",
+        "description": "TeX breaks paragraphs into lines by considering the paragraph as a whole to minimize 'badness' (irregular spacing) and reduce hyphenation; overfull and underfull boxes indicate poor fits. The \\tolerance parameter controls how wide spaces may become \u2014 higher tolerance accepts wider spaces.",
+        "guidance": "TeX's global optimization yields uniform interword spacing and fewer hyphenations. Adjust \\tolerance and related parameters to influence the tradeoff between spacing uniformity and line breaks (higher \\tolerance => more tolerance for large spaces)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 35,
+  "n_chunks": 160,
+  "chunk_chars": 39922,
+  "model": "gpt-5-mini",
+  "elapsed_s": 210.47417508299986,
+  "input_tokens": 17010,
+  "output_tokens": 5219,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "Users of the Singular computer algebra system; computational algebraic geometers and researchers working on singularity theory and invariants",
+    "subtask_short": "computational_singularity_analysis",
+    "subtask_description": "Practical procedures and criteria for computing and interpreting singularity-theoretic invariants (Milnor/Tjurina numbers, critical points, polar curves, T1/T2, deformations, classification, resolution, invariants) using the Singular CAS and its libraries. The page gives commands, expected outputs and guidance for choosing orderings, rings and checking correctness.",
+    "subtask_keywords": [
+      "singular_software",
+      "singularity_theory",
+      "milnor_tjurina",
+      "deformation",
+      "polar_curve",
+      "invariant_theory"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Critical points via dp ordering (affine computation)",
+        "description": "The same computation which computes the Milnor, resp. the Tjurina, number, but with ordering dp instead of ds (i.e., in K[x1, . . . , xn] instead of Loc(x)K[x1, . . . , xn]) gives: \u2022 the number of critical points of f in the affine space (counted with multiplicities) \u2022 the number of singular points of f on the affine hypersurface f=0 (counted with multiplicities).",
+        "guidance": "Define a polynomial ring with ordering dp (degrevlex), map f from local ring via imap if needed, compute j = jacob(f), then vdim(std(j)) and vdim(std(j+f)). Example: vdim(std(j)) = 536, vdim(std(j+f)) = 195 implies 286 critical points (difference) counted with multiplicity and that the affine surface f=0 is smooth outside the origin when dimK(Loc.../(jacob(f)+ (f))) = dimK(K[x,...]/(jacob(f)+(f))). Use option(noprot); timer for diagnostics. Note that polynomials/ideals belong to a ring, so recreate or imap f when changing rings."
+      },
+      {
+        "name": "Polar curve computation (affine/local/projective)",
+        "description": "The polar curve of a hypersurface given by f \u2208 k[x1,...,xn,t] with respect to t is defined as the Zariski closure of V(\u2202f/\u2202x1,...,\u2202f/\u2202xn) \\ V(f) if this happens to be a curve. Some authors consider V(\u2202f/\u2202x1,...,\u2202f/\u2202xn) itself as polar curve.",
+        "guidance": "Use elim.lib and sing.lib. Compute ideal j = (diff(f,x1),...,diff(f,xn)), check dim(std(j)) and dim(std(j+ideal(f))). To remove branches contained in f=0 set-theoretically take q = quotient(j,ideal(f)) or qsat = sat(j,f)[1]; q or qsat define the polar curve (or use j:f or j:f^k for saturation). Check equality/inclusions by size(reduce(qsat,std(q))) and size(reduce(q,std(qsat))). For projective polar curves homogenize appropriately (e.g., homogenize affine ideal with respect to y) and compare ideals via reduce. Use the generators of qsat to inspect whether polar curve passes through origin."
+      },
+      {
+        "name": "T1 and T2 modules (infinitesimal deformations and obstructions)",
+        "description": "T1, resp. T2, of an ideal j usually denote the modules of infinitesimal deformations, resp. of obstructions. In Singular there are procedures T_1 and T_2 in sing.lib such that T_1(j) and T_2(j) compute a standard basis of a presentation of these modules.",
+        "guidance": "If T1,T2 are finite dimensional K-vector spaces use kbase(T_1(j)); and vdim to get basis and dimensions. For complete intersections Tjurina also computes T1 (and T2 = 0) faster. For non-complete intersections use T_12 which is faster than separate T_1 and T_2. Steps: load sing.lib; check if ideal j is a complete intersection by number_of_variables = dimension + minimal_number_of_generators (use dim(std(j)) and size(minbase(j))). Compute tjurina(f) for hypersurfaces. Example outputs show kbase listing and vdim values. Use T_12(i,<any>) to get a list with std bases and vdim entries (L[1] std basis of T1, L[2] std basis of T2, L[3] vdim(T1), L[4] vdim(T2))."
+      },
+      {
+        "name": "Computing deformations: deform and versal (miniversal/versal deformations)",
+        "description": "The libraries sing.lib and deform.lib contain procedures to compute total and base space of the miniversal (= semiuniversal) deformation of an isolated complete intersection singularity, respectively of an arbitrary isolated singularity. The procedure deform in sing.lib returns a matrix whose columns h1,...,hr represent all 1st order deformations.",
+        "guidance": "Use deform(f) to obtain first-order deformation generators: any infinitesimal deformation over K[\u03b5]/(\u03b5^2) is f + \u03b5 g with g a K-linear combination of the h_i. Use versal in deform.lib to compute a formal miniversal deformation up to a user-prescribed order; versal extends the basering to include deformation parameters and returns rings/lists describing total and base spaces (L with L[1]..L[4] containing various rings). For complete intersections the 1st order part is already miniversal. Set printlevel=2 before versal to show intermediate steps for long computations. Default names for created objects exist but can be overridden. Example: print(deform(f)) yields monomials corresponding to base parameters and the printed Fs and Js encode equations of total and base spaces."
+      },
+      {
+        "name": "Invariants of plane curve singularities via Hamburger\u2013Noether expansion",
+        "description": "The Puiseux pairs of an irreducible and reduced plane curve singularity and other invariants can be computed from its Hamburger\u2013Noether expansion. The library hnoether.lib uses Campillo's algorithm and works in arbitrary characteristic, needing minimal field extensions.",
+        "guidance": "Use develop(f) or develop(f,<order>) to compute the Hamburger\u2013Noether matrix; displayHNE and displayInvariants(hn) show parametrizations and invariants. Available invariants: characteristic exponents, Puiseux pairs (of a complex model), degree of the conductor, delta invariant, generators of the semigroup, sequence of multiplicities. Use param(hn) for (partial) parametrization \u2014 warnings indicate accuracy order. extdevelop extends an existing development to higher order without recomputing from scratch. Also provides Newton polygon and square-free part computations; invariants(hn) returns invariants as a list."
+      },
+      {
+        "name": "Detecting branches of space curve singularities \u2014 primary decomposition pitfalls and normalization",
+        "description": "When computing branches of a quasihomogeneous isolated space curve singularity, primary decomposition algorithms may miss components because (1) a computed component could be globally irreducible but analytically reducible, or (2) a component might be irreducible over Q but reducible over C.",
+        "guidance": "Use primdec.lib (primdecSY, primdecGTZ) to compute primary decompositions; compare different algorithms to detect incomplete decompositions. Use formulas mu = tau - t + 1 (for quasihomogeneous curve singularities, where t is Cohen\u2013Macaulay type) and mu = 2 delta - r + 1 to check consistency and deduce the number of branches r. Compute tau via T_1(i) (sing.lib) to get dim T_1. If decomposition seems incomplete, compute normalization via normal.lib (normal(i)) to reveal further splitting; inspect norid and generators to conclude number of branches. Example: combining primdec outputs, T_1 and normalization led to final count of 5 branches in the example."
+      },
+      {
+        "name": "Classification of hypersurface singularities (Arnold algorithm)",
+        "description": "Classify isolated hypersurface singularities up to right-equivalence using classify.lib which implements Arnold's algorithm. A first guess is made based on the Hilbert polynomial of the Milnor algebra.",
+        "guidance": "Use singularity(\"Type\",<param>)[1] to get a normal form from database; apply coordinate changes and feed into classify(q). classify reports Milnor number, corank, determinacy and attempts to compute normal form and R-equivalence type (e.g., 'is R-equivalent to E[14]'). The library also provides routines to determine corank and residual part without running the full classification (functions corank(q) and morsesplit(q)). Be prepared for potentially long computations (splitting lemma applied etc.)."
+      },
+      {
+        "name": "Resolution of singularities and intersection data",
+        "description": "Resolution of singularities and related applications are provided by resolve.lib and reszeta.lib; outputs include intersection matrix and genera of exceptional curves. Graphical output can be produced via surf and dot using resgraph.lib.",
+        "guidance": "Call resolve(I) to compute a resolution list L; use intersectionDiv(L) to compute intersection matrix and genera. The output is a list whose first entry contains the intersection matrix of the exceptional divisors and the second entry the list of genera; further entries encode how to find divisors in charts. A separate tutorial (linked) explains the data structures and usage in detail. Example: for I = x^7 + y^2 - z^2, intersection matrix and genera are printed in list form; inspect list structure to access pieces."
+      },
+      {
+        "name": "Computing invariants of Lie-algebra-generated actions (G_a-invariants)",
+        "description": "Compute rings of invariants for actions generated by a vector field (Lie algebra of one vector field) using ainvar.lib and invariantRing.",
+        "guidance": "Define the vector field as a matrix m and a weighted polynomial ring, then call invariantRing(m,<var1>,<var2>,0). The routine returns generators of the invariant ring (primary invariants). Example: for n=5 the invariant ring is generated by 5 invariants printed as in[1]...in[5]. For more complicated vector fields provide the matrix entries and appropriate ring declaration; inspect returned ideal/list to obtain explicit invariants."
+      },
+      {
+        "name": "Invariant ring of a finite group: primary and secondary invariants algorithms",
+        "description": "Two algorithms invariant_ring and invariant_ring_random compute the invariant ring of a finite group. Bases of homogeneous invariants are generated successively and chosen as primary invariants that lower the dimension of the ideal generated so far. In the non-modular case secondary invariants are computed via a monomial basis modulo primary invariants and the Reynolds operator; modular case follows Kemper's algorithm.",
+        "guidance": "Load finvar.lib, define group generator matrices, and call invariant_ring(A) to obtain matrices: first containing primary invariants, second secondary invariants (module generators over a Noetherian normalization), third irreducible secondary invariants if Molien series available. Alternatively use invariant_ring_random(A,seedrange) to attempt randomized primary choices (example used random numbers between -1 and 1). Inspect returned matrices B(1), B(2), B(3) for explicit invariants. Example outputs show primary invariants like z^2,x^2+y^2,x^2y^2 and secondary invariants 1,xyz,..."
+      },
+      {
+        "name": "Computing GIT-fans (using symmetry and parallelism)",
+        "description": "Compute the GIT-fan of an affine variety with torus action (and using symmetry for more complicated examples) using gitfan.lib. The GIT-fan enumerates GIT-quotients (Dolgachev/Hu, Thaddeus) and can be computed efficiently using Groebner bases, convex geometry and symmetry.",
+        "guidance": "Load gitfan.lib, setcores(n) to enable parallelism, define ring and ideal J and weight matrix Q, then call fan GIT = GITfan(J,Q); inspect fVector(GIT). For symmetric situations supply a symmetry group (e.g., simplexSymmetryGroup = G25Action()) and call GITfan(J,Q,simplexSymmetryGroup). For large symmetry computations it can be faster to compute orbit decomposition in GAP and import the data into Singular. The routine returns a fan object; use provided utilities to inspect cones (each cone represented by an integer)."
+      }
+    ]
+  }
+}

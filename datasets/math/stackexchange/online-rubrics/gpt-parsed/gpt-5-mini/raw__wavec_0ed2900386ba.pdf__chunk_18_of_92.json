@@ -1,0 +1,270 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 18,
+  "n_chunks": 92,
+  "chunk_chars": 39992,
+  "model": "gpt-5-mini",
+  "elapsed_s": 131.59510316599335,
+  "input_tokens": 13735,
+  "output_tokens": 6883,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and developers (mathematicians and programmers using the GAP system)",
+    "subtask_short": "GAP list operations specification",
+    "subtask_description": "Reference specification of semantics, categories, attributes, and operations on list objects in GAP, covering comparisons, arithmetic, mutability, searching, properties, and sorting. Intended to guide implementers and users about when and how list operations are defined and behave.",
+    "subtask_keywords": [
+      "gap",
+      "lists",
+      "reference_manual",
+      "list_operations",
+      "scripting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "List equality (list1 = list2)",
+        "description": "Two lists list1 and list2 are equal iff for every index i, either both entries list1[i] and list2[i] are unbound, or both are bound and equal (i.e., list1[i] = list2[i] is true).",
+        "guidance": "Examples: [1,2,3] = [1,2,3] is true; holes/unbound entries must match; comparing lists that contain themselves may cause infinite recursion and crash GAP. Be careful with self-referential lists."
+      },
+      {
+        "name": "Lexicographic list ordering (<, <=)",
+        "description": "Lists are ordered lexicographically: find smallest i where entries differ; unbound entries are smaller than any bound entry. list1 < list2 if list1[i] is unbound (and list2[i] not) or both bound and list1[i] < list2[i].",
+        "guidance": "For comparisons with < or <=, the relevant list elements must themselves be comparable by < (often not the case across different families). Comparing lists with other object types also depends on those types (see 13.1). Examples illustrate unbound entries compare as smaller."
+      },
+      {
+        "name": "Arithmetic not universally defined for lists",
+        "description": "Arithmetic operations for lists are only defined for lists in certain categories/filters (e.g., IsGeneralizedRowVector for additive operations, IsMultiplicativeGeneralizedRowVector for multiplicative operations); not all list objects are given arithmetic semantics.",
+        "guidance": "This allows flexible behavior (e.g., matrices, Lie matrices). The reference describes return values but not algorithms; mutability status of results is handled separately."
+      },
+      {
+        "name": "IsGeneralizedRowVector category",
+        "description": "IsGeneralizedRowVector(list) being true indicates that the additive arithmetic behaviour of list is as defined in 21.13, and that NestingDepthA will return a nonzero value when called with list.",
+        "guidance": "Used to determine when unary/binary additive operations are defined. Example: canonical bases and certain Lie objects may or may not be in this category."
+      },
+      {
+        "name": "IsMultiplicativeGeneralizedRowVector category",
+        "description": "IsMultiplicativeGeneralizedRowVector(list) being true indicates that the multiplicative arithmetic behaviour of list is as defined in 21.14, and that NestingDepthM will return a nonzero value when called with list.",
+        "guidance": "Controls when multiplicative operations (one, inverse, multiplication, division, mod, LeftQuotient) are defined. Note: these filters do not automatically enable default methods for addition/multiplication (see IsListDefault)."
+      },
+      {
+        "name": "IsListDefault category",
+        "description": "IsListDefault(list) indicates that default methods for arithmetic operations of lists (like pointwise addition and multiplication as inner/matrix product) shall be applicable to list. It implies IsGeneralizedRowVector and IsMultiplicativeGeneralizedRowVector.",
+        "guidance": "All internally represented lists are in this category; many wrapped list objects are not. Results of arithmetic with IsListDefault lists will generally be internally represented lists."
+      },
+      {
+        "name": "NestingDepthA attribute",
+        "description": "NestingDepthA(obj) returns additive nesting depth: 0 if obj not in IsGeneralizedRowVector; 1 if obj is empty list in IsGeneralizedRowVector; otherwise 1 plus the additive nesting depth of the first bound entry.",
+        "guidance": "Used to determine how addition behaves for nested lists (vectors vs matrices vs scalars in additive context). Examples given."
+      },
+      {
+        "name": "NestingDepthM attribute",
+        "description": "NestingDepthM(obj) returns multiplicative nesting depth: 0 if obj not in IsMultiplicativeGeneralizedRowVector; 1 if obj is empty list in that category; otherwise 1 plus multiplicative nesting depth of the first bound entry.",
+        "guidance": "Used to decide multiplicative roles (vector/matrix/scalar) and to select among inner product, left/right scalar multiplication, and matrix product behaviors."
+      },
+      {
+        "name": "Additive operation applicability rules",
+        "description": "Unary additive operations require the unique argument to be in IsGeneralizedRowVector; for binary operations (addition/subtraction), at least one argument must be in IsGeneralizedRowVector and the other either not a list or also in IsGeneralizedRowVector.",
+        "guidance": "If an argument is a list not in IsGeneralizedRowVector, that argument decides whether an operation is defined. This general rule limits where addition semantics apply."
+      },
+      {
+        "name": "Zero for lists",
+        "description": "Zero(x) for a list x in IsGeneralizedRowVector is the list whose entry at position i is Zero(x[i]) if x[i] is bound, and is unbound otherwise.",
+        "guidance": "Example: Zero([1,2,3]) => [0,0,0]; Zero applied to nested lists or Lie objects produces appropriately nested zeros."
+      },
+      {
+        "name": "AdditiveInverse for lists",
+        "description": "AdditiveInverse(x) for a list x in IsGeneralizedRowVector is the list whose entry at position i is AdditiveInverse(x[i]) if x[i] is bound, and is unbound otherwise.",
+        "guidance": "Example: AdditiveInverse([1,2,3]) => [-1,-2,-3]."
+      },
+      {
+        "name": "Addition of lists (pointwise and nesting rules)",
+        "description": "If x and y are in IsGeneralizedRowVector and have the same additive nesting depth, x+y is defined pointwise: result[i] = x[i]+y[i] if both bound; if only one bound, a shallow copy of the bound entry; if both unbound, unbound. If nesting depths differ or one argument is not a list/domain, the list with greater depth uses elementwise addition with the other treated as scalar where appropriate.",
+        "guidance": "Addition is not always commutative in these contexts; order matters when nesting depths differ. Examples show sums of nested lists, behavior with holes (unbound entries), and shallow copies."
+      },
+      {
+        "name": "Subtraction of lists",
+        "description": "For x and y where one is in IsGeneralizedRowVector and the other is either in IsGeneralizedRowVector or neither a list nor a domain, x - y is defined as x + (\u2212y).",
+        "guidance": "Behaves analogously to addition with nesting depth rules preserved. Examples illustrate results with holes and nested lists."
+      },
+      {
+        "name": "Multiplicative operation applicability rules",
+        "description": "Unary multiplicative operations require the unique argument to be in IsMultiplicativeGeneralizedRowVector; for binary operations (multiplication/division), at least one argument must be in IsMultiplicativeGeneralizedRowVector and the other either not a list or also in IsMultiplicativeGeneralizedRowVector.",
+        "guidance": "Analogous to additive applicability rules, restricting where multiplicative semantics are defined."
+      },
+      {
+        "name": "One for lists (multiplicative identity)",
+        "description": "One(x) for a dense list x in IsMultiplicativeGeneralizedRowVector with even multiplicative nesting depth and with rows of equal length is the identity matrix on the outer two levels: diagonal entries One(x[1][1]) and off-diagonal entries Zero(x[1][1]).",
+        "guidance": "Examples: One applied to a 2x2 nested list returns a 2x2 identity of appropriately nested ones and zeros."
+      },
+      {
+        "name": "Inverse for lists (multiplicative inverse)",
+        "description": "Inverse(x) for x in IsMultiplicativeGeneralizedRowVector whose entries lie in a common field is the usual inverse y (square matrix) with x*y and y*x equal to One(x).",
+        "guidance": "Requires invertible square matrices; example demonstrates inversion of a 2x2 list."
+      },
+      {
+        "name": "Multiplication of lists: three result forms (I/L/R)",
+        "description": "Multiplication x*y involving lists in IsMultiplicativeGeneralizedRowVector may compute one of: (I) inner product (sum x[i]*y[i] omitting unbound summands), (L) left scalar multiple (list with entries x*y[i]), or (R) right scalar multiple (list with entries x[i]*y).",
+        "guidance": "Decision is based on multiplicative nesting depths: odd depth => vector, even => scalar/matrix. If exactly one argument is in IsMultiplicativeGeneralizedRowVector, the other is considered a scalar and result is (L) or (R) depending on order. Detailed decision tree in text: both odd => (I); one odd => (I) or (L)/(R) depending on depths and order; both even and depths equal => matrix product (R); otherwise treat less deeply nested as scalar and choose (L)/(R) accordingly. Examples illustrate permutations, scalar multiplication, and matrix-like products."
+      },
+      {
+        "name": "Division of lists (x / y)",
+        "description": "If one of x,y is in IsMultiplicativeGeneralizedRowVector and the other is also in that category or neither a list nor a domain, then x / y is defined as x * Inverse(y).",
+        "guidance": "Examples show dividing a row by a scalar or by a matrix where applicable."
+      },
+      {
+        "name": "mod for lists",
+        "description": "If x and y are in IsMultiplicativeGeneralizedRowVector and have the same multiplicative nesting depth, x mod y is defined pointwise: result[i] = x[i] mod y[i] if both bound; shallow copy of bound entry if other unbound; unbound if both unbound. If depths differ (or other not list/domain) the deeper list uses elementwise mod with the other treated as scalar.",
+        "guidance": "Examples: integer mod list and list mod integer produce elementwise results; note behavior with holes/unbound entries."
+      },
+      {
+        "name": "LeftQuotient for lists",
+        "description": "LeftQuotient(x, y) is defined (when one argument is in IsMultiplicativeGeneralizedRowVector and the other is either also in that category or neither a list nor a domain) as Inverse(x) * y.",
+        "guidance": "Example: LeftQuotient(matrix, vector) returns the solution vector when appropriate."
+      },
+      {
+        "name": "Mutability and immutability levels for lists",
+        "description": "Define sequence x = x1, x2, ... where xi+1 is the first bound entry in xi; immutability level of x is infinity if x immutable, otherwise number of xi which are immutable. The immutability level of result of binary operations is the minimum of the arguments' immutability levels (when mutable versions exist). Results have homogeneous mutability at each nesting depth: if first bound entry at depth i is immutable (or mutable) then all entries at that depth are immutable (or mutable) provided a mutable version exists.",
+        "guidance": "Examples: sum of a matrix (immutability level 1 or 0) and mutable row vector (level 0) yields fully mutable matrix. Product of two mutable row vectors of integers yields immutable integer because GAP lacks mutable integers. For unary arithmetic there are three operation variants: ones returning immutable result, ones returning mutable result (ZeroOp etc.), and ones preserving argument mutability (ZeroSameMutability etc.)."
+      },
+      {
+        "name": "ListWithIdenticalEntries(n,obj)",
+        "description": "Creates a list of length n that stores the object obj at each position from 1 to n. All elements are identical (same stored object).",
+        "guidance": "Useful to construct mutable zero vectors via expressions like 0 * [1..n] or via ListWithIdenticalEntries. Example: ListWithIdenticalEntries(10,0) => [0,0,0,0,0,0,0,0,0,0]."
+      },
+      {
+        "name": "Position(list,obj[,from])",
+        "description": "Returns position of the first occurrence of obj in list, or fail if not contained. Optional from starts search after that index.",
+        "guidance": "Two-argument calls are translated to three-argument with from = 0. Methods for two-argument version must be installed as methods for the three-argument form with IsZeroCyc handling. Examples demonstrate returns and fail."
+      },
+      {
+        "name": "Positions(list,obj)",
+        "description": "Returns the set (list) of positions of all occurrences of obj in list.",
+        "guidance": "Developers adapting for custom list types must install methods for PositionsOp. Example: Positions([1,2,1,2,3,2,2],2) => [2,4,6,7]."
+      },
+      {
+        "name": "PositionCanonical(list,obj)",
+        "description": "Returns the position of the canonical associate of obj in list. The definition of canonical associate depends on the list (for internally represented lists it's the element itself).",
+        "guidance": "Used for enumerators where a canonical associate may differ from the element itself (e.g., RightTransversal). Example shows Position failing but PositionCanonical succeeding."
+      },
+      {
+        "name": "PositionNthOccurrence(list,obj,n)",
+        "description": "Returns the position of the n-th occurrence of obj in list, or fail if obj does not occur n times.",
+        "guidance": "Examples demonstrate returning correct positions or fail when insufficient occurrences."
+      },
+      {
+        "name": "PositionSorted(list,elm[,func])",
+        "description": "When list is sorted, returns pos such that list[pos-1] < elm \u2264 list[pos]. With duplicates returns first occurrence; if elm not in list returns insertion index to keep list sorted. Optional func provides ordering comparator (two-argument function returning true if first < second).",
+        "guidance": "PositionSorted uses binary search (faster than linear Position). The list must be sorted w.r.t. func. Examples show positions and insertion indices."
+      },
+      {
+        "name": "PositionSortedBy(list,val,func)",
+        "description": "Equivalent to PositionSorted(List(list,func),val) but more efficient: func is one-argument producing comparable values; list must satisfy func(list[i]) <= func(list[i+1]) (not verified). Returns pos such that func(list[pos-1]) < val \u2264 func(list[pos]).",
+        "guidance": "Each func(list[i]) is computed at most once. Violating the precondition yields undefined results. Examples show behavior with Length as func."
+      },
+      {
+        "name": "PositionSet(list,obj[,func])",
+        "description": "Variation of PositionSorted that returns fail if obj is not in list (rather than insertion index).",
+        "guidance": "Optional func as comparator; examples show fail vs positions for present elements."
+      },
+      {
+        "name": "PositionMaximum / PositionMinimum(list[,func])",
+        "description": "Return the position of the maximum/minimum entry in list. If func provided, they return position of largest/smallest entry in List(list,func). If several equal maxima/minima, first such position returned.",
+        "guidance": "Examples show using an invert func to get min vs max positions."
+      },
+      {
+        "name": "PositionProperty(list,func[,from])",
+        "description": "Returns the position of the first entry in list for which property tester func returns true, or fail if none. Optional from starts searching after that index.",
+        "guidance": "Useful to find first element satisfying a predicate (e.g., primality). Example demonstrates on numeric ranges."
+      },
+      {
+        "name": "PositionsProperty(list,func)",
+        "description": "Returns the set of all positions in list which are bound and for which func returns true.",
+        "guidance": "Examples show finding positions of positive integers or primes in a list."
+      },
+      {
+        "name": "PositionBound(list)",
+        "description": "Returns the first bound position of list, or fail for the empty list.",
+        "guidance": "Example: PositionBound([,1,2,3]) => 2."
+      },
+      {
+        "name": "PositionsBound(list)",
+        "description": "Returns the set of all bound positions in list.",
+        "guidance": "Examples include dense lists and lists with holes; empty list returns []."
+      },
+      {
+        "name": "PositionNot(list,val[,from])",
+        "description": "Returns the smallest nonnegative integer n such that list[n] is either unbound or not equal to val. Optional from starts search after that index.",
+        "guidance": "PositionNonZero is a special case. Examples show usage with repeated values and starting indices."
+      },
+      {
+        "name": "PositionNonZero(vec[,from])",
+        "description": "For a row vector vec, returns position of first non-zero element, or Length(vec)+1 if all entries zero. Optional from starts search after that index.",
+        "guidance": "Implements a special case of PositionNot (avoiding zero element). Requires (at least) homogeneous vector so zero element is well-specified."
+      },
+      {
+        "name": "PositionSublist(list,sub[,from])",
+        "description": "Returns smallest index in list at which a sublist equal to sub starts, or fail if sub does not occur. Optional from starts search after that index.",
+        "guidance": "To check match at particular position, use IsMatchingSublist(list,sub,at) which is more direct and may be more efficient for single-position checks."
+      },
+      {
+        "name": "IsMatchingSublist(list,sub[,at])",
+        "description": "Returns true if sub matches list starting at position 1 (or at given position at), false otherwise. If sub is empty returns true; if list empty but sub non-empty returns false.",
+        "guidance": "For finding whether some at exists with a match, use PositionSublist(list,sub) <> fail (more efficient)."
+      },
+      {
+        "name": "IsDuplicateFree / IsDuplicateFreeList",
+        "description": "IsDuplicateFree(obj) returns true if obj is a list or collection and contains no duplicate entries; IsDuplicateFreeList is a synonym requiring IsList. A duplicate-free list is dense and does not contain equal entries in different positions. Every domain is duplicate free.",
+        "guidance": "GAP cannot compare arbitrary objects; IsDuplicateFree may error if the list contains non-comparable entries."
+      },
+      {
+        "name": "IsSortedList",
+        "description": "IsSortedList(obj) returns true if obj is a list and is sorted: dense and satisfies list[i] \u2264 list[j] whenever i < j.",
+        "guidance": "Sorted lists enable binary-search-based membership/positioning (PositionSorted). GAP cannot compare arbitrary objects, so IsSortedList may error with non-comparable entries. Sorted does not imply strictly sorted or duplicate-free."
+      },
+      {
+        "name": "IsSSortedList / IsSet",
+        "description": "IsSSortedList(obj) (aka IsSet) returns true if obj is a list and strictly sorted: list is sorted and list[i] < list[j] whenever i < j. Strictly sorted lists are duplicate free.",
+        "guidance": "Internally there is little special treatment of sorted-but-not-strictly-sorted lists. Comparability caveats apply as for IsSortedList."
+      },
+      {
+        "name": "Length(list) attribute",
+        "description": "Length(list) returns the length of the list, defined to be the index of the last bound entry in list.",
+        "guidance": "Lists may have holes; Length reflects last bound position, not an allocated capacity."
+      },
+      {
+        "name": "ConstantTimeAccessList(list)",
+        "description": "Returns an immutable list containing the same elements (and holes) as list in the same order. If list is already a constant-time-access list, returns an immutable copy directly.",
+        "guidance": "Converts lists with holes to immutable lists that provide constant-time access to positions; useful for caching properties that depend on entries (homogeneity, sortedness)."
+      },
+      {
+        "name": "Sorting algorithms overview",
+        "description": "GAP provides several sorting algorithm families: default is pattern-defeating quicksort (good on partially sorted lists and with good worst-case behavior); Stable* functions use merge sort and are stable; Shell* functions use shell sort (older default). Sortex and SortingPerm are stable.",
+        "guidance": "Choose StableSort when preserving relative order of equal elements is important; SortBy and StableSortBy compute key values once for efficiency."
+      },
+      {
+        "name": "Sort / SortBy / StableSort / StableSortBy behaviors",
+        "description": "Sort(list[,func]) sorts list in place using < (or func for two-arg form). StableSort preserves relative order of equal elements. SortBy sorts by key func(list[i]) computing each key once; StableSortBy is stable key-based sort. Sort returns nothing (in-place).",
+        "guidance": "If you want to keep the original list, use ShallowCopy before Sort. Use Reversed to get a decreasing-order copy. When list not homogeneous, user must ensure < or func is defined for relevant element pairs."
+      },
+      {
+        "name": "SortParallel / StableSortParallel",
+        "description": "SortParallel(list1,list2[,func]) sorts list1 in increasing order (like Sort) and applies the same exchanges to list2 (which must have at least as many elements as list1). StableSortParallel is the stable variant.",
+        "guidance": "Examples show that relative order of equal keys in list1 may vary with SortParallel; StableSortParallel guarantees preservation of equal-key order."
+      },
+      {
+        "name": "Sortex(list[,func])",
+        "description": "Sortex sorts list and returns a permutation that can be applied to list to obtain the sorted list. The returned permutation keeps equal elements in the same relative order (stable).",
+        "guidance": "Use Permuted(list, perm) to apply the permutation to another copy; Sortex changes the original list."
+      },
+      {
+        "name": "SortingPerm attribute",
+        "description": "SortingPerm(list) returns the same as Sortex but does not change the argument list (returns the permutation only).",
+        "guidance": "Useful when you need the permutation but want to keep the original list unchanged."
+      }
+    ]
+  }
+}

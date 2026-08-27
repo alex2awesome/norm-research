@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_faba7c6eaa6c.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_faba7c6eaa6c.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39971,
+  "model": "gpt-5-mini",
+  "elapsed_s": 32.266319499998644,
+  "input_tokens": 13328,
+  "output_tokens": 3512,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML / NLP researchers and dataset engineers building process-reward models (PRMs) or creating PRM training data using formal verification tools",
+    "subtask_short": "creating PRM training data via formal_verification",
+    "subtask_description": "Constructing step-level error-labeled training data for classification-based Process Reward Models (PRMs) by converting informal problems to formal statements, generating formal solutions with LLMs, and using formal verification tools (e.g., Z3, Isabelle) to annotate each step as correct/incorrect.",
+    "subtask_keywords": [
+      "process_reward_models",
+      "formal_verification",
+      "dataset_construction",
+      "prm_training",
+      "llm_reasoning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Step-level correctness labeling protocol",
+        "description": "For each step, label as 'correct' if the reasoning is logically valid and mathematically sound, or if the step is a general statement/transition that does not contain reasoning; label as 'incorrect' if the step includes any errors or flawed logic.",
+        "guidance": "This is the canonical annotation rule used in FOVER examples (examples shown for both formal logic and Isabelle-format proofs). Use the verifier's judgment of logical validity to determine labels. Treat non-reasoning transitions (e.g., 'then have', statements restating assumptions) as 'correct' unless they contain flawed logic."
+      },
+      {
+        "name": "Produce formal solutions in formats compatible with verification tools",
+        "description": "Generated formal solutions must follow the syntax and format required by the target verification tool (e.g., Z3 for first-order logic tasks, Isabelle for formal theorem proving).",
+        "guidance": "Use few-shot prompting to guide LLMs to emit solutions in the expected formal syntax; filter out syntactically invalid outputs (examples: Isabelle rejects '\u00d7' as a multiplication symbol). Provide concrete format examples in prompts to improve compliance."
+      },
+      {
+        "name": "Filter syntactically invalid solutions before verification",
+        "description": "Remove or reject generated solutions that are syntactically invalid for the verifier (e.g., unparsable Isabelle proofs).",
+        "guidance": "Use the verifier's parsing/type-check feedback (or insert placeholders like Isabelle's 'sorry') to detect and filter invalid formats. The paper describes filtering with Z3 for formal logic and using 'sorry' insertion + Isabelle parsing for formal proofs."
+      },
+      {
+        "name": "Adapt solution-level verifiers for step-level annotation",
+        "description": "Because many formal tools are designed to verify whole solutions, implement wrapper/postprocessing code to adapt them to independently check individual steps (i.e., supply premises and the conclusion for the target step).",
+        "guidance": "Example: use a checker based on Z3 (FLDx2 checker) and write code to extract premises and a target step's conclusion to query Z3; for Isabelle, insert 'sorry' in all but one step to type-check a single step."
+      },
+      {
+        "name": "Postprocess steps into independent premise\u2192conclusion checks",
+        "description": "Before calling the verifier, convert each step into an independent logical step by providing the relevant premises and the step's conclusion so the verifier can determine validity.",
+        "guidance": "Figure 6a behavior: supply premises and conclusion to Z3. Postprocessing may include isolating intermediate results and canonicalizing expressions to the verifier's expected input."
+      },
+      {
+        "name": "Isabelle step-level verification via 'sorry' insertion",
+        "description": "To verify each step in a multi-step Isabelle proof independently, insert the 'sorry' keyword into all other steps so Isabelle will type-check and parse the target step in isolation.",
+        "guidance": "Run Isabelle once per step with all other steps replaced by 'sorry'; this enables independent verification of parsing and type-checking for each 'have' / 'then have' statement even if the entire proof is incomplete."
+      },
+      {
+        "name": "Assume preceding intermediate results are correct (step-independent verification caveat)",
+        "description": "When verifying a target step independently, the wrapper/verification pipeline typically assumes that preceding intermediate results are correct; this is an explicit assumption of the step-independent approach.",
+        "guidance": "Recognize the limitation: some errors (e.g., improper use of discharged assumptions) may not be detectable by purely step-independent checks. Combine step-independent checks with solution-level verification to catch such cases."
+      },
+      {
+        "name": "Exclude proofs relying on undischarged assumptions (e.g., 'assump') unless supported",
+        "description": "For the FOVER-40K construction, remove cases whose reasoning steps include 'assump' (used in proofs by contradiction) because the step-independent verification pipeline cannot reliably detect undischarged assumptions.",
+        "guidance": "If extending to more complex tasks, modify the verification pipeline (or combine step- and solution-level verification) to handle assumptions properly. The paper explicitly removed such cases to keep the pipeline simple and focused."
+      },
+      {
+        "name": "Format verification via placeholder insertion to isolate syntax errors",
+        "description": "Use placeholders (e.g., Isabelle's 'sorry') to accept incomplete proofs syntactically; this allows detection of syntax/parsing errors in generated proofs without requiring semantic correctness of other steps.",
+        "guidance": "By inserting 'sorry' into generated proof steps, you can force the verifier to check only syntactic correctness and flag parsing errors (example: Isabelle reporting 'Failed to parse prop' on malformed 'have' lines)."
+      },
+      {
+        "name": "Use few-shot prompting for formal statement and proof generation",
+        "description": "When converting informal math problems to formal statements and when generating formal proofs, use few-shot prompts with examples to guide LLMs to produce verifier-compatible outputs.",
+        "guidance": "The authors used few-shot demonstrations for Llama 3.1 and Qwen 2.5 to generate formal logic solutions (Z3-compatible) and Isabelle-format proofs. Include explicit instructions (e.g., 'Don't generate anything other than the proof' and format templates) to reduce invalid outputs."
+      },
+      {
+        "name": "Use existing checkers / repositories as building blocks",
+        "description": "Leverage existing verification/checker code (e.g., the FLDx2 Z3-based checker) as part of the automatic annotation pipeline rather than reimplementing from scratch.",
+        "guidance": "The pipeline used the checker provided by FLDx2 (link provided) for Z3-based step checking. Reuse and adapt such tools for consistent, tested behavior."
+      },
+      {
+        "name": "Per-step verifier runs (one run per step)",
+        "description": "Run the formal verifier once per proof step to enable independent verification and to localize the exact step judged correct/incorrect.",
+        "guidance": "For Isabelle, run it per step with other steps replaced by 'sorry'; for Z3, supply premises+conclusion for each step. This allows creation of step-level labels for PRM training."
+      },
+      {
+        "name": "Avoid non-supported syntax/operators for the target verifier",
+        "description": "Ensure generated formal statements and proofs use only operators/syntax that the target verifier accepts (e.g., avoid the symbol '\u00d7' in Isabelle).",
+        "guidance": "If common symbols in informal problems map to unsupported tokens, either canonicalize them in postprocessing or instruct the LLM to use verifier-native operators in prompts."
+      },
+      {
+        "name": "Scope the PRM dataset to classification-based PRMs unless cost permits otherwise",
+        "description": "FOVER focuses on classification-based PRMs that generate a single score for each step; PRMs that provide step-level reasoning are left for future work because they incur substantially higher computational costs for verification.",
+        "guidance": "When building datasets, prefer classification-style labels for scalability; be aware that richer PRMs (producing step-level reasoning) require much more verification compute (often multiple times greater than trace generation)."
+      },
+      {
+        "name": "Combine step-independent and solution-level verification to detect undischarged-assumption errors",
+        "description": "To catch errors that arise from improper assumptions (e.g., assumption not discharged in proof by contradiction), use both step-independent verification and solution-level verification.",
+        "guidance": "Example given: a proof that uses 'Assume A; A \u2192 Hypothesis; Therefore, the hypothesis is proved' will appear valid in step-independent checks but fail solution-level verification; combining both enables labeling final step as erroneous."
+      },
+      {
+        "name": "Keep verification pipeline simple for initial evaluations, but plan to extend for complex tasks",
+        "description": "Start with relatively simple tasks and a minimal pipeline to keep evaluation focused; anticipate needing additional modifications for more complex tasks or richer logic features.",
+        "guidance": "The authors limited FOVER-40K to simpler tasks (e.g., excluded proofs with 'assump') and note that supporting more complex problems will require further verifier adaptations and more careful postprocessing."
+      },
+      {
+        "name": "Use generated formal statements from diverse sources to broaden coverage",
+        "description": "Generate formal statements from multiple informal datasets (e.g., GSM8K, MetaMathQA, Big-Math) to create a varied corpus of formal problems compatible with the verifier.",
+        "guidance": "Convert informal GSM8K-level math word problems into Isabelle-compatible statements using few-shot prompting to increase dataset diversity for PRM training."
+      },
+      {
+        "name": "Document and report verifier/toolchain choices and limitations",
+        "description": "When releasing PRM training data, record which verification tools were used (Z3, Isabelle), how they were adapted for step-level checks, and any limitations/assumptions made (e.g., assuming preceding steps correct).",
+        "guidance": "The paper provides detailed appendix sections (e.g., implementation details, examples, limitations) \u2014 follow this practice to enable reproducibility and to clarify the types of errors/detections the dataset supports."
+      }
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_77c2895a5ec2.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_77c2895a5ec2.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39964,
+  "model": "gpt-5-mini",
+  "elapsed_s": 44.35203191600158,
+  "input_tokens": 10947,
+  "output_tokens": 4100,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in physics-informed machine learning, computational scientists, and applied ML researchers working on PDEs, inverse problems and scientific ML",
+    "subtask_short": "designing_and_evaluating_PINNs",
+    "subtask_description": "Guidelines and evaluative criteria for designing, choosing, and applying physics-informed neural networks (PINNs) and related physics-informed ML frameworks for forward/inverse PDEs, stochastic systems, and high-dimensional scientific problems.",
+    "subtask_keywords": [
+      "physics-informed",
+      "PINN",
+      "scientific_ml",
+      "inverse_problems",
+      "pde",
+      "neural_networks"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Advantage in small-data regime / strong generalization",
+        "description": "Physics-informed learning has the advantage of strong generalization in the small data regime.",
+        "guidance": "By enforcing or embedding physics, deep learning models are effectively constrained on a lower-dimensional manifold and thus can be trained with a small amount of data. To enforce the physics, one can embed the physical principles into the network architecture, use physics as soft penalty constraints or use data augmentation. Physics-informed learning is capable of extrapolation (not only interpolation), e.g., spatial extrapolation in boundary-value problems. Example/anti-pattern: PINNs are especially useful when few measurements are available; they may be unnecessary or less competitive when abundant high-quality data exist."
+      },
+      {
+        "name": "Appropriateness for ill-posed and inverse problems",
+        "description": "PINNs are particularly effective in solving ill-posed and inverse problems.",
+        "guidance": "Collective evidence shows PINNs excel at forward and inverse problems where boundary/initial conditions or parameters are missing or unknown \u2014 scenarios where classical numerical methods may fail. By integrating physics into loss functions, PINNs can find meaningful solutions even when problems are not perfectly well posed. Anti-pattern: for forward, well-posed problems that do not require data assimilation, existing grid-based solvers currently outperform PINNs."
+      },
+      {
+        "name": "Handling incomplete models and imperfect data (use Bayesian integration)",
+        "description": "When dealing with imperfect models and noisy/scattered data, integrate Bayesian approaches with physics-informed learning for uncertainty quantification.",
+        "guidance": "Examples include Bayesian PINNs (B-PINNs) to provide uncertainty bounds. PINNs can combine physics and noisy data to infer solutions, but setting priors for B-PINNs systematically remains an open question. Use Bayesian/probabilistic variants when aleatoric and epistemic uncertainties are important."
+      },
+      {
+        "name": "Mesh-free advantage for irregular and moving domains",
+        "description": "Physics-informed learning is mesh-free and can easily handle irregular and moving-domain problems without computationally expensive mesh generation.",
+        "guidance": "This makes PINNs advantageous for problems where mesh generation is difficult or expensive. Use PINNs when domain geometry or moving boundaries complicate mesh-based solvers."
+      },
+      {
+        "name": "Sources of uncertainty and matching UQ methods",
+        "description": "Identify three sources of uncertainty for physics-informed learning: (1) uncertainty due to the physics (stochastic systems), (2) uncertainty due to the data (aleatoric and epistemic), and (3) uncertainty due to the learning models (approximation/train/generalization errors).",
+        "guidance": "Match the uncertainty source to a method: (1) use stochastic formulations, GANs or physics-informed probabilistic losses for SPDEs; (2) use Gaussian process regression, Bayesian PINNs or active learning for aleatoric/epistemic uncertainty; (3) use dropout, ensembles or polynomial chaos and other approaches to quantify model-induced uncertainty. Example: physics-informed GANs for high stochastic dimensionality; B-PINNs for epistemic uncertainty."
+      },
+      {
+        "name": "Choice of architecture dictated by problem/data type",
+        "description": "The underlying architecture of a PINN model is determined by the nature of a given problem and available data.",
+        "guidance": "Guidelines: multi-layer perceptrons (MLPs) are generally applicable but generic; convolutional NNs suit gridded 2D domains/images; Fourier feature networks suit PDEs with high frequencies or periodic boundaries; recurrent architectures suit non-Markovian or time-discrete problems. For operator learning use DeepONet. The required sample complexity depends on inductive biases, compatibility between observed data and the physical law, and the complexity of the target function/operator."
+      },
+      {
+        "name": "When to use DeepONet (operator vs function inference)",
+        "description": "Use DeepONet when the task is to infer an operator (mapping between function spaces) rather than a single function.",
+        "guidance": "DeepONet learns operators and its architecture/inputs should be chosen according to data modality (scattered sensors -> MLP; images -> CNNs; time series -> RNNs). This differs from PINNs which infer deterministic functions consistent with physics."
+      },
+      {
+        "name": "Use of probabilistic and generative models for stochastic/high-dimensional distributions",
+        "description": "For stochastic PDEs and modelling distributions, use probabilistic variants (Bayesian approaches) or generative models (GANs, VAEs).",
+        "guidance": "GANs have been used successfully to model high-dimensional distributions and quantify parametric uncertainty. Physics-informed GANs can solve stochastic PDEs in high dimensions if properly formulated. Use generative models to capture aleatoric uncertainty or to learn distributions when labels are unavailable."
+      },
+      {
+        "name": "Software selection: solver vs wrapper, language and scaling",
+        "description": "Choose software libraries according to whether you want a solver (high-level problem definition) or a wrapper (high-level interfaces) and consider language/backend and GPU/MPI support.",
+        "guidance": "Examples: DeepXDE and SimNet act as solvers (users define problems and solver handles details); SciANN and ADCME are wrappers needing more user implementation. DeepXDE (Python/TensorFlow) supports fractional PDEs and complex geometries; SimNet is optimized for NVIDIA GPUs and large-scale engineering. ADCME can embed DNNs into numerical schemes and supports MPI-based domain decomposition for large-scale problems. Consider backend (TensorFlow/PyTorch/JAX/Julia) and scalability requirements."
+      },
+      {
+        "name": "Compute derivatives with automatic differentiation and library optimizations",
+        "description": "Compute network-output derivatives w.r.t. inputs using automatic differentiation provided by ML packages (TensorFlow, PyTorch) and exploit library features for efficiency.",
+        "guidance": "Example: in TensorFlow use tf.gradients for first derivatives and nested gradients for higher orders. DeepXDE provides dde.grad.hessian which lazily evaluates Hessian entries and memoizes gradients to avoid duplicate computation, speeding up problems requiring many gradient evaluations. Use library-specific optimized routines to reduce compute cost."
+      },
+      {
+        "name": "Enforcing physics: architecture, soft penalties, or data augmentation",
+        "description": "Physics can be enforced in models by embedding principles into the network architecture, using physics as soft penalty constraints in the loss, or via data augmentation informed by physics.",
+        "guidance": "Choose an enforcement strategy depending on problem: embed symmetries/constraints in architecture for hard enforcement; use penalty terms when some flexibility is acceptable; use physics-based data augmentation when observational data are scarce. Example: ADCME embeds DNNs in standard numerical schemes for stronger coupling."
+      },
+      {
+        "name": "Multiscale and multiphysics problem strategies",
+        "description": "Address multiscale and multiphysics problems with specialized techniques because fully connected NNs struggle with high-frequency components (spectral bias/F-principle).",
+        "guidance": "Recommended remedies include domain decomposition, Fourier features, multiscale DNNs, or training each physics separately and coupling them (e.g., DeepM&M using multiple DeepONets). Learning multiphysics simultaneously may be computationally expensive; consider coarse-scale learning or decomposed approaches. Anti-pattern: using vanilla fully connected networks for stiff high-frequency/multiscale problems without mitigation."
+      },
+      {
+        "name": "Avoid point-wise physics residuals for problems with low regularity or shocks",
+        "description": "Point-wise physics-informed loss functions may be inappropriate for hyperbolic problems with shocks or where point evaluation of the solution is ill-defined.",
+        "guidance": "Use alternative stabilizations requiring reduced regularity such as control-volume PINNs (cvPINN) which generalize finite-volume schemes, allow total variation diminishing (TVD) limiters, and recover entropy solutions. cvPINNs increase accuracy for problems with discontinuities and enable estimation of black-box equations of state for shock hydrodynamics."
+      },
+      {
+        "name": "Multi-fidelity frameworks for combining synthetic and experimental data",
+        "description": "Use multi-fidelity composite neural networks to fuse abundant synthetic (low-fidelity) simulations with scarce experimental (high-fidelity) data.",
+        "guidance": "Example: a composite NN with a low-fidelity ResNet trained on many finite-element simulations and a high-fidelity ResNet taking sparse experimental data plus low-fidelity output to learn the correlation function. This can dramatically reduce inference error (e.g., yield stress estimation from >100% error to <5%). Consider adaptive training and architecture choices to integrate fidelities."
+      },
+      {
+        "name": "Use adaptive activation functions and trainable hyperparameters to accelerate convergence",
+        "description": "Adaptive activation functions and trainable hyperparameters can substantially accelerate convergence, especially in noisy-data inverse problems.",
+        "guidance": "Example: detecting and characterizing cracks via PINNs used adaptive activations to speed convergence despite significant noise in ultrasonic data. Consider introducing trainable activation parameters when optimization stalls or in presence of noisy measurements."
+      },
+      {
+        "name": "Be aware of potential pitfalls and robustness limits (problem-specific failure modes)",
+        "description": "PINNs can fail or be non-robust in the presence of certain measurement conditions or complex flow patterns (e.g., high signal-to-noise ratio in MRI, boundary layers, high vorticity, transient turbulent bursts).",
+        "guidance": "Assess robustness for a given application: under physiological laminar flow PINNs usually remain effective, but complex turbulent patterns may present pitfalls. Validate PINN reconstructions against independent experiments/measurements (e.g., particle image velocimetry) when possible."
+      },
+      {
+        "name": "No universal rule for choosing framework/training; use meta-learning and expertise",
+        "description": "There are no rule-of-thumb strategies for selecting ML framework, training algorithm, or sample size; choices depend intimately on the specific task and require experience.",
+        "guidance": "Meta-learning techniques may automate these choices in the future, but currently practitioners should rely on domain knowledge, diagnostics and empirical validation to select architectures, training regimes, and data requirements. Consider inductive biases, physics-compatibility, and complexity of the target when estimating sample complexity."
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_92fb522de038.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_92fb522de038.html",
+  "chunk_idx": 22,
+  "n_chunks": 25,
+  "chunk_chars": 39457,
+  "model": "gpt-5-mini",
+  "elapsed_s": 113.29291754199949,
+  "input_tokens": 15281,
+  "output_tokens": 3471,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "implementers and authors of MathML processors and tools performing Presentation\u2192Strict Content MathML transformations",
+    "subtask_short": "rewrite to Strict Content MathML",
+    "subtask_description": "Rules and recommended behaviors for transforming non-strict/Presentation MathML constructs into Strict Content MathML equivalents, including operator selection, attribute handling, and annotation conventions. Intended to guide implementers of MathML transformation/serialization.",
+    "subtask_keywords": [
+      "mathml",
+      "strict_content",
+      "transformation",
+      "presentation_to_content",
+      "xml"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "cn with Presentation MathML markup",
+        "description": "If the cn contains Presentation MathML markup, then it may be rewritten to Strict MathML using variants of the rules above where the arguments of the constructor are ci elements annotated with the supplied Presentation MathML.",
+        "guidance": "Example: a <cn type=\"rational\"> with child <mi>P</mi><sep/><mi>Q</mi> should be rewritten as an <apply> whose first child is a <csymbol cd=\"nums1\">rational</csymbol> and with two <semantics> children each holding a <ci> (p and q) plus an <annotation-xml encoding=\"MathML-Presentation\"> containing the original <mi> elements. The identifier names (p and q) must be text strings determined from the presentation MathML content (e.g., character data ignoring markup). Implementations should ensure constructs using the same Presentation MathML content are rewritten to semantics elements using the same ci, and constructs using different presentation MathML get different identifier names (even if the presentation character data is identical)."
+      },
+      {
+        "name": "cn with unpermitted character data \u2192 rewrite as ci",
+        "description": "When a cn element contains character data not permitted in Strict Content MathML usage (e.g., non-digit alphabetic characters), this is analogous to cn containing presentation mtext and could be rewritten via annotation.",
+        "guidance": "However, if the resulting annotation would contain no additional rendering information, such instances should be rewritten directly as ci elements rather than as a semantics construct."
+      },
+      {
+        "name": "ci may contain mglyph or presentation constructs (rendering)",
+        "description": "The ci element can contain mglyph elements to refer to characters not in Unicode or a general presentation construct which is used for rendering.",
+        "guidance": "Such presentation-containing ci elements are handled by transforming the ci into a <semantics> element whose first child is a plain <ci> whose text is an identifier derived from the presentation content, and the presentation content is placed into an <annotation-xml encoding=\"MathML-Presentation\">. The identifier name should be determined in a system-defined way (e.g., character data ignoring markup) and be consistent across identical presentation content."
+      },
+      {
+        "name": "ci presentation-mathml rewrite example (atomic visual symbol)",
+        "description": "Atomic symbols that visually contain presentation markup (example: a symbol that displays as C^2) should be treated as a single content identifier.",
+        "guidance": "Example: <ci><msup><mi>C</mi><mn>2</mn></msup></ci> becomes <semantics><ci>C2</ci><annotation-xml encoding=\"MathML-Presentation\">...msup...</annotation-xml></semantics>. The content ci is a text identifier (here 'C2') and the original presentation markup is retained as an annotation for rendering."
+      },
+      {
+        "name": "Rewrite remaining operator elements to csymbol",
+        "description": "Rewrite any remaining operator defined in 4.3 Content MathML for Specific Structures to a <csymbol> referencing the symbol identified in the syntax table by the rule 'Rewrite: element'.",
+        "guidance": "In general the translation is direct (element \u2192 <csymbol cd=\"...\">name</csymbol>) but some operators require special-case rules to determine the correct content dictionary or symbol name (see following operator-specific items)."
+      },
+      {
+        "name": "selector operator special-case",
+        "description": "The order of the arguments for the selector operator must be rewritten, and the symbol depends on the type of the arguments.",
+        "guidance": "Implementations must reorder selector arguments as required by Strict Content conventions and select the appropriate content symbol depending on argument types."
+      },
+      {
+        "name": "minus operator (unary vs binary) rewrite",
+        "description": "The choice of symbol for the minus operator depends on the number of arguments: as unary arithmetic (one argument) it corresponds to unary_minus; with two arguments it corresponds to minus.",
+        "guidance": "Translation to Strict Content markup is direct; implementations must choose unary_minus vs minus to reflect actual usage."
+      },
+      {
+        "name": "set operators: use multiset1 symbols when type=\"multiset\"",
+        "description": "When translating to Strict Content Markup, if the type attribute has value 'multiset', then multiset1 content-dictionary symbols must be used instead of the defaults.",
+        "guidance": "Specific mappings: in \u2192 multiset1:in, notin \u2192 multiset1:notin, subset \u2192 multiset1:subset, prsubset \u2192 multiset1:prsubset, notsubset \u2192 multiset1:notsubset, notprsubset \u2192 multiset1:notprsubset, setdiff \u2192 multiset1:setdiff, size \u2192 multiset1:size. Implementations should choose these multiset1 symbols whenever the element's type attribute is 'multiset'."
+      },
+      {
+        "name": "statistical operators mapping depends on operand kind",
+        "description": "Some statistical operators map to different content dictionaries depending on whether they are applied to explicit lists or to distributions.",
+        "guidance": "When mean/sdev/variance are applied to an explicit list of arguments, use the symbol from s_data1; when applied to a distribution, use the symbol from s_dist1. For qualifiers, use the 'Rewrite: n-ary domainofapplication' rule with the same caveat. median and mode applied to explicit lists use s_data1 symbols. Implementations must inspect argument kind (list vs distribution) to choose the correct content dictionary."
+      },
+      {
+        "name": "emptyset operator mapping",
+        "description": "The choice of symbol for the emptyset element depends on context; it may represent a set or a multiset.",
+        "guidance": "If context makes it clear emptyset corresponds to multiset semantics, the emptyset symbol from multiset1 may be used. However, because authors cannot explicitly indicate this except by annotation, it is always acceptable to translate to the emptyset symbol from set1. Implementations may prefer set1:emptyset unless annotation/context indicates multiset."
+      },
+      {
+        "name": "Rewrite type attributes via semantic attribution",
+        "description": "In Strict Content, type attributes are represented via semantic attribution (annotations) rather than as type attributes on the element.",
+        "guidance": "Example for ci: <ci type=\"T\">n</ci> is rewritten to <semantics><ci>n</ci><annotation-xml cd=\"mathmltypes\" name=\"type\" encoding=\"MathML-Content\"><ci>T</ci></annotation-xml></semantics>. For csymbol: <csymbol type=\"T\">symbolname</csymbol> becomes <semantics><csymbol>symbolname</csymbol><annotation-xml cd=\"mathmltypes\" name=\"type\" encoding=\"MathML-Content\"><ci>T</ci></annotation-xml></semantics>. Implementations must convert type attributes into annotation-xml blocks referencing the mathmltypes cd."
+      },
+      {
+        "name": "Rewrite definitionURL and encoding attributes to cd when possible",
+        "description": "If the definitionURL and encoding attributes on a csymbol element can be interpreted as a reference to a content dictionary, rewrite them to reference the content dictionary by the cd attribute instead.",
+        "guidance": "Implementations should detect when definitionURL/encoding encode a content-dictionary reference and normalize to cd=\"...\" form on the csymbol element."
+      },
+      {
+        "name": "General rewrite of attributes not allowed in Strict markup",
+        "description": "Any element with attributes that are not allowed in strict markup must be rewritten to a semantics construction with the element (without those attributes) as the first child and the attributes recorded as annotation elements.",
+        "guidance": "Example: <ci class=\"foo\" xmlns:other=\"...\" other:att=\"bla\">x</ci> is rewritten to <semantics><ci>x</ci><annotation cd=\"mathmlattr\" name=\"class\" encoding=\"text/plain\">foo</annotation><annotation-xml cd=\"mathmlattr\" name=\"foreign\" encoding=\"MathML-Content\">...foreign_attribute apply encoding with cs tokens...</annotation-xml></semantics>. The mathmlattr content dictionary provides symbols for attributes allowed on content MathML elements. For content MathML attributes that specialize semantics (e.g., some cn and interval attributes), case-by-case rewrite rules from section 4.3 apply; for general attributes, use the annotation and mathmlattr approach."
+      }
+    ]
+  }
+}

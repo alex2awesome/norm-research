@@ -1,0 +1,225 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_d2b9e2308e9d.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_d2b9e2308e9d.pdf",
+  "chunk_idx": 10,
+  "n_chunks": 13,
+  "chunk_chars": 39978,
+  "model": "gpt-5-mini",
+  "elapsed_s": 85.60540004099312,
+  "input_tokens": 11046,
+  "output_tokens": 6872,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Sage developers and maintainers creating or updating packages for the Sage distribution",
+    "subtask_short": "sagemath_package_packaging",
+    "subtask_description": "Guidance and rules for creating, building, installing, testing, versioning, and maintaining packages (spkgs) in the Sage distribution, including script templates, helper functions, dependency metadata, and policies for patches and upstream interactions.",
+    "subtask_keywords": [
+      "sagemath",
+      "packaging",
+      "spkg",
+      "developer_guide",
+      "package_maintenance"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of spkg-preinst.in and spkg-postinst.in",
+        "description": "It is possible to include script templates named spkg-preinst.in or spkg-postinst.in to run additional steps before or after the package has been installed into $SAGE_LOCAL.",
+        "guidance": "Put steps that modify already-installed files in spkg-postinst.in rather than combining them with spkg-install.in because spkg-install may not yet have installed to $SAGE_LOCAL, whereas by the time spkg-postinst runs the installation to $SAGE_LOCAL is complete."
+      },
+      {
+        "name": "Standard build steps for upstream projects",
+        "description": "If the upstream project installs via the usual configure / make / make install steps, the spkg-build.in should run sdh_configure and sdh_make in src; spkg-install.in should run sdh_make_install in src.",
+        "guidance": "Top-level directory inside the tarball is renamed to src before calling spkg-build and spkg-install, so use cd src rather than cd foo-1.3."
+      },
+      {
+        "name": "Installing included documentation",
+        "description": "If meaningful documentation is included but not installed by sdh_make_install, add commands guarded by the SAGE_SPKG_INSTALL_DOCS environment variable to build and install it.",
+        "guidance": "Example: if [ \"$SAGE_SPKG_INSTALL_DOCS\" = yes ] ; then sdh_make doc; sdh_install doc/ \"$SAGE_SHARE\"/doc/PACKAGE_NAME; fi"
+      },
+      {
+        "name": "Default compiler flags at build time",
+        "description": "At build time CFLAGS, CXXFLAGS, FCFLAGS, and F77FLAGS are usually set to -g -O2 -march=native (subject to debugging options and fat-binary builds).",
+        "guidance": "Variants available: use CFLAGS_NON_NATIVE to avoid -march=native, CFLAGS_O3 to use -O3, or ORIGINAL_CFLAGS to use user-set flags (possibly empty). Same applies to other flag variables."
+      },
+      {
+        "name": "Python code in install/build scripts",
+        "description": "Build/install scripts may still be written in Python but the Python code should go in a separate file (e.g. spkg-install.py) and be executed from the spkg-install.in template.",
+        "guidance": "Execute with exec sage-bootstrap-python spkg-install.py or exec python3 spkg-install.py; use sage-bootstrap-python only for tasks that must run before Sage has made python3 available (accepts Python >=2.6 and >=3.4). Do not use sage-bootstrap-python to run pip or setup.py for any package; use python3 to ensure installing into the Sage-managed Python."
+      },
+      {
+        "name": "Separation of build and install steps",
+        "description": "It is recommended to separate spkg-build.in and spkg-install.in so that build and install can be run separately (useful for root-owned install hierarchies).",
+        "guidance": "Sage uses $SAGE_SUDO for privileged installs. Rules: if spkg-build.in exists, generated spkg-build is called first, followed by $SAGE_SUDO spkg-install; otherwise only spkg-install is called (without $SAGE_SUDO), so such packages must prefix commands that write into the install hierarchy with $SAGE_SUDO."
+      },
+      {
+        "name": "spkg-src annotation for modified tarballs",
+        "description": "If an spkg-src file is present it indicates that the tarball is not an unmodified third-party tarball and documents how the tarball was generated.",
+        "guidance": "Prefer using unmodified upstream tarballs; most packages will not have an spkg-src file."
+      },
+      {
+        "name": "Install scripts for script packages",
+        "description": "For script packages you may use an install script named spkg-install which must be an executable shell script and is executed directly (not templated).",
+        "guidance": "Many script packages have a source tree under $SAGE_ROOT/pkgs/ with a symlink src and a spkg-src script to build a tarball."
+      },
+      {
+        "name": "sdh_die helper function",
+        "description": "sdh_die MESSAGE: exit the build script with the error code of the last command (or 1) and print an error message.",
+        "guidance": "Typical usage: command || sdh_die \"Command failed\". If called with no arguments, sdh_die reads the error message from stdin, enabling heredoc multi-line messages. Note: other helper functions call sdh_die internally, so constructs like sdh_make || sdh_die are unnecessary and the right-hand side will never be reached."
+      },
+      {
+        "name": "sdh_check_vars helper function",
+        "description": "sdh_check_vars [VARIABLE ...]: check that one or more variables are defined and non-empty, exiting with error if any are undefined or empty.",
+        "guidance": "Pass variable names without the '$' to prevent unwanted expansion."
+      },
+      {
+        "name": "sdh_configure helper function",
+        "description": "sdh_configure runs ./configure with standard arguments setting --prefix=\"$SAGE_LOCAL\", --libdir=\"$SAGE_LOCAL/lib\", --disable-static, --disable-maintainer-mode, and --disable-dependency-tracking; additional arguments may be supplied.",
+        "guidance": "Use sdh_configure instead of hand-rolling configure commands to ensure consistent install prefixes and flags."
+      },
+      {
+        "name": "sdh_make helper function",
+        "description": "sdh_make [...]: runs $MAKE with the default target; extra arguments are passed to make.",
+        "guidance": "Use instead of directly invoking make to keep consistency."
+      },
+      {
+        "name": "sdh_make_install helper function",
+        "description": "sdh_make_install [...]: runs $MAKE install with DESTDIR set correctly for staged installations; additional arguments may be passed.",
+        "guidance": "If $SAGE_DESTDIR is not set the command is run with $SAGE_SUDO if set."
+      },
+      {
+        "name": "sdh_pip_install helper function",
+        "description": "sdh_pip_install [...]: a wrapper equivalent to running pip install with default arguments used for installing packages into Sage; the last argument must be . to indicate installation from the current directory.",
+        "guidance": "sdh_pip_install actually builds a wheel in dist/ and then calls sdh_store_and_pip_install_wheel to move and install the wheel."
+      },
+      {
+        "name": "sdh_pip_editable_install helper function",
+        "description": "sdh_pip_editable_install [...]: equivalent to pip install -e with default Sage-specific flags; the last argument must be .",
+        "guidance": "See pip documentation for details concerning editable installs."
+      },
+      {
+        "name": "sdh_pip_uninstall helper function",
+        "description": "sdh_pip_uninstall [...]: runs pip uninstall with given arguments.",
+        "guidance": "If unsuccessful, it displays a warning rather than failing fatally."
+      },
+      {
+        "name": "sdh_store_and_pip_install_wheel helper function",
+        "description": "sdh_store_and_pip_install_wheel .: requires the current directory to have dist/ containing a unique wheel file; moves this wheel to $SAGE_SPKG_WHEELS and installs it into $SAGE_LOCAL.",
+        "guidance": "Both steps use the staging directory $SAGE_DESTDIR if set; otherwise they use $SAGE_SUDO (if set)."
+      },
+      {
+        "name": "sdh_install helper function",
+        "description": "sdh_install [-T] SRC [SRC...] DEST: copies files or directories into DEST, ensuring DEST and parent directories exist; DEST should typically be under $SAGE_LOCAL; -T treats DEST as a normal file for copying to a different filename.",
+        "guidance": "This is automatically added to each install script, so do not add it yourself."
+      },
+      {
+        "name": "sdh_guard helper function",
+        "description": "sdh_guard: wrapper for sdh_check_vars that checks common variables (SAGE_ROOT, SAGE_LOCAL, SAGE_SHARE) required for many packages to build correctly.",
+        "guidance": "Use to prevent accidental installation to unintended locations."
+      },
+      {
+        "name": "Rare helper functions: sdh_cmake and sdh_preload_lib",
+        "description": "sdh_cmake runs cmake with given arguments and sets CMAKE_INSTALL_PREFIX and CMAKE_INSTALL_LIBDIR appropriately; sdh_preload_lib EXECUTABLE SONAME (Linux-only) checks shared libraries loaded by EXECUTABLE for a library starting with SONAME and appends SONAME to LD_PRELOAD if found.",
+        "guidance": "sdh_preload_lib is a no-op on non-Linux platforms."
+      },
+      {
+        "name": "Encouraging support for using system packages",
+        "description": "Packages that can use an already-installed system version should include a spkg-configure.m4 script and a populated build/pkgs/PACKAGE/distros directory (arch.txt, conda.txt, debian.txt, fedora.txt, homebrew.txt, etc.) listing equivalent system package names.",
+        "guidance": "The ./configure script can detect system packages and suggest installation (e.g., 'brew install foo'). Use ${PYTHON_MINOR} substitution for Python minor versions. Important: new standard packages should, when possible, include spkg-configure.m4 and distros files. Exceptions exist for some pip-installed packages or tools used only in separate processes."
+      },
+      {
+        "name": "Self-tests via spkg-check.in",
+        "description": "spkg-check.in is optional but highly recommended to run a package's self-tests; format is same as spkg-build/install and is run after build/install if SAGE_CHECK is set.",
+        "guidance": "Ideally upstream provides a test suite run by make check; spkg-check.in can simply run cd src; $MAKE check. For Python-based spkg-check scripts use python3 (exec python3 spkg-check.py) so the correct Python is run."
+      },
+      {
+        "name": "Python package dependency declarations",
+        "description": "Python-based packages should declare $(PYTHON) as a dependency; most will also declare $(PYTHON_TOOLCHAIN) as an order-only dependency to ensure pip/setuptools are available at build time.",
+        "guidance": "Install Python packages using sdh_pip_install (cd src && sdh_pip_install .) so pip wheel is used and installation goes to the correct Python environment. For spkg-check scripts use python3."
+      },
+      {
+        "name": "Abstract requirements: version_requirements.txt",
+        "description": "All normal Python packages and wheel packages must have a version_requirements.txt file; for pip packages the file is optional (requirements.txt used if absent). For PyPI packages the file must contain the PyPI package name and may include version constraints formatted as install_requires.",
+        "guidance": "Version constraints are used to generate metadata and to allow configure --enable-system-site-packages to validate system Python versions. Strongly recommend comments explaining why bounds exist (links to GitHub issues/PRs allowed). Developers may refine constraints over time; adjust lower bounds when updating to pick up critical bug fixes; upper bounds are complex and require care."
+      },
+      {
+        "name": "Concrete package version: package-version.txt",
+        "description": "All normal Python packages and wheel packages must have package-version.txt (optional for script Python packages); it contains the package version shipped by Sage \u2014 either upstream version or a date-based identifier if upstream lacks version numbers.",
+        "guidance": "If patches or modifications are applied to an upstream tarball, append .p0 and increase patch level for subsequent changes (1.3, 1.3.p0, 1.3.p1, ...). Changing the package-version.txt or patch level triggers reinstallation."
+      },
+      {
+        "name": "Concrete pip-package requirements: requirements.txt",
+        "description": "Pip packages set concrete requirements in requirements.txt which is passed to pip at install time and can pin versions, specify ranges, or leave unconstrained.",
+        "guidance": "Pinning versions increases stability and reproducibility but costs maintenance; leaving versions unpinned keeps packages up-to-date but risks instability. Decide policy per-package based on upstream quality, integration depth with Sage, developer interest, and whether it affects mathematics."
+      },
+      {
+        "name": "Handling dependencies of pip packages",
+        "description": "Dependencies of a pip package do not need to be available as Sage distribution packages because pip can pull them from PyPI, but if a dependency is also a Sage package it must be declared to avoid build or upgrade errors.",
+        "guidance": "Be aware that new versions of pip packages adding dependencies that are Sage packages can introduce instability."
+      },
+      {
+        "name": "SPKG.rst file structure and content",
+        "description": "SPKG.rst should follow a fixed pattern: PACKAGE_NAME one-line description, Description (what does it do?), License (compatibility), Upstream Contact (URL), Dependencies (only special dependencies not in dependencies file), Special Update/Build Instructions (describe manual tarball changes).",
+        "guidance": "Do not include changelogs in SPKG.rst; changelogs are kept in commit messages and PR discussions."
+      },
+      {
+        "name": "Dependencies file format and semantics",
+        "description": "The dependencies file lists dependencies with optional order-only dependencies separated by '|'; syntax: normal dependencies | order-only dependencies. If no '|' then all are normal dependencies. If there are no dependencies use a file containing '# no dependencies'.",
+        "guidance": "Order-only dependencies mean B must be built before A but B's version does not matter (use for build-time tools like pip); order-only deps can be placed in dependencies_order_only. Normal dependencies indicate that A should be rebuilt whenever B is updated (used for libraries). There are also separate files for dependencies_check and dependencies_optional. Run make distclean && make PACKAGE_NAME to validate dependency declarations. Standard packages should only depend on standard packages; optional packages should depend only on standard or optional packages."
+      },
+      {
+        "name": "Package tags for index and CI",
+        "description": "Place empty tag files in the package directory to categorize and filter packages: 'math' to show in Mathematics index, 'front-end' for front-end/graphics/doc subsections. Use 'huge' to mark very large packages and 'has_nonfree_dependencies' to indicate non-redistributable or non-free dependencies.",
+        "guidance": "Tags are used by the Reference Manual index and by CI filtering to skip or special-case certain packages."
+      },
+      {
+        "name": "Installation trees and overriding with trees.txt",
+        "description": "$SAGE_VENV is default installation tree for Python packages (normal/wheel/pip requirements), $SAGE_LOCAL is default for non-Python packages, and $SAGE_DOCS (set only at build time) is for docs. A package may override the default by placing trees.txt in its directory with the desired tree name.",
+        "guidance": "Examples: build/pkgs/python3/trees.txt contains SAGE_VENV; build/pkgs/sagemath_doc_html/trees.txt contains SAGE_DOCS."
+      },
+      {
+        "name": "Package versioning guidance (dates and patch levels)",
+        "description": "package-version.txt contains only the version; if upstream lacks version numbers use a date representing the revision contained in the tarball; append '.p0' (or increment patch level) when applying patches or making non-upstream changes.",
+        "guidance": "Use dates referring to the contents of the tarball (not the packaging date). Maintain patch level increases when modifying packages so automated rebuilds occur and tests pick up changes."
+      },
+      {
+        "name": "checksums.ini and upstream_url templating",
+        "description": "checksums.ini contains the filename pattern of the upstream tarball (tarball=FoO-VERSION.tar.gz) and its checksums; upstream_url optionally holds a template URL where VERSION (or ${VERSION}, VERSION_MAJOR, VERSION_MINOR, VERSION_MICRO) is substituted.",
+        "guidance": "For Python packages available from PyPI use an upstream_url from files.pythonhosted.org of the form https://files.pythonhosted.org/packages/source/m/matplotlib/matplotlib-VERSION.tar.gz. Release Manager uses upstream_url to download archives for creating releases and mirrors; avoid duplicating upstream_url info in PR descriptions."
+      },
+      {
+        "name": "sage --package utility usage for creating/updating packages",
+        "description": "The command sage --package offers functions to create, update, and maintain packages: create (with --version, --tarball, --type), create from PyPI (pkg:pypi/...), set --source normal/pip/wheel, update <pkg> <version>, update-latest pkg:pypi/<name>, fix-checksum, and metrics.",
+        "guidance": "When creating from PyPI the tool downloads metadata and may create wheel packages by default; dependencies file may need manual editing; for normal/pip packages set --source accordingly. Using --commit will run git commit. Creating overwrites existing package files."
+      },
+      {
+        "name": "Interpreting sage --package metrics",
+        "description": "sage --package metrics computes aggregated package metrics (e.g., has_file_patches, line_count_file_patches, has_file_spkg_check, has_file_spkg_configure_m4, line_count_spkg_install, counts of package types).",
+        "guidance": "Use these metrics to monitor distribution complexity and quality: e.g., many patches indicates maintenance burden; large line counts in spkg-install may indicate upstream build systems need improvement; developers should work upstream to reduce patches or improve upstream build scripts; presence/absence of spkg_check/configure_m4/distros indicates readiness for system-package usage and self-tests."
+      },
+      {
+        "name": "Building and testing a package locally",
+        "description": "After creating or updating a tarball, build and install a package locally with ./sage -i package_name (or ./sage -f package_name to force reinstall).",
+        "guidance": "Run self-tests if present with ./sage -i -c package_name (or ./sage -f -c package_name). If all succeeds, open a PR with the code under SAGE_ROOT/build/pkgs."
+      },
+      {
+        "name": "When to patch vs repackage vs autoconfiscate",
+        "description": "Decide how to modify third-party code: prefer upgrading to a newer stable version first; use distribution patches if available; avoid simple Makefile edits via patching (override variables like DESTDIR via make command-line instead).",
+        "guidance": "If upstream Makefile does not build shared libraries, autoconfiscate and use Automake/Libtool. If you must change autotools source files (configure.ac etc.) or the patch would be huge, create a modified tarball rather than maintaining patches. Otherwise maintain a set of patches."
+      },
+      {
+        "name": "Preparing a patch by importing a GitHub pull request",
+        "description": "To import an upstream PR, save the PR as a .patch file in the package's patches/ directory (use the .patch extension) and modify package-version.txt to increment patch level (e.g., append .p0).",
+        "guidance": "Test building (make build) to see 'Applying NN.patch' messages; safely ignore 'fuzz' messages. Add the .patch file to your branch, commit with a message like build/pkgs/cmr: Add https://github.com/.../pull/64 as a patch, and open a PR; automatic CI will rebuild the patched package."
+      },
+      {
+        "name": "Preparing manual patches: format and placement",
+        "description": "Manual patch files must include documentation in their header (a title and multi-line description) and must have only one 'prefix' level in paths (one directory level above upstream sources).",
+        "guidance": "Patches placed directly under patches/ with a .patch extension are applied automatically before running spkg-install; conditional patches can be placed in subdirectories (e.g., patches/solaris/) and applied manually from spkg-install using sage-apply-patches. Ensure patch header documents what it does, origin, platform specificity, and whether it should be pushed upstream."
+      }
+    ]
+  }
+}

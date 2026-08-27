@@ -1,0 +1,139 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/8501e19243e7.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18965,
+  "output_tokens": 4566,
+  "elapsed_s": 1972.625045957975,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "people learning to formalize mathematics in Lean (Lean 4 / Mathlib), especially beginners and students",
+    "subtask_short": "formalizing mathematics in lean",
+    "subtask_description": "Introductory chapter guiding users how to write and structure proofs in Lean/Mathlib: calculating, applying lemmas and theorems, and reasoning about generic algebraic structures. Emphasizes tactics, proof structuring, naming conventions, and use of library automation.",
+    "subtask_keywords": [
+      "lean",
+      "mathlib",
+      "formalization",
+      "proof_tactics",
+      "beginner_tutorial"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Treat calculations as proofs / justify each step",
+        "description": "When we justify each step in a calculation, as Lean requires us to do, the net result is a proof that the left-hand side of the calculation is equal to the right-hand side.",
+        "guidance": "Write out the intermediate equalities and justify them with tactics or proof terms so Lean accepts the calculation as a proof. Exercises in the chapter ask you to replace `sorry` with tactic proofs demonstrating this approach."
+      },
+      {
+        "name": "Use the rw tactic for rewriting",
+        "description": "Lean provides the rewriting tactic `rw` to replace the left-hand side of an identity by the right-hand side in the goal.",
+        "guidance": "You can call `rw` with lemma names (with or without explicit arguments), use `rw [\u2190 mul_assoc a b c]` to reverse an identity, provide partial information (e.g. `mul_comm a`), rewrite using local hypotheses (`rw [h']`), perform multiple rewrites in a single `rw [h', \u2190 mul_assoc, h, mul_assoc]`, and use `rw ... at hyp` to rewrite inside assumptions. Examples in the text show many variants."
+      },
+      {
+        "name": "Use nth_rw to target particular occurrences",
+        "description": "There is a variation `nth_rw` that allows you to replace only particular instances of an expression in the goal.",
+        "guidance": "Possible matches are enumerated starting with 1, e.g. `nth_rw 2 [h]` replaces the second occurrence. Useful when multiple identical subexpressions occur and you only want to rewrite one."
+      },
+      {
+        "name": "Use calc for structured multi-step calculations",
+        "description": "Lean provides a more structured way of writing proofs like multi-step algebraic calculations using the `calc` keyword. An expression that begins with `calc` is a proof term.",
+        "guidance": "`calc` proofs are more readable than long tactic sequences; they require the right indentation and the `_`/justification format in the exact layout shown. A common workflow: outline the `calc` with `sorry` justifications, ensure Lean accepts the term, then fill in the justifications."
+      },
+      {
+        "name": "Balance concision and readability in proof scripts",
+        "description": "Good proof-writing style should strike a balance between concision and readability.",
+        "guidance": "Short automated proofs (`by ring`, `by linarith`) are acceptable, but prefer readable structure for longer proofs (use `calc`, `have`, `show`, named lemmas) so humans can follow the proof."
+      },
+      {
+        "name": "Use automation tactics appropriately (ring, linarith, norm_num, group, abel, noncomm_ring)",
+        "description": "Mathlib provides useful automation like `ring` (commutative rings), `linarith` (linear arithmetic), `norm_num` (numeric goals), and `group`, `abel`, `noncomm_ring` for algebraic manipulations.",
+        "guidance": "Use `ring` for ring identities that follow from ring axioms; `linarith` to combine inequalities; `norm_num` for concrete numeric goals. Prefer the automation when it applies, but learn the underlying lemmas so you can proceed when automation doesn't suffice."
+      },
+      {
+        "name": "Follow Lean/Mathlib notational and formatting conventions",
+        "description": "It is generally good style to be mindful of Lean\u2019s notational conventions and leave out parentheses when Lean does as well. Mathlib tends to put spaces around binary operations like `*` and `^`.",
+        "guidance": "Adopt Mathlib naming and formatting conventions (spacing, implicit/explicit arguments) to make code consistent and readable. The text notes sometimes compressed format increases readability \u2014 use judgement."
+      },
+      {
+        "name": "Prefer `\u2264` over `\u2265` for automation friendliness",
+        "description": "An expression `s \u2265 t` is definitionally equivalent to `t \u2264 s`, but some of Lean\u2019s automation does not recognize the equivalence, so Mathlib tends to favor `\u2264` over `\u2265`.",
+        "guidance": "When writing goals or lemmas intended to work well with automation, use `\u2264`-style statements where possible."
+      },
+      {
+        "name": "Use `#check` to inspect types and theorem statements",
+        "description": "The `#check` command works for both objects and facts and reports types and lemma/proof types (e.g., `#check mul_comm a b` reports that it is a proof of `a * b = b * a`).",
+        "guidance": "Use `#check` frequently to discover the exact form of lemmas and types you plan to use so `rw`, `apply`, and `exact` match correctly."
+      },
+      {
+        "name": "Make arguments implicit where appropriate (curly braces)",
+        "description": "Lean allows marking arguments as implicit with curly braces `{...}`, meaning they are supposed to be left out and inferred by other means.",
+        "guidance": "Declare frequently-repeated parameters (like a type or common variables) as implicit to avoid redundant application. Use implicit arguments to improve ergonomics when applying lemmas (e.g., `add_left_cancel h` instead of `add_left_cancel a b c h`)."
+      },
+      {
+        "name": "Use `have` for local subproofs and modular structure",
+        "description": "The `have` tactic introduces a new goal; the indented block proves that goal, and the resulting hypothesis is added to the context for the remaining proof.",
+        "guidance": "Use `have` to break proofs into manageable subclaims. Indentation delineates the subproof; after the subproof completes, use the named hypothesis in the rest of the proof (often finishing with `exact` or `apply`)."
+      },
+      {
+        "name": "Choose `apply` vs `exact` appropriately",
+        "description": "`exact` takes as argument a proof term which completely proves the current goal; `apply` takes a (possibly more general) proof and leaves any necessary hypotheses as new goals.",
+        "guidance": "Use `exact` when you have a fully-formed proof term \u2014 it makes scripts clearer and more robust. Use `apply` when you want Lean to generate subgoals or infer implicit arguments."
+      },
+      {
+        "name": "Use `show`, dots, and focused blocks to structure tactic proofs",
+        "description": "You can use the `show` tactic to indicate what is being proved in a block, and dots (`\u00b7`) or indentation to separate and focus proofs for multiple goals.",
+        "guidance": "Dots introduce focused subblocks where only one goal is visible; use them and `show` to make branching proofs (e.g., when using `le_antisymm`) clearer. `repeat` can be used to apply a tactic block as many times as possible to avoid repetition."
+      },
+      {
+        "name": "When chaining inequalities, provide the intermediate witness (use `calc` or `trans`)",
+        "description": "Applying `le_trans` without indicating the intermediate element `y` causes Lean to generate awkward goals involving `?a`. Use `calc` to provide intermediate steps explicitly or use `trans y` to set the intermediate witness.",
+        "guidance": "Prefer `calc` or `trans` when you know the intermediate you want; alternatively, write full proof terms like `exact le_trans inf_le_left inf_le_right` if you can plan them out."
+      },
+      {
+        "name": "Learn and exploit Mathlib naming conventions and search tools",
+        "description": "Mathlib naming conventions help find lemmas: a theorem named `A_of_B_of_C` establishes `A` from hypotheses of the form `B` and `C`. Use tools like GitHub, API docs, Loogle, Ctrl-space completion, `apply?`, and editor 'jump to file' to find relevant lemmas.",
+        "guidance": "Type partial names (e.g., `add_le`) and use completion; use `apply?` in tactic mode to try to find relevant lemmas automatically; consult Mathlib docs and `loogle.lean-lang.org` for pattern searches."
+      },
+      {
+        "name": "Use library lemmas and give local names consistent with Mathlib",
+        "description": "Most facts you need are already in Mathlib; the chapter reuses library names for proved versions to learn naming conventions and avoid confusion.",
+        "guidance": "Where possible, prefer using Mathlib lemmas; if you reprove a lemma locally, give it the same name as the library to learn conventions, but avoid cheating on exercises (use only previously established facts when requested)."
+      },
+      {
+        "name": "Use `apply?`, `linarith`, and other helpers to automate lemma selection",
+        "description": "The `apply?` tactic tries to find the relevant theorem in the library; `linarith` handles linear arithmetic and can combine inequalities from context and extra passed inequalities.",
+        "guidance": "If a direct `apply` seems tedious, try `apply?` to search automatically; use `linarith` to combine linear inequalities instead of manual `le_trans` chains when applicable."
+      },
+      {
+        "name": "Structure proofs to avoid redundancy (local lemmas, `repeat`, `have`)",
+        "description": "When a proof looks repetitive, state a local lemma (e.g., `have h : \u2200 x y, min x y \u2264 min y x`) or use `repeat` to shorten repetitive tactic sequences.",
+        "guidance": "Refactor repeated proof patterns into local lemmas and reuse them. `repeat` applies a tactic block until it fails and is useful for repetitive small steps."
+      },
+      {
+        "name": "Be careful with scope: use `variable`, `section`/`end` to manage declarations",
+        "description": "You can declare variables once outside examples/theorems with `variable (a b c : \u211d)`; to delimit scope, put declarations inside `section ... end` blocks.",
+        "guidance": "Group common variables and structures to avoid repeating them in every example; ensure implicit/explicit scopes do not clash by scoping via `section`."
+      },
+      {
+        "name": "Use `at` to rewrite inside hypotheses and `exact hyp` to finish when hypothesis matches goal",
+        "description": "You can perform rewriting in an assumption in the context with `rw [mul_comm a b] at hyp`. The `exact` tactic can use `hyp` to solve the goal when `hyp` matches the goal exactly.",
+        "guidance": "Apply `rw ... at hyp` to adjust local hypotheses, and use `exact hyp` when the hypothesis equals the current target. This avoids extra unfolding or manual steps."
+      },
+      {
+        "name": "Use `constructor` to split conjunctions and other introduction tactics appropriately",
+        "description": "Some proofs require splitting conjunctions; the `constructor` tactic creates the separate goals for each conjunct.",
+        "guidance": "Use `constructor` (or more specific introduction tactics) when a goal is a conjunction to split into subgoals, then prove each part separately."
+      },
+      {
+        "name": "Understand algebraic-structure abstractions and use appropriate instances",
+        "description": "Lean supports reasoning about abstract structures (Ring, CommRing, AddGroup, Group, PartialOrder, Lattice, DistribLattice, MetricSpace, etc.) and you can use generic theorems about these structures.",
+        "guidance": "Declare the intended structures (e.g., `variable {R : Type*} [Ring R]`) so generic lemmas apply. Use the weaker structure when possible (e.g., group vs ring) so lemmas remain broadly applicable."
+      },
+      {
+        "name": "Prefer proof terms (no `by`) when appropriate (`calc` expressions are proof terms)",
+        "description": "An expression that begins with `calc` is a proof term and does not begin with `by`. `calc` expressions can also be used inside tactic proofs where Lean interprets them as the instruction to use the resulting proof term to solve the goal.",
+        "guidance": "Use proof-term style (`calc`, direct application of lemma as a term) for clarity when a proof can be written as a term; use tactic mode (`by ...`) when constructing proofs interactively or when tactics simplify the job."
+      }
+    ]
+  }
+}

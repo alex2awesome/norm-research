@@ -1,0 +1,111 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/acffc2a1f0e5.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "acffc2a1f0e5.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 14,
+  "chunk_chars": 39998,
+  "model": "gpt-5-mini",
+  "elapsed_s": 60.79240299999947,
+  "input_tokens": 14320,
+  "output_tokens": 4820,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "students and researchers in combinatorics and probability (readers interested in mathematical analysis of card shuffling, mixing times, and combinatorial enumeration)",
+    "subtask_short": "analyzing_card_shuffles_mixing",
+    "subtask_description": "Mathematical analysis of how card-shuffling processes approach uniform randomness (mixing), including precise metrics (variation distance), stopping rules, probabilistic models (top-in-at-random, Gilbert\u2013Shannon\u2013Reeds riffle shuffle), and combinatorial tools used to estimate mixing times. Also includes related combinatorial lemmas (Gessel\u2013Viennot) and enumerative results (Cayley's formula) used as illustrative applications.",
+    "subtask_keywords": [
+      "card_shuffling",
+      "variation_distance",
+      "riffle_shuffle",
+      "mixing_time",
+      "combinatorics",
+      "probability"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Variation distance (total variation) between distributions",
+        "description": "The variation distance between two probability distributions Q1 and Q2 on S_n is defined as ||Q1 - Q2|| = max_{S subset S_n} |Q1(S) - Q2(S)|, equivalently (1/2) sum_{pi in S_n} |Q1(pi) - Q2(pi)|. It satisfies 0 \u2264 ||Q1 - Q2|| \u2264 1.",
+        "guidance": "Being 'close to random' is interpreted as having small variation distance from the uniform distribution U. Example: starting distribution E (identity) has ||E - U|| \u2248 1. Use variation distance d(k) := ||Q^{*k} - U|| to quantify mixing after k shuffles."
+      },
+      {
+        "name": "Interpretation of 'close to random' via variation distance",
+        "description": "The phrase 'being close to random' is interpreted as 'having small variation distance from the uniform distribution'.",
+        "guidance": "This gives a concrete numerical target for mixing problems (e.g., 'is 7 shuffles enough?'). Use variation distance thresholds (e.g., <0.1) to decide practical randomness; concrete bounds are derived later for models such as top-in-at-random and riffle shuffles."
+      },
+      {
+        "name": "Mixing profile and the cut-off phenomenon",
+        "description": "For a shuffle distribution Q, the mixing profile d(k) := ||Q^{*k} - U|| typically goes to zero exponentially fast for large k (Markov chain theory), but in many card-shuffling examples one observes a sharp 'cut-off': d(k) remains large until near a critical k0 and then drops rapidly.",
+        "guidance": "Expect exponential decay for large k in general finite-group Markov chains (reference Behrends). Use analyses tailored to the shuffle type to identify the cut-off location k0."
+      },
+      {
+        "name": "Strong uniform stopping rule (definition)",
+        "description": "A stopping rule (depending only on the observed random shuffles applied so far) is strong uniform if for all feasible k > 0: Prob[X_k = pi | T = k] = 1/n! for all permutations pi in S_n. That is, whenever the process is stopped after exactly k steps, the resulting permutation is exactly uniform.",
+        "guidance": "Three important consequences: (1) such rules exist and can be simple, (2) they are often analyzable (one can compute Prob[T > k]), and (3) they yield effective upper bounds on variation distance via Prob[T > k]. Example: For top-in-at-random, 'STOP after the original bottom card (labelled n) is first inserted back into the deck' is a strong uniform stopping rule; analyzing its distribution reduces to coupon-collector problems."
+      },
+      {
+        "name": "Relative (conditional) probability",
+        "description": "The relative probability (conditional probability) of event A given B is Prob[A | B] = Prob[A \u2229 B] / Prob[B].",
+        "guidance": "Used to formulate the strong uniform stopping rule condition: Prob[X_k = pi | T = k] = 1/n! for all pi and feasible k."
+      },
+      {
+        "name": "Lemma: bound of variation distance by stopping-time tail",
+        "description": "If Q is a shuffle distribution on S_n that admits a strong uniform stopping rule with stopping time T, then for all k > 0: ||Q^{*k} - U|| \u2264 Prob[T > k].",
+        "guidance": "Proof idea: decompose Q^{*k}(S) = U(S) (1 - Prob[T > k]) + Prob[X_k \u2208 S | T > k] Prob[T > k], so the maximum deviation from U is at most Prob[T > k]. This is the crucial link allowing analysis of Prob[T > k] (often combinatorial) to yield upper bounds on variation distance."
+      },
+      {
+        "name": "Coupon collector analogy for top-in-at-random",
+        "description": "For top-in-at-random shuffles, one can define stopping times T_i counting the number of shuffles until i cards lie below card n; the increments T_i - T_{i-1} are distributed like the increments in the coupon collector problem. Hence the stopping time T (time until card n has had all cards below it) corresponds to the coupon collector total time.",
+        "guidance": "This equivalence allows use of standard coupon-collector estimates: with high probability T > k for k significantly less than n log n, and T \u2264 n log n + c n with exponentially small tail probability in c. Consequently, top-in-at-random requires about n log n shuffles to mix (quantified in Theorem 1)."
+      },
+      {
+        "name": "Theorem 1 (top-in-at-random mixing bound)",
+        "description": "Let c > 0 and k := \u2308n log n + c n\u2309. Then after performing k top-in-at-random shuffles on a deck of n cards, the variation distance from uniform satisfies a small-tail bound (derived from the coupon-collector lemma).",
+        "guidance": "Conclusion: top-in-at-random shuffles require roughly n log n shuffles to get 'close to random'. For n = 52 this estimate implies roughly 205 shuffles (i.e., top-in-at-random is very ineffective compared to realistic shuffling). The exact bound in the text is deduced via the lemma ||Q^{*k} - U|| \u2264 Prob[T > k]."
+      },
+      {
+        "name": "Gilbert\u2013Shannon\u2013Reeds (GSR) model for riffle shuffles (Rif)",
+        "description": "A widely used probabilistic model for riffle shuffles, described equivalently in three ways: (1) permutations that are the interleaving of two increasing sequences are given positive probability (with specific formula), (2) cut t cards with Binomial(n,1/2) distribution then drop from the two halves with probabilities proportional to current sizes, (3) label each card independently 0/1 with prob 1/2 and move all 0-labelled cards to the top preserving relative order.",
+        "guidance": "GSR model is elegant, natural for amateur shuffles, and analyzable. It defines the distribution Rif on S_n used in subsequent analysis of riffle-shuffle mixing times."
+      },
+      {
+        "name": "Inverse riffle shuffle and 'distinct binary string' strong uniform stopping rule",
+        "description": "Consider inverse riffle shuffles (equivalently, track labels picked up by each card). After k inverse riffle shuffles each card has a k-bit string. Stopping rule: 'STOP as soon as all cards have distinct strings.' When this happens the deck order (sorted by these binary strings) is uniform, so this is a strong uniform stopping rule.",
+        "guidance": "This reduction to labels/binary strings makes the problem amenable to the birthday-paradox analysis: collisions of k-bit labels correspond to non-uniqueness; ensuring no collisions implies uniformity. Reeds' inversion lemma ensures analysis via inverse shuffles is equivalent to forward riffles."
+      },
+      {
+        "name": "Birthday-paradox estimate for riffle-shuffle stopping time",
+        "description": "Modeling the k-bit labels as placing n cards into K = 2^k boxes, the probability that some box receives more than one card (a collision) is approximated by the birthday paradox. Hence Prob[T > k] is roughly the collision probability for n balls in K boxes.",
+        "guidance": "Setting k \u2248 2 log2 n gives small collision probability. For large n one needs roughly k = 2 log2 n riffle shuffles to get close to random. Concrete numerical bounds for n = 52: d(10) < 0.73, d(12) < 0.28, d(14) \u2264 0.08, so about 12 riffle shuffles are practically sufficient though practical usage differs."
+      },
+      {
+        "name": "Reeds' inversion lemma (symmetry of uniform distribution under inversion)",
+        "description": "For riffle shuffle distribution Rif, analyzing inverse riffle shuffles is legitimate because U(pi) = U(pi^{-1}) and Rif(pi) = Rif(pi^{-1}) (Reeds' inversion lemma). Thus mixing of inverse shuffles mirrors forward shuffles.",
+        "guidance": "This legitimizes the strategy of analyzing inverse riffle shuffles and applying stopping rules based on labels collected during inverse shuffles."
+      },
+      {
+        "name": "Gessel\u2013Viennot Lemma (path matrix determinant identity)",
+        "description": "Let G be a finite acyclic directed graph with edge weights. For two n-sets A = {A1,...,An} and B = {B1,...,Bn} define the path matrix M with entries m_{ij} = sum_{paths Ai\u2192Bj} weight(path). Then det M equals the signed sum of weights over all vertex-disjoint path systems from A to B: det M = sum_{P vertex-disjoint} sign(P) w(P).",
+        "guidance": "Proof via sign-reversing involution on non-vertex-disjoint path systems (pairwise intersections cancel). Applications: proves binomial-determinant identities, yields nonnegativity results, derives Binet\u2013Cauchy-type combinatorial interpretations. Use the lemma to convert determinant calculations into combinatorial counting of vertex-disjoint path systems."
+      },
+      {
+        "name": "Binet\u2013Cauchy theorem (determinant of product equals sum over minors)",
+        "description": "If P is r\u00d7s and Q is s\u00d7r with r \u2264 s, then det(PQ) is the sum over all r-subsets S of {1..s} of det(P_S) det(Q_S), where P_S is the r\u00d7r submatrix of P with columns S and Q_S the corresponding r\u00d7r submatrix of Q.",
+        "guidance": "Used in proofs such as the matrix-tree theorem (Kirchhoff) to express cofactors as sums over submatrices corresponding to edge-sets; links algebraic determinants to combinatorial structures (spanning trees)."
+      },
+      {
+        "name": "Kirchhoff's matrix-tree theorem (counting spanning trees via Laplacian cofactors)",
+        "description": "For a connected graph G with Laplacian A (degree on diagonal, -1 for adjacent off-diagonals), the number t(G) of spanning trees equals any cofactor det A_{ii} obtained by deleting the i-th row and column.",
+        "guidance": "Proof uses Binet\u2013Cauchy applied to oriented incidence matrix and shows that only submatrices corresponding to tree edge-sets contribute nonzero determinant (equal to \u00b11). Specializing to the complete graph K_n and computing the Laplacian cofactor yields Cayley's formula for T_n."
+      },
+      {
+        "name": "Cayley's formula for number of labeled trees",
+        "description": "There are n^{n-2} different labeled trees on the vertex set {1,...,n}.",
+        "guidance": "Multiple proofs presented: bijection (Prufer/Joyal codings), linear algebra via matrix-tree theorem, recursion (Riordan\u2013R\u00e9nyi), and double-counting (Pitman). Each proof provides a different constructive or enumerative perspective useful in combinatorics."
+      }
+    ]
+  }
+}

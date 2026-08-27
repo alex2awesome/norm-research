@@ -1,0 +1,235 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 37,
+  "n_chunks": 42,
+  "chunk_chars": 39811,
+  "model": "gpt-5-mini",
+  "elapsed_s": 283.56492770800105,
+  "input_tokens": 15647,
+  "output_tokens": 7993,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX implementers, advanced TeX users, font designers, and professional typesetters",
+    "subtask_short": "typesetting math and hyphenation",
+    "subtask_description": "Detailed low-level rules and parameter conventions for converting TeX math lists into boxes (math typesetting) and for hyphenation using Liang's algorithm and TeX's exception/pattern mechanisms. Includes per-item processing rules (Rules 1\u201322), sub/superscript positioning, fraction/radical/accent construction, inter-element spacing, penalty insertion, and hyphenation pattern/exception syntax and behavior.",
+    "subtask_keywords": [
+      "tex",
+      "math_typesetting",
+      "hyphenation",
+      "implementer",
+      "font_parameters"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Rule 1: leave rule/discretionary/penalty/whatsit/boundary items unchanged",
+        "description": "If the current item is a rule or discretionary or penalty or 'whatsit' or boundary item, simply leave it unchanged and move to the next item.",
+        "guidance": "These items are not transformed during the first pass of math-list translation; they remain as-is for later processing."
+      },
+      {
+        "name": "Rule 2: translate glue and kern (mu\u2192absolute conversion and \\nonscript handling)",
+        "description": "If the current item is glue or a kern, translate it: convert mu units from \\mskip or \\mkern to absolute units by multiplying each finite dimension appropriately; if glue is from \\nonscript, check the immediately following item and possibly remove it if certain conditions hold.",
+        "guidance": "Special-case \\nonscript glue: if immediately following item is glue or kern and condition C \u2264 S holds, remove the following item. Convert mu glue to absolute units as specified so spacing is correct in non-math-unit dimensions."
+      },
+      {
+        "name": "Rule 3: style-change items",
+        "description": "If the current item is a style change, set C to the specified style, delete the style-change item, and continue.",
+        "guidance": "Style-change items affect the 'current style' used for subsequent translations; they are removed during the pass after updating C."
+      },
+      {
+        "name": "Rule 4: four-way choice items (style-dependent lists)",
+        "description": "If the item is a four-way choice (contains four math lists for the four main styles), replace it by the math list corresponding to the current style C and continue processing from the first unprocessed item of that list.",
+        "guidance": "This implements size/style substitutions (e.g., display/text/script/script-script) by selecting the appropriate sublist early."
+      },
+      {
+        "name": "Rule 5: Bin atom initial-context conversion",
+        "description": "If the current item is a Bin atom and it is the first atom in the list or the most recent previous atom was Bin/Op/Rel/Open/Punct, change the current Bin to Ord (then continue with Rule 14); otherwise proceed to Rule 17.",
+        "guidance": "This enforces context-sensitive class changing of '+'-like tokens when they appear at starts or after certain atom types so spacing and behavior match mathematical conventions."
+      },
+      {
+        "name": "Rule 6: fix previous Bin when following atom is Rel/Close/Punct",
+        "description": "If the current item is a Rel or Close or Punct atom and the most recent previous atom was Bin, change that previous Bin to Ord, then continue with Rule 17.",
+        "guidance": "Ensures a preceding Bin is not left in a binary role when syntax makes it an ordinary symbol (affects spacing and classification)."
+      },
+      {
+        "name": "Rule 7: Open or Inner atom short-circuit",
+        "description": "If the current item is an Open or Inner atom, go directly to Rule 17 (i.e., no special earlier handling).",
+        "guidance": "Open/Inner atoms are handled in the later stages where nucleus translation and sub/superscript attachment occur."
+      },
+      {
+        "name": "Rule 8: \\vcenter atoms converted to Ord and axis-based adjustments",
+        "description": "If the current item is a vcenter atom, let its nucleus be a vbox of height+depth v; change its height to \u00bdv + a and depth to \u00bdv \u2212 a (where a is axis height a22), change atom type to Ord, and continue with Rule 17.",
+        "guidance": "Centers vcenter material around TeX's math axis by redistributing height/depth and treating it as an ordinary atom."
+      },
+      {
+        "name": "Rule 9: Over atoms (\\overline) construct vbox with rule above",
+        "description": "For an Over atom, set box x to the nucleus in style C'; replace the nucleus by a vbox consisting of kern e, hrule of height e, kern 3e, and box x (top to bottom), where e is the default rule thickness; continue with Rule 16.",
+        "guidance": "Creates an overline with specified clearances (3e) and assumes e units of extra white space above the rule. Uses default_rule_thickness parameter."
+      },
+      {
+        "name": "Rule 10: Under atoms (\\underline) construct vtop with rule below",
+        "description": "For an Under atom, set box x to nucleus in style C, replace nucleus by a vtop made from box x, kern 3e, and hrule of height e (e = default rule thickness), add e to the depth of the box, and continue with Rule 16.",
+        "guidance": "Places a rule under the nucleus with 3e clearance and assumes e units of extra white space below the rule."
+      },
+      {
+        "name": "Rule 11: Radical atoms (\\radical / \\sqrt) construction rules",
+        "description": "For a Radical atom, compute e (default rule thickness), compute minimum clearance \u00b5 (called \u03d5 or similar) between the radical's rule and the nucleus, select a variable delimiter of sufficient height+depth, set rule thickness from delimiter font (h(y)), adjust \u00b5 if delimiter depth exceeds nucleus size, and construct a vbox consisting of kern, hrule, and the nucleus box; replace nucleus by a raised variable delimiter box and the new vbox.",
+        "guidance": "The font's delimiter metrics determine the rule thickness and delimiter size; increases in delimiter depth above the nucleus increase clearance. Follow the detailed arithmetic in the text to ensure correct vertical spacing."
+      },
+      {
+        "name": "Rule 12: Math accents (\\mathaccent) positioning and construction",
+        "description": "If the accent character exists in the current size, set box x to the nucleus in style C', compute nucleus width n and possible italic correction \ud835\udeff (skew), choose accent successor if width \u2264 n, set J = min(h(x), x-height_of_accent_font), if nucleus is single character, package nucleus with its sub/superscripts in style C and empty those fields, put accent into a box including italic correction, build vbox z combining accent and nucleus with computed kerns and shifts, adjust heights/depths as needed, replace nucleus by box z and continue with Rule 16.",
+        "guidance": "Uses font parameter 5 (x-height) and the font's skewchar; handles single-character nuclei specially so accent placement accounts for superscripts/subscripts."
+      },
+      {
+        "name": "Rule 13: Operators (Op atoms) and limit determination",
+        "description": "Mark Op atoms as having limits if marked \\limits or (\\displaylimits and current style C > T). If nucleus is a symbol, possibly move to a successor glyph for larger display sizes, put symbol in a new box shifted vertically to center on the axis, and set italic correction J included in width if limits are set or there is no subscript.",
+        "guidance": "Large operators (e.g., \u03a3, \u222b) change to larger glyphs in display styles; whether limits are set affects whether the italic correction contributes to width and later placement of limits."
+      },
+      {
+        "name": "Rule 13a: Typesetting limits for Op atoms",
+        "description": "If limits are to be typeset, set boxes for the superscript field (style C\u00b9), nucleus (style C), and subscript (style C+), rebox all to width = max(widths), attach superscript above nucleus separated by kern = max(e\u2089, e\u2081\u2081 - d(x)) with horizontal shifts/extra kerns as specified, attach subscript below similarly, and make the resulting vbox the nucleus of the Op atom.",
+        "guidance": "Use the big-Op-spacing parameters and default rule thickness e to compute vertical separations and horizontal shifts for proper limit placement. The text gives exact formulas for kerns and horizontal shifts."
+      },
+      {
+        "name": "Rule 14: Ord atoms\u2014ligatures and implicit kerns",
+        "description": "Ord atoms usually go to Rule 17, unless nucleus is a symbol, both sub/superscripts empty, next item is one of specific atom types and shares the same font family\u2014then mark current symbol as a text symbol; if font info shows a ligature for the pair, insert ligature character(s); if font shows a kern between them, insert a kern item accordingly; after ligature/kern processing go to Rule 17.",
+        "guidance": "Handles font ligatures and inter-character kerns within mathematical symbols; uses fontdimen info to decide italic corrections and ligature behavior."
+      },
+      {
+        "name": "Rule 15: Generalized fractions (\\over, \\atop, \\above and delimiters)",
+        "description": "Handle generalized fractions by selecting bar thickness e depending on generator (\\over \u2192 e = default_rule_thickness, \\atop \u2192 e = 0, \\above \u2192 specified e), record left/right delimiters (if present), and proceed to construct numerator/denominator boxes and combine them with appropriate vertical shifts and optional rule bar.",
+        "guidance": "Subrules 15a\u201315e give the exact style choices for numerator/denominator, tentative vertical shifts n and v, minimum clearances \u03d5, adjustments when e = 0 (\\atop) or e \u2260 0 (\\over), and final enclosure by delimiters of sufficient size centered on the axis."
+      },
+      {
+        "name": "Rule 15a: Put numerator/denominator into boxes with appropriate styles",
+        "description": "Put numerator into box x using style T (or T' if C is D or D'); put denominator into box z using style T' if C > T otherwise C+; rebox the smaller to the larger width so numerator and denominator have same width.",
+        "guidance": "Ensures numerator and denominator align vertically/centrally by equalizing widths before building fraction vbox."
+      },
+      {
+        "name": "Rule 15b: Tentative vertical shifts n and v for fractions",
+        "description": "Set tentative upward shift n and downward shift v according to display vs text style (use parameters a(\u22121), a9, a10, a12 etc.) so numerator is shifted up by n and denominator down by v unless boxes are unusually large.",
+        "guidance": "Values depend on whether formula is display or text style and on the particular fraction-generation command used; see the parameter table for exact mapping."
+      },
+      {
+        "name": "Rule 15c: Combine numerator/denominator for \\atop (e = 0)",
+        "description": "When e = 0, compute minimum clearance \u03d5 (7e(\u22121) or 3e(\u22121) depending on style), get actual clearance \u03b8 = (n \u2212 depth(x)) \u2212 (height(z) \u2212 v); if \u03b8 < \u03d5 increase n and v by \u00bd(\u03d5 \u2212 \u03b8) each, then construct vbox of height h(x) + n and depth d(z) + v with appropriate kern between boxes.",
+        "guidance": "Guarantees minimum spacing between numerator and denominator when no rule bar is present."
+      },
+      {
+        "name": "Rule 15d: Combine numerator/denominator for \\over (e \u2260 0) with bar line",
+        "description": "When e \u2260 0, set \u03d5 (3e(\u22121) or 0 depending on style) as minimum clearance between numerator/denominator and bar, place bar center at axis height a, adjust n and v so clearances meet \u03d5, then make vbox ordering box x, kern, hrule (height e), kern, box z with kerns chosen so hrule bottom is at a \u2212 \u00bde above baseline.",
+        "guidance": "Accurate placement of the fraction bar around the math axis is critical; follow axis-height and default_rule_thickness parameters."
+      },
+      {
+        "name": "Rule 15e: Enclose fraction vbox by delimiters and replace by Inner atom",
+        "description": "Enclose the constructed vbox by delimiters whose height+depth is at least a specified parameter (azo or az1 depending on style), shift delimiters to be vertically centered on the axis, and replace the generalized fraction by an Inner atom whose nucleus is left-delimiter, vbox, right-delimiter.",
+        "guidance": "Use delimiter sizing rules (delimiterfactor, delimitershortfall) and center with respect to axis; choose variable delimiters if necessary."
+      },
+      {
+        "name": "Rule 16: Convert current item to Ord and continue to sub/sup handling",
+        "description": "Change the current item to an Ord atom and continue with Rule 17.",
+        "guidance": "Standardizes item type so subsequent nucleus translation and attachment logic applies uniformly."
+      },
+      {
+        "name": "Rule 17: Nucleus translation to box and italic correction handling",
+        "description": "If the nucleus is a math list, replace it by a box obtained by typesetting that list in the current style; otherwise (common case) convert symbol to character box for specified family and style, set italic correction J (fontdimen 2) if not marked as text symbol and if fontdimen 2 \u2260 0, and if J nonzero and subscript empty insert a kern of width J after the character box.",
+        "guidance": "This is where character glyph conversion and italic-correction insertion occur; fontdimen parameters are consulted to decide corrections and kern insertions prior to attaching subscripts/superscripts."
+      },
+      {
+        "name": "Rule 18: Attaching subscripts and superscripts (general scheme)",
+        "description": "If neither subscript nor superscript present move on; otherwise follow subrules 18a\u201318f to compute tentative n and v, create boxes for scripts in appropriate styles, add \\scriptspace to their widths, enforce minimum vertical offsets (including limits related to x-height fractions), and if both are present ensure clearance between them at least 4e with adjustments as needed; finally combine nucleus and scripts into vbox with horizontal displacements and append.",
+        "guidance": "Detailed formulas (18a\u201318f) compute baseline shifts, ensure scripts don't intrude beyond font-specific fractions of x-height, and ensure minimum spacing between joint sub/superscript combinations; default_rule_thickness e and font-based parameters (a1, a9, a10, a12, etc.) are used."
+      },
+      {
+        "name": "Rule 19: Boundary item replacement by delimiters sized to formula extent",
+        "description": "If math list begins and ends with boundary items, compute maximum height h and depth d of boxes in translation, let a be axis height a22 and J = max(h \u2212 a, d + a), replace boundary items by delimiters whose height+depth \u2265 max(J/500 * f, 2J \u2212 l) where f = \\delimiterfactor and l = \\delimitershortfall, shift delimiters to be vertically centered with respect to axis, and change left/right boundaries to Open/Close atoms.",
+        "guidance": "Boundary delimiters are sized to cover the full vertical extent of the formula; precise formulas use delimiterfactor and delimitershortfall to pick delimiter size."
+      },
+      {
+        "name": "Rule 20: Second pass\u2014replace atoms by boxes and insert inter-element spacing",
+        "description": "After Rules 1\u201319 convert the math list into atoms of the remaining types (Ord, Op, Bin, Rel, Open, Close, Punct, Inner). Make a second pass replacing all atoms by their translated boxes and kerns and insert inter-element spacing before each atom except the first, based on the atom type pair and parameters \\thinmuskip, \\medmuskip, and \\thickmuskip (mu converted to absolute units as in Rule 2).",
+        "guidance": "Inter-element spacing depends on the pair of adjacent atom classes and is defined in Chapter 18; mu units conversion must be performed consistently with earlier rules and style."
+      },
+      {
+        "name": "Rule 21: Insert penalties after Bin and Rel atoms in paragraph math lists",
+        "description": "Penalties are placed after the translation of each atom of type Bin or Rel if the math list was part of a paragraph. The penalty after a Bin is \\binoppenalty and after a Rel is \\relpenalty, except do not insert if it's the final item in entire list, the penalty value \u2265 100001, next item already a penalty, or after a Rel immediately followed by another Rel.",
+        "guidance": "Penalties influence line-breaking behavior in paragraph math; observe the exceptions to avoid spurious penalties."
+      },
+      {
+        "name": "Rule 22: Enclose inline math and record \\mathsurround; displayed formulas handled later",
+        "description": "After conversion to horizontal list, if the result is being inserted into a larger horizontal list (horizontal or restricted horizontal mode) enclose it by 'math-on' and 'math-off' items that each record the current value of \\mathsurround; if the list is a displayed formula process further as explained in Chapter 19.",
+        "guidance": "\\mathsurround records extra horizontal space around inline math; displayed math follows additional layout steps handled elsewhere."
+      },
+      {
+        "name": "Font and non-font parameters affecting math typesetting (summary)",
+        "description": "A set of fontdimen parameters (various fontdimen indices: e.g., space=fontdimen2, x-height=fontdimen5, italic correction, big-Op-spacing parameters, sup/sub parameters, delim parameters) and non-font parameters (\\delimitershortfall, \\nulldelimiterspace, \\mathsurround, \\scriptspace, \\delimiterfactor, \\binoppenalty, \\relpenalty, \\thinmuskip, \\medmuskip, \\thickmuskip) influence the behavior of Rules 1\u201322.",
+        "guidance": "Carefully set these parameters for new mathematical fonts or macros to ensure correct accent placement, operator sizing, fraction clearances, delimiter sizing, inter-element spacing, penalties, and script positioning. The appendix provides mappings from external names (e.g., :sup2) to fontdimen indices and rule references."
+      },
+      {
+        "name": "Hyphenation principle 1: try exception dictionary first",
+        "description": "TeX hyphenates a word by first looking for it in an 'exception dictionary' that specifies hyphen positions for words needing special treatment; if not found, patterns are used.",
+        "guidance": "Exception entries must match exactly (after lowercase conversion via \\lccode); exception dictionary overrides pattern results and is global in scope."
+      },
+      {
+        "name": "Hyphenation principle 2: Liang's pattern algorithm (patterns \u2192 inter-letter values \u2192 odd=hyphen)",
+        "description": "Liang's algorithm extends a word with markers at ends, considers all subwords of varying lengths, matches subwords against a pattern dictionary whose patterns carry inter-letter integer values, computes the maximum value at each potential hyphenation position, and accepts a hyphen at positions where the maximal value is odd.",
+        "guidance": "Patterns encode desirability (digits 0\u20139) for hyphenation points; matching and maximization are efficient and language-adaptable. Example: 'hyphenation' yields markers and patterns producing odd values at 'hy-phen-ation'."
+      },
+      {
+        "name": "Pattern syntax and constraints",
+        "description": "A (pattern) consists of one or more occurrences of (value)(letter) followed by (value), where (value) is a digit 0\u20139 or empty (meaning zero), and (letter) is a character token category 11 or 12 whose \\lccode is nonzero; '.' is treated as a letter of code 0 in patterns to represent word edges.",
+        "guidance": "To include a digit as a letter in a pattern, precede it by a nonempty value; patterns are strict in character types and are intended to be precompiled by experts (plain TeX loads a large static set)."
+      },
+      {
+        "name": "Pattern application detail: maximal inter-letter value selection",
+        "description": "For each inter-letter position in the extended word, TeX gathers all pattern-supplied values that touch that position and takes the maximum; hyphenation is allowed where this maximum is odd.",
+        "guidance": "Example calculations are shown in text (e.g., how patterns produce 'hy-phen-ation' by maximizing values from different matched patterns)."
+      },
+      {
+        "name": "Pattern coverage and derivation (Liang's method and data sources)",
+        "description": "Patterns can be derived by analyzing a hyphenated dictionary (Liang used a special Webster's Pocket Dictionary and a hyphenation dictionary from a publisher), weighting common words more heavily; plain TeX's English patterns (4,447 patterns) find ~89.3% of hyphens in Liang's dictionary and guarantee complete hyphenation for the ~700 most common English words.",
+        "guidance": "Pattern sets are language-specific; deriving good patterns requires curated corpora and may include adding exceptional words after testing against larger dictionaries."
+      },
+      {
+        "name": "Exception dictionary format and rules for \\hyphenation{...}",
+        "description": "The \\hyphenation{words} command takes words (one or more) separated by spaces; each word item must consist wholly of letters and hyphens (a 'hyphen' is token -, category code 12), letters are characters with category codes 11 or 12 or control-sequences via \\chardef/\\char whose character has nonzero \\lccode; TeX uses \\lccode to convert letters to lowercase for matching; exception entries affect hyphenation only on exact lowercase match and are global.",
+        "guidance": "Exceptions never insert hyphens after the very first letter or before the last or second-last letter unless you explicitly include discretionary hyphens in the entry. If the same word is specified more than once, the most recent entry wins."
+      },
+      {
+        "name": "Commands for debugging/inspecting hyphenation: \\showhyphens",
+        "description": "Use \\showhyphens{<text>} to display terminal/log output of hyphenation points TeX would find for the text; the macro constructs an intentionally underfull hbox so hyphens are shown in compact form.",
+        "guidance": "Ignore the spurious 'Underfull \\hbox (badness 10000)' warning that arises because the display technique purposely makes an underfull box."
+      },
+      {
+        "name": "Pattern loading: static patterns vs dynamic exception dictionary",
+        "description": "The exception dictionary is dynamic (can be modified at run-time via \\hyphenation) but the pattern dictionary is static in production TeX: to change the pattern set you must create a new format using INITEX and a \\patterns{...} list (INITEX precompresses patterns into a format file for fast loading by production TeX).",
+        "guidance": "Pattern compression requires extra INITEX-time memory; production versions load precompiled pattern tables rapidly and cannot accept \\patterns at runtime."
+      },
+      {
+        "name": "Word recognition for hyphenation (what counts as a word)",
+        "description": "TeX recognizes words for hyphenation within horizontal lists containing boxes, glue, rules, ligatures, kerns, discretionaries, mathwhatsits, punctuation, etc.; punctuation or ligatures around or within words shouldn't prevent recognition, but TeX intentionally uses simple, fast heuristics to avoid spending time on unusual cases.",
+        "guidance": "The algorithm aims to be fast and robust; authors can add exceptions if the patterns are insufficient for their context."
+      },
+      {
+        "name": "Hyphenation-related integer and dimension parameters",
+        "description": "TeX's hyphenation behavior and frequency can be influenced by parameters such as \\hyphenpenalty, \\doublehyphendemerits, \\pretolerance, \\tolerance, \\finalhyphendemerits, \\lefthyphenmin, \\righthyphenmin, and \\hyphenchar.",
+        "guidance": "These parameters control how eager TeX is to hyphenate, penalties for single/double hyphens, tolerances in breaking paragraphs, and minimum letters before/after hyphenation. The appendix shows examples of setting these to force more hyphenation for demonstration."
+      },
+      {
+        "name": "Exception vs pattern tradeoff and practical expectation",
+        "description": "Plain TeX's patterns find ~90% of permissible hyphen points overall, but when word frequency is considered they effectively cover >95% of likely needs; manual intervention (exception additions) is rarely necessary and, when needed, is cheap relative to proofreading.",
+        "guidance": "Patterns generalize well to new coined or rare words similar to common patterns; use \\hyphenation to add high-frequency misses for a specific job."
+      },
+      {
+        "name": "Restrictions on exception entries (character and category constraints)",
+        "description": "In \\hyphenation entries a 'letter' is restricted to tokens of category 11 or 12 or control sequences defined by \\chardef/\\char whose corresponding character has nonzero \\lccode; any hyphenation entry must be made of such letters and hyphens (token - of code 12).",
+        "guidance": "This enforces that exception words are composed of characters TeX can lowercase and match reliably; otherwise they won't behave as expected."
+      }
+    ]
+  }
+}

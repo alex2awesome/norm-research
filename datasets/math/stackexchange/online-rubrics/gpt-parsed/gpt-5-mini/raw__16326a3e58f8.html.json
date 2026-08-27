@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/16326a3e58f8.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16145,
+  "output_tokens": 3315,
+  "elapsed_s": 1904.6474662078544,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "proof theorists, logicians, philosophers of mathematics, and researchers studying proof complexity and mathematical practice",
+    "subtask_short": "measuring discovermental complexity of proofs",
+    "subtask_description": "Evaluate and construct formal measures of the difficulty of discovering mathematical proofs (discovermental complexity), especially via graph-theoretic measures (genus) extracted from formal and informal proofs. Compare candidate graph-extraction methods and assess whether they adequately capture the proof-structural features relevant to discoverability.",
+    "subtask_keywords": [
+      "proof_theory",
+      "discovermental_complexity",
+      "genus",
+      "graph_extraction",
+      "philosophy_of_mathematics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Distinguish verificational vs discovermental complexity",
+        "description": "Measures should distinguish 'verificational complexity' (difficulty of checking that a given syntactic entity is a proof) from 'discovermental complexity' (difficulty of coming up with a proof in the first place).",
+        "guidance": "The paper emphasizes Detlefsen's contrast: many existing proof-theoretic complexity metrics measure verificational complexity; a good measure for the task at hand must target inventional/discovermental aspects. Anti-pattern: treating length/size alone as capturing discoverability. Example: Potter's remark that a short proof is useless if we cannot find it."
+      },
+      {
+        "name": "Genus as candidate measure of discovermental complexity",
+        "description": "Use the topological genus of a graph extracted from a proof as a measure of the proof's global structural complexity, with the intuition that a more 'convoluted' inferential structure (higher genus) is harder to discover.",
+        "guidance": "Define genus as least number of handles needed on a sphere to draw the graph without crossings; planar graphs have genus 0. Carbone and Statman extract graphs from proofs and measure genus to capture 'convolutedness'. Example: complete graphs K_n have calculable genus (Ringel\u2013Youngs formula). Scoring note: higher genus indicates more global interrelatedness among inferential points."
+      },
+      {
+        "name": "Proof-to-graph extraction must capture global proof structure",
+        "description": "The graph extraction method must encode the global structural relations of the proof (not merely local token-flow) so that graph complexity reflects proof complexity.",
+        "guidance": "Statman's derivation graphs include tree structure plus assumption-to-discharge links, thereby representing premise-to-conclusion and assumption-discharge relations; logical flow graphs (Buss/Carbone) often fail here because they track atomic formula flow and can omit logical-structure relations. Anti-pattern: extracting graphs that only track occurrences of atomic formulas and thereby miss logical composition."
+      },
+      {
+        "name": "Logical flow graphs adequacy criterion",
+        "description": "Assess whether logical flow graphs encode the logical rules and global inferential structure of proofs; if they ignore logical-rule structure, their genus may not reflect proof structural complexity.",
+        "guidance": "Carbone's logical flow graphs trace how an atomic formula spreads through a sequent-calculus proof, but they largely ignore the structure introduced by logical connectives and thus may only reflect structural rules (e.g., contraction). Consequence: logical flow graphs can yield genus 0 for many logically-complex proofs (anti-pattern)."
+      },
+      {
+        "name": "Derivation graphs adequacy criterion",
+        "description": "Prefer graph extractions (e.g., Statman's derivation graphs) that represent formulas (not only atoms), the proof tree, and assumption-discharge relations so that genus is sensitive to logical rules.",
+        "guidance": "Statman's derivation graphs account for all relations between parts of a proof (premise-to-conclusion and assumption-to-discharge), and thus the genus of such graphs can be affected by logical inference structure as well as structural features. This makes them better candidates for measuring global structural (and thus discovermental) complexity."
+      },
+      {
+        "name": "Sensitivity to structural rules (contraction, cut, function composition)",
+        "description": "A complexity measure should reflect the impact of structural rules (contraction, cut) and added rules like function composition because these affect the graph's degree structure and hence genus.",
+        "guidance": "Observation: nodes of degree >=3 (necessary for genus > 0) arise from contraction or similar merging operations; Carbone's construction to produce arbitrarily high genus relies on structural rules and function composition. Anti-pattern: a measure that cannot reflect the presence/effect of contraction or cuts will mis-evaluate many proofs."
+      },
+      {
+        "name": "Account for cuts and lemmas in discoverability",
+        "description": "A suitable measure should capture the practical trade-off that proofs with cut (lemmas) may be shorter but harder to discover, i.e., include features that reflect the epistemic difficulty of selecting cut formulas.",
+        "guidance": "Statman showed cut-free proofs can be exponentially longer than proofs with cut; Carbone notes cuts may shorten proofs but choosing appropriate cuts (lemmas) is often non-obvious. A measure should help explain this discrepancy between proof length and discoverability rather than equating shorter proofs with easier discovery."
+      },
+      {
+        "name": "Distinguish size (length) from global structural complexity",
+        "description": "A useful complexity metric should separate 'size' (number of lines/vertices) from global structural complexity (interrelatedness encoded by genus): high size does not imply high genus and vice versa.",
+        "guidance": "High genus requires a large graph but large graphs (e.g., trees) can have genus 0. Thus genus adds nuance beyond length. Anti-pattern: relying solely on proof length as a proxy for discoverability."
+      },
+      {
+        "name": "Genus is a global, non-additive property",
+        "description": "Recognize and account for genus' global, non-compositional character: the genus of a union of subgraphs sharing vertices may be arbitrarily larger than the sum of subgenera.",
+        "guidance": "Archdeacon's result on non-additivity: genus is not computable from parts independently. Consequence: modular or compositional scoring that sums subproof complexities can misrepresent overall discoverability."
+      },
+      {
+        "name": "Graph-theoretic measures must be applicable to informal proofs/outlines",
+        "description": "The metric should be applicable not only to fully formalized proofs but also to informal proof outlines that exhibit logical/structural flow (e.g., Szemer\u00e9di-style flowcharts), since mathematicians often work at that level.",
+        "guidance": "Informal proofs communicate logical structure via standard phrases (e.g., 'proof by induction'); their outlines can be modelled by graphs and thus genus-based measures can be meaningfully applied. Anti-pattern: dismissing graph measures as irrelevant because many proofs are informal."
+      },
+      {
+        "name": "Represent assumption discharge relations explicitly",
+        "description": "Any representation intended to measure global structure must include the relationship between assumptions and where they are discharged, because that relation is essential to what the proof is a proof of.",
+        "guidance": "Statman argues that Gentzen trees omit assumption-discharge links; including them (as derivation graphs do) is necessary to capture global structure. Without this, the representation may fail to indicate open vs closed assumptions, undermining the metric's relevance to discoverability."
+      },
+      {
+        "name": "Robustness across formalisms and transferability",
+        "description": "A good measure should be meaningfully transferable across proof formalisms (sequent calculus, natural deduction, intuitionistic/single-conclusion variants) or at least account for differences introduced by the chosen formalism.",
+        "guidance": "Carbone's results can be transferred to single-conclusion restrictions and Statman's natural deduction approach corresponds to structural features hidden in sequent systems. Metric designers should explain how graph extraction handles formal-system differences and hidden structural features."
+      },
+      {
+        "name": "Computability and practicability of the metric",
+        "description": "Prefer measures (or subclasses thereof) for which genus or related graph parameters are computable or have known bounds so the measure can be applied concretely to examples.",
+        "guidance": "For instance, genus of complete graphs K_n is given by Ringel\u2013Youngs formula; such computable cases help calibrate and test the metric. Anti-pattern: proposing measures that are in principle interesting but infeasible to compute for realistic proofs."
+      },
+      {
+        "name": "Measure should reflect impurity advantages (impure vs pure proofs)",
+        "description": "If claiming that impure methods (use of extraneous methods or lemmas) lower discovermental complexity, the metric must be able to detect and justify this difference (e.g., lower genus for impure proofs).",
+        "guidance": "The paper discusses Thesis: 'Impure proofs are generally simpler to discover than pure proofs.' A valid metric should be able to provide evidence for or against this claim (Carbone vs Statman differences). Anti-pattern: declaring impurity simpler without showing how the metric captures that."
+      },
+      {
+        "name": "Make explicit the limitations and intended interpretations of the metric",
+        "description": "Any proposed measure should come with clear statements of what it captures (e.g., global structural complexity) and what it does not (e.g., not a direct measure of cognitive process), plus known limitations and counterexamples.",
+        "guidance": "Authors should discuss where the metric succeeds/fails (the paper argues Carbone's logical-flow-graph genus fails to measure proof global structure while Statman's derivation-graph genus may succeed). Provide concrete counterexamples and thought experiments to reveal limits."
+      }
+    ]
+  }
+}

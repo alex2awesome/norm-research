@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 38,
+  "n_chunks": 42,
+  "chunk_chars": 39795,
+  "model": "gpt-5-mini",
+  "elapsed_s": 228.75737416700576,
+  "input_tokens": 22553,
+  "output_tokens": 4223,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users and implementors / advanced typesetters interested in TeX's hyphenation algorithm",
+    "subtask_short": "TeX hyphenation rules",
+    "subtask_description": "Detailed operational rules and constraints that TeX uses to decide which sequences are considered words for hyphenation, how exception entries and patterns are interpreted, and the preconditions for inserting discretionary hyphens. Covers pattern format, search/scan rules, language selection, and kernel behaviors (kerns, ligatures, whatsits).",
+    "subtask_keywords": [
+      "tex",
+      "hyphenation",
+      "typesetting",
+      "patterns",
+      "lefthyphenmin_righthyphenmin"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Exception dictionary matching and lowercase conversion",
+        "description": "TeX uses the \\lccode to convert each letter to 'lowercase' form; a word-to-be-hyphenated will match an entry in the exception dictionary if and only if both words have the same lowercase form after conversion to lowercase.",
+        "guidance": "TeX inserts discretionary hyphens in the specified positions whenever it attempts to hyphenate a word that matches an entry in the exception dictionary, except that hyphens are never inserted after the very first letter or before the last or second-last letter of a word (you must insert explicit discretionary hyphens to allow those positions). A \\hyphenation entry might contain no hyphens at all; then TeX inserts no hyphens in the word. The exception dictionary is global; if you specify \\hyphenation of the same word more than once, its most recently specified hyphen positions are used."
+      },
+      {
+        "name": "Pattern dictionary is static; update only via INITEX",
+        "description": "The exception dictionary is dynamic, but the pattern dictionary is static: to change TeX's current set of hyphenation patterns you must give an entirely new set.",
+        "guidance": "The command format is \\patterns{(patterns)} where (patterns) is a sequence of (pattern) items separated by spaces. This command is available only in INITEX, not in production versions of TeX, because pattern compression requires extra memory. INITEX massages the patterns and outputs a format file that production versions can load at high speed."
+      },
+      {
+        "name": "Pattern format rules",
+        "description": "A (pattern) consists of one or more occurrences of (value)(letter) followed by (value); (value) is either a digit (0..9) or empty (empty stands for zero).",
+        "guidance": "Examples: the pattern :0a1b0: can be written as 0a1b0 or a1b0 or 0a1b or a1b. A (letter) is a character token of category 11 or 12 whose \\lccode is nonzero. To use a digit as a (letter) you must precede it with a nonempty (value) and have a nonzero \\lccode. Exception: the character '.' is treated as if it were a (letter) of code 0 when it appears in a pattern; code 0 represents the left or right edge of a word."
+      },
+      {
+        "name": "Starting-letter detection and pre-search bypass rules",
+        "description": "TeX looks for potentially hyphenatable words by searching ahead from each glue item that is not in a math formula and identifies the starting letter as the first character with nonzero \\lccode or a ligature that begins with such a character.",
+        "guidance": "The search bypasses characters whose \\lccode is zero, ligatures that begin with such characters, whatsits, and implicit kern items (kerns inserted by TeX because of font info). If any other type of item occurs before a suitable starting letter is found, hyphenation is abandoned (until after the next glue item). If the starting letter is not lowercase (i.e., does not equal its own \\lccode), hyphenation is abandoned unless \\uchyph is positive."
+      },
+      {
+        "name": "Hyphenchar and font-character existence test",
+        "description": "After a suitable starting letter is found, hyphenation is abandoned unless the \\hyphenchar of the font f is between 0 and 255 and a character of that number exists in the font.",
+        "guidance": "This test must pass before TeX continues scanning the trial word; otherwise no hyphenation attempt is made for that trial word."
+      },
+      {
+        "name": "Admissible item types while scanning a trial word",
+        "description": "TeX continues scanning forward until it encounters something that is not one of three admissible item types; those admissible items define the trial word.",
+        "guidance": "Admissible items are: (1) a character in font f whose \\lccode is nonzero; (2) a ligature formed entirely from characters of type (1); (3) an implicit kern. The first inadmissible item terminates the trial-word scan; the trial word consists of all letters found in admissible items and all these letters are in the same font f."
+      },
+      {
+        "name": "Minimum-length constraint (lefthyphenmin and righthyphenmin)",
+        "description": "A trial word of length n is abandoned unless n >= l + p, where l = max(1, \\lefthyphenmin) and p = max(1, \\righthyphenmin).",
+        "guidance": "This enforces that hyphenation cannot occur too close to the beginning or end of a word; TeX also uses these minima later to forbid insertion before l or after n+p."
+      },
+      {
+        "name": "Constraints on items following the trial word",
+        "description": "The items immediately following the trial word must consist of zero or more characters, ligatures and implicit kerns, followed immediately by glue or an explicit kern or a penalty item or a whatsit or a vertical-mode insert or a \\vadjust.",
+        "guidance": "If instead a box or rule or math material or a discretionary occurs too closely after the trial word, hyphenation is inhibited. Because TeX inserts empty discretionaries after explicit hyphens, already-hyphenated compound words will not be further hyphenated by the algorithm."
+      },
+      {
+        "name": "Hyphenation algorithm submission and insertion limits",
+        "description": "Trial words that pass all the prior tests are submitted to the hyphenation algorithm; hyphens are not inserted before l or after n+p.",
+        "guidance": "If the algorithm finds hyphenation points elsewhere in the word, TeX inserts one or more discretionary items at those points; ligatures and implicit kerns are reconstituted at the same time."
+      },
+      {
+        "name": "Implicit vs explicit kern behavior",
+        "description": "Distinction between implicit and explicit kerns matters because TeX recomputes implicit kerns when it finds at least one hyphen point in a word.",
+        "guidance": "When TeX displays lists of items in its internal format, implicit kerns appear as :\\kern2.0) while explicit kerns show as :\\kern 2.0). The italic correction command \\/ inserts an explicit kern."
+      },
+      {
+        "name": "\\- control sequence equivalence",
+        "description": "The control sequence \\- is equivalent to \\discretionary{\\char h}{}{} where h is the \\hyphenchar of the current font, provided that h lies between 0 and 255.",
+        "guidance": "If the \\hyphenchar does not lie between 0 and 255, \\- is equivalent to \\discretionary{}{}{}."
+      },
+      {
+        "name": "Multiple language support and \\language parameter",
+        "description": "TeX can remember up to 256 distinct sets of hyphenation rules (if memory permits); an integer parameter \\language selects which rules are actually used.",
+        "guidance": "Every \\hyphenation and \\patterns specification appends new rules to those previously given for the current value of \\language. If \\language is negative or greater than 255, TeX acts as if \\language = 0. All \\patterns for all languages must be given before a paragraph is typeset if INITEX is used for typesetting."
+      },
+      {
+        "name": "In-paragraph language switching via whatsits and \\setlanguage",
+        "description": "TeX can work with several languages in the same paragraph by inserting whatsit nodes marking language changes when characters are added whose language differs from the current \\language.",
+        "guidance": "At the beginning of a paragraph the current language is defined to be 0. Whenever a character is added in unrestricted horizontal mode, TeX compares the current language to \\language and, if different, resets the current language and inserts a whatsit node before the character. Users can insert the whatsit themselves (even in restricted horizontal mode) by saying \\setlanguage{number}; this changes the current language but does not change \\language. Each whatsit records the current \\lefthyphenmin and \\righthyphenmin, so hyphenation uses the per-what sit minima."
+      },
+      {
+        "name": "Practical limitations and overlap anomalies",
+        "description": "TeX's hyphenation process is designed to be fast and avoid spending time on unusual situations; certain anomalies like overlapping ligatures might preclude some hyphenation points.",
+        "guidance": "Presence of punctuation before/after a word, or ligatures and kerns within a word, should not make a word unrecognizable for hyphenation, but TeX intentionally avoids handling mechanically hard-to-recognize or unusual situations. The text notes that overlapping ligatures/hyphenation interactions are possible in principle but probably won't occur in real life, and TeX's approach to the problem is not discussed further here."
+      }
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/6ef9f7f8e57a.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 4828,
+  "output_tokens": 4462,
+  "elapsed_s": 2009.2359979159664,
+  "extracted": {
+    "orientation": "wiki",
+    "intended_audience": "Lean 3 users porting code to Lean 4 (mathlib4 contributors)",
+    "subtask_short": "porting Lean 3 to Lean 4",
+    "subtask_description": "Practical survival-guide style rules and recommendations for translating Lean 3 code and practices to Lean 4, including syntax, tactic changes, naming conventions, gotchas, and tooling tips for contributors to mathlib4.",
+    "subtask_keywords": [
+      "lean4",
+      "lean3",
+      "porting",
+      "mathlib4",
+      "syntax",
+      "tactics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Function notation changes",
+        "description": "Function/lambda notation has changed from `\u03bb x, f x` to `fun x => f x` (or `\u03bb x => f x`, or `fun x \u21a6 f x`, or `\u03bb x \u21a6 f x`).",
+        "guidance": "Use the new `fun`/`=>` (or `\u21a6`) forms when writing lambdas. The page lists multiple equivalent notations to prefer in Lean 4."
+      },
+      {
+        "name": "\u03a0/\u03a3 type notation updated",
+        "description": "Old `\u03a0 x : A, P x` and `\u03a3 x : A, P x` notations now have new forms `(x : A) \u2192 P x` and `(x : A) \u00d7 P x`.",
+        "guidance": "The old notation still works, but prefer the new arrow/product forms in Lean 4 code for consistency with the guide."
+      },
+      {
+        "name": "Structure expansion/`with`-syntax for updates",
+        "description": "To build a structure that expands other structures, the new syntax is `{ parent1, parent2 with field1 := value1 field2 := value2 }`. If there are no extra fields, use `{ parent1, parent2 with }`.",
+        "guidance": "When you need to pass a term of a pre-structure type, you can write `my_term : Struct A where preStruct_2.mk := proof1 ... __ : preStruct_1 := proof3`. The final line uses two underscores `__` to indicate passing a term; if the type can be inferred you may omit an explicit type annotation."
+      },
+      {
+        "name": "Pattern matching uses `=>` and no `end`",
+        "description": "Pattern-match clauses use `=>` instead of `:=`, and `\u21a6` cannot be used in `match` patterns; `match` does not require/end with `end`.",
+        "guidance": "Examples: `def Option.str1 : Option Nat \u2192 String | some a => \"some\" ++ toString a | none => \"none\"`. Be careful to use `=>` and the new indentation/whitespace rules (no `end`)."
+      },
+      {
+        "name": "Infix notation uses `\u00b7` implicit lambda",
+        "description": "For infix notation like `+` you can no longer write `(+)` or `(+ n)`; instead use `(\u00b7 + \u00b7)` or `(\u00b7 + n)`. The dot `\u00b7` (entered with `\\.`) is an implicit lambda expression.",
+        "guidance": "The `\u00b7` placeholder is an implicit anonymous argument; it will be inserted at the nearest enclosing parentheses. Use `\\.` (not `\\cdot`) to type it."
+      },
+      {
+        "name": "Application operator `f $ x` replaced by `f <| x` (optional)",
+        "description": "A new notation `f <| x` exists for the low-precedence application formerly written `f $ x` (the old notation still works).",
+        "guidance": "You may adopt `f <| x` for consistency with Lean 4, but legacy `f $ x` remains supported."
+      },
+      {
+        "name": "Whitespace sensitivity / indentation rules",
+        "description": "Lean 4 is whitespace-sensitive; multi-line commands (`by`, `do`, `match`, tactic block `\u00b7`, etc.) are ended by unindenting the first line following the block. Incorrect indentation can make lines out of scope and produce errors.",
+        "guidance": "Example shows a tactic block where a line indented less than the line above is out of the `\u00b7` scope. Pay attention to indentation for tactic blocks, `calc` blocks, matches, and multi-line constructs; small changes in spaces can change scoping."
+      },
+      {
+        "name": "`calc` block syntax is whitespace-sensitive",
+        "description": "The `calc` block is written like `calc A = B := proof1 _ = C := proof2` and its layout is whitespace-sensitive.",
+        "guidance": "Ensure correct indentation within `calc` sequences; spacing affects how the proofs are associated with the steps."
+      },
+      {
+        "name": "Defining terms that expand other structures: use `where` + `__` trick",
+        "description": "To define a term of a structure that expands other structures, use `my_term : Struct A where ... __ : preStruct_1 := proof3` where the `__` line passes a term of the pre-structure type. If the pre-structure type can be inferred from the RHS, you can omit the explicit type.",
+        "guidance": "This replaces the older `{Struct := _, ..preStruct_1}` Lean 3 pattern; the VSCode skeleton can still propose many fields from unfolded parent structures, so `__` may be more convenient."
+      },
+      {
+        "name": "Tactic mode entry and layout: use `by` + newline + indentation",
+        "description": "Enter tactic mode by writing `by` then a newline and indenting following tactic lines (e.g., `by\\ntrivial`). Don't put commas after tactics; write the next tactic on a new line in the same column.",
+        "guidance": "Avoid trailing commas after tactics; use new line indentation. Example: `example : True := by trivial` or `by` then indented tactics. Tactic blocks must respect column alignment and indentation."
+      },
+      {
+        "name": "Use `\u00b7` for focusing the first goal inside tactic blocks",
+        "description": "With multiple goals, `\u00b7 <tactics>` addresses the first goal instead of `{ <tactics> }`. The bullet `\u00b7` is typed with `\\.` (not `\\cdot`).",
+        "guidance": "This is the Lean 4 replacement for the old `{ ... }` goal-focus braces. Keep consistent column alignment when using `\u00b7` blocks."
+      },
+      {
+        "name": "Sequencing tactics on one line: `;` and `<;>`",
+        "description": "If you want multiple tactics on the same line, use `tac1; tac2` (corresponds to Lean 3 `tac1, tac2`) or `tac1 <;> tac2` (corresponds to Lean 3 `tac1; tac2`).",
+        "guidance": "Pick the appropriate separator to match the old Lean 3 sequencing semantics when porting tactic scripts."
+      },
+      {
+        "name": "`_` vs `?_` underscore semantics in tactics",
+        "description": "`_` should be used for implicit arguments that the elaborator can fill; `?_` produces a new metavariable/subgoal. You can name these produced subgoals `?myName`.",
+        "guidance": "Use `_` to avoid creating extra goals and `?_` when you want an explicit hole/new goal you can later fill; name holes with `?name` to refer to them."
+      },
+      {
+        "name": "Tactic renames and syntax differences (refine', cases', induction', rw brackets, constructor)",
+        "description": "Several tactic names changed: `refine` \u2192 `refine'`, `cases` \u2192 `cases'`, `induction` \u2192 `induction'`. The square brackets in `rw [h]` are mandatory. `split` has been removed; use `constructor` instead.",
+        "guidance": "When porting tactics, replace deprecated names with the primed variants and update call syntax (e.g., `rw` must have square-bracketed lemma lists). Replace `split` with `constructor` in proofs that used `split`."
+      },
+      {
+        "name": "Attribute and locale syntax changes",
+        "description": "Attributes like `@[simp, priority 100]` are replaced by `@[simp 100]` (you can also use `@[simp low]` or `@[simp high]`). `open_locale foo` is roughly replaced by `open scoped Foo`.",
+        "guidance": "Update attribute annotations and locale opening forms to Lean 4 equivalents; prefer `open scoped` for localized notation/locale opening."
+      },
+      {
+        "name": "Naming conventions",
+        "description": "Conventions (from porting wiki): terms of `Prop` (proofs, theorem names) use `snake_case`; `Prop`/`Type` objects (inductive types, structures, classes) use `UpperCamelCase`; functions are named like their return values (e.g., a function of type `A \u2192 B \u2192 C` is named as though it is a term of type `C`); other `Type` terms use `lowerCamelCase`. When an `UpperCamelCase` item is part of something named in `snake_case`, refer to it in `lowerCamelCase`. Acronyms depend on first-character case. Rules apply to fields and constructors; rare exceptions exist and should be discussed on Zulip.",
+        "guidance": "Follow these conventions for consistency in mathlib4; be mindful of special-case exceptions and discuss them publicly. The list is taken from the porting wiki and may have edge-case updates there."
+      },
+      {
+        "name": "Pitfall: stray names in types become fresh variables",
+        "description": "If you write a name in the type of a declaration that isn't a known declaration or variable, Lean interprets it as a fresh variable (and adds it as an argument to the declaration).",
+        "guidance": "Example: `example : a + 3 = 3 + a := by rw [Nat.add_comm]` \u2014 `a` in the type becomes a variable. Such names are colored differently in the editor; if problematic, disable the behavior with `set_option autoImplicit false`."
+      },
+      {
+        "name": "All variables included in declaration context; `include`/`omit` removed",
+        "description": "In Lean 4 all variables are included in the context for a declaration (including named instances). `include` and `omit` commands are removed. After elaboration, Lean removes unused variables from the argument list, but during proof-writing all variables appear in the local context.",
+        "guidance": "Consequences: goal states may look cluttered with variables that are not actual arguments; `induction` generalizes all variables in the local context causing them to appear in the proof term. Workaround: `clear` variables you don't want before using `induction`."
+      },
+      {
+        "name": "New features: named implicit args, `f ..`, and `#align`",
+        "description": "Named implicit arguments supported: `f (x := 3) a`. You can write `f ..` for multiple unnamed arguments. `#align` connects Lean 3 names to Lean 4 names for mathport and will be removed from mathlib after porting.",
+        "guidance": "Use named implicit arguments to improve clarity and replace verbose `@`-style explicit argument passing. `#align` is a temporary aid for porting mathlib3 names to Lean 4."
+      },
+      {
+        "name": "Editor/navigation features",
+        "description": "Hovering shows pop-ups with information and you can jump to definitions/notations (F12). When right-clicking a declaration you can go to both 'go to definition' and 'go to declaration'.",
+        "guidance": "Use editor features to inspect declarations and notations while porting; these improve discoverability during migration."
+      },
+      {
+        "name": "Metaprogramming changed in Lean 4",
+        "description": "Metaprogramming works completely differently in Lean 4 compared to Lean 3.",
+        "guidance": "Consult Lean 4 Metaprogramming book, Functional Programming in Lean, and meta4dummies for guidance; porting metaprograms requires reworking code with Lean 4's metaprogramming APIs."
+      },
+      {
+        "name": "Cache/tooling: `lake exe cache get` replaces `leanproject get-cache`",
+        "description": "The previous `leanproject get-cache` command is replaced by `lake exe cache get`, which downloads as many ready-made `.olean` files as possible to speed local builds. Use `lake exe cache get!` (with `!`) to force re-downloading the entire cache if something seems wrong.",
+        "guidance": "Run `lake exe cache get` to speed up builds; if downloads or builds behave oddly, run the forced variant with `!` to refresh the cache."
+      }
+    ]
+  }
+}

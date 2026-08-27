@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/df980afd8727.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15849,
+  "output_tokens": 4550,
+  "elapsed_s": 2055.854402875062,
+  "extracted": {
+    "orientation": "blog_post",
+    "intended_audience": "mathematicians and formalizers learning/using Lean 4 and mathlib (people writing formal proofs)",
+    "subtask_short": "lean_4 proof formalization",
+    "subtask_description": "Writing and formalizing mathematical proofs in Lean 4 (using mathlib) by converting a human-readable blueprint into a machine-checkable proof. Covers tactics, modeling choices, naming, and workflow practices for Lean proofs.",
+    "subtask_keywords": [
+      "lean4",
+      "formalization",
+      "mathlib",
+      "proof_assistant",
+      "mathematicians"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pre-planning: use an informal blueprint",
+        "description": "I am finding the pre-planning step of the proof (using an informal \u201cblueprint\u201d to break the proof down into extremely granular pieces) to make the formalization process significantly easier than in the past.",
+        "guidance": "Write a human-readable proof blueprint before formalizing (a lower-case \u201cblueprint\u201d rather than the fancier Blueprint used in the PFR project). Break the proof into small, self-contained steps that map to the atomic \"sorry\" obligations. Benefits: easier formalization, ability to fill sorries in any order, and enable parallelization of micro-tasks in group projects. Aim for an appropriate step size (not too tiny, not too large) so steps are meaningful to mathematicians."
+      },
+      {
+        "name": "Modeling choices for types (e.g., \u2115 \u2192 \u211d vs NNReal)",
+        "description": "The main variables here are the sequences a and D, which in Lean are best modeled by functions a, D from the natural numbers \u2115 to the reals \u211d. (One can choose to \u201chardwire\u201d the non-negativity hypothesis into the D by making D take values in the nonnegative reals NNReal, but this turns out to be inconvenient, because the laws of algebra and summation that we will need are clunkier on the non-negative reals ... than on the reals.)",
+        "guidance": "Choose underlying types to make algebra and library lemmas work smoothly; avoid hardwiring constraints into the type if that makes algebraic/manipulative lemmas less convenient. Prefer types that give access to rich algebraic laws (e.g., \u211d) unless there is a strong reason otherwise."
+      },
+      {
+        "name": "Use Mathlib provided terminology and lemmas",
+        "description": "The property of being monotone decreasing already has a name in Lean\u2019s Mathlib, namely Antitone, and it is generally a good idea to use the Mathlib provided terminology (because that library contains a lot of useful lemmas about such terms).",
+        "guidance": "Adopt Mathlib conventions and names (e.g., Antitone) so you can reuse existing lemmas. Search mathlib using keyword combinations (e.g., Finset, sum, sub, range) to locate appropriate lemmas rather than reproving things by hand."
+      },
+      {
+        "name": "Place frequently-used variables in hypotheses (avoid unnecessary \u2200 quantifiers)",
+        "description": "When proving a universally quantified statement such as \u2200 k, a k \u2264 D 0 / (k + 1), the first step is almost always to open up the quantifier to introduce the variable k (using the Lean command intro k). Because of this, it is slightly more efficient to hide the universal quantifier by placing the variable k in the hypotheses, rather than in the quantifier ...",
+        "guidance": "Introduce commonly instantiated variables as explicit hypotheses (e.g., k : \u2115 in the context) to avoid repeated intro steps and let Lean infer ranges where possible. This can make scripts marginally more efficient and convenient."
+      },
+      {
+        "name": "Use calc for chains of inequalities",
+        "description": "The Lean tactic for proving an inequality via chains of other inequalities is known as calc. We use the blueprint to fill in the calc that we want, leaving the justifications of each step as 'sorry's for now.",
+        "guidance": "When your proof is a chain of inequalities, express it with calc to mirror the human blueprint and make each step explicit; fill justifications later. calc maps naturally to the blueprint-chain style of arguments."
+      },
+      {
+        "name": "Use field_simp then ring for algebraic identities",
+        "description": "A convenient way to establish algebraic identities is to use the tactic field_simp to clear denominators, and then ring to verify any identity that is valid for commutative rings. This works, and clears the first sorry.",
+        "guidance": "For goals that are algebraic identities (especially involving division), run field_simp to clear denominators (it can infer nonzeroness), then ring to discharge the identity. These tactics often eliminate routine algebraic steps automatically."
+      },
+      {
+        "name": "Use congr for equality-matching and gcongr for inequalities",
+        "description": "congr, which tries to match two sides of an equality goal as much as possible ... There is a powerful relative gcongr of congr that is perfectly suited for inequalities. It can also open up sums, products, and integrals, reducing global inequalities between such quantities into pointwise inequalities.",
+        "guidance": "Apply congr to reduce equality goals by cancelling common structure (e.g., denominators). Use gcongr to reduce inequalities between sums/products to pointwise inequalities, often after supplying a variable and membership hypothesis (e.g., gcongr with i hi)."
+      },
+      {
+        "name": "Use simp to exploit Mathlib simp-lemmas (including at hypotheses)",
+        "description": "simp completely kills off this identity, without any further human intervention ... The goal and hypothesis are very close indeed. Here we can just close the goal using the linarith tactic used in the previous tour. ... The goal is now very close to the hypothesis hi. One could now look up the documentation for Finset.range to see how to unpack hi, but as before simp can do this for us. Invoking simp at hi, we obtain ...",
+        "guidance": "Use simp aggressively to discharge routine simplifications, and also use simp at H to simplify a hypothesis H. Many standard finite-sum identities (e.g., Finset.sum_const) are available as simp lemmas so simp often collapses mundane steps."
+      },
+      {
+        "name": "Use linarith for simple linear inequalities",
+        "description": "Here the hypothesis hpos will tell us that D (k+1) is nonnegative; specifically, the instance hpos (k+1) of that hypothesis will state exactly this. The linarith tactic will then resolve this goal once it is told about this particular instance.",
+        "guidance": "Invoke linarith to solve goals involving linear arithmetic and linear combinations of hypotheses; ensure the relevant hypothesis instances are available or passed in (e.g., hpos (k+1))."
+      },
+      {
+        "name": "Open relevant namespaces for readable notation (Finset, BigOperators)",
+        "description": "Here, we \u201copen\u201ced the Finset namespace in order to easily access Finset\u2018s range function, ... and also \u201copen\u201ced the BigOperators namespace to access the familiar \u2211 notation for (finite) summation, in order to make the steps in the Lean code resemble the blueprint as much as possible.",
+        "guidance": "Open namespaces such as Finset and BigOperators when you want readable \u2211-notation and convenient names; otherwise expressions become verbose (Finset.sum (Finset.range (k+1)) (fun i \u21a6 a i))."
+      },
+      {
+        "name": "Prefer library lemmas (e.g., Finset.sum_const, sum_range_sub') over manual induction",
+        "description": "This particular sort of identity \u2013 summing a constant over a finite set \u2013 is already covered by Mathlib. Indeed, searching for Finset, sum, and const soon leads us to the Finset.sum_const lemma here. ... This is a telescoping series identity. One could try to prove it by induction, or one could try to see if this identity is already in Mathlib. Searching for Finset, sum, and sub will locate the right tool ... apply sum_range_sub' here.",
+        "guidance": "Before proving routine combinatorial/summation identities by hand, search mathlib for existing lemmas (Finset.sum_const, sum_range_sub'). Use apply or exact? with those lemmas to discharge goals."
+      },
+      {
+        "name": "Lean infers ranges and coercions; avoid unnecessary annotations",
+        "description": "One thing to note here is that Lean is quite good at filling in implied ranges of variables. Because a and D have the natural numbers \u2115 as their domain, the dummy variable k in these hypotheses is automatically being quantified over \u2115. We could have made this quantification explicit ... but it is not necessary to do so. ... The uparrows \u2191 are coercion symbols, indicating that the natural number k has to be converted to a real number ... but we can ignore these coercions for this tour (for this proof, it turns out Lean will basically manage them automatically without need for any explicit intervention by a human).",
+        "guidance": "Let Lean infer implicit domains and coercions whenever possible; avoid cluttering code with explicit : \u2115 annotations or manual coercions unless required."
+      },
+      {
+        "name": "Use temporary sorry placeholders to structure work",
+        "description": "At this point Lean is complaining of an unexpected end of input: the example has been stated, but not proved. We will temporarily mollify Lean by adding a sorry as the purported proof: ... Now Lean is content, other than giving a warning ... that the proof contains a sorry.",
+        "guidance": "Insert sorry placeholders to outline the structure, then progressively replace them with tactics/lemmas. This supports iterative development and parallel work on different sorries."
+      },
+      {
+        "name": "Rename unused variables/hypotheses with underscores (use the linter)",
+        "description": "There are two warnings though \u2013 there are two variables i and hi introduced in the proof that Lean\u2019s 'linter' has noticed are not actually used in the proof. So we can rename them with underscores to tell Lean that we are okay with them not being used:",
+        "guidance": "Pay attention to Lean's linter and rename unused variables/hypotheses to _ to silence warnings and indicate intentional omission."
+      },
+      {
+        "name": "Tradeoff: code-golfing (compact proofs) vs readability and compilation speed",
+        "description": "This is a perfectly fine proof, but upon noticing that many of the steps are similar to each other, one can do a bit of 'code golf' as in the previous tour to compactify the proof a bit ... From the mathematical side, I think it comes down to the principle of 'giving appropriate amounts of detail' ... For large projects (and particularly for contributing to Mathlib, the largest project of all), code is often 'golf'ed not so much for brevity as for compilation speed. Powerful and intuitive tactics such as simp that perform an extensive search as part of their execution are often replaced with much more explicit 'low level' tactics that are much faster but also harder to read. (There is a tactic called simp? which runs simp but then prints the specific simp lemmas used, which can then be used for this sort of compilation golf.)",
+        "guidance": "Balance human readability against compilation/performance needs. For single-user or pedagogical proofs, prefer clarity; for large shared libraries, consider compactifying (replace heavy-search tactics with targeted low-level steps). Use simp? to discover lemmas used by simp as a step toward replacing it with faster explicit steps."
+      },
+      {
+        "name": "Use apply/exact? to leverage known lemmas",
+        "description": "A simpler way to proceed here is to use the exact? tactic we saw in the previous tour: A brief check of the documentation for sum_range_sub' confirms that this is what we want. Actually we can just use apply sum_range_sub' here, as the apply tactic is smart enough to fill in the missing arguments.",
+        "guidance": "When a lemma exactly matches the goal, use exact? or apply to have Lean fill trivial arguments. Check lemma docs and let apply/ exact? supply implicit parameters."
+      },
+      {
+        "name": "Work can be parallelized: micro-tasks (sorries) are independent",
+        "description": "Once one has used a blueprint to atomize a proof into self-contained smaller pieces, one can fill them in in any order. Importantly for a group project, these micro-tasks can be parallelized, with different contributors claiming whichever 'sorry' they feel they are qualified to solve, and working independently of each other. (And, because Lean can automatically verify if their proof is correct, there is no need to have a pre-existing bond of trust with these contributors in order to accept their contributions.)",
+        "guidance": "Structure proofs into independent sorries so contributors can work concurrently; Lean's checker enforces correctness of each microproof, enabling distributed collaboration without trusting contributors' reputations."
+      },
+      {
+        "name": "Follow Mathlib naming conventions to ease lemma discovery",
+        "description": "Mathlib\u2019s naming conventions are laid out in this web page. One rationale for such conventions is to be able to quickly recognize whether a given term refers to a proposition, type, variable, or tactic ... Another key motivation for encouraging a rather formal naming system here is to make it easier to find specific Mathlib routines that achieve specific tasks.",
+        "guidance": "Learn and follow mathlib naming conventions so you can reliably locate lemmas by keyword components (e.g., Finset.sum_range_sub). If simp is too heavy, use naming knowledge and search to find targeted lemmas."
+      },
+      {
+        "name": "Use the online Lean playground for quick experiments",
+        "description": "For this quick project, it was convenient to use the online Lean playground, rather than my local IDE, so the screenshots will look a little different from those in the previous post.",
+        "guidance": "For short experiments or sharing small examples, use the online Lean playground to avoid local setup and to let others reproduce screenshots or follow along interactively."
+      }
+    ]
+  }
+}

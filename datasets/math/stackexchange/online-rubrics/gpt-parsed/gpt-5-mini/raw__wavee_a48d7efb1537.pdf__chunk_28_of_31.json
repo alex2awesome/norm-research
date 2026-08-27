@@ -1,0 +1,236 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 28,
+  "n_chunks": 31,
+  "chunk_chars": 39977,
+  "model": "gpt-5-mini",
+  "elapsed_s": 154.2806391250051,
+  "input_tokens": 13311,
+  "output_tokens": 5498,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX/pgf/tikz developers, driver implementers, and advanced users writing optimized frontends or drivers",
+    "subtask_short": "pgf system_layer command reference",
+    "subtask_description": "Low-level reference for the pgf \u2018system layer\u2019 commands (\\pgfsys@... and quick pgf commands) used by drivers and frontends; documents required behavior, constraints, and implementation notes for each command or family of commands.",
+    "subtask_keywords": [
+      "pgf",
+      "system_layer",
+      "driver_implementation",
+      "tikz",
+      "latex",
+      "pgfsys"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "When to use quick commands",
+        "description": "Quick commands execute faster than normal pgf commands and should be used only if you have very many commands to process or commands executed very often.",
+        "guidance": "Quick commands are faster but offer less functionality; use them for performance-critical code only."
+      },
+      {
+        "name": "Quick commands limitations (general)",
+        "description": "Quick path commands do not keep track of bounding boxes, do not allow arcing corners, and do not apply coordinate transformations.",
+        "guidance": "They do use the soft-path subsystem allowing mixing with normal path commands. Be aware of the functional trade-offs before switching to quick variants."
+      },
+      {
+        "name": "\\pgfqpoint argument restrictions",
+        "description": "\\pgfqpoint takes simple dimensions only (e.g., 1pt, 1cm); complex expressions like 2ex or 2cm+1pt are not allowed.",
+        "guidance": "Use only raw TeX dimensions for x and y when using quick coordinate construction."
+      },
+      {
+        "name": "\\pgfpathqmoveto behavior",
+        "description": "Starts a path or new part of a path at coordinate (x,y) given as simple dimensions; coordinate is not transformed by the current coordinate transformation matrix, although low-level transformations still apply.",
+        "guidance": "Use when you need a fast moveto unaffected by the CTM; suitable for performance-sensitive code where CTM should be ignored."
+      },
+      {
+        "name": "\\pgfpathqlineto behavior",
+        "description": "Quick line-to operation that continues the current path to the given coordinate; coordinates are simple dimensions and not transformed by CTM.",
+        "guidance": "Faster than normal \\pgfpathlineto but lacks bounding-box updates, corner arcing, and CTM application."
+      },
+      {
+        "name": "\\pgfpathqcurveto behavior",
+        "description": "Quick cubic B\u00e9zier curve: three pairs of simple-dimension coordinates (s1x,s1y),(s2x,s2y),(tx,ty); control points and target specified similarly to normal curveto but without CTM and other higher-level features.",
+        "guidance": "Use for fast curve construction; remember support points and target are simple dimensions and curve is not processed for bounding boxes or corner arcs."
+      },
+      {
+        "name": "\\pgfpathqcircle behavior",
+        "description": "Adds a circle of given radius around the origin; much faster than \\pgfcircle with \\pgfpointorigin.",
+        "guidance": "Use when you need many small circles and can accept the quick command's limitations."
+      },
+      {
+        "name": "Quick path usage limitations",
+        "description": "Quick path usage commands (\\pgfusepathq...) do not add arrows, do not modify the path (ends not shortened), and corners are not replaced by arcs.",
+        "guidance": "They are intended for contexts like arrow tip definitions where arrows must not be added or path modification is undesired."
+      },
+      {
+        "name": "\\pgfusepathqstroke / \\pgfusepathqfill / \\pgfusepathqfillstroke / \\pgfusepathqclip",
+        "description": "Quick versions of path usage commands: stroke/fill/fill-then-stroke/clip the current path without further processing.",
+        "guidance": "They perform the action 'without further ado' meaning no arrow drawing, no corner/arcing, no end shortening; use where raw stroke/fill/clip is required."
+      },
+      {
+        "name": "\\pgfqbox behavior",
+        "description": "Inserts a TeX box into a pgfpicture by escaping to TeX and inserting the box at the origin, then returning to picture typesetting.",
+        "guidance": "Used to place typeset content into pictures; use \\pgfqboxsynced when CTM sync and hyperlink placement matter."
+      },
+      {
+        "name": "\\pgfqboxsynced behavior and hyperlink note",
+        "description": "\\pgfqboxsynced applies the current coordinate transformation matrix to the canvas transformation matrix before inserting the box and uses TeX translations (\\hskip/\\raise) for translation parts so hyperlinks are placed correctly.",
+        "guidance": "Scale/rotation still do not apply to hyperlinks; use this when hyperlinks inside boxes must maintain correct placement under translations."
+      },
+      {
+        "name": "System layer abstraction rule",
+        "description": "Higher layers should not use \\special directly or check \\pdfoutput; all drawing requests must be channeled through the system commands (\\pgfsys@...).",
+        "guidance": "Driver files implement the system commands and the higher layers call those; do not bypass the system layer."
+      },
+      {
+        "name": "Driver files and \\pgfsysdriver",
+        "description": "The system layer provides default implementations; actual backend implementations live in pgfsys-xxxx.sty files and selection is via \\pgfsysdriver (set by pgf.cfg).",
+        "guidance": "pgf.cfg should set \\pgfsysdriver appropriately; drivers should not change it if already set."
+      },
+      {
+        "name": "\\pgfsys@beginpicture / \\pgfsys@endpicture contract",
+        "description": "Every stream of system commands starts with \\pgfsys@beginpicture and ends with \\pgfsys@endpicture; these commands allow drivers to perform necessary setup/teardown.",
+        "guidance": "Most drivers must implement these; they mark beginning/end of a pgfpicture stream."
+      },
+      {
+        "name": "\\pgfsys@typesetpicturebox behavior",
+        "description": "Called after a pgfpicture has been typeset with the picture box number; should insert and appropriately resize/shift the raw box according to baseline shift and box size.",
+        "guidance": "Has a default implementation and need not be implemented by every driver, but drivers can override for custom behavior."
+      },
+      {
+        "name": "Pure picture variants (\\pgfsys@beginpurepicture / \\pgfsys@endpurepicture)",
+        "description": "Variants for pictures that do not contain escaped boxes; drivers may provide more compact implementations.",
+        "guidance": "Default implementations exist; use when picture is guaranteed 'pure' to allow optimizations."
+      },
+      {
+        "name": "\\pgfsys@hbox / \\pgfsys@hboxsynced semantics",
+        "description": "Commands to insert a TeX (horizontal) box inside a pgfpicture; synced version applies coordinate transformation syncing with canvas transformation matrix before insertion.",
+        "guidance": "Most drivers must (re-)implement these; \\pgfsys@hboxsynced differs in how it treats the CTM and hyperlink preservation."
+      },
+      {
+        "name": "\\pgfsys@moveto / \\pgfsys@lineto coordinate units rule",
+        "description": "Coordinates are given as TeX dimensions and it's the driver's job to convert them to backend coordinate system (e.g., multiples of 1/72in).",
+        "guidance": "Use helper functions like \\pgf@sys@bp for conversion; examples included in the reference illustrate usage."
+      },
+      {
+        "name": "\\pgfsys@curveto signature and use",
+        "description": "Curveto takes six dimension arguments (x1,y1,x2,y2,x3,y3) to append a B\u00e9zier curve using those control and target points.",
+        "guidance": "Protocolling applies; examples show approximations of arcs using curves."
+      },
+      {
+        "name": "\\pgfsys@rect fast-rectangle behavior",
+        "description": "Appends a rectangle to the current path with lower-left corner and width/height in big points; included for speed (pdf has quick version).",
+        "guidance": "Can be mapped back to moveto/lineto but drivers may implement faster primitives."
+      },
+      {
+        "name": "\\pgfsys@closepath vs explicit lineto-to-start",
+        "description": "\\pgfsys@closepath joins current point with last \\pgfsys@moveto point smoothly; explicit lineto back to origin overlays lines and yields wrong corners.",
+        "guidance": "Prefer \\pgfsys@closepath to ensure joins are rendered correctly (sharp pointed corner rather than overlapping lines)."
+      },
+      {
+        "name": "Canvas transformation commands (\\pgfsys@transformcm / \\pgfsys@transformshift / \\pgfsys@transformxyscale)",
+        "description": "Commands to perform CTM concatenation, origin translation, and x/y scaling respectively; transformcm uses dimensionless a..d and dimensions e/f.",
+        "guidance": "transformxyscale affects everything including line widths (scaling may change line appearance); transformshift has default implementation often sufficient."
+      },
+      {
+        "name": "\\pgfsys@stroke graphic state dependencies",
+        "description": "Stroking is influenced by line width, stroke color, cap, join, dash pattern, and clipping area; a line width of 0 is the thinnest but may be invisible; 0.4pt is a good default.",
+        "guidance": "Drivers must honor these graphic state parameters; clipping and clipping-after-stroke semantics are described with \\pgfsys@clipnext."
+      },
+      {
+        "name": "\\pgfsys@closestroke behavior",
+        "description": "Should have same effect as closing the current path and then stroking it.",
+        "guidance": "Default implementation exists; drivers may need not implement separately."
+      },
+      {
+        "name": "\\pgfsys@fill behavior and interior rule",
+        "description": "Fills area bounded by current path (closing it first); nonzero winding number rule used except when \\ifpgfsys@eorule is true (then even-odd rule).",
+        "guidance": "Filling influenced by fill color and clipping area; \\pgfsys@clipnext combined with fill can make path be used for clipping as well."
+      },
+      {
+        "name": "\\pgfsys@fillstroke semantics",
+        "description": "First fills then strokes the path; if fill and stroke colors are same, result approximates fill but stroked area slightly larger because of line thickness.",
+        "guidance": "Also participates in clipping when used with \\pgfsys@clipnext."
+      },
+      {
+        "name": "\\pgfsys@discardpath and \\pgfsys@clipnext contract",
+        "description": "\\pgfsys@discardpath typically throws away current path unless preceded by \\pgfsys@clipnext; \\pgfsys@clipnext causes the next use of stroke/fill/discard to also set clipping to the used path (intersecting with existing clipping).",
+        "guidance": "Use \\pgfsys@clipnext after path construction but before the next stroke/fill/discard to make path contribute to clipping. Winding rule for clipping follows \\ifpgfsys@eorule."
+      },
+      {
+        "name": "Graphic state option commands (linewidth, caps, joins, miter limit, dash)",
+        "description": "Commands such as \\pgfsys@setlinewidth, \\pgfsys@buttcap, \\pgfsys@roundcap, \\pgfsys@rectcap, \\pgfsys@miterjoin, \\pgfsys@roundjoin, \\pgfsys@beveljoin, \\pgfsys@setmiterlimit, and \\pgfsys@setdash set the corresponding graphic state parameters.",
+        "guidance": "\\pgfsys@setdash takes a comma-separated list of dimension lengths for on/off pattern and a phase dimension; odd-length lists repeat last entry. Example: \\pgfsys@setdash{3pt,3pt}{0pt}."
+      },
+      {
+        "name": "\\ifpgfsys@eorule flag",
+        "description": "Determines whether even-odd rule is used for filling and clipping (if set) or nonzero winding number rule (if not set).",
+        "guidance": "Drivers must implement fill/clip according to this flag."
+      },
+      {
+        "name": "Stroke/fill opacity commands",
+        "description": "\\pgfsys@stroke@opacity and \\pgfsys@fill@opacity set the respective opacities for stroking and filling operations.",
+        "guidance": "Drivers should implement opacity support where backend allows."
+      },
+      {
+        "name": "Separate stroking and filling colors",
+        "description": "pgf supports separate colors for stroking and filling via \\pgfsys@color@... commands (rgb, cmyk, gray variants and @stroke/@fill variants), unlike the color package.",
+        "guidance": "Drivers must ensure stroking and filling colors can differ; pdf backends map easily, PostScript may store colors in special variables to set them appropriately."
+      },
+      {
+        "name": "\\pgfsys@color@reset behavior and optimization",
+        "description": "Called when \\color is used to purge internal stroking/filling color settings; default assumes color commands came 'in order' which allows optimizations. Incorrect usage (e.g., inside a box constructed earlier) can break reset semantics.",
+        "guidance": "If \\pgfsys@color@reset@inorder is true (default), driver may assume earlier color commands occurred before the reset and optimize output; drivers can disable optimized resetting by setting the false variant."
+      },
+      {
+        "name": "\\pgfsys@color@unstacked obscure command",
+        "description": "Sets the current color to a named LaTeX color without changing the color stack.",
+        "guidance": "Used to 'trick' the color stack in special circumstances."
+      },
+      {
+        "name": "Pattern commands (declare and set)",
+        "description": "\\pgfsys@declarepattern declares a pattern (colored or uncolored) with name, bounding box, tiling step, code and flag; \\pgfsys@setpatternuncolored and \\pgfsys@setpatterncolored set fill color to previously declared patterns.",
+        "guidance": "Uncolored patterns (flag=0) require a color at set time; colored patterns (flag=1) carry inherent color. The declared code is the drawing operations for one tile."
+      },
+      {
+        "name": "Scoping commands save/restore graphics state",
+        "description": "\\pgfsys@beginscope saves the current graphic state; \\pgfsys@endscope restores it. Changes to graphic state parameters used by stroke/fill are local to the scope.",
+        "guidance": "Do not call \\pgfsys@beginscope while a path is non-empty (path may or may not be part of graphic state depending on backend); calling \\pgfsys@discardpath prior is recommended. These commands are protocoled."
+      },
+      {
+        "name": "Image inclusion hooks and macros (imagesuffixlist / \\pgfsys@defineimage)",
+        "description": "\\pgfsys@imagesuffixlist lists file suffixes to try; \\pgfsys@defineimage is invoked to define an image and is provided with macros like \\pgf@filename, \\pgf@imagewidth, \\pgf@imageheight; it must set \\pgf@image as the 'return value' macro to typeset the image.",
+        "guidance": "If height/width absent, use natural size; if one present preserve aspect ratio; pdf-specific macros include \\pgf@imagepage, \\pgf@imagemask and \\pgf@imageinterpolate."
+      },
+      {
+        "name": "\\pgfsys@definemask behavior",
+        "description": "\\pgfsys@definemask declares a mask for images, using macros like \\pgf@filename and \\pgf@maskmatte and must set \\pgf@mask to a pdf object count usable as a soft mask.",
+        "guidance": "Drivers must map mask semantics to backend mask mechanisms (pdf soft mask semantics described)."
+      },
+      {
+        "name": "Shading declarations (horishading / vertshading / radialshading)",
+        "description": "Declare horizontal, vertical, or radial shadings by name and parameters; command should create a macro \\@pgfshading<name>! that when invoked inserts a shading box of declared size/specification.",
+        "guidance": "Horizontal shading: name, height, specification; vertical: name, width; radial: name, starting point and specification. Implementations must honor shading specifications and sizes."
+      },
+      {
+        "name": "Reusable object definition and use (\\pgfsys@defobject / \\pgfsys@useobject)",
+        "description": "\\pgfsys@defobject declares a reusable object with name, bounding box, and code; \\pgfsys@useobject renders it and can run extra code (typically transformation) before rendering.",
+        "guidance": "Objects can be precached for performance (e.g., arrow head); code should be simple; default implementations exist but drivers may optimize."
+      },
+      {
+        "name": "Invisibility blocks (\\pgfsys@begininvisible / \\pgfsys@endinvisible)",
+        "description": "Suppress all drawing/stroking/text rendering between begininvisible and endinvisible (no paths, images, shadings), without opening TeX or graphic state groups.",
+        "guidance": "Useful to suppress output orthogonally to other scopes. Default implementations exist; commands are protocoled."
+      },
+      {
+        "name": "Position tracking (\\pgfsys@markposition / \\pgfsys@getposition)",
+        "description": "Two-stage position tracking: \\pgfsys@markposition marks a position to be saved on page shipout; \\pgfsys@getposition retrieves the marked position on a later run, redefining a macro to either \\relax (if unknown) or a \\pgfpoint{...}{...} command.",
+        "guidance": "Use for absolute page positioning; to find page origin use special name 'pgfpageorigin' and shift positions accordingly. Drivers should implement writing/reading of positions across runs as backend allows."
+      }
+    ]
+  }
+}

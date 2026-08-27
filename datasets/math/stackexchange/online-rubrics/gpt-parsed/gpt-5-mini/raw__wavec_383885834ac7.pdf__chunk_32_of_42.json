@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 32,
+  "n_chunks": 42,
+  "chunk_chars": 39457,
+  "model": "gpt-5-mini",
+  "elapsed_s": 171.84832620799716,
+  "input_tokens": 15584,
+  "output_tokens": 4939,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users and macro programmers (people implementing tricky TeX macros and verbatim/listing facilities)",
+    "subtask_short": "advanced_tex_macro_programming",
+    "subtask_description": "Techniques and guidelines for writing advanced TeX macros: verbatim/listing facilities, selective loading, grouping and alignment tricks, box manipulation, and other \u2018dirty tricks\u2019 for robust macro libraries and typesetting. Focused on practical implementations and their failure modes.",
+    "subtask_keywords": [
+      "tex",
+      "macro_programming",
+      "verbatim",
+      "selective_loading",
+      "box_manipulation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Remove rightmost item from list efficiently",
+        "description": "If list items are restricted to unexpandable tokens it is possible to remove the rightmost item quite efficiently (example: \\def\\deleterightmost#1{\\edef#1{\\expandafter\\xyzzy#1\\xyzzy}} ... ).",
+        "guidance": "Use unexpandable-token list representation and an auxiliary macro (\\xyzzy/\\yzzyx) to peel off the rightmost token; this avoids unattractive \\aftergroup tricks and can be efficient even for long lists."
+      },
+      {
+        "name": "Convert count register to decimal stored in a control sequence",
+        "description": "A \\count register's contents can be converted to decimal and stored in a control sequence, e.g. if \\n is a register: \\edef\\csn{\\the\\n} puts its value into \\csn; conversely a value from \\csn can be put back into \\n by saying simply :\\n=\\csn).",
+        "guidance": "Useful when you want a decimal representation in a macro/list; usually unnecessary just to save \\count registers (TeX has many), but helpful when storing numeric data in token lists."
+      },
+      {
+        "name": "Represent unordered sets as list macros (set macros)",
+        "description": "Use a list macro without braces to represent a set of control sequences, e.g. \\def\\1{\\\\\\alpha\\\\\\beta\\\\\\gamma} represents {\\alpha,\\beta,\\gamma}.",
+        "guidance": "Test membership by defining a macro that iterates over the set (example \\def\\ismember#1\\of#2{...}); removal and other set operations follow by suitable token-list processing."
+      },
+      {
+        "name": "Use \\dospecials and \\uncatcodespecials for verbatim output",
+        "description": "Plain TeX's \\dospecials is essentially a set macro of all characters with special category codes. One can define \\uncatcodespecials to set those characters' catcode to 12 (other) so they print as themselves: \\def\\uncatcodespecials{\\def\\do##1{\\catcode'##1=12 }\\dospecials}.",
+        "guidance": "This is important when temporarily disabling TeX's automatic features to print characters exactly as in a file; relies on \\dospecials representing the current set of special characters."
+      },
+      {
+        "name": "Essential components of a \\setupverbatim macro",
+        "description": "A \\setupverbatim macro should include \\obeylines, \\uncatcodespecials, and \\obeyspaces, and set type to \\tt; also handle line numbering via \\everypar to insert line numbers in indentation position.",
+        "guidance": "Be careful: change \\par before \\obeylines; compensate for \\obeyspaces side effects; make active space equal control space (example: {\\obeyspaces\\global\\let =\\ } ). Insert \\everypar{\\advance\\lineno by1 \\llap{...}} to number lines."
+      },
+      {
+        "name": "Handle empty lines and ligatures in verbatim listings",
+        "description": "Two common failures: (1) empty lines of the file are omitted because \\par at end of an empty line in vertical mode doesn't start a new paragraph; (2) font ligatures (e.g., Spanish punctuation) cause undesirable printing.",
+        "guidance": "Cure by inserting \\def\\par{\\leavevmode\\endgraf} and setting the catcode for the quote character to active with an appropriate definition (example: {\\catcode'\\'=\\active \\gdef'{\\relax\\lq}}) before invoking \\obeylines."
+      },
+      {
+        "name": "Do not scan verbatim argument prematurely; change catcodes first",
+        "description": "If \\verbatim is defined as \\long\\def\\verbatim#1{...} then #1 is tokenized before catcode changes and the argument won't be truly verbatim; instead change category codes before scanning the argument (use \\begingroup and a separate scanner like \\doverbatim).",
+        "guidance": "Implement \\verbatim as \\begingroup\\tt\\uncatcodespecials\\obeyspaces\\doverbatim and let \\doverbatim read the body under the altered catcodes."
+      },
+      {
+        "name": "Almost-verbatim via \\meaning has limitations",
+        "description": "A fairly fast way to produce an almost-verbatim transcript is to capture the argument in a macro and then use \\meaning to strip token syntax (example: \\long\\def\\verbatim#1{\\def\\next{#1}{\\tt\\frenchspacing\\expandafter\\strip\\meaning\\next}} with \\def\\strip#1>{}).",
+        "guidance": "This strips tokens, so information like exact spacing can be lost (e.g., spaces after control words may be inserted even if absent originally)."
+      },
+      {
+        "name": "Strategies to terminate verbatim mode",
+        "description": "Verbatim mode is hard to stop if normal control capability is turned off. Options: (a) rely on end-of-file (as \\listing does), (b) specify a fixed number of lines, (c) put constraints on text so an explicit delimiter (\\endverbatim) can be detected, (d) use a repeated delimiter character approach.",
+        "guidance": "For delimited approach, implement \\beginverbatim/\\endverbatim with temporary escape char and catcode changes, assuming \\beginverbatim appears at line end so the body is read into memory; this can be memory intensive."
+      },
+      {
+        "name": "Delimiter-character approach for verbatim (keep one char untouchable)",
+        "description": "Keep one character (char) untouchable and define \\doverbatim such that \\verbatim{char}(text}(char}) typesets text verbatim, where text must not contain the repeated delimiter char: \\def\\doverbatim#1{\\def\\next##1#1{##1\\endgroup}\\next}.",
+        "guidance": "Fast and simple when the delimiter is not present inside the text; avoids scanning problems but requires user to pick a safe delimiter."
+      },
+      {
+        "name": "Place interlock in macro files to avoid double input",
+        "description": "To prevent infinite loops or redefinition anomalies when a macro file might be \\input more than once, place an interlock near beginning, e.g. \\ifx\\macsisloaded\\relax\\endinput\\else\\let\\macsisloaded=\\relax\\fi.",
+        "guidance": "Use a different control sequence per file. This prevents multiple readings and the growth of nested definitions that can cause recursion."
+      },
+      {
+        "name": "Understand TeX memory categories and macro cost",
+        "description": "A macro consumes four kinds of memory: token memory, name memory, string memory, and character memory. Token memory is most important: a macro takes one token cell per token in its definition; each control sequence also uses one cell of name and string memory and as many character memory cells as the name length.",
+        "guidance": "Short macro names don't save much; monitor usage with \\tracingstats=1 and increase hash/pool/token sizes if necessary (see Chapter 27)."
+      },
+      {
+        "name": "Selective loading of optional macro sections",
+        "description": "Provide a \\load{file}{options} mechanism that converts the option string to a set macro (\\options) and conditionally loads parts of the file guarded by \\ifoption <X> ... \\fi (example \\def\\load#1#2{\\let\\options=\\empty \\addoptions#2\\end \\input#1}).",
+        "guidance": "Within the file, enclose option-specific code in conditional tests (\\ifoption) so only requested parts are activated; faster alternative below uses catcode swapping."
+      },
+      {
+        "name": "Fast selective loading via category-code swapping and comment sentinel",
+        "description": "Use a scheme where the leftmost nonblank character on each line is v or c and reserve another symbol (e.g. '-') as sentinel. Preface optional region with \\beginoption B and end with -endoptionalcode where - has catcode 14 so it is ignored unless categories are swapped. Implement \\beginoption to swap categories (\\swapcategories) and let \\endoptionalcode=\\endgroup.",
+        "guidance": "This allows skipping optional blocks at high speed without requiring well-nested \\if..\\fi constructs; material required under multiple options can be prefaced by multiple \\beginoption lines."
+      },
+      {
+        "name": "Conditional loading based on undefined control sequences without table pollution",
+        "description": "Use \\ifx\\cs\\undefined ... \\fi so that TeX does not put undefined control sequences into its internal tables when they appear in the condition or while skipping, letting you prepare e.g. a bibliography where only entries whose keys are defined get loaded.",
+        "guidance": "This avoids occupying table entries for unused macros while allowing selective inclusion."
+      },
+      {
+        "name": "Prefer \\bgroup/\\egroup (implicit braces) in definitions",
+        "description": "\\bgroup and \\egroup are implicit braces (\\let\\bgroup={ and \\let\\egroup=}). Using them in replacement texts allows category codes to change inside the box, is faster (no double scanning), and uses less memory (no argument storage).",
+        "guidance": "Use \\bgroup/\\egroup-based begin/end constructs rather than argument-scanning forms when you want category-code flexibility, speed, and space efficiency."
+      },
+      {
+        "name": "Distinguish master counter vs balance counter and alignments",
+        "description": "TeX's 'master counter' increments/decrements for every { and } scanned (including those produced by category-code evaluations), while the 'balance counter' tracks explicit { and } tokens contributed to a token list being formed. Alignment processing uses only the master counter: an alignment entry ends with the first & or \\cr or \\crcr that appears when the master counter equals its starting value.",
+        "guidance": "These rules explain surprising behaviors (e.g., certain constructs allow & or \\cr inside templates) and must be understood when writing macros that interact with alignments or scanning of balanced text."
+      },
+      {
+        "name": "Poor-man's bold via overprinting copies (\\pmb)",
+        "description": "If a bold glyph is unavailable, simulate bold by overprinting the glyph three times with slight horizontal/vertical offsets so the result occupies same space as the original: \\def\\pmb#1{\\setbox0=\\hbox{#1}% \\kern-.025em\\copy0\\kern-\\wd0 \\kern.05em\\copy0\\kern-\\wd0 \\kern-.025em\\raise.0433em\\box0 }.",
+        "guidance": "Produces fuzzy but sometimes acceptable bold; use only when true bold font is not available."
+      },
+      {
+        "name": "Use boxes as temporary experiments (do not commit immediately)",
+        "description": "Put material into box registers to try different layout possibilities behind the scenes (e.g., to test column widths or balancing) without inserting into document; after experimentation, choose which box to output.",
+        "guidance": "Box registers allow non-destructive trials; combined with dimension registers and repeated setting you can perform binary search for balanced column heights."
+      },
+      {
+        "name": "Binary-search strategy for balancing two columns",
+        "description": "To balance two language columns so they have nearly equal heights, perform up to N trials (e.g., 10), choosing trial widths between low and high bounds, typeset both columns into vboxes with those widths, compare heights (\\ht0 vs \\ht2), and adjust bounds accordingly until height difference less than a tolerance (\\delheight) or trials limit reached.",
+        "guidance": "Temporarily set \\hbadness=10000 and \\hfuzz=\\maxdimen during trials to suppress irrelevant warnings; recompute final solution to emit proper warnings."
+      },
+      {
+        "name": "Changing box dimensions (\\ht, \\wd, \\dp) does not change internal glue behavior",
+        "description": "Assignments to \\ht, \\wd, or \\dp of a box register alter the box's external dimensions but do not change anything inside the box (they do not affect glue settings inside). When copying boxes into new boxes and adjusting dimensions, different cases arise depending on whether the original box is an hbox or vbox and which dimension is altered (see \\twohboxes and \\twovboxes examples).",
+        "guidance": "Analyze per-case effects: e.g., altering \\wd of an hbox moves adjacent content; altering \\ht of a vbox shifts internal material; altering \\dp affects depths. Understand propagation in vertical lists too (interline glue interactions)."
+      },
+      {
+        "name": "Rules for TeX assigning positions to boxes in lists",
+        "description": "Given a box and its reference point: (1) For an hbox, TeX starts at the reference point and walks through the horizontal list, placing enclosed boxes with their reference points at the current position and then moving right by their width. (2) For a vbox, TeX starts at the upper-left corner, moves up by height, walks the vertical list, places enclosed boxes with upper-left corner at current position, moves down by height and depth, etc.",
+        "guidance": "Use these placement rules to reason about how changes to box dimensions or nesting will affect positions of interior boxes and adjacent material."
+      },
+      {
+        "name": "Use zero-width boxes and \\nointerlineskip for precise point placement",
+        "description": "To place annotations or markers at arbitrary coordinates, create boxes of zero width (so their order doesn't affect horizontal layout) and use \\kern and \\raise to position them; when in vertical mode, create a vbox with zero height/depth and include \\nointerlineskip to avoid interline glue.",
+        "guidance": "Example \\point macro constructs a zero-width hbox or vbox for coordinate labeling; include \\nointerlineskip in vertical mode to prevent interline glue interference."
+      },
+      {
+        "name": "Constructing paths with font glyphs and macros",
+        "description": "If a font contains quarter-circle glyphs with consistent geometry, you can build macros (\\path with tokens \\L, \\R, \\S, \\T) that compose those glyphs into arbitrary turtle-like paths; additional operations \\B and \\W can turn path segments black/white.",
+        "guidance": "Ensure path boxes may need kerns before/after since produced boxes might be narrower than the visual path; rely on fixed fontdimen thickness (e.g., \\fontdimen8) to match rules to arcs."
+      }
+    ]
+  }
+}

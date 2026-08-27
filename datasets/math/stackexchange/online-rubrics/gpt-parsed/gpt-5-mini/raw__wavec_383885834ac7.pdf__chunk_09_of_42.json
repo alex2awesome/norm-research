@@ -1,0 +1,156 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 42,
+  "chunk_chars": 39423,
+  "model": "gpt-5-mini",
+  "elapsed_s": 70.88964854200458,
+  "input_tokens": 15584,
+  "output_tokens": 4945,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users of Plain TeX (authors, macro writers, and advanced typesetters)",
+    "subtask_short": "plain_tex page_breaking_and_insertions",
+    "subtask_description": "Guidance and operational rules for page breaking, insertions (footnotes, floats), registers, and box manipulation in Plain TeX; aimed at people designing documents or macros that control page makeup. Covers penalties, page-cost computation, inserts (\topinsert/\biginsert/\footnote), and numeric/box/register semantics.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "page_breaking",
+      "insertions",
+      "registers",
+      "macro_writing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Penalty semantics",
+        "description": "Each potential breakpoint has an associated penalty which is high for undesirable breakpoints and negative for desirable ones. The penalty is zero at glue and kern breaks, so it is nonzero only at explicit penalty breaks.",
+        "guidance": "A penalty of 10000 or more inhibits breaking; a penalty of -10000 or less forces breaking. Example: \\penalty-100 indicates TE-X should try to break here; the negative bonus offsets badness. Penalties are discarded after a page break."
+      },
+      {
+        "name": "Small/Medium/Big break macros",
+        "description": "Plain TeX macros \\smallbreak, \\medbreak, and \\bigbreak specify increasingly desirable places to break, with respective penalties of -50, -100, and -200.",
+        "guidance": "They also insert a \\smallskip, \\medskip, or \\bigskip if a break is not taken, but they do not increase existing glue unnecessarily (so used conveniently before/after theorem statements). \\medbreak\\medbreak is equivalent to a single \\medbreak to avoid duplicated skips."
+      },
+      {
+        "name": "\\goodbreak usage",
+        "description": "\\goodbreak is an abbreviation for \\par\\penalty-500.",
+        "guidance": "Use when proofreading to stretch some page a little to improve the following one; less drastic than \\eject because if it ends up not near the bottom of a page it has no effect."
+      },
+      {
+        "name": "\\filbreak macro semantics",
+        "description": "\\filbreak roughly means: 'Break the page here and fill the bottom with blank space unless there is room for more copy that is itself followed by \\filbreak.'",
+        "guidance": "Precisely defined as \\vfil\\penalty-200\\vfilneg. Putting \\filbreak at the end of each paragraph (if paragraphs aren't too long) makes page breaks occur between paragraphs and fits as many paragraphs as possible on each page."
+      },
+      {
+        "name": "\\raggedbottom behavior",
+        "description": "\\raggedbottom is the vertical analog of \\raggedright.",
+        "guidance": "It tells TeX to permit a small amount of variability in bottom margins on different pages to make other spacing uniform."
+      },
+      {
+        "name": "Page cost computation (c = f(b,p,q))",
+        "description": "TeX figures the 'cost' c of a page break using the badness b of the would-be page, the penalty p at the breakpoint, and q (\\insertpenalties) the sum of penalties for split insertions on the page.",
+        "guidance": "The manual gives piecewise rules (cases depend on ranges of b, p, q) that govern how c is computed and when c is considered infinite. Vertical badness b is an integer between 0 and 10000 inclusive, except overfull boxes where b = infinity."
+      },
+      {
+        "name": "Vertical badness range and overfull condition",
+        "description": "Vertical badness is computed by the same rules as horizontal badness; it is an integer between 0 and 10000 inclusive, except when the box is overfull, when it is infinity (oo).",
+        "guidance": "When b is very large (e.g., 10000) TeX treats many breaks as indistinguishable; c can be 100000 in such cases and TeX will accumulate material until b < 10000."
+      },
+      {
+        "name": "Page-breaking algorithm (current page vs recent contributions)",
+        "description": "TeX maintains a 'current page' list (material considered for the next page) and 'recent contributions' (items to be moved as convenient). When moving an item from recent contributions to the current page, TeX discards a discardable item if the current page has no boxes; otherwise it computes the cost c of breaking here and, if c is <= smallest so far, remembers this breakpoint as best so far.",
+        "guidance": "If c = infinity or p <= -10000, TeX breaks at the best remembered breakpoint. Material following the chosen breakpoint is moved back to recent contributions and considered again; hence current page typically holds more than a page's worth before choosing a breakpoint."
+      },
+      {
+        "name": "Use \\tracingpages to debug page breaks",
+        "description": "Setting \\tracingpages=1 instructs TeX to put its page-cost calculations into the log file so you can watch the algorithm in action.",
+        "guidance": "Log lines: first '%%' line shows goal height (\\vsize) and max depth (\\maxdepth); subsequent '%' lines show t (total height so far), y (goal height), badness b, penalty p, and cost c; a '#' marks the best breakpoint so far. Use this to understand odd page breaks and to tune parameters."
+      },
+      {
+        "name": "\\maxdepth parameter effect",
+        "description": "\\maxdepth tells TeX to raise the bottom box on the page if that box has too much depth, so that the depth of the constructed page will not exceed a specified value.",
+        "guidance": "Its saved value (like \\vsize) is taken when the first box/insertion enters the current page. Example: unusual depth due to descended glyphs can affect the computed t value in tracing output."
+      },
+      {
+        "name": "\\topskip handling for top baseline alignment",
+        "description": "TeX inserts special glue before the first box on each page equal to \\topskip reduced by the height of the first box (or set to zero if negative) so that top and bottom baselines occur in predetermined positions whenever possible.",
+        "guidance": "If \\topskip=20pt plus2pt and first box is 13pt tall, TeX inserts \\vskip7pt plus2pt before it. Plain TeX usually sets \\topskip=10pt. \\topskip is looked at only when the first box is contributed to the current page. If insertions occur before the first box, the \\topskip glue is considered a valid breakpoint."
+      },
+      {
+        "name": "Page parameters available and modifiable (\\pagetotal, \\pagegoal, \\insertpenalties)",
+        "description": "TeX maintains quantities like \\pagetotal, \\pagegoal (saved \\vsize), \\pagestretch, \\pagefilstretch, \\pagefillstretch, \\pagefilllstretch, \\pageshrink, and \\pagedepth; the integer q used in page cost formula is \\insertpenalties.",
+        "guidance": "You can inspect and change these values (e.g., \\pagegoal=500pt overrides saved \\vsize), but when the current page contains no boxes some of these are zero and \\pagegoal = very large value and changes have no effect at such times."
+      },
+      {
+        "name": "Difference between \\eject and \\break and persistence of penalties",
+        "description": "Penalties are discarded after a page break. Therefore \\eject\\eject the second \\eject is ignored (equivalent to \\penalty-10000 being discarded). But \\break\\break inside a paragraph causes an empty line because penalties are discarded after a break in a paragraph only if they do not belong to the final sequence of breakpoints.",
+        "guidance": "Avoid \\eject\\eject or \\break\\break to create empty page/line. Recommended: empty page by \\eject\\line{}\\vfil\\eject and empty line by \\break\\hbox{}\\hfil\\break to avoid underfull boxes."
+      },
+      {
+        "name": "Use of output routines for per-page processing",
+        "description": "TeX allows further processing after each page break via a special 'output routine' before pages receive final form (used to attach page numbers and other page-level material).",
+        "guidance": "Refer to Chapter 23 (in manual) for constructing or modifying the plain TeX output routine."
+      },
+      {
+        "name": "When to force or revise page breaks",
+        "description": "If TeX produces an awful-looking page, it usually means no good page break is possible (many breaks have b >= 10000 and TeX treats them as indistinguishable).",
+        "guidance": "Solutions: insert \\eject or \\vfill\\eject in an acceptable spot, revise the manuscript, or use \\tracingpages to inspect and modify TeX's parameters to get better results. Frequently arises if the format imposes overly strict page limitations."
+      },
+      {
+        "name": "Floating inserts: \\topinsert, \\pageinsert, \\midinsert behaviors",
+        "description": "\\topinsert( vertical material )\\endinsert attempts to put vertical material at the top of the current page (or next page if no room). \\pageinsert forces material to a full page (appears on following page). \\midinsert tries first to insert in place in middle of current page, otherwise converts to a \\topinsert.",
+        "guidance": "Vertical mode only (between paragraphs), not inside boxes or other insertions. \\midinsert may not always find the best place because TeX processes ahead; inserting \\goodbreak before \\midinsert is recommended. Multiple \\topinsert/\\pageinsert in succession retain relative order and may be carried over to several pages."
+      },
+      {
+        "name": "Insert interactions and constraints",
+        "description": "Insertions (footnotes, top/page/mid inserts) interact: e.g., a pageinsert that floats to the page following a long broken footnote may cause held-over insertions to try to force themselves onto the same page, potentially producing an overfull vbox. Insertions cannot appear within insertions.",
+        "guidance": "If you need a footnote in a caption (which is inside an insertion) use \\vfootnote (place the reference mark in the caption and \\vfootnote*{...} on the page where you expect the caption to fall). In complex situations consider rethinking the document format."
+      },
+      {
+        "name": "Footnote usage constraints and behavior",
+        "description": "The \\footnote macro is provided for use within paragraphs (or hboxes contributed to the main vertical list); TeX ensures each footnote occurs at the bottom of the same page as its reference. Long footnotes will be split and continued on following pages if necessary.",
+        "guidance": "Footnotes should not be used inside boxes that are inside boxes (they will be lost). Footnotes cannot occur within insertions. Authors interested in good exposition should avoid footnotes when possible as they distract."
+      },
+      {
+        "name": "Registers: counts, dimen, skip, muskip capacities and operations",
+        "description": "TeX has 256 registers of each type: \\count0..\\count255 (integers in signed 32-bit range), \\dimen0..\\dimen255 (dimen), \\skip0..\\skip255 (glue), \\muskip0..\\muskip255 (muglue). Assign with \\count{n}={number}, \\dimen{n}={dimen}, \\skip{n}=(glue), \\muskip{n}=(muglue).",
+        "guidance": "Use \\advance to add/subtract, \\multiply and \\divide (only by integers). Be careful not to overflow registers or divide by zero. If infinite glue components are added, lower-order infinities disappear (examples given)."
+      },
+      {
+        "name": "Conversions between register types and numeric semantics",
+        "description": "A \\dimen can be used as a {number}, a \\skip can be used as a {dimen} or {number}. TeX converts (glue) to {dimen} by omitting stretch and shrink components; converts {dimen} to {number} by assuming units of sp (scaled points).",
+        "guidance": "Examples: if \\skip1 holds 1pt plus 2pt then \\dimen1=\\skip1 sets \\dimen1=1pt. \\count2=\\dimen1 or \\count2=\\skip1 set \\count2 equal to 65536 (sp conversion). Also applies to internal parameters like \\baselineskip."
+      },
+      {
+        "name": "Grouping and global/local register behavior",
+        "description": "Registers obey TeX's group structure: changes inside { ... } do not affect values outside unless \\global is used.",
+        "guidance": "To make register changes persist outside the group, prefix with \\global (e.g., \\global\\advance...)."
+      },
+      {
+        "name": "Symbolic register names (\\countdef, \\dimendef, \\skipdef, \\muskipdef)",
+        "description": "Use \\countdef\\name=number (and similar for other types) to give symbolic names to registers so the name acts like a parameter.",
+        "guidance": "After \\countdef the control sequence can be used in TeX commands as if it were an integer parameter like \\tolerance. \\dimendef, \\skipdef, and \\muskipdef create corresponding dimension/glue parameters."
+      },
+      {
+        "name": "Box registers: \\setbox, \\box vs \\copy, \\unhbox / \\unvbox semantics",
+        "description": "Box registers \\box0..\\box255 hold hboxes or vboxes. \\setbox{n}=(box) assigns; using \\box{n} or \\unhbox/\\unvbox consumes the register (makes it void). \\copy{n} or \\unhcopy/\\unvcopy use contents without voiding.",
+        "guidance": "Unboxing removes one level of boxing; an 'unsetting' unboxing also affects glue set at the outer level. To build large boxes by accretion use \\unhbox/\\unvbox to avoid nested boxes and memory blowup. \\global\\setbox makes a box register globally void or set appropriately."
+      },
+      {
+        "name": "Unboxing and outer-level glue behavior",
+        "description": "An unboxing operation 'unsets' any glue that was set at the box's outer level. Inner-level glue remains unaffected.",
+        "guidance": "Example: making \\box6 = \\hbox to 1.05\\wd5{\\unhcopy5} makes \\box6 wider by stretching outer glue; glue inside inner hbox does not change."
+      },
+      {
+        "name": "Debugging registers and boxes with \\show commands",
+        "description": "Use \\showthe\\countN, \\showthe\\dimenN, \\showthe\\skipN, and \\showboxN to display register and box contents.",
+        "guidance": "Box contents appear in the log file unless \\tracingonline=1. Plain TeX provides \\tracingall to turn on every interaction mode, useful for checking register/box state when solving exercises or debugging macros."
+      }
+    ]
+  }
+}

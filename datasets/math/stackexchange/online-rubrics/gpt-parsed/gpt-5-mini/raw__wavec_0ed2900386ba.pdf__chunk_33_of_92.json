@@ -1,0 +1,195 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 33,
+  "n_chunks": 92,
+  "chunk_chars": 39953,
+  "model": "gpt-5-mini",
+  "elapsed_s": 195.96343795899884,
+  "input_tokens": 12957,
+  "output_tokens": 6375,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of GAP (computational group/semigroup/rewriting system implementers)",
+    "subtask_short": "associative_word_and_slp_usage",
+    "subtask_description": "Guidance and API-level rules for representing associative words, using/converting external representations, constructing and manipulating straight line programs (SLPs), and developing/using rewriting systems in GAP. Targeted at people writing GAP code or implementing algorithms that work with words, SLPs, and rewriting systems.",
+    "subtask_keywords": [
+      "gap",
+      "associative_words",
+      "straight_line_programs",
+      "rewriting_systems",
+      "computational_group_theory"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Representation types for associative words",
+        "description": "There are two kinds of internal representations for associative words: syllable representation (generator/exponent pairs) and letter representation (list of generator/inverse numbers). Negative numbers are used for inverses.",
+        "guidance": "Letter access is fast and syllable access is slow for words stored in letter representation; syllable access is fast and letter access is slow for words stored in syllable representation. (See IsLetterAssocWordRep (37.6.1) and IsSyllableAssocWordRep (37.6.5))."
+      },
+      {
+        "name": "Default representation choice",
+        "description": "Unless the syllable representation is specified explicitly when creating the free group/monoid/semigroup, a letter representation is used by default.",
+        "guidance": "Be explicit about the representation when your algorithm depends on fast syllable or letter access."
+      },
+      {
+        "name": "Choose representation by task (performance tradeoff)",
+        "description": "Depending on the task, either letter or syllable representation will perform better in time or memory; algorithms that are syllable- or letter-based perform substantially better in the corresponding representation.",
+        "guidance": "Example: when creating pc-groups it is advantageous to use a syllable representation; calculations in free groups usually benefit from using a letter representation. Use syllable-based routines (e.g., GeneratorSyllable) only when syllable rep is appropriate."
+      },
+      {
+        "name": "Internal letter representation variants (byte vs integer)",
+        "description": "There are letter representations that use integers (4 Byte) to represent a generator and letter representations that use single bytes to represent a character.",
+        "guidance": "The single-byte variant is more memory efficient but can only be used if there are less than 128 generators, in which case it is used by default."
+      },
+      {
+        "name": "Syllable representation compression variants",
+        "description": "Different versions of syllable representations compress a generator-exponent pair in 8, 16 or 32 bits or use a pair of integers.",
+        "guidance": "Internal mechanisms try to make this as memory efficient as possible; choose representation appropriate to memory/time tradeoffs."
+      },
+      {
+        "name": "Conversion between representations allowed",
+        "description": "It is possible to convert a word to letter or syllable representation and vice versa via provided operations.",
+        "guidance": "Use LetterRepAssocWord to get the letter rep, AssocWordByLetterRep to build a word from a letter rep, ExtRepOfObj/ObjByExtRep to interface with the external (syllable-like) representation. Conversions may have cost (e.g., words stored in syllable form must be computed into letter form when requested)."
+      },
+      {
+        "name": "External representation format for associative words",
+        "description": "The external representation of an associative word w = g1^e1 g2^e2 ... gk^ek is the list [i1, e1, i2, e2, ..., ik, ek], where ij denotes the index of the generator and exponents may be negative; the empty list describes the identity.",
+        "guidance": "The external representation is guaranteed to be freely reduced (e.g., g1*g2*g2^-1*g1 has external rep [1,2]). ExtRepOfObj and ObjByExtRep interface to this representation regardless of family preference."
+      },
+      {
+        "name": "Use external rep to get syllable-like rep irrespective of family preference",
+        "description": "Regardless of the family preference for letter or syllable representations, ExtRepOfObj and ObjByExtRep can be used to access a syllable-like external representation.",
+        "guidance": "Use this when you specifically require a syllable-like representation even if the family chooses letter as default."
+      },
+      {
+        "name": "Straight line program (SLP) structure",
+        "description": "A straight line program in GAP stores a list of 'lines' each being one of: (1) a nonempty dense list l of integers, (2) a pair [l,i] where l is as in (1) and i is a positive integer (overwrite), or (3) a list [l1,l2,...,lk] of lists of form (1) (may occur only as last line). The lists of integers are interpreted as external representations of associative words.",
+        "guidance": "SLPs provide an efficient way to evaluate abstract words at concrete generators with fewer multiplications than naive evaluation; use StraightLineProgram (37.8.2) to construct them."
+      },
+      {
+        "name": "Constructing StraightLineProgram: nrgens requirement",
+        "description": "When constructing an SLP via StraightLineProgram(lines[, nrgens]), 'lines' must define a unique SLP; if a line of form 1 occurs except in the last position then the number of input generators is not determined by lines and the optional argument nrgens must be specified.",
+        "guidance": "If nrgens is not provided in that ambiguous case, StraightLineProgram returns fail. Use the NC (no-check) variant to skip the internal consistency check when desired."
+      },
+      {
+        "name": "StraightLineProgramNC and internal consistency",
+        "description": "The NC variant creates an SLP without checking internal consistency.",
+        "guidance": "IsInternallyConsistent can be used to check consistency explicitly; StraightLineProgramNC is useful when you are sure the lines define a valid program and you want to avoid the check for performance."
+      },
+      {
+        "name": "ResultOfStraightLineProgram evaluation semantics",
+        "description": "ResultOfStraightLineProgram(prog, gens) evaluates the SLP prog on the list gens: initialize a list r as shallow copy of gens; for each line before the last add or overwrite entries as prescribed; for the last line return either a single element, an element described by a pair, or a list of group elements if last line is a list of lists.",
+        "guidance": "Follow the exact algorithmic semantics: for i<k extending/replacing r as appropriate; for pk return depending on its form. Examples illustrate behavior for empty inputs and multi-output SLPs."
+      },
+      {
+        "name": "NrInputsOfStraightLineProgram behavior",
+        "description": "NrInputsOfStraightLineProgram(prog) returns the number of generators (inputs) the SLP prog needs.",
+        "guidance": "If a line of form 1 occurs in lines except in the last line and prog did not store the number of generators, this attribute signals an error. Ensure nrgens was specified when required at construction time."
+      },
+      {
+        "name": "StringOfResultOfStraightLineProgram output formatting",
+        "description": "StringOfResultOfStraightLineProgram(prog, gensnames[, \"LaTeX\"]) returns a string describing the result of prog in terms of gensnames; optional 'LaTeX' format uses ^{...} for exponents.",
+        "guidance": "If the result is a list, the returned string is a comma-separated concatenation enclosed in square brackets; if a single element, parentheses and ^ are used as appropriate."
+      },
+      {
+        "name": "CompositionOfStraightLinePrograms requirements",
+        "description": "CompositionOfStraightLinePrograms(prog2, prog1) returns an SLP prog such that for any input gens, ResultOfStraightLineProgram(prog, gens) equals ResultOfStraightLineProgram(prog2, ResultOfStraightLineProgram(prog1, gens)).",
+        "guidance": "The number of outputs of prog1 must match the number of inputs of prog2. Use when building compound computations from simpler SLPs."
+      },
+      {
+        "name": "IntegratedStraightLineProgram semantics",
+        "description": "IntegratedStraightLineProgram(listofprogs) for a list of SLPs with the same number of inputs returns an SLP whose result is the concatenation of the results of each program (each result ri is either a list of elements or wrapped as a singleton list).",
+        "guidance": "Order of programs affects the order of outputs; repeating or concatenating integrated programs concatenates their outputs accordingly."
+      },
+      {
+        "name": "RestrictOutputsOfSLP: reduce computation to needed outputs",
+        "description": "RestrictOutputsOfSLP(slp, k) returns a new slp that calculates only the outputs specified by k (integer or list of indices) and does only what is necessary.",
+        "guidance": "The original slp must have a last line with enough expressions for the requested k. slp may be either an slp object or a pair (lines, ninputs). Use to optimize computation when only some outputs are needed."
+      },
+      {
+        "name": "IntermediateResultOfSLP and overwrite considerations",
+        "description": "IntermediateResultOfSLP(slp, k) returns a new slp that calculates only the value of slot k at the end of slp doing only what is necessary; this assumes a general SLP that may overwrite slots.",
+        "guidance": "If the SLP does not overwrite slots, use IntermediateResultOfSLPWithoutOverwrite (much faster). slp may be an slp or a pair (lines, ninputs)."
+      },
+      {
+        "name": "IntermediateResultOfSLPWithoutOverwrite precondition",
+        "description": "IntermediateResultOfSLPWithoutOverwrite(slp, k) requires that slp does not overwrite slots but only append; it returns a new slp that calculates only the value of slot k.",
+        "guidance": "This variant is much faster; if your SLP overwrites slots, use the generic IntermediateResultOfSLP instead."
+      },
+      {
+        "name": "IntermediateResultsOfSLPWithoutOverwrite for multiple slots",
+        "description": "IntermediateResultsOfSLPWithoutOverwrite(slp, k) returns a new slp calculating only the values of slots listed in k; requires no overwriting.",
+        "guidance": "Use when multiple intermediate values are needed and SLP appends only."
+      },
+      {
+        "name": "ProductOfStraightLinePrograms preconditions",
+        "description": "ProductOfStraightLinePrograms(s1, s2) requires s1 and s2 to be SLPs that each return a single element with the same number of inputs; it constructs an slp that returns the product of their results on the same input.",
+        "guidance": "Use only when both SLPs have matching input arity and single-element output."
+      },
+      {
+        "name": "SlotUsagePattern optimization attribute",
+        "description": "SlotUsagePattern(s) analyses an SLP for more efficient evaluation so that intermediate results not needed later are not computed, and results used for the last time are discarded to reduce memory.",
+        "guidance": "When available, this attribute reduces memory usage and speeds evaluation by avoiding unnecessary computations."
+      },
+      {
+        "name": "Straight line program elements: memory/time tradeoff",
+        "description": "A straight line program element (SLP element) stores a seed (list of group elements) and an SLP; it represents elements via the SLP for memory efficiency.",
+        "guidance": "While memory usage is reduced (useful for very large elements like huge permutations), some normally cheap operations (e.g., equality tests) can become more expensive. This is the tradeoff for using less memory."
+      },
+      {
+        "name": "StraightLineProgGens base argument for permutations",
+        "description": "StraightLineProgGens(gens[, base]) returns a set of SLP elements corresponding to gens; if gens is a set of permutations, a base can be given which will be used to speed up equality tests.",
+        "guidance": "Provide base for permutation generators when you expect many equality checks to gain performance."
+      },
+      {
+        "name": "StretchImportantSLPElement to 'materialize' important elements",
+        "description": "StretchImportantSLPElement(elm) for an SLP element with very long straight line representation replaces it by an equal SLP element whose seed contains the evaluation of elm and whose SLP has length 1.",
+        "guidance": "Use this to designate frequently referred 'important' elements so subsequent operations on them are cheaper (short SLP). For non-SLP objects nothing happens."
+      },
+      {
+        "name": "Rewriting system: definition and reduction notion",
+        "description": "A term rewriting system for a term algebra T is a set of ordered pairs (l,r). Rewriting replaces subterms equal to l by r; an element is reduced if no rule applies to it.",
+        "guidance": "View the rewriting system as presentation for a quotient algebra A of T. The ReducedForm(rws, u) operation rewrites u by successive application of rules until no further rewriting is possible and returns the reduced element."
+      },
+      {
+        "name": "IsConfluent: confluence criterion and checks",
+        "description": "IsConfluent(rws) returns true iff rws is confluent, i.e., for every two words u and v representing the same element of the algebra A, ReducedForm(rws,u) = ReducedForm(rws,v); ConfluentRws(rws) returns a new confluent rewriting system defining the same algebra.",
+        "guidance": "MakeConfluent(rws) attempts to add rules (and perhaps reduce) to make rws confluent. For algebras with a canonical rewriting system IsConfluent checks whether that system is confluent."
+      },
+      {
+        "name": "IsReduced, ReduceRules and AddRuleReduced semantics",
+        "description": "IsReduced(rws) indicates that for each rule (l,r) both l and r are reduced. ReduceRules(rws) reduces rules and removes redundant ones to make rws reduced. AddRuleReduced(rws,rule) adds a rule and performs reduction so a reduced rws remains reduced.",
+        "guidance": "Prefer AddRuleReduced when adding rules to a reduced system to preserve the reduced property automatically."
+      },
+      {
+        "name": "ReducedForm operation semantics",
+        "description": "ReducedForm(rws,u) rewrites u by successive application of rws rules until no further rewriting is possible and returns the resulting element of the free (or term) algebra T.",
+        "guidance": "This is the primary operation to obtain normal forms; ensure the rewriting system's ordering and rules are set appropriately for intended normal forms."
+      },
+      {
+        "name": "GeneratorsOfRws attribute",
+        "description": "Rules(rws) and GeneratorsOfRws(rws) list the rules and generators comprising the rewriting system; these may change over the life of the rws but will always be a set of defining relations of the algebra.",
+        "guidance": "Expect Rules to be computed/updated when MakeConfluent or AddRuleReduced are used; do not assume immutability."
+      },
+      {
+        "name": "Using rewriting for finitely presented groups/monoids requires conversions",
+        "description": "To rewrite words in a finitely presented group, convert it to an fp monoid (IsomorphismFpMonoid), rewrite words in the underlying free monoid (UnderlyingElement), and convert back (ElementOfFpMonoid/PreImagesRepresentative).",
+        "guidance": "Follow the conversion steps carefully: build KnuthBendixRewritingSystem for the monoid, MakeConfluent if needed, then use ReducedForm on the monoid words and map back to group elements."
+      },
+      {
+        "name": "kbmag package can replace built-in rewriting for performance",
+        "description": "Under Unix, after loading the kbmag package via LoadPackage(\"kbmag\"), assign KB_REW := KBMAG_REW to use kbmag's efficient C implementation instead of built-in rewriting; assignment to GAPKB_REW reverts to built-in implementation.",
+        "guidance": "Use kbmag for performance-critical rewriting tasks when available; be aware of platform/package availability and the global assignment to KB_REW."
+      },
+      {
+        "name": "Rewriting system objects often computed on the fly (developer guidance)",
+        "description": "Rewriting systems frequently evolve during a session; many properties (e.g., IsConfluent, Rules) are rarely stored but computed afresh from private members of the rws object.",
+        "guidance": "Do not rely on attributes being stored; calling IsConfluent triggers the appropriate method to compute confluence. When implementing rws creation, construct objects to allow on-demand computation (see example of CreateKnuthBendixRewritingSystem)."
+      }
+    ]
+  }
+}

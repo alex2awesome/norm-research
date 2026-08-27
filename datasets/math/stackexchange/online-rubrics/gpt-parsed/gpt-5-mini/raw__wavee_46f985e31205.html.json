@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_46f985e31205.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 7897,
+  "output_tokens": 2996,
+  "elapsed_s": 1392.5390568750445,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers in automated theorem proving, formal verification, and machine learning for formal mathematics",
+    "subtask_short": "neuro-symbolic formal proof generation",
+    "subtask_description": "Designing, training, and evaluating a neuro-symbolic system (ProofNet++) that generates machine-verifiable proofs by combining LLMs with symbolic verifiers, verifier-guided reinforcement learning, curriculum supervision over proof trees, and an iterative self-correction module.",
+    "subtask_keywords": [
+      "formal_verification",
+      "automated_theorem_proving",
+      "neuro_symbolic",
+      "llm",
+      "reinforcement_learning",
+      "proof_correction"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Verifier-in-the-loop reinforcement learning",
+        "description": "Integrate a symbolic verifier (e.g., Lean 4, HOL Light) directly into the policy learning process so that the verifier accepts or rejects individual proof steps and serves as the environment for RL.",
+        "guidance": "Binary reward function: r = 1 if the step is verifiable; r = -1 otherwise. Use PPO or A3C and propagate delayed feedback using n-step returns over proof subtrees. The deterministic nature of the symbolic verifier stabilizes learning and prevents reward hacking. The verifier must be called during training and inference so only valid proof steps receive positive reinforcement."
+      },
+      {
+        "name": "Curriculum learning over structured proof trees",
+        "description": "Sort proofs by syntactic complexity and logical depth and introduce problems progressively so the model internalizes formal reasoning patterns with increasing logical depth.",
+        "guidance": "Extract full proof trees from formal corpora, linearize into state-action sequences for supervised learning, and organize training data to encourage early learning of fundamental axioms followed by progressively harder lemmas."
+      },
+      {
+        "name": "Self-correction loop (automatic error correction)",
+        "description": "When a generated proof is rejected by the verifier, automatically extract the failed node and its context subtree; use a correction head (fine-tuned LLM decoder) to propose alternative steps; validate replacements with the verifier and update the proof tree.",
+        "guidance": "The correction module diagnoses failed proof states, identifies logical or syntactic error types, proposes repair candidates, and resumes forward generation when verification succeeds. Correction is depth-limited and targeted at subtree substitutions. Post-correction metrics reported: 36% reduction in tree edit distance and 12% increase in proof success rate."
+      },
+      {
+        "name": "Symbolic reasoning interface (parsing/generation bridging)",
+        "description": "Provide a layer that parses autoregressive LLM outputs into formal tactics and structured proof trees interpretable by proof assistants.",
+        "guidance": "This interface bridges free-form generation and strict tactic syntax; it must produce formally-structured, labeled n-ary trees with nodes as statements/lemmas and edges as dependencies. A symbolic planner may reorder and optimize tactic sequences before verification."
+      },
+      {
+        "name": "Formal verification engine usage and soundness verification",
+        "description": "All generated proofs must be validated using external verifiers (Lean 4 kernel, HOL Light engine) to confirm logical correctness and adherence to the type system.",
+        "guidance": "Enforce kernel-level checking during benchmark evaluation. Use a timeout per proof (the paper uses an 8 second cap). Verification result drives rewards and correction invocation; soundness is a hard requirement for success."
+      },
+      {
+        "name": "Proof tree supervision and representation",
+        "description": "Represent proofs as trees where each node is a logical statement or lemma and each edge is a derivation dependency; use these structures for supervised learning and fine-grained supervision.",
+        "guidance": "Linearize trees to state-action sequences for model training. Annotate each node as valid/flawed in curated corpora to enable localized error detection and correction. Use dependency and tactic traces from libraries (e.g., mathlib) to enrich supervision."
+      },
+      {
+        "name": "Dataset curation, splits, and augmentation",
+        "description": "Curate datasets from multiple formal environments (miniF2F, mathlib-extract, HOL Light Testbed), annotate proof trees (valid/flawed), and apply synthetic augmentation to address class imbalance.",
+        "guidance": "Maintain train/validation/test splits preserving error-mode distribution (paper uses 70%/15%/15%). Inject synthetic flawed examples (hallucinated lemmas, incomplete induction cases, etc.) to increase flawed-sample diversity; the authors increased flawed diversity by 150% and reported a flawed prevalence of 23% in the aggregated corpus."
+      },
+      {
+        "name": "Benchmark tasks definition",
+        "description": "Evaluate across three primary tasks: Full Proof Generation, Soundness Verification, and the Self-Correction Loop to measure end-to-end ability to produce verified proofs and to recover from failures.",
+        "guidance": "Clearly define task inputs/outputs: Full Proof Generation requires an end-to-end proof script; Soundness Verification requires kernel validation of generated proofs; Self-Correction Loop measures how well the system repairs invalid proofs using verifier traces and the correction head."
+      },
+      {
+        "name": "Evaluation metrics (FPSR, PPC, EDPT, Verifier Latency, Proof Length)",
+        "description": "Use quantitative metrics to capture syntactic/semantic correctness, refinement capability, and execution efficiency: FPSR (Formal Proof Success Rate), PPC (Partial Proof Correctness), EDPT (Edit Distance to Proof Tree), Verifier Latency, and average Proof Length.",
+        "guidance": "FPSR = ratio of fully validated proofs to total prompts. PPC = proportion of valid intermediate steps across attempted proof trees. EDPT = minimum number of subtree transformations needed to reach a correct proof (computed via post-order tree edit distance). Verifier Latency = mean ms per validation call from submission to kernel acknowledgment. Report per-dataset breakdowns (paper reports FPSR 68.4/74.9/63.5% etc.). Use these metrics to diagnose strengths/weaknesses across datasets."
+      },
+      {
+        "name": "Error mode taxonomy and impact analysis",
+        "description": "Identify and categorize common error types (hallucinated lemmas, invalid topological order, incomplete inductive cases, semantic drift) and quantify their prevalence and correlations with performance.",
+        "guidance": "Track prevalence (paper: hallucinated lemmas 29%, invalid order 24%, incomplete induction 32%, semantic drift 15%) and statistical correlations (e.g., hallucinated lemmas r = \u22120.73 with proof success rate). Use these labels to guide correction strategies and targeted augmentation."
+      },
+      {
+        "name": "System configuration and model choices",
+        "description": "Specify LLM backbone and adaptations (e.g., Code LLaMA-13B finetuned on Lean/HOL corpora, prompt-tuning, LoRA adapters) and symbolic layer implementation details.",
+        "guidance": "Document backend versions and compilation (Lean 4 v4.1.0, OCaml 4.14 for HOL Light), timeout settings, and structural representation (labeled n-ary trees, depth limits). These choices affect reproducibility and performance; include hardware/latency measurement protocols."
+      },
+      {
+        "name": "Scalability and verifier-call optimization",
+        "description": "Optimize verifier usage to reduce computational costs via batching, memoization, verifier approximation, and asynchronous evaluation.",
+        "guidance": "Batch verification by grouping structurally similar proofs to enable subtree memoization and dependency-aware caching (authors report 2.4\u00d7 speedup). Train a graph-transformer verifier-approximator to predict verification success (paper reports 88.9% accuracy, 91.3% recall) to skip low-likelihood branches and reduce calls (skip \u224835% branches). Employ asynchronous event-driven scheduling to parallelize correction evaluation (authors report 1.7\u00d7 throughput gain). Note verifier calls remain the primary computational bottleneck."
+      },
+      {
+        "name": "Statistical evaluation and ablation reporting",
+        "description": "Use regression, ablations, and significance testing to explain variance and quantify module contributions (e.g., impact of correction, error detection accuracy).",
+        "guidance": "Report R^2 and p-values for models explaining performance (paper: R^2 = 0.67, p < 0.001). Validate synthetic error detection (paper: 94.7% accuracy, 91.3% recall). Present ablation results showing effect sizes (e.g., 12% absolute improvement in final proof success rate, 36% reduction in EDPT after correction). Include correlation coefficients for error-mode impacts."
+      },
+      {
+        "name": "Interpretability via tree-structured representations and embedding signals",
+        "description": "Favor tree-structured proof representations and per-node visualization to enable precise localization of flawed reasoning and to use embedding-space continuity as a proxy for logical coherence.",
+        "guidance": "Use per-node classification heatmaps and measure cosine-similarity drops between adjacent node embeddings to detect semantic drift (paper: valid sequences show 0.05 mean drop vs 0.21 for flawed). Interpretability metrics should guide correction and model debugging."
+      },
+      {
+        "name": "Symbolic-neural integration desiderata and future directions",
+        "description": "Aim for tighter integration between neural generators and symbolic verifiers, including joint embeddings, backward symbolic search, differentiable verifiers, and training objectives that penalize unsupported transitions.",
+        "guidance": "Propose concrete integration strategies: joint embeddings encoding symbolic states and steps into shared vectors to discourage hallucinated lemmas; neural-augmented backward planners for incomplete induction errors; neural approximators/differentiable verifiers to propagate correctness feedback as gradients. Preliminary contrastive-loss experiments on 50,000 trees improved logical coherence by 9.8%."
+      }
+    ]
+  }
+}

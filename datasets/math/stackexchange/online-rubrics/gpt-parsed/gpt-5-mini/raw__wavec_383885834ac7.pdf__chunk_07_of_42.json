@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 7,
+  "n_chunks": 42,
+  "chunk_chars": 39781,
+  "model": "gpt-5-mini",
+  "elapsed_s": 43.36182900000131,
+  "input_tokens": 15175,
+  "output_tokens": 5118,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users, macro-writers, and typesetters wanting precise control of TeX line-breaking internals",
+    "subtask_short": "TeX line-breaking rules and heuristics",
+    "subtask_description": "Detailed chapter-level rules and parameters describing how TeX breaks paragraphs into lines (where breaks are allowed, how badness and demerits are computed, hyphenation/discretionaries, and relevant primitives/macros to influence behavior). Targeted to people implementing or tuning TeX documents/macros.",
+    "subtask_keywords": [
+      "tex",
+      "line_breaking",
+      "hyphenation",
+      "typesetting",
+      "macro_writing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of ties (~) to prevent breaks",
+        "description": "A tie (~) acts like a space but TeX will not break a line at that space.",
+        "guidance": "Use ~ after abbreviations that do not end a sentence, between named parts (Chapter~12, Figure~3, Theorem~1.2, Table~B-8), between forenames and multiple surnames (Donald~E. Knuth, Luis~I. Trabb~Pardo), between math symbols in apposition with nouns (dimension~$d$, string~$s$ of), in symbol series (1,~2, or~3; $a$,~$b$, and~$c$), when a symbol is tightly bound to a preposition (in common with~$m$), and when enumerating cases within a paragraph. Do not leave blanks adjacent to ~ (they count as additional spaces). If ~ is at the end of an input line, the following return produces an extra (wider) space."
+      },
+      {
+        "name": "Use \\\\hbox to prevent breaking at hyphens/dashes or to keep units together",
+        "description": "An \\hbox forms an indivisible unit; TeX will not split contents of a box across a line break.",
+        "guidance": "Wrap items you must not have split across a line (e.g., \\hbox{13--22} in bibliographic references) in \\hbox. Use when you need to forbid breaking after hyphens/dashes or to keep compound tokens together. Typically unnecessary unless TeX already made a bad break on a previous run."
+      },
+      {
+        "name": "Discretionary breaks (\\discretionary{pre}{post}{no})",
+        "description": "A discretionary break has pre-break, post-break and no-break texts: if a break occurs, the pre-break text ends the current line and the post-break text begins the next; otherwise the no-break text appears.",
+        "guidance": "You can explicitly insert arbitrary discretionary breaks via \\discretionary{...}{...}{...}. The usual hyphen is a discretionary: \\discretionary{-}{}{} abbreviated as \\\\-. An empty discretionary (\\discretionary{}{}{}) is automatically inserted after - and after ligatures ending with -; explicit discretionaries prevent TeX's automatic hyphenation algorithm from being applied to that word."
+      },
+      {
+        "name": "Where line breaks are permitted (five cases)",
+        "description": "Line breaks can occur only in five situations: (a) at glue (if immediately preceded by a non-discardable item and not inside math), (b) at a kern (if immediately followed by glue and not inside math), (c) at a math-off immediately followed by glue, (d) at a penalty, and (e) at a discretionary break.",
+        "guidance": "If two globs of glue occur adjacent, the second will never be selected as a breakpoint because it is preceded by discardable glue. Math-on/math-off items are treated specially (see math surrounds)."
+      },
+      {
+        "name": "Penalty semantics and special values",
+        "description": "Each potential breakpoint has an associated penalty representing the aesthetic cost of breaking there.",
+        "guidance": "Penalty >= 10000 forbids a break; penalty <= -10000 forces a break. \\penalty N inserts an explicit penalty N. Negative penalties act as bonuses (can produce negative demerits). \\nobreak is an abbreviation for \\penalty10000. Hyphenation-related penalties: \\hyphenpenalty and \\exhyphenpenalty are used for discretionary breaks (defaults: 50 each)."
+      },
+      {
+        "name": "Hyphenation: pretolerance and tolerance two-pass behavior",
+        "description": "TeX first tries to break lines without inserting discretionary hyphens using \\pretolerance; if that fails it hyphenates words (insert discretionaries) and retries using \\tolerance.",
+        "guidance": "Plain TeX defaults: \\pretolerance=100 and \\tolerance=200. If \\pretolerance is set very large (e.g., 10000) the first pass will nearly always succeed and hyphenation won't be tried (may yield terrible spacing). If \\pretolerance=-1 the first pass is omitted and hyphenation happens immediately. Typical behavior: first pass succeeds >90% for wide lines; narrow lines usually require hyphenation."
+      },
+      {
+        "name": "Assignment of hyphen/discretionary penalties",
+        "description": "For a discretionary break the penalty used is \\hyphenpenalty if the pre-break text is nonempty, or \\exhyphenpenalty if the pre-break text is empty.",
+        "guidance": "Plain TeX sets \\hyphenpenalty=50 and \\exhyphenpenalty=50. Use explicit discretionaries to override automatic hyphenation when necessary."
+      },
+      {
+        "name": "Badness definition and caps",
+        "description": "The badness of a line is a nonnegative integer that measures how much glue must stretch or shrink; approximately 100 times the cube of the ratio by which glue must stretch or shrink (capped at 10000). Overfull boxes are treated as having infinite badness.",
+        "guidance": "If glue set order i indicates infinite stretch/shrinkability the badness is zero. Badness >10000 is clamped to 10000; overfull boxes avoided whenever possible."
+      },
+      {
+        "name": "Line classification (tight/loose/very loose/decent) and visual incompatibility",
+        "description": "A line with badness >=13 has glue set ratio >50%: such a line is classified as tight (shrank), loose (stretched), or very loose (stretched so badness >=100). A line with badness <=12 is 'decent'. Two adjacent lines are visually incompatible if their classifications are not adjacent (e.g., tight next to loose or very loose, or decent next to very loose).",
+        "guidance": "Visually incompatible adjacent lines incur extra demerits when TeX computes total demerits for a paragraph."
+      },
+      {
+        "name": "Demerits and the objective function for choosing breakpoints",
+        "description": "TeX assigns demerits to each line based on its badness and any associated penalty; the paragraph's total demerits are minimized to choose the optimal break sequence.",
+        "guidance": "Demerits formula depends on the penalty p at the breakpoint and on current \\linepenalty (plain TeX sets \\linepenalty=10). Additional demerits are added for visually incompatible adjacent lines (\\adjdemerits, default 10000), consecutive hyphenated line pairs (\\doublehyphendemerits, default 10000), and if the second-last line ends with a discretionary (\\finalhyphendemerits, default 5000). Minimizing total demerits approximates minimizing sum of squares of badnesses and penalties; TeX uses a shortest-path variant algorithm on feasible breakpoints."
+      },
+      {
+        "name": "Feasible breakpoints and the shortest-path algorithm",
+        "description": "Feasible breakpoints are those reachable without exceeding the current tolerance; TeX numbers feasible breakpoints (@@0 is paragraph start) and computes total demerits t to each feasible point, selecting the shortest (lowest demerits) path to the paragraph end.",
+        "guidance": "Trace output (when \\tracingparagraphs=1) shows feasible breakpoints, line classifications, badness b, penalty p, and cumulative demerits d. Candidate breakpoints (@ but not @@) are intermediate alternatives; infeasible breakpoints (bigger than tolerance) may be chosen only if no feasible way exists."
+      },
+      {
+        "name": "Discardable vs non-discardable items in horizontal lists",
+        "description": "Items in a horizontal list include boxes, discretionaries, whatsits, vertical material, glue, leaders, kerns, penalties, and math-on/math-off. The last four (glue, kern, penalty, math items) are discardable; the first four are non-discardable.",
+        "guidance": "When a line break occurs TeX removes discardable items that follow the break until reaching a non-discardable item or another chosen breakpoint; sequences of glue and penalties vanish as a unit unless they are part of an optimal breakpoint sequence."
+      },
+      {
+        "name": "Hyphenation algorithm won't operate on words already containing discretionary breaks",
+        "description": "TeX does not apply its hyphenation algorithm to words that already contain a discretionary break.",
+        "guidance": "Use explicit discretionary breaks to override automatic hyphenation in emergencies or to ensure nonstandard splits. TeX's hyphenation can split ligatures as needed by inserting discretionary breaks (it can generate complicated discretionary items behind the scenes)."
+      },
+      {
+        "name": "Empty discretionary behavior and hyphenchar",
+        "description": "An empty discretionary (\\discretionary{}{}{}) is automatically inserted after hyphens and dashes and after ligatures that end with hyphenchar (for plain TeX assume hyphenchar = -).",
+        "guidance": "Empty discretionaries allow certain hyphenation behavior without printing hyphen characters in the no-break case."
+      },
+      {
+        "name": "Use \\slash to allow optional break after '/'",
+        "description": "Plain TeX provides \\slash to permit a line break after a '/' as if it were a hyphen.",
+        "guidance": "Type input/output as input\\slash output so TeX may break 'input/output' at the slash when needed."
+      },
+      {
+        "name": "Forcing breaks: \\break and \\hfil\\break",
+        "description": "\\break forces TeX to break at that point (may produce an oddly spaced/short line); \\hfil\\break forces a break while filling the right-hand part of the line with blank space and prevents indenting the next line.",
+        "guidance": "Use \\hfil\\break when you want the preceding line to be filled with space before forcing the break and you do not want the next line indented."
+      },
+      {
+        "name": "\\obeylines for line-for-line input (poems etc.)",
+        "description": "\\obeylines makes each end-of-line in the input act like \\par, so input lines produce one output line each (unless the input line ends with % or is too long).",
+        "guidance": "Enclose \\obeylines in a group unless you want it to persist to the end of the document. Useful for typesetting poems. Be aware of lines ending with % or overly long input lines which may be broken by TeX."
+      },
+      {
+        "name": "Paragraph end finishing glue (\\parfillskip insertion)",
+        "description": "Just before choosing breakpoints TeX discards trailing glue at paragraph end (if any) and appends \\penalty10000, \\hskip\\parfillskip, and \\penalty-10000 to the horizontal list.",
+        "guidance": "Plain TeX sets \\parfillskip=0pt plus1fil so the last line of a paragraph will be filled with white space when appropriate; adjust \\parfillskip to change how the final line is treated (e.g., leave last line shorter or match indentation). To get the last line to have exactly the same right whitespace as the first line's left indentation, set \\parfillskip accordingly."
+      },
+      {
+        "name": "\\leftskip and \\rightskip influence line-breaking calculations; use of \\narrower",
+        "description": "\\leftskip and \\rightskip add glue at left and right of every line in a paragraph and are taken into account when computing badnesses and demerits. Plain TeX provides \\narrower to increase both by \\parindent.",
+        "guidance": "Normally \\leftskip and \\rightskip are zero. Use \\narrower inside a group to typeset quoted/narrower paragraphs; end the paragraph before ending the group so the effect persists during line breaking. To implement ragged-right or ragged-left carefully, adjust these skips in combination with fixed interword spaces (see \\raggedright definition in Appendix B)."
+      },
+      {
+        "name": "Changing line-breaking parameters mid-paragraph has no effect on that paragraph's line breaks",
+        "description": "TeX looks at parameters affecting line breaking only when it breaks the paragraph; the relevant values are those current at the end of the paragraph.",
+        "guidance": "Do not attempt to alter \\hyphenpenalty, \\rightskip, \\hsize, etc., in the middle of a paragraph expecting different behavior for earlier words; the values at paragraph end determine line-breaking behavior. Exceptions: the width of an indentation produced when the indentation token was inserted depends on \\parindent at the time the indentation was contributed. Penalties inserted into formulas use \\binoppenalty and \\relpenalty values current at the end of each formula."
+      },
+      {
+        "name": "Tracing and debugging tools: \\tracingparagraphs and \\showlists",
+        "description": "\\tracingparagraphs=1 causes TeX to write a trace summary of the line-breaking calculations to the log file; \\showlists displays internal lists and modes.",
+        "guidance": "Use \\tracingparagraphs to watch tradeoffs as you tweak parameters like \\linepenalty, \\hyphenpenalty, and \\adjdemerits; study the trace format (feasible breakpoints @@n, candidate @n, line b/p/d values) to understand TeX's choices. \\showlists helps inspect the current horizontal/vertical/math lists and items."
+      }
+    ]
+  }
+}

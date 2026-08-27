@@ -1,0 +1,156 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 41,
+  "chunk_chars": 39704,
+  "model": "gpt-5-mini",
+  "elapsed_s": 95.9562171669968,
+  "input_tokens": 13633,
+  "output_tokens": 4680,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users of the Magma computer algebra system (mathematicians/programmers) constructing iterable homogeneous aggregates",
+    "subtask_short": "constructing iterable homogeneous aggregates",
+    "subtask_description": "Rules, semantics, and idioms for creating and manipulating Magma iterable homogeneous aggregates (enumerated sets, multisets, indexed sets, enumerated sequences), including universe declaration, constructors, operations, and special cases (empty/null, incomplete, recursive definitions).",
+    "subtask_keywords": [
+      "magma",
+      "aggregates",
+      "sets_sequences",
+      "construction",
+      "operations",
+      "programming_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Declare universe explicitly when it differs from Magma's automatic choice",
+        "description": "If the required universe U differs from the universe Magma would calculate of its own accord, then U must be given explicitly.",
+        "guidance": "Example: create an initial set with RationalField() as universe if you plan to include rationals later; otherwise operations like Include may error (e.g., including 7/9 into an Integer-universe set). Also use explicit universe to restrict to a subset of the automatically computed universe (e.g., binary := [ {0,1} | ... ] to ensure only 0/1 allowed)."
+      },
+      {
+        "name": "Declare universe when elements are specified literally from primitive components",
+        "description": "If the elements of U are specified literally using sequences of primitive components and U is stated on the left of the constructor, it is sufficient to describe the elements using these sequences without coercing each into U separately.",
+        "guidance": "Example: V := VectorSpace(GF(3),4); vecs := { V | [2,1,0,2], [0,0,1,0], [1,2,0,1] } \u2014 the V | form lets you list raw vector literals."
+      },
+      {
+        "name": "ChangeUniverse returns same elements with new universe; procedure variant mutates in place",
+        "description": "ChangeUniverse(S, U) returns an aggregate (same category) with same elements as S but universe U. ChangeUniverse(~S, U) changes S itself.",
+        "guidance": "Example: zqR := ChangeUniverse(zq, RationalField()); or ChangeUniverse(~zq, Q) to mutate. After changing, equality (eq) may still hold but Universe() differs."
+      },
+      {
+        "name": "Empty vs Null aggregate semantics",
+        "description": "An empty iterable homogeneous aggregate has a declared universe but no elements; a null aggregate has no universe and no elements.",
+        "guidance": "Create empty aggregate with universe, e.g., emptyZ := { IntegerRing() | }; Null is created without a universe. Only elements coercible to the empty aggregate's universe can later be included; null aggregates accept any element until first insertion (then gain a universe). Use IsEmpty(S) and IsNull(S) to test; note IsEmpty(true) for null as well."
+      },
+      {
+        "name": "Arithmetic progression constructors and their semantics",
+        "description": "Special syntaxes {i..j}, [i..j], {i..j by k}, [i..j by k] construct integer-progressions for enumerated sets/sequences, with k != 0; universe is Integer Ring.",
+        "guidance": "If progression step k positive and i>j (or k negative and i<j) result is empty. If j is not reachable as i+mk, progression stops at largest/smallest reachable element not exceeding j. Magma stores the progression symbolically (efficient) and iterates in increasing order for sets (direction reversed if k negative). These constructors are only for enumerated sets/sequences; use transfer functions (e.g., SetToMultiset, SetToIndexedSet) to convert to other aggregate types."
+      },
+      {
+        "name": "Element-description constructor syntax and semantics",
+        "description": "Construct aggregates with expression : x in E or expression : x in E | condition; free identifiers (dummy variables) range over iterable domains, whose k-tuples produce elements by evaluating the expression for tuples satisfying the optional condition.",
+        "guidance": "Domains Ei may be any iterable structure (iterable aggregate or finite magma). Free identifiers have local scope and do not affect same-named outside variables. Elements are computed (possibly with coercion) and the aggregate's universe is determined by the values unless explicitly specified on the left. Example: squares := { n^2 : n in [1..5] }."
+      },
+      {
+        "name": "Specify universe on element-description constructors to force target universe and trigger coercion",
+        "description": "Placing a universe expression on the left of an element-description constructor sets the aggregate\u2019s universe; elements must coerce into it or a runtime error occurs.",
+        "guidance": "Example: vals := [ RealField() | x^3 - 7*x^2 + 2: x in [-2..4] ]; If an element cannot be coerced (e.g., complex value into RealField()), construction errors."
+      },
+      {
+        "name": "Use where-construction to avoid recomputing common sub-expressions",
+        "description": "If the condition and the element expression share a common sub-expression, a where-construction placed after the condition defines that sub-expression for reuse in both, increasing efficiency and compactness.",
+        "guidance": "Example: phi_le_6 := { <n,phi> : n in {2..100} | phi le 6 where phi is EulerPhi(n) }; This avoids recomputing EulerPhi for successful n."
+      },
+      {
+        "name": "Order of generation in element-description constructors",
+        "description": "When multiple free identifiers xi range over Ei, Magma considers all k-tuples <x1,...,xk> where indices on the right vary more rapidly than on the left; the ordering of enumerated sequences/indexed sets constructed in this way corresponds to this generation order.",
+        "guidance": "If domains are enumerated sequences or indexed sets their own element order is used; otherwise iteration order depends on Magma's internal representation and should not be assumed. Example printed ordering uses rightmost domain varying fastest."
+      },
+      {
+        "name": "Recursive/inductive enumerated sequence construction with Self(i) and Self()",
+        "description": "Within an enumerated sequence constructor, Self(i) returns the ith term of the sequence under construction (allowing reference to already-constructed terms); Self() returns the sequence itself.",
+        "guidance": "Example Fibonacci construction: F := [ n in {1,2} select 1 else Self(n-1) + Self(n-2) : n in [1..50] ]. Use built-in functions (like Fibonacci) where available for clarity and efficiency."
+      },
+      {
+        "name": "Incomplete (sequences with undefined terms) sequence rules",
+        "description": "Sequences may have undefined terms represented as 'undef' in output; 'undef' cannot be used inside expressions. IsDefined(Q,i) tests definedness; Unde\ufb01ne(~Q,i) makes a term undefined; IsComplete(Q) tests completeness.",
+        "guidance": "You can build sequences by assigning terms out of order (e.g., q3[7] := 45). #Q is the index of the furthest defined term. Prefer iterating over an incomplete sequence to obtain its defined terms (Magma ignores undef during iteration), e.g., q4 := [ n: n in q3 ] to produce complete sequence of defined terms."
+      },
+      {
+        "name": "Indexing, Position/Index semantics",
+        "description": "For indexed aggregates S, S[i] returns the element at index i. Position(S,x) or Index(S,x) returns the index of x in S (or zero if not present). For sequences, if x occurs multiple times, the smallest index (leftmost occurrence) is returned.",
+        "guidance": "Examples show difference between indexed set Position and sequence Position: Position on indexed set returns index of item in its indexing; for sequence, leftmost occurrence index. Use Position to find where an element occurs."
+      },
+      {
+        "name": "Cardinality operator # semantics across aggregate categories",
+        "description": "#S returns the number of elements if S is enumerated/indexed set (distinct elements). For multisets and enumerated sequences it returns total number counting multiplicities. For sequences with unde\ufb01ned terms, #S returns the highest index at which a term is defined (i.e., length).",
+        "guidance": "S[#S] accesses the last/rightmost element. Example: constructing multiset from string and #m gives total characters; be mindful of multiplicities in multisets and sequences."
+      },
+      {
+        "name": "Equality (eq) and universe compatibility/coercion rules",
+        "description": "R eq S requires that R and S be in the same category and have compatible universes (equal or have common overstructure into which elements coerce). Elements must be equal, counting multiplicities where relevant. For sequences equality also requires same order; for indexed sets order need not be the same.",
+        "guidance": "Auto-coercion is attempted when parent of elements differs from universe of aggregate. Example: {FiniteField(7) | n: n in {2..5}} eq {2..5} is true because integers are coerced into GF(7)."
+      },
+      {
+        "name": "Membership x in S with auto-coercion",
+        "description": "x in S tests membership; if parent(x) != Universe(S), Magma attempts auto-coercion of x into the universe before testing membership.",
+        "guidance": "Use x notin S to test non-membership. Coercion failure can affect results or raise errors depending on context."
+      },
+      {
+        "name": "Subset testing R subset S semantics",
+        "description": "R subset S checks whether every element of R is an element of S. Universes are auto-coerced if not identical. Multiplicity is relevant only for multisets; order is never relevant. For sequence-order-aware tests use IsSubsequence.",
+        "guidance": "For multisets, multiplicity comparisons matter; for enumerated/indexed sets only elements matter irrespective of order."
+      },
+      {
+        "name": "Include and Exclude intrinsics: function vs procedure and category-specific effects",
+        "description": "Include(S,x)/Exclude(S,x) return a new aggregate; Include(~S,x)/Exclude(~S,x) mutate S. Effects depend on category: enumerated set include adds x if absent; indexed set include appends x at end if absent (Exclude not available); multiset include increases multiplicity; multiset exclude decreases multiplicity; enumerated sequence include appends x if absent, exclude removes leftmost instance.",
+        "guidance": "Procedure calls (\u02dcS) are statements and must end with semicolon. The \u02dc symbol denotes a variable reference argument. Use mutation versions to change stored aggregates efficiently. Behavior differs significantly across categories\u2014choose correct category or operation accordingly."
+      },
+      {
+        "name": "Maximum/Minimum functions require total ordering and may return index",
+        "description": "Maximum(S)/Minimum(S) (Max/Min) apply only when the universe has a total ordering. For enumerated sequences and indexed sets they return a second value: the index of the leftmost occurrence of the max/min element.",
+        "guidance": "Use multiple assignment to capture both value and index. Example: [value, index] := Maximum(Q)."
+      },
+      {
+        "name": "Reduction (& operator) semantics and special cases",
+        "description": "Given an associative binary operator \u25e6 suitable for the universe of S, & \u25e6 S reduces S to S1 \u25e6 S2 \u25e6 ... \u25e6 Sn (elements Si taken in index order for sequences/indexed sets). For empty aggregates reductions follow mathematical conventions: sum of empty -> 0, product of empty -> 1, &and on empty or null -> true, &or on empty or null -> false.",
+        "guidance": "Operators +, *, and, or, join, meet can be used; for sequences of sequences or strings use cat for concatenation. Example: ord := &*[q^n - q^(i-1) : i in [1..n]]."
+      },
+      {
+        "name": "Set binary operations join (union) and meet (intersection) and multiset specifics",
+        "description": "R join S returns R \u222a S, R meet S returns R \u2229 S. Returned aggregate has same set category as arguments. For multisets, join adds multiplicities, meet takes minimum multiplicities.",
+        "guidance": "Universes must be compatible (auto-coercion attempted). Examples: join of arithmetic progression and list, multiset join combining multiplicities. Use SetToMultiset or other converters when necessary."
+      },
+      {
+        "name": "Difference (diff) and symmetric difference (sdiff) available only for enumerated and indexed sets",
+        "description": "R diff S returns {x : x \u2208 R and x \u2209 S}. R sdiff S returns symmetric difference {x : x \u2208 R \u222a S and x \u2209 R \u2229 S}. These operators are not defined for multisets.",
+        "guidance": "Examples show usage. Mutation assignments (e.g., ix join:= {@ ... @}) are possible to modify in-place. For multisets use join/meet semantics described above."
+      },
+      {
+        "name": "ExtractRep for enumerated sets",
+        "description": "ExtractRep(~R, ~x) modifies enumerated set R by extracting a representative element from it and assigns it to x.",
+        "guidance": "This mutates R (removes representative); differs from Rep(M) which returns representative without changing M. Example: ExtractRep(~J, ~r) yields r assigned and J modified."
+      },
+      {
+        "name": "Subsets(S,k) enumerated set constructor behaviour",
+        "description": "Subsets(S,k) returns the set of all k-subsets of enumerated set S. If k < 0 or k > #S, the value returned is an empty set.",
+        "guidance": "Use this to enumerate combinations. Example printing shows all 2-subsets of a 5-element set. Ordering of returned subsets follows Magma conventions."
+      },
+      {
+        "name": "Enumerated sequence operations: Explode, subsequences, concatenation and mutation variants",
+        "description": "Explode(Q) returns multiple return values Q[1], Q[2], ..., Q[#Q]. Q[I] selects terms at indices I (I an integer sequence). Q cat T concatenates sequences; use mutation assignment (cat:=) or Append/Append(~Q,x) / Prune to modify in place. Q[I] cannot be used on left side of assignment to reassign multiple terms at once.",
+        "guidance": "Examples show Explode assignments, subsequence selection (including shorthand i..j by k), and concatenation with cat and cat:=. Use mutation variants for efficiency when modifying large sequences."
+      },
+      {
+        "name": "IsSubsequence kinds and semantics",
+        "description": "IsSubsequence(Q,T) tests whether Q is a subsequence of T. Parameter Kind controls interpretation: default \"Consecutive\" (terms occur consecutively), or \"Sequential\" (terms occur in same order but not necessarily consecutively).",
+        "guidance": "Examples: IsSubsequence([9,6,3],[8,4,2,9,6,3,1]) true for default; ordering and consecutiveness matter under different Kind values. Use Kind parameter to change test strength."
+      }
+    ]
+  }
+}

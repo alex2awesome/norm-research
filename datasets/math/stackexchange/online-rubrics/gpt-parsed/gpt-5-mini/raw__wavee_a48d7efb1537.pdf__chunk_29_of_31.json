@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 29,
+  "n_chunks": 31,
+  "chunk_chars": 39782,
+  "model": "gpt-5-mini",
+  "elapsed_s": 140.56553749999875,
+  "input_tokens": 14582,
+  "output_tokens": 4878,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "PGF/TikZ driver authors and advanced pgf/tikz implementers (TeX backend developers)",
+    "subtask_short": "pgf system driver implementation",
+    "subtask_description": "Specification and implementation requirements for low-level pgfsys commands, soft-path and protocol subsystems, position tracking, invisibility, and related backend behavior in the PGF/TikZ system. Intended for people writing or adapting backend driver files or otherwise implementing the pgfsys layer.",
+    "subtask_keywords": [
+      "pgf",
+      "tikz",
+      "driver",
+      "tex",
+      "graphics_backend"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Radial shading starting point",
+        "description": "The parameter starting point is a pgf point specifying the inner starting point of the shading.",
+        "guidance": "When inserting a radial shading whose size is implicit in the specification, the driver must accept a pgf point as the starting point (inner point) to define the shading's origin."
+      },
+      {
+        "name": "Insertion of protocoled literals (\\pgfsys@invoke{literals})",
+        "description": "This command gets protocoled literals and should insert them into the .pdf or .dvi file using an appropriate \\special.",
+        "guidance": "Driver implementations must take the given literal text (that has been protocoled) and emit it into the output file via the backend-appropriate mechanism (e.g., a \\special or direct PDF literal)."
+      },
+      {
+        "name": "Object declaration (\\pgfsys@defobject{name}{lower left}{upper right}{code})",
+        "description": "Declares an object for later use so that the object can be precached and rendered more quickly when used several times. The parameters name, lower left and upper right specify the name and a bounding box (pgf points); code is the code for the object.",
+        "guidance": "Drivers should accept a name and a bounding box in pgf points and store the provided code for later efficient reuse. The manual warns: 'The code should not be too fancy.' Note that this command has a default implementation and need not be implemented by a driver file."
+      },
+      {
+        "name": "Object rendering (\\pgfsys@useobject{name}{extra code})",
+        "description": "Renders a previously declared object. The first parameter is the name of the object. The second parameter is extra code executed right before the object is rendered (typically transformation code).",
+        "guidance": "Driver implementations should locate the previously declared object by name and render it, executing the provided extra code immediately prior to rendering. Default implementation exists and need not be supplied by drivers."
+      },
+      {
+        "name": "Default implementations for some system commands",
+        "description": "Several system commands (e.g., \\pgfsys@defobject, \\pgfsys@useobject, \\pgfsys@begininvisible, \\pgfsys@endinvisible) 'have a default implementation and need not be implemented by a driver file.'",
+        "guidance": "Driver authors may rely on the default implementations provided by the pgf-system layer for these commands; only override if backend-specific behavior is required."
+      },
+      {
+        "name": "Invisibility section semantics (\\pgfsys@begininvisible / \\pgfsys@endinvisible)",
+        "description": "All drawing or stroking or text rendering between calls of the invisibility commands should be suppressed. Nothing should be drawn at all, which includes all paths, images and shadings. However, no groups (neither TeX groups nor graphic state groups) should be opened by this command.",
+        "guidance": "Implementations must ensure full suppression of graphical output within an invisibility block while not creating TeX or graphic state grouping. \\pgfsys@endinvisible ends the invisibility section; if invisibility blocks are nested only the last one restores visibility. These commands have default implementations and need not be implemented by a driver file, but if implemented the above rules must hold. The commands are protocoled (see protocol subsystem)."
+      },
+      {
+        "name": "Position tracking: marking positions (\\pgfsys@markposition{name})",
+        "description": "Marks a position on the page; this command should be given while normal typesetting is done. It causes the named position to be saved when the page is shipped out (for later retrieval).",
+        "guidance": "Driver behavior should cause a marked position to be recorded (e.g., by writing page coordinates to an auxiliary stream) so that on a subsequent run the position can be retrieved. Use in ordinary typesetting contexts (not at shipout time) as the position can't always be determined at marking moment."
+      },
+      {
+        "name": "Position retrieval (\\pgfsys@getposition{name}{macro})",
+        "description": "Retrieves a position that has been marked on an earlier run. The provided macro is redefined to either \\relax (if position not available) or to a \\pgfpoint... command; executing the macro yields coordinates interpreted as 'x to the right and y up from the origin of the page.'",
+        "guidance": "Drivers must provide a mechanism so that getposition either signals 'not-yet-known' via \\relax or supplies exact page coordinates as a \\pgfpoint{...}{...}. The special name pgfpageorigin can be used to obtain the page origin; by shifting positions by this value absolute page placement is possible."
+      },
+      {
+        "name": "Page origin handling (special name pgfpageorigin)",
+        "description": "To determine the lower left corner of a page, call \\pgfsys@getposition with name=pgfpageorigin. By shifting all positions by the amount returned you can position things absolutely on a page.",
+        "guidance": "Driver authors must ensure pgfpageorigin is supported as a special marked name whose retrieved position corresponds to the page origin reference point used for picture positioning."
+      },
+      {
+        "name": "Internal conversion command (\\pgf@sys@bp{dimension})",
+        "description": "Converts TeX dimensions into dimensionless values interpreted as multiples of 1/72 in. For example, 2bp -> 2 and 10pt -> 9.9626401. Inserts this value into the current protocol stream (buffered).",
+        "guidance": "This helper must perform accurate conversion from TeX units to PDF/PostScript units and write the numeric value into the protocol stream. Note: this command is not a system command that can/needs to be overwritten by a driver."
+      },
+      {
+        "name": "Soft path vs hard path distinction and motivations",
+        "description": "Commands in the soft path subsystem create 'soft paths' that can still be changed/molded; once satisfied the soft path is turned into a hard path (a sequence of literals inserted into the .pdf or .ps). Reasons: (1) PDF spec requires a path not be interrupted by non-path-construction commands; (2) soft paths can be manipulated or optimized before becoming hard.",
+        "guidance": "Driver implementations must ensure that the final emitted hard path is a contiguous set of path-construction operations with no intervening non-path commands, and support the ability for the system layer to manipulate soft paths before invocation."
+      },
+      {
+        "name": "Soft path creation process (high-level steps)",
+        "description": "When front-end commands (e.g., \\draw) are used they are translated to \\pgfpathmoveto/lineto etc.; these invoke \\pgfsyssoftpath@moveto/lineto which append tokens to an internal macro representing the current soft path; when \\pgfusepath is encountered the soft path is iterated and appropriate \\pgfsys@moveto/lineto are called to create the hard path; after the path has been invoked \\pgfsys@stroke is called to insert stroking literal.",
+        "guidance": "Drivers need to implement the low-level \\pgfsys@... commands so that when the pgf-system later calls them (during invocation of a soft path) the correct backend literals are emitted. It is important that soft-path tokenization and the eventual sequence of \\pgfsys@ calls produce valid, contiguous backend path code."
+      },
+      {
+        "name": "Soft path API semantics: get/set/invoke/flush current path",
+        "description": "\\pgfsyssoftpath@getcurrentpath stores the current soft path in a macro; \\pgfsyssoftpath@setcurrentpath sets the current soft path from a macro; \\pgfsyssoftpath@invokecurrentpath turns the current soft path into a hard path by iterating and calling appropriate \\pgfsys@xxxx commands but does not change the current soft path; \\pgfsyssoftpath@flushcurrentpath invokes the current soft path and then sets it to be empty.",
+        "guidance": "Driver and system-layer code must conform to these semantics: invoking should not clear the stored soft path (so it can be reused), while flush should both invoke and clear. Storage and transfer via macros must preserve the path tokenization exactly."
+      },
+      {
+        "name": "Soft path creation commands (moveto/lineto/curveto/rect/closepath)",
+        "description": "Commands like \\pgfsyssoftpath@moveto{<x>}{<y>} and \\pgfsyssoftpath@lineto{<x>}{<y>} append the corresponding segment to the current soft path; coordinates are given as normal TeX dimensions. Examples: append move-to, line-to, curve-to (with six numbers), rect (lower-left and width/height), and closepath.",
+        "guidance": "The soft-path layer must accept TeX-dimension inputs and append standardized tokens to the current soft-path macro; examples (draw a line) illustrate how these are combined and later flushed/invoked."
+      },
+      {
+        "name": "Soft path data structure and tokenization",
+        "description": "A soft path is stored as a standardized long sequence of triples. Each triple starts with a token identifying the operation followed by two dimensions in braces. Curve-to is expressed using three triples (support A, support B, target) and these three triples must always remain together; rect uses rectcornertoken followed by rectsizetoken.",
+        "guidance": "Driver/system-layer must preserve this triple-based token format when storing, transferring, and invoking soft paths. Forbidden states such as a lonely supportbtoken (i.e., tokens out of their required groups) must not be produced."
+      },
+      {
+        "name": "Soft path token semantics (move/line/curve/rect/close)",
+        "description": "Specific tokens exist and carry precise meaning: \\pgfsyssoftpath@movetotoken indicates move-to with following numbers as new current point; \\pgfsyssoftpath@linetotoken indicates line-to; \\pgfsyssoftpath@curvetosupportatoken and curvetosupportbtoken indicate curve control points and must be followed by curvetotoken; rectcornertoken followed by rectsizetoken indicates rectangle corner and size; closepath indicates closing of subpath and parameters should reflect original move-to if non-zero.",
+        "guidance": "When constructing or parsing soft-path macros, the token order and grouping constraints must be respected. Implementations must support the tokens listed and their required sequences."
+      },
+      {
+        "name": "Protocol subsystem: concept of protocolling and current protocol",
+        "description": "When protocolling is switched on there is a 'current protocol' to which literal text gets appended. Once commands that needed protocolling have been issued, the protocol can be obtained and stored via \\pgfsysprotocol@getcurrentprotocol; \\pgfsysprotocol@invokecurrentprotocol inserts the protocoled commands into the .pdf or .dvi file.",
+        "guidance": "Driver implementations must support an appendable buffered protocol stream and operations to get/set/invoke/flush this stream. The protocol is intended for grouping commonly used literal sequences for efficient reuse."
+      },
+      {
+        "name": "Which commands can be protocolled",
+        "description": "Only those \\pgfsys@ commands that use the command \\pgfsysprotocol@literal internally can be protocolled. All 'normal' system-level commands can be protocolled. However, commands for creating or invoking shadings, images, or whole pictures require special \\special's and cannot be protocolled.",
+        "guidance": "Driver and system authors must ensure that only appropriate literal-emitting commands use the protocol facility; complex constructs requiring special backend handling should not be appended to the protocol buffer."
+      },
+      {
+        "name": "Literal buffering and emission semantics (\\pgfsysprotocol@literalbuffered / \\pgfsysprotocol@literal)",
+        "description": "\\pgfsysprotocol@literalbuffered{literal text} adds the literal text (after \\edef) to the current protocol (will always protocol). \\pgfsysprotocol@literal first calls the buffered variant and then, if protocolling is currently switched off, passes the literal on to \\pgfsys@invoke.",
+        "guidance": "Implementations must ensure buffered literals are stored and that non-buffered emission occurs immediately when protocolling is off. The buffering must respect \\edef expansion semantics before storage."
+      },
+      {
+        "name": "Turning protocolling on/off and flush semantics (\\pgfsysprotocol@bufferedtrue / bufferedfalse)",
+        "description": "\\pgfsysprotocol@bufferedtrue turns on protocolling so subsequent \\pgfsysprotocol@literal append to the current protocol. \\pgfsysprotocol@bufferedfalse turns off protocolling; if the current protocol is not empty when protocolling is switched off, the next call to \\pgfsysprotocol@literal will first flush (insert) the current protocol into the file.",
+        "guidance": "Driver code must implement the toggle behavior and guarantee that buffered protocol content is flushed appropriately when protocolling is disabled (either immediately or on next literal emission as specified)."
+      },
+      {
+        "name": "Protocol API semantics: get/set/invoke/flush current protocol",
+        "description": "\\pgfsysprotocol@getcurrentprotocol{macro} stores the current protocol in a macro; \\pgfsysprotocol@setcurrentprotocol{macro} sets the current protocol; \\pgfsysprotocol@invokecurrentprotocol inserts the text stored in the current protocol into the .pdf or .dvi file without changing the current protocol; \\pgfsysprotocol@flushcurrentprotocol first inserts the current protocol and then sets it to the empty string.",
+        "guidance": "Implementations must preserve the contract: invokecurrentprotocol is non-destructive (protocol remains available for reuse), whereas flushcurrentprotocol empties the stored protocol after inserting it."
+      }
+    ]
+  }
+}

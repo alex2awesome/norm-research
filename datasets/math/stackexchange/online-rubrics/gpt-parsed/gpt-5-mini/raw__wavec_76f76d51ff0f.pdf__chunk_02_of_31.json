@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 31,
+  "chunk_chars": 39742,
+  "model": "gpt-5-mini",
+  "elapsed_s": 81.52050216600037,
+  "input_tokens": 12465,
+  "output_tokens": 4451,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of the PARI/GP system writing GP scripts (mathematicians, computational number theorists, PARI programmers)",
+    "subtask_short": "writing PARI/GP scripts",
+    "subtask_description": "Guidelines and best practices for writing GP (PARI) code: variable naming and ordering, scoping, user-defined functions, strings/keywords handling, error handling, and related pitfalls when manipulating polynomials, power series and other PARI objects.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "scripting",
+      "mathematical_software",
+      "programming"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Prefer vectors over many sequentially named variables",
+        "description": "If you need hundreds of variables, store them in a vector (e.g. X[1], X[2], X[3]) instead of creating X1, X2, X3, ...",
+        "guidance": "Using vectors avoids the limitation of having many separate named variables and is the recommended pattern when dealing with large numbers of related values."
+      },
+      {
+        "name": "Use the quote operator to register free variables",
+        "description": "The quote operator 't registers a new free variable with the interpreter (written as t) and evaluates to a monomial of degree 1 in that variable.",
+        "guidance": "Use 't to create symbolic polynomial variables. Remember that GP interprets an unknown variable as its quoted form for backward compatibility; do not rely on this behavior in serious programs\u2014explicitly use 't or initialize t via t = 't before assigning numeric values."
+      },
+      {
+        "name": "Do not rely on implicit uninitialized variable behavior",
+        "description": "For backward compatibility, using a valid variable name before assigning a value is interpreted as its quoted/free variable rather than raising an exception.",
+        "guidance": "This feature is fragile: unexpected assignments later (e.g. t = 1) may break code. Use explicit quoting ('t) or initialize variables with t = 't to avoid surprises. Note that assigning a value later does not retroactively change earlier stored expressions unless you eval them again."
+      },
+      {
+        "name": "Assigned variable values do not affect previously stored expressions without eval",
+        "description": "Assigning a value to a polynomial variable does not affect previous expressions involving it; you must call eval(...) to force re-evaluation.",
+        "guidance": "Store expressions carefully and use eval to recompute them after changing variable bindings."
+      },
+      {
+        "name": "Prefer quoting in subst to avoid name-expecting errors",
+        "description": "When using subst(p, t, val) ensure t is a variable name (e.g. use 't if you want the symbol), otherwise gp may complain 'variable name expected'.",
+        "guidance": "Example: subst(p, 't, 3) is correct when t should be treated symbolically; failing to quote can make t evaluate to a number and cause errors."
+      },
+      {
+        "name": "Understand implicit variable priority/order",
+        "description": "Variables are implicitly ordered by the interpreter: when a new identifier is input it is registered as having strictly lower priority than any variable already in use. The highest-priority variable becomes the main variable in multivariate polynomial representations.",
+        "guidance": "Check variable ordering with variable(). To get a desired internal ordering, declare variables in the order you want before computations (or in gprc), or create new variables with varhigher/varlower. You cannot change the priority of existing variables."
+      },
+      {
+        "name": "Be aware that multivariate polynomials are stored as nested univariate polynomials",
+        "description": "A multivariate polynomial in PARI is a univariate polynomial whose coefficients are themselves polynomials not involving the main variable; the main variable is the highest-priority one.",
+        "guidance": "Because of this asymmetric storage, operations and representations depend on variable priority. Creating objects with a different storage pattern via low-level constructors may produce invalid objects."
+      },
+      {
+        "name": "Be wary of implicit division due to variable ordering",
+        "description": "PARI assumes Euclidean division of multivariate polynomials takes place in the fraction field of the coefficient ring; variable ordering defines which variable is treated as main and thus affects division semantics.",
+        "guidance": "When computations involve implicit divisions, content, numerator or denominator, variable ordering can change results unexpectedly (e.g., denominator(x / y) vs denominator(y / x)). Avoid implicit assumptions and use explicit divrem(x,y,var) where appropriate."
+      },
+      {
+        "name": "Multivariate power series are single-variable objects and cannot express multivariate error terms",
+        "description": "PARI cannot handle multivariate error terms like O(x^i y^j); multivariate power series are represented with a single main variable and polynomial factors in the others.",
+        "guidance": "If x has higher priority than y, then y is treated as independent of x and substituting expressions that violate this assumption can yield incorrect or surprising results. Avoid substituting expressions involving higher-priority variables into lower-priority variables."
+      },
+      {
+        "name": "Distinguish lexical vs dynamic scoping and use lexical (my) for private variables",
+        "description": "GP implements both lexical (my) and dynamic (local) scoping. Lexical scoping binds names to the block of program text, while dynamic scoping pushes values on a stack visible to called functions until the scope is exited.",
+        "guidance": "Prefer my for true private variables (lexical scope). Use local when you want temporary values visible dynamically (e.g., to subroutines called from the defining function)."
+      },
+      {
+        "name": "Function parameters and loop indices are lexically scoped",
+        "description": "Named parameters in function definitions and loop indices (for, prod, sum, vector, matrix, plot, etc.) have lexical scope within the function or loop body respectively.",
+        "guidance": "Do not expect loop indices to retain their loop values after exiting the loop. If you break out of loops, save the index to another variable before breaking, or wrap the loop in a function and return."
+      },
+      {
+        "name": "Scope variables to the smallest possible block",
+        "description": "Variables declared with my or local can be restricted to small blocks; variables without explicit default values are initialized to 0.",
+        "guidance": "Always lexically scope variables to the smallest needed scope to avoid 'rogue' variables whose values depend on the whole calling context. If you want initial free-variable semantics, explicitly initialize with quoting, e.g. my(x = 'x)."
+      },
+      {
+        "name": "User functions are ordinary GP objects and should be lexically scoped when appropriate",
+        "description": "User-defined functions are GP objects bound to variables and are subject to the same scoping rules; private helper functions can be lexically scoped to the block where they are needed.",
+        "guidance": "Define functions with (args) -> seq or f(args) = seq. Use my inside function bodies to declare private temporary variables. Assigning or redefining functions in global scope is allowed but scoping them locally is cleaner."
+      },
+      {
+        "name": "Function definitions: syntax options and semicolon to suppress printing",
+        "description": "Functions can be defined as (list) -> seq or f(list) = seq. A trailing semicolon prevents GP from printing the resulting function object.",
+        "guidance": "Either form works; the f(list)=seq form cannot define anonymous functions. Use semicolons when you want to avoid printing the function object after definition."
+      },
+      {
+        "name": "Arguments are passed by value; formal parameters are lexically scoped",
+        "description": "Arguments are passed by value (a copy is assigned to the formal parameter). Formals are lexically scoped to the function body, and duplicate parameter names are not allowed.",
+        "guidance": "Modifying a formal parameter inside the function does not change the caller's variable. Do not use the same variable name for multiple parameters (GP will error)."
+      },
+      {
+        "name": "Support for variadic functions (unlimited arguments)",
+        "description": "Define variadic functions with (formal_vars, var[..]) -> seq where var becomes a vector of the remaining arguments.",
+        "guidance": "Use the var[..] parameter to collect extra arguments. Example: f(c[..]) = sum(i=1,#c,c[i])."
+      },
+      {
+        "name": "Provide explicit defaults for function arguments and consider strictargs",
+        "description": "Formal parameters can have default values via =expr in the definition; GP historically gives uninitialized formals a default integer 0 (deprecated). Setting default(strictargs,1) makes missing arguments errors.",
+        "guidance": "Prefer explicitly specifying defaults in function definitions. Use the empty-argument trick (f(,3)) to skip intermediate defaults. Enable strictargs to force mandatory arguments."
+      },
+      {
+        "name": "Avoid loop-index scoping pitfalls (do not rely on loop indices after loop)",
+        "description": "Loop indices are lexically scoped to the loop body and are restored after exit; using a separate my(...) and then a loop that introduces the same name will shadow the intended variable.",
+        "guidance": "To return a loop index found by break, either save it before breaking or better, write the loop inside a function and return the index directly (e.g., forprime(..., if(..., return(p)))."
+      },
+      {
+        "name": "Be mindful of recursion limits",
+        "description": "GP's recursion depth is limited by the operating system stack; a deep recursion will error with 'deep recursion'.",
+        "guidance": "You cannot increase the recursion limit from within gp; to raise it, adjust the process stack size via ulimit or shell-specific limits before launching gp."
+      },
+      {
+        "name": "Functions may be passed as arguments and stored in arrays/vectors",
+        "description": "You can pass built-in or user functions as parameters, store them in arrays, and call them via e.g. funcs[i](x).",
+        "guidance": "Use anonymous closures for single-use functions (calc(x->x^2, 3)). The built-in apply/APPLY patterns are useful to apply a function to each element of a vector/list/matrix."
+      },
+      {
+        "name": "Closures capture copies of their defining context (not a shared mutable environment)",
+        "description": "GP closures incorporate the existing context at definition time, but they access a copy. Mutating what looks like shared state inside a closure will not change the original captured context for future calls.",
+        "guidance": "Closures cannot be used to simulate objects with mutable private state; incremental updates inside closures will not persist across calls as intuitive object fields would."
+      },
+      {
+        "name": "Member functions via dot notation: definition and rationale",
+        "description": "Member functions are defined with var.member = seq and provide accessors for structured objects (e.g., x.j for elliptic curve j-invariant). Their namespace is independent from variables/functions, allowing short identifiers.",
+        "guidance": "Do not attempt to override built-in member functions (they are read-only). Use custom member names (e.g., x.myj) if necessary. Member function names must start with a letter and follow with keyword/alphanumeric characters; names starting with e/E followed by a digit are forbidden."
+      },
+      {
+        "name": "Strings: quoting, escapes, concatenation and expansion in string context",
+        "description": "Strings are enclosed in double quotes; escape sequences \\e, \\n, \\t are supported. In string context, adjacent string literals are concatenated and inserted expressions are expanded (evaluated then converted to string).",
+        "guidance": "Be aware whitespace inside quotes is significant. When mixing expressions and strings, GP expands the largest possible expression; avoid ambiguous constructs like print(\"a\"[1]). Use concat or Str where appropriate to build strings programmatically."
+      },
+      {
+        "name": "Keywords differ from strings: they are auto-quoted and do not expand",
+        "description": "Keywords are like strings but are automatically quoted (no expansion), even if you omit quotes; they are used in contexts where expansion is undesirable.",
+        "guidance": "Function prototypes specify whether arguments are treated as strings or keywords. Use keywords when you want literal tokens (examples include the first argument of default, alias, trap, install except last arg, etc.)."
+      },
+      {
+        "name": "Know which functions take string or keyword contexts",
+        "description": "Certain built-in functions process their arguments in string context (Str, addhelp second arg, print functions, read, system, etc.), while others process arguments as keywords (alias, default first arg, trap first arg, install except last, whatnow).",
+        "guidance": "Refer to the documented lists to avoid unexpected expansion or quoting behavior when calling these functions."
+      },
+      {
+        "name": "Errors: two kinds and how GP reports them",
+        "description": "There are syntax errors produced by the bytecode compiler and runtime/library errors produced during evaluation. Both are fatal to the current computation and GP reports context with a caret or arrows showing where the error occurred.",
+        "guidance": "Default behavior is to return to the prompt after error and cleanup unless recover option is off (then gp exits). Read the context in error messages: parser errors show where input was malformed; runtime errors include mathematical content and call-stack frames, helping locate the source."
+      },
+      {
+        "name": "Enable recover and use meaningful error-handling policies for batch mode",
+        "description": "By default GP returns to the prompt after an error and performs cleanup; setting recover option off makes errors fatal causing gp to exit (useful for batch-mode to make untrapped errors fatal).",
+        "guidance": "Decide whether you want interactive recovery (default) or fatal errors for batch runs; set recover accordingly. Use careful coding patterns or traps to manage expected failure modes."
+      }
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_92fb522de038.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_92fb522de038.html",
+  "chunk_idx": 8,
+  "n_chunks": 25,
+  "chunk_chars": 39802,
+  "model": "gpt-5-mini",
+  "elapsed_s": 39.98749400000088,
+  "input_tokens": 13501,
+  "output_tokens": 3680,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Authors and implementers of Content MathML (MathML spec readers, XML/Math software developers)",
+    "subtask_short": "authoring Content MathML",
+    "subtask_description": "Guidance for encoding, rendering, and implementing Content MathML elements (cn, ci, csymbol, cs, apply, bind, share, semantics, cerror) including strict vs non-strict rules, typing, referencing, structure-sharing and error annotation.",
+    "subtask_keywords": [
+      "mathml",
+      "content_mathml",
+      "markup_spec",
+      "xml",
+      "implementation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "<cn> element: type attribute and numeric lexical rules",
+        "description": "The type attribute (mandatory in Strict Content MathML) may take integer, real, hexdouble or double; each implies the form of content (e.g., integer = optional sign + decimal digits; real = radix notation; double = IEEE 754 lexical rules; hexdouble = 16-digit hex encoding of IEEE 754 double).",
+        "guidance": "Examples given (0.3, 1, -31.56 for real; -1E4, 12.78e-2, INF for double). Note that double follows XML Schema lexical rules and hexdouble directly represents IEEE 754 bits. The type attribute determines how the text content must be parsed and interpreted."
+      },
+      {
+        "name": "<cn> element: rendering and presentation variants",
+        "description": "The default rendering of the text content of cn is the same as presentation element mn, with suggested variants when attributes or sep are used.",
+        "guidance": "Use mn-like rendering for numeric literals; when sep or attributes are present, prefer suggested presentation variants. Sample presentations are shown for hexdouble, rationals, complex numbers, etc."
+      },
+      {
+        "name": "<cn> element: non-strict uses and base attribute",
+        "description": "In non-strict markup the base attribute specifies the base (positive integer) for parsing digits (default 10). base should only be used with integer or real and is deprecated for other types.",
+        "guidance": "When base>10 letters A-Z/a-z are used as digits (case-insensitive). When base>36 some integers cannot be represented using only letters/numbers; support for extra digit characters is application-specific. Use of base with rational is deprecated."
+      },
+      {
+        "name": "<cn> element: additional non-strict type values (e-notation, rational, complex-cartesian, complex-polar, constant)",
+        "description": "Non-strict MathML supports extra type values: e-notation (significand<sep/>exponent), rational (numerator<sep/>denominator), complex-cartesian (real<sep/>imaginary), complex-polar (magnitude<sep/>angle), and constant (Unicode representations of well-known constants).",
+        "guidance": "Examples: <cn type=\"e-notation\">12.3<sep/>5</cn> => 12.3e5; <cn type=\"rational\">22<sep/>7</cn> => 22/7. The e-notation type mainly exists for MathML 2 compatibility; prefer double where appropriate. For constants prefer dedicated empty elements (e.g., <pi/>) or Strict csymbol representations when possible."
+      },
+      {
+        "name": "<cn> element: allowed content extensions",
+        "description": "Beyond text content and sep, cn may contain mglyph elements (for non-Unicode characters) or general presentation constructs for rendering.",
+        "guidance": "These are permitted especially in non-strict markup to assist rendering. In Strict Content MathML, type attribute is mandatory and use of presentation constructs is constrained."
+      },
+      {
+        "name": "<ci> element: variables and type attribute",
+        "description": "ci constructs content identifiers (variables). After white-space normalization the content is a name; two variables are equal iff names are identical and in same scope. In Strict Content MathML the type attribute may be one of integer, rational, real, complex, complex-polar, complex-cartesian, constant, function, vector, list, set, matrix.",
+        "guidance": "complex is an alias for complex-cartesian and should be rewritten to complex_cartesian_type symbol. For advanced types (e.g., vector(complex)), use semantics to associate richer type structure rather than the type attribute. Use id/xref on ci inside bvar to support explicit identification of bound variables."
+      },
+      {
+        "name": "<ci> element: rendering of identifiers",
+        "description": "If ci content consists of Presentation MathML that tagging is used; otherwise the text content is rendered as if it were an mi element. The type attribute may provide rendering hints (e.g., vector could be rendered bold).",
+        "guidance": "If application supports bidirectional text rendering follow Unicode bidi rules. Type attribute may be interpreted to affect presentation, but semantic typing should use semantics element for advanced types."
+      },
+      {
+        "name": "<csymbol> element: referencing external definitions (cd and definitionURL)",
+        "description": "csymbol refers to mathematically-defined concepts with external definitions. Strict Content MathML requires the cd attribute (OpenMath Content Dictionaries preferred). definitionURL (backwards-compatible) may reference any URI; when both cd and definitionURL are present, cd takes precedence.",
+        "guidance": "Prefer OpenMath CDs (use cd attribute). definitionURL is useful for MathML 2 compatibility or URI-based frameworks but may impede automatic interpretation without community context. When using OpenMath, a CD triple (symbol name, CD name, CD base) is conceptually mapped to cdbase + '/' + cd-name + '#' + symbol-name. Recommend that CD files be retrievable at their URIs."
+      },
+      {
+        "name": "<csymbol> element: cdgroup and error handling",
+        "description": "A cdgroup attribute on enclosing math may specify a CD Group file mapping CD names to CD bases; if a referenced CD name is absent or group retrieval fails then the csymbol is not defined; handling of this error is user-agent responsibility.",
+        "guidance": "Use CD Group files to allow CD locations to change without changing markup. If cdgroup specified but lookup fails, the csymbol becomes undefined; applications must decide error handling behavior."
+      },
+      {
+        "name": "<csymbol> element: rendering and non-strict uses",
+        "description": "If csymbol content is tagged with presentation tags use that for rendering; otherwise render as if it were an mi element. Non-strict csymbol may contain mglyph or presentation constructs; when moving to Strict Content MathML treat such csymbol as ci (rewrite to ci presentation mathml).",
+        "guidance": "Rendering follows Unicode bidi rules if applicable. When using definitionURL, the symbol name in the CD need not match csymbol content but can make instances much longer; weigh tradeoffs."
+      },
+      {
+        "name": "<cs> element: string literal constraints",
+        "description": "cs encodes string literals for Content MathML expressions. The content is plain text; no Presentation MathML constructs are allowed (even in non-strict). cs may not contain mglyph and its content does not undergo white-space normalization.",
+        "guidance": "Use cs for string literals inside sets, lists, etc. Remember that cs content is preserved verbatim (no normalization) and must not include presentation elements."
+      },
+      {
+        "name": "<apply> element: function/operator application structure",
+        "description": "apply builds an expression tree representing application of a function or operator to arguments. Its content model is op followed by operands which are themselves Content MathML expression trees. apply constructs can be nested arbitrarily.",
+        "guidance": "No need for parentheses or operator precedence; apply explicitly defines grouping. apply may have zero or more operands (e.g., plus may have zero or more; minus requires one or two). Both function and arguments may be simple identifiers or complex expressions. Sample encodings shown for sums, products and nested operations."
+      },
+      {
+        "name": "<apply> element: rendering of applications and qualifiers",
+        "description": "Strict Content MathML applications render as mathematical function applications (F\u2061(A1,...,An)). Non-strict applications may be used with qualifiers (bvar, domainofapplication, qualifiers) and rendering should follow sample motivated by sum presentation (Op with under/over and a fenced argument).",
+        "guidance": "When qualifiers are present render using constructs like munder for Op and a fenced expression for the body. Use ApplyFunction invisible operator (U+2061) between operator and argument presentation where appropriate."
+      },
+      {
+        "name": "<bind> and <bvar> elements: binding expressions and bound-variable rules",
+        "description": "bind represents binding expressions: first child is binding operator, followed by non-empty list of bvar elements (bound variables), then the body expression. bvar content is an annotated variable (ci or semantics wrapping ci). Names identify bound variables; renaming (\u03b1-conversion) is allowed provided it doesn't capture free variables.",
+        "guidance": "Bound variables can be explicitly identified via id on ci and xref usage elsewhere. Additional information about a bound variable (type, presentation) can be attached via semantics element containing the ci and annotations. When renaming, replace occurrences in annotations, subsequent bvar children and the body. Avoid renaming to a name that is free in the body (capture)."
+      },
+      {
+        "name": "Bindings: rendering binding constructions",
+        "description": "Rendering of a bind element shows operator followed by a list of bound variables and a separator then the body (e.g., B x1,...,xn. S).",
+        "guidance": "If <ci>b</ci> renders as B and <ci>s</ci> as S then render accordingly. Use separators and fencing as shown in sample presentation."
+      },
+      {
+        "name": "<share> element: structure sharing via src referencing",
+        "description": "share has a src attribute referencing the id of the root node of an expression tree; the share element is equivalent to a copy of the referenced tree (structurally equal but not identical).",
+        "guidance": "src values are URIs resolved relative to document base. Use share to conserve space by avoiding repeated encoding of identical subtrees; the produced expression is treated as if the referenced subtree were copied in place."
+      },
+      {
+        "name": "<share> element: global acyclicity constraint",
+        "description": "share occurrences must satisfy an acyclicity constraint: an element may not dominate itself (shares that create cycles by referencing ancestors are invalid).",
+        "guidance": "Examples show invalid self-dominating references that would lead to non-terminating copy expansion (e.g., share src=\"#badid1\" pointing to ancestor). Implementations must enforce acyclicity; such cyclic representations are not valid Content MathML."
+      },
+      {
+        "name": "<share> element: interaction with binding and variable capture (anti-pattern)",
+        "description": "share is a syntactic referencing mechanism and does not interact intuitively with binding; shares can cause variable capture where a copied subterm's free variables become bound by a nearer bind in the copying context, changing semantics.",
+        "guidance": "This phenomenon can lead to representation errors and is not recommended. \u03b1-conversion to avoid capture may prevent sharing; be cautious when sharing subexpressions that include occurrences of bound variables. Prefer avoiding shares that cross binding scopes or ensure semantics-preserving renaming and copy behavior."
+      },
+      {
+        "name": "<share> element: rendering options",
+        "description": "Acceptable renderings for share include rendering as a hypertext link to the referenced element or using the rendering of the referenced element itself.",
+        "guidance": "Choose rendering strategy appropriate for the application; linking is useful for human-readable documents, direct rendering may be appropriate for flattened views."
+      },
+      {
+        "name": "<semantics> element: annotation and dual-role",
+        "description": "semantics wraps an annotated element and annotation-xml / annotation children used for representing annotations. semantics is part of both presentation and Content MathML; it's considered (strict) Content MathML iff its first child is (strict) Content MathML.",
+        "guidance": "Use semantics to associate additional information (types, encodings, alternative presentations) with content elements. semantics is the standard mechanism for richer typing beyond simple type attribute values."
+      },
+      {
+        "name": "<cerror> element: error markup structure and use",
+        "description": "cerror is composed of an initial csymbol indicating the kind of error followed by zero or more MathML expressions providing context. cerror has no direct mathematical meaning and is intended to mark erroneous sub-expressions in communication contexts.",
+        "guidance": "Enclose only the smallest erroneous sub-expression in cerror (do not wrap larger correct context). Example: DivisionByZero csymbol followed by apply(divide x 0). Default presentation maps cerror to an merror whose first child presents the error symbol and subsequent children present the context; when default presentation is unhelpful an application may provide an alternative representation of the error context."
+      }
+    ]
+  }
+}

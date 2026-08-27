@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_69f08d7253e0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_69f08d7253e0.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39960,
+  "model": "gpt-5-mini",
+  "elapsed_s": 52.62951595800405,
+  "input_tokens": 13214,
+  "output_tokens": 4937,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "mathematicians and formal-methods researchers (Isabelle/HOL users) working on formal verification and exhaustive computational enumeration (Kepler-conjecture style proofs)",
+    "subtask_short": "formalizing Kepler proof in Isabelle/HOL",
+    "subtask_description": "Formal, machine-checked reworking of the Kepler conjecture proof: executable enumeration of plane/tame graphs, representation of graph systems, and formally verified refutation of potential counterexamples via linear programming certificates inside Isabelle/HOL.",
+    "subtask_keywords": [
+      "formalization",
+      "isabelle_hol",
+      "graph_enumeration",
+      "linear_programming",
+      "kepler_conjecture"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Bounding polynomials via Bernstein representation",
+        "description": "If p(x) = sum_{i=0}^k b_i \u00b7 B^k_i(x) (Bernstein basis of order k) then \u2200x \u2208 [0,1]. p(x) \u2264 max_i b_i.",
+        "guidance": "Convert a polynomial to its Bernstein representation to obtain an upper bound from the largest Bernstein coefficient; reduce any interval to [0,1] by change of variable; multivariate generalization is straightforward. For practical purposes use an efficient algorithm (cf. [6,48]) rather than naive matrix multiplication."
+      },
+      {
+        "name": "Handling transcendental/irrational coefficients",
+        "description": "g contains irrational coefficients (consequence of requirement (5.1)); approximation polynomials were chosen so the transcendental parts factor out (e.g. occurrence of \u03c0\u22124 arctan in definition of sqrt), and p(y) := 2(g(y) \u2212 pt) has rational coefficients.",
+        "guidance": "When p has rational coefficients it can be converted to a Bernstein representation without rounding using the algorithm in [48]; only divisions by powers of 2 occur and dyadic numbers can represent these exactly."
+      },
+      {
+        "name": "Represent plane graphs as lists of faces (faces as oriented vertex lists)",
+        "description": "Finite, undirected, plane graphs are represented as lists (= finite sets) of faces, and faces are lists of vertices (hence oriented).",
+        "guidance": "Because faces are lists they carry an orientation. Enumeration requires distinguishing final and non-final faces, so a face is a pair (list_of_vertices, Boolean). A plane graph is final iff each of its faces is final; in final graphs the Boolean component can be ignored."
+      },
+      {
+        "name": "Define planarity by executable enumeration (next-planep / Seedp)",
+        "description": "The original proof's executable enumeration is taken as the definition of planarity: start from a seed graph (Seedp) and apply next-planep inductively to subdivide non-final faces until final graphs (leaves) are produced.",
+        "guidance": "Seedp contains two (p+3)-gons; a plane graph of n faces can be generated in n\u22121 steps by adding one final face at a time. The Bernstein of order p parameterizes maximal size of final faces; different p produce disjoint graph sets."
+      },
+      {
+        "name": "Enumeration parameter p (face-size control)",
+        "description": "The enumeration is parameterized by natural number p which controls the maximal size of final faces in the generated graphs (final faces are at most (p+3)-gons).",
+        "guidance": "Tame graphs may contain only triangles up to octagons, corresponding to parameters p = 0,...,5; enumeration is run for these p values."
+      },
+      {
+        "name": "Executable successor function next-tamep for tame enumeration",
+        "description": "The HOL formalization defines next-tamep which maps a graph to a list of successors by computing next-planep and post-processing.",
+        "guidance": "next-tamep post-processes next-planep results by: (1) removing graphs that cannot lead to tame graphs due to lower bound admissible weight estimates; (2) finalizing all triangles (every 3-cycle in a tame graph must be a face); (3) removing final graphs that are not tame (a necessary but possibly not sufficient check). The enumeration may produce non-tame graphs (acceptable: may yield fake counterexamples but won't miss real ones)."
+      },
+      {
+        "name": "Balance pruning effectiveness with formal simplicity",
+        "description": "Pruning criteria must be chosen to balance execution efficiency and ease of formal completeness proofs.",
+        "guidance": "Weak pruning criteria are easy to justify formally but slow; sophisticated pruning is faster but harder to justify. Prefer simplifications that make formal proofs manageable even if they forego complex optimizations (e.g., removed special treatment of Seed0 and Seed1)."
+      },
+      {
+        "name": "Archive construction and isomorphism elimination",
+        "description": "Results of running tameEnump for p=0..5 are collected into an Archive and isomorphic graphs are eliminated, producing a reduced Archive (2771 graphs versus 5128 in original).",
+        "guidance": "Reduced Archive differences are due to isomorphic copies and non-tame graphs that the original program did not enforce; to build on enumeration results without rerunning, store and deduplicate outputs and verify modulo graph isomorphism (verified executable test for graph isomorphism is available in HOL)."
+      },
+      {
+        "name": "Logic must contain an executable programming language (HOL)",
+        "description": "The logic must contain a programming language; we used Church\u2019s higher-order logic (HOL) based on \u03bb-calculus, where programs are sets of recursion equations (pure logic).",
+        "guidance": "This lets programs be written as logical definitions (recursion equations) and reasoned about inside the logic."
+      },
+      {
+        "name": "Executions must be efficient and count as proofs (Isabelle/HOL evaluation)",
+        "description": "The programming language contained in the logic must be efficiently executable and such executions must count as proofs: Isabelle/HOL can evaluate a term t to a value v and yield the theorem t = v.",
+        "guidance": "If all functions in a term are data or defined by recursion equations, Isabelle/HOL can 'evaluate' the term in one efficient step producing a machine-checked equality theorem; this makes large computations part of the formal proof."
+      },
+      {
+        "name": "Represent tame graphs as hypermaps (darts + permutations)",
+        "description": "Tame graphs are represented as hypermaps: a finite set D of darts with three permutations (edge, face, node) composing to identity e \u25e6 n \u25e6 f = I.",
+        "guidance": "This representation simplifies the axiomatization of a graph system and the formal development; see [38, \u00a74] for full axioms."
+      },
+      {
+        "name": "Graph system axioms \u2192 large conjunction of linear (in)equalities",
+        "description": "Apply the axioms of a graph system to each tame graph to obtain a large Isabelle theorem: a conjunction of linear equalities and inequalities which is normalized into a matrix inequality Ax \u2264 b.",
+        "guidance": "Entries of A and b are symbolic expressions that may contain real constants (e.g., \u03c0)."
+      },
+      {
+        "name": "Formal interval arithmetic to bound symbolic matrices",
+        "description": "Replace A and b with numerical approximations A', A'' and b' with formally proven bounds: A' \u2264 A \u2264 A'' and b \u2264 b'.",
+        "guidance": "A formal interval-arithmetic development in Isabelle is used to obtain these numerical matrices with machine-checked inequalities (Equation (5) style bounds)."
+      },
+      {
+        "name": "Compute formal a-priori bounds for variables",
+        "description": "Apply preprocessing to obtain formally proven a-priori bounds x' \u2264 x \u2264 x'' for x such that x' \u2264 x \u2264 x''.",
+        "guidance": "These bounds are used to confine variable ranges before applying linear programming."
+      },
+      {
+        "name": "Use external LP solver certificates verifiably",
+        "description": "Obtain a certificate from an external LP solver (e.g., GLPK) that can be checked inside Isabelle to derive a contradiction from Ax \u2264 b.",
+        "guidance": "Certificates allow use of heavily optimized, untrusted solvers while retaining a trusted, mechanically verifiable final check in Isabelle; this yields soundness even with untrusted external code."
+      },
+      {
+        "name": "Current formalization limited to constraints avoiding branch-and-bound",
+        "description": "The present formalization does not use all constraints of the original proof but only those that do not require branch-and-bound strategies; this notion corresponds to 'basic linear programs' in [22, \u00a723.3].",
+        "guidance": "Because not all constraints are captured, not all potential counterexamples can be refuted yet; nevertheless most are refuted (2565 out of 2771, \u224892.5%). Future work will extend the notion of graph system to include remaining constraints."
+      },
+      {
+        "name": "Definition of edges E (construction rules and special edges S)",
+        "description": "Edges E' between vertices in U are formed from: (i) all standard edges {v,w} with 0 < ||v\u2212w|| \u2264 2.51; (ii) edges {v,w} of an anchored simplex when the upright diagonal is an unerased loop; (iii) edges with 0 < ||v\u2212w|| \u2264 \u221a8 provided they do not cross any edge in previous two items (if crossing choose one). Special simplices have a special edge of length at most \u221a8 and at least 3.2; S is the set of special edges and E = E' \\ S.",
+        "guidance": "By construction these edges do not cross; projecting E to the unit sphere yields a planar graph whose complementary components' closures are subregions."
+      },
+      {
+        "name": "Loop subregion characterization",
+        "description": "A loop subregion contains an unerased loop {0,v}; it has no enclosed vertices of height \u2264 2.51 over the subregion; its corners are anchors of the upright diagonal together with special corners; the subregion is star-convex with center at the projection of v and has a simple polygonal boundary.",
+        "guidance": "This ensures loop subregions' boundaries are simple polygons and remain rigid under admissible deformations."
+      },
+      {
+        "name": "Admissible deformation conditions",
+        "description": "A deformation of U is admissible if: (i) if \u0393 is not connected, the deformation is a rotation about the origin acting on vertices of a single connected component (others fixed) (preserves ||v||); (ii) if \u0393 is connected but not biconnected with articulation vertex a, deform by rotation about axis {0,a} acting on a single component of \u0393\\{a} (others fixed); (iii) distances between any v,w \u2208 U remain at least 2.",
+        "guidance": "Deformations are constructed to preserve values of vor0,R and \u03c40,R for standard regions while changing combinatorial structure to reach biconnectivity."
+      },
+      {
+        "name": "Admissible deformation halting conditions",
+        "description": "The deformation stops when either: (1) ||v\u2212w|| \u2264 \u221a8 where edge {v,w} \u2209 E' and {v,w} \u2286 U does not cross any edge in E'; or (2) ||v\u2212w|| decreases to 2 for some v,w \u2208 U and {v,w} crosses an edge in E'.",
+        "guidance": "Deformation is allowed to assume configurations where distances between some u \u2208 U and the upper endpoint of an unerased upright diagonal dip below 2, provided u is not a corner of that loop subregion; the first halting condition prevents adding new special vertices to a loop subregion."
+      },
+      {
+        "name": "Strategy: produce biconnected graph to ensure polygonal faces",
+        "description": "The proof strategy is to produce a biconnected graph; in a biconnected planar graph with at least three vertices each face is a simple polygon, thereby justifying reduction to polygonal standard regions.",
+        "guidance": "Start with erasure simplification, then admissible deformations preserving vor0,R and \u03c40,R while altering combinatorial structure to eliminate articulation vertices."
+      },
+      {
+        "name": "Acceptability of necessary-but-not-sufficient tameness checks",
+        "description": "In the last step of next-tamep, a necessary but possibly not sufficient check for tameness is used, so enumeration may produce non-tame graphs.",
+        "guidance": "This is unproblematic: in worst case one gets a fake counterexample, but one does not miss any real counterexamples. The completeness theorem (Theorem 2) guarantees that any tame final graph reachable by next-planep is also reachable by next-tamep."
+      },
+      {
+        "name": "Use metric lemmas/explicit metric thresholds to exclude pathological configurations",
+        "description": "A sequence of geometric lemmas with explicit numerical thresholds (e.g., distances \u22652, \u22642.51, \u22643.2, \u22642.91, diameter bounds like 1.044, dihedral/distance interval calculations) is used to rule out configurations that would obstruct admissible deformations or biconnectivity.",
+        "guidance": "These metric constraints are explicit parts of the formal proof (Lemmas 1\u201312) and must be checked by geometric calculation/interval arithmetic or coordinate computations inside the formal system; they underpin elimination of hypothetical problematic cases (Figs. 2\u20134)."
+      },
+      {
+        "name": "Completeness theorem for tame enumeration (Theorem 2)",
+        "description": "If a tame and final graph g is reachable from Seedp via next-planep then g is also reachable from Seedp via next-tamep.",
+        "guidance": "Because next-tamep is executable and exhaustive (modulo its pruning), tameEnump can be used to enumerate tame graphs for p=0..5 and the resulting set checked modulo isomorphism against the Archive."
+      }
+    ]
+  }
+}

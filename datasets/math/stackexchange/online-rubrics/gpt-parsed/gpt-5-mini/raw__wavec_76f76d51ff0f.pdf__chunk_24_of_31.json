@@ -1,0 +1,230 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 24,
+  "n_chunks": 31,
+  "chunk_chars": 39982,
+  "model": "gpt-5-mini",
+  "elapsed_s": 313.56467633300053,
+  "input_tokens": 13775,
+  "output_tokens": 7482,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of the PARI/GP system (mathematicians, number theorists, and programmers using PARI/GP for high-precision summation, plotting, and GP programming).",
+    "subtask_short": "PARI/GP summation plotting programming",
+    "subtask_description": "Reference guidance for using PARI/GP numerical summation routines, plotting facilities, and GP control statements; includes function preconditions, performance characteristics, flags, and usage notes. Targeted at users writing gp scripts or using the PARI library interactively.",
+    "subtask_keywords": [
+      "pari_gp",
+      "numerical_summation",
+      "plotting",
+      "gp_programming",
+      "reference_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "sum: initialization parameter x controls operation type",
+        "description": "The initialization parameter x may be given to force the type of the operations being performed.",
+        "guidance": "Example: summing rationals vs floating-point yields large differences in speed and size of results (rational denominator huge vs numeric float faster). Library syntax: somme(GEN a, GEN b, char *expr, GEN x). Use x to control numeric vs exact behavior when it affects performance or memory."
+      },
+      {
+        "name": "sumalt: alternating-series summation (Cohen\u2013Villegas\u2013Zagier)",
+        "description": "Numerical summation of an alternating series (\u22121)^k a_k with formal variable X starting at a; uses the Cohen\u2013Villegas\u2013Zagier algorithm.",
+        "guidance": "If flag = 0 and the a_k are moments of a positive measure on [0,1], set n \u2248 1.3\u00b7p for realprecision p; algorithm overhead negligible: time O(p^2) and space O(p). Routine is heuristic\u2014use to guess infinite sums; divergent or non-exactly alternating series may sometimes be summed but conditions for rigorous use are hard to check."
+      },
+      {
+        "name": "sumalt flag=1 variant (faster convergence, higher overhead)",
+        "description": "When flag = 1 use a variant with more complicated polynomials; convergence potentially exponential under stronger analytic conditions on the generating function.",
+        "guidance": "If a_k are moments of w(x) with analytic extension (or x\u00b7w(x^2) analytic) then convergence O(14.4^{-n}). For realprecision p set n \u2248 0.86\u00b7p. Overhead is not negligible: time O(p^3) and space O(p^2). Worthwhile only if computing a_k is expensive (\u2248O(p^2) per term); otherwise gains are a small constant at large overhead. Best used heuristically."
+      },
+      {
+        "name": "suminf: infinite sum stopping criterion and input restriction",
+        "description": "Compute infinite sum of expr from X=a; evaluation stops when relative error < default precision for 3 consecutive evaluations. Expressions must always evaluate to a complex number.",
+        "guidance": "If series converges slowly, reduce realprecision (even 28 may be too high). For alternating or constant-sign terms, prefer sumalt or sumpos. Library syntax: suminf(void *E, GEN (*eval)(void*,GEN), GEN a, long prec)."
+      },
+      {
+        "name": "choose suminf when series converges geometrically",
+        "description": "If the series already converges geometrically, suminf is often a better choice than other summation routines.",
+        "guidance": "Examples show suminf is faster and more accurate for rapidly converging series where sumalt or sumnum would be slower or produce user interrupts at high precision."
+      },
+      {
+        "name": "sumnum: Euler\u2013MacLaurin summation for positive C^\u221e functions",
+        "description": "Numerical summation of f(n) for n from a to +\u221e using Euler\u2013MacLaurin; f assumed positive and C^\u221e, a must be integer. Optional tab from sumnuminit helps precompute abscissas and weights.",
+        "guidance": "Complexity: f evaluated at O(D log D) real arguments where D \u2248 realprecision\u00b7log(10). Geared to slowly decreasing functions; for exponentially decreasing f prefer suminf or sumpos. Precompute tab via sumnuminit() to speed repeated calls, especially if f is cheap to evaluate; if f is expensive, precomputation speedup is less significant."
+      },
+      {
+        "name": "sumnum: behaviour at infinity and asymp argument",
+        "description": "sumnum assumes by default f decreases like O(n^{-2}); for different decrease rates the asymp parameter must be given via sumnuminit([+oo, alpha]).",
+        "guidance": "If \u03b1 > 0, encodes exponential decrease exp(\u2212\u03b1n); if \u22122 < \u03b1 < \u22121, encodes polynomial decrease n^\u03b1. If not specified correctly, expect accuracy loss or overflow (e.g., using sumnum on 2^-n without exponential asymp causes overflow). A rough value suffices for exponential decrease; exact rate is required for slow polynomial decrease."
+      },
+      {
+        "name": "sumnuminit: precompute tables and encode asymptotics",
+        "description": "Initialize tables for Euler\u2013MacLaurin summation; optional asymp = [+oo, \u03b1] to indicate decrease rate at infinity.",
+        "guidance": "Use returned tab in sumnum calls to get dramatic speedups for repeated summations at the same accuracy. Library syntax: GEN sumnuminit(GEN asymp = NULL, long prec). Examples show huge time reduction when tab is provided."
+      },
+      {
+        "name": "sumnummonien: Monien summation and analytic continuation requirement",
+        "description": "Numerical summation using Monien's method; assumes f(1/z) has a complex analytic continuation in a neighborhood of [0,1].",
+        "guidance": "Complexity: f evaluated at O(D / log D) arguments (D \u2248 realprecision\u00b7log(10)). Default assumption f(n)=O(n^{-2}) with a non-zero asymptotic expansion; use sumnummonieninit for precomputations and to specify other asymptotics. sumnummonien is faster when its analytic hypotheses hold."
+      },
+      {
+        "name": "sumnummonieninit: asymp, weight w, and n0 options",
+        "description": "Initialize tables for Monien summation; asymp can be \u03b1 or [\u03b1,\u03b2] to represent different asymptotic expansions; w encodes weight functions and n0 the starting index.",
+        "guidance": "asymp = \u03b1>1 implies expansions starting at i=1; asymp = [\u03b1,\u03b2] requires \u03b1>0 and \u03b1+\u03b2>1. w may be an integer k to code (log n)^k (only k=0,1 implemented well), a closure computing w(n), [w,fast] to provide growth bound, or [w,oo] for exponentially decreasing weight. If w is a closure or log n, n0 is stored and must be reused in subsequent calls. If weight decreases exponentially, prefer suminf or sumpos in practice."
+      },
+      {
+        "name": "sumpos: series with same-sign terms using Van Wijngaarden trick",
+        "description": "Numerical summation for series whose terms all have the same sign; converts to an alternating series then uses sumalt. Assumes expr is more or less decreasing and has positive terms.",
+        "guidance": "Routine is heuristic: it does not verify same sign and will be wrong if expr is zero often. If flag = 1 use sumalt(,1) variant (fewer terms but higher overhead). To reach accuracy 10^-p both algorithms need O(p^2) space and compute O(p^2) terms under polynomial decay assumptions; sumpos(,1) has smaller constant (~1.5\u00d7 faster) but may yield worse accuracy."
+      },
+      {
+        "name": "precomputation (tab/tabmon) to speed repeated summations",
+        "description": "Use sumnuminit or sumnummonieninit to precompute data valid for a given accuracy; passing the tab to sumnum/sumnummonien speeds later calls considerably.",
+        "guidance": "Precomputations can be expensive but amortize over many evaluations. For example, sumnuminit() can reduce a call from seconds to milliseconds when the summand is cheap; when the summand is expensive, precomputation effect is less impressive."
+      },
+      {
+        "name": "heuristic use warning for sumalt/sumpos/sumnum variants",
+        "description": "The analytic conditions required for rigorous use of these summation routines are hard to check; the routines are best used heuristically to guess values of infinite sums.",
+        "guidance": "Even divergent alternating series or non-exactly alternating series can sometimes be summed, but results are not guaranteed. Examples in the manual contrast performance and accuracy under different precisions and flags."
+      },
+      {
+        "name": "sumnum vs suminf/sumpos: choose according to decay rate",
+        "description": "sumnum is geared to slowly decreasing functions (polynomial decay); if f decreases exponentially, prefer suminf or sumpos.",
+        "guidance": "If f satisfies additional analytic hypotheses (e.g. Monien), sumnummonien may be faster. For exponential decay even rough asymp value is enough, and suminf/sumpos are usually faster and more accurate."
+      },
+      {
+        "name": "library syntax conventions for summation routines",
+        "description": "Library-mode function signatures are provided for each summation routine (e.g., sumalt(void *E, GEN (*eval)(void*,GEN), GEN a, long prec)).",
+        "guidance": "When embedding in external C or using the library, follow the specified signatures. The manual often notes also alternate variants (sumalt2, sumpos2) with same arguments."
+      },
+      {
+        "name": "plotting functions: three classes and purpose",
+        "description": "Three types of plotting functions: high-level (ploth*), low-level rectplot (plot*), and PostScript output (ps*). Plotting is provided as a convenient visual aid, not for heavy-duty graphics.",
+        "guidance": "Plotting functions are platform independent with several drivers (X11, Qt, FLTK). The plotting child process is forked so the gp session continues. Not available in PARI library mode; if heavy graphics needed, use specialized tools."
+      },
+      {
+        "name": "rectwindows and virtual cursor model",
+        "description": "Low-level plotting uses 16 virtual windows (rectwindows), each with a virtual cursor initialized at [0,0]; windows must be initialized with plotinit before use.",
+        "guidance": "Only parts of objects inside a window are drawn (except polygons and strings). Windows are preserved between draws; to erase a window use plotkill which fully erases and frees memory. Use plotscale to work in scaled coordinates to avoid unnecessary conversions."
+      },
+      {
+        "name": "plot: crude ASCII plotting defaults",
+        "description": "plot(X=a,b,expr,{Ymin},{Ymax}) makes a crude ASCII plot with Ymin/Ymax defaulting to computed min/max of expression values.",
+        "guidance": "If Ymin or Ymax omitted, computed extrema are used. Library syntax: pariplot(GEN X, GEN b, GEN expr, GEN Ymin=NULL, GEN Ymax=NULL, long prec)."
+      },
+      {
+        "name": "plotdraw and plotcopy: positioning semantics and flag units",
+        "description": "plotdraw(list,{flag}) draws specified rectwindows at physical positions; plotcopy(sourcew,destw,dx,dy,{flag}) copies with offset. If flag bit 1 set, dx/dy are fractions of device size, otherwise pixels; other bits control anchor corner.",
+        "guidance": "plotdraw expects list formatted as [w1,x1,y1,w2,x2,y2,...] with number of components divisible by 3. If flag=0 positions are fractions of device size; overlapping regions are drawn twice (windows transparent)."
+      },
+      {
+        "name": "ploth: high-precision plotting may evaluate expr thousands of times",
+        "description": "ploth computes high-precision plots; it can evaluate expr many times so only a few significant digits matter in typical plotting devices.",
+        "guidance": "Keep current precision low (e.g., 9) before calling ploth to avoid wasted work. n parameter selects number of reference points (0 uses defaults: 1000 general, 1500 parametric, 8 recursive). Returns bounding box [xmin,xmax,ymin,ymax]."
+      },
+      {
+        "name": "ploth flag bits: parametric (1) and recursive (2)",
+        "description": "ploth uses bit flags: bit 1 = Parametric (expr must be vector with even number of components). Bit 2 = Recursive (adaptive subdivision of segments).",
+        "guidance": "Parametric: successive pairs of components are coordinates of parametric curves. Recursive: faster and usually more precise but can produce misleading polygon approximations if unlucky or parameters poorly chosen (e.g., plotting odd functions symmetrically with too few points). Try varying parameters."
+      },
+      {
+        "name": "ploth other flags: various display toggles (4..4096)",
+        "description": "Other ploth flag bits toggle display options: 4=no Rescale, 8=no X axis, 16=no Y axis, 32=no Frame, 64=no Lines, 128=Points too, 256=Splines, 512=no X ticks, 1024=no Y ticks, 2048=Same ticks, 4096=Complex (treat expr members as complex pairs).",
+        "guidance": "Use combinations of bits to select display behavior. Example: Complex mode lets each member of expr encode two coordinates as a complex number (e.g., exp(I*X) draws a circle). no Rescale used with plotscale for consistent coordinate systems across multiple plots."
+      },
+      {
+        "name": "plothraw: plotting raw (x,y) point lists and flag behavior",
+        "description": "plothraw(listx,listy,{flag}) plots the points given by listx and listy (equal length). If flag=1, join points; automatic positioning and scaling done with option to preserve same scaling factor on x and y.",
+        "guidance": "Non-zero flags toggle display options similar to ploth (combinations of bits 2^k, k\u22653). High-precision evaluation is used."
+      },
+      {
+        "name": "plothsizes: device size and character/tick information",
+        "description": "plothsizes({flag=0}) returns a 6-component vector: window width and height, tick sizes horizontal/vertical, width and height of characters. If flag=0 results in pixels, otherwise fractions of screen size.",
+        "guidance": "Useful to initialize rectwindows in a portable way across devices and to convert to a desired coordinate system (examples given use [0,1000] range)."
+      },
+      {
+        "name": "plotinit & plotscale: initializing rectwindow and scaling coordinates",
+        "description": "plotinit(w,{x},{y},{flag=0}) initializes rectwindow w with width x and height y; plotscale(w,x1,x2,y1,y2) sets coordinate mapping for that window.",
+        "guidance": "If flag=0 x/y are pixels; otherwise they are fractions of device size. Use plothsizes() to determine device bounds. After plotinit default scaling uses pixel counts; use plotscale to set logical coordinate ranges and change orientation (y-axis default downward)."
+      },
+      {
+        "name": "plotkill: erase rectwindow and free memory",
+        "description": "plotkill(w) erases rectwindow w and frees its memory; if you want to reuse w you must call plotinit again.",
+        "guidance": "plotkill cannot partially erase a window \u2014 to remove parts of a drawing use plotclip and plotcopy workflow or reinitialize the window."
+      },
+      {
+        "name": "plotlines/plotpoints semantics and cursor behavior",
+        "description": "plotlines(w,X,Y,{flag=0}) draws polygon with X/Y coordinates; plotpoints(w,X,Y) draws points. X and Y may be scalars to draw a single segment/point relative to current virtual cursor.",
+        "guidance": "plotlines draws the whole polygon even if parts are outside the rectwindow; if inputs are scalar a single segment/point is drawn (cursor moved accordingly). Use plotmove to set cursor for arbitrary segment endpoints."
+      },
+      {
+        "name": "plotstring justification flags",
+        "description": "plotstring(w,x,{flags=0}) draws string x at current cursor position; bits 1/2 control horizontal alignment (left/right/center), bits 4/8 vertical alignment (bottom/top/v-center); bits 16/32 insert small horizontal/vertical gap.",
+        "guidance": "See tutorial for examples. Flags allow precise placement and slight offsets relative to the plotted point."
+      },
+      {
+        "name": "PostScript output (psdraw/psploth/psplothraw) behavior",
+        "description": "psdraw/psploth/psplothraw write PostScript programs appended to psfile (default ./pari.ps); flag != 0 scales plot from device size to standard PostScript plotting size.",
+        "guidance": "Each call appends to the psfile so you may want to remove or rename psfile between runs to avoid appending unwanted plots. PostScript output may differ slightly from screen output but is reasonably close."
+      },
+      {
+        "name": "plotting library mode limitation",
+        "description": "None of the graphic functions are available within the PARI library; they are only available under the gp interactive environment.",
+        "guidance": "The plotting set of routines is provided as a simple visual aid; the source is readable (plot*.c) if you insist on embedding similar functionality in external programs, but heavy-duty graphics should use specialized libraries."
+      },
+      {
+        "name": "GP control statements: lexical scoping caveat",
+        "description": "In constructs like for (X = a,b, seq) the variable X is lexically scoped to the loop; if seq modifies the loop index, the loop updates accordingly but the outer variable keeps its original value after the loop.",
+        "guidance": "Example: n=5; for(n=1,10, if(..., break)); at end n is still 5. If seq modifies the loop index (e.g., n += 2), the loop increments use the new value and may terminate differently; be careful when reusing variable names."
+      },
+      {
+        "name": "break(n): interrupt loops",
+        "description": "break({n=1}) interrupts execution of current seq and immediately exits from the n innermost enclosing loops within the current function call or top-level loop. n must be positive.",
+        "guidance": "If n is greater than number of enclosing loops, all enclosing loops are exited. This applies inside functions or top-level loops; use to escape nested loops."
+      },
+      {
+        "name": "breakpoint(): enter break loop for debugging",
+        "description": "breakpoint() interrupts the program and enters the breakloop; the program continues when the breakloop is exited.",
+        "guidance": "In breakloop you can inspect variables and call debugging helpers (dbg_*). Example shows use inside a function and inspecting variable values before continuing."
+      },
+      {
+        "name": "dbg_up/dbg_down/dbg_err/dbg_x utilities in break loop",
+        "description": "dbg_down(n) / dbg_up(n) move down/up n frames in break loop; dbg_err() returns error data; dbg_x(A,{n}) prints inner structure of A to depth n.",
+        "guidance": "Use dbg_up/down to inspect parent frames; dbg_err is useful to obtain structured error information (complements iferr). dbg_x similar to \\x but does not require history entry."
+      },
+      {
+        "name": "for loop general semantics and infinite loops",
+        "description": "for(X = a,b, seq) evaluates seq where X goes from a to b; nothing is done if a>b. If b is +oo the loop will not stop unless caller breaks out.",
+        "guidance": "b may be +oo to indicate potentially infinite loops; user expected to break out via break or return. a and b must be in R. Lexical scoping rules apply."
+      },
+      {
+        "name": "forcomposite: iterate composite numbers and index read-only behavior",
+        "description": "forcomposite(n=a,{b},seq) loops variable n over composite numbers between a and b. Omitting b runs over all composites \u2265 a; index cannot be modified inside seq (attempting to change it produces error).",
+        "guidance": "Example shows printing composite numbers. If seq tries to assign to the index variable a change is flagged as 'index read-only'."
+      },
+      {
+        "name": "fordiv: iterate divisors using divisors() or factor matrix",
+        "description": "fordiv(n,X,seq) loops X over positive divisors of n (divisors sorted if n integer). Instead of n you may pass a factorization matrix (output of factor(n)).",
+        "guidance": "To avoid storing all divisors (memory), a FORDIV macro example loops using constant space at cost of speed. Use fordiv for convenience or custom macro for memory-critical loops."
+      },
+      {
+        "name": "forell: iterate elliptic curves via elldata database",
+        "description": "forell(E,a,b,seq,{flag=0}) iterates E=[name,M,G] over elliptic curves with conductors between a and b; if flag non-zero select only first curve in each isogeny class.",
+        "guidance": "name is Cremona curve name, M minimal model, G Z-basis of Mordell\u2013Weil free part. Requires elldata database installed and containing requested conductors. Library syntax provided for embedding."
+      },
+      {
+        "name": "forpart: loop over integer partitions with length and part restrictions",
+        "description": "forpart(X=k,seq,{a=k},{n=k}) evaluates seq over partitions X of integer k; optional n restricts partition length, a restricts maximum part(s).",
+        "guidance": "By default parts are positive and zeros are removed unless amin\u22640. n may be scalar or vector [nmin,nmax]; a may be scalar or [amin,amax]. Example shows usage to restrict to at most 3 non-zero parts all \u22644 and to fill with zeros for fixed-length partitions."
+      },
+      {
+        "name": "forprime: iterate primes via nextprime increment",
+        "description": "forprime(p=a,{b},seq) sets p to successive primes from a to b by incrementing p to nextprime(p+1) at each iteration.",
+        "guidance": "Nothing is done if a>b. Use to iterate over primes in a given interval; implementation relies on nextprime so steps adapt to prime gaps."
+      }
+    ]
+  }
+}

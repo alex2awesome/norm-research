@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 16,
+  "n_chunks": 37,
+  "chunk_chars": 39994,
+  "model": "gpt-5-mini",
+  "elapsed_s": 193.60893500000384,
+  "input_tokens": 12871,
+  "output_tokens": 6504,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users and macro programmers (readers of The TeXbook / advanced plain-TeX programmers)",
+    "subtask_short": "tex macro and box programming",
+    "subtask_description": "Rules and semantics for TeX expansion, definitions, explicit box/rule construction, leaders, whatsits, and file I/O \u2014 guidance for writing robust TeX macros and boxes. Focused on how primitives behave so macro authors can predict expansion and box/layout results.",
+    "subtask_keywords": [
+      "tex",
+      "macros",
+      "boxes",
+      "expansion",
+      "plain_tex"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "\\meaning behavior",
+        "description": "\\meaning expands to the sequence of characters that would be displayed on your terminal by \\show; for example, '\\meaning A' usually expands to 'the letter A'; '\\meaning\\A' after '\\def\\A#1B{\\C}' expands to 'macro:#1B->\\C '.",
+        "guidance": "Use \\meaning to inspect what a token would print as; it reports the 'meaning' of control sequences and characters in readable token text. Example shows difference between literal character and control sequence meaning."
+      },
+      {
+        "name": "\\csname...\\endcsname behavior",
+        "description": "When TeX expands \\csname it reads to the matching \\endcsname, expanding tokens as it goes; only character tokens should remain after this expansion. The expansion of the entire \\csname...\\endcsname text will be a single control sequence token, defined to be like \\relax if its meaning is currently undefined.",
+        "guidance": "Use \\csname...\\endcsname to create control sequence names from tokens; be aware intermediate tokens are expanded until only characters remain, and undefined names behave like \\relax."
+      },
+      {
+        "name": "\\expandafter semantics",
+        "description": "TeX first reads the token immediately after \\expandafter, without expanding it (call it t). Then TeX reads the token after t (and possibly more tokens if that token has an argument), replacing it by its expansion. Finally TeX puts t back in front of that expansion.",
+        "guidance": "Use \\expandafter to control one-step reordering of expansion. Remember it only skips expansion of the immediately following token and forces expansion of the next one."
+      },
+      {
+        "name": "\\noexpand semantics",
+        "description": "The expansion is the token itself; but that token is interpreted as if its meaning were '\\relax' if it is a control sequence that would ordinarily be expanded by TeX's expansion rules.",
+        "guidance": "Use \\noexpand to protect a token from expansion inside an \\edef or similar expanded context; it prevents the following token from being expanded at that expansion time."
+      },
+      {
+        "name": "marks expansion (\\topmark, \\firstmark, etc.)",
+        "description": "The expansion is the token list in the corresponding 'mark' register.",
+        "guidance": "Mark registers provide stored token lists which \\the or \\meaning-like operations will expand into when requested (see chapter on marks)."
+      },
+      {
+        "name": "\\input and \\endinput expansion",
+        "description": "\\input: the expansion is null; but TeX prepares to read from the specified file before looking at any more tokens from its current source. \\endinput: the expansion is null. The next time TeX gets to the end of an \\input line, it will stop reading from the file containing that line.",
+        "guidance": "These primitives do not expand to token lists but control input streams; use \\endinput to truncate further input from a file."
+      },
+      {
+        "name": "\\the primitive and its subcases",
+        "description": "\\the produces a list of tokens representing the current value of one of TeX's variables (numbers, dimensions, glue, registers, catcode/mathcode tables, font identifiers, token lists, etc.). In many cases \\the produces ASCII character tokens (category code 12, except code 32 becomes category 10). In other cases \\the can produce non-character tokens such as a font identifier or arbitrary token lists (e.g., \\the\\font or \\the\\everypar).",
+        "guidance": "Use \\the to stringify internal quantities; be mindful of which kinds of tokens and catcodes are produced, and that \\showthe reveals exactly what \\the would produce (preceded by '> ' and followed by a period)."
+      },
+      {
+        "name": "cases when expandable tokens are not expanded",
+        "description": "Expansion is suppressed in many situations (e.g., when tokens are being deleted during error recovery; when tokens are skipped because conditional text is being ignored; when TeX is reading the arguments of a macro; when reading a control sequence to be defined by \\let, \\futurelet, \\def, \\gdef, \\edef, \\xdef, \\chardef, etc.; when absorbing parameter or replacement text of a definition; reading preamble of an alignment except after \\span or when reading the hglue after \\tabskip; just after a $ that begins math mode to check for $$; just after an ' that begins an alphabetic constant).)",
+        "guidance": "Knowing exactly when expansion is suppressed is crucial when crafting \\edefs and other expanded constructs; many primitives and parsing contexts temporarily inhibit expansion."
+      },
+      {
+        "name": "\\edef and \\xdef expanded definitions",
+        "description": "\\edef (and \\xdef for global) blindly expands the tokens of the replacement text according to TeX's expansion rules, producing a definition where only unexpandable tokens remain. Conditionals and other expansions occur during the \\edef. Token lists produced by \\the are not expanded further. A token following \\noexpand will not be expanded.",
+        "guidance": "Use \\edef to create definitions based on current expanded values; combine with \\noexpand or \\the to control which parts are expanded. Examples show how conditional mode affects the result and how repeated \\edefs can expand nested macros to many levels."
+      },
+      {
+        "name": "\\mark, \\message, \\errmessage, \\special, \\write expansion behavior",
+        "description": "These primitives expand the token lists in braces almost exactly as \\edef and \\xdef do, but macro parameter character # should not be duplicated in such commands (use ## in an \\edef, but only # within a \\mark). The \\write command is special: its token list is first read without expansion and expansion occurs later, when the tokens are actually being written to a file.",
+        "guidance": "When generating output like marks/messages or writes, be careful about when macro parameters and expansions are performed; use doubling of # appropriately and remember \\write defers expansion."
+      },
+      {
+        "name": "\\read and auxiliary file-reading semantics",
+        "description": "TeX can read individual lines from up to 16 files via \\openin, \\closein, and \\read. \\read<stream> to\\cs defines the control sequence as a parameterless macro whose replacement text is the contents of the next line read; lines are converted to token lists using current category codes. Additional lines are read until an equal number of left and right braces is found. An empty line is implicitly appended to the end of a file being \\read. The macro definition is local unless you say \\global\\read.",
+        "guidance": "Use \\read to import line-oriented data; remember brace balancing behavior, default '.tex' extension, and locality of the macro created unless globalized."
+      },
+      {
+        "name": "dialogs with the user via \\read and \\message",
+        "description": "Combining \\message and \\read allows interactive prompts: \\message{Please type your name:} \\read16 to\\myname \\message{Hello, \\myname!}. If the stream number is negative (e.g., \\read-1) TeX omits the 'prompt=' echo and reads from terminal without echoing to log.",
+        "guidance": "For simple interactive dialogs use \\read with appropriate stream numbers; be aware that line-ending returns may become spaces (exercise notes how to fix)."
+      },
+      {
+        "name": "\\loop...\\repeat semantics and implementation",
+        "description": "Plain TeX's \\loop...\\repeat works as: \\loop \u03b1 \\if... \u03b2 \\repeat \u2014 TeX executes \u03b1, then if the condition is true it does \u03b2 and repeats the whole process; if the condition is false the loop stops. Implementation uses a \\body control sequence and tail-recursive \\iterate so memory doesn't fill during long loops.",
+        "guidance": "Use \\loop for simple conditional repetition; note the implementation detail (tail recursion via \\let\\next=\\iterate\\else...) which avoids memory growth during many iterations."
+      },
+      {
+        "name": "rule boxes: \\hrule and \\vrule defaults and specifications",
+        "description": "To make a rule box type \\hrule (vertical mode) or \\vrule (horizontal mode) followed by any of 'width<dimen>', 'height<dimen>', 'depth<dimen>' in any order. If you specify a dimension twice the second overrules the first. Defaults: for \\hrule width=* height=0.4pt depth=0.0pt; for \\vrule width=0.4pt height=* depth=*. '*' means dimension depends on context (rule will extend to smallest enclosing box or alignment boundary).",
+        "guidance": "Use \\hrule/\\vrule with explicit dimensions if precise sizing is needed; remember defaults and that '*' makes size context-dependent (e.g., \\hrule across page width)."
+      },
+      {
+        "name": "mode-specific rule invocation and negative dimensions",
+        "description": "You must call \\hrule in vertical mode and \\vrule in horizontal mode regardless of visual appearance; \\vrule in vertical mode starts a new paragraph; \\hrule in horizontal mode stops the current paragraph and returns to vertical mode. Dimensions can be negative, but a rule is invisible unless (height + depth) > 0 and width > 0. A rule whose width is negative acts like a backspace in a horizontal list.",
+        "guidance": "Pick the primitive appropriate to the current mode; be cautious with negative dimensions \u2014 they can produce backspace-like effects or invisibility."
+      },
+      {
+        "name": "explicit box forms (hboxi) and box specification",
+        "description": "An hboxi can be one of: \\hbox{<horizontal material>}, \\vbox{<vertical material>}, \\vtop{...}, \\box<register>, \\copy<register>, \\vsplit<register>to<dimen>, or \\lastbox. A hbox specification is either 'to<dimen>' or 'spread<dimen>' or empty, governing glue setting inside the box. In math modes an additional \\vcenter form exists. Characters and rules are not regarded as hboxi.",
+        "guidance": "Use these forms to create and manipulate boxes explicitly. Remember 'to' and 'spread' control internal glue, and that copying vs boxing differs (\\box empties the register; \\copy does not)."
+      },
+      {
+        "name": "\\lastbox semantics and restrictions",
+        "description": "\\lastbox removes the last item on the current horizontal or vertical list if it is an hbox or vbox and makes it \\lastbox; otherwise \\lastbox is void. Allowed in internal vertical mode, horizontal mode, and restricted horizontal mode, but not allowed to take a box from the current page in vertical mode. In math modes \\lastbox is always void. At the beginning of a paragraph, '{\\setbox0=\\lastbox}' removes the indentation box.",
+        "guidance": "Use \\lastbox to extract recently-built boxes, but be mindful of mode restrictions and that it won't pull boxes already shipped to the page."
+      },
+      {
+        "name": "\\unskip behavior and limitations",
+        "description": "\\unskip removes glue (or leaders) if the last thing on the current list is glue; you cannot remove glue from the current page by using \\unskip in vertical mode, but you can approximate that with '\\vskip-\\lastskip'.",
+        "guidance": "Use \\unskip to tidy trailing glue in lists; when working with page-level glue in vertical mode use \\vskip-\\lastskip instead."
+      },
+      {
+        "name": "leaders: \\leaders, \\cleaders, \\xleaders semantics",
+        "description": "Leaders repeat a box (or rule) to fill a given space. \\leaders aligns repeated boxes flush with the enclosing box's reference point (so dots align across lines); \\cleaders centers a tightly packed run of boxes leaving equal blank at left and right; \\xleaders distributes extra space equally between boxes (expanded leaders). If repeated box width is w and available space is q w \u2264 space < (q+1)w, then q copies are used (centered or expanded as per variant). Vertical leaders behave similarly using vertical glue; when a rule is used instead of a box it fills the space completely so all three leader types are equivalent.",
+        "guidance": "Use leaders for dot-fills, tables of contents, extensible decorations. Be aware alignment differences (important for aligning leaders across lines) and the special-case that if available space < 2w a \\leaders copy may not appear."
+      },
+      {
+        "name": "leaders with non-positive repeated-box dimensions",
+        "description": "If you specify horizontal leaders with a box whose width isn't positive, or vertical leaders with a box whose height-plus-depth isn't positive, TeX silently ignores the leaders and produces ordinary glue instead.",
+        "guidance": "Ensure repeated-box dimensions are positive when using leaders; otherwise you get plain glue (no repetitions)."
+      },
+      {
+        "name": "leaders affect enclosing box dimensions",
+        "description": "Horizontal leaders have height and depth when TeX calculates the size of the enclosing box (even if the number of replications is zero). Similarly, vertical leaders have width.",
+        "guidance": "Leaders influence layout calculations beyond simply placing copies; account for their vertical/horizontal extent when computing box sizes."
+      },
+      {
+        "name": "constructing extensible symbols (overbrace/underbrace, arrows)",
+        "description": "Macros like \\overbrace and \\underbrace combine characters with rules (fonts like cmex10 contain symbols with appropriate dimensions). More complex macros (e.g., \\overrightarrow) use boxes with leaders and carefully chosen backspacing so the middle repeatable piece tiles correctly; sometimes fractional numbers of repeat units require compensating backspace to align ends.",
+        "guidance": "To build extensible symbols, combine glyphs with leaders/rules and add backspacing to correct small alignment offsets; study plain-TeX macro recipes (Appendix B) for practical techniques."
+      },
+      {
+        "name": "whatsits: mechanism for extensions and portability caveat",
+        "description": "Whatsits are a general mechanism to incorporate special printing applications as extensions to TeX (so system-level features can be accommodated without changing core code). They allow new things in boxes but reduce portability across different TeX implementations.",
+        "guidance": "Use whatsits (e.g., specials) sparingly; they enable device-specific features but can make documents nonportable."
+      },
+      {
+        "name": "file output primitives (\\openout, \\closeout, \\write, \\immediate) and stream semantics",
+        "description": "You can \\openout<stream>=<filename> and \\closeout<stream>, and use \\write<stream>{<token list>} to write a line. Filenames usually get '.tex' appended if no extension given. If the stream number is negative or >15 or the stream is not open, output goes to the log file and terminal unless number is negative. Plain TeX's \\newwrite allocates output streams from 0..15. Output streams are independent of input streams.",
+        "guidance": "Manage output streams carefully; be aware of stream-number ranges, default filename extension, and that \\newwrite is provided to obtain stream numbers safely."
+      },
+      {
+        "name": "deferred execution of \\write whatsits and rationale",
+        "description": "The \\openout, \\closeout, and \\write commands are not performed when TeX sees them; TeX places them into whatsit items which are output only when the whatsit is shipped out to the dvi file as part of a larger box. The token list of a \\write is stored without macro expansion; expansion occurs later during \\shipout. This delay ensures correct page-number references (e.g., an index) because the exact page a paragraph is shipped on is unknown when the \\write occurs.",
+        "guidance": "Expect \\write to be delayed and expanded at shipout time; do not rely on immediate side effects of \\write in mid-paragraph. Example: '\\write\\inx{example: \\the\\count0}' will write the page number at shipout time."
+      }
+    ]
+  }
+}

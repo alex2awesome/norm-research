@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a0d5c1717da8.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a0d5c1717da8.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39713,
+  "model": "gpt-5-mini",
+  "elapsed_s": 41.489869833996636,
+  "input_tokens": 12703,
+  "output_tokens": 3134,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine-learning and formal-methods researchers working on automated theorem proving and proof assistant tooling",
+    "subtask_short": "llm-based theorem proving evaluation",
+    "subtask_description": "Evaluation and methodological guidance for using large language models to generate and repair formal proofs (Isabelle/HOL) and for comparing LLM-based approaches to search-based and hammer-based methods. Focuses on metrics, experimental design choices (data splits, inference cost), and promising future directions.",
+    "subtask_keywords": [
+      "theorem_proving",
+      "llm",
+      "isabelle_hol",
+      "proof_repair",
+      "benchmarking"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Model scaling improves theorem proving performance",
+        "description": "Theorem proving performance improves with the scale of the language model. (RA4)",
+        "guidance": "Empirically observe larger models (e.g., 62b) outperform smaller models (e.g., 8b) on proof success rate. Note caveat: insufficient hyperparameter tuning on larger models due to higher cost may hide greater potential gains."
+      },
+      {
+        "name": "Evaluate proof success vs inference cost (efficiency)",
+        "description": "Measure the ratio of theorems proven against the number of proof attempts or overall inference cost (Figure 6).",
+        "guidance": "Define inference cost as the number of model invocations (e.g., generation + repair steps). Compare strategies (generate-only, generate+repair, multiple repairs) at equal inference cost. Example: generate+repair with cost 2 proves 24.9% of test theorems; adding a second repair raises to 26.2% (cost 3). Report proof rate as a function of inference cost and number of attempts."
+      },
+      {
+        "name": "Contextual generation improves performance",
+        "description": "Providing context to the generation model improves proof generation performance (generation model with context outperforms without).",
+        "guidance": "Compare generation with and without access to surrounding project/contextual information; demonstrate performance gains when context is available (Figure 6 comparisons between 8b/62b with context vs without)."
+      },
+      {
+        "name": "Complementarity of LLM-based and search/hammers",
+        "description": "LLM-based methods and search-based (and hammer-based) methods are complementary; their union can substantially increase proving power. (RA5)",
+        "guidance": "Report combined performance (e.g., union of Baldur and Thor proves 65.7% of the theorems vs each alone). Interpret orthogonality of their improvements and consider hybrid/ensemble approaches."
+      },
+      {
+        "name": "Premise selection and use of hammers matter",
+        "description": "Premise selection may be particularly useful; Thor\u2019s use of Sledgehammer and premise selection likely contributes to its superior performance on some problem types.",
+        "guidance": "When comparing methods, account for whether premise-selection tools or automated theorem proving backends are used. Consider integrating premise selection or Sledgehammer-like components to improve coverage on mathematics/computer-science problems."
+      },
+      {
+        "name": "Ability to employ tactics (coverage of proof techniques)",
+        "description": "Hammers lack the ability to employ certain tactics (e.g., induction), limiting their ability to prove some classes of theorems; evaluation should consider coverage across tactic classes.",
+        "guidance": "Classify proof problems by tactic requirements and report which techniques each method can handle. Use this to explain strengths/weaknesses of hammers vs search-based or LLM-based approaches."
+      },
+      {
+        "name": "Use proof repair and error messages as a task",
+        "description": "Use error messages produced by failing proof attempts as input to a proof repair model; the proof repair task (with error messages) is a new ML task that improves proof synthesis.",
+        "guidance": "Train repair models to take erroneous proofs and accompanying error messages to produce corrected proofs. Demonstrated benefit: generate-and-repair pipeline improves overall proving performance. Note design detail: error messages often report the first occurring error, biasing repair training data toward early-line fixes."
+      },
+      {
+        "name": "Design repair training data to reflect multi-step repair needs",
+        "description": "Repair models learn primarily to address the types of errors they see (often early-line errors); training data should better mirror the kinds of changes needed for subsequent repair attempts.",
+        "guidance": "Suggested approaches: create training examples by concatenating the first few lines of human-written ground-truth proofs as prefixes and sampling the model for the rest; if the concatenated attempt fails, use it as a repair-training example. Focus on making repair data represent later-stage errors, not only first-line failures."
+      },
+      {
+        "name": "Learnable proof search via generate+repair",
+        "description": "Integrate generation and repair models into a learnable proof search strategy: (1) sample candidates with generation model, (2) repair them, (3) iterate repairing repairs.",
+        "guidance": "Treat the sequence of generation/repair model calls as a search process and measure its effectiveness relative to pure generation or classical search-based strategies. Consider sampling temperatures and number of repair iterations; account for inference cost when comparing."
+      },
+      {
+        "name": "Data split choice must match evaluation goals (theorem-wise vs project-wise)",
+        "description": "The choice of training/test data split (theorem-wise vs project-wise) corresponds to different evaluation goals and should be selected according to intended use.",
+        "guidance": "Theorem-wise splits (used by PISA) allow models to use nearby project context and are apt when integrating tools into existing proof developments. Project-wise splits (used by CoqGym) evaluate generalization to entirely new projects and suit tools intended to help on new developments. Report results under different splits when appropriate."
+      },
+      {
+        "name": "Cross-proof-assistant evaluation",
+        "description": "Evaluate techniques across multiple proof assistants to understand generality and to allow fairer comparisons.",
+        "guidance": "Port developed methods across assistants and/or build cross-proof-assistant benchmark suites; be aware that problem distributions differ across assistants and that benchmarks like MiniF2F may be unevenly represented across systems."
+      },
+      {
+        "name": "Use established benchmarks for fair comparisons",
+        "description": "Use established, assistant-specific benchmark suites (e.g., Isabelle/HOL benchmark, PISA) to fairly compare methods and increase generalization likelihood.",
+        "guidance": "Choose benchmarks that match the target assistant and be explicit about splits and metrics. Example: authors used an Isabelle/HOL benchmark to compare Baldur with prior work."
+      },
+      {
+        "name": "Report per-topic/problem-category performance",
+        "description": "Break down proof success rates by topic/classification (e.g., AFP topics: computer science, logic, mathematics, tools) to reveal relative strengths.",
+        "guidance": "Use provided topic labels (from authors of developments) to compute per-topic proof rates and number of theorems; e.g., Table 7 shows differing performance for Baldur vs Thor across topics (Baldur better on tools, similar on logic, lower on mathematics/computer science)."
+      },
+      {
+        "name": "Temperature and decoding choices affect performance",
+        "description": "Sampling temperature and decoding strategy influence proof generation results (experiments report results at temperatures like t=0 and t=0.8).",
+        "guidance": "Report temperature used and compare deterministic (t=0) sampling vs stochastic (t>0) sampling. In the paper, sampling with temperature 0 was used for certain multi-step generate+repair experiments; other results use t=0.8."
+      },
+      {
+        "name": "Inference cost accounting and fair cost-based comparisons",
+        "description": "When comparing methods, count and account for inference cost (e.g., number of model calls) so methods with different computation patterns can be fairly compared.",
+        "guidance": "Define cost units (e.g., cost per generation or repair call) and report proof rates at fixed inference costs. Example: a protocol that samples once, repairs twice has inference cost 3 (1 generation + 2 repairs). Compare strategies at equal total cost."
+      },
+      {
+        "name": "Prover acts as an absolute oracle for correctness",
+        "description": "Use the proof assistant's checker as an absolute oracle: if it accepts a proof, the proof is guaranteed correct, so evaluation can treat prover verification as definitive.",
+        "guidance": "This property differentiates theorem proving from program repair: it prevents 'plausible but incorrect' solutions\u2014if a proof checks, it is correct. Report proof checking as the final correctness metric."
+      },
+      {
+        "name": "Consideration of training-data quantity/quality and language differences across assistants",
+        "description": "Differences in training data size/quality and language complexity across proof assistants affect achievable proof rates and must be considered in comparisons.",
+        "guidance": "Lower automatic proving fractions for some assistants (e.g., Diva for Coq proves 33.8%) may reflect limited training data, differences in benchmark complexity, or fundamental language differences. Use caution interpreting cross-assistant differences."
+      },
+      {
+        "name": "Use union/ensemble of orthogonal approaches to maximize coverage",
+        "description": "Combining orthogonal methods (e.g., Baldur + Thor) can substantially increase overall automated proving coverage (union proved 65.7%).",
+        "guidance": "When reporting results, include ensemble/union metrics in addition to per-method metrics to illustrate complementarity. Explore hybrid pipelines that integrate strengths (LLM generation, Sledgehammer-based premise selection, search-based stepwise synthesis)."
+      }
+    ]
+  }
+}
