@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>byteshare.io - Secure File Storage</title>
+    <!--
+      SECURITY FIX: Content Security Policy.
+      Restricts what resources the page can load, significantly reducing the blast radius
+      of any XSS vulnerability — an injected script cannot load arbitrary external
+      resources or exfiltrate data to attacker-controlled servers.
+
+      'unsafe-inline' is required here because this is a single-file SPA with inline JS.
+      To harden further: move JS to an external file and add a per-request nonce or hash
+      per script tag, then remove 'unsafe-inline' entirely.
+
+      KNOWN RISK — JWT tokens in localStorage: tokens are currently stored in localStorage,
+      readable by any JS on the page.  Recommended fix: store tokens in httpOnly cookies
+      served by a server-side BFF (Backend For Frontend) proxy.  Intermediate step:
+      use sessionStorage for accessToken/idToken; keep only refreshToken in localStorage.
+    -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;
+                   style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;
+                   connect-src 'self' https://*.amazonaws.com https://*.amazoncognito.com https://api.stripe.com;
+                   img-src 'self' data: https:;
+                   font-src 'self' https:;
+                   frame-src https://js.stripe.com https://hooks.stripe.com https://*.amazonaws.com;
+                   media-src https://*.amazonaws.com;
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'none';
+                   upgrade-insecure-requests;">
+    <link rel="stylesheet" href="tailwind.min.css">
+    <script src="config.js"></script>
+    <style>
+        /* iOS safe-area support for fixed-position elements */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        }
+        /* Normalise selects on iOS Safari */
+        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        /* Mobile hamburger menu */
+        .mobile-menu-btn { display: none; }
+        @media (max-width: 640px) {
+            .mobile-menu-btn { display: inline-flex; }
+            .header-nav-links { display: none; }
+            .header-nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; right: 0; background: #1f2937; border: 1px solid #374151; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); padding: 0.5rem 0; min-width: 180px; z-index: 50; }
+            .header-nav-links.open > * { padding: 0.625rem 1rem; color: #e5e7eb; }
+        }
+        /* Share action icon buttons */
+        .share-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: #9ca3af; transition: color 0.15s, background-color 0.15s; cursor: pointer; border: none; background: none; position: relative; }
+        .share-btn:hover { color: #818cf8; background-color: #312e81; }
+        .share-btn:focus-visible { outline: 2px solid #4f46e5; outline-offset: 1px; }
+        .share-btn svg { width: 18px; height: 18px; pointer-events: none; }
+        @media (pointer: coarse) { .share-btn { width: 40px; height: 40px; } }
+        /* QR popover */
+        .qr-popover { position: absolute; bottom: calc(100% + 8px); right: 0; background: #1f2937; border: 1px solid #374151; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); padding: 16px; z-index: 60; width: 240px; text-align: center; }
+        .qr-popover::after { content: ''; position: absolute; top: 100%; right: 16px; border: 8px solid transparent; border-top-color: #1f2937; }
+        .qr-popover canvas { display: block; margin: 0 auto 8px; border-radius: 4px; }
+        /* Upload progress bar animation */
+        @keyframes progressPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        .progress-bar-active { animation: progressPulse 1.5s ease-in-out infinite; }
+        /* Ensure touch targets are at least 44px */
+        @media (pointer: coarse) {
+            .touch-target { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="dark bg-gray-950">
+    <div id="app"></div>
+
+    <script>
+        // Analytics stub — track() calls left in place as no-ops for
+        // easy re-integration with a future analytics provider.
+        function track() {}
+        function trackPageView() {}
+
+        // =========================================================
+        // CONFIGURATION — loaded from config.js (shared with admin.html)
+        // Edit config.js to set your AWS, Cognito, and Stripe values.
+        // =========================================================
+
+        // Retention tiers — display metadata only, not deployment config
+        const TIERS = {
+            '7d':      { label: '7 Days',    description: 'Files deleted after 7 days (default)' },
+            '30d':     { label: '30 Days',   description: 'Files deleted after 30 days' },
+            '90d':     { label: '90 Days',   description: 'Files deleted after 90 days' },
+            '1y':      { label: '1 Year',    description: 'Files deleted after 1 year' },
+            '3y':      { label: '3 Years',   description: 'Files deleted after 3 years' },
+            'forever': { label: 'Permanent', description: 'Files kept indefinitely' },
+        };
+
+        // =========================================================
+        // UTILITY FUNCTIONS
+        // =========================================================
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), sizes.length - 1);
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(
+                    atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
+                );
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).format(date);
+        }
+
+        // =========================================================
+        // TOAST NOTIFICATION SYSTEM
+        // =========================================================
+
+        function showToast(message, type = 'success') {
+            const existing = document.getElementById('toastContainer');
+            if (existing) existing.remove();
+
+            const colors = {
+                success: 'bg-green-600',
+                error:   'bg-red-600',
+                info:    'bg-indigo-600',
+                warning: 'bg-amber-600'
+            };
+
+            const toast = document.createElement('div');
+            toast.id = 'toastContainer';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            toast.className = [
+                'fixed bottom-6 right-4 left-4 sm:left-auto sm:right-6 z-50 text-white px-5 py-3',
+                'rounded-lg shadow-lg text-sm font-medium max-w-sm sm:ml-auto',
+                'transition-opacity duration-300 safe-bottom',
+                colors[type] || colors.success
+            ].join(' ');
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            // Fade out then remove
+            setTimeout(() => { toast.style.opacity = '0'; }, 3500);
+            setTimeout(() => { if (toast.parentNode) toast.remove(); }, 4000);
+        }
+
+        // =========================================================
+        // TOKEN MANAGEMENT
+        // =========================================================
+
+        function getAccessToken() {
+            return localStorage.getItem('accessToken');
+        }
+
+        function getIdToken() {
+            return localStorage.getItem('idToken');
+        }
+
+        function getRefreshToken() {
+            return localStorage.getItem('refreshToken');
+        }
+
+        async function refreshTokens() {
+            const refreshToken = getRefreshToken();
+            if (!refreshToken) {
+                redirectToLogin();
+                return false;
+            }
+
+            try {
+                const result = await cognitoRequest('InitiateAuth', {
+                    AuthFlow: 'REFRESH_TOKEN_AUTH',
+                    ClientId: CONFIG.CLIENT_ID,
+                    AuthParameters: {
+                        REFRESH_TOKEN: refreshToken,
+                    },
+                });
+                const tokens = result.AuthenticationResult;
+                localStorage.setItem('idToken', tokens.IdToken);
+                localStorage.setItem('accessToken', tokens.AccessToken);
+                // Refresh token is not returned on refresh — keep the existing one
+                return true;
+            } catch (e) {
+                redirectToLogin();
+                return false;
+            }
+        }
+
+        function isTokenExpired(token) {
+            const payload = parseJwt(token);
+            if (!payload || !payload.exp) return true;
+            return Date.now() >= payload.exp * 1000;
+        }
+
+        // =========================================================
+        // API HELPERS
+        // =========================================================
+
+        // Last error details from apiCall — callers can inspect after a null return
+        let lastApiError = null;
+
+        async function apiCall(method, path, body = null) {
+            lastApiError = null;
+            let token = getIdToken();
+
+            if (!token || isTokenExpired(token)) {
+                const refreshed = await refreshTokens();
+                if (!refreshed) return null;
+                token = getIdToken();
+            }
+
+            const options = {
+                method,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            try {
+                const response = await fetch(CONFIG.API_URL + path, options);
+
+                if (response.status === 401) {
+                    const refreshed = await refreshTokens();
+                    if (!refreshed) return null;
+                    // Retry request with new token
+                    options.headers['Authorization'] = `Bearer ${getIdToken()}`;
+                    const retryResp = await fetch(CONFIG.API_URL + path, options);
+                    if (!retryResp.ok) {
+                        lastApiError = { status: retryResp.status };
+                        return null;
+                    }
+                    return await retryResp.json();
+                }
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({}));
+                    lastApiError = { status: response.status, ...error };
+                    return null;
+                }
+
+                return await response.json();
+            } catch (e) {
+                lastApiError = { status: 0, error: e.message };
+                return null;
+            }
+        }
+
+        // =========================================================
+        // AUTHENTICATION & OAUTH
+        // =========================================================
+
+        function redirectToLogin() {
+            window.location.hash = '#/login';
+        }
+
+        const COGNITO_URL = `https://cognito-idp.${CONFIG.REGION}.amazonaws.com/`;
+
+        // Auth state for multi-step flows
+        let authState = {
+            mode: 'signin',  // 'signin' | 'signup' | 'confirm' | 'forgot' | 'reset'
+            email: '',
+            password: '',
+            session: null,
+            tosAccepted: false,  // TOS checkbox on signup form
+        };
+
+        async function cognitoRequest(action, payload) {
+            const resp = await fetch(COGNITO_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-amz-json-1.1',
+                    'X-Amz-Target': `AWSCognitoIdentityProviderService.${action}`,
+                },
+                body: JSON.stringify(payload),
+            });
+            const data = await resp.json();
+            if (!resp.ok) throw new Error(data.message || data.__type || 'Auth request failed');
+            return data;
+        }
+
+        async function signIn() {
+            try {
+                const result = await cognitoRequest('InitiateAuth', {
+                    AuthFlow: 'USER_PASSWORD_AUTH',
+                    ClientId: CONFIG.CLIENT_ID,
+                    AuthParameters: {
+                        USERNAME: authState.email,
+                        PASSWORD: authState.password,
+                    },
+                });
+                const tokens = result.AuthenticationResult;
+                localStorage.setItem('idToken', tokens.IdToken);
+                localStorage.setItem('accessToken', tokens.AccessToken);
+                localStorage.setItem('refreshToken', tokens.RefreshToken);
+                track('sign_in_complete');
+                await loadUserData();
+                window.location.hash = '#/dashboard';
+                renderApp();
+            } catch (e) {
+                if (e.message.includes('User is not confirmed')) {
+                    authState.mode = 'confirm';
+                    renderApp();
+                    showToast('Please verify your email first', 'warning');
+                } else {
+                    showToast(e.message, 'error');
+                }
+            }
+        }
+
+        async function signUp() {
+            if (!authState.tosAccepted) {
+                showToast('You must agree to the Terms of Service, Acceptable Use Policy, and Privacy Policy to create an account.', 'error');
+                return;
+            }
+            try {
+                await cognitoRequest('SignUp', {
+                    ClientId: CONFIG.CLIENT_ID,
+                    Username: authState.email,
+                    Password: authState.password,
+                    UserAttributes: [
+                        { Name: 'email', Value: authState.email },
+                        { Name: 'custom:tosVersion', Value: CONFIG.LEGAL_VERSIONS.tos },
+                        { Name: 'custom:aupVersion', Value: CONFIG.LEGAL_VERSIONS.aup },
+                        { Name: 'custom:privacyVersion', Value: CONFIG.LEGAL_VERSIONS.privacy },
+                    ],
+                });
+                authState.mode = 'confirm';
+                renderApp();
+                showToast('Check your email for a verification code', 'info');
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function confirmSignUp() {
+            const code = document.getElementById('confirmCode')?.value?.trim();
+            if (!code) { showToast('Enter the verification code', 'error'); return; }
+            try {
+                await cognitoRequest('ConfirmSignUp', {
+                    ClientId: CONFIG.CLIENT_ID,
+                    Username: authState.email,
+                    ConfirmationCode: code,
+                });
+                showToast('Email verified! Signing you in...', 'success');
+                await signIn();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function resendConfirmationCode() {
+            try {
+                await cognitoRequest('ResendConfirmationCode', {
+                    ClientId: CONFIG.CLIENT_ID,
+                    Username: authState.email,
+                });
+                showToast('New code sent to your email', 'success');
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function forgotPassword() {
+            try {
+                await cognitoRequest('ForgotPassword', {
+                    ClientId: CONFIG.CLIENT_ID,
+                    Username: authState.email,
+                });
+                authState.mode = 'reset';
+                renderApp();
+                showToast('Check your email for a reset code', 'info');
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function confirmForgotPassword() {
+            const code = document.getElementById('resetCode')?.value?.trim();
+            const newPass = document.getElementById('newPassword')?.value;
+            if (!code || !newPass) { showToast('Enter code and new password', 'error'); return; }
+            try {
+                await cognitoRequest('ConfirmForgotPassword', {
+                    ClientId: CONFIG.CLIENT_ID,
+                    Username: authState.email,
+                    ConfirmationCode: code,
+                    Password: newPass,
+                });
+                authState.password = newPass;
+                showToast('Password reset! Signing you in...', 'success');
+                await signIn();
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        async function handleOAuthCallback() {
+            // No longer using OAuth redirect flow — auth is handled inline
+        }
+
+        function logout() {
+            track('sign_out');
+            localStorage.clear();
+            authState = { mode: 'signin', email: '', password: '', session: null };
+            window.location.hash = '#/login';
+            renderApp();
+        }
+
+        // =========================================================
+        // APP STATE & ROUTING
+        // =========================================================
+
+        let appState = {
+            currentView: '#/login',
+            user: null,
+            uploads: [],
+            paymentMessage: null,
+            // Account & billing state
+            depositPaid: false,
+            freeUploadsUsed: 0,
+            accountCredit: 0,
+            depositAmount: CONFIG.DEFAULT_DEPOSIT_AMOUNT,
+            freeSample: Object.assign({}, CONFIG.DEFAULT_FREE_SAMPLE),
+            uploadConcurrency: 8,          // Default; overridden by admin config
+            uploadTargetParts: 1000,        // Adaptive part sizing: target number of parts
+            uploadLargeFileConcurrency: 12, // Concurrent streams for files > 50 GB
+            // User settings (loaded from GET /api/my-settings)
+            maxDownloadsPerFile: 100,       // Per-file monthly download cap (user default)
+            downloadNotificationsEnabled: true,
+            // Legal consent tracking (loaded from GET /api/my-account)
+            // Initialised to current versions to avoid a false re-consent flash
+            // before the /my-account API call returns.  loadUserData() overwrites
+            // these with the user's actual accepted versions from DynamoDB.
+            tosAcceptedVersion: CONFIG.LEGAL_VERSIONS.tos,
+            aupAcceptedVersion: CONFIG.LEGAL_VERSIONS.aup,
+            privacyAcceptedVersion: CONFIG.LEGAL_VERSIONS.privacy,
+        };
+
+        function getRoute() {
+            const hash = (window.location.hash || '#/login').split('?')[0];
+
+            // Share view is public — no auth required
+            if (hash.startsWith('#/share')) {
+                return '#/share';
+            }
+
+            const idToken = getIdToken();
+
+            if (!idToken || isTokenExpired(idToken)) {
+                return '#/login';
+            }
+
+            return hash || '#/dashboard';
+        }
+
+        async function loadUserData() {
+            const idToken = getIdToken();
+            if (!idToken) return;
+
+            const payload = parseJwt(idToken);
+            if (payload) {
+                appState.user = {
+                    email: payload.email || payload.sub,
+                    id: payload.sub,
+                    isAdmin: payload['cognito:groups'] && payload['cognito:groups'].includes('admin')
+                };
+            }
+
+            // Load account status (includes deposit, balance, free sample info)
+            const accountData = await apiCall('GET', '/my-account');
+            if (accountData) {
+                appState.depositPaid = accountData.depositPaid || false;
+                appState.freeUploadsUsed = accountData.freeUploadsUsed || 0;
+                appState.accountCredit = accountData.accountCredit || 0;
+                appState.depositAmount = accountData.depositAmount || CONFIG.DEFAULT_DEPOSIT_AMOUNT;
+                appState.freeSample = accountData.freeSample || appState.freeSample;
+                appState.uploadConcurrency = accountData.uploadConcurrency || 8;
+                appState.uploadTargetParts = accountData.uploadTargetParts || 1000;
+                appState.uploadLargeFileConcurrency = accountData.uploadLargeFileConcurrency || 12;
+                // Legal consent versions
+                appState.tosAcceptedVersion = accountData.tosAcceptedVersion || '';
+                appState.aupAcceptedVersion = accountData.aupAcceptedVersion || '';
+                appState.privacyAcceptedVersion = accountData.privacyAcceptedVersion || '';
+            } else {
+                // Surface failure so user knows their account data didn't load
+                showToast('Could not load account info — some details may be out of date.', 'warning');
+            }
+
+            // If the user hasn't accepted the current legal terms, they'll be
+            // shown the re-consent wall and can't interact with the dashboard.
+            // Skip loading uploads and settings — avoids unnecessary API calls
+            // and prevents confusing error toasts behind the consent screen.
+            // loadUserData() is called again after acceptTerms() succeeds.
+            if (needsReConsent()) return;
+
+            // Load uploads
+            const uploadsData = await apiCall('GET', '/my-uploads');
+            if (uploadsData) {
+                appState.uploads = uploadsData.uploads || [];
+            } else {
+                showToast('Could not load your uploads list. Please refresh to try again.', 'warning');
+            }
+
+            // Load user settings (download cap, notification prefs)
+            const settingsData = await apiCall('GET', '/my-settings');
+            if (settingsData) {
+                appState.retentionTier = settingsData.retentionTier ?? '7d';
+                appState.maxDownloadsPerFile = settingsData.maxDownloadsPerFile ?? 100;
+                appState.downloadNotificationsEnabled = settingsData.downloadNotificationsEnabled ?? true;
+            }
+        }
+
+        /**
+         * After Stripe redirects back with ?deposit=success, the webhook
+         * that sets depositPaid=true in DynamoDB may not have fired yet.
+         * Poll /my-account until the deposit is confirmed so uploads
+         * aren't blocked by the race condition.
+         */
+        appState.depositVerifying = false;
+
+        async function waitForDepositConfirmation() {
+            const hashQuery = window.location.hash.split('?')[1] || '';
+            const urlParams = new URLSearchParams(hashQuery || window.location.search);
+            if (urlParams.get('deposit') !== 'success') return;
+            if (appState.depositPaid) return; // Already confirmed
+
+            appState.depositVerifying = true;
+            renderApp();
+
+            const MAX_ATTEMPTS = 15;
+            const POLL_INTERVAL_MS = 2000;
+
+            for (let i = 0; i < MAX_ATTEMPTS; i++) {
+                await new Promise(r => setTimeout(r, POLL_INTERVAL_MS));
+                const data = await apiCall('GET', '/my-account');
+                if (data && data.depositPaid) {
+                    appState.depositPaid = true;
+                    appState.accountCredit = data.accountCredit || 0;
+                    appState.freeUploadsUsed = data.freeUploadsUsed || 0;
+                    appState.freeSample = data.freeSample || appState.freeSample;
+                    appState.depositVerifying = false;
+                    renderApp();
+                    return;
+                }
+            }
+
+            // Timed out — webhook may have failed
+            appState.depositVerifying = false;
+            showToast('Deposit verification is taking longer than expected. Please refresh the page in a moment.', 'warning');
+            renderApp();
+        }
+
+        // =========================================================
+        // LEGAL CONSENT
+        // =========================================================
+
+        function needsReConsent() {
+            return appState.tosAcceptedVersion !== CONFIG.LEGAL_VERSIONS.tos
+                || appState.aupAcceptedVersion !== CONFIG.LEGAL_VERSIONS.aup
+                || appState.privacyAcceptedVersion !== CONFIG.LEGAL_VERSIONS.privacy;
+        }
+
+        async function acceptTerms() {
+            try {
+                const result = await apiCall('POST', '/accept-terms', {
+                    tosVersion: CONFIG.LEGAL_VERSIONS.tos,
+                    aupVersion: CONFIG.LEGAL_VERSIONS.aup,
+                    privacyVersion: CONFIG.LEGAL_VERSIONS.privacy,
+                });
+                if (result) {
+                    appState.tosAcceptedVersion = CONFIG.LEGAL_VERSIONS.tos;
+                    appState.aupAcceptedVersion = CONFIG.LEGAL_VERSIONS.aup;
+                    appState.privacyAcceptedVersion = CONFIG.LEGAL_VERSIONS.privacy;
+                    showToast('Terms accepted. Welcome to byteshare.io!', 'info');
+                    // Consent is now current, so loadUserData() will proceed past
+                    // the needsReConsent() guard and fetch uploads + settings.
+                    await loadUserData();
+                    renderApp();
+                } else {
+                    showToast('Could not save your consent. Please try again.', 'error');
+                }
+            } catch (e) {
+                showToast('Error accepting terms: ' + e.message, 'error');
+            }
+        }
+
+        function renderReConsentView() {
+            return `
+                <div class="min-h-screen flex items-center justify-center bg-gray-950 py-12 px-4">
+                    <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-8">
+                        <h1 class="text-2xl font-bold text-center text-indigo-500 mb-2">Updated Terms</h1>
+                        <p class="text-center text-gray-400 text-sm mb-6">We've updated our legal documents. Please review and accept them to continue using byteshare.io.</p>
+                        <div class="space-y-3 mb-6">
+                            <a href="legal.html#tos" target="_blank" rel="noopener" class="flex items-center justify-between w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 hover:border-indigo-500 transition">
+                                <span>Terms of Service</span>
+                                <span class="text-xs text-gray-500">${CONFIG.LEGAL_VERSIONS.tos}</span>
+                            </a>
+                            <a href="legal.html#aup" target="_blank" rel="noopener" class="flex items-center justify-between w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 hover:border-indigo-500 transition">
+                                <span>Acceptable Use Policy</span>
+                                <span class="text-xs text-gray-500">${CONFIG.LEGAL_VERSIONS.aup}</span>
+                            </a>
+                            <a href="legal.html#privacy" target="_blank" rel="noopener" class="flex items-center justify-between w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 hover:border-indigo-500 transition">
+                                <span>Privacy Policy</span>
+                                <span class="text-xs text-gray-500">${CONFIG.LEGAL_VERSIONS.privacy}</span>
+                            </a>
+                        </div>
+                        <label class="flex items-start gap-3 cursor-pointer mb-6">
+                            <input type="checkbox" id="reConsentCheckbox" onchange="document.getElementById('reConsentBtn').disabled=!this.checked; document.getElementById('reConsentBtn').classList.toggle('opacity-50',!this.checked)"
+                                class="mt-1 w-4 h-4 rounded border-gray-600 bg-gray-800 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-0 accent-indigo-500">
+                            <span class="text-xs text-gray-400 leading-relaxed">I have reviewed and agree to the updated <a href="legal.html#tos" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 underline">Terms of Service</a>, <a href="legal.html#aup" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 underline">Acceptable Use Policy</a>, and <a href="legal.html#privacy" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 underline">Privacy Policy</a>.</span>
+                        </label>
+                        <button id="reConsentBtn" onclick="acceptTerms()" disabled class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg font-medium text-white opacity-50">
+                            Accept &amp; Continue
+                        </button>
+                        <div class="mt-6 text-center">
+                            <button onclick="logout()" class="text-gray-500 hover:text-gray-400 text-sm transition">Sign out</button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        // =========================================================
+        // VIEWS
+        // =========================================================
+
+        function renderLoginView() {
+            if (authState.mode === 'confirm') {
+                return `
+                    <div class="min-h-screen flex items-center justify-center bg-gray-950 py-12 px-4">
+                        <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-8">
+                            <h1 class="text-4xl font-bold text-center text-indigo-500 mb-2">byteshare.io</h1>
+                            <p class="text-center text-gray-400 text-sm mb-8">Check your email for a verification code</p>
+                            <div class="space-y-4">
+                                <input id="confirmCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="Verification code"
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <button onclick="confirmSignUp()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg font-medium text-white">
+                                    Verify Email
+                                </button>
+                                <button onclick="resendConfirmationCode()" class="w-full py-2 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">
+                                    Resend code
+                                </button>
+                                <button onclick="authState.mode='signin'; renderApp()" class="w-full py-2 text-gray-500 hover:text-gray-400 text-sm transition">
+                                    &larr; Back to sign in
+                                </button>
+                            </div>
+                            <div class="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs">&copy; 2026 byteshare.io &middot; <a href="legal.html#tos" class="hover:text-gray-400 transition">Terms</a> &middot; <a href="legal.html#privacy" class="hover:text-gray-400 transition">Privacy</a> &middot; <a href="legal.html#aup" class="hover:text-gray-400 transition">Acceptable Use</a></div>
+                        </div>
+                    </div>`;
+            }
+
+            if (authState.mode === 'forgot') {
+                return `
+                    <div class="min-h-screen flex items-center justify-center bg-gray-950 py-12 px-4">
+                        <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-8">
+                            <h1 class="text-4xl font-bold text-center text-indigo-500 mb-2">byteshare.io</h1>
+                            <p class="text-center text-gray-400 text-sm mb-8">Reset your password</p>
+                            <div class="space-y-4">
+                                <input id="forgotEmail" type="email" placeholder="Email address" value="${authState.email}"
+                                    oninput="authState.email=this.value"
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <button onclick="forgotPassword()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg font-medium text-white">
+                                    Send Reset Code
+                                </button>
+                                <button onclick="authState.mode='signin'; renderApp()" class="w-full py-2 text-gray-500 hover:text-gray-400 text-sm transition">
+                                    &larr; Back to sign in
+                                </button>
+                            </div>
+                            <div class="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs">&copy; 2026 byteshare.io &middot; <a href="legal.html#tos" class="hover:text-gray-400 transition">Terms</a> &middot; <a href="legal.html#privacy" class="hover:text-gray-400 transition">Privacy</a> &middot; <a href="legal.html#aup" class="hover:text-gray-400 transition">Acceptable Use</a></div>
+                        </div>
+                    </div>`;
+            }
+
+            if (authState.mode === 'reset') {
+                return `
+                    <div class="min-h-screen flex items-center justify-center bg-gray-950 py-12 px-4">
+                        <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-8">
+                            <h1 class="text-4xl font-bold text-center text-indigo-500 mb-2">byteshare.io</h1>
+                            <p class="text-center text-gray-400 text-sm mb-8">Enter the code and your new password</p>
+                            <div class="space-y-4">
+                                <input id="resetCode" type="text" inputmode="numeric" placeholder="Reset code"
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <input id="newPassword" type="password" placeholder="New password"
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <button onclick="confirmForgotPassword()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg font-medium text-white">
+                                    Reset Password
+                                </button>
+                                <button onclick="authState.mode='signin'; renderApp()" class="w-full py-2 text-gray-500 hover:text-gray-400 text-sm transition">
+                                    &larr; Back to sign in
+                                </button>
+                            </div>
+                            <div class="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-xs">&copy; 2026 byteshare.io &middot; <a href="legal.html#tos" class="hover:text-gray-400 transition">Terms</a> &middot; <a href="legal.html#privacy" class="hover:text-gray-400 transition">Privacy</a> &middot; <a href="legal.html#aup" class="hover:text-gray-400 transition">Acceptable Use</a></div>
+                        </div>
+                    </div>`;
+            }
+
+            // Default: signin / signup toggle
+            const isSignUp = authState.mode === 'signup';
+            return `
+                <div class="min-h-screen flex items-center justify-center bg-gray-950 py-12 px-4">
+                    <div class="max-w-md w-full bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-8">
+                        <h1 class="text-4xl font-bold text-center text-indigo-500 mb-2">byteshare.io</h1>
+                        <p class="text-center text-gray-400 text-sm mb-8">${isSignUp ? 'Create your account' : 'Share files. Pay only for what you use.'}</p>
+                        <div class="space-y-4">
+                            <input id="authEmail" type="email" placeholder="Email address" value="${authState.email}"
+                                oninput="authState.email=this.value"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <input id="authPassword" type="password" placeholder="Password"
+                                oninput="authState.password=this.value"
+                                onkeydown="if(event.key==='Enter'){${isSignUp ? 'signUp()' : 'signIn()'}}"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            ${isSignUp ? `<label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" id="tosCheckbox" onchange="authState.tosAccepted=this.checked; document.getElementById('signUpBtn').disabled=!this.checked; document.getElementById('signUpBtn').classList.toggle('opacity-50',!this.checked)"
+                                    class="mt-1 w-4 h-4 rounded border-gray-600 bg-gray-800 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-0 accent-indigo-500"
+                                    ${authState.tosAccepted ? 'checked' : ''}>
+                                <span class="text-xs text-gray-400 leading-relaxed">I agree to the <a href="legal.html#tos" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 underline">Terms of Service</a>, <a href="legal.html#aup" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 underline">Acceptable Use Policy</a>, and <a href="legal.html#privacy" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 underline">Privacy Policy</a>.</span>
+                            </label>` : ''}
+                            <button id="${isSignUp ? 'signUpBtn' : ''}" onclick="${isSignUp ? 'signUp()' : 'signIn()'}" ${isSignUp && !authState.tosAccepted ? 'disabled' : ''} class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 transition rounded-lg font-medium text-white ${isSignUp && !authState.tosAccepted ? 'opacity-50' : ''}">
+                                ${isSignUp ? 'Create Account' : 'Sign In'}
+                            </button>
+                            ${!isSignUp ? `<button onclick="authState.mode='forgot'; renderApp()" class="w-full py-2 text-gray-500 hover:text-gray-400 text-sm transition">Forgot password?</button>` : ''}
+                        </div>
+                        <div class="mt-6 text-center">
+                            <button onclick="authState.mode='${isSignUp ? 'signin' : 'signup'}'; renderApp()" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">
+                                ${isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+                            </button>
+                        </div>
+                        <!-- Pricing summary -->
+                        <div class="mt-8 pt-6 border-t border-gray-800">
+                            <div class="flex justify-center gap-6 mb-4">
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold text-indigo-400">$0.25<span class="text-sm font-normal text-gray-500">/GB/mo</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">Storage</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold text-indigo-400">$0.25<span class="text-sm font-normal text-gray-500">/GB</span></p>
+                                    <p class="text-xs text-gray-500 mt-1">Downloads</p>
+                                </div>
+                            </div>
+                            <p class="text-center text-gray-500 text-xs mb-1">Keep files 7 days to forever &mdash; same price regardless.</p>
+                            <p class="text-center text-gray-500 text-xs">Try a free sample, or get started for just $1.</p>
+                        </div>
+                        <div class="mt-6 text-center text-gray-500 text-xs">&copy; 2026 byteshare.io &middot; <a href="legal.html#tos" class="hover:text-gray-400 transition">Terms</a> &middot; <a href="legal.html#privacy" class="hover:text-gray-400 transition">Privacy</a> &middot; <a href="legal.html#aup" class="hover:text-gray-400 transition">Acceptable Use</a></div>
+                    </div>
+                </div>`;
+        }
+
+        function renderDashboardView() {
+            const user = appState.user;
+            const hashQuery = window.location.hash.split('?')[1] || '';
+            const urlParams = new URLSearchParams(hashQuery || window.location.search);
+            const paymentParam = urlParams.get('payment');
+            const depositParam = urlParams.get('deposit');
+
+            let paymentMessage = '';
+            if (depositParam === 'success') {
+                track('deposit_complete', { amount: appState.depositAmount });
+                if (appState.depositVerifying) {
+                    paymentMessage = `<div class="bg-yellow-900/30 border border-yellow-700/30 text-yellow-400 px-4 py-3 rounded mb-6 flex items-center gap-3">
+                        <svg class="animate-spin h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                        Verifying your deposit&hellip; This usually takes just a few seconds.
+                    </div>`;
+                } else if (appState.depositPaid) {
+                    paymentMessage = `<div class="bg-green-900/30 border border-green-700/30 text-green-400 px-4 py-3 rounded mb-6">Deposit confirmed! You now have $${appState.accountCredit.toFixed(2)} in account credit. Upload away!</div>`;
+                } else {
+                    paymentMessage = `<div class="bg-yellow-900/30 border border-yellow-700/30 text-yellow-400 px-4 py-3 rounded mb-6">Deposit payment received — waiting for confirmation. Please refresh if this persists.</div>`;
+                }
+            } else if (depositParam === 'cancelled') {
+                track('deposit_cancelled');
+                paymentMessage = '<div class="bg-red-900/30 border border-red-700/30 text-red-400 px-4 py-3 rounded mb-6">Deposit was cancelled. You can try again anytime.</div>';
+            } else if (paymentParam === 'success') {
+                track('payment_complete');
+                paymentMessage = '<div class="bg-green-900/30 border border-green-700/30 text-green-400 px-4 py-3 rounded mb-6">Payment successful! Your account has been updated.</div>';
+            } else if (paymentParam === 'cancelled') {
+                paymentMessage = '<div class="bg-red-900/30 border border-red-700/30 text-red-400 px-4 py-3 rounded mb-6">Payment was cancelled.</div>';
+            }
+
+            // Account status banner
+            let accountBanner = '';
+            const freeRemaining = Math.max(0, (appState.freeSample.maxFiles || 1) - appState.freeUploadsUsed);
+            if (!appState.depositPaid) {
+                if (freeRemaining > 0 && appState.freeSample.enabled) {
+                    // User still has free uploads available
+                    const fileWord = freeRemaining === 1 ? 'file' : 'files';
+                    accountBanner = `
+                        <div class="bg-indigo-900/30 border border-indigo-700/30 rounded-lg p-4 mb-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-semibold text-indigo-300">Welcome! Try byteshare.io free</p>
+                                    <p class="text-sm text-indigo-400 mt-1">Upload ${freeRemaining} ${fileWord} up to ${appState.freeSample.maxSizeMB} MB each, stored for ${appState.freeSample.retentionDays} days — no payment required.</p>
+                                </div>
+                                <span class="px-3 py-1 bg-indigo-600 text-white rounded-full text-xs font-bold">FREE SAMPLE</span>
+                            </div>
+                        </div>`;
+                } else {
+                    // Free samples exhausted — show upgrade CTA
+                    accountBanner = `
+                        <div class="bg-indigo-900/20 border border-indigo-700/30 rounded-lg p-5 mb-6">
+                            <div class="flex items-center justify-between flex-wrap gap-4">
+                                <div>
+                                    <p class="font-semibold text-indigo-300 text-lg">Get started for just $${appState.depositAmount.toFixed(2)}</p>
+                                    <p class="text-sm text-indigo-400/80 mt-1">Goes straight to your account credit. Upload any file size, pick any retention period, pay only for what you use.</p>
+                                </div>
+                                <button onclick="startDeposit()" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold text-lg whitespace-nowrap">
+                                    Unlock Uploads &mdash; $${appState.depositAmount.toFixed(2)}
+                                </button>
+                            </div>
+                        </div>`;
+                }
+            } else if (appState.accountCredit > 0) {
+                // Deposit paid, show credit balance
+                accountBanner = `
+                    <div class="bg-green-900/30 border border-green-700/30 rounded-lg p-3 mb-6 flex items-center justify-between">
+                        <p class="text-green-400 text-sm">Account credit: <strong>$${appState.accountCredit.toFixed(2)}</strong> — applied automatically to your next bill.</p>
+                        <span class="px-3 py-1 bg-green-600 text-white rounded-full text-xs font-bold">ACTIVE</span>
+                    </div>`;
+            }
+
+            // Sort uploads newest-first by upload date
+            const sortedUploads = [...appState.uploads].sort((a, b) =>
+                (b.uploadedAt || '').localeCompare(a.uploadedAt || '')
+            );
+
+            const uploadsTable = appState.uploads.length > 0
+                ? `
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-800/50 border-b border-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Filename</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Size</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Retention</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Uploaded</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Expires</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Downloads</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Status</th>
+                                    <th class="px-4 py-2 text-left font-semibold text-gray-300">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sortedUploads.map(upload => {
+                                    const tierLabel = TIERS[upload.retentionTier]?.label || upload.retentionTier;
+                                    const isDeleted = upload.status === 'deleted';
+                                    const isPending = upload.status === 'pending';
+                                    const isActive = upload.status === 'active';
+
+                                    // Status badge: active (green), pending (yellow pulse), deleted (gray)
+                                    let statusBadge;
+                                    if (isActive) {
+                                        statusBadge = '<span class="px-2 py-1 rounded text-xs font-semibold bg-green-900/30 text-green-400 border border-green-700/30">Active</span>';
+                                    } else if (isPending) {
+                                        statusBadge = '<span class="px-2 py-1 rounded text-xs font-semibold bg-yellow-900/30 text-yellow-400 border border-yellow-700/30 animate-pulse">Processing&hellip;</span>';
+                                    } else if (isDeleted) {
+                                        statusBadge = '<span class="px-2 py-1 rounded text-xs font-semibold bg-gray-800/50 text-gray-400 border border-gray-700/30">Deleted</span>';
+                                    } else {
+                                        statusBadge = `<span class="px-2 py-1 rounded text-xs font-semibold bg-gray-800/50 text-gray-400 border border-gray-700/30">${escapeHtml(upload.status)}</span>`;
+                                    }
+
+                                    return `
+                                        <tr class="border-b border-gray-800 hover:bg-gray-800/50 transition-colors" id="upload-${upload.uploadId}">
+                                            <td class="px-4 py-2 text-gray-200">${escapeHtml(upload.filename)}</td>
+                                            <td class="px-4 py-2 text-gray-400">${formatBytes(upload.fileSize)}</td>
+                                            <td class="px-4 py-2 text-gray-400">${tierLabel}</td>
+                                            <td class="px-4 py-2 text-gray-400">${formatDate(upload.uploadedAt)}</td>
+                                            <td class="px-4 py-2 text-gray-400">${upload.expiresAt && upload.expiresAt !== 'never' ? formatDate(upload.expiresAt) : 'Never'}</td>
+                                            <td class="px-4 py-2 text-gray-400">
+                                                <div class="flex flex-col gap-1">
+                                                    <span class="text-xs">${upload.downloadsThisMonth ?? 0} this mo${upload.maxDownloadsPerFile != null ? ` / ${Number(upload.maxDownloadsPerFile).toLocaleString()}` : ''}</span>
+                                                    ${isActive ? `
+                                                    <div class="flex items-center gap-1">
+                                                        <input id="dlcap-${upload.uploadId}"
+                                                               type="text" inputmode="numeric"
+                                                               placeholder="default"
+                                                               value="${upload.maxDownloadsPerFile != null ? upload.maxDownloadsPerFile : ''}"
+                                                               class="w-20 px-1.5 py-0.5 text-xs bg-gray-800 border border-gray-700 rounded text-gray-200 focus:border-indigo-500 focus:outline-none"
+                                                               title="Per-file download cap (blank = use account default of ${appState.maxDownloadsPerFile})" />
+                                                        <button onclick="updateFileDownloadCap('${upload.uploadId}')"
+                                                                class="px-1.5 py-0.5 text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded transition"
+                                                                title="Save per-file cap">Set</button>
+                                                        <span id="dlcap-status-${upload.uploadId}" class="text-xs text-gray-500 ml-1"></span>
+                                                    </div>` : `<span class="text-xs text-gray-600">${upload.maxDownloadsPerFile != null ? 'Cap: ' + Number(upload.maxDownloadsPerFile).toLocaleString() : 'Account default'}</span>`}
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-2">
+                                                ${statusBadge}
+                                            </td>
+                                            <td class="px-4 py-2">
+                                                ${(isActive || isPending) ? `
+                                                <div class="flex items-center gap-1 relative">
+                                                    ${upload.hasAccessKey ? '<span title="Access-key protected" class="text-amber-500 mr-0.5"><svg class="w-3.5 h-3.5 inline" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span>' : ''}
+                                                    <button onclick="copyShareLink('${encodeURIComponent(upload.uploadId)}', '${appState.user.id}')" class="share-btn" title="Copy link" aria-label="Copy share link for ${escapeHtml(upload.filename)}">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                                    </button>
+                                                    <a href="${window.location.origin}/#/share?userId=${encodeURIComponent(appState.user.id)}&uploadId=${encodeURIComponent(upload.uploadId)}" target="_blank" rel="noopener" class="share-btn" title="Open share page" aria-label="Open share page for ${escapeHtml(upload.filename)}">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                                    </a>
+                                                    <button onclick="emailShareLink('${encodeURIComponent(upload.uploadId)}', '${appState.user.id}', '${escapeHtml(upload.filename)}', ${!!upload.hasAccessKey})" class="share-btn" title="Email" aria-label="Share ${escapeHtml(upload.filename)} via email">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                                    </button>
+                                                    <button onclick="showQrCode(this, '${encodeURIComponent(upload.uploadId)}', '${appState.user.id}')" class="share-btn" title="QR code" aria-label="Show QR code for ${escapeHtml(upload.filename)}">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                                                    </button>
+                                                    ${'share' in navigator ? `
+                                                    <button onclick="nativeShare('${encodeURIComponent(upload.uploadId)}', '${appState.user.id}', '${escapeHtml(upload.filename)}')" class="share-btn" title="Share" aria-label="Share ${escapeHtml(upload.filename)} via system share">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                                                    </button>` : ''}
+                                                    <button onclick="deleteUpload('${upload.uploadId}')" class="share-btn text-red-400 hover:text-red-600 hover:bg-red-50" title="Delete" aria-label="Delete ${escapeHtml(upload.filename)}">
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                    </button>
+                                                </div>
+                                                ` : ''}
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `
+                : '<p class="text-gray-400 text-center py-8">No uploads yet. Upload your first file above.</p>';
+
+            return `
+                <div class="min-h-screen bg-gray-950">
+                    <!-- Header -->
+                    <header class="bg-gray-900 border-b border-gray-800">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center relative">
+                            <h1 class="text-2xl font-bold text-indigo-500">byteshare.io</h1>
+                            <button class="mobile-menu-btn p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" onclick="document.getElementById('headerNav').classList.toggle('open')" aria-label="Toggle menu" aria-expanded="false">
+                                <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </button>
+                            <div id="headerNav" class="header-nav-links flex items-center gap-4">
+                                <span class="text-gray-300 text-sm truncate max-w-[200px]">${escapeHtml(user.email)}</span>
+                                ${user.isAdmin ? `<a href="admin.html" class="text-indigo-400 hover:text-indigo-300 font-medium">Admin</a>` : ''}
+                                <a href="#/settings" class="text-indigo-400 hover:text-indigo-300 font-medium">Settings</a>
+                                <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Sign Out</button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        ${paymentMessage}
+                        ${accountBanner}
+
+                        <!-- Upload Section -->
+                        <div class="bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Upload File</h2>
+                            ${appState.depositVerifying ? `
+                                <div class="text-center py-8 text-gray-400">
+                                    <svg class="animate-spin h-8 w-8 text-yellow-400 mx-auto mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                    <p class="text-lg mb-2">Confirming your deposit&hellip;</p>
+                                    <p class="text-sm">Uploads will unlock in just a moment.</p>
+                                </div>
+                            ` : (!appState.depositPaid && freeRemaining <= 0) ? `
+                                <div class="relative">
+                                    <div class="opacity-40 pointer-events-none select-none" aria-hidden="true">
+                                        <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center">
+                                            <p class="text-gray-400">Drag and drop a file here, or click to select</p>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <button onclick="startDeposit()" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold shadow-lg shadow-indigo-900/30">
+                                            Unlock Uploads &mdash; $${appState.depositAmount.toFixed(2)}
+                                        </button>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div id="dropzone"
+                                     role="button"
+                                     tabindex="0"
+                                     aria-label="Upload file — tap to browse or drag and drop a file here"
+                                     class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center cursor-pointer hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                                    <p class="text-gray-400 hidden sm:block">Drag and drop a file here, or click to select</p>
+                                    <p class="text-gray-400 sm:hidden">Tap to select a file</p>
+                                    ${(!appState.depositPaid && freeRemaining > 0) ?
+                                        `<p class="text-xs text-gray-500 mt-2">Free sample: ${freeRemaining} ${freeRemaining === 1 ? 'file' : 'files'} remaining — up to ${appState.freeSample.maxSizeMB} MB each, ${appState.freeSample.retentionDays}-day retention</p>` : ''}
+                                    <label for="fileInput" class="sr-only">Choose file to upload</label>
+                                    <input type="file" id="fileInput" class="hidden" onchange="handleFileSelect(event)">
+                                </div>
+                                <!-- File preview: shown after a file is selected -->
+                                <div id="filePreviewArea" class="hidden mt-3 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg flex items-center gap-3">
+                                    <svg class="w-5 h-5 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-medium text-gray-200 truncate" id="filePreviewName"></p>
+                                        <p class="text-xs text-gray-400" id="filePreviewSize"></p>
+                                    </div>
+                                </div>
+                                ${appState.depositPaid ? `
+                                    <div class="mt-4">
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Retention Period</label>
+                                        <select id="retentionSelect" class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                            ${Object.entries(TIERS).map(([key, tier]) =>
+                                                `<option value="${key}" ${key === '7d' ? 'selected' : ''}>${tier.label} - ${tier.description}</option>`
+                                            ).join('')}
+                                        </select>
+                                    </div>
+                                ` : `
+                                    <input type="hidden" id="retentionSelect" value="7d">
+                                    <p class="mt-3 text-xs text-gray-500">Free sample: ${appState.freeSample.retentionDays}-day retention, max ${appState.freeSample.maxSizeMB} MB per file</p>
+                                `}
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">Access Key <span class="text-gray-500 font-normal">(optional)</span></label>
+                                    <input type="text" id="accessKeyInput" class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500" placeholder="Leave blank for no key, or enter a key viewers must provide" maxlength="128">
+                                    <p class="text-xs text-gray-400 mt-1">Anyone with the share link will need this key to download the file.</p>
+                                </div>
+                                <button id="uploadBtn" onclick="uploadFile()" class="mt-4 w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
+                                    ${(!appState.depositPaid && freeRemaining > 0) ? 'Upload Free Sample' : 'Upload'}
+                                </button>
+                                <!-- Progress bar: shown during S3 upload -->
+                                <div id="uploadProgressArea" class="hidden mt-4" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Upload progress">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-300" id="uploadProgressLabel">Uploading… 0%</span>
+                                        <button onclick="cancelUpload()" class="touch-target text-sm text-red-500 hover:text-red-400 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 rounded px-2 py-1">Cancel</button>
+                                    </div>
+                                    <p class="text-xs text-indigo-300 mb-1 truncate" id="uploadFileName" style="max-width:100%"></p>
+                                    <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                                        <div id="uploadProgressBar" class="bg-indigo-600 h-3 rounded-full progress-bar-active" style="width:0%; transition: width 300ms ease"></div>
+                                    </div>
+                                    <div class="flex items-center justify-between mt-1">
+                                        <p class="text-xs text-gray-400" id="uploadProgressDetail"></p>
+                                        <p class="text-xs text-gray-500" id="uploadProgressExtra"></p>
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- Usage Overview -->
+                        <div class="bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Usage Overview</h2>
+                            ${(() => {
+                                const active = appState.uploads.filter(u => u.status === 'active');
+                                if (active.length === 0) {
+                                    return `<p class="text-gray-500 text-center py-6">Your usage breakdown will appear here after your first upload.</p>`;
+                                }
+                                const totalBytes = active.reduce((sum, u) => sum + (Number(u.fileSize) || 0), 0);
+                                const monthlyCost = active.reduce((sum, u) => {
+                                    const gb = (Number(u.fileSize) || 0) / (1024 * 1024 * 1024);
+                                    const rate = parseFloat(u.pricePerGbMonth) || 0;
+                                    return sum + (gb * rate);
+                                }, 0);
+
+                                // Per-tier breakdown
+                                const tierBreakdown = {};
+                                active.forEach(u => {
+                                    const tier = u.retentionTier || 'unknown';
+                                    if (!tierBreakdown[tier]) tierBreakdown[tier] = { files: 0, bytes: 0, cost: 0 };
+                                    tierBreakdown[tier].files++;
+                                    tierBreakdown[tier].bytes += (Number(u.fileSize) || 0);
+                                    const gb = (Number(u.fileSize) || 0) / (1024 * 1024 * 1024);
+                                    tierBreakdown[tier].cost += gb * (parseFloat(u.pricePerGbMonth) || 0);
+                                });
+                                const tierKeys = Object.keys(tierBreakdown).sort((a, b) => {
+                                    const order = ['7d','30d','90d','1y','3y','forever'];
+                                    return order.indexOf(a) - order.indexOf(b);
+                                });
+
+                                return `
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                                <div class="bg-indigo-900/20 border border-indigo-800/30 rounded p-4 transition-all duration-200 hover:translate-y-[-1px]">
+                                    <p class="text-sm text-gray-400">Active Files</p>
+                                    <p class="text-3xl font-bold text-indigo-400">${active.length}</p>
+                                </div>
+                                <div class="bg-indigo-900/20 border border-indigo-800/30 rounded p-4 transition-all duration-200 hover:translate-y-[-1px]">
+                                    <p class="text-sm text-gray-400">Total Storage</p>
+                                    <p class="text-3xl font-bold text-indigo-400">${formatBytes(totalBytes)}</p>
+                                </div>
+                                <div class="bg-indigo-900/20 border border-indigo-800/30 rounded p-4 transition-all duration-200 hover:translate-y-[-1px]">
+                                    <p class="text-sm text-gray-400">Est. Monthly Cost</p>
+                                    <p class="text-3xl font-bold text-amber-400">$${monthlyCost.toFixed(2)}</p>
+                                    ${appState.accountCredit > 0 ? '<p class="text-xs text-gray-500 mt-1">before credit applied</p>' : ''}
+                                </div>
+                                <div class="bg-indigo-900/20 border border-indigo-800/30 rounded p-4 transition-all duration-200 hover:translate-y-[-1px]">
+                                    <p class="text-sm text-gray-400">Account Status</p>
+                                    <p class="text-lg font-bold ${appState.depositPaid ? 'text-green-400' : 'text-amber-400'}">${appState.depositPaid ? 'Active' : (freeRemaining <= 0 ? 'Deposit Required' : 'Free Sample')}</p>
+                                </div>
+                                <div class="bg-indigo-900/20 border border-indigo-800/30 rounded p-4 transition-all duration-200 hover:translate-y-[-1px]">
+                                    <p class="text-sm text-gray-400">Account Credit</p>
+                                    <p class="text-3xl font-bold text-green-400">$${appState.accountCredit.toFixed(2)}</p>
+                                </div>
+                            </div>
+                            ${tierKeys.length > 0 ? `
+                            <div class="border-t border-gray-800 pt-4">
+                                <p class="text-xs text-gray-500 uppercase tracking-wider mb-3">Storage by retention tier</p>
+                                <div class="grid grid-cols-2 md:grid-cols-${Math.min(tierKeys.length, 5)} gap-3">
+                                    ${tierKeys.map(tier => {
+                                        const t = tierBreakdown[tier];
+                                        const label = TIERS[tier]?.label || tier;
+                                        return `
+                                    <div class="bg-gray-800/40 border border-gray-700/30 rounded px-3 py-2">
+                                        <p class="text-xs text-gray-400 font-medium">${label}</p>
+                                        <p class="text-sm font-semibold text-gray-200">${t.files} file${t.files !== 1 ? 's' : ''} &middot; ${formatBytes(t.bytes)}</p>
+                                        <p class="text-xs text-gray-500">$${t.cost.toFixed(2)}/mo</p>
+                                    </div>`;
+                                    }).join('')}
+                                </div>
+                            </div>` : ''}`;
+                            })()}
+                        </div>
+
+                        <!-- Recent Uploads -->
+                        <div class="bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-6">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Recent Uploads</h2>
+                            ${uploadsTable}
+                        </div>
+                    </main>
+                </div>
+
+                <!-- Delete Confirmation Modal -->
+                <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm"
+                     role="alertdialog" aria-modal="true" aria-labelledby="deleteModalTitle" aria-describedby="deleteModalDesc">
+                    <div class="bg-gray-900 rounded-lg shadow-xl shadow-black/30 ring-1 ring-gray-800/50 p-6 max-w-sm">
+                        <h3 id="deleteModalTitle" class="text-lg font-semibold text-gray-100 mb-2">Delete File?</h3>
+                        <p id="deleteModalDesc" class="text-gray-400 mb-6">This action cannot be undone.</p>
+                        <div class="flex gap-4">
+                            <button onclick="cancelDelete()" class="flex-1 px-4 py-2 border border-gray-700 rounded hover:bg-gray-800 transition font-medium focus:outline-none focus:ring-2 focus:ring-gray-400 text-gray-300">
+                                Cancel
+                            </button>
+                            <button onclick="confirmDelete()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium focus:outline-none focus:ring-2 focus:ring-red-500">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // =========================================================
+        // SHARE PAGE — file preview + download
+        // =========================================================
+
+        // Map file extensions to preview categories (covers code files that
+        // arrive with content_type 'application/octet-stream' or 'text/plain')
+        const TEXT_PREVIEW_EXTENSIONS = new Set([
+            'txt','md','csv','tsv','json','xml','yaml','yml','toml','ini','cfg','conf',
+            'log','env','sh','bash','zsh','fish',
+            'js','jsx','ts','tsx','mjs','cjs',
+            'py','rb','rs','go','java','kt','scala','swift','c','h','cpp','hpp','cs',
+            'php','pl','lua','r','m','sql','graphql','gql',
+            'html','htm','css','scss','sass','less',
+            'dockerfile','makefile','cmake','gitignore','editorconfig',
+            'svg',  // SVGs are viewable as both image and text
+        ]);
+
+        /** Determine preview category from contentType + filename. */
+        function getPreviewCategory(contentType, filename) {
+            const ct = (contentType || '').toLowerCase();
+            if (ct.startsWith('image/'))  return 'image';
+            if (ct.startsWith('video/'))  return 'video';
+            if (ct.startsWith('audio/'))  return 'audio';
+            if (ct === 'application/pdf') return 'pdf';
+            if (ct === 'text/csv' || ct === 'text/plain' || ct === 'application/json' || ct === 'application/xml') return 'text';
+
+            // Fallback: check file extension for code/text files
+            const ext = (filename || '').split('.').pop().toLowerCase();
+            if (TEXT_PREVIEW_EXTENSIONS.has(ext)) return 'text';
+
+            return null;
+        }
+
+        /** Return an SVG icon for a file type (used when no preview is available). */
+        function fileTypeIcon(contentType, filename) {
+            const ext = (filename || '').split('.').pop().toLowerCase();
+            // Color + label by broad category
+            let color = '#6B7280'; let label = ext.toUpperCase() || 'FILE';
+            if (/spreadsheet|excel|csv|tsv/.test(contentType) || ['xlsx','xls','csv','tsv'].includes(ext)) { color = '#059669'; label = ext.toUpperCase(); }
+            else if (/word|document/.test(contentType) || ['docx','doc'].includes(ext))        { color = '#2563EB'; label = ext.toUpperCase(); }
+            else if (/presentation|powerpoint/.test(contentType) || ['pptx','ppt'].includes(ext)) { color = '#D97706'; label = ext.toUpperCase(); }
+            else if (/zip|gzip|tar|rar|7z/.test(contentType) || ['zip','gz','tar','rar','7z'].includes(ext)) { color = '#7C3AED'; label = ext.toUpperCase(); }
+
+            return `
+                <div class="inline-flex items-center justify-center w-20 h-24 rounded-lg" style="background: ${color}15; border: 2px solid ${color}30;">
+                    <div class="text-center">
+                        <svg class="w-8 h-8 mx-auto mb-1" style="color: ${color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-xs font-bold" style="color: ${color}">${escapeHtml(label)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        /** Build the preview HTML for a given category + presigned URL. */
+        function renderPreviewContent(category, previewUrl, filename, fileSize) {
+            switch (category) {
+                case 'image':
+                    return `
+                        <div class="rounded-lg overflow-hidden border border-gray-700 bg-gray-800 mb-4">
+                            <img src="${escapeHtml(previewUrl)}" alt="${escapeHtml(filename)}"
+                                 class="max-w-full max-h-96 mx-auto block"
+                                 style="object-fit: contain;"
+                                 onerror="this.parentElement.innerHTML='<p class=\\'text-center text-gray-400 py-8\\'>Preview unavailable</p>'">
+                        </div>
+                    `;
+                case 'video':
+                    return `
+                        <div class="rounded-lg overflow-hidden border border-gray-700 bg-black mb-4">
+                            <video controls preload="metadata" class="w-full max-h-96"
+                                   style="object-fit: contain;">
+                                <source src="${escapeHtml(previewUrl)}">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                    `;
+                case 'audio':
+                    return `
+                        <div class="rounded-lg border border-gray-700 bg-gray-800 p-6 mb-4 text-center">
+                            <svg class="w-12 h-12 mx-auto text-indigo-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                            </svg>
+                            <audio controls preload="metadata" class="w-full">
+                                <source src="${escapeHtml(previewUrl)}">
+                            </audio>
+                        </div>
+                    `;
+                case 'pdf':
+                    return `
+                        <div class="rounded-lg overflow-hidden border border-gray-700 mb-4">
+                            <iframe src="${escapeHtml(previewUrl)}#toolbar=0&navpanes=0" class="w-full" style="height: 480px; border: none;"
+                                    title="PDF preview of ${escapeHtml(filename)}"></iframe>
+                        </div>
+                    `;
+                case 'text':
+                    // Text preview is loaded async — return a placeholder that gets filled
+                    return `
+                        <div class="rounded-lg border border-gray-700 mb-4 overflow-hidden">
+                            <div class="bg-gray-800 px-4 py-2 border-b border-gray-700 flex items-center justify-between">
+                                <span class="text-xs font-mono text-gray-400">${escapeHtml(filename)}</span>
+                                <span class="text-xs text-gray-500">${formatBytes(fileSize)}</span>
+                            </div>
+                            <div id="textPreviewContent" class="p-4 bg-gray-800 overflow-auto" style="max-height: 400px;">
+                                <p class="text-center text-gray-400 text-sm py-4">Loading preview&hellip;</p>
+                            </div>
+                        </div>
+                    `;
+                default:
+                    return '';
+            }
+        }
+
+        /** Fetch text content from a presigned URL and render it into the text preview area. */
+        async function loadTextPreview(previewUrl, filename) {
+            const container = document.getElementById('textPreviewContent');
+            if (!container) return;
+
+            try {
+                const resp = await fetch(previewUrl);
+                if (!resp.ok) throw new Error('Fetch failed');
+                let text = await resp.text();
+
+                // Truncate if very long (display first 500 lines)
+                const lines = text.split('\n');
+                let truncated = false;
+                if (lines.length > 500) {
+                    text = lines.slice(0, 500).join('\n');
+                    truncated = true;
+                }
+
+                container.innerHTML = `
+                    <pre class="text-sm font-mono text-gray-300 whitespace-pre-wrap break-words leading-relaxed">${escapeHtml(text)}</pre>
+                    ${truncated ? '<p class="text-xs text-gray-500 mt-2 text-center italic">Preview truncated — download for full file</p>' : ''}
+                `;
+            } catch (e) {
+                container.innerHTML = '<p class="text-center text-gray-400 text-sm py-4">Could not load text preview</p>';
+            }
+        }
+
+        /** Fetch a preview URL from the backend. */
+        async function fetchPreviewUrl(userId, uploadId, accessKey) {
+            try {
+                const resp = await fetch(CONFIG.API_URL + '/preview', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, uploadId, accessKey: accessKey || '' })
+                });
+                if (!resp.ok) return null;
+                const data = await resp.json();
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // State for current share page
+        let _shareState = {};
+
+        function renderShareView() {
+            const params = new URLSearchParams(window.location.hash.split('?')[1] || '');
+            const userId = params.get('userId') || '';
+            const uploadId = params.get('uploadId') || '';
+
+            return `
+                <div class="min-h-screen flex items-center justify-center bg-gray-950 py-12 px-4">
+                    <div class="w-full bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50" style="max-width: 640px;">
+                        <div class="p-6 sm:p-8">
+                            <h1 class="text-2xl font-bold text-center text-indigo-500 mb-1">byteshare.io</h1>
+                            <p class="text-center text-gray-500 text-xs mb-6">Secure File Sharing</p>
+                            <div id="shareContent">
+                                <p class="text-center text-gray-400 py-8"><span class="inline-block animate-spin mr-2">&#8635;</span> Loading file info&hellip;</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadSharePage() {
+            const params = new URLSearchParams(window.location.hash.split('?')[1] || '');
+            const userId = params.get('userId') || '';
+            const uploadId = decodeURIComponent(params.get('uploadId') || '');
+            const container = document.getElementById('shareContent');
+
+            if (!userId || !uploadId) {
+                container.innerHTML = '<p class="text-center text-red-600">Invalid share link.</p>';
+                return;
+            }
+
+            try {
+                // Fetch file metadata (public, no auth needed)
+                const infoResponse = await fetch(CONFIG.API_URL + '/share-info?userId=' + encodeURIComponent(userId) + '&uploadId=' + encodeURIComponent(uploadId));
+                const info = await infoResponse.json();
+
+                if (!infoResponse.ok) {
+                    container.innerHTML = `<p class="text-center text-red-400 py-4">${escapeHtml(info.error || 'File not available')}</p>`;
+                    return;
+                }
+
+                // Save share state for later use by download/preview actions
+                _shareState = { userId, uploadId, info };
+
+                const contentType = info.contentType || 'application/octet-stream';
+                const previewCategory = getPreviewCategory(contentType, info.filename);
+
+                // ── File header (always shown) ──
+                let html = `
+                    <div id="sharePreviewArea"></div>
+                    <div class="text-center mb-5" id="shareFileInfo">
+                        <div id="shareFileIcon" class="mb-3">${fileTypeIcon(contentType, info.filename)}</div>
+                        <p class="text-lg font-semibold text-gray-100">${escapeHtml(info.filename)}</p>
+                        <p class="text-sm text-gray-400">${[
+                            info.uploaderName ? 'Shared by ' + escapeHtml(info.uploaderName) : '',
+                            formatBytes(info.fileSize),
+                            info.uploadedAt ? _timeAgo(info.uploadedAt) : ''
+                        ].filter(Boolean).join(' · ')}</p>
+                        ${info.expiresAt && info.expiresAt !== 'never' ? `<p class="text-xs text-gray-500 mt-1">Available until ${formatDate(info.expiresAt)}</p>` : ''}
+                    </div>
+                `;
+
+                // ── Glacier restore status ──
+                if (info.restoreStatus === 'in_progress') {
+                    html += `
+                        <div class="bg-amber-900/30 border border-amber-700/30 rounded-lg p-4 text-center">
+                            <p class="text-amber-400 text-sm font-medium mb-1">&#9202; File is being restored from cold storage</p>
+                            <p class="text-amber-400/80 text-xs">The file owner has been notified. This typically takes 3&ndash;12 hours.</p>
+                        </div>
+                    `;
+                    container.innerHTML = html;
+                    return;
+                }
+
+                // ── Access key input (if required) ──
+                if (info.requiresKey) {
+                    html += `
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Enter access key</label>
+                            <input type="text" id="shareAccessKey"
+                                   class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
+                                   placeholder="Access key"
+                                   onkeydown="if(event.key==='Enter'){document.getElementById('shareUnlockBtn')?.click();}">
+                            <button id="shareUnlockBtn" onclick="unlockSharePreview()"
+                                    class="w-full mt-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium text-sm">
+                                Unlock Preview
+                            </button>
+                        </div>
+                    `;
+                }
+
+                // ── Download + CLI buttons ──
+                html += `
+                    <div class="flex gap-2">
+                        <button id="shareDownloadBtn"
+                                onclick="downloadSharedFile('${escapeHtml(userId)}', '${escapeHtml(uploadId)}')"
+                                class="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Download
+                        </button>
+                        <button id="shareCliBtn"
+                                onclick="handleShareCli('${escapeHtml(userId)}', '${escapeHtml(uploadId)}')"
+                                class="px-4 py-3 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 transition font-medium flex items-center justify-center gap-1.5 text-sm border border-gray-700"
+                                title="Get curl/wget command">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            CLI
+                        </button>
+                    </div>
+                    <div id="shareCliSection" class="hidden mt-3">
+                        <div class="bg-gray-950 border border-gray-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <p class="text-xs font-medium text-gray-400">Direct download link — expires in 1 hour</p>
+                                <button onclick="document.getElementById('shareCliSection').classList.add('hidden')" class="text-gray-500 hover:text-gray-300 text-sm">&times;</button>
+                            </div>
+                            <div id="shareCliCommands"></div>
+                        </div>
+                    </div>
+                    <div id="shareError" class="mt-4 hidden"></div>
+                    <p class="text-center text-gray-600 text-xs mt-6">Share files from $0.25/GB &mdash; <a href="https://byteshare.io" class="text-indigo-500 hover:text-indigo-400 transition">try byteshare.io free</a></p>
+                `;
+
+                container.innerHTML = html;
+
+                // ── Auto-load preview for files that don't require a key ──
+                if (!info.requiresKey && previewCategory) {
+                    loadSharePreview(userId, uploadId, '', info);
+                }
+
+            } catch (e) {
+                container.innerHTML = '<p class="text-center text-red-400 py-4">Error loading file information.</p>';
+            }
+        }
+
+        /** Load and display the file preview in the share page. */
+        async function loadSharePreview(userId, uploadId, accessKey, info) {
+            const previewArea = document.getElementById('sharePreviewArea');
+            const fileIcon = document.getElementById('shareFileIcon');
+            if (!previewArea) return;
+
+            const contentType = info.contentType || 'application/octet-stream';
+            const category = getPreviewCategory(contentType, info.filename);
+            if (!category) return;
+
+            track('preview_load', { upload_id: uploadId, category: category });
+
+            // Show loading state
+            previewArea.innerHTML = '<p class="text-center text-gray-400 text-sm py-4">Loading preview…</p>';
+
+            const preview = await fetchPreviewUrl(userId, uploadId, accessKey);
+            if (!preview || !preview.previewable) {
+                previewArea.innerHTML = '';  // Silently hide — file icon is still shown
+                return;
+            }
+
+            // Hide the generic file icon now that we have a real preview
+            if (fileIcon) fileIcon.classList.add('hidden');
+
+            previewArea.innerHTML = renderPreviewContent(
+                preview.previewCategory || category,
+                preview.previewUrl,
+                info.filename,
+                info.fileSize
+            );
+
+            // For text files, fetch and render the actual content
+            if ((preview.previewCategory || category) === 'text') {
+                loadTextPreview(preview.previewUrl, info.filename);
+            }
+        }
+
+        /** Unlock preview for access-key-protected files. */
+        async function unlockSharePreview() {
+            const keyInput = document.getElementById('shareAccessKey');
+            const accessKey = keyInput ? keyInput.value.trim() : '';
+            if (!accessKey) {
+                showToast('Please enter the access key.', 'warning');
+                if (keyInput) keyInput.focus();
+                return;
+            }
+
+            const { userId, uploadId, info } = _shareState;
+            if (!userId || !uploadId) return;
+
+            const btn = document.getElementById('shareUnlockBtn');
+            if (btn) { btn.disabled = true; btn.textContent = 'Checking\u2026'; }
+
+            const preview = await fetchPreviewUrl(userId, uploadId, accessKey);
+
+            if (!preview) {
+                showToast('Invalid access key.', 'error');
+                if (btn) { btn.disabled = false; btn.textContent = 'Unlock Preview'; }
+                return;
+            }
+
+            // Key is valid — show preview (even if file isn't previewable, key is confirmed)
+            if (btn) btn.remove();  // Remove unlock button, keep the key input for download
+
+            if (preview.previewable) {
+                const fileIcon = document.getElementById('shareFileIcon');
+                if (fileIcon) fileIcon.classList.add('hidden');
+
+                const previewArea = document.getElementById('sharePreviewArea');
+                const category = preview.previewCategory || getPreviewCategory(info.contentType, info.filename);
+                if (previewArea && category) {
+                    previewArea.innerHTML = renderPreviewContent(category, preview.previewUrl, info.filename, info.fileSize);
+                    if (category === 'text') loadTextPreview(preview.previewUrl, info.filename);
+                }
+            } else {
+                showToast('Access key accepted.', 'success');
+            }
+        }
+
+        /** Relative time helper for share page metadata */
+        function _timeAgo(iso) {
+            if (!iso) return '';
+            try {
+                const diff = Date.now() - new Date(iso).getTime();
+                const mins = Math.floor(diff / 60000);
+                if (mins < 1) return 'just now';
+                if (mins < 60) return mins + 'm ago';
+                const hrs = Math.floor(mins / 60);
+                if (hrs < 24) return hrs + 'h ago';
+                const days = Math.floor(hrs / 24);
+                if (days < 30) return days + 'd ago';
+                return Math.floor(days / 30) + 'mo ago';
+            } catch { return ''; }
+        }
+
+        /** CLI direct link handler for share page */
+        async function handleShareCli(userId, uploadId) {
+            const section = document.getElementById('shareCliSection');
+            const commands = document.getElementById('shareCliCommands');
+            const btn = document.getElementById('shareCliBtn');
+            if (!section || !commands) return;
+
+            // Toggle off if visible
+            if (!section.classList.contains('hidden')) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            if (btn) { btn.disabled = true; }
+
+            try {
+                const keyInput = document.getElementById('shareAccessKey');
+                const accessKey = keyInput ? keyInput.value.trim() : '';
+                const resp = await fetch(CONFIG.API_URL + '/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, uploadId, accessKey })
+                });
+                const data = await resp.json();
+
+                if (!resp.ok) {
+                    commands.innerHTML = `<p class="text-red-400 text-xs">${escapeHtml(data.error || 'Failed to generate link.')}</p>`;
+                    section.classList.remove('hidden');
+                    return;
+                }
+
+                const url = data.download_url;
+                const fname = (data.filename || _shareState?.info?.filename || 'download')
+                    .replace(/[\/\\]/g, '_').replace(/\.\./g, '_');
+                const curlCmd = `curl -L -o "${fname}" "${url}"`;
+                const wgetCmd = `wget -O "${fname}" "${url}"`;
+
+                commands.innerHTML = '';
+                [['curl', curlCmd], ['wget', wgetCmd]].forEach(([label, cmd]) => {
+                    const block = document.createElement('div');
+                    block.style.cssText = 'position:relative;display:flex;align-items:start;gap:8px;background:#111827;border:1px solid #374151;border-radius:6px;padding:8px 12px;margin-bottom:8px;font-family:monospace;font-size:12px;line-height:1.5;color:#d1d5db;word-break:break-all;';
+                    const lbl = document.createElement('span');
+                    lbl.style.cssText = 'flex-shrink:0;font-family:sans-serif;font-size:10px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;padding-top:1px;';
+                    lbl.textContent = label;
+                    const code = document.createElement('code');
+                    code.style.cssText = 'flex:1;';
+                    code.textContent = cmd;
+                    const copyBtn = document.createElement('button');
+                    copyBtn.style.cssText = 'flex-shrink:0;cursor:pointer;color:#6b7280;background:none;border:none;padding:2px;';
+                    copyBtn.title = 'Copy';
+                    copyBtn.innerHTML = '<svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(cmd).then(() => {
+                            const orig = copyBtn.innerHTML;
+                            copyBtn.innerHTML = '<svg style="width:16px;height:16px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" style="color:#4ade80"/></svg>';
+                            setTimeout(() => { copyBtn.innerHTML = orig; }, 1500);
+                        });
+                    });
+                    block.appendChild(lbl);
+                    block.appendChild(code);
+                    block.appendChild(copyBtn);
+                    commands.appendChild(block);
+                });
+                section.classList.remove('hidden');
+
+            } catch {
+                commands.innerHTML = '<p class="text-red-400 text-xs">Network error — please try again.</p>';
+                section.classList.remove('hidden');
+            } finally {
+                if (btn) { btn.disabled = false; }
+            }
+        }
+
+        async function downloadSharedFile(userId, uploadId) {
+            // --- Analytics: download attempt from share page ---
+            track('download_start', { upload_id: uploadId });
+
+            const keyInput = document.getElementById('shareAccessKey');
+            const accessKey = keyInput ? keyInput.value.trim() : '';
+            const errorDiv = document.getElementById('shareError');
+
+            try {
+                const response = await fetch(CONFIG.API_URL + '/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, uploadId, accessKey })
+                });
+
+                const data = await response.json();
+
+                if (response.status === 403) {
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.innerHTML = `<p class="text-red-600 text-sm text-center">${escapeHtml(data.error)}</p>`;
+                    return;
+                }
+
+                // Handle Glacier restore (202 = restore initiated or in progress)
+                if (response.status === 202) {
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.innerHTML = `
+                        <div class="text-center">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 mb-3">
+                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <p class="text-amber-700 text-sm font-medium mb-1">File is in cold storage</p>
+                            <p class="text-amber-600 text-sm">${escapeHtml(data.message)}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (response.status === 429) {
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.innerHTML = `<p class="text-amber-700 text-sm text-center">${escapeHtml(data.message || data.error || 'Too many requests. Please try again later.')}</p>`;
+                    return;
+                }
+
+                if (!response.ok) {
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.innerHTML = `<p class="text-red-600 text-sm text-center">${escapeHtml(data.error || 'Download failed')}</p>`;
+                    return;
+                }
+
+                // --- Analytics: download succeeded ---
+                track('download_complete', { upload_id: uploadId });
+
+                // Trigger download
+                window.location.href = data.download_url;
+            } catch (e) {
+                errorDiv.classList.remove('hidden');
+                errorDiv.innerHTML = '<p class="text-red-600 text-sm text-center">Download failed. Please try again.</p>';
+            }
+        }
+
+        function renderSettingsView() {
+            const user = appState.user;
+            const currentTier = appState.retentionTier || '7d';
+            const maxDl = appState.maxDownloadsPerFile ?? 100;
+            const notifEnabled = appState.downloadNotificationsEnabled ?? true;
+
+            return `
+                <div class="min-h-screen bg-gray-950">
+                    <!-- Header -->
+                    <header class="bg-gray-900 border-b border-gray-800">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center relative">
+                            <h1 class="text-2xl font-bold text-indigo-500">byteshare.io</h1>
+                            <button class="mobile-menu-btn p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" onclick="document.getElementById('settingsHeaderNav').classList.toggle('open')" aria-label="Toggle menu">
+                                <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                            </button>
+                            <div id="settingsHeaderNav" class="header-nav-links flex items-center gap-4">
+                                <span class="text-gray-300 text-sm truncate max-w-[200px]">${escapeHtml(user.email)}</span>
+                                <a href="#/dashboard" class="text-indigo-400 hover:text-indigo-300 font-medium">Dashboard</a>
+                                <button onclick="logout()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Sign Out</button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <main class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <!-- Retention Settings -->
+                        <div class="bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-6 mb-6">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Storage Settings</h2>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Default Retention Period</label>
+                            <select id="settingsRetentionSelect" class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                ${Object.entries(TIERS).map(([key, tier]) =>
+                                    `<option value="${key}" ${key === currentTier ? 'selected' : ''}>${tier.label} - ${tier.description}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+
+                        <!-- Download & Sharing Settings -->
+                        <div class="bg-gray-900 rounded-lg shadow-lg shadow-black/20 ring-1 ring-gray-800/50 p-6 mb-6">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-4">Download &amp; Sharing</h2>
+
+                            <!-- Per-file monthly download cap -->
+                            <div class="mb-6">
+                                <label for="settingsMaxDownloads" class="block text-sm font-medium text-gray-300 mb-1">Monthly download limit per file</label>
+                                <p class="text-xs text-gray-500 mb-2">Default cap applied to all your files. You can override this per file from your dashboard. Bandwidth charges apply for downloads beyond your plan.</p>
+                                <div class="flex items-center gap-3">
+                                    <input type="number" id="settingsMaxDownloads" min="1" max="1000000000" value="${maxDl}"
+                                           class="w-40 px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <span class="text-sm text-gray-400">downloads / file / month</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <button onclick="document.getElementById('settingsMaxDownloads').value=100" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700">100</button>
+                                    <button onclick="document.getElementById('settingsMaxDownloads').value=1000" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700">1,000</button>
+                                    <button onclick="document.getElementById('settingsMaxDownloads').value=10000" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700">10,000</button>
+                                    <button onclick="document.getElementById('settingsMaxDownloads').value=1000000" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700">1M</button>
+                                    <button onclick="document.getElementById('settingsMaxDownloads').value=1000000000" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-700">Unlimited (1B)</button>
+                                </div>
+                            </div>
+
+                            <!-- Download notification toggle -->
+                            <div>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="checkbox" id="settingsDownloadNotif" ${notifEnabled ? 'checked' : ''}
+                                           class="w-5 h-5 rounded border-gray-600 bg-gray-800 text-indigo-600 focus:ring-indigo-500 focus:ring-2 cursor-pointer">
+                                    <div>
+                                        <span class="text-sm font-medium text-gray-300">Email me when someone downloads my files</span>
+                                        <p class="text-xs text-gray-500">Rate-limited to one notification per file per hour.</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="mb-6">
+                            <button id="saveSettingsBtn" onclick="saveAllSettings()" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed">
+                                Save Settings
+                            </button>
+                            <span id="settingsSaveStatus" class="ml-3 text-sm text-gray-400"></span>
+                        </div>
+
+                        <!-- Account Deletion Section -->
+                        <div class="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-6">
+                            <h2 class="text-xl font-semibold text-gray-100 mb-2">Delete Account</h2>
+                            <p class="text-gray-400 mb-6">This will permanently delete your account and all uploaded files. A final pro-rated invoice will be issued for any remaining storage charges. This action cannot be undone.</p>
+                            <button onclick="initiateAccountDeletion()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium">
+                                Delete My Account
+                            </button>
+                        </div>
+                    </main>
+                </div>
+
+                <!-- Account Deletion Modal -->
+                <div id="deleteAccountModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm"
+                     role="alertdialog" aria-modal="true" aria-labelledby="deleteAccountModalTitle" aria-describedby="deleteAccountModalDesc">
+                    <div class="bg-gray-900 rounded-lg shadow-xl shadow-black/30 ring-1 ring-gray-800/50 p-6 max-w-sm">
+                        <h3 id="deleteAccountModalTitle" class="text-lg font-semibold text-gray-100 mb-4">Delete Account?</h3>
+                        <p id="deleteAccountModalDesc" class="text-gray-400 mb-4">All your files will be permanently deleted immediately. This action cannot be undone.</p>
+                        <label for="deleteConfirmInput" class="block text-sm text-gray-400 mb-2">Type <strong>DELETE</strong> to confirm:</label>
+                        <input type="text" id="deleteConfirmInput" autocomplete="off"
+                               class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-6 placeholder-gray-500" placeholder="DELETE">
+                        <div class="flex gap-4">
+                            <button onclick="cancelAccountDeletionModal()" class="flex-1 px-4 py-2 border border-gray-700 rounded hover:bg-gray-800 transition font-medium focus:outline-none focus:ring-2 focus:ring-gray-400 text-gray-300">
+                                Cancel
+                            </button>
+                            <button onclick="confirmAccountDeletion()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition font-medium focus:outline-none focus:ring-2 focus:ring-red-500">
+                                Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // =========================================================
+        // EVENT HANDLERS
+        // =========================================================
+
+        let selectedFileForDeletion = null;
+
+        function deleteUpload(uploadId) {
+            selectedFileForDeletion = uploadId;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function cancelDelete() {
+            selectedFileForDeletion = null;
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
+
+        async function confirmDelete() {
+            if (!selectedFileForDeletion) return;
+
+            const result = await apiCall('POST', '/delete-upload', { uploadId: selectedFileForDeletion });
+            if (result) {
+                track('file_delete', { upload_id: selectedFileForDeletion });
+                // Remove from UI
+                const row = document.getElementById(`upload-${selectedFileForDeletion}`);
+                if (row) row.remove();
+                selectedFileForDeletion = null;
+                document.getElementById('deleteModal').classList.add('hidden');
+            }
+        }
+
+        function initiateAccountDeletion() {
+            document.getElementById('deleteAccountModal').classList.remove('hidden');
+        }
+
+        function cancelAccountDeletionModal() {
+            document.getElementById('deleteConfirmInput').value = '';
+            document.getElementById('deleteAccountModal').classList.add('hidden');
+        }
+
+        async function confirmAccountDeletion() {
+            const input = document.getElementById('deleteConfirmInput');
+            if (input.value !== 'DELETE') {
+                showToast('Please type DELETE (all caps) to confirm account deletion.', 'warning');
+                input.focus();
+                return;
+            }
+
+            const btn = document.querySelector('#deleteAccountModal button[onclick="confirmAccountDeletion()"]');
+            if (btn) { btn.disabled = true; btn.textContent = 'Deleting…'; }
+
+            const result = await apiCall('POST', `/my-account/delete`, {});
+            if (result) {
+                track('account_delete');
+                document.getElementById('deleteAccountModal').classList.add('hidden');
+                // Clear all stored tokens
+                localStorage.removeItem('idToken');
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                showToast('Your account and all files have been permanently deleted.', 'info');
+                setTimeout(() => {
+                    window.location.hash = '#/login';
+                    renderApp();
+                }, 1500);
+            } else {
+                const errMsg = lastApiError?.error || 'Account deletion failed. Please try again.';
+                showToast(errMsg, 'error');
+                if (btn) { btn.disabled = false; btn.textContent = 'Delete Account'; }
+            }
+        }
+
+        // =========================================================
+        // SETTINGS SAVE HANDLER
+        // =========================================================
+
+        async function saveAllSettings() {
+            const btn = document.getElementById('saveSettingsBtn');
+            const status = document.getElementById('settingsSaveStatus');
+            if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+            if (status) status.textContent = '';
+
+            const retentionTier = document.getElementById('settingsRetentionSelect')?.value;
+            const maxDownloads = parseInt(document.getElementById('settingsMaxDownloads')?.value, 10);
+            const notifEnabled = document.getElementById('settingsDownloadNotif')?.checked;
+
+            // Validate
+            if (isNaN(maxDownloads) || maxDownloads < 1 || maxDownloads > 1000000000) {
+                showToast('Download limit must be between 1 and 1,000,000,000.', 'error');
+                if (btn) { btn.disabled = false; btn.textContent = 'Save Settings'; }
+                return;
+            }
+
+            const payload = {
+                retentionTier: retentionTier,
+                maxDownloadsPerFile: maxDownloads,
+                downloadNotificationsEnabled: notifEnabled,
+            };
+
+            const result = await apiCall('POST', '/my-settings', payload);
+            if (result) {
+                appState.maxDownloadsPerFile = result.maxDownloadsPerFile ?? maxDownloads;
+                appState.downloadNotificationsEnabled = result.downloadNotificationsEnabled ?? notifEnabled;
+                if (result.retentionTier) appState.retentionTier = result.retentionTier;
+                showToast('Settings saved.', 'success');
+                if (status) status.textContent = 'Saved';
+            } else {
+                const errMsg = lastApiError?.error || 'Failed to save settings.';
+                showToast(errMsg, 'error');
+            }
+
+            if (btn) { btn.disabled = false; btn.textContent = 'Save Settings'; }
+        }
+
+        async function updateFileDownloadCap(uploadId) {
+            const input = document.getElementById(`dlcap-${uploadId}`);
+            const statusEl = document.getElementById(`dlcap-status-${uploadId}`);
+            if (!input) return;
+
+            const rawVal = input.value.trim().toLowerCase();
+            let payload;
+
+            if (rawVal === '' || rawVal === 'default') {
+                payload = { uploadId, maxDownloadsPerFile: 'default' };
+            } else {
+                const val = parseInt(rawVal, 10);
+                if (isNaN(val) || val < 1 || val > 1000000000) {
+                    showToast('Per-file cap must be 1–1,000,000,000, or blank for default.', 'error');
+                    return;
+                }
+                payload = { uploadId, maxDownloadsPerFile: val };
+            }
+
+            if (statusEl) statusEl.textContent = 'Saving…';
+
+            const result = await apiCall('POST', '/upload-settings', payload);
+            if (result && result.success) {
+                // Update local state
+                const upload = appState.uploads.find(u => u.uploadId === uploadId);
+                if (upload) {
+                    upload.maxDownloadsPerFile = (rawVal === '' || rawVal === 'default') ? null : parseInt(rawVal, 10);
+                }
+                if (statusEl) { statusEl.textContent = 'Saved'; statusEl.className = 'text-xs text-green-400 ml-2'; }
+                setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 2000);
+            } else {
+                const errMsg = lastApiError?.error || 'Failed to update.';
+                showToast(errMsg, 'error');
+                if (statusEl) { statusEl.textContent = 'Error'; statusEl.className = 'text-xs text-red-400 ml-2'; }
+            }
+        }
+
+        // =========================================================
+        // SHARING FUNCTIONS
+        // =========================================================
+
+        function _buildShareUrl(uploadId, userId) {
+            return `${window.location.origin}/#/share?userId=${encodeURIComponent(userId)}&uploadId=${uploadId}`;
+        }
+
+        function copyShareLink(uploadId, userId) {
+            track('share_link_copy', { upload_id: uploadId });
+            const shareUrl = _buildShareUrl(uploadId, userId);
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showToast('Share link copied to clipboard!', 'success');
+            }).catch(() => {
+                // Clipboard API unavailable — show share URL in a temporary, pre-selected input
+                const box = document.createElement('div');
+                box.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm';
+                box.innerHTML = `
+                    <div class="bg-gray-900 rounded-lg shadow-xl shadow-black/30 ring-1 ring-gray-800/50 p-6 max-w-md w-full mx-4" role="dialog" aria-label="Copy share link">
+                        <p class="text-sm font-medium text-gray-300 mb-2">Copy your share link:</p>
+                        <input id="shareLinkCopyInput" type="text" readonly value="${escapeHtml(shareUrl)}"
+                               class="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-200 rounded text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button onclick="this.closest('.fixed').remove()" class="w-full px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 font-medium">Done</button>
+                    </div>`;
+                document.body.appendChild(box);
+                const inp = document.getElementById('shareLinkCopyInput');
+                inp.focus();
+                inp.select();
+            });
+        }
+
+        function emailShareLink(uploadId, userId, filename, hasAccessKey) {
+            track('share_link_email', { upload_id: uploadId });
+            const shareUrl = _buildShareUrl(uploadId, userId);
+            const subject = encodeURIComponent(`File shared via byteshare.io: ${filename}`);
+            let body = `Here's a file shared with you via byteshare.io:\n\n${filename}\n${shareUrl}`;
+            if (hasAccessKey) {
+                body += '\n\nNote: You will need the access key provided by the sender to download this file.';
+            }
+            window.location.href = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
+        }
+
+        async function nativeShare(uploadId, userId, filename) {
+            const shareUrl = _buildShareUrl(uploadId, userId);
+            try {
+                await navigator.share({
+                    title: `${filename} — byteshare.io`,
+                    text: `Here's a file shared with you: ${filename}`,
+                    url: shareUrl
+                });
+            } catch (e) {
+                // User cancelled or share failed — ignore AbortError, surface others
+                if (e.name !== 'AbortError') {
+                    showToast('Could not share. Try copying the link instead.', 'warning');
+                }
+            }
+        }
+
+        // =========================================================
+        // MINIMAL QR CODE GENERATOR (QR Code Model 2, ECC-L)
+        // Encodes URLs up to ~150 chars as a version-6 QR code.
+        // No external dependencies — keeps CSP tight.
+        // =========================================================
+
+        const QR = (() => {
+            // Galois field GF(256) tables for Reed-Solomon
+            const EXP = new Uint8Array(256), LOG = new Uint8Array(256);
+            let x = 1;
+            for (let i = 0; i < 255; i++) { EXP[i] = x; LOG[x] = i; x = (x << 1) ^ (x >= 128 ? 0x11d : 0); }
+
+            function rsMult(a, b) { return a && b ? EXP[(LOG[a] + LOG[b]) % 255] : 0; }
+
+            function rsEncode(data, ecLen) {
+                // Build generator polynomial
+                const gen = new Uint8Array(ecLen + 1);
+                gen[0] = 1;
+                for (let i = 0; i < ecLen; i++) {
+                    for (let j = ecLen; j >= 1; j--) gen[j] = gen[j - 1] ^ rsMult(gen[j], EXP[i]);
+                    gen[0] = rsMult(gen[0], EXP[i]);
+                }
+                const msg = new Uint8Array(data.length + ecLen);
+                msg.set(data);
+                for (let i = 0; i < data.length; i++) {
+                    const coef = msg[i];
+                    if (coef) for (let j = 0; j <= ecLen; j++) msg[i + j] ^= rsMult(gen[j], coef);
+                }
+                return msg.slice(data.length);
+            }
+
+            // Place modules on the grid
+            function createMatrix(version) {
+                const size = version * 4 + 17;
+                const m = Array.from({ length: size }, () => new Uint8Array(size));
+                const r = Array.from({ length: size }, () => new Uint8Array(size)); // reserved mask
+                // Finder patterns
+                function finder(cx, cy) {
+                    for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) {
+                        const x = cx + dx, y = cy + dy;
+                        if (x < 0 || x >= size || y < 0 || y >= size) continue;
+                        const v = Math.max(Math.abs(dx), Math.abs(dy));
+                        m[y][x] = (v !== 1 && v !== 3) ? 0 : 1; // invert: dark=0 here, we'll flip later
+                        m[y][x] = (v === 0 || v === 2 || v === 3) ? 1 : 0;
+                        r[y][x] = 1;
+                    }
+                }
+                finder(3, 3); finder(size - 4, 3); finder(3, size - 4);
+                // Separators
+                for (let i = 0; i < 8; i++) {
+                    for (const [sx, sy] of [[7, i], [i, 7], [size-8, i], [i, size-8], [7, size-1-i], [size-1-i, 7]]) {
+                        if (sx >= 0 && sx < size && sy >= 0 && sy < size) { r[sy][sx] = 1; }
+                    }
+                }
+                // Timing patterns
+                for (let i = 8; i < size - 8; i++) { m[6][i] = m[i][6] = (i % 2 === 0) ? 1 : 0; r[6][i] = r[i][6] = 1; }
+                // Dark module
+                m[size - 8][8] = 1; r[size - 8][8] = 1;
+                // Reserve format info
+                for (let i = 0; i < 9; i++) { r[8][i] = 1; r[i][8] = 1; }
+                for (let i = 0; i < 8; i++) { r[8][size - 1 - i] = 1; r[size - 1 - i][8] = 1; }
+                // Alignment patterns for version >= 2
+                if (version >= 2) {
+                    const positions = alignmentPositions(version);
+                    for (const cy of positions) for (const cx of positions) {
+                        if (r[cy][cx]) continue; // skip if overlaps finder
+                        for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
+                            m[cy + dy][cx + dx] = (Math.abs(dx) === 2 || Math.abs(dy) === 2 || (dx === 0 && dy === 0)) ? 1 : 0;
+                            r[cy + dy][cx + dx] = 1;
+                        }
+                    }
+                }
+                // Version info for version >= 7 (not needed for our use case)
+                return { m, r, size };
+            }
+
+            function alignmentPositions(version) {
+                if (version === 1) return [];
+                const intervals = [0, 0, 16, 18, 20, 22, 24]; // versions 1-6
+                const last = version * 4 + 10;
+                if (version <= 6) return [6, last];
+                // For larger versions, compute alignment pattern positions
+                const step = intervals[version] || Math.ceil((last - 6) / Math.ceil((last - 6) / 28));
+                const positions = [6];
+                for (let p = last; p > 6; p -= step) positions.unshift(p);
+                positions.unshift(6);
+                return [...new Set(positions)].sort((a, b) => a - b);
+            }
+
+            function placeData(matrix, bits) {
+                const { m, r, size } = matrix;
+                let bitIdx = 0;
+                // Traverse in 2-column strips from right to left
+                for (let right = size - 1; right >= 1; right -= 2) {
+                    if (right === 6) right = 5; // skip timing column
+                    for (let vert = 0; vert < size; vert++) {
+                        for (let j = 0; j < 2; j++) {
+                            const x = right - j;
+                            const y = ((Math.floor((size - 1 - right) / 2)) % 2 === 0) ? (size - 1 - vert) : vert;
+                            if (r[y][x]) continue;
+                            if (bitIdx < bits.length) {
+                                m[y][x] = bits[bitIdx] ? 1 : 0;
+                            }
+                            bitIdx++;
+                        }
+                    }
+                }
+            }
+
+            function applyMask(matrix, maskId) {
+                const { m, r, size } = matrix;
+                const maskFns = [
+                    (y, x) => (y + x) % 2 === 0,
+                    (y) => y % 2 === 0,
+                    (_, x) => x % 3 === 0,
+                    (y, x) => (y + x) % 3 === 0,
+                    (y, x) => (Math.floor(y / 2) + Math.floor(x / 3)) % 2 === 0,
+                    (y, x) => ((y * x) % 2 + (y * x) % 3) === 0,
+                    (y, x) => ((y * x) % 2 + (y * x) % 3) % 2 === 0,
+                    (y, x) => ((y + x) % 2 + (y * x) % 3) % 2 === 0,
+                ];
+                const fn = maskFns[maskId];
+                for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+                    if (!r[y][x] && fn(y, x)) m[y][x] ^= 1;
+                }
+            }
+
+            function placeFormatInfo(matrix, maskId) {
+                const { m, size } = matrix;
+                // ECC level L = 01, mask pattern
+                const formatBits = formatInfoBits(0b01, maskId);
+                // Horizontal: left side then right side
+                const positions = [
+                    [0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[7,8],[8,8],[8,7],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0]
+                ];
+                for (let i = 0; i < 15; i++) {
+                    const [y, x] = positions[i];
+                    m[y][x] = (formatBits >> (14 - i)) & 1;
+                }
+                // Vertical: bottom-left then top-right
+                const positions2 = [
+                    [8, size-1],[8, size-2],[8, size-3],[8, size-4],[8, size-5],[8, size-6],[8, size-7],[8, size-8],
+                    [size-7,8],[size-6,8],[size-5,8],[size-4,8],[size-3,8],[size-2,8],[size-1,8]
+                ];
+                for (let i = 0; i < 15; i++) {
+                    const [y, x] = positions2[i];
+                    m[y][x] = (formatBits >> (14 - i)) & 1;
+                }
+            }
+
+            function formatInfoBits(ecLevel, mask) {
+                let data = (ecLevel << 3) | mask;
+                let bits = data << 10;
+                // BCH(15,5) division by generator 10100110111
+                for (let i = 4; i >= 0; i--) {
+                    if (bits & (1 << (i + 10))) bits ^= (0b10100110111 << i);
+                }
+                bits = (data << 10) | bits;
+                return bits ^ 0b101010000010010; // XOR mask
+            }
+
+            function penaltyScore(matrix) {
+                const { m, size } = matrix;
+                let score = 0;
+                // Rule 1: runs of same color
+                for (let y = 0; y < size; y++) {
+                    let run = 1;
+                    for (let x = 1; x < size; x++) {
+                        if (m[y][x] === m[y][x - 1]) { run++; } else { if (run >= 5) score += run - 2; run = 1; }
+                    }
+                    if (run >= 5) score += run - 2;
+                }
+                for (let x = 0; x < size; x++) {
+                    let run = 1;
+                    for (let y = 1; y < size; y++) {
+                        if (m[y][x] === m[y - 1][x]) { run++; } else { if (run >= 5) score += run - 2; run = 1; }
+                    }
+                    if (run >= 5) score += run - 2;
+                }
+                // Rule 3: finder-like patterns (simplified)
+                // Rule 4: proportion of dark modules
+                let dark = 0;
+                for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) dark += m[y][x];
+                const pct = dark / (size * size) * 100;
+                score += Math.abs(Math.round(pct / 5) * 5 - 50) * 2;
+                return score;
+            }
+
+            function encode(text) {
+                // Byte-mode encoding, ECC level L
+                const data = new TextEncoder().encode(text);
+                const len = data.length;
+                // Version table: [totalCW, ecPerBlock, numBlocks, byteCapacity]
+                const VERSIONS = [
+                    null,
+                    { total: 26,  ecPer: 7,  blocks: 1, cap: 17  },  // V1
+                    { total: 44,  ecPer: 10, blocks: 1, cap: 32  },  // V2
+                    { total: 70,  ecPer: 15, blocks: 1, cap: 53  },  // V3
+                    { total: 100, ecPer: 20, blocks: 1, cap: 78  },  // V4
+                    { total: 134, ecPer: 26, blocks: 1, cap: 106 },  // V5
+                    { total: 172, ecPer: 18, blocks: 2, cap: 134 },  // V6
+                    { total: 196, ecPer: 18, blocks: 2, cap: 154 },  // V7
+                ];
+                const maxVersion = VERSIONS.length - 1;
+                let version = 1;
+                for (let v = 1; v <= maxVersion; v++) { if (len <= VERSIONS[v].cap) { version = v; break; } }
+                if (len > VERSIONS[maxVersion].cap) throw new Error('Text too long for QR code (max ~154 chars)');
+
+                const V = VERSIONS[version];
+                const totalEC = V.ecPer * V.blocks;
+                const dataCW = V.total - totalEC;
+
+                // Build bit stream: mode(4) + count(8) + data + terminator + padding
+                const bitStream = [];
+                function pushBits(val, count) { for (let i = count - 1; i >= 0; i--) bitStream.push((val >> i) & 1); }
+                pushBits(0b0100, 4); // byte mode
+                pushBits(len, version >= 10 ? 16 : 8);
+                for (const b of data) pushBits(b, 8);
+                pushBits(0, Math.min(4, dataCW * 8 - bitStream.length)); // terminator
+                while (bitStream.length % 8) bitStream.push(0); // byte-align
+                const padBytes = [0xEC, 0x11];
+                let padIdx = 0;
+                while (bitStream.length < dataCW * 8) { pushBits(padBytes[padIdx % 2], 8); padIdx++; }
+
+                // Convert to codeword array
+                const codewords = new Uint8Array(dataCW);
+                for (let i = 0; i < dataCW; i++) {
+                    let byte = 0;
+                    for (let b = 0; b < 8; b++) byte = (byte << 1) | bitStream[i * 8 + b];
+                    codewords[i] = byte;
+                }
+
+                // Split into blocks, compute EC for each, then interleave
+                const blockDataSize = Math.floor(dataCW / V.blocks);
+                const dataBlocks = [];
+                const ecBlocks = [];
+                for (let b = 0; b < V.blocks; b++) {
+                    // Last block gets any remainder codewords
+                    const start = b * blockDataSize;
+                    const end = (b === V.blocks - 1) ? dataCW : start + blockDataSize;
+                    const block = codewords.slice(start, end);
+                    dataBlocks.push(block);
+                    ecBlocks.push(rsEncode(block, V.ecPer));
+                }
+
+                // Interleave data codewords across blocks, then EC codewords
+                const finalBits = [];
+                const maxDataLen = Math.max(...dataBlocks.map(b => b.length));
+                for (let i = 0; i < maxDataLen; i++) {
+                    for (const block of dataBlocks) {
+                        if (i < block.length) for (let bit = 7; bit >= 0; bit--) finalBits.push((block[i] >> bit) & 1);
+                    }
+                }
+                for (let i = 0; i < V.ecPer; i++) {
+                    for (const block of ecBlocks) {
+                        if (i < block.length) for (let bit = 7; bit >= 0; bit--) finalBits.push((block[i] >> bit) & 1);
+                    }
+                }
+                // Remainder bits
+                const remainderBits = version >= 2 ? 7 : 0;
+                for (let i = 0; i < remainderBits; i++) finalBits.push(0);
+
+                // Create matrix, place data, pick best mask
+                const matrix = createMatrix(version);
+                placeData(matrix, finalBits);
+
+                let bestMask = 0, bestScore = Infinity;
+                for (let mask = 0; mask < 8; mask++) {
+                    // Deep copy matrix
+                    const copy = { m: matrix.m.map(r => r.slice()), r: matrix.r.map(r => r.slice()), size: matrix.size };
+                    applyMask(copy, mask);
+                    placeFormatInfo(copy, mask);
+                    const s = penaltyScore(copy);
+                    if (s < bestScore) { bestScore = s; bestMask = mask; }
+                }
+                applyMask(matrix, bestMask);
+                placeFormatInfo(matrix, bestMask);
+
+                return { modules: matrix.m, size: matrix.size };
+            }
+
+            function toCanvas(qr, pixelSize = 8) {
+                const quiet = 4; // quiet zone
+                const totalSize = (qr.size + quiet * 2) * pixelSize;
+                const canvas = document.createElement('canvas');
+                canvas.width = canvas.height = totalSize;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, totalSize, totalSize);
+                ctx.fillStyle = '#000000';
+                for (let y = 0; y < qr.size; y++) {
+                    for (let x = 0; x < qr.size; x++) {
+                        if (qr.modules[y][x]) {
+                            ctx.fillRect((x + quiet) * pixelSize, (y + quiet) * pixelSize, pixelSize, pixelSize);
+                        }
+                    }
+                }
+                return canvas;
+            }
+
+            return { encode, toCanvas };
+        })();
+
+        function showQrCode(btnEl, uploadId, userId) {
+            // Close any existing QR popover
+            document.querySelectorAll('.qr-popover').forEach(el => el.remove());
+
+            const shareUrl = _buildShareUrl(uploadId, userId);
+            const container = btnEl.closest('.relative') || btnEl.parentElement;
+
+            try {
+                const qr = QR.encode(shareUrl);
+                const canvas = QR.toCanvas(qr, 6);
+
+                const popover = document.createElement('div');
+                popover.className = 'qr-popover';
+                popover.setAttribute('role', 'dialog');
+                popover.setAttribute('aria-label', 'QR code for share link');
+                popover.innerHTML = `
+                    <p class="text-xs font-medium text-gray-300 mb-2">Scan to download</p>
+                `;
+                popover.insertBefore(canvas, popover.firstChild.nextSibling);
+                const downloadBtn = document.createElement('a');
+                downloadBtn.href = canvas.toDataURL('image/png');
+                downloadBtn.download = 'byteshare-qr.png';
+                downloadBtn.className = 'text-xs text-indigo-600 hover:text-indigo-800 font-medium';
+                downloadBtn.textContent = 'Save QR image';
+                popover.appendChild(downloadBtn);
+
+                container.appendChild(popover);
+
+                // Close on outside click or Escape
+                function close(e) {
+                    if (e.type === 'keydown' && e.key !== 'Escape') return;
+                    if (e.type === 'click' && popover.contains(e.target)) return;
+                    popover.remove();
+                    document.removeEventListener('click', close, true);
+                    document.removeEventListener('keydown', close, true);
+                }
+                // Delay attaching so this click doesn't immediately close it
+                setTimeout(() => {
+                    document.addEventListener('click', close, true);
+                    document.addEventListener('keydown', close, true);
+                }, 10);
+            } catch (err) {
+                showToast('Could not generate QR code.', 'error');
+            }
+        }
+
+        async function startDeposit() {
+            try {
+                // --- Analytics: deposit checkout initiated ---
+                track('deposit_start');
+
+                const result = await apiCall('POST', '/billing/create-deposit', {});
+                if (result && result.checkout_url) {
+                    track('deposit_redirect', { checkout_url: result.checkout_url });
+                    window.location.href = result.checkout_url;
+                } else {
+                    const errMsg = lastApiError?.error || 'Could not start deposit process. Please try again.';
+                    showToast(errMsg, 'error');
+                }
+            } catch (e) {
+                showToast('Error starting deposit. Please try again.', 'error');
+            }
+        }
+
+        let selectedFile = null;
+        let currentUploadXHR = null;  // Held so cancelUpload() can abort it
+        let currentMultipartAbort = null;  // Abort handle for multipart uploads ({ abort() })
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            selectedFile = file;
+            // Show file preview
+            const previewArea = document.getElementById('filePreviewArea');
+            if (previewArea) {
+                document.getElementById('filePreviewName').textContent = file.name;
+                document.getElementById('filePreviewSize').textContent = formatBytes(file.size);
+                previewArea.classList.remove('hidden');
+            }
+        }
+
+        function cancelUpload() {
+            // Immediately kill the UI — don't wait for async cleanup
+            _setUploadProgress(null);
+            showToast('Upload cancelled.', 'info');
+            const uploadBtn = document.getElementById('uploadBtn');
+            if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = 'Upload'; }
+
+            // Abort in-flight XHRs (kills TCP connections instantly)
+            if (currentUploadXHR) {
+                currentUploadXHR.abort();
+                currentUploadXHR = null;
+            }
+            if (currentMultipartAbort) {
+                currentMultipartAbort.abort();
+                currentMultipartAbort = null;
+            }
+        }
+
+        // Upload speed / ETA tracking state
+        let _uploadStartTime = 0;
+        let _uploadLastLoaded = 0;
+        let _uploadLastTime = 0;
+        let _uploadPartInfo = null;  // { current, total } for multipart context
+
+        function _setUploadProgress(pct, loadedBytes, totalBytes) {
+            const area   = document.getElementById('uploadProgressArea');
+            const bar    = document.getElementById('uploadProgressBar');
+            const lbl    = document.getElementById('uploadProgressLabel');
+            const detail = document.getElementById('uploadProgressDetail');
+            const extra  = document.getElementById('uploadProgressExtra');
+            const fname  = document.getElementById('uploadFileName');
+            if (!area) return;
+
+            if (pct === null) {
+                // Hide & reset
+                area.classList.add('hidden');
+                if (bar) { bar.style.width = '0%'; bar.classList.remove('bg-green-500'); bar.classList.add('bg-indigo-600', 'progress-bar-active'); }
+                if (detail) detail.textContent = '';
+                if (extra) extra.textContent = '';
+                if (fname) fname.textContent = '';
+                area.setAttribute('aria-valuenow', '0');
+                _uploadStartTime = 0;
+                _uploadPartInfo = null;
+                return;
+            }
+
+            if (pct === 0) { _uploadStartTime = Date.now(); _uploadLastLoaded = 0; _uploadLastTime = Date.now(); }
+
+            area.classList.remove('hidden');
+            if (bar) bar.style.width = `${pct}%`;
+            area.setAttribute('aria-valuenow', String(pct));
+
+            // Show file name
+            if (fname && selectedFile) {
+                fname.textContent = selectedFile.name;
+            }
+
+            // Compute speed, ETA, elapsed
+            const now = Date.now();
+            let speedText = '';
+            let extraText = '';
+            if (_uploadStartTime && loadedBytes && totalBytes && pct > 0 && pct < 100) {
+                const elapsedSec = (now - _uploadStartTime) / 1000;
+
+                // Elapsed time display
+                const eMins = Math.floor(elapsedSec / 60);
+                const eSecs = Math.round(elapsedSec % 60);
+                const elapsedStr = eMins > 0 ? `${eMins}m ${eSecs}s` : `${eSecs}s`;
+
+                // Bytes transferred
+                extraText = `${formatBytes(loadedBytes)} / ${formatBytes(totalBytes)}`;
+                if (elapsedSec > 0.3) extraText += ` · ${elapsedStr} elapsed`;
+
+                // Part info for multipart
+                if (_uploadPartInfo && _uploadPartInfo.total > 1) {
+                    extraText += ` · Part ${_uploadPartInfo.current}/${_uploadPartInfo.total}`;
+                }
+
+                if (elapsedSec > 0.5) {
+                    const speed = loadedBytes / elapsedSec;  // bytes/sec
+                    const remaining = totalBytes - loadedBytes;
+                    const etaSec = remaining / speed;
+                    speedText = `${formatBytes(Math.round(speed))}/s`;
+                    if (etaSec < 3600) {
+                        const mins = Math.floor(etaSec / 60);
+                        const secs = Math.round(etaSec % 60);
+                        speedText += mins > 0 ? ` — about ${mins}m ${secs}s left` : ` — about ${secs}s left`;
+                    }
+                }
+            }
+
+            if (lbl) lbl.textContent = pct >= 100 ? 'Upload complete!' : `Uploading… ${pct}%`;
+            if (detail) detail.textContent = pct >= 100 ? `${formatBytes(totalBytes || 0)} uploaded` : speedText;
+            if (extra) extra.textContent = pct >= 100 ? '' : extraText;
+
+            // Completion styling
+            if (pct >= 100 && bar) {
+                bar.classList.remove('bg-indigo-600', 'progress-bar-active');
+                bar.classList.add('bg-green-500');
+            }
+        }
+
+        // Multipart upload threshold: 10 MB.  Files larger than this use
+        // S3 multipart upload with per-part presigned URLs for parallel,
+        // resumable large-file transfers.  Lower threshold = more files
+        // benefit from parallel upload streams.
+        const MULTIPART_THRESHOLD = 10 * 1024 * 1024;
+
+        async function uploadFile() {
+            if (!selectedFile) {
+                showToast('Please select a file first.', 'warning');
+                return;
+            }
+
+            const retentionEl = document.getElementById('retentionSelect');
+            const retention = retentionEl ? retentionEl.value : '7d';
+            const uploadBtn = document.getElementById('uploadBtn');
+            const originalText = uploadBtn ? uploadBtn.textContent.trim() : 'Upload';
+            if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.textContent = 'Preparing…'; }
+
+            try {
+                let token = getIdToken();
+                if (!token || isTokenExpired(token)) {
+                    const refreshed = await refreshTokens();
+                    if (!refreshed) {
+                        showToast('Session expired — please sign in again.', 'error');
+                        return;
+                    }
+                    token = getIdToken();
+                }
+
+                const accessKeyInput = document.getElementById('accessKeyInput');
+                const accessKey = accessKeyInput ? accessKeyInput.value.trim() : '';
+
+                track('upload_start', {
+                    file_size: selectedFile.size,
+                    file_type: selectedFile.type || 'unknown',
+                    retention_tier: retention,
+                    has_access_key: accessKey !== '',
+                    multipart: selectedFile.size > MULTIPART_THRESHOLD
+                });
+
+                // Branch: multipart for large files, single PUT for small files
+                if (selectedFile.size > MULTIPART_THRESHOLD) {
+                    await _doMultipartUpload(token, retention, accessKey, uploadBtn);
+                } else {
+                    await _doSingleUpload(token, retention, accessKey, uploadBtn);
+                }
+            } catch (e) {
+                _setUploadProgress(null);
+                showToast('Upload failed. Please check your connection and try again.', 'error');
+            } finally {
+                currentUploadXHR = null;
+                currentMultipartAbort = null;
+                if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = originalText; }
+            }
+        }
+
+        /** Single presigned PUT upload (files ≤ 10 MB) — small-file fast path */
+        async function _doSingleUpload(token, retention, accessKey, uploadBtn) {
+            const urlResponse = await fetch(CONFIG.API_URL + '/get-upload-url', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    filename: selectedFile.name,
+                    content_type: selectedFile.type || 'application/octet-stream',
+                    file_size: selectedFile.size,
+                    retention_tier: retention,
+                    access_key: accessKey
+                })
+            });
+
+            const urlData = await urlResponse.json();
+            if (_handleUploadErrors(urlResponse, urlData)) return;
+
+            if (!urlResponse.ok || !urlData.upload_url) {
+                showToast(urlData.error || 'Failed to get upload URL. Please try again.', 'error');
+                return;
+            }
+
+            if (uploadBtn) uploadBtn.textContent = 'Uploading…';
+            _setUploadProgress(0);
+
+            const uploadSuccess = await new Promise((resolve) => {
+                const xhr = new XMLHttpRequest();
+                currentUploadXHR = xhr;
+
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        _setUploadProgress(Math.round((e.loaded / e.total) * 100), e.loaded, e.total);
+                    }
+                });
+
+                xhr.addEventListener('load', () => { currentUploadXHR = null; resolve(xhr.status >= 200 && xhr.status < 300); });
+                xhr.addEventListener('error', () => { currentUploadXHR = null; resolve(false); });
+                xhr.addEventListener('abort', () => { currentUploadXHR = null; resolve(null); });
+
+                xhr.open('PUT', urlData.upload_url);
+                xhr.setRequestHeader('Content-Type', urlData.content_type || selectedFile.type || 'application/octet-stream');
+                xhr.send(selectedFile);
+            });
+
+            if (uploadSuccess) {
+                _setUploadProgress(100, selectedFile.size, selectedFile.size);
+                await new Promise(r => setTimeout(r, 800));
+            }
+            _setUploadProgress(null);
+
+            if (uploadSuccess === null) { return; }  // UI already cleared by cancelUpload()
+
+            if (uploadSuccess) {
+                _onUploadSuccess(urlData, retention);
+            } else {
+                track('upload_error', { file_size: selectedFile.size, retention_tier: retention, error: 'storage_put_failed' });
+                showToast('Upload to storage failed. Please try again.', 'error');
+            }
+        }
+
+        /** Adaptive part sizing: scales part size with file size to stay well under S3's 10,000-part limit.
+         *  Small files get 10 MB parts (good granularity), large files get bigger parts (fewer round-trips). */
+        function _calcPartSize(fileSize) {
+            const MIN_PART = 10 * 1024 * 1024;    // 10 MB floor
+            const MAX_PART = 500 * 1024 * 1024;    // 500 MB ceiling (S3 max)
+            const targetParts = appState.uploadTargetParts || 1000;
+            const size = Math.ceil(fileSize / targetParts);
+            return Math.max(MIN_PART, Math.min(size, MAX_PART));
+        }
+
+        /** Multipart upload (files > 10 MB) — presigned URL per part with parallel upload */
+        async function _doMultipartUpload(token, retention, accessKey, uploadBtn) {
+            const PART_SIZE = _calcPartSize(selectedFile.size);
+            // Dynamic concurrency: bump to higher value for large files (> 50 GB)
+            const LARGE_FILE_THRESHOLD = 50 * 1024 * 1024 * 1024;  // 50 GB
+            const baseConcurrency = appState.uploadConcurrency || 8;
+            const largeConcurrency = appState.uploadLargeFileConcurrency || 12;
+            const MAX_CONCURRENT = selectedFile.size > LARGE_FILE_THRESHOLD ? largeConcurrency : baseConcurrency;
+
+            // Step 1: Initiate multipart upload
+            const initResponse = await fetch(CONFIG.API_URL + '/initiate-multipart-upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    filename: selectedFile.name,
+                    content_type: selectedFile.type || 'application/octet-stream',
+                    file_size: selectedFile.size,
+                    retention_tier: retention,
+                    access_key: accessKey,
+                    part_size: PART_SIZE
+                })
+            });
+
+            const initData = await initResponse.json();
+            if (_handleUploadErrors(initResponse, initData)) return;
+
+            if (!initResponse.ok || !initData.part_urls) {
+                showToast(initData.error || 'Failed to initiate upload. Please try again.', 'error');
+                return;
+            }
+
+            if (uploadBtn) uploadBtn.textContent = 'Uploading…';
+            _setUploadProgress(0);
+
+            const completedParts = [];
+            let aborted = false;
+
+            // Step 2: Upload each part via XHR (with concurrency limit and per-part progress)
+            const partQueue = [...initData.part_urls];
+            const fileSize = selectedFile.size;
+            const partSize = initData.part_size || PART_SIZE;
+            const totalParts = partQueue.length;
+
+            // Track per-part loaded bytes for smooth progress across concurrent uploads
+            const partLoaded = new Array(totalParts).fill(0);
+            let completedBytes = 0;  // bytes from fully completed parts
+            let partsCompleted = 0;  // incremented inside XHR load for live part counter
+            const activeXHRs = [];   // track XHRs for abort
+
+            // Abort handler: replaces AbortController for XHR-based uploads
+            currentMultipartAbort = {
+                abort() {
+                    aborted = true;
+                    activeXHRs.forEach(xhr => { try { xhr.abort(); } catch(_){} });
+                }
+            };
+
+            function _updateMultipartProgress() {
+                // Sum completed bytes + in-flight per-part loaded bytes
+                const inFlightLoaded = partLoaded.reduce((s, v) => s + v, 0);
+                const totalLoaded = completedBytes + inFlightLoaded;
+                const pct = Math.min(Math.round((totalLoaded / fileSize) * 100), 99);
+
+                // Determine which part is furthest along for the part indicator
+                let maxPartIdx = 0;
+                for (let i = 1; i < partLoaded.length; i++) {
+                    if (partLoaded[i] > partLoaded[maxPartIdx]) maxPartIdx = i;
+                }
+                _uploadPartInfo = { current: Math.min(partsCompleted + 1, totalParts), total: totalParts };
+
+                _setUploadProgress(pct, totalLoaded, fileSize);
+            }
+
+            async function uploadPart(partInfo) {
+                if (aborted) return null;
+                const { partNumber, url } = partInfo;
+                const partIdx = partNumber - 1;
+                const start = partIdx * partSize;
+                const end = Math.min(start + partSize, fileSize);
+                const blob = selectedFile.slice(start, end);
+                const blobSize = end - start;
+
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    activeXHRs.push(xhr);
+
+                    xhr.upload.addEventListener('progress', (e) => {
+                        if (e.lengthComputable) {
+                            partLoaded[partIdx] = e.loaded;
+                            _updateMultipartProgress();
+                        }
+                    });
+
+                    xhr.addEventListener('load', () => {
+                        // Remove from active list
+                        const i = activeXHRs.indexOf(xhr);
+                        if (i !== -1) activeXHRs.splice(i, 1);
+
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            const etag = xhr.getResponseHeader('ETag');
+                            // Move this part's bytes from in-flight to completed
+                            partLoaded[partIdx] = 0;
+                            completedBytes += blobSize;
+                            partsCompleted++;
+                            _updateMultipartProgress();
+                            resolve({ partNumber, etag });
+                        } else {
+                            reject(new Error(`Part ${partNumber} failed: ${xhr.status}`));
+                        }
+                    });
+
+                    xhr.addEventListener('error', () => {
+                        const i = activeXHRs.indexOf(xhr);
+                        if (i !== -1) activeXHRs.splice(i, 1);
+                        reject(new Error(`Part ${partNumber} network error`));
+                    });
+
+                    xhr.addEventListener('abort', () => {
+                        const i = activeXHRs.indexOf(xhr);
+                        if (i !== -1) activeXHRs.splice(i, 1);
+                        aborted = true;
+                        resolve(null);
+                    });
+
+                    xhr.open('PUT', url);
+                    xhr.send(blob);
+                });
+            }
+
+            try {
+                // Rolling-window concurrency: start a new part as soon as any slot frees up.
+                // This keeps MAX_CONCURRENT uploads in flight at all times, eliminating the
+                // stall that batch-wait causes when one slow part holds up the entire batch.
+                let nextIdx = 0;
+                let inFlight = 0;
+                let uploadError = null;
+
+                await new Promise((resolveAll, rejectAll) => {
+                    function checkDone() {
+                        if (aborted && inFlight === 0) { resolveAll(); return true; }
+                        if (nextIdx >= partQueue.length && inFlight === 0 && !uploadError) { resolveAll(); return true; }
+                        return false;
+                    }
+                    function launchNext() {
+                        if (checkDone()) return;
+                        while (inFlight < MAX_CONCURRENT && nextIdx < partQueue.length && !aborted && !uploadError) {
+                            const part = partQueue[nextIdx++];
+                            inFlight++;
+                            uploadPart(part).then(result => {
+                                inFlight--;
+                                if (result) completedParts.push(result);
+                                if (uploadError) return;
+                                if (!checkDone()) launchNext();
+                            }).catch(err => {
+                                inFlight--;
+                                uploadError = err;
+                                rejectAll(err);
+                            });
+                        }
+                        checkDone();
+                    }
+                    launchNext();
+                });
+            } catch (partErr) {
+                // Abort the multipart upload on S3
+                try {
+                    await fetch(CONFIG.API_URL + '/abort-multipart-upload', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            upload_id: initData.upload_id,
+                            s3_upload_id: initData.s3_upload_id,
+                            s3_key: initData.s3_key
+                        })
+                    });
+                } catch (_) {}
+                _setUploadProgress(null);
+                showToast('Upload failed on part ' + (completedParts.length + 1) + '. Please try again.', 'error');
+                return;
+            }
+
+            if (aborted) {
+                // User cancelled — UI already cleared by cancelUpload(), just clean up S3
+                try {
+                    await fetch(CONFIG.API_URL + '/abort-multipart-upload', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            upload_id: initData.upload_id,
+                            s3_upload_id: initData.s3_upload_id,
+                            s3_key: initData.s3_key
+                        })
+                    });
+                } catch (_) {}
+                return;
+            }
+
+            // Step 3: Complete the multipart upload
+            if (uploadBtn) uploadBtn.textContent = 'Finalizing…';
+
+            const completeResponse = await fetch(CONFIG.API_URL + '/complete-multipart-upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    upload_id: initData.upload_id,
+                    s3_upload_id: initData.s3_upload_id,
+                    s3_key: initData.s3_key,
+                    parts: completedParts
+                })
+            });
+
+            const completeData = await completeResponse.json();
+            if (!completeResponse.ok) {
+                _setUploadProgress(null);
+                showToast(completeData.error || 'Failed to finalize upload.', 'error');
+                return;
+            }
+
+            _setUploadProgress(100, fileSize, fileSize);
+            await new Promise(r => setTimeout(r, 800));
+            _setUploadProgress(null);
+
+            _onUploadSuccess(initData, retention);
+        }
+
+        /** Handle common upload error responses (402, 413, 429, 403) */
+        function _handleUploadErrors(response, data) {
+            if (response.status === 402) {
+                showToast(data.error || 'A deposit is required to upload.', 'warning');
+                if (window.confirm(`${data.error}\n\nWould you like to make a deposit now?`)) {
+                    startDeposit();
+                }
+                return true;
+            }
+            if (response.status === 413) {
+                if (data.depositRequired) {
+                    if (window.confirm(`${data.error}\n\nWould you like to deposit and unlock full uploads?`)) {
+                        startDeposit();
+                    }
+                } else {
+                    showToast(data.error || 'File is too large.', 'error');
+                }
+                return true;
+            }
+            if (response.status === 429) {
+                showToast(data.error || 'Too many uploads. Please wait and try again.', 'warning');
+                return true;
+            }
+            if (response.status === 403 && data.emailVerificationRequired) {
+                showToast('Please verify your email address before uploading. Check your inbox.', 'warning');
+                return true;
+            }
+            return false;
+        }
+
+        /** Success handler shared between single and multipart upload paths */
+        async function _onUploadSuccess(urlData, retention) {
+            track('upload_complete', {
+                file_size: selectedFile.size,
+                file_type: selectedFile.type || 'unknown',
+                retention_tier: retention,
+                is_free_upload: !!urlData.isFreeUpload
+            });
+
+            selectedFile = null;
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) fileInput.value = '';
+            const previewArea = document.getElementById('filePreviewArea');
+            if (previewArea) previewArea.classList.add('hidden');
+
+            await loadUserData();
+            renderApp();
+
+            if (urlData.isFreeUpload) {
+                showToast(`Free sample uploaded! Available for ${urlData.sampleRetentionDays || 7} days.`, 'success');
+            } else {
+                showToast(`Uploaded! Stored for ${TIERS[retention]?.label || retention}.`, 'success');
+            }
+
+            // The S3 event handler activates the upload (pending → active)
+            // asynchronously. Poll until the record is active so the user
+            // sees the status transition without a manual refresh.
+            _pollUploadActivation(urlData.upload_id);
+        }
+
+        /**
+         * Poll /my-uploads until the given upload reaches 'active' status.
+         * Runs in the background — does not block the UI.
+         */
+        async function _pollUploadActivation(uploadId) {
+            const MAX_POLLS = 10;
+            const POLL_MS = 2000;
+
+            for (let i = 0; i < MAX_POLLS; i++) {
+                await new Promise(r => setTimeout(r, POLL_MS));
+                const uploadsData = await apiCall('GET', '/my-uploads');
+                if (uploadsData) {
+                    appState.uploads = uploadsData.uploads || [];
+                    const target = appState.uploads.find(u => u.uploadId === uploadId);
+                    if (target && target.status === 'active') {
+                        renderApp();
+                        return;
+                    }
+                    // Re-render to update any other status changes
+                    renderApp();
+                }
+            }
+        }
+
+        // =========================================================
+        // APP RENDERING
+        // =========================================================
+
+        function renderApp() {
+            const route = getRoute();
+            const app = document.getElementById('app');
+
+            // --- Analytics: SPA page-view on every route change ---
+            const routeNames = {
+                '#/login': 'Login',
+                '#/dashboard': 'Dashboard',
+                '#/settings': 'Settings',
+                '#/share': 'Share / Download'
+            };
+            trackPageView(route, routeNames[route] || route);
+
+            if (route === '#/login') {
+                app.innerHTML = renderLoginView();
+            } else if (route !== '#/share' && needsReConsent()) {
+                // Block all authenticated views until user accepts current legal terms
+                app.innerHTML = renderReConsentView();
+            } else if (route === '#/dashboard') {
+                app.innerHTML = renderDashboardView();
+                // Set up dropzone
+                const dropzone = document.getElementById('dropzone');
+                if (dropzone) {
+                    // Click to open file picker
+                    dropzone.addEventListener('click', () => {
+                        document.getElementById('fileInput').click();
+                    });
+                    // Keyboard: Enter or Space triggers file picker (WCAG 2.1 §2.1.1)
+                    dropzone.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            document.getElementById('fileInput').click();
+                        }
+                    });
+                    // Drag-and-drop
+                    dropzone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        dropzone.classList.add('border-indigo-500', 'bg-indigo-50');
+                    });
+                    dropzone.addEventListener('dragleave', () => {
+                        dropzone.classList.remove('border-indigo-500', 'bg-indigo-50');
+                    });
+                    dropzone.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        dropzone.classList.remove('border-indigo-500', 'bg-indigo-50');
+                        const files = e.dataTransfer.files;
+                        if (files.length > 0) {
+                            selectedFile = files[0];
+                            // Sync preview
+                            const previewArea = document.getElementById('filePreviewArea');
+                            if (previewArea) {
+                                document.getElementById('filePreviewName').textContent = files[0].name;
+                                document.getElementById('filePreviewSize').textContent = formatBytes(files[0].size);
+                                previewArea.classList.remove('hidden');
+                            }
+                        }
+                    });
+                    // Paste from clipboard (e.g. screenshots)
+                    document.addEventListener('paste', (e) => {
+                        const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+                        if (!items) return;
+                        for (const item of items) {
+                            if (item.kind === 'file') {
+                                const file = item.getAsFile();
+                                if (file) {
+                                    selectedFile = file;
+                                    const previewArea = document.getElementById('filePreviewArea');
+                                    if (previewArea) {
+                                        document.getElementById('filePreviewName').textContent = file.name || 'pasted-file';
+                                        document.getElementById('filePreviewSize').textContent = formatBytes(file.size);
+                                        previewArea.classList.remove('hidden');
+                                    }
+                                    showToast(`File "${file.name || 'pasted file'}" ready to upload.`, 'info');
+                                }
+                                break;
+                            }
+                        }
+                    }, { once: false });
+                }
+            } else if (route === '#/settings') {
+                app.innerHTML = renderSettingsView();
+            } else if (route === '#/share') {
+                app.innerHTML = renderShareView();
+                loadSharePage();
+            }
+        }
+
+        // =========================================================
+        // INITIALIZATION
+        // =========================================================
+
+        async function init() {
+            // First check for OAuth callback
+            await handleOAuthCallback();
+
+            // Then load user data if authenticated
+            const idToken = getIdToken();
+            if (idToken && !isTokenExpired(idToken)) {
+                await loadUserData();
+            }
+
+            // Finally render the app
+            renderApp();
+
+            // If returning from a successful deposit, poll until the
+            // Stripe webhook has confirmed the deposit in DynamoDB.
+            // This runs after the initial render so the user sees the
+            // "Verifying your deposit..." state immediately.
+            if (idToken && !isTokenExpired(idToken)) {
+                await waitForDepositConfirmation();
+            }
+
+            // Set up hash change listener
+            window.addEventListener('hashchange', async () => {
+                const idToken = getIdToken();
+                if (idToken && !isTokenExpired(idToken)) {
+                    await loadUserData();
+                }
+                renderApp();
+            });
+        }
+
+        // Start the app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

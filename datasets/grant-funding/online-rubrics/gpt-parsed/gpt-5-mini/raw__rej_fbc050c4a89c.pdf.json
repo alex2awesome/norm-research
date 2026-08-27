@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/rej_fbc050c4a89c.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 15469,
+  "output_tokens": 4219,
+  "elapsed_s": 1237.7450688749086,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NIH reviewers and computational structural biologists / molecular modelers designing membrane-protein inhibitors",
+    "subtask_short": "EmrE modeling and peptide design",
+    "subtask_description": "Computational construction, refinement, validation of atomic-resolution EmrE membrane-protein structures and in silico design/optimization of proteolysis-resistant peptide dimerization inhibitors, with downstream experimental testing.",
+    "subtask_keywords": [
+      "nih_r03",
+      "computational_biology",
+      "membrane_protein",
+      "peptide_design",
+      "molecular_dynamics",
+      "free_energy"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Aim 1: Construct and validate an atomic-level model of EmrE",
+        "description": "To construct and validate an atomic-level model of the EmrE membrane protein. The C\u03b1 structures will be used with available modeling protocols to construct a series of all-atom models.",
+        "guidance": "Improve models by molecular dynamics simulations with replica exchange in the presence of an explicit lipid membrane and water; compute free energy of refined structural candidates with the confinement method; select lowest-free-energy candidates and validate by comparison with experimentally determined ligand dissociation constants and residue pKa values."
+      },
+      {
+        "name": "Aim 2: Design peptide analogues to inhibit EmrE dimerization",
+        "description": "To design peptide analogues that inactivate the EmrE transporter by preventing dimerization, mimicking TM4 and optimizing sequence to bind the EmrE monomer.",
+        "guidance": "Initial inhibitor model identical to TM4; optimize peptide sequence based on interaction energies between EmrE monomer and peptide; model proteolysis-resistant all-hydrocarbon stapled \u03b1-helical peptides; iterate MD-based optimization and synthesize/test best candidates experimentally."
+      },
+      {
+        "name": "Use multiple side-chain modeling algorithms to generate initial all-atom models",
+        "description": "Starting from C\u03b1 coordinates, generate coordinates of backbone and side chains using several algorithms (SCWRL, OPUS-Rota, SCMF, ROSETTA).",
+        "guidance": "Generate backbone via CHARMM internal coordinates and apply dihedral restraints to keep \u03c6/\u03c8 in allowed Ramachandran regions; energy-minimize with CHARMM using an implicit membrane model; detect and correct any chirality errors before MD refinement."
+      },
+      {
+        "name": "Refine modeled structures by MD in explicit lipid bilayer with explicit solvent/ions",
+        "description": "Insert modeled structures into pre-equilibrated DPMC lipid bilayers with explicit water and ions and perform MD to refine structures.",
+        "guidance": "Use CHARMM-GUI for insertion; run equilibrium MD with ACE-MD on GPUs and NAMD; typical system ~50,000 atoms; expect several hundred nanoseconds to reach steady-state; CHARMM/NAMD/AceMD protocols described for equilibration and production."
+      },
+      {
+        "name": "Apply enhanced-sampling methods (temperature REMD and LES)",
+        "description": "Use temperature replica exchange MD (REMD) and Locally Enhanced Sampling (LES) to accelerate conformational sampling for membrane protein refinement.",
+        "guidance": "Conduct REMD across temperatures from 300K up to ~600K (only 300K used for evaluation); perform LES with CHARMM (implicit solvent) and NAMD (explicit solvent); use variable restraints to transform LES ensemble into proper canonical ensemble."
+      },
+      {
+        "name": "Evaluate refined structures by fit to experimental electron density (EM) maps",
+        "description": "Check whether MD-refined coordinates fit experimental EM density maps and perform additional MD with restraints to the EM map if coordinates do not fit completely.",
+        "guidance": "Retain final structures whose coordinates are consistent with the EM map for further analysis."
+      },
+      {
+        "name": "Rank candidate structures by configurational free energy via implicit-membrane + confinement analysis",
+        "description": "Remove explicit lipids/waters, place structures into an implicit membrane model and estimate solvation free energy and protein configurational free energy using a confinement analysis.",
+        "guidance": "Retain lowest-free-energy structures; if several distinct structures have very similar free energies, retain all for further validation and analysis."
+      },
+      {
+        "name": "Compute ligand binding free energies using alchemical annihilation",
+        "description": "Compute the free energy (FE) of ligand binding (e.g., TPP+, ethidium) by reversible alchemical annihilation in both the EmrE active site and in aqueous/lipid solvent.",
+        "guidance": "Parameterize ligands using CHARMM-CGENFF (with QM/MM iterative improvement per CHARMM protocol); perform alchemical FE calculations with NAMD and analyze with VMD; use standard alchemical FE best practices."
+      },
+      {
+        "name": "Determine pKa\u2019s of key residues to validate active-site arrangement",
+        "description": "Estimate pKa shifts for residues involved in transport (e.g., Glu14) using Poisson-Boltzmann solvation theory and alchemical free-energy simulations.",
+        "guidance": "Compare predicted pKa values to experimental literature values (e.g., Glu-14 literature 7.3\u20138.5); perform alchemical protonation calculations to compute pKa shifts as a stringent test of active-site structural quality."
+      },
+      {
+        "name": "Use initial EmrE\u2013peptide inhibition models that isolate TM4",
+        "description": "Construct two EmrE\u2013peptide starting models by deleting all parts of one monomer except TM4 (and vice versa) to create monomer\u2013peptide complexes for simulation.",
+        "guidance": "Perform MD equilibration of monomer\u2013peptide complexes (100 ns) and also simulate the isolated TM4 peptide in the bilayer (100 ns) to normalize interaction energies; use lowest-average-interaction-energy trajectory as starting point for mutational optimization."
+      },
+      {
+        "name": "Optimize peptide sequence via Monte Carlo using interaction-energy differences (\u2206E)",
+        "description": "Select residues near the monomer interface, mutate randomly to nonpolar residues and evaluate change in interaction energy \u2206E = E_complex_mutated \u2212 E_complex_original \u2212 (E_peptide_mutated \u2212 E_peptide_original).",
+        "guidance": "Use Metropolis acceptance: Paccept = 1 if \u2206E \u2264 0, else exp(\u2212\u03b2\u2206E); vary \u03b2 (inverse temperature) from physiological to higher values to broaden sampling; repeat until composition stabilizes; each trial evaluated by repeating 100 ns MD of complex and peptide-alone simulations."
+      },
+      {
+        "name": "Include peptide\u2013lipid interaction energies when assessing binding in membrane environment",
+        "description": "Because binding occurs in the membrane, account for interaction energies between peptide and lipid both in bound and free states in the \u2206E calculation.",
+        "guidance": "Compute interaction energies from MD trajectories of peptide in complex and peptide alone in membrane to normalize membrane contributions."
+      },
+      {
+        "name": "Estimate error from neglecting entropy by computing binding free energy and enthalpy differences via confinement analysis",
+        "description": "The optimization protocol uses interaction-energy differences (enthalpy-like) instead of full free energies; quantify entropic contribution/error using confinement analysis with an implicit membrane model.",
+        "guidance": "Perform confinement-based calculations to compute binding free energy and enthalpy differences resulting from a trial mutation to assess magnitude of neglected entropy."
+      },
+      {
+        "name": "Design proteolysis-resistant stapled peptide analogs with staples placed away from binding interface",
+        "description": "Construct stapled all-hydrocarbon \u03b1-helical peptides (staple positions among residue pairs separated by 3, 4 or 7 residues) that mimic TM4 sequence but resist proteolysis.",
+        "guidance": "Only consider staple positions away from the protein-binding interface; use TM4 reference sequence positions (84\u2013105) as candidate locations; replace sidechains with hydrocarbon staples and simulate stapled peptides in complex and alone to evaluate."
+      },
+      {
+        "name": "Rank stapled peptide candidates by interaction-energy differences and \u03b1-helical propensity",
+        "description": "Rank candidates based on the computed interaction energy differences (peptide\u2013protein and peptide\u2013lipid) and the peptide\u2019s \u03b1-helical propensity.",
+        "guidance": "Retain highest-scoring stapled peptides for experimental characterization (synthesis and efflux inhibition assays)."
+      },
+      {
+        "name": "Parameterize small-molecule ligands with CHARMM-CGENFF following CHARMM protocol",
+        "description": "Submit ligand coordinates to CHARMM-CGENFF to generate force field parameters and iteratively improve with alternating quantum and molecular-mechanical calculations per CHARMM parametrization protocol.",
+        "guidance": "This is standard computational chemistry procedure and necessary prior to alchemical FE calculations."
+      },
+      {
+        "name": "Follow best practices in free-energy calculations and alchemical protocols",
+        "description": "Apply established methods for absolute and relative binding free-energy calculations (alchemical annihilation, restraining potentials) and adhere to good-practice recommendations.",
+        "guidance": "Use references and protocols (Boresch et al., Wang et al., Shirts, Pohorille et al.) and standard analysis workflows for reliable FE results."
+      },
+      {
+        "name": "Use realistic membrane composition known to support EmrE function (DPMC used here)",
+        "description": "Insert models into DPMC lipid bilayers (EmrE known to be functional in DPMC) though other membrane compositions may be used if appropriate.",
+        "guidance": "CHARMM-GUI used to build mixed bilayers; choose membrane composition consistent with biological activity."
+      },
+      {
+        "name": "Engage experimental collaborators for synthesis and functional testing of designed peptides",
+        "description": "Validated in silico peptide analogs should be synthesized and tested experimentally by collaborators (e.g., synthesis and efflux inhibition assays).",
+        "guidance": "Letters of support from synthesis/experimental labs indicated; plan for experimental testing within the two-year project period for top candidates."
+      },
+      {
+        "name": "Project timeline expectations for deliverables",
+        "description": "Anticipated pacing: ~6 months to produce several refined structures (Aims 1a\u20131c), additional 4\u20136 months for validation (Aims 1c\u20131d), remaining time for peptide optimization and stapling (Aim 2).",
+        "guidance": "Design and iterative cycles between in silico optimization and experimental testing are expected to be completed within the two-year R03 period for at least some candidate peptides."
+      }
+    ]
+  }
+}

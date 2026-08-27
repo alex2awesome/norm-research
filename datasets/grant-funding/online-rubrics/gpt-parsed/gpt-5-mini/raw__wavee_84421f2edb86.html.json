@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/wavee_84421f2edb86.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12853,
+  "output_tokens": 4122,
+  "elapsed_s": 1531.6235957499593,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on citation prediction, NLP, and applying/finetuning large language models for regression tasks",
+    "subtask_short": "llm-based citation rate prediction",
+    "subtask_description": "End-to-end prediction of average monthly citation rates from the textual content of academic manuscripts using pre-trained causal language models adapted for regression. Includes dataset construction, preprocessing, model architecture, training/fine-tuning, evaluation, interpretability, and ablation studies.",
+    "subtask_keywords": [
+      "citation_prediction",
+      "nlp",
+      "language_models",
+      "regression",
+      "biomedical_corpus"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pearson correlation coefficient (r)",
+        "description": "Measures the linear relationship between predicted and true (transformed) citation rates. \"This is our most commonly reported statistic due to its ubiquity and simplicity.\"",
+        "guidance": "Report Pearson r on holdout test sets and in scaling-law visualizations (e.g., 2D/3D plots). Use as a primary metric for linear agreement. Report both train and test splits and visualize trends across model sizes/data volumes."
+      },
+      {
+        "name": "Spearman rank correlation (\u03c1)",
+        "description": "Captures the monotonic relationship between predicted and true (transformed) citation rates. \"Equivalent to the Pearson correlation between the rank values of the two variables. This is the statistic we most commonly compare to prior works.\"",
+        "guidance": "Use Spearman \u03c1 for comparisons to prior citation-prediction literature because it is invariant under monotonic transformations. Report alongside Pearson r and highlight as the canonical comparison metric."
+      },
+      {
+        "name": "Coefficient of determination (R2)",
+        "description": "Quantifies the proportion of the variation in the true (transformed) citation rates which is explainable by the predicted citation rates.",
+        "guidance": "Report R2 to convey explained variance. Use together with correlation metrics and error metrics to give a fuller picture of predictive quality (e.g., compare R2 to prior models' R2 values)."
+      },
+      {
+        "name": "Mean Absolute Error (MAE)",
+        "description": "Represents the average magnitude of the prediction error.",
+        "guidance": "Report MAE to communicate average prediction error in the (transformed) units and to compare model robustness to outliers less aggressively than MSE."
+      },
+      {
+        "name": "Mean Squared Error (MSE)",
+        "description": "Similar to MAE, except it penalizes large deviations more heavily.",
+        "guidance": "Report MSE when sensitivity to large errors is important; include alongside MAE to show error distribution characteristics."
+      },
+      {
+        "name": "Dataset collection and filtering standards",
+        "description": "Construct dataset via automated queries (Elsevier API: seven biomedical keywords across months Jan 2000\u2013Dec 2024, max 6K results per query), then de-duplicate and rigorously filter corrupted entries, non-English and restricted-access items, and outliers (e.g., by article length, completeness).",
+        "guidance": "Document query strategy, deduplication steps, and concrete filtering rules. Provide summary statistics (e.g., keyword counts, final corpus size). Preserve publication date and citation counts as annotations. Justify exclusions and record them for reproducibility."
+      },
+      {
+        "name": "Target transformation and standardization",
+        "description": "Apply a log-transform to average monthly citation rates to produce a near-Gaussian distribution, then standardize using the training split's mean and standard deviation to prevent leakage.",
+        "guidance": "Perform transforms that stabilize optimization (e.g., log then z-score). Always compute normalization parameters on the training set only. Visualize transformed distribution vs standard normal to justify transformation (as in Figure 2)."
+      },
+      {
+        "name": "Document format standardization",
+        "description": "Convert original XML articles to a consistent Markdown representation via XSLT, preserving structural elements (section headings, section content, figure/table captions) and available metadata (journal name, copyright).",
+        "guidance": "Standardize document structure to ensure consistent tokenization and enable section-wise processing/ablations. Document conversion pipeline (scripts/XSLT) and include it in released code for reproducibility."
+      },
+      {
+        "name": "Train/test split and holdout practice",
+        "description": "Use a 90/10 train/test split and evaluate on a randomly generated hold-out test set unless otherwise specified.",
+        "guidance": "Fix and report split ratios; use a held-out test set for final reporting; when performing temporal experiments, use temporal splits consistent with the experiment design (e.g., train on pre-2023 for temporal holdout)."
+      },
+      {
+        "name": "Model architecture convention for regression",
+        "description": "Adapt pre-trained causal language models by appending a simple linear head to the model's final hidden state and inherit tokenization/context from the base model.",
+        "guidance": "Keep the base model architecture unchanged except for an appended regression head. Document exactly which hidden state is used (e.g., final token/state) and any pooling/aggregation. Provide reasons for architectural decisions."
+      },
+      {
+        "name": "Quantization and numeric precision for efficient training",
+        "description": "Apply 4-bit NF4 quantization and bfloat16 arithmetic to maximize hardware utilization and enable larger models to fit memory budgets.",
+        "guidance": "Report quantization scheme and numeric precision used in training/inference. Ensure that quantization choices are compatible with the fine-tuning method (e.g., QLoRA). Document any observed trade-offs between efficiency and predictive fidelity."
+      },
+      {
+        "name": "Two-phase training procedure (freeze then fine-tune)",
+        "description": "Train in two phases: (1) initial phase where the base LLM is frozen and only the appended linear head is trained; (2) fine-tuning phase where the base LLM is unfrozen and jointly fine-tuned with the linear head using QLoRA.",
+        "guidance": "Report phase durations, hyperparameters for each phase, and rationale (e.g., stability, compute). Note potential anti-patterns (authors observed possible trapping in inferior local minima from initial frozen-head training) and consider gradual unfreezing as mitigation."
+      },
+      {
+        "name": "Hyperparameter reporting",
+        "description": "Provide a complete list of training and fine-tuning hyperparameters (optimizers, learning rates, schedulers, weight decay, gradient accumulation steps, batch sizes, epochs) and QLoRA-specific parameters (dropout, alpha, rank).",
+        "guidance": "Publish hyperparameter tables (as in Appendix A) and state any omitted parameters left at defaults. This enables reproducibility and fair comparisons. When manual tuning is used, disclose it and note computational constraints."
+      },
+      {
+        "name": "Scaling-law experimental design",
+        "description": "Systematically characterize performance across model sizes and data volumes (models spanning ~0.5B\u201314B parameters; data fractions 1%\u201316% of corpus), and fit a bounded least-squares model f(p,d)=tanh(\u03b20+\u03b21 log2(p)+\u03b22 log2(d)) to extrapolate performance.",
+        "guidance": "Design grid experiments covering both axes (model size and data volume). Report full grids of metrics (train/test) and visualize as 2D/3D surfaces. Fit and report parameters for extrapolation, and state limits/assumptions of extrapolation explicitly."
+      },
+      {
+        "name": "Temporal holdout and concept-drift evaluation",
+        "description": "Train on an earlier time slice (e.g., pre-2023 subset) and evaluate on subsequent monthly cohorts, reporting a rolling Pearson correlation to assess out-of-distribution robustness over time.",
+        "guidance": "Use temporal holdouts to probe model robustness to concept drift. Report rolling correlations over time, interpret decay rates, and consider recommending online learning or periodic retraining if performance degrades rapidly."
+      },
+      {
+        "name": "Gradient-based saliency interpretability",
+        "description": "Compute token-level gradient attributions (gradients of predicted score w.r.t. input embeddings) to quantify impact of individual tokens and visualize with heatmaps; note observed heavy attribution to titles/abstracts and penalties for meta-discursive 'empty' statements.",
+        "guidance": "Use gradient-based methods to identify which text regions/models rely on. Present representative heatmaps and aggregate statistics (e.g., average attribution of titles vs body). Use interpretability findings to motivate ablations or training strategies (e.g., section-wise dropout)."
+      },
+      {
+        "name": "Ablation studies to test feature reliance",
+        "description": "Perform targeted ablations (e.g., remove titles and/or abstracts) to quantify how much models rely on peripheral elements; reported negligible drops (\u2206r < 0.02) in some settings.",
+        "guidance": "Design ablations that isolate candidate shortcut features (titles, abstracts, metadata). Report performance deltas and use them to argue about whether reliance is convenience vs necessity. Use results to propose regularization or dropout schemes."
+      },
+      {
+        "name": "Evaluate the effect of fine-tuning regimes",
+        "description": "Compare baseline pre-trained checkpoints to variants that underwent specialized fine-tuning (e.g., reasoning fine-tuning like DeepSeek distillation) to assess whether such fine-tuning helps or hurts citation prediction.",
+        "guidance": "Compare original and fine-tuned checkpoints systematically across data volumes; report where fine-tuning improves vs degrades performance and hypothesize mechanisms (e.g., forgetting of contextual information)."
+      },
+      {
+        "name": "Assess importance of pre-training",
+        "description": "Compare pre-trained models to randomly re-initialized models to quantify the benefit of pre-training (observed steep drop in performance after re-initialization across data volumes).",
+        "guidance": "Run experiments with random initialization replicating architecture but without pre-training to show semantic knowledge contribution. Report \u2206r across data volumes and discuss diminishing gaps as data volume grows."
+      },
+      {
+        "name": "Reproducibility and open-science commitments",
+        "description": "Public release of code and model checkpoints of various sizes to spur further advancements; provide appendices with hyperparameters, model variant tables, and full metric grids.",
+        "guidance": "Release code, data processing scripts, and model checks (subject to licenses) upon publication. Include exact model names, publishers, parameter counts, and full result tables to enable replication and fair comparison."
+      },
+      {
+        "name": "Compute/hardware and runtime reporting",
+        "description": "Report compute environment (e.g., Compute Canada's Narval cluster, CPU/GPU specs) and impose experiment constraints (maximum run-time of 7 days per run).",
+        "guidance": "Document hardware, wall-clock runtimes, and per-run constraints. Explicitly describe compute-driven limits on experiment breadth (e.g., maximum data fraction used) and consequences for results interpretation."
+      },
+      {
+        "name": "Visualization and reporting practices",
+        "description": "Use informative visualizations (3D surface for model size vs data volume vs performance; 2D isolations; rolling correlation plots; gradient heatmaps) and tabular appendices (full grids of metrics), highlighting best performance.",
+        "guidance": "Provide clear, labeled figures and tables that allow readers to inspect trends and extrapolations. Make choices explicit (e.g., log2-scaling axes), and provide appendices for full numerical values."
+      },
+      {
+        "name": "Ethical considerations and misuse warning",
+        "description": "Acknowledge potential misuse of citation-prediction systems (e.g., 'citation hacking') and argue these tools should complement, not supplant, human judgment.",
+        "guidance": "Include an ethics discussion in publications, warn about possible behavioral effects, and recommend safeguards (transparency, human oversight) when deploying models for evaluation/sorting."
+      },
+      {
+        "name": "Limitations disclosure and directions for future work",
+        "description": "Explicitly disclose study limitations (single-run experiments, manual hyperparameter tuning, seven-day compute limit, reliance on biomedical English-only data) and propose future directions (multi-modal integration, section-wise dropout, progressive training regimes, expansion to non-biomedical and non-English corpora).",
+        "guidance": "Provide a candid limitations section and actionable future work items. Use limitations to contextualize claims and recommend specific experimental modifications for follow-up studies."
+      }
+    ]
+  }
+}

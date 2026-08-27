@@ -1,0 +1,146 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/rej_73052d36cd13.pdf",
+  "task": "grant-funding",
+  "source_dir": "raw",
+  "source_file": "rej_73052d36cd13.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39969,
+  "model": "gpt-5-mini",
+  "elapsed_s": 66.23888970800908,
+  "input_tokens": 11677,
+  "output_tokens": 4000,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, NIH policy analysts, scientometricians, and policymakers studying NIH grant funding and disparities",
+    "subtask_short": "analyzing NIH R01 funding disparities",
+    "subtask_description": "Empirical/statistical analysis of racial differences in NIH R01 application outcomes (discussion, scores, and funding) using IMPAC II data, word2vec topic clustering, bibliometric measures (RCR), and multivariate regression to quantify contributors to the funding gap.",
+    "subtask_keywords": [
+      "nih",
+      "r01",
+      "funding_disparities",
+      "word2vec",
+      "rcr",
+      "regression_analysis"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Discussion status (application is discussed by study section)",
+        "description": "Whether an R01 application was discussed by a study section. Impact and percentile scores are only assigned to discussed applications.",
+        "guidance": "Used as a primary decision point; applications from AA/B scientists are less likely to be discussed, which substantially contributes to the funding gap. Discussion is treated as a binary outcome in probit models."
+      },
+      {
+        "name": "Overall impact score (for discussed applications)",
+        "description": "The overall impact score assigned to discussed R01 applications (extracted from IMPAC II).",
+        "guidance": "Impact scores inform funding decisions and are analyzed to compare scores received by AA/B and WH applicants; used as an outcome variable to assess scoring differences."
+      },
+      {
+        "name": "Percentile score (for discussed applications)",
+        "description": "Percentile ranked score assigned to discussed applications (available for ~91% of discussed R01s).",
+        "guidance": "Modeled with a linear model as an outcome; percentile differences across topic clusters and study sections are measured and used in variance analyses."
+      },
+      {
+        "name": "Relative Citation Ratio (RCR) as publication influence metric",
+        "description": "RCR is used as a measure of paper-level influence and as a proxy for prestige (not equivalent to impact/importance/quality).",
+        "guidance": "Applied to publications listed in biosketches and to publications after award; median biosketch RCR and count of biosketch papers in the top RCR decile are used as regression controls. Note caution: influence \u2260 quality."
+      },
+      {
+        "name": "Biosketch publication metrics (median RCR and top-decile count)",
+        "description": "Two publication-based covariates extracted from applicant biosketches: median biosketch RCR and number of biosketch publications in the top RCR decile.",
+        "guidance": "Transformed via inverse hyperbolic sine (IHS) for regression (median RCR multiplied by 100 before IHS). Include binary indicator for missing biosketch RCR (8.7%). These are proxies for publication influence rather than quantity."
+      },
+      {
+        "name": "Topic assignment via word2vec clustering",
+        "description": "Applications are clustered into content/topic areas using word2vec embeddings of title/abstract/specific aims, producing partitions at k = 30, 150, and 300; k = 150 chosen as primary.",
+        "guidance": "Clusters represent content-driven topics agnostic to administrative boundaries; topic cluster membership is used as a control in regression and to rank topics by funding rates. Clusters were binned into quintiles by funding rate."
+      },
+      {
+        "name": "Use of topic superclusters (merging clusters for robustness)",
+        "description": "Iteratively merge the 150 clusters into superclusters under the constraint that no merged cluster comprises more than 5% of applications; 89 superclusters used as the base case.",
+        "guidance": "Alternative topic parametrizations tested to confirm robustness; adding superclusters to regression reduces the estimated award gap, demonstrating the role of topic choice."
+      },
+      {
+        "name": "Rocket chart visualization for pipeline stages",
+        "description": "Visual representation (rocket charts) that shows numbers/rates of applicants, submissions, applications discussed, and applications funded per applicant (rates per applicant).",
+        "guidance": "Compute rate ratios and combined percentage differences at each step (e.g., discussed rates, funded per submission); scale rocket thickness to number of applications per applicant; used to visually compare AA/B and WH groups."
+      },
+      {
+        "name": "Preprocessing pipeline for application text",
+        "description": "Text preprocessing steps: concatenate title/abstract/specific aims, ASCII transliteration, dehyphenation, remove boilerplate, substitute acronyms and MeSH noun phrases, remove parentheticals, standardize capitalization, and select POS.",
+        "guidance": "Substitute acronyms defined in-text appearing in \u22655 documents; convert noun phrases to single tokens (e.g., natural_language_processing); rationale: improves embedding precision and interpretability."
+      },
+      {
+        "name": "Part-of-speech filtering (vocabulary restriction)",
+        "description": "Remove determiners/conjunctions and semantic POS (verbs, adverbs); retain only nouns and adjectives for embeddings.",
+        "guidance": "Rationale: improved precision/recall in downstream classification and more interpretable clusters; intended to focus on topic-descriptive tokens."
+      },
+      {
+        "name": "Down-weighting of superfluous words using Gaussian weighting",
+        "description": "Identify superfluous words (e.g., scientist, collaboration, university) and de-emphasize them by applying Gaussians centered on each such word so their contribution to document vectors is fractionally reduced based on proximity.",
+        "guidance": "Alternative to a fixed stop-word list; prevents meta-words from dominating clusters and producing non-descriptive groupings."
+      },
+      {
+        "name": "Word2vec hyperparameter and vector aggregation choices",
+        "description": "Standard word2vec settings used: 300 dimensions, window size 5, negative skip-gram sampling rate 10^-5, 80 training epochs, minimum word count 10. Document vectors computed as sum of TF-IDF \u00d7 word embedding and renormalized to unit sphere.",
+        "guidance": "Interdocument comparisons via cosine similarity; document vector approach sacrifices some information but yields an average semantic sense adequate for clustering."
+      },
+      {
+        "name": "Clustering procedure and centroid aggregation",
+        "description": "Spectral clustering on sampled subsets: randomly sample multiple subsets of 10,000 document vectors, compute spectral clustering to get centroids, collapse centroids into meta-centroids, and assign documents to nearest meta-centroid. k partitions tried: 30, 150, 300.",
+        "guidance": "Spectral clustering used because k-means ignores spherical manifold and full spectral clustering is computationally expensive. Choice of k affects granularity (30 broad, 150 mid-level, 300 fine-grained)."
+      },
+      {
+        "name": "SME validation of computational clusters",
+        "description": "Human subject-matter experts (SMEs) tested agreement with word2vec partitions via binary grouping tasks; SMEs reproduced groupings 97.6% of the time; median annotator agreement Cohen's kappa = 0.96.",
+        "guidance": "High SME agreement used as evidence that computational clusters align with human judgment; experiment used varying degrees of semantic overlap to test robustness."
+      },
+      {
+        "name": "Cluster-to-study-section representation threshold (80%)",
+        "description": "To quantify how many study sections represent a cluster, rank study sections by fraction of cluster applications and count the study sections that compose 80% of the cluster's applications.",
+        "guidance": "This threshold excludes study sections with very few cluster applications and yields a robust measure of study-section representation for a topic."
+      },
+      {
+        "name": "Topic-cluster relatedness and network connectivity thresholds",
+        "description": "Intercluster relatedness measured by modified cosine similarity scaled to [-0.3, 1.0]; in the topic cluster network, nodes are connected if median distance \u2265 0.725.",
+        "guidance": "Provides interpretable network of related topics; threshold chosen for clarity of connections."
+      },
+      {
+        "name": "Variance analysis of percentile scores within clusters and study sections",
+        "description": "Compute median percentile score for each study section in each topic cluster and calculate weighted within-cluster variance; compute within-study-section variance by sampling cluster applications within that study section.",
+        "guidance": "Compare distributions (Kolmogorov-Smirnov test) and assess whether cluster-based variance differs from random label shuffling to evaluate consistency of percentile scores across clusters."
+      },
+      {
+        "name": "Statistical modeling choices for outcomes",
+        "description": "Use probit models (maximum likelihood) for binary outcomes (e.g., discussed, awarded), linear models for percentile score outcomes, Poisson models for counts (number of applications per applicant) with quasi-MLE and robust SEs, and cluster-robust SEs clustered by applicant where applicable.",
+        "guidance": "Report Average Marginal Effects (AMEs) rather than raw regression coefficients; treat resubmissions and original applications as separate entries with a resubmission indicator; restrict some analyses (e.g., multivariate regressions) to Type 1 R01s to avoid complications."
+      },
+      {
+        "name": "Controls and covariates in regression models",
+        "description": "Individual/application-level controls: FY indicator, ESI flag, resubmission indicator, years since degree (linear and quadratic), number of prior R01 applications and awards, biosketch RCR metrics (IHS transformed). Organization-level controls: Carnegie classification, IMPAC II org type, geographic region, prior-period total R01 funding and number of applicants (IHS transformed).",
+        "guidance": "Also use organization fixed-effects (binary indicators) in alternative specifications restricted to organizations with >100 total applications and >10 AA/B applications to compare within organizations."
+      },
+      {
+        "name": "Handling of resubmissions in analyses",
+        "description": "Treat original and resubmitted applications as separate observations (when eligible), include a resubmission indicator, and model resubmission probability with a probit using a FY+2 resubmission window.",
+        "guidance": "Restricting to FY+2 captures >98% of resubmissions; resubmission behavior is linked to discussion likelihood and scoring."
+      },
+      {
+        "name": "Transformation and missing-data handling for RCR controls",
+        "description": "Transform biosketch RCR features with inverse hyperbolic sine (IHS) after multiplying median RCR by 100; include a binary indicator for missing biosketch RCR (8.7%).",
+        "guidance": "IHS approximates log transformation and allows zeros; inclusion of missing-data indicator mitigates bias from incomplete biosketch information."
+      },
+      {
+        "name": "AME computation and interpretation",
+        "description": "Report Average Marginal Effects (AMEs): compute marginal effect of variable of interest for each observation at its covariate values and then average those marginal effects.",
+        "guidance": "AME chosen because marginal effects in nonlinear models (e.g., probit) vary with covariate values; AME gives an interpretable average effect (e.g., estimated percentage-point gap)."
+      },
+      {
+        "name": "Organization-level subsample constraints for fixed-effects analysis",
+        "description": "When using organization binary indicators, restrict sample to organizations with >100 total applications and >10 applications from AA/B scientists (49 organizations in the subsample).",
+        "guidance": "This subsample allows direct within-organization comparisons and yields estimates similar to the full sample while controlling for organization characteristics."
+      }
+    ]
+  }
+}
