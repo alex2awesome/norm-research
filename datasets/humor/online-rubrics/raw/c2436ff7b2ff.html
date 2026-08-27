@@ -1,0 +1,358 @@
+<html>
+    <head>
+        <link id="darkTheme" rel="stylesheet" href="css/bootstrap-darkly-4.3.1.min.css">
+        <link id="lightTheme" rel="stylesheet" href="css/bootstrap-flatly-4.3.1.min.css" disabled="">
+        <link id="customScrollbars" rel="stylesheet" href="css/simplebar-5.0.7.min.css" disabled="">
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="icon" href="favicon.png">
+        <link rel="manifest" href="manifest.json">
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap-4.3.1.bundle.min.js"></script>
+        <script src="js/simplebar-5.0.7.min.js"></script>
+        <script src="js/app.js"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js"></script>
+        <title>Home - Webcomic Archive</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="The Webcomic Archive maintains backup copies of hundreds of different online comics and graphic novels to prevent good stories from being lost to time.">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top navbar-miny py-0 px-lg-0">
+            <div class="collapse navbar-collapse w-100 order-1 order-lg-0">
+                <a href="#/home">
+                    <span class="navbar-brand pl-3 d-none d-lg-inline">
+                        <img src="favicon.svg" class="navbar-icon" title="Raindrop">
+                    </span>
+                </a>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active" data-toggle="collapse" data-target=".collapse.show">
+                        <a class="nav-link" href="#/home">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Comics</a>
+                        <div class="dropdown-menu dropdown-maxx pt-0">
+                            <div class="form-inline p-0">
+                                <input type="text" class="form-control w-100 rounded-0 border-0 shadow-none" placeholder="Filter comics..." autocomplete="off" oninput="search(this);" data-target="dropdownComics">
+                            </div>
+                            <div class="dropdown-divider mt-0"></div>
+                            <div id="dropdownComicsContainer" class="pre-scrollable content-scroll dropdown-maxx" data-target="dropdownComics">
+                                <div id="dropdownComics" tabindex="-1" data-toggle="collapse" data-target=".collapse.show"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a id="stripsDropdown" class="nav-link dropdown-toggle disabled" href="#" data-toggle="dropdown">Strips</a>
+                        <div class="dropdown-menu dropdown-maxx pt-0">
+                            <div class="form-inline p-0">
+                                <input type="text" class="form-control w-100 rounded-0 border-0 shadow-none" placeholder="Filter strips..." autocomplete="off" oninput="search(this);" data-target="dropdownStrips">
+                            </div>
+                            <div class="dropdown-divider mt-0"></div>
+                            <div id="dropdownStripsContainer" class="pre-scrollable content-scroll dropdown-maxx" data-target="dropdownStrips">
+                                <div id="dropdownStrips" tabindex="-1" data-toggle="collapse" data-target=".collapse.show"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item" data-toggle="collapse" data-target=".collapse.show">
+                        <a class="nav-link" href="#/settings">Settings</a>
+                    </li>
+                    <li class="nav-item" data-toggle="collapse" data-target=".collapse.show">
+                        <a class="nav-link" href="#/about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="order-0 w-100 navbar-miny py-1 d-flex justify-content-between overflow-hidden">
+                <button class="navbar-toggler" data-toggle="collapse" data-target=".collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <span id="title" class="navbar-brand active mx-auto px-2">Webcomic Archive</span>
+                <button class="navbar-toggler invisible">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse w-100 order-2">
+                <div class="navbar-nav ml-auto">
+                    <div class="mx-auto">
+                        <button id="favoriteButton" class="nav-item navbar-lg-miny btn btn-primary px-4 px-xl-5 border-0 rounded-0 shadow-none disabled" onclick="toggleFavorite();">&star;</button>
+                        <button class="nav-item navbar-lg-miny btn btn-primary px-4 px-xl-5 border-0 rounded-0 shadow-none disabled" onclick="navigate('first');">&lt;&lt;</button>
+                        <button class="nav-item navbar-lg-miny btn btn-primary px-4 px-xl-5 border-0 rounded-0 shadow-none disabled" onclick="navigate('prev');">&lt;</button>
+                        <button class="nav-item navbar-lg-miny btn btn-primary px-4 px-xl-5 border-0 rounded-0 shadow-none disabled" onclick="navigate('next');">&gt;</button>
+                        <button class="nav-item navbar-lg-miny btn btn-primary px-4 px-xl-5 border-0 rounded-0 shadow-none disabled" onclick="navigate('last');">&gt;&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div id="sidebar" class="col-lg-2 card content d-none d-lg-flex flex-column px-0 border-0">
+                    <div id="sidebarHeader" class="card-header rounded-0 border-0">All Comics</div>
+                    <div class="form-inline">
+                        <input id="sidebarInput" type="text" class="form-control w-100 rounded-0 border-top-0 border-left-0 border-right-0 border-secondary shadow-none" placeholder="Filter comics..." autocomplete="off" oninput="search(this);" data-target="sidebarComics">
+                    </div>
+                    <div class="content-scroll h-100 mb-2 border-bottom border-secondary">
+                        <div id="sidebarComics" class="list-group list-group-flush" tabindex="-1" style="display:none;"></div>
+                        <div id="sidebarStrips" class="list-group list-group-flush" tabindex="-1" style="display:none;"></div>
+                    </div>
+                    <div id="sidebarCard" class="card border-secondary m-2 mt-auto" style="display:none;">
+                        <div class="card-body d-flex justify-content-between">
+                            <img id="sidebarCardIcon" class="card-icon my-auto" src="">
+                            <div class="d-flex flex-column ml-2">
+                                <span id="sidebarCardCompleted" class="badge badge-pill badge-success mb-1" style="display:none;">Completed</span>
+                                <span id="sidebarCardUpdated" class="badge badge-pill badge-info mb-1" style="display:none;">Updated</span>
+                                <span id="sidebarCardAdult" class="badge badge-pill badge-danger mb-1" style="display:none;">Adult</span>
+                                <span id="sidebarCardLocal" class="badge badge-pill badge-warning mb-1" style="display:none;">Local</span>
+                            </div>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <div id="sidebarCardText" class="list-group-item">&nbsp;</div>
+                        </div>
+                        <div class="progress rounded-0">
+                            <div id="sidebarCardProgress" class="progress-bar"></div>
+                        </div>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span id="sidebarCardTitle" class="minx-0">&nbsp;</span>
+                            <span id="sidebarCardStrips" class="badge badge-primary badge-pill ml-1">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="content" class="col-lg-10 content content-scroll h-100 p-0">
+                    <div id="home" class="p-3" style="display:none;">
+                        <div class="jumbotron mb-3">
+                            <h5>Home</h5>
+                        </div>
+                        <div id="welcomeBanner" class="jumbotron mb-3" style="display:none;">
+                            <button class="close" onclick="hideWelcomeBanner();">&times;</button>
+                            <p><b>Welcome to the Webcomic Archive!</b></p>
+                            The Webcomic Archive maintains backup copies of hundreds of different online comics and graphic novels to prevent good stories from being lost to time.<br>
+                            Comics without the &nbsp;<span class="badge badge-pill badge-warning">Local</span>&nbsp; badge are still available online and will direct readers to the creator's website.
+                        </div>
+                        <div id="comicCards"></div>
+                    </div>
+                    <div id="comic" style="display:none;">
+                        <div id="comicContainer" class="h-100 d-flex flex-column">
+                            <div class="mx-auto p-2 d-flex flex-shrink-1 miny-0 text-center">
+                                <div id="comicImages" class="h-100 d-flex flex-column"></div>
+                            </div>
+                            <div class="mx-auto pb-2 flex-shrink-0">
+                                <button class="btn btn-primary mx-3" onclick="navigate('first');">&lt;&lt;</button>
+                                <button class="btn btn-primary mx-3" onclick="navigate('prev');">&lt;</button>
+                                <button class="btn btn-primary mx-3" onclick="navigate('next');">&gt;</button>
+                                <button class="btn btn-primary mx-3" onclick="navigate('last');">&gt;&gt;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="settings" class="p-3" style="display:none;">
+                        <div class="jumbotron mb-3">
+                            <h5>Settings</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="m-3 form-group d-flex flex-column">
+                                    <h5>Theme</h5>
+                                    <div class="custom-control custom-switch mb-2">
+                                        <input id="settingTheme" type="checkbox" class="custom-control-input" checked="" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingTheme">Dark mode</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingSidebar" type="checkbox" class="custom-control-input" checked="" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingSidebar">Show sidebar</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingProgressbar" type="checkbox" class="custom-control-input" checked="" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingProgressbar">Show progressbar</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingFitToScreen" type="checkbox" class="custom-control-input" checked="" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingFitToScreen">Fit comics to screen</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingCustomScrollbars" type="checkbox" class="custom-control-input" checked="" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingCustomScrollbars">Use custom scrollbars</label>
+                                    </div>
+                                </div>
+                                <div class="m-3 form-group d-flex flex-column">
+                                    <h5>Comic List</h5>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingNSFW" type="checkbox" class="custom-control-input" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingNSFW">Show NSFW comics</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingFavoritesOnly" type="checkbox" class="custom-control-input" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingFavoritesOnly">Show favorites only</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingRecommendedHeading" type="checkbox" class="custom-control-input" checked="" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingRecommendedHeading">Show separate heading for recommended comics</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingUpdatedHeading" type="checkbox" class="custom-control-input" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingUpdatedHeading">Show separate heading for recently updated comics</label>
+                                    </div>
+                                    <div class="custom-control custom-switch my-2">
+                                        <input id="settingUnreadHeading" type="checkbox" class="custom-control-input" onchange="applySettings();">
+                                        <label class="custom-control-label" for="settingUnreadHeading">Show separate heading for unread comics</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="m-3">
+                                    <h5>Statistics</h5>
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Archived comics</th>
+                                                <td><span id="statComicCount">0</span></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Completed</th>
+                                                <td><span id="statCompletedCount">0</span></td>
+                                                <td>(<span id="statCompletedPercent">0</span>% of total)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>NSFW</th>
+                                                <td><span id="statAdultCount">0</span></td>
+                                                <td>(<span id="statAdultPercent">0</span>% of total)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Recently updated</th>
+                                                <td><span id="statUpdatedCount">0</span></td>
+                                                <td>(<span id="statUpdatedPercent">0</span>% of total)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Marked unread</th>
+                                                <td><span id="statUnreadCount">0</span></td>
+                                                <td>(<span id="statUnreadPercent">0</span>% of total)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Archive size</th>
+                                                <td><span id="statSize">0</span> GB</td>
+                                                <td>(<span id="statFileCount">0</span> files, <span id="statDirCount">0</span> directories)</td>
+                                            </tr>    
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="m-3 form-group d-flex flex-column">
+                                    <h5>Actions</h5>
+                                    <button class="btn btn-primary my-2" onclick="resetState();">
+                                        Mark all comics as read
+                                    </button>
+                                    <div class="d-flex w-100">
+                                        <input id="stateFileImport" type="file" class="d-none" autocomplete="off" onchange="importState();">
+                                        <a id="stateFileExport" class="d-none" download="webcomic-archive-bookmarks.json" href=""></a>
+                                        <button class="btn btn-primary my-2 mr-1 flex-fill" onclick="importState();">
+                                            Import bookmarks
+                                        </button>
+                                        <button class="btn btn-primary my-2 ml-1 flex-fill" onclick="exportState();">
+                                            Export bookmarks
+                                        </button>
+                                    </div>
+                                    <button id="clearFileCache" class="btn btn-warning d-flex justify-content-between align-items-center my-2" onclick="clearCache(this, 'file');" disabled="">
+                                        <div class="w-25"></div>
+                                        <div class="w-100">Clear file cache</div>
+                                        <div class="w-25 text-right">
+                                            <div class="spinner-border spinner-border-sm" style="display:none;"></div>
+                                        </div>
+                                    </button>
+                                    <button id="clearFaviconCache" class="btn btn-danger d-flex justify-content-between align-items-center my-2" onclick="clearCache(this, 'favicon');" disabled="">
+                                        <div class="w-25"></div>
+                                        <div class="w-100">Clear favicon cache</div>
+                                        <div class="w-25 text-right">
+                                            <div class="spinner-border spinner-border-sm" style="display:none;"></div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="about" class="p-3" style="display:none;">
+                        <div class="jumbotron mb-3">
+                            <h5>About</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="m-3">
+                                    <p>The Webcomic Archive is powered by <b>Raindrop</b>, a polished interface for browsing downloaded webcomic archives, and <b><a href="https://github.com/webcomics/dosage">Dosage</a></b>, a versatile automated webcomic downloader.</p>
+                                    <p>To recommend comics for inclusion in the archive, request comics be made available for viewing, or report problems accessing the archive, please contact <a href="mailto:admin@webcomicarchive.com">admin@webcomicarchive.com</a>.</p>
+                                </div>
+                                <div class="m-3 pt-3">
+                                    <h5>Frequently Asked Questions</h5>
+                                    <p>
+                                        <b>What is the purpose of the Webcomic Archive?</b><br>
+                                        The Webcomic Archive maintains backup copies of hundreds of different online comics and graphic novels to prevent good stories from being lost to time.
+                                    </p>
+                                    <p>
+                                        <b>There are so many comics! Where should I start?</b><br>
+                                        <a href="#/Freefall">Freefall</a> and <a href="#/XKCD">XKCD</a> are highly recommended. For a directory of comics sorted by category, including many not present in the archive, please visit <a href="https://new.belfrycomics.net/">The Belfry WebComics Index</a>.
+                                    </p>
+                                    <p>
+                                        <b>Why are some pages out of order?</b><br>
+                                        Comic pages are lexically sorted by filename. Some webcomics don't use ordered or consistent filenames for their pages; while renaming is generally automatic, bonus pages or refactors can cause strips to appear out of order.
+                                    </p>
+                                    <p>
+                                        <b>Why are some comics unavailable?</b><br>
+                                        Only comics with the &nbsp;<span class="badge badge-pill badge-warning">Local</span>&nbsp; badge can be viewed from the archive. The Webcomic Archive is intended to provide an "archive of last resort" for comics that are unavailable elsewhere; for comics that are still available on the internet, please support their creators by visiting their websites directly.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="m-3">
+                                    <h5>Keyboard Shortcuts</h5>
+                                    <table>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">W</span></td>
+                                            <td>First comic</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">A</span>or<span class="badge badge-primary my-1 mx-2">&larr;</span></td>
+                                            <td>Previous comic</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">S</span></td>
+                                            <td>Last comic</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">D</span>or<span class="badge badge-primary my-1 mx-2">&rarr;</span></td>
+                                            <td>Next comic</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">E</span></td>
+                                            <td>Toggle favorite</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">F</span></td>
+                                            <td>Highlight the filter box in the sidebar.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap"><span class="badge badge-primary my-1 mr-2">Space</span>or<span class="badge badge-primary my-1 mx-2">0</span></td>
+                                            <td>Toggle the image display mode between full-size and fit-to-screen.</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="d-none d-lg-block m-3 pt-3 text-center">
+                                    <img src="favicon.svg" class="h-50 mw-100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Official Website Available</h5>
+                        <button class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>The official website for this comic appears to be online. Please support the comic's creator by visiting their website directly.
+                    </div>
+                    <div class="modal-footer">
+                        <a id="modalLink" class="btn btn-primary" href="">Official Website</a>
+                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

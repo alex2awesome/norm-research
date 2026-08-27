@@ -1,0 +1,3469 @@
+
+<!doctype html>
+<html lang="en-US" class="nojs">
+<head>
+	<style>
+    .osano-cm-widget {
+        display: none;
+    }
+</style>
+
+<script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer[0] = {}; // rj datalayer.
+    function gtag() { window.dataLayer.push(arguments); }
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'personalization_storage': 'denied',
+        'functionality_storage': 'granted',
+        'security_storage': 'granted',
+        'wait_for_update': 500,
+    });
+    gtag("set", "ads_data_redaction", true);
+</script>
+<script>
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+    pbjs.que.push(function () {
+        pbjs.setConfig({
+            consentManagement: {
+                gdpr: {
+                    cmpApi: 'iab', // Use IAB TCF API
+                    timeout: 3000,  // Wait up to 3s for user response
+                    allowAuctionWithoutConsent: false, // Suppress auctions if no consent
+                    defaultGdprScope: true, // Enforce GDPR globally if unsure
+                },
+                usp: {
+                    cmpApi: 'iab', // Use IAB CCPA/CPRA interface
+                    timeout: 100, // Wait up to 100ms for US privacy string
+                },
+                gpp: {
+                    cmpApi: 'iab', // IAB GPP API for US state-level laws and others
+                    timeout: 3000,  // Wait up to 3s for user response
+                }
+            }
+        });
+    });
+</script>
+
+<script src="https://cmp.osano.com/lHFYjdHC7m/0330e02a-add0-459d-b255-bf8ace1f3c7c/osano.js"></script>
+
+<script>
+    window.rjConsentHandler = {
+        handleAllConsents: function () {
+            console.log('Osano - RJ HandleAllConsents');
+            const consent = window.Osano.cm.getConsent();
+            window.rjConsentHandler.marketingConsent.handle(consent);
+            window.rjConsentHandler.analyticsConsent.handle(consent);
+        },
+        deletePlaceholders: function (selector) {
+            const elementsToDelete = document.querySelectorAll(selector);
+            elementsToDelete.forEach(element => {
+                element.remove();
+            });
+        },
+        createPlaceholder: function (text, className) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'rj-consent-placeholder ' + className;
+            placeholder.innerHTML = `
+            <div>
+                <p>${text}</p>
+                <button onclick="window.Osano.cm.showDrawer()">Manage Privacy Settings</button>
+            </div>
+            `;
+            return placeholder;
+        },
+        marketingConsent: {
+            delete: function () {
+                window.rjConsentHandler.deletePlaceholders('.rj-consent-placeholder-marketing');
+            },
+            handle: function (consent) {
+                console.log('Osano - Marketing Consent: ', consent.MARKETING);
+                if (consent.MARKETING !== "ACCEPT") {
+                    // window.rjConsentHandler.marketingConsent.stn(consent);
+                    window.rjConsentHandler.marketingConsent.trinityAudio(consent);
+                }
+
+            },
+            stn: function (consent) {
+                // const blockedElems = document.querySelectorAll('script[type="osano/blocked"][data-type="s2nScript"]');
+                const blockedElems = document.querySelectorAll('.s2nPlayer');
+                const text = `
+                    Your privacy settings have blocked this video. To access, please adjust your cookie preferences.
+                    <br>Please provide consent for <b>Targeted Advertising</b> to view this content.
+                `;
+                blockedElems.forEach(elem => {
+                    const placeholder = window.rjConsentHandler.createPlaceholder(text, 'rj-consent-placeholder-marketing');
+                    elem.insertAdjacentElement("beforebegin", placeholder);
+                });
+            },
+            trinityAudio: function (consent) {
+                const blockedElems = document.querySelectorAll('#most-view-audio');
+                const text = `
+                    Your privacy settings have blocked this audio. To access, please adjust your cookie preferences.
+                    <br>Please provide consent for <b>Targeted Advertising</b> to view this content.
+                `;
+                blockedElems.forEach(elem => {
+                    const placeholder = window.rjConsentHandler.createPlaceholder(text, 'rj-consent-placeholder-marketing');
+                    elem.insertAdjacentElement("beforebegin", placeholder);
+                });
+            },
+        },
+        analyticsConsent: {
+            delete: function () {
+                window.rjConsentHandler.deletePlaceholders('.rj-consent-placeholder-analytics');
+            },
+            handle: function (consent) {
+                console.log('Osano - Analytics Consent: ', consent.ANALYTICS);
+                if (consent.ANALYTICS !== "ACCEPT") {
+                    // Most read.
+                    window.rjConsentHandler.analyticsConsent.mostRead(consent);
+                }
+            },
+            mostRead: function () {
+                const blockedElems = document.querySelectorAll('.rj-most-view .field-story, #recommend-marfeel');
+                const text = `
+                    Your privacy settings have blocked this content. To access, please adjust your cookie preferences.
+                    <br>Please provide consent for <b>Analytics</b> to view this content.
+                `;
+                blockedElems.forEach(elem => {
+                    const placeholder = window.rjConsentHandler.createPlaceholder(text, 'rj-consent-placeholder-analytics');
+                    elem.insertAdjacentElement("beforebegin", placeholder);
+                });
+            },
+        },
+    };
+
+    window.Osano.cm.addEventListener('osano-cm-initialized', () => {
+        console.log('Osano - Initialized', 'Jurisdiction: ' + window.Osano.cm.jurisdiction);
+        const jurisdiction = window.Osano.cm.jurisdiction;
+        if (
+            jurisdiction &&
+            jurisdiction.startsWith('us-') &&
+            ![
+                'us-ca', 'us-co', 'us-ct', 'us-de', 'us-ia',
+                'us-mn', 'us-mt', 'us-ne', 'us-nh', 'us-nj',
+                'us-or', 'us-tn', 'us-tx', 'us-ut', 'us-va'
+            ].includes(jurisdiction)
+        ) {
+            const observer = new MutationObserver((mutations, obs) => {
+                const message = document.querySelector('.osano-cm-content__message.osano-cm-message');
+                if (message) {
+                    message.textContent = "This website uses cookies and similar tracking technologies and collects information about you and your visit. You may manage your cookie preferences by clicking the “Manage Preferences” button below.";
+                    obs.disconnect();
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        window.rjConsentHandler.handleAllConsents();
+
+    });
+    window.Osano.cm.addEventListener('osano-cm-script-blocked', function (item) {
+        console.log('Osano - Script blocked: ', item);
+    });
+    window.Osano.cm.addEventListener('osano-cm-cookie-blocked', function (item) {
+        console.log('Osano - Cookie blocked: ', item);
+    });
+    window.Osano.cm.addEventListener('osano-cm-analytics', function () {
+        console.log('Osano - Consent granted for analytics. Delete analytics placeholders.');
+        window.rjConsentHandler.analyticsConsent.delete();
+    });
+    window.Osano.cm.addEventListener('osano-cm-marketing', function () {
+        console.log('Osano - Consent granted for marketing. Delete marketing placeholders.');
+        window.rjConsentHandler.marketingConsent.delete();
+    });
+</script>
+<style>
+    .rj-consent-placeholder {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f9f9f9;
+        border: 1px dashed #bbb;
+        text-align: center;
+        font-size: 13px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .rj-consent-placeholder button {
+        margin-top: 10px;
+        padding: 3px 5px;
+        border-radius: 5px;
+        font-size: 12px;
+        color: #fff;
+        background-color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+</style>	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<link rel="preload" href="https://fonts.googleapis.com/css?family=Merriweather:400,700,900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet';" />
+	<link rel="preload" href="https://use.typekit.net/gmb6zaw.css" as="style" onload="this.onload=null;this.rel='stylesheet';">
+	<link rel="preload" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/library/font-awesome-4.7.0/css/font-awesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet';" />
+	<!-- intersection-observer.min.js already available in most browser -->
+
+			<!-- BEGIN metadata tag -->
+		<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"NewsArticle","publisher":{"@type":"Organization","name":"Neon","logo":{"@type":"ImageObject","url":"https:\/\/neon.reviewjournal.com\/wp-content\/uploads\/2025\/05\/neon_logo_default.png?w=600","width":600,"height":172}},"mainEntityOfPage":"https:\/\/neon.reviewjournal.com\/post\/202602","image":["https:\/\/neon.reviewjournal.com\/wp-content\/uploads\/2015\/06\/29252885-sfxl_.jpg?w=640"],"thumbnailUrl":"https:\/\/neon.reviewjournal.com\/wp-content\/uploads\/2015\/06\/29252885-sfxl_.jpg?w=150&h=100&crop=1","headline":"Jon Stewart skips jokes on \u2018Daily Show\u2019 after S.C. shootings","url":"https:\/\/neon.reviewjournal.com\/post\/202602","dateCreated":"2015-06-19T17:46:05Z","datePublished":"2015-06-19T17:46:05Z","dateModified":"2017-03-02T20:10:35Z","creator":[{"@type":"Person","name":"David Wright Cnn"}],"keywords":"Entertainment, mc-entertainment, rj-has-vdo","description":"<p>Jon Stewart dropped any pretense of humor at the beginning of the &#8220;Daily Show&#8221; on Thursday night, choosing instead to open his episode by addressing the tragic Charleston shootings with a solemn, critical monologue.<\/p>","articleSection":"Entertainment","author":[{"@type":"Person","name":"David Wright Cnn"}]}</script>
+		<!-- END metadata tag -->
+					<script type="text/javascript">
+			window.dataLayer = window.dataLayer || [];
+			window.dataLayer[0] = {"rj_page_type":"story","node_type":"article","vdo_num":1,"img_num":3,"content_source":"","metrics":{"pageType":"article","mediaType":"article","articleId":202602,"articlePublishTime":"2015-06-19T17:46:05+00:00","articleUpdateTime":"2017-03-02T20:10:35+00:00","articleType":"post","author":["David Wright Cnn"],"articleSource":"","section":"Entertainment","categories":["Entertainment"],"hierarchy":"Entertainment","hl-category":"Entertainment"}};
+			function rj_gtag() {
+				if (!arguments || 'event' !== arguments[0] || !arguments[2] || !arguments[2].event_category || !arguments[2].event_action || !arguments[2].event_label) {
+					return;
+				}
+
+				let data = arguments[2];
+				window.dataLayer.push({
+					'event': 'GAEvent',
+					'category': data.event_category,
+					'action': data.event_action,
+					'label': data.event_label
+				});
+			}
+		</script>
+		<!-- Google Tag Manager -->
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-WJQX3C');</script>
+		<!-- End Google Tag Manager -->
+		<script id="sophi-init">
+    console.log('sophi-init');
+    window.sophi = window.sophi || {};
+    sophi.demeter = { actions: [] };
+    window.demeter = window.demeter || async function () {
+        var resolve, reject;
+        const s = new Promise((res, rej) => {
+            resolve = res, reject = rej;
+        });
+        sophi.demeter.actions.push([arguments, resolve, reject]);
+        return s;
+    };
+
+    var addSophiScriptToPage = function ({ isConsented = false }) {
+        const hostId = '1543942570';
+        const script = document.createElement('script');
+        script.id = 'sophi-loader';
+        script.async = true;
+        script.src = `https://cdn.sophi.io/assets/demeter/1/stable/${hostId}.js?isConsented=${isConsented}`;
+        script.onload = function () {
+            console.log('sophi_script_is_loaded');
+            var event_sophi_is_load = new CustomEvent('sophi_is_loaded');
+            document.dispatchEvent(event_sophi_is_load);
+        };
+        document.head.appendChild(script);
+        console.log('sophi-load-script:'+script.src);
+    };
+
+    var consentProvider = async function () {
+        if (window.Osano && window.Osano.cm) {
+            const consent = window.Osano.cm.getConsent().ANALYTICS;
+            console.log('sophi_consent_osano', consent);
+            return consent === "ACCEPT";
+        }
+        console.log('sophi_consent_no_osano');
+        return false;
+    }
+
+    consentProvider().then(consentStatus => {
+        console.log('sophi_consent_provider', consentStatus);
+        if (consentStatus === undefined) {
+            addSophiScriptToPage({ isConsented: false });
+        } else if (consentStatus == true) {
+            addSophiScriptToPage({ isConsented: true });
+        } else {
+            addSophiScriptToPage({ isConsented: false });
+        }
+    }).catch(err => {
+        console.error('sophi_consent_provider_error', err);
+        addSophiScriptToPage({ isConsented: false });
+    });
+</script>
+
+<script>
+let sophi_page_info = sophi_get_page_info();
+console.log('sophi_page_info_v4.1', sophi_page_info);
+
+window.rj_visitor_type = 'anonymous';
+if ( localStorage && localStorage.getItem('rj_visitor_type') ) {
+    window.rj_visitor_type = localStorage.getItem('rj_visitor_type');
+}
+
+window.rj_sophi_decision_wall = '';
+
+function check_sophi_is_loaded() {
+    return new Promise(resolve => {
+        document.addEventListener('sophi_is_loaded', function handler(e) {
+            document.removeEventListener('sophi_is_loaded', handler);
+            resolve(true);
+        });
+    });
+}
+
+function check_rj_event_wallhit() {
+    return new Promise(resolve => {
+        document.addEventListener('rj_event_wallhit', function handler(e) {
+            document.removeEventListener('rj_event_wallhit', handler);
+            resolve(true);
+        });
+    });
+}
+
+//let promise_check_visitor_type = check_visitor_type();
+let promise_check_sophi_is_loaded = check_sophi_is_loaded();
+let promise_check_rj_event_wallhit = check_rj_event_wallhit();
+
+async function sophi_page_view() {
+    let promise_results = await Promise.all([promise_check_sophi_is_loaded]); //promise_check_visitor_type, 
+    let sophiData = window.sophi.dataLayer;
+   
+    let event_data = {
+        event: 'sophi_page_view',
+        visitor_type: window.rj_visitor_type, //All events
+        page_section: sophi_page_info.section, //Top-level section the content belongs to // pageviews
+        sophi_page_type: sophi_page_info.page_type, //All events
+        sophi_experiments_code: sophiData.experimentsCode, //All events
+        sophi_inputs: sophiData.inputs, //wall_hits and pageviews
+        sophi_context: sophiData.context, //wall_hits and pageviews
+        sophi_trace: sophiData.trace, //wall_hits and pageviews
+        sophi_decision_source: sophiData.decisionSource //wall_hits and pageviews,
+    };
+    window.dataLayer.push(event_data);
+    console.log('sophi_page_view', event_data);
+
+    demeter('pageview', {
+        args: { article: sophi_page_info.isArticle, section: sophi_page_info.section }
+    });
+    console.log('sophi_demeter_pageview', sophi_page_info.section);
+
+
+    //subscription event
+    let q_str = new URLSearchParams(window.location.search);
+    let buy_subscription = q_str.get('buy_subscription');
+    if ( '1' === buy_subscription ) {
+        let subs_event_data = {
+            event: 'subscription',
+            visitor_type: window.rj_visitor_type, 
+            sophi_page_type: sophi_page_info.page_type,
+            sophi_experiments_code: sophiData.experimentsCode, 
+            sophi_inputs: sophiData.inputs, 
+            sophi_context: sophiData.context, 
+            sophi_trace: sophiData.trace, 
+            sophi_decision_source: sophiData.decisionSource,
+            subscription_type: 'monthly', 
+            subscription_status: 'active'
+        };
+        window.dataLayer.push(subs_event_data);
+        console.log('sophi_subscription', subs_event_data);
+    }
+
+
+    // Retrieve the AB test context from Sophi.
+    let assignedGroup = sophiData.assignedGroup; //variant, control
+    console.log('sophi_assignedGroup', assignedGroup, window.rj_visitor_type); 
+
+    if ( window.rj_visitor_type != 'subscriber'
+        && typeof(window.dataLayer[0]) === 'object' 
+        && typeof(window.dataLayer[0].metrics) === 'object'
+        && window.dataLayer[0].metrics.pageType === 'article' ) { 
+        
+        let meta_rj_paywall = document.querySelector('meta[name="rj:paywall"]'); 
+        let meta_rj_paywall_val = meta_rj_paywall ? meta_rj_paywall.getAttribute('content') : 'private'; //free, private, premium
+        console.log('sophi_meta_rj_paywall', meta_rj_paywall_val);
+        if ( meta_rj_paywall_val === 'premium' ) {
+            window.rj_sophi_decision_wall = 'yes';
+        }
+
+        if ( meta_rj_paywall_val === 'private' && assignedGroup === 'variant' ) {
+            try {
+                //let decision = await demeter('getDecision');
+                let decision = await demeter('getDecision', { 
+                    args: { visitor: window.rj_visitor_type }, // 'anonymous' or 'registered' 
+                });
+                
+                console.log('sophi_decision', decision);
+                if (decision.outcome.wallVisibility === 'always') {
+                    //myWallExperienceSystem.showWall(decision.outcome.wallType); // 'regwall' or 'paywall'
+                    //Engage does not have the function to show paywall, David told to store the Sophi responses within the window object.
+                    window.rj_sophi_decision_wall = 'yes';
+                } else {
+                    window.rj_sophi_decision_wall = 'no';
+                }
+            } catch (err) {
+                console.error('sophi_decision_error', err);
+            }
+        }
+    }
+
+}
+
+async function sophi_wallhit() {
+    let promise_results = await Promise.all([promise_check_sophi_is_loaded, promise_check_rj_event_wallhit]); //promise_check_visitor_type, 
+    let sophiData = window.sophi.dataLayer;
+    
+    let event_data = {
+        event: 'wallhit',
+        visitor_type: window.rj_visitor_type, 
+        sophi_page_type: sophi_page_info.page_type, 
+        sophi_experiments_code: sophiData.experimentsCode,
+        sophi_inputs: sophiData.inputs, 
+        sophi_context: sophiData.context,
+        sophi_trace: sophiData.trace,
+        sophi_decision_source: sophiData.decisionSource,
+        wall_type: 'paywall'
+    };
+    window.dataLayer.push(event_data);
+    console.log('sophi_wallhit', event_data);
+
+    demeter('wall', {
+        args: { wallType: 'paywall', section: sophi_page_info.section }
+    });
+    console.log('sophi_demeter_wall', sophi_page_info.section);
+
+}
+
+async function sophi_exec() {
+    await sophi_page_view();
+    await sophi_wallhit();
+}
+
+sophi_exec();
+
+function sophi_get_page_info() {
+    let resp = {
+        isArticle: false,
+        section: 'unknown',
+        page_type: 'unknown' //should be article, section, account, subscription
+    };
+
+    if (typeof(window.dataLayer[0]) !== 'object' || typeof(window.dataLayer[0].metrics) !== 'object') {
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'homepage') {
+        resp.section = 'homepage';
+        resp.page_type = 'homepage';
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'section') {
+        if ( window.dataLayer[0].metrics['hl-category'] ) { 
+            resp.section = window.dataLayer[0].metrics['hl-category']; //resp.section = window.dataLayer[0].metrics.hierarchy;
+        }
+        resp.page_type = 'section';
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'article') {
+        resp.isArticle = true;
+        if ( window.dataLayer[0].metrics['hl-category'] ) {
+            resp.section = window.dataLayer[0].metrics['hl-category']; //resp.section = window.dataLayer[0].metrics.hierarchy;
+        }
+        resp.page_type = 'article';
+        return resp;
+    }
+
+    let path = window.location.pathname;
+    path = path.replace(/^\/+|\/+$/g, '');
+    path = path.replace(/\//g, ' | ');
+
+    if (window.dataLayer[0].metrics.pageType === 'video') {
+        resp.section = 'videos'; //path; //videos | slug
+        resp.page_type = 'video';
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'page') {
+        resp.section = 'page'; // 'page | '+path;
+        resp.page_type = 'page';
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'tag') {
+        /*
+        resp.section = path;
+        if ( window.dataLayer[0].metrics.name ) {
+            resp.section = 'tag | '+window.dataLayer[0].metrics.name;
+        }
+        */
+        resp.section = 'tag';
+        resp.page_type = 'section';
+        return resp;
+    }
+
+    if (path === 'pc') {
+        resp.section = 'sponsored_category';
+        resp.page_type = 'section';
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'taxonomy' && window.dataLayer[0].metrics.taxonomy_type && window.dataLayer[0].metrics['hl-category']) {
+        resp.section = window.dataLayer[0].metrics.taxonomy_type + ' | ' + window.dataLayer[0].metrics['hl-category']; //rj_author | Adam Hill, sponsored_category | Business
+        resp.page_type = 'section';
+        return resp;
+    }
+
+    if (window.dataLayer[0].metrics.pageType === 'article.sponsored') {
+        //resp.isArticle = true; //not sure if we need to set as article
+        if ( window.dataLayer[0].metrics['hl-category'] ) {
+            resp.section = 'sponsored_category | '+ window.dataLayer[0].metrics['hl-category']; //window.dataLayer[0].metrics.hierarchy 
+        }
+        resp.page_type = 'section';
+        return resp;
+    }
+
+    /*
+    if (window.dataLayer[0].metrics.pageType) {
+        resp.section = window.dataLayer[0].metrics.pageType + ' | '+path;
+        return resp;
+    }
+    */
+
+    return resp;
+
+}
+</script>
+		<title>Jon Stewart skips jokes on ‘Daily Show’ after S.C. shootings | Entertainment</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//securepubads.g.doubleclick.net' />
+<link rel='dns-prefetch' href='//media.reviewjournal.com' />
+<link rel='dns-prefetch' href='//stats.wp.com' />
+<link rel='dns-prefetch' href='//v0.wordpress.com' />
+<link rel="alternate" type="application/rss+xml" title="Neon &raquo; Feed" href="https://neon.reviewjournal.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Neon &raquo; Comments Feed" href="https://neon.reviewjournal.com/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://neon.reviewjournal.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fneon.reviewjournal.com%2Fentertainment%2Fjon-stewart-skips-jokes-on-daily-show-after-s-c-shootings%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://neon.reviewjournal.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fneon.reviewjournal.com%2Fentertainment%2Fjon-stewart-skips-jokes-on-daily-show-after-s-c-shootings%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link rel='stylesheet' id='all-css-2' href='https://neon.reviewjournal.com/wp-content/themes/rjth2019/style-neon.min.css?m=1773257795g' type='text/css' media='all' />
+<script type="text/javascript" src="https://neon.reviewjournal.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" id="rjth-post-js-extra">
+/* <![CDATA[ */
+var js_data = {"google_api_key":"AIzaSyDMcDUzs0wcz1AkNXgewafVYI8PODGC_cw","gallery_auto_full_screen":"1","gallery_ads_slide_th":"5","gallery_ads_slide":"","gallery_ads_under":"","gallery_ads_left":"","gallery_ads_right":"","gallery_ads_under_uid":"","gallery_ads_right_uid":""};
+//# sourceURL=rjth-post-js-extra
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://neon.reviewjournal.com/_static/??-eJyNzsEOwiAMBuAXkuE4bHgwPophjGwlUBBK3N5eMDt40MSkSS//17/8GRmgdmU2mds6j2LSfizmYUmKTOcBO5tPvIZ1QDJInFbjK0mWVnHuL83m7GD+N+zUHgoxNAG/iejKAtgIdzAlVX/a3uf5veLtZ9OHi2VyoFtXDJmO8M1f+3GUYhBSDvYFrNVcSQ=="  defer></script><script type="text/javascript" async="async" src="//securepubads.g.doubleclick.net/tag/js/gpt.js" id="gpt-js"></script>
+<script type="text/javascript" id="gpt-js-after">
+/* <![CDATA[ */
+window.googletag = window.googletag || {cmd: []};
+//# sourceURL=gpt-js-after
+/* ]]> */
+</script>
+<script type="text/javascript" async="async" src="https://media.reviewjournal.com/media/projects/header-bidding/prebid-10.25.0.js" id="prebidjs-js"></script>
+<script type="text/javascript" id="ad-tags-js-extra">
+/* <![CDATA[ */
+var rj_ads_info = {"ad_unit_path_prefix":"/104590658/Neon","post_id":"202602","article":"1","level":"1","parent":[""],"child":[""],"section":["entertainment"],"env":"production","enable_listener":"1","enable_refresh":"1","enable_lazyload":"1","use_safeframe":"0","biddersConfig":{"debug":false,"config":{"bidderTimeout":1500},"prebidTimeout":2000,"failsafeTimeout":3000,"checkMobile":false,"bidCpmMin":0.15,"bidCpmAdjustment":1.5,"allowBidCpmAdjustment":false,"inViewRefresh":30,"outOfViewRefresh":300,"allowExternalRefresh":false,"enableSingleRequest":false,"fetchMarginPercent":200,"renderMarginPercent":100,"lazyAdsRootMargin":"400px 0px","filterConfig":{"advertisers":[],"campaigns":[],"lineItems":[]},"bidders":[{"bidder":"pubmatic","extraParams":{"publisherId":"165465","adSlot":"6238106"},"sizes":[[300,250],[336,280],[300,600],[320,50],[728,90],[970,250],[970,90],[300,100]]},{"bidder":"opsco","extraParams":{"publisherId":"1024","placementId":"10240011"},"sizes":[[300,250]]},{"bidder":"opsco","extraParams":{"publisherId":"1024","placementId":"10240012"},"sizes":[[300,250]]},{"bidder":"opsco","extraParams":{"publisherId":"1024","placementId":"10240010"},"sizes":[[320,50]]},{"bidder":"opsco","extraParams":{"publisherId":"1024","placementId":"10240009"},"sizes":[[728,90]]},{"bidder":"opsco","extraParams":{"publisherId":"1024","placementId":"10240014"},"sizes":[[970,250]]},{"bidder":"opsco","extraParams":{"publisherId":"1024","placementId":"10240007"},"sizes":[[300,600]]},{"bidder":"criteo","extraParams":{"networkId":"7238","zoneId":"1770234"},"sizes":[[300,250]]},{"bidder":"criteo","extraParams":{"networkId":"7238","zoneId":"1770237"},"sizes":[[320,50]]},{"bidder":"criteo","extraParams":{"networkId":"7238","zoneId":"1770235"},"sizes":[[728,90]]},{"bidder":"criteo","extraParams":{"networkId":"7238","zoneId":"1770238"},"sizes":[[970,250]]},{"bidder":"criteo","extraParams":{"networkId":"7238","zoneId":"1770236"},"sizes":[[300,600]]},{"bidder":"mediafuse","extraParams":{"placementId":"29552594"},"id":"29552594","sizes":[[300,250]]},{"bidder":"mediafuse","extraParams":{"placementId":"29552595"},"id":"29552595","sizes":[[320,50]]},{"bidder":"mediafuse","extraParams":{"placementId":"29552598"},"id":"29552598","sizes":[[728,90]]},{"bidder":"mediafuse","extraParams":{"placementId":"29552601"},"id":"29552601","sizes":[[970,250]]},{"bidder":"mediafuse","extraParams":{"placementId":"29552603"},"id":"29552603","sizes":[[300,600]]},{"bidder":"kargo","extraParams":{"placementId":"_xrF2qMjjNB"},"sizes":[[970,250],[970,90]]},{"bidder":"kargo","extraParams":{"placementId":"_jY4Xur8ztT"},"sizes":[[728,90]]},{"bidder":"kargo","extraParams":{"placementId":"_pNs8tMabfV"},"sizes":[[300,250],[336,280]]},{"bidder":"kargo","extraParams":{"placementId":"_wznUW4u7I4"},"sizes":[[300,600]]},{"bidder":"kargo","extraParams":{"placementId":"_ahh1QM5VLM"},"sizes":[[320,50]]},{"bidder":"nativo","extraParams":{"placementId":"1593478"},"sizes":[[300,600]]},{"bidder":"nativo","extraParams":{"placementId":"1593482"},"sizes":[[300,250],[336,280]]},{"bidder":"nativo","extraParams":{"placementId":"1593483"},"sizes":[[728,90],[320,50]]}]}};
+//# sourceURL=ad-tags-js-extra
+/* ]]> */
+</script>
+<script type="text/javascript" async="async" src="https://neon.reviewjournal.com/wp-content/plugins/rj/public/js/ad-tags_bid/ad-tags-post.min.js?ver=20251124" id="ad-tags-js"></script>
+<script type="text/javascript" async="async" src="https://neon.reviewjournal.com/wp-content/plugins/rj-lazy-load/js/rj-lazy-load.min.js?ver=20251124" id="rj-lazy-load-js"></script>
+<script type="text/javascript" id="mg2_loader_loader-js-extra">
+/* <![CDATA[ */
+var MG2 = {"settings":{"environment":"prod","version":"review-journal","CONFIG_URL":"https://loader.reviewjournal.com/prod/review-journal/loader-config.json","DL_CNAME":"g2i.reviewjournal.com","FP_CNAME":"fp.reviewjournal.com","NXT_CNAME":"engage.reviewjournal.com","xCode":"","randomURLChoosing":false,"plugins":[{"name":"FP","required":true,"initOptions":{"version":"review-journal","environment":"prod"}},{"name":"DL","required":true,"initOptions":{"version":"review-journal","environment":"prod","flowModes":"InterestsRecommendations, EngageABExperiments","tagManager":"GTM","containerId":"GTM-5ZBPF7G","collectors":["connext"]}},{"name":"NXT","required":true,"initOptions":{"environment":"prod","siteCode":"LVJR","configCode":"LVJR","clientCode":"Review-Journal","debug":false,"silentmode":true,"attr":"","settingsKey":"","userAuthenticationTime":180,"authSettings":{"domain":"login.reviewjournal.com","client_id":"eY8tZV4dKrsDfhJrhDk5uSnhImrV781p","redirect_uri":"https://neon.reviewjournal.com/auth-callback/"}}}],"appInsightsKey":"8241cbc2-50a5-47c4-b91f-462506490fad"}};
+//# sourceURL=mg2_loader_loader-js-extra
+/* ]]> */
+</script>
+<script type="text/javascript" async="async" src="https://neon.reviewjournal.com/wp-content/plugins/mg2-loader-wp/static/loader_prod.min.js?ver=1.6.5" id="mg2_loader_loader-js"></script>
+<script type="text/javascript" id="mg2_loader_loader-js-after">
+/* <![CDATA[ */
+var MG2Loader = MG2Loader || {};
+(function( MG2, MG2Loader ) {
+	if ( 'undefined' !== typeof MG2 && 'undefined' !== typeof MG2Loader && MG2Loader.init) {
+		MG2Loader.init( MG2.settings );
+	} else {
+		// wait for script to load in case "async" attribute is used.
+		var timerIdPoll = setInterval(function () {
+			if ( 'undefined' !== typeof window.MG2 && 'undefined' !== typeof window.MG2Loader && window.MG2Loader.init) {
+				clearInterval(timerIdPoll);
+				window.MG2Loader.init( window.MG2.settings );
+			}
+		}, 500);
+	}
+})( MG2, MG2Loader );
+//# sourceURL=mg2_loader_loader-js-after
+/* ]]> */
+</script>
+<link rel="https://api.w.org/" href="https://neon.reviewjournal.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://neon.reviewjournal.com/wp-json/wp/v2/posts/202602" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://neon.reviewjournal.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.4" />
+<link rel="canonical" href="https://neon.reviewjournal.com/entertainment/jon-stewart-skips-jokes-on-daily-show-after-s-c-shootings/" />
+<link rel='shortlink' href='https://neon.reviewjournal.com/?p=202602' />
+
+<!-- RJ Meta Tags -->
+<meta name="description" content="Jon Stewart dropped any pretense of humor at the beginning of the &#8220;Daily Show&#8221; on Thursday night, choosing instead to open his episode by addressing the tragic Charleston shootings with a solemn, critical monologue." />
+<meta name="rj:id" content="post_id-202602" />
+<meta name="vf:container_id" content="post_id-202602" />
+<meta property="mrf:canonical" content="https://neon.reviewjournal.com/entertainment/jon-stewart-skips-jokes-on-daily-show-after-s-c-shootings/" />
+<meta property="mrf:cms_id" content="neon--post--202602" />
+
+<!-- Open Graph Tags -->
+<meta property="og:site_name" content="Neon" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Jon Stewart skips jokes on ‘Daily Show’ after S.C. shootings" />
+<meta property="og:url" content="https://neon.reviewjournal.com/entertainment/jon-stewart-skips-jokes-on-daily-show-after-s-c-shootings/" />
+<meta property="og:description" content="Jon Stewart dropped any pretense of humor at the beginning of the &#8220;Daily Show&#8221; on Thursday night, choosing instead to open his episode by addressing the tragic Charleston shootings with..." />
+<meta property="og:image" content="https://neon.reviewjournal.com/wp-content/uploads/2015/06/29252885-sfxl_.jpg" />
+<meta property="og:image:width" content="640" />
+<meta property="og:image:height" content="426" />
+<meta property="article:published_time" content="2015-06-19T17:46:05+00:00" />
+<meta property="article:modified_time" content="2017-03-02T20:10:35+00:00" />
+
+<!-- END Open Graph Tags -->
+
+<!-- Twitter Card Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@neonlasvegas" />
+<meta name="twitter:title" content="Jon Stewart skips jokes on ‘Daily Show’ after S.C. shootings" />
+<meta name="twitter:description" content="Jon Stewart dropped any pretense of humor at the beginning of the &#8220;Daily Show&#8221; on Thursday night, choosing instead to open his episode by addressing the tragic Charleston shootings with..." />
+<meta name="twitter:image" content="https://neon.reviewjournal.com/wp-content/uploads/2015/06/29252885-sfxl_.jpg" />
+
+<!-- END Twitter Card Tags -->
+
+<!-- Custom Meta Tags -->
+<meta name="google-site-verification" content="XsUlmsG2YwrlUc9xS6_NHTdqc_ii_WhasAbc5Yp0WR0" />
+<!-- END Custom Meta Tags -->
+
+<!-- End RJ Meta Tags -->
+
+<!-- RJ Paywall Meta Tags -->
+<meta name="rj:paywall" content="private" />
+<!-- End RJ Paywall Meta Tags -->
+		<style type="text/css">
+			/* If html does not have either class, do not show lazy loaded. */
+			html:not( .rj-lazy-load-js-enabled ):not( .js ) .rj-lazy-load {
+				display: none;
+			}
+		</style>
+		<script>
+            document.documentElement.classList.add(
+                'rj-lazy-load-js-enabled'
+            );
+		</script>
+			<style>img#wpstats{display:none}</style>
+		<link rel="apple-touch-icon" sizes="180x180" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/apple-touch-icon.png"><link rel="icon" type="image/png" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/favicon-32x32.png" sizes="32x32"><link rel="icon" type="image/png" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/favicon-16x16.png" sizes="16x16"><link rel="shortcut icon" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/favicon.ico"><link rel="mask-icon" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/safari-pinned-tab.svg" color="#c21c2b"/><link rel="manifest" href="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/manifest.json"><meta name="msapplication-config" content="https://neon.reviewjournal.com/wp-content/themes/rjth2019/favicons/neon/browserconfig.xml"><meta name="theme-color" content="#ffffff">		<style type="text/css" id="wp-custom-css">
+			/* begin_color_mapping */       
+.color-d {
+    color: #5617b6;
+}
+.bg-color-d {
+    background-color: #5617b6;
+}
+.before-color-d::before {
+    color: #5617b6;
+}
+.fill-color-d {
+    fill:  #5617b6;
+}
+
+.category-sports .color-d {
+    color: #ffcf49;
+}
+.category-sports .bg-color-d {
+    background-color: #ffcf49;
+}
+.category-sports .before-color-d::before {
+    color: #ffcf49;
+}
+.category-sports .fill-color-d {
+    fill:  #ffcf49;
+}
+
+.rj-main-category--dining-out .color-d, 
+.category-dining-out .color-d,
+.rj-main-category--faves-craves .color-d, 
+.category-faves-craves .color-d {
+    color: #1186cf;
+}
+.category-dining-out .bg-color-d,
+.category-faves-craves .bg-color-d {
+    background-color: #1186cf;
+}
+.category-dining-out .before-color-d::before,
+.category-faves-craves .before-color-d::before {
+    color: #1186cf;
+}
+.category-dining-out .fill-color-d,
+.category-faves-craves .fill-color-d {
+    fill:  #1186cf;
+}
+
+.rj-main-category--family-friendly .color-d, 
+.category-family-friendly .color-d {
+    color: #ff3d00;
+}
+.category-family-friendly .bg-color-d {
+    background-color: #ff3d00;
+}
+.category-family-friendly .before-color-d::before {
+    color: #ff3d00;
+}
+.category-family-friendly .fill-color-d {
+    fill:  #ff3d00;
+}
+
+.rj-main-category--arts-culture .color-d,
+.category-arts-culture .color-d {
+    color: #05e4ff;
+}
+.category-arts-culture .bg-color-d {
+    background-color: #05e4ff;
+}
+.category-arts-culture .before-color-d::before {
+    color: #05e4ff;
+}
+.category-arts-culture .fill-color-d {
+    fill: #05e4ff;
+}
+
+.rj-main-category--attractions .color-d,
+.category-attractions .color-d {
+    color: #6bbf5a;
+}
+.category-attractions .bg-color-d {
+    background-color: #6bbf5a;
+}
+.category-attractions .before-color-d::before {
+    color: #6bbf5a;
+}
+.category-attractions .fill-color-d {
+    fill: #6bbf5a;
+}
+
+.rj-main-category--free .color-d,
+.category-free .color-d {
+    color: #ff66b3;
+}
+.category-free .bg-color-d {
+    background-color: #ff66b3;
+}
+.category-free .before-color-d::before {
+    color: #ff66b3;
+}
+.category-free .fill-color-d {
+    fill:  #ff66b3;
+}
+
+.rj-main-category--music .color-d,
+.category-music .color-d {
+    color: #ff1e7a;
+}
+.category-music .bg-color-d {
+    background-color: #ff1e7a;
+}
+.category-music .before-color-d::before {
+    color: #ff1e7a;
+}
+.category-music .fill-color-d {
+    fill:  #ff1e7a;
+}
+
+.rj-main-category--nightlife .color-d,
+.category-nightlife .color-d,
+.rj-main-category--bars .color-d,
+.category-bars .color-d {
+    color: #a539e3;
+}
+.category-nightlife .bg-color-d,
+.category-bars .bg-color-d {
+    background-color: #a539e3;
+}
+.category-nightlife .before-color-d::before,
+.category-bars .before-color-d::before {
+    color: #a539e3;
+}
+.category-nightlife .fill-color-d,
+.category-bars .fill-color-d {
+    fill:  #a539e3;
+}
+
+.rj-main-category--outdoors .color-d,
+.category-outdoors .color-d {
+    color: #00bfaf;
+}
+.category-outdoors .bg-color-d {
+    background-color: #00bfaf;
+}
+.category-outdoors .before-color-d::before {
+    color: #00bfaf;
+}
+.category-outdoors .fill-color-d {
+    fill: #00bfaf;
+}
+
+.rj-main-category--kats .color-d,
+.category-kats .color-d {
+    color: #92fb6e;
+}
+.category-kats .bg-color-d {
+    background-color: #92fb6e;
+}
+.category-kats .before-color-d::before {
+    color: #92fb6e;
+}
+.category-kats .fill-color-d {
+    fill: #92fb6e;
+}
+
+.rj-main-category--leisure .color-d,
+.category-leisure .color-d {
+    color: #5617b6;
+}
+.category-leisure .bg-color-d {
+    background-color: #5617b6;
+}
+.category-leisure .before-color-d::before {
+    color: #5617b6;
+}
+.category-leisure .fill-color-d {
+    fill: #5617b6;
+}
+
+.rj-main-category--movies .color-d,
+.category-movies .color-d {
+    color: #ab8bdb;
+}
+.category-movies .bg-color-d {
+    background-color: #ab8bdb;
+}
+.category-movies .before-color-d::before {
+    color: #ab8bdb;
+}
+.category-movies .fill-color-d {
+    fill: #ab8bdb;
+}
+
+.rj-main-category--theater .color-d,
+.category-theater .color-d {
+    color: #00dfd7;
+}
+.category-theater .bg-color-d {
+    background-color: #00dfd7;
+}
+.category-theater .before-color-d::before {
+    color: #00dfd7;
+}
+.category-theater .fill-color-d {
+    fill: #00dfd7;
+}
+
+.rj-main-category--shows .color-d,
+.category-shows .color-d {
+    color: #92fb6e;
+}
+.category-shows .bg-color-d {
+    background-color: #92fb6e;
+}
+.category-shows .before-color-d::before {
+    color: #92fb6e;
+}
+.category-shows .fill-color-d {
+    fill: #92fb6e;
+}
+/* end_color_mapping */
+
+
+
+/* begin_tmp */
+.side-rail-nav > ul > li > a {
+    font-size: 22px;
+}
+
+.rj-story-full .entry-content {
+	font-family: "Merriweather", serif;
+    line-height: 32px;
+}
+
+@media (min-width: 768px) {
+    .neon-topnews-custom.top5.w-custom-header .rj-story:nth-child(2) .field-title {
+        overflow: visible !important;
+    }
+}
+
+
+#page {
+	width: 100%;
+	overflow-x: hidden;
+}
+
+/* disabled sub-nav */
+body.category .wrap-page-header .flexible-nav-container {display:none;}
+
+
+@media (min-width: 1100px) {
+    body.tag .wrap-page-header.has-image .page-full-header,
+    body.category .wrap-page-header.has-image .page-full-header {
+        margin-left: 40px;
+    }
+    body.tag .rj-zone,
+    body.category .rj-zone {
+        margin-left: 80px;
+    }
+    body.tag .rj-zone.has-right-sidebar .rj-left-side,
+    body.category .rj-zone.has-right-sidebar .rj-left-side {
+        padding-right: 80px;
+    }
+} 
+
+
+#rjth-region-footer-row-2 .rj-widget .menu-item.big-pink {
+    margin-bottom:0;
+}
+#rjth-region-footer-row-2 .rj-widget .menu-item.big-pink a {
+    color: #e71887;
+    text-transform: lowercase;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+
+.rj-ads-wrapper {
+	/*background-color: #d8d8d880;*/
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative !important;
+	overflow: hidden !important;
+	display: block !important;
+	float: none !important;
+	contain: layout style !important;
+}
+@media (min-width: 768px) {
+	.rj-ads-wrapper.high-impact {
+		width: 728px;
+		height: 90px;
+	}
+}
+@media (min-width: 992px) {
+	.rj-ads-wrapper.high-impact {
+		width: 970px;
+		height: 250px;
+	}
+}
+/* end_tmp */		</style>
+		
+	
+	<!-- Marfeel Pixel -->
+<script type="text/javascript">
+let mrf_page_type = 0;
+let _ua = navigator.userAgent;
+
+if ( /RJAppOS\/ios/i.test(_ua) ) {
+	mrf_page_type = 3;
+}
+if ( /RJAppOS\/android/i.test(_ua) ) {
+	mrf_page_type = 4;
+}
+if ( /VNAppOS\/ios/i.test(_ua) ) {
+	mrf_page_type = 3;
+}
+if ( /VNAppOS\/android/i.test(_ua) ) {
+	mrf_page_type = 4;
+}
+function e(e){var t=!(arguments.length>1&&void 0!==arguments[1])||arguments[1],c=document.createElement("script");c.src=e,t?c.type="module":(c.async=!0,c.type="text/javascript",c.setAttribute("nomodule",""));var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(c,n)}function t(t,c,n){var a,o,r;null!==(a=t.marfeel)&&void 0!==a||(t.marfeel={}),null!==(o=(r=t.marfeel).cmd)&&void 0!==o||(r.cmd=[]),t.marfeel.config=n,t.marfeel.config.accountId=c;var i="https://sdk.mrf.io/statics";e("".concat(i,"/marfeel-sdk.js?id=").concat(c),!0),e("".concat(i,"/marfeel-sdk.es5.js?id=").concat(c),!1)}!function(e,c){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};t(e,c,n)}(window,2632,{"pageType":mrf_page_type});
+</script>
+<!-- End Marfeel Pixel --><style id='global-styles-inline-css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+</head>
+
+<body class="wp-singular post-template-default single single-post postid-202602 single-format-standard wp-custom-logo wp-theme-rjth2019 rj-main-category--entertainment rj-main-category-id--105">
+			<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJQX3C"
+						  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
+		
+	<header id="header-main">
+		<div id="menu-top" class="rj-container">
+
+			<div class="menu-bars-cont toggle-popup-elem">
+				<div id="button-nav-toggle" class="menu-bars toggle-popup-click">
+					<div class="bar top"></div>
+					<div class="bar middle"></div>
+					<div class="bar bottom"></div>
+				</div>
+
+				<div id="side-rail-nav" class="side-rail-nav">
+					<ul id="slide-menu" class="rj-slide-nav"><li id="menu-item-3309978" class="goguide-text menu-item menu-item-type-post_type menu-item-object-page menu-item-3309978"><a href="https://neon.reviewjournal.com/goguide/">goguide</a></li>
+<li id="menu-item-3318250" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3318250"><a href="https://neon.reviewjournal.com/./kats/">Kats!</a></li>
+<li id="menu-item-3318251" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3318251"><a href="https://neon.reviewjournal.com/./dining-out/">Dining Out</a></li>
+<li id="menu-item-3318254" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3318254"><a href="https://neon.reviewjournal.com/top-100-restaurants-2025/">top 100 restaurants</a></li>
+<li id="menu-item-3318566" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3318566"><a href="https://neon.reviewjournal.com/./faves-craves/">Faves &amp; Craves</a></li>
+<li id="menu-item-3318252" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3318252"><a href="https://neon.reviewjournal.com/./outdoors/">Outdoors</a></li>
+<li id="menu-item-3318253" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3318253"><a href="https://neon.reviewjournal.com/./bars/">Bars</a></li>
+<li id="menu-item-3308925" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3308925"><a href="https://neon.reviewjournal.com/./nightlife/">Nightlife</a></li>
+<li id="menu-item-3308927" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3308927"><a href="https://neon.reviewjournal.com/./music/">Music</a></li>
+<li id="menu-item-3308928" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3308928"><a href="https://neon.reviewjournal.com/./arts-culture/">Arts &amp; Culture</a></li>
+<li id="menu-item-3310668" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3310668"><a href="https://neon.reviewjournal.com/./free/">Free</a></li>
+<li id="menu-item-3311793" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3311793"><a href="https://neon.reviewjournal.com/./family-friendly/">Family Friendly</a></li>
+<li id="menu-item-3318953" class="lvrj-link menu-item menu-item-type-custom menu-item-object-custom menu-item-3318953"><a target="_blank" href="https://www.reviewjournal.com/">lvrj.com</a></li>
+</ul>									</div><!-- #side-rail-nav -->
+
+			</div>
+			<div id="rjth-region-header">
+				<div id="rj_widget_text-351" class="rj-widget-num-1 rj-widget-first rj-widget-odd  rj-widget rj_widget_text">		<div class="ear-ads left" style="width:234px; height:60px;">
+<div id="ad-ear_left" data-match-media="(min-width: 1100px)"></div>
+</div>		</div><div id="rj_widget_text-805" class="rj-widget-num-2 rj-widget-even  rj-widget rj_widget_text">		<div class="main-logo-header">
+	<a href="/" title="main-logo" rel="home" itemprop="url">
+		<img class="skip-lazy" width="300" height="81" src="https://res.cloudinary.com/review-journal/image/upload/v1744230958/neon/0-neon-logo-main-glow-animated-v4.svg" alt="main-logo"><noscript><img class="skip-lazy" width="300" height="81" src="https://res.cloudinary.com/review-journal/image/upload/v1744230958/neon/0-neon-logo-main-glow-animated-v4.svg" alt="main-logo" /></noscript>
+		<!--<img class="skip-lazy" width="350" height="105" src="https://res.cloudinary.com/review-journal/image/upload/v1743926509/neon/0-neon-logo-main-glow-animated-v1.min.svg" alt="main-logo"><noscript><img class="skip-lazy" width="350" height="105" src="https://res.cloudinary.com/review-journal/image/upload/v1743926509/neon/0-neon-logo-main-glow-animated-v1.min.svg" alt="main-logo" /></noscript>-->
+		<!--<img class="skip-lazy" width="350" height="105" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_350/v1741996068/neon/neon_logo_01.png" alt="main-logo"><noscript><img class="skip-lazy" width="350" height="105" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_350/v1741996068/neon/neon_logo_01.png" alt="main-logo" /></noscript>-->
+	</a>
+</div>		</div><div id="rj_widget_text-354" class="rj-widget-num-3 rj-widget-odd  rj-widget rj_widget_text">		<div class="ear-ads right" style="width:234px; height:60px;">
+<div id="ad-ear_right" data-match-media="(min-width: 1100px)"></div>
+</div>		</div><div id="rj_widget_text-790" class="rj-widget-num-4 rj-widget-even  rj-widget rj_widget_text">		<style>
+#menu-top .user-menu {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+}
+#menu-top .user-popup {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    border: solid 1px #e71887;
+    z-index: 1060;
+    padding: 10px 10px 0 10px;
+}
+#menu-top .user-menu.active .user-popup {
+    display: block;
+}
+#menu-top .subs-elem {
+    display: none;
+    font-size: 14px;
+    white-space: nowrap;
+    margin-bottom: 10px;
+}
+#menu-top .subs-elem:hover {
+    cursor: pointer;
+    color: #e71887;
+}
+#menu-top .subs-elem.show {
+    display: block;
+}
+@media (min-width: 768px) {
+    #menu-top .user-menu {
+        top: 15px;
+        right: 40px;
+    }
+}
+@media (min-width: 992px) {
+    #menu-top .user-menu {
+        top: 50px;
+    }
+}
+@media (min-width: 1240px) {
+    #menu-top .user-menu {
+        right: 0;
+    }
+}
+
+.goguide-text a {
+    position: relative;
+    top: 2px;
+    font-family: houschka-rounded, sans-serif;
+    font-weight: 800;
+    color: #e71887;
+}   
+
+.side-rail-nav > ul > li.active.goguide-text > a {
+    color: #e71887;
+    background-color: transparent;
+}
+.goguide-text a .purple {
+    color: #5617b6;
+}
+.goguide-text a:hover .purple {
+    color: #5617b6;
+}
+
+.lvrj-link a {
+    font-family: houschka-rounded, sans-serif;
+    font-weight: 800;
+}
+</style>
+<div class="user-menu toggle-popup-elem">
+    <div class="btn-round user-btn toggle-popup-click">
+        <i class="fa fa-user" aria-hidden="true"></i>
+    </div>
+    <div class="user-popup">
+        <div class="subs-elem hi-user">Hi <span class="user-name"></span></div>
+
+        <a id="mg2-subscribe-link" href="https://checkout.reviewjournal.com/def2?g2i_source=lvrj&g2i_medium=button&g2i_campaign=default&g2i_or_p=default" target="_blank" class="subs-elem show subs-url">SUBSCRIBE</a>
+        
+        <a id="mg2-login-link" data-mg2-action="login" href="#" class="subs-elem show">SIGN IN</a>
+
+        <a id="mg2-activate-link" data-mg2-action="activation" href="#" class="subs-elem">ACTIVATE</a>
+
+        <a id="mg2-manage-account-link" href="https://account.reviewjournal.com/" target="_blank" class="subs-elem">MANAGE</a>
+ 
+        <a id="mg2-logout-link" data-mg2-action="logout" href="#" class="subs-elem">SIGN OUT</a>
+    </div>
+</div>
+<script>
+(function ($) {
+    $('.goguide-text a').html('go<span class="purple">guide</span>');
+
+    ab_subscribe_button();
+
+    function ab_subscribe_button() {
+        var mather_cookie = get_cookie('_matheriSegs');
+        console.log('rj_ab_matheriSegs:'+mather_cookie);
+        var i = -1;
+        if (mather_cookie.includes('MATHER_U3I_GROUPA50_20240410')) {
+            i = 0;
+        }
+        if (mather_cookie.includes('MATHER_U3I_GROUPB25_20240410')) {
+            i = 1;
+        }
+        if (mather_cookie.includes('MATHER_U3I_GROUPC25_20240410')) {
+            i = 2;
+        }
+
+        if (i === -1) {
+            return;
+        }
+
+        var urls = [
+            'https://checkout.reviewjournal.com/def2?g2i_source=lvrj&g2i_medium=button&g2i_campaign=default&g2i_or_p=neonA',
+            'https://checkout.reviewjournal.com/def4?g2i_source=lvrj&g2i_medium=button&g2i_campaign=default&g2i_or_p=neonB',
+            'https://checkout.reviewjournal.com/def5?g2i_source=lvrj&g2i_medium=button&g2i_campaign=default&g2i_or_p=neonC'
+        ];
+       
+        console.log('rj_ab_i:'+i+'_suburl:'+urls[i]);
+
+        $('.subs-url').attr('href',urls[i]);
+        /*
+        if (i === 1) {
+            $('.subs-url.one').html('99&cent; for 6 mos');
+            $('.subs-url.two').html('99&cent; for 6 months');
+        }
+        if (i === 2) {
+            $('.subs-url.one').html('25&cent; for 3 mos');
+            $('.subs-url.two').html('25&cent; for 3 months');
+        }
+        */
+    }
+
+    function get_cookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        var i, c;
+        for( i = 0; i <ca.length; i++) {
+            c = ca[i].trim();
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    }
+    
+    document.addEventListener("onNewsletterSignUp", function (e) {
+        console.log("EventListener: onNewsletterSignUp.", e);
+        if (window.localStorage) {
+            window.localStorage.setItem('NW', true);
+        }
+        if (window.Connext && window.Connext.Run) {
+            setTimeout(function () {
+                window.Connext.Run();
+            }, 3000);
+        }
+    });
+
+    document.addEventListener("onNotAuthorized", function (e) {
+        console.log("EventListener: onNotAuthorized");
+         //$('.user-menu .hi-user').removeClass('show');
+
+        $('#mg2-subscribe-link').addClass('show');
+        $('#mg2-login-link').addClass('show');
+        
+        $('#mg2-logout-link').removeClass('show');
+
+        $('#mg2-activate-link').removeClass('show');
+        $('#mg2-manage-account-link').removeClass('show');
+
+        window.rj_visitor_type = 'anonymous';
+        localStorage.setItem('rj_visitor_type', 'anonymous'); //window.rj_visitor_type = 'anonymous';
+        localStorage.setItem('rjIsSubscribed', '0');
+        
+        /*
+        if (typeof(window.marfeel) !== 'undefined') {
+            window.marfeel.cmd.push(['compass', function(compass) {
+                compass.setUserType(4);
+            }]);
+        }
+        */
+    });
+
+    document.addEventListener("onLoggedIn", function (e) { //onAuthorized
+        console.log("EventListener: onLoggedIn");
+        //$('.user-menu .hi-user').removeClass('show');
+
+        $('#mg2-subscribe-link').addClass('show');
+        $('#mg2-login-link').removeClass('show');
+
+        $('#mg2-logout-link').addClass('show'); //$('#mg2-logout-link').removeClass('show');
+        
+        $('#mg2-activate-link').addClass('show');
+        $('#mg2-manage-account-link').removeClass('show');
+
+        //$('.rj-paywall-def-text').hide();
+        //$('.rj-paywall-login-user-text').show();
+
+        var user_data = Connext.Storage.GetUserData();
+        var user_state = Connext.Storage.GetUserState();
+
+        console.log('Connext.Storage.GetUserData()', user_data);
+        if (user_data.DigitalAccess && user_data.DigitalAccess.Subscription ) { //&& window.location.pathname === '/'
+            var first_name = user_data.DigitalAccess.Subscription.FirstName;
+            first_name = first_name.trim().toLowerCase();
+            if (first_name.length > 0) {
+                first_name = first_name.charAt(0).toUpperCase() + first_name.slice(1);
+            }
+            $('.user-menu .hi-user .user-name').html(first_name);
+        }
+
+        window.rj_visitor_type = 'registered';
+        localStorage.setItem('rj_visitor_type', 'registered');
+        localStorage.setItem('rjIsSubscribed', '0');
+
+        if (typeof(window.marfeel) !== 'undefined') {
+            window.marfeel.cmd.push(['compass', function(compass) {
+                compass.setUserType(2); //compass.setUserType('logged');
+            }]);
+        }
+    });
+
+    document.addEventListener("onHasNoActiveSubscription", function (e) {
+        console.log("EventListener: onHasNoActiveSubscription, marfeel setUserType=2");
+        //$('.user-menu .hi-user').removeClass('show');
+
+        $('#mg2-subscribe-link').addClass('show');
+        $('#mg2-login-link').removeClass('show');
+
+        
+        $('#mg2-logout-link').addClass('show'); //$('#mg2-logout-link').removeClass('show');
+        
+        $('#mg2-activate-link').addClass('show');
+        $('#mg2-manage-account-link').removeClass('show');
+        
+        window.rj_visitor_type = 'registered';
+        localStorage.setItem('rj_visitor_type', 'registered'); //window.rj_visitor_type = 'registered';
+        localStorage.setItem('rjIsSubscribed', '0');
+
+        if (typeof(window.marfeel) !== 'undefined') {
+            window.marfeel.cmd.push(['compass', function(compass) {
+                compass.setUserType(2);
+            }])
+        }
+    });
+
+    document.addEventListener("onHasAccessNotEntitled", function (e) {
+        console.log("EventListener: onHasAccessNotEntitled, marfeel setUserType=2");
+        //$('.user-menu .hi-user').removeClass('show');
+
+        $('#mg2-subscribe-link').addClass('show');
+        $('#mg2-login-link').removeClass('show');
+
+        $('#mg2-logout-link').addClass('show'); //$('#mg2-logout-link').removeClass('show');
+        
+        $('#mg2-activate-link').addClass('show');
+        $('#mg2-manage-account-link').removeClass('show');
+        
+        window.rj_visitor_type = 'registered';
+        localStorage.setItem('rj_visitor_type', 'registered'); //window.rj_visitor_type = 'registered';
+        localStorage.setItem('rjIsSubscribed', '0');
+
+        if (typeof(window.marfeel) !== 'undefined') {
+            window.marfeel.cmd.push(['compass', function(compass) {
+                compass.setUserType(2);
+            }])
+        }
+    });
+
+    document.addEventListener("onHasAccess", function (e) {
+        console.log("EventListener: onHasAccess, marfeel setUserType=3", e);
+        $('.user-menu .hi-user').addClass('show');
+
+        $('#mg2-subscribe-link').removeClass('show');
+        $('#mg2-login-link').removeClass('show');
+        
+        $('#mg2-logout-link').addClass('show');
+
+        $('#mg2-activate-link').removeClass('show');
+        $('#mg2-manage-account-link').addClass('show');
+
+        window.rj_visitor_type = 'subscriber';
+        localStorage.setItem('rj_visitor_type', 'subscriber'); //window.rj_visitor_type = 'subscriber';
+        localStorage.setItem('rjIsSubscribed', '1');
+
+        if (typeof(window.marfeel) !== 'undefined') {
+            window.marfeel.cmd.push(['compass', function(compass) {
+                compass.setUserType(3); //compass.setUserType('paid');
+            }]);
+        }
+        
+    });
+
+    $('#mg2-logout-link').on('click', function () {
+        console.log('mg2-logout-click');
+        window.Connext.Logout();
+    });
+
+})(jQuery);
+</script>		</div><div id="rj_widget_text-813" class="rj-widget-num-5 rj-widget-last rj-widget-odd  rj-widget rj_widget_text">		<a id="rj-web-action-login-button" aria-label="login-btn" href="#" data-mg2-action="login" class="hide" style="display: none;"></a>
+<script>
+    (function ($) {
+        $('body').on('click', '[data-rj-web-action="login"]', function (ev) {
+            ev.preventDefault();
+            document.getElementById('rj-web-action-login-button').click();
+        });
+
+        $('body').on('click', '[data-rj-web-action="subscribe"]', function (ev) {
+            ev.preventDefault();
+        });
+    })(jQuery);
+</script>
+		</div>			</div><!-- #rjth-region-header -->
+
+			<div class="search-form-cont toggle-popup-elem">
+				<div class="btn-round btn-search toggle-popup-click">
+					<i class="fa fa-search" aria-hidden="true"></i>
+				</div>
+
+				<form action="https://neon.reviewjournal.com/" class="search-form">
+					<input class="search-text" name="s" placeholder="Search..." type="search">
+					<div class="search-submit"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+				</form>
+			</div>
+		</div><!-- #menu-top -->
+
+
+	</header>
+
+	<!-- summit ads -->
+	<!-- begin region topsponsor -->
+		<!-- end region topsponsor -->
+
+	<div id="page" class="site">
+
+					<div id="rjth-region-top" class="widget-area rj-container-fluid no-padding">
+				<div id="rj_widget_text-596" class="rj-widget-num-1 rj-widget-first rj-widget-odd  rj-widget rj_widget_text">		<script>
+    if (typeof window.$ === 'undefined') {window.$ = window.jQuery;}
+    window.rj_newline = new RegExp("\n", "g");
+    
+    function getCookie(a) {
+        var cookies = document.cookie.split(';');
+        var cookie;
+        for (var i = 0; i < cookies.length; i++) {
+            cookie = cookies[i].trim();
+            if (cookie.startsWith(a + '=')) {
+                return cookie.substring(a.length + 1);
+            }
+        }
+    
+        return ''; 
+    }
+    function validateEmail(email) {
+        var v = /\S+@\S+\.\S+/;
+        return v.test(email);
+    }
+</script>		</div><div id="rj_widget_text-832" class="rj-widget-num-2 rj-widget-last rj-widget-even fixed-banner-top   rj-widget rj_widget_text">		<style>
+:root {
+    --admin_h: 46px;
+    --rj_header: 90px;
+    --ad_w: 320px;
+    --ad_h: 50px;
+    --ad_margin_bot: 5px;
+}
+@media (min-width: 768px) {
+    :root {
+        --admin_h: 32px;
+        --rj_header: 110px;
+        --ad_w: 728px;
+        --ad_h: 90px;
+    }
+}
+@media (min-width: 992px) {
+    :root {
+        --rj_header: 180px;
+    }
+}
+@media (min-width: 1200px) {
+    :root {
+        --ad_w: 1200px;
+        --ad_h: 70px;
+    }
+}
+
+body.wp-custom-logo {
+     padding-top: calc( var(--rj_header) + var(--ad_h) + var(--ad_margin_bot) );
+}
+body.admin-bar {
+    padding-top: calc( var(--rj_header) + var(--ad_h) + var(--ad_margin_bot) + var(--admin_h) );
+}
+.fixed-banner-top {
+    position: fixed;
+    z-index: 1035;
+    top: var(--rj_header);
+    left: 0;
+    width: 100%;
+    height: calc( var(--ad_h) + var(--ad_margin_bot) );
+    background-color: #fff;
+    overflow: hidden;
+}
+body.admin-bar .fixed-banner-top {
+    top: calc( var(--rj_header) + var(--admin_h) );
+}
+.fixed-ad-top a {
+    display: block;
+}
+.fixed-ad-top img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.fixed-ad-top {
+    width: var(--ad_w);
+    height: var(--ad_h);
+    margin: 0 auto;
+    background-color: #fff;
+}
+@media (min-width: 768px) {
+    body.admin-bar.menu-top-fixed {
+        padding-top: calc( var(--rj_header) + var(--ad_h) + var(--ad_margin_bot) + var(--admin_h) );
+    }
+}
+@media (min-width: 1240px) {
+    .fixed-banner-top {
+        width: 1200px;
+        margin: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+}
+/*
+body.rj-is-app-request .fixed-banner-top {top: var(--rj_header);}
+body.rj-is-app-request {padding-top: 55px;}
+@media (min-width: 768px) {
+    body.rj-is-app-request .fixed-banner-top {top: 38px;}
+    body.rj-is-app-request,
+    body.rj-is-app-request.menu-top-fixed {padding-top: 133px;}   
+} 
+*/  
+</style>
+<div class="fixed-ad-top">
+    <div id="ad-sticky_high_impact_1"></div>
+</div>		</div>			</div><!-- #rjth-region-top -->
+		
+		<div id="content" class="site-content">
+
+	<div id="rjth-region-above-article-content" class="rj-container-fluid">
+		<div class="widget-area rj-container">
+			<div id="rj_widget_text-794" class="rj-widget-num-1 rj-widget-first rj-widget-last rj-widget-odd hide-tablet rj-widget rj_widget_text">		<div class="rj-ads-wrapper high-impact mt-20 mb-20"><div id="ad-high_impact_1"></div></div>
+
+<div class="separator-horizontal"></div>		</div>		</div>
+	</div><!-- #rjth-region-above-article-content -->
+
+	<div class="rj-container-fluid">
+		<div class="rj-post-post">
+			
+
+<div class="rj-container">
+
+	<article id="post-202602" data-template="neon-default"
+			 data-content-source="" class="rj-story rj-story-full has-video has-image has-gallery has-gallery-pagination rj-story-full-neon-default rj-zone has-right-sidebar post-202602 post type-post status-publish format-standard has-post-thumbnail hentry category-entertainment tag-mc-entertainment tag-rj-has-vdo rj-main-category--entertainment rj-main-category-id--105">
+
+					<div class="rj-gallery xslide">
+				<div class="xscreen">
+					<div class="xplayer">
+						<div class="xmedias">
+							
+									<template class="rj-gallery-elem">
+					<div class="media-wrap" data-xs-type="video" data-xs-thumb="https://neon.reviewjournal.com/wp-content/uploads/2015/06/29252885-sfxl_.jpg?w=150&#038;h=100&#038;crop=1">
+						<div class="inform-embed ndn_embed" data-type="VideoPlayer/Single" data-config-id="2" data-tracking-group="90277" data-video-id="29252885" data-site-section="lvrj"></div>
+						<script type="text/javascript">_informq.push(['embed']);</script>
+						<div class="media-caption">The 52-year-old host greeted his audience with an impassioned, jokeless monologue about Wednesday&#039;s Charleston, S.C., church shooting.</div>
+					</div>
+				</template>
+					
+		<div class="rj-gallery-elem media-wrap" data-xs-type="image"><img width="640" height="427" src="https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg" class="media-content media-img rj-lazy-load lazy-image" alt="" decoding="async" fetchpriority="high" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg 640w, https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg?resize=210,140 210w" data-lazy-sizes="(max-width: 640px) 100vw, 640px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2015/06/web1_29252885-sfxl_3.jpg?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /><div class="media-caption">Jon Stewart. (Entertainment Tonight/NDN)</div></div>						</div>
+					</div>
+											<div class="xpagination"></div>
+									</div>
+			</div>
+		
+		<div class="rj-left-side">
+
+			
+												<div class="rj-container">
+						<ul class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+							<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+								<a itemprop="item" href="/">
+									<span itemprop="name">Home</span>
+								</a>
+								<meta itemprop="position" content="1" />
+							</li>
+																						<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+									<span class="separator">&gt;&gt;</span>
+									<a itemprop="item" href="https://neon.reviewjournal.com/entertainment/">
+										<span itemprop="name">Entertainment</span>
+									</a>
+									<meta itemprop="position" content="2" />
+								</li>
+													</ul>
+					</div>
+					
+			<header class="entry-header">
+				
+			<div class="rj-field-main-category category-entertainment">
+			<a href="https://neon.reviewjournal.com/entertainment/">Entertainment</a>
+		</div>
+	
+<h1 class="entry-title">Jon Stewart skips jokes on ‘Daily Show’ after S.C. shootings</h1>
+<div class="post-excerpt" style="display: none;">
+	<p>Jon Stewart dropped any pretense of humor at the beginning of the &#8220;Daily Show&#8221; on Thursday night, choosing instead to open his episode by addressing the tragic Charleston shootings with a solemn, critical monologue.</p>
+</div>
+			</header><!-- .entry-header -->
+
+			<div class="entry-info-cont">
+				<div class="entry-info">
+					<div class="info-left">
+													<div class="rj-field-byline" >
+					By DAVID WRIGHT CNN				</div>
+										<div class="rj-field-published-time">
+					June 19, 2015 - 10:46 am				</div>
+										</div>
+					<div class="rj-story-social">
+								<a class="share-facebook" aria-label="share-facebook" data-pretext="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fneon.reviewjournal.com%2Fpost%2F202602" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fneon.reviewjournal.com%2Fpost%2F202602"
+		   onclick="window.open(this.href, 'winpop', 'width=500,height=500'); return false;"><i aria-hidden="true" class="fa fa-facebook"></i></a>
+		<a class="share-twitter" aria-label="share-twitter" data-pretext="https://twitter.com/intent/tweet?url=https%3A%2F%2Fneon.lvrj.com%2Fpost%2F202602&amp;via=neonlasvegas" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fneon.lvrj.com%2Fpost%2F202602&#038;via=neonlasvegas&#038;text=Jon%20Stewart%20skips%20jokes%20on%20%E2%80%98Daily%20Show%E2%80%99%20after%20S.C.%20shootings"
+		   onclick="window.open(this.href, 'winpop', 'width=500,height=500'); return false;">
+			<img width="50" height="47" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_50/v1690838126/rj-project/social_x_icon_black.png" class="icon-x" alt="icon-x" />
+		</a>
+		<a class="share-email" aria-label="share-email" data-subject="[Shared Post] Jon Stewart skips jokes on ‘Daily Show’ after S.C. shootings" data-url="https://neon.reviewjournal.com/post/202602" data-sitename="Neon" href="mailto:?&subject=[Shared Post] Jon Stewart skips jokes on ‘Daily Show’ after S.C. shootings&body=You may be interested in the following post: https://neon.reviewjournal.com/post/202602"><i
+				aria-hidden="true" class="fa fa-envelope"></i></a>
+							</div>
+					<div class="rj-clear">&nbsp;</div>
+				</div><!-- .entry-info -->
+			</div><!-- .entry-info-cont -->
+
+			
+			<div class="entry-content">
+				<p>Jon Stewart dropped any pretense of humor at the beginning of the &ldquo;Daily Show&rdquo; on Thursday night, choosing instead to open his episode by addressing <a href="https://neon.reviewjournal.com/news/nation-and-world/nine-killed-shooting-south-carolina-church" target="_blank">the tragic Charleston shootings</a> with a solemn, critical monologue.</p>
+<p>Sighing that he had &ldquo;no jokes,&rdquo; the Comedy Central host began by saying &ldquo;I have nothing other than just sadness, once again, that we have to peer into the abyss of the depraved violence that we do to each other in the nexus of a just gaping racial wound that will not heal &mdash; yet we pretend doesn&rsquo;t exist.&rdquo;</p>
+<p>Similar in tone to his famous post-9/11 speech and his comments after the choking death of Eric Garner at the hands of New York police officers, Stewart&rsquo;s remarks expressed both anguish and exasperation.</p>
+<p>Contrasting the reaction to the Charleston shootings with reactions to other incidents of terrorism, Stewart argued &ldquo;If this had been what we thought was Islamic terrorism&#8230;it&rsquo;s &lsquo;we&rsquo;ve got to do whatever we can &mdash; we&rsquo;ll torture people! &mdash; we&rsquo;ve got to do whatever we can to keep Americans safe.&rsquo; <a href="https://neon.reviewjournal.com/news/las-vegas/north-las-vegas-vigil-south-carolina-church-slayings-becomes-call-action" target="_blank">Nine people shot in a church</a>, what about that? &lsquo;Hey, what are you gonna do, crazy is as crazy does.&rsquo; That&rsquo;s the part that I cannot for the life of me wrap my head around.&rdquo;</p>
+<p>Stewart slammed the growing regularity of atrocities and the accompanying media coverage, saying &ldquo;You know it &mdash; you know &mdash; that it&rsquo;s going to go down the same path. They&rsquo;re already using the nuanced language of lack of effort for this. This is a terrorist attack. This is a violent attack on the Emmanuel Church in South Carolina which is a symbol for the black community.&rdquo;</p>
+<p>He continued, &ldquo;I heard someone on the news say, well &lsquo;tragedy has visited this church.&rsquo; This wasn&rsquo;t a tornado. This was racist. This was a guy with a Rhodesia badge on his sweater.&rdquo;</p>
+<p>Stewart also issued a scathing critique of Confederate imagery, noting &ldquo;In South Carolina, the roads that black people drive on are named for Confederate generals who fought to keep black people from being able to drive freely on that road. That&rsquo;s insanity. That&rsquo;s racial wallpaper. That&rsquo;s &mdash; you can&rsquo;t allow that.&rdquo;</p>
+<p>&ldquo;The Confederate flag flies over South Carolina. And the roads are named for Confederate generals,&rdquo; Stewart went on, &ldquo;and the white guy is the one who feels like his country is being taken away from him.&rdquo;</p>
+<p>
+					<template class="rj-isidebar1-elem">
+				</p>
+<p><div><a href="https://neon.reviewjournal.com/entertainment/reel" target="_blank"><img src="http://mm.reviewjournal.com/media/video/2014web/reelsidebar.jpg" alt="The Reel" height="50" width="159" data-lazy-src="http://mm.reviewjournal.com/media/video/2014web/reelsidebar.jpg?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img src="http://mm.reviewjournal.com/media/video/2014web/reelsidebar.jpg" alt="The Reel" height="50" width="159"></noscript></a></div>
+</p>
+<p><strong>RELATED</strong></p>
+<p><a href="https://neon.reviewjournal.com/news/nation-and-world/nine-killed-shooting-south-carolina-church" target="_blank">Nine killed in shooting at South Carolina church</a></p>
+<p><a href="https://neon.reviewjournal.com/news/las-vegas/north-las-vegas-vigil-south-carolina-church-slayings-becomes-call-action" target="_blank">North Las Vegas vigil for South Carolina church slayings becomes call to action</a></p>
+<p><a href="https://neon.reviewjournal.com/news/nation-and-world/gunman-custody-after-south-carolina-church-massacre" target="_blank">Gunman in custody after South Carolina church massacre</a></p>
+<p><a href="https://neon.reviewjournal.com/politics/hillary-clinton-calls-unity-aftermath-church-shooting" target="_blank">Hillary Clinton calls for unity in aftermath of church shooting</a></p>
+<p><a href="https://neon.reviewjournal.com/news/nation-and-world/suspect-sc-shooting-confesses-faces-9-murder-charges" target="_blank">Suspect in S.C. shooting confesses, faces 9 murder charges</a></p>
+<p>			</template>
+		
+		</p>
+				<div class="rj-content-last-elem"></div>
+			</div><!-- .entry-content -->
+			<div class="rj-isidebar"></div>
+
+			
+					</div>
+
+		<div id="rj-region-sidebar-1" class="widget-area rj-region rj-right-side">
+			<div id="rj_widget_text-364" class="rj-widget-num-1 rj-widget-first rj-widget-odd  rj-widget rj_widget_text">		<div class="rj-ads-wrapper" style="min-height:600px; margin-bottom:var(--mv_default);">
+  <div id="ad-infeed_1x2_2"></div>
+</div>
+
+<!--<div class="separator-horizontal"></div>-->		</div><div id="rj_widget_text-809" class="rj-widget-num-2 rj-widget-even  rj-widget rj_widget_text">		<div class="separator-horizontal"></div>
+
+<script>
+    let mostReadWidgetHandler = {
+        widgetId: 'most-read-widget-js-sdk',
+        widget: {
+            title: 'most read',
+            recommenderId: 'IL_boBNxzKERjCIqa_M4M0vFQ',
+        },
+        mapping: [
+            {
+                path: '/news/',
+                title: 'MOST READ',
+                recommenderId: 'IL_gBzdsDiLQfymHcNDHUbsBQ',
+            }
+        ],
+        setWidgetParams() {
+            let data, pathname = window.location.pathname;
+            if ('/' === pathname) {
+                // use default widget.
+                return;
+            }
+            // Base on current path set widget params.
+            for (let i = 0; i < this.mapping.length; i++) {
+                data = this.mapping[i];
+                if (data.path === pathname || pathname.startsWith(data.path)) {
+                    this.widget = {
+                        title: data.title,
+                        recommenderId: data.recommenderId,
+                    };
+                    break;
+                }
+            }
+        },
+        render() {
+            let this_ = this;
+            window.marfeel.cmd.push(['experiences', (experiences) => {
+                experiences.getRecommendations(this_.widget.recommenderId)
+                    .then(recommendations => {
+                        let recommendationHandler = {
+                            replaceQueryParams(urlStr, paramsObj, replaceHost) {
+                                const url = new URL(urlStr);
+                                if (replaceHost && url.host === 'www.reviewjournal.com') {
+                                    url.host = 'neon.reviewjournal.com';
+                                }
+                                url.search = ''; // Clear all existing search params.
+                                const params = new URLSearchParams(url.search);
+                                for (const [param, value] of Object.entries(paramsObj)) {
+                                    params.set(param, value);
+                                }
+                                url.search = params.toString();
+                                return url.toString();
+                            },
+                            handle(recommendations) {
+                                // set title.
+                                $(`#${this_.widgetId} .rj-widget-title`).html(this_.widget.title);
+                                let widgetWrapper = $(`#${this_.widgetId} .field-story`);
+                                let elem, recommendation, index, title, url, img;
+                                for (let i = 0; i < recommendations.length; i++) {
+                                    index = i + 1;
+                                    recommendation = recommendations[i];
+                                    console.log('recommendation: ', recommendation);
+                                    title = recommendation['title'];
+                                    url = recommendationHandler.replaceQueryParams(recommendation['url'], {
+                                        'utm_campaign': 'widget',
+                                        'utm_medium': 'most_read',
+                                    }, true);
+                                    img = recommendationHandler.replaceQueryParams(recommendation['img'], {
+                                        'w': '150',
+                                    }, false);
+                                    elem = `
+                                        <a class="mv-story" href="${url}">
+                                            <span class="field-number color-d">${index}</span>
+                                            <div class="field-title">${title}</div>
+                                            <div class="field-image">
+                                                <img class="field-img rj-lazy-load lazy-image" width="120" height="80" alt="${title}" src="${img}" data-lazy-src="http://$img?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"><noscript><img class="field-img" width="120" height="80" alt="${title}" src="${img}"></noscript>
+                                            </div>
+                                        </a>
+                                    `;
+                                    widgetWrapper.append(elem);
+                                }
+                            }
+                        };
+                        recommendationHandler.handle(recommendations);
+                        $('body').trigger('post-load', {});
+                    });
+            }]);
+        },
+        run() {
+            this.setWidgetParams();
+
+            this.render();
+        },
+    };
+    mostReadWidgetHandler.run();
+</script>
+
+<style>
+    .rj-most-view .mv-story:last-child {
+        margin: 0;
+    }
+</style>
+
+<div class="rj-gutter">
+    <div id="most-read-widget-js-sdk" class="rj-most-view" style="min-height:460px;">
+        <div class="rj-widget-title color-d">most read</div>
+        <div class="field-story"></div>
+    </div>
+    <div id="mva-cont"></div>
+</div>
+
+<div class="separator-horizontal"></div>		</div><div id="rj_widget_text-838" class="rj-widget-num-3 rj-widget-odd  rj-widget rj_widget_text">		<style>
+    .invis-text {
+        display: inline-block;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        position: absolute;
+        color: #fff;
+        z-index: -1;
+    }
+
+    #mva .f-title {
+        font-family: urw-form, sans-serif;
+        font-weight: 900;
+    }
+
+    #most-view-audio {
+        min-height: 80px;
+    }
+
+    a.mva-sponsor {
+        display: block;
+        font-family: urw-form, sans-serif;
+        font-weight: 200;
+        margin: 10px 0 20px;
+        font-size: 14px;
+        color: #000;
+    }
+
+    .mva-sponsor .f-logo {
+        display: block;
+        margin: 0 0 10px;
+        width: 250px;
+        height: auto;
+    }
+
+    .mva-sponsor .f-logo.h-80 {
+        height: 80px;
+        width: auto;
+    }
+
+    .mva-sponsor .f-name {
+        font-weight: 900;
+    }
+</style>
+<a class="mva-sponsor" style="display:none;"
+    href="https://www.onenevada.org/?utm_source=lvrj_most_read&utm_medium=Display" rel="nofollow noopener"
+    target="_blank">
+    <img class="f-logo rj-lazy-load lazy-image" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_300/v1715884380/webdev/OneNevadaCU.png" width="300" height="58" alt="sponsor logo" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_300/v1715884380/webdev/OneNevadaCU.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"><noscript><img class="f-logo"
+        src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_300/v1715884380/webdev/OneNevadaCU.png"
+        width="300" height="58" alt="sponsor logo" /></noscript>
+    <span>Sponsored By </span><span class="f-name">One Nevada Credit Union</span>
+</a>
+<div id="mva" style="max-width: 400px; margin:20px auto 0;" class="rj-lazy-load lazy-script">
+    <div class="f-title">LISTEN TO THE TOP FIVE HERE</div>
+    <div id="most-view-audio"></div>
+    <div id="most-view-text" class="invis-text"></div>
+</div>
+
+<script>
+    (function ($) {
+        var env = '';
+        var section = '';
+        var sub_section_1 = '';
+        var ad_targetting = {};
+
+        var show_sponsor_logo = false;
+
+        var pathname = window.location.pathname;
+        var trinity_player_id = '';
+        var intro_text = 'Most read articles';
+
+        var mv_story_data;
+        var mv_p_num = 3;
+
+
+        if (rj_ads_info) {
+            if (rj_ads_info.env) {
+                env = rj_ads_info.env;
+            }
+
+            if (rj_ads_info.section && rj_ads_info.section[0]) {
+                section = rj_ads_info.section[0];
+                if ('production' !== env) {
+                    section += '2';
+                }
+                ad_targetting.section = section;
+            }
+            if (rj_ads_info.child && rj_ads_info.child[0]) {
+                sub_section_1 = rj_ads_info.child[0];
+                if ('production' !== env) {
+                    sub_section_1 += '2';
+                }
+                ad_targetting.sub_section_1 = sub_section_1;
+            }
+        }
+
+        trinity_player_id = '2900019784'; //neon-prod = 2900019784 | rj-prod = 2900017418 | rj-dev = 2900018590
+        /*
+        if ('production' !== env) {
+            trinity_player_id = '2900018590';
+        }
+        */
+
+        var first_path = '';
+        if ('/' === pathname) {
+            first_path = '/';
+        }
+        if (pathname.startsWith('/outdoors/')) {
+            first_path = '/outdoors/';
+        }
+
+        /*
+        switch (first_path) {
+            case '/':
+                intro_text = 'Most read articles are brought to you by One Nevada Credit Union.';
+                show_sponsor_logo = true;
+                break;
+
+            case '/outdoors/':
+                intro_text = 'Most read articles are brought to you by Regus.';
+                $('.mva-sponsor').attr('href', 'https://www.regus.com/en-us/united-states/nevada/las-vegas?dclid=CL6-gpzw-IsDFRua7gEdYsQQqw&utm_source=digital_press&utm_medium=localtoolkit&utm_campaign=Geo_Las_Vegas_Relaunch_Las_Vegas_Review_Journal_Newsletter&utm_id=18264&utm_content=most+read');
+                $('.mva-sponsor .f-name').text('REGUS');
+                $('.mva-sponsor .f-logo').attr({
+                    'src': 'https://res.cloudinary.com/review-journal/image/upload/f_auto,q_auto,c_scale,w_250/v1737739509/webdev/regus.png',
+                    'width': '250',
+                    'height': '140'
+                }).addClass('h-80');
+                show_sponsor_logo = true;
+                break;
+        }
+        */
+
+        console.log('rjt_playerid:' + trinity_player_id + '_path:' + pathname + '_adtargetting:', ad_targetting);
+
+        if (show_sponsor_logo) {
+            $('.mva-sponsor').insertAfter('#most-read-widget-js-sdk .rj-widget-title').show(); //.rj-most-view:eq(0)
+        }
+
+        if ($('#mva-cont').length > 0) {
+            $('#mva').appendTo('#mva-cont');
+            //wp_api();
+        }
+
+        var mmr_ready = false;
+        var mmr_count = 100;
+        var mmr_story = 0;
+        var mmr_tmr;
+
+        document.getElementById('mva').addEventListener('rj-lazy-load-handle', function (e) {
+            mmr_tmr = setInterval(function () {
+                mmr_count--;
+                mmr_story = $('#most-read-widget-js-sdk .mv-story').length;
+                //console.log('rjt_mmr_c:'+mmr_count+'_story:'+mmr_story);
+                if (mmr_story > 0) {
+                    clearInterval(mmr_tmr);
+                    wp_api();
+                }
+                if (mmr_count <= 0) {
+                    clearInterval(mmr_tmr);
+                }
+            }, 100);
+        });
+
+        function wp_api() {
+            var post_ids = [];
+            var url, last_path, post_id;
+
+            $('#most-read-widget-js-sdk .mv-story').each(function () { //.rj-most-view:eq(0)
+                post_id = $(this).attr('data-post-id');
+                if (post_id) {
+                    post_ids.push(post_id);
+                } else {
+                    url = $(this).attr('href');
+                    url = url.split('/');
+                    last_path = url[url.length - 2]; //the last one is query parameter
+                    last_path = last_path.split('-');
+                    post_id = last_path[last_path.length - 1];
+                    post_id = post_id.replace(/[^0-9]/g, '');
+                    console.log('rjt_mmr_post_id:' + post_id);
+
+                    $(this).attr('data-post-id', post_id);
+                    if (post_id) {
+                        post_ids.push(post_id);
+                    }
+                }
+            });
+
+            var end_point = '/wp-json/wp/v2/posts';
+            var param = 'include=' + post_ids.join(',');
+
+            var u = '/wp-json/rj/v2/api?name=neon-wp-json&end_point=' + end_point + '&param=' + encodeURIComponent(param);
+
+            console.log('rjt_mva_u:' + u);
+            $.ajax({
+                type: 'GET',
+                url: u,
+                cache: true,
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status == '1' && typeof (response.response) !== 'undefined') {
+                        get_story_data(response.response);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('_xhr.status:' + xhr.status + '_error:' + thrownError);
+
+                }
+            });
+        }
+
+        function get_story_data(data) {
+            var i, d, cont;
+            mv_story_data = {};
+
+            for (i = 0; i < data.length; i++) {
+                d = data[i];
+                console.log('rjt_mva_id:' + d['id']);
+                cont = find_tag(d['content']['rendered'], '<p>', '</p>', mv_p_num);
+                mv_story_data['id_' + d['id']] = cont;
+
+            }
+
+            //console.log(mv_story_data);
+            insert_hidden_text();
+        }
+
+        function insert_hidden_text() {
+            var story_total = $('#most-read-widget-js-sdk .mv-story').length; //.rj-most-view:eq(0)
+            var i = 0;
+            var id;
+            var mv_text = '';
+
+            //mv_text += '<div class="mva-item">' + $('.rj-most-view:eq(0) .rj-widget-title').text() + '.</div>';
+            if (intro_text) {
+                mv_text += '<div class="mva-item">' + intro_text + '</div>';
+            }
+
+            $('#most-read-widget-js-sdk .mv-story').each(function () {// .rj-most-view:eq(0)
+                i++;
+                id = $(this).attr('data-post-id');
+                mv_text += '<div class="mva-item">';
+                mv_text += '<p>number' + i + '. ' + $(this).find('.field-title').text() + '.</p>';
+                if (id && mv_story_data['id_' + id]) {
+                    mv_text += mv_story_data['id_' + id];
+                }
+
+                if (i < story_total) {
+                    mv_text += '<p>next story.</p>';
+                }
+                mv_text += '</div>';
+            });
+
+            $('#most-view-text').html(mv_text);
+
+            render_audio_player();
+        }
+
+        function render_audio_player() {
+            var textSelector;
+            var js;
+
+            textSelector = '#most-view-text'; //'.rj-most-view';
+
+            js = document.createElement('script');
+            js.type = 'text/javascript';
+            js.setAttribute('fetchpriority', 'high');
+            js.setAttribute('charset', 'UTF-8');
+            js.setAttribute('data-player-id', 'player-most-view');
+            js.src = 'https://trinitymedia.ai/player/trinity/' + trinity_player_id + '/';
+
+            js.src += '?textSelector=' + encodeURIComponent(btoa(textSelector));
+            if (ad_targetting.hasOwnProperty('section')) {
+                //js.src += '&cms='+encodeURIComponent(JSON.stringify(ad_targetting)); 
+                js.src += '&g_cust_params=' + encodeURIComponent('section=' + ad_targetting.section);
+                if (ad_targetting.hasOwnProperty('sub_section_1')) {
+                    js.src += encodeURIComponent('&sub_section_1=' + ad_targetting.sub_section_1);
+                }
+            }
+            document.getElementById("most-view-audio").appendChild(js);
+        }
+
+        function find_tag(html, begin_tag, end_tag, num) {
+            var result = '';
+            var cont = '';
+            var c = 0;
+            var pos_begin, pos_end;
+            pos_begin = html.indexOf(begin_tag, 0);
+
+            while ((pos_begin > -1) && (c < num)) {
+                pos_end = html.indexOf(end_tag, (pos_begin + begin_tag.length));
+
+                if (pos_end > -1) {
+                    cont = html.substring(pos_begin, (pos_end + end_tag.length));
+                    //console.log('rjt_mva_cont_ori:'+cont);
+                    cont = cont.replace(/<[^>]*>?/gm, '');
+                    cont = cont.replace(/&amp;/g, '&');
+                    cont = cont.replace(/&#231;/g, 'ç');
+                    cont = cont.replace(/&#8212;|&#8216;|&#8217;|&#8220;|&#8221;|&#9670;|‘|’|“|”/g, '');
+                    cont = cont.replace(/\s\s+/g, ' ');
+                    cont = cont.trim();
+                    //console.log('rjt_mva_cont_clean:'+cont+'|');
+
+                    if (cont != '') {
+                        c++;
+                        result += begin_tag + cont + end_tag;
+                    }
+
+                    pos_begin = html.indexOf(begin_tag, (pos_end + end_tag.length));
+                } else {
+                    result += html.substring(pos_begin);
+                }
+            }
+
+            return result;
+        }
+    })(jQuery);
+</script>		</div><div id="rj_widget_text-837" class="rj-widget-num-4 rj-widget-even  rj-widget rj_widget_text">		<div class="rj-ads-wrapper" style="min-height:250px; max-width: 300px; margin-bottom:40px;"> <div id="ad-sidebar_1"></div>
+</div>
+
+<div class="separator-horizontal"></div>		</div><div id="rj_widget_text-828" class="rj-widget-num-5 rj-widget-odd  rj-widget rj_widget_text">		<script>
+    window.marfeel.cmd.push(['experiences', (experiences) => {
+        experiences.getRecommendations('IL_bem4HKJsThyHkDPbKYPHWQ')
+            .then(recommendations => {
+                let recommendationHandler = {
+                    replaceQueryParams(urlStr, paramsObj, replaceHost) {
+                        const url = new URL(urlStr);
+                        if (replaceHost && url.host === 'www.reviewjournal.com') {
+                            url.host = 'neon.reviewjournal.com';
+                        }
+                        url.search = ''; // Clear all existing search params.
+                        const params = new URLSearchParams(url.search);
+                        for (const [param, value] of Object.entries(paramsObj)) {
+                            params.set(param, value);
+                        }
+                        url.search = params.toString();
+                        return url.toString();
+                    },
+                    handle(recommendations) {
+                        let mostReadMarfeelWrapper = $('#recommend-marfeel-sidebar-wrapper .field-story');
+                        let elem, recommendation, index, title, url, img;
+                        for (let i = 0; i < recommendations.length; i++) {
+                            index = i + 1;
+                            recommendation = recommendations[i];
+                            console.log('recommendation: ', recommendation);
+                            title = recommendation['title'];
+                            url = recommendationHandler.replaceQueryParams(recommendation['url'], {
+                                'utm_campaign': 'widget',
+                                'utm_medium': 'most_read',
+                            }, true);
+                            img = recommendationHandler.replaceQueryParams(recommendation['img'], {
+                                'w': '150',
+                            }, false);
+                            elem = `
+                                <a class="mv-story" href="${url}">
+                                    <div class="field-title">${title}</div>
+                                    <div class="field-image">
+                                        <img class="field-img rj-lazy-load lazy-image" width="120" height="80" alt="${title}" src="${img}" data-lazy-src="http://$img?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"><noscript><img class="field-img" width="120" height="80" alt="${title}" src="${img}"></noscript>
+                                    </div>
+                                </a>
+                            `;
+                            mostReadMarfeelWrapper.append(elem);
+                        }
+                    }
+                };
+                recommendationHandler.handle(recommendations);
+                $('body').trigger('post-load', {});
+            });
+    }]);
+</script>
+
+<div class="rj-gutter">
+    <div class="rj-most-view recommend-marfeel" style="min-height:300px;">
+        <div class="rj-widget-title color-d" style="font-size:30px;">in case you missed it</div>
+        <div id="recommend-marfeel-sidebar-wrapper">
+            <div class="field-story"></div>
+        </div>
+    </div>
+</div>
+
+<div class="separator-horizontal"></div>		</div><div id="rj_widget_text-830" class="rj-widget-num-6 rj-widget-last rj-widget-even  rj-widget rj_widget_text">		<div class="rj-ads-wrapper" style="min-height:250px; max-width: 300px; margin-bottom:40px;"> <div id="ad-sidebar_2"></div>
+</div>		</div>		</div><!-- #rj-region-sidebar-1 -->
+	</article><!-- #post-## -->
+
+</div>
+		</div><!-- rj-post-post -->
+	</div><!-- rj-post-container -->
+
+	<template id="rjth-region-insert-content" class="widget-area">
+		<div id="rj_widget_text-806" class="rj-widget-num-1 rj-widget-first rj-widget-odd tpl-neon-default_p-0 rj-widget rj_widget_text">		<div id="story-audio-cont" class="rj-lazy-load lazy-script" style="max-width:840px; margin:0 auto;"></div>
+<script>
+    document.getElementById('story-audio-cont').addEventListener('rj-lazy-load-handle', function(e) {
+        var elem =  document.querySelector('article.rj-story-full');
+        if (elem !== null && !elem.classList.contains('tag-no-trinity')) {
+            add_trinity_audio();
+        }
+
+        function add_trinity_audio() {
+            //var textSelector = '.rj-story-full .entry-content';
+            var js = document.createElement('script');
+            js.type = 'text/javascript';
+            js.setAttribute('fetchpriority', 'high');
+            js.setAttribute('data-player-id', 'story-audio');
+            js.src = 'https://trinitymedia.ai/player/trinity/2900008944/';
+            js.src += '?pageURL=' + encodeURIComponent(window.location.href);
+            //js.src += '?textSelector=' + encodeURIComponent(btoa(textSelector));
+            document.getElementById("story-audio-cont").appendChild(js);
+        }
+    }); 
+</script>		</div><div id="rj_widget_text-40" class="rj-widget-num-2 rj-widget-even tpl-neon-default_p-2 rj-widget rj_widget_text">		<div class="ads-insert" style="clear: both; text-align: center; margin-top: 10px">
+<div class="ad-text-continue">Story continues after advertisement</div>
+<div id="ad-in_article_1" class="rj-ads-wrapper rj-lazy-ad" style="min-height: 250px; margin: 0 auto; overflow: hidden;" data-match-media-123="(max-width: 767px)"></div></div>		</div><div id="rj_widget_text-847" class="rj-widget-num-3 rj-widget-odd tpl-neon-default_p-5 rj-widget rj_widget_text">		<style>
+#stn-in-article-player.enable {
+    background-color: #eee;
+    padding: 20px;
+}
+#stn-in-article-player .f-title {
+    font-family: houschka-rounded, sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: #e71887;
+    margin-top: 5px;
+}
+</style>
+<div id="stn-in-article-player" class="stn-wrapper rj-lazy-load lazy-script"></div>
+<script>
+document.getElementById('stn-in-article-player').addEventListener('rj-lazy-load-handle', function(e) {
+    
+    window.current_date_obj = get_date_obj(); //fuel_date_obj
+    window.current_dt = get_current_dt(); //fuel_cdt
+    _check = check_schedule('thu_19:00,fri,sat,sun,mon,tue', '');
+    //console.log('_rjcheck', _check);
+    if ( _check.enable ) {
+        setup_in_article_player();
+    }
+    
+});
+function setup_in_article_player() {
+
+    $ = jQuery;
+    var stnInArticleVideo = {
+        wrapper: null,
+        canInsertVideo: function() {
+            return !(stnInArticleVideo.excludePage() || stnInArticleVideo.hasEmbed());
+        },
+        excludePage: function() {
+            var i, result = false, checkClasses = ['tag-rj-has-vdo', 'tag-rj-has-vdo-in-body', 'tag-no-stn', 'tag-livestream', 'tag-tribune-video'];
+            for (i = 0; i < checkClasses.length; i++) {
+                if (stnInArticleVideo.wrapper.hasClass(checkClasses[i])) {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        },
+        hasEmbed: function() {
+            return stnInArticleVideo.wrapper.find('.s2nPlayer').length > 0;
+        },
+        insertVideo: function(fkId) {
+            var elem = $('#stn-in-article-player');
+            var pHtml;
+            var pScript = document.createElement("script");
+            pScript.type = 'text/javascript';
+            pScript.async = true;
+
+            
+            pHtml = $('<div data-stn-player="' + fkId + '" style="margin: 20px 0;"></div>');
+            pScript.src = 'https://embed.sendtonews.com/player3/embedcode.php?fk=' + fkId; 
+            
+            elem.append(pHtml);
+            elem.append(pScript);
+        },
+        insertVideoFuel: function(channelId) {
+            var img_url = 'https://res.cloudinary.com/review-journal/image/upload/f_auto,q_auto,c_scale,w_1200/v1607187636/webdev/rj_video.png';
+            //var description = _setting[1][3];
+            var elem = $('#stn-in-article-player');
+
+            //if we do not add this info google will detect this fuel video without proper data need to fix in search console
+            elem.attr({
+                'itemscope': '',
+                'itemprop': 'VideoObject',
+                'itemtype': 'https://schema.org/VideoObject',
+            })
+            .append($('<meta/>',{'itemprop':'description','content':'watch now.'}))
+            .append($('<meta/>',{'itemprop':'name','content':'Neon In-Article Streaming'}))
+            .append($('<meta/>',{'itemprop':'thumbnailUrl','content':img_url}))
+            .append($('<meta/>',{'itemprop':'uploadDate','content':'2025-06-17T00:00:00+00:00'}))
+            .append($('<meta/>',{'itemprop':'contentUrl','content':'https://fuel-streaming-prod01.fuelmedia.io/v1/sem/'+channelId+'.m3u8'}));
+
+
+            //'https://fuel-streaming-prod01.fuelmedia.io/player/1.0/player.min.js'; //https://fuel-streaming-prod01.fuelmedia.io/player/v3/fuel.js
+            var pScript = document.createElement("script");
+            pScript.type = 'text/javascript';
+            pScript.src = 'https://fuel-streaming-prod01.fuelmedia.io/player/v3/fuel.js'; 
+            //pScript.async = true;
+            pScript.setAttribute('id', 'fuel-player-script');
+            elem.append(pScript);
+            elem.addClass('rj-fuel-77');
+            var fuel_float = 'true';
+            if (localStorage.getItem('rjIsSubscribed') === '1' || document.body.classList.contains('logged-in')) {
+                //console.log('fuel_disabled_float');
+                fuel_float = 'false';
+            }
+            var pHtml = $('<fuel-video/>',{'data-channel':channelId,'data-poster-image':img_url,'data-autoplay':'true','data-muted':'true','data-floating':fuel_float,'data-floating-corner':'BR', 'data-floating-width':'288', 'data-floating-height':'162'});
+            var click_url = '/7at7/?utm_campaign=7at7&utm_medium=insert_widget&utm_source=article_page';
+            var f_title = $('<div/>',{'class':'f-title'}).append(
+                //$('<a/>',{'href':click_url, 'alt':'7at7'}).append(
+                    $('<span/>',{'html':'watch neon streaming now'})
+                //)
+            );
+            //var f_desc = $('<div/>',{'class':'f-desc','html':description})
+           
+            elem.append(pHtml);
+            elem.append(f_title);
+            //elem.append(f_desc);
+            
+            //var is_android = /(android)/i.test(navigator.userAgent);
+            if (true) {
+                var tmr = setInterval(function() {
+                    document.getElementsByTagName('fuel-video')[0].player.play();
+                    clearInterval(tmr);
+                },1000);
+            }
+            
+        },
+        videoIDs: {
+            //'rj-story-full': {'id': '52d33epw', 'app_id': '52d33epw'},
+            'rj-story-full': {'id': '47080a21-4a03-4860-9345-6fbce0ea5f3b', 'provider':'fuel'},
+        },
+
+        getVideoId: function() {
+            //var fkId = false,
+            var vdo_k = false; 
+            for (var checkClass in stnInArticleVideo.videoIDs) {
+                if (stnInArticleVideo.wrapper.hasClass(checkClass)) {
+                    //fkId = videoIDs[checkClass].id;
+                    vdo_k = checkClass;
+                    break;
+                }
+            }
+            return vdo_k; //fkId;
+        },
+        run: function() {
+            var vdo_id;
+            stnInArticleVideo.wrapper = $('article.rj-story.rj-story-full');
+            if (stnInArticleVideo.wrapper && stnInArticleVideo.canInsertVideo()) {
+                var vdo_k = stnInArticleVideo.getVideoId();
+                if (vdo_k) {
+                    if (stnInArticleVideo.videoIDs[vdo_k].hasOwnProperty('provider')) {
+                        switch(stnInArticleVideo.videoIDs[vdo_k].provider) {
+                            case 'fuel':
+                                stnInArticleVideo.insertVideoFuel(stnInArticleVideo.videoIDs[vdo_k].id);
+                                $('#stn-in-article-player').addClass('enable');
+                                break;
+                        }
+                        
+                    } else {
+                        vdo_id = stnInArticleVideo.videoIDs[vdo_k].id;
+                        var userAgent = navigator.userAgent;
+                        if ( (userAgent.indexOf('RJApp') > -1) && (stnInArticleVideo.videoIDs[vdo_k].app_id) ) {
+                            vdo_id = stnInArticleVideo.videoIDs[vdo_k].app_id;
+                        }
+                        stnInArticleVideo.insertVideo(vdo_id);
+                        $('#stn-in-article-player').addClass('enable');
+                    }
+                    
+                }
+            }
+        }
+    };
+    stnInArticleVideo.run();
+}
+function get_date_obj() {
+    var q_str = new URLSearchParams(window.location.search);
+    var dt = q_str.get('dt');
+    var cdate;
+    if (dt) {
+        cdate = new Date(dt);
+    } else {
+        cdate = new Date();
+    }
+    return cdate;
+}
+function get_current_dt() {
+    var cdate = window.current_date_obj; //fuel_date_obj
+    //d.toLocaleString(); //"2/1/2013 7:37:08 AM"
+    var y = cdate.getFullYear();
+    var m = cdate.getMonth();
+    var d = cdate.getDate();
+    var h = cdate.getHours();
+    var i = cdate.getMinutes();
+    var s = cdate.getSeconds();
+    window.current_day  = cdate.getDay(); //0-6 | Sun-Sat //fuel_cday
+ 
+    m++;
+    m = add_pre_zero(m);
+    d = add_pre_zero(d);
+    h = add_pre_zero(h);
+    i = add_pre_zero(i);
+    s = add_pre_zero(s);
+    return y+'-'+m+'-'+d+'_'+h+':'+i+':'+s; 
+}
+function add_pre_zero(n) {
+    if (n < 10) {
+        n = '0' + n;
+    } 
+    return n;
+}
+function check_schedule(start, stop) {
+    var resp = {'enable':false, 'start':start, 'stop':stop};
+
+    var date_pattern = /\d{4}-\d{2}-\d{2}/; // ^
+    var tmp, start_date, start_time, stop_date, stop_time;
+
+    start = start.toLowerCase();
+
+    if (date_pattern.test(start)) {
+        //range 
+        //start = 2023-12-24_07:00 | stop = 2023-12-25_09:30
+        tmp = start.split('_');
+        start_date = tmp[0];
+        if (tmp.length == 1) {
+            start_time = '00:00:00';
+        } else {
+            start_time = tmp[1];
+            start_time = normalize_time(start_time);
+        }
+        
+        start = start_date + '_' + start_time;
+
+        tmp = stop.split('_');
+        stop_date = tmp[0];
+        if (tmp.length == 1) {
+            stop_time = '00:00:00';
+        } else {
+            stop_time = tmp[1];
+            stop_time = normalize_time(stop_time);
+        }
+
+        stop = stop_date + '_' + stop_time;
+        
+        if (window.current_dt >= start && window.current_dt < stop) { //fuel_cdt
+            resp.enable  = true;
+        }
+
+        resp.start = start;
+        resp.stop = stop;
+        return resp;
+
+    } else {
+        //pattern
+        //start = wed_17:00,thu,fri,sat_00:00-06:00 | stop = y-01-01,y-12-25
+        var tmp = window.current_dt.split('_'); //fuel_cdt
+        var cdate = tmp[0];
+        var ctime = tmp[1];
+
+        if (stop) {
+            if (stop.includes('pause')) {
+                return resp;
+            }
+            var cyear = window.current_date_obj.getFullYear(); //fuel_date_obj
+            stop = stop.replace(/y/g, cyear);
+            resp.stop = stop;
+
+            var stop_arr = stop.split(',');
+            if (stop_arr.includes(cdate)) {
+                return resp;
+            }
+        }
+
+        var start_obj = normalize_day_pattern(start);
+        var d_index = start_obj.d.indexOf(window.current_day); //fuel_cday
+        //console.log('d_index:'+d_index);
+        if ( d_index === -1 ) {
+            return resp;
+        }
+        //console.log('ctime:'+ctime+'_'+start_obj.begin[d_index]+'_'+start_obj.end[d_index]);
+        if (ctime >= start_obj.begin[d_index] && ctime <=  start_obj.end[d_index]) {
+            resp.enable  = true;
+        }
+        return resp;
+
+    }
+
+}
+function normalize_time(str) {
+    var tmp = str.split(':');
+    if (tmp.length == 1) {
+        tmp.push('00');
+    }
+    if (tmp.length == 2) {
+        tmp.push('00');
+    }
+    return tmp[0]+':'+tmp[1]+':'+tmp[2];
+}
+function replace_days_with_num(str) {
+    var day_mapping = {
+        'sun': 0,
+        'mon': 1,
+        'tue': 2,
+        'wed': 3,
+        'thu': 4,
+        'fri': 5,
+        'sat': 6
+    };
+
+    // Use a regular expression with a callback function to perform the replacement
+    var result = str.replace(/(sun|mon|tue|wed|thu|fri|sat)/gi, function(match, day) {
+        return day_mapping[day]; //day.toLowerCase()
+    });
+
+    return result;
+}
+function normalize_day_pattern(str) {
+    var i, tmp, d, t, t_begin, t_end;
+    var arr = replace_days_with_num(str).split(',');
+    var d_arr = [];
+    var begin_arr = [];
+    var end_arr = [];
+    for (i=0; i<arr.length; i++) {
+        tmp = arr[i].trim().split('_');
+        if (tmp.length == 1) {
+            tmp.push('00:00:00-23:59:59');
+        }
+        d = parseInt(tmp[0]);
+        if (isNaN(d)) {
+            d = -1;
+        }
+        t = tmp[1];
+        tmp = t.split('-');
+        if (tmp.length == 1) {
+            tmp.push('23:59:59');
+        }
+        t_begin = normalize_time(tmp[0]);
+        t_end = normalize_time(tmp[1]);
+
+        d_arr.push(d);
+        begin_arr.push(t_begin);
+        end_arr.push(t_end);
+    }
+
+    var obj = {'d':d_arr, 'begin':begin_arr, 'end':end_arr};
+    //console.log('rj_day_pattern', obj);
+    return obj;
+}
+</script>		</div><div id="rj_widget_text-855" class="rj-widget-num-4 rj-widget-even tpl-neon-default_p-7 rj-widget rj_widget_text">		<style>
+.goguide-insert {display: block;}
+.goguide-insert img {display: block; width: 100%; height: auto;}    
+</style>
+<a class="goguide-insert" aria-label="top pick events" href="/goguide/">
+    <picture>
+        <source media="(min-width: 420px)" srcset="https://res.cloudinary.com/review-journal/image/upload/f_auto/v1752864686/neon/goguide_banner_v3.jpg" />
+        <img alt="goguide" width="320" height="250" src="https://res.cloudinary.com/review-journal/image/upload/f_auto/v1752864686/neon/goguide_banner_phone_v3.jpg" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto/v1752864686/neon/goguide_banner_phone_v3.jpg?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="goguide" width="320" height="250" src="https://res.cloudinary.com/review-journal/image/upload/f_auto/v1752864686/neon/goguide_banner_phone_v3.jpg" /></noscript>
+    </picture>
+</a>		</div><div id="rj_widget_text-756" class="rj-widget-num-5 rj-widget-odd tpl-neon-default_p-9 rj-widget rj_widget_text">		<div class="ads-insert" style="clear: both; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+<div class="ad-text-continue">Story continues after advertisement</div>
+<div id="ad-in_article_banner_1" style="min-height:50px;" class="rj-ads-wrapper rj-lazy-ad" ></div></div>		</div><div id="rj_widget_text-846" class="rj-widget-num-6 rj-widget-even tpl-neon-default_p-10 rj-widget rj_widget_text">		<!-- https://developers.google.com/recaptcha/docs/faq -->
+<style>
+.grecaptcha-badge { visibility: hidden; }
+.newsletter-widget {
+    font-family: urw-form, sans-serif;
+    line-height: normal;
+    border-top: solid 1px #000;
+    border-bottom: solid 1px #000;
+    margin-bottom: var(--mv_default);
+    overflow: hidden;
+}
+.newsletter-widget .field-cont {
+    position: relative;
+    text-align: center;
+}
+.newsletter-widget .field-title {
+    color: #e71887;
+    background-color: #fff;
+    padding: 10px 10px 0;
+    font-size: 18px;
+    font-weight: 900;
+}
+.newsletter-widget .field-icon {
+    position: absolute;
+    width: 200px;
+    left: 50%;
+    top: -50px;
+    transform:translateX(-50%);
+    opacity: 0.2;
+}
+.newsletter-widget .field-icon img {
+    width: 100%;
+    height: auto;
+}
+.newsletter-widget .inner-2 {
+    position: relative;
+}
+.newsletter-widget .field-name {
+    font-family: houschka-rounded, sans-serif;
+    font-weight: 800;
+    line-height: 0.9;
+    font-size: 60px;
+    color: #e71887;
+    margin: 5px 0;
+}
+.newsletter-widget .field-description {
+    margin: 5px 0 10px;
+}
+.newsletter-widget .field-signup {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+.newsletter-widget .user-email {
+    flex-basis: 100px;
+    flex-grow: 1;
+    margin-right: 10px;
+    border: solid 1px #888;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+.newsletter-widget .btn-signup {
+    display: inline-block;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 900;
+    cursor: pointer;
+    background-color: #5617b6;
+    transition: background-color 0.5s ease;
+}
+.newsletter-widget .btn-signup:hover,
+.newsletter-widget .btn-signup.active {
+    background-color: #e71887;
+}
+
+.newsletter-widget .err-msg {
+    font-size: 14px;
+    color: #f00;
+    width: 100%;
+    margin-bottom: 3px;
+}
+.newsletter-widget .field-privacy-cont {
+    font-size: 10px;
+    width: 100%;
+    background-color: #fff;
+}
+.newsletter-widget .inner-2 > :last-child {
+    margin-bottom: 10px;
+}
+.newsletter-widget .field-privacy.rj {
+    margin-bottom: 3px;
+}
+@media (min-width: 768px) {
+    .newsletter-widget .field-cont {
+        display: flex;
+        flex-flow: row wrap;
+        text-align: left;
+        max-width: 730px;
+        margin: 0 auto;
+    }
+    .newsletter-widget .field-icon {
+        width: 110px;
+        top: -20px;
+        left: 115px;
+        opacity: 1;
+        transform: none;
+    }
+    .newsletter-widget .field-title {
+        height: 100%;
+        padding: 8px 20px 20px;
+        width: 185px;
+        font-size: 28px;
+    }
+    .newsletter-widget .inner-2 {
+        display: flex;
+        flex-flow: row wrap;
+        flex-basis: 100px;
+        flex-grow: 1;
+        align-items: center;
+        padding-left: 20px;
+    }
+    .newsletter-widget .field-name {
+        font-size: 70px;
+        margin: 0 15px 0 0;
+    }
+    .newsletter-widget .field-description {
+        position: relative;
+        top: 4px;
+        margin: 0;
+        font-size: 16px;
+        width: 165px;
+    }
+    .newsletter-widget .field-signup {
+        max-width: 500px;
+        margin: 0;
+    }
+
+}
+@media (min-width: 1150px) {
+    .newsletter-widget .field-cont {
+        max-width: 1150px;
+    }
+    .newsletter-widget .field-title {
+        width: 260px;
+        font-size: 40px;
+        padding: 16px 20px 20px;
+    }
+    .newsletter-widget .field-icon {
+        width: 160px;
+        top: -10px;
+        left: 165px;
+    }
+    .newsletter-widget .inner-2 {
+        padding-left: 40px;
+    }
+    .newsletter-widget .field-name {
+        font-size: 120px;
+    }
+    .newsletter-widget .field-signup {
+        max-width: 800px;
+    }
+    .newsletter-widget .field-description {
+        font-size: 25px;
+        width: 260px;
+    }
+    .newsletter-widget .field-privacy {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .newsletter-widget .field-privacy.rj {
+        margin: 0 5px 0 0;
+    }
+}
+
+.rj-story-full .newsletter-widget.rj-gutter {
+    margin: 1em 0;
+}
+@media (min-width: 1100px) {
+    .rj-story-full .newsletter-widget .field-title {
+        width: 170px;
+    }
+    .rj-story-full .newsletter-widget .field-icon {
+        width: 100px;
+        top: -8px;
+        left: 111px;
+    }
+}
+@media (min-width: 1150px) {
+    .rj-story-full .newsletter-widget .field-title {
+        font-size: 28px;
+        width: 170px;
+        padding: 8px 20px 20px;
+    }
+    .rj-story-full .newsletter-widget .field-icon {
+        width: 100px;
+        top: -8px;
+        left: 111px;
+    }
+    .rj-story-full .newsletter-widget .field-name {
+        font-size: 70px;
+    }
+    .rj-story-full .newsletter-widget .inner-2 {
+        padding-right: 20px;
+    }
+    .rj-story-full .newsletter-widget .field-description {
+        font-size: 16px;
+        width: 165px;
+    }
+}
+</style>
+
+<div class="newsletter-widget rj-gutter" data-prefid="entertainment">
+    <div class="field-cont">
+        <div class="field-icon"><img alt="icon" width="300" height="550" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_300/v1746118255/neon/icon/lightning_2.png" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_300/v1746118255/neon/icon/lightning_2.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="icon" width="300" height="550" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_300/v1746118255/neon/icon/lightning_2.png"></noscript></div>
+        <div class="inner-1">
+            <div class="field-title">brighten up your inbox</div>
+        </div>
+        <div class="inner-2">
+            <div class="field-name"><span style="color:#5617b6;">neon</span>news</div>
+            <div class="field-description">the ultimate Las Vegas entertainment guide</div>
+            <div class="field-signup">
+                <input type="email" class="user-email" placeholder="enter your email" />
+                <button class="btn-signup">subscribe</button>
+            </div>
+            <div class="err-msg">&nbsp;</div>
+            <div class="field-privacy-cont">
+                <div class="field-privacy rj">By signing up you agree to our <a href="https://www.reviewjournal.com/privacy/" class="td-underline">Privacy Policy</a> and <a href="https://www.reviewjournal.com/terms-of-service/" class="td-underline" style="white-space:nowrap;">Terms of Service</a>. Unsubscribe at any time.</div>
+                <div class="field-privacy google">This site is protected by reCAPTCHA and the Google <a class="td-underline" href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a> and <a class="td-underline" href="https://policies.google.com/terms" target="_blank">Terms of Service</a> apply.</div>
+            </div>
+        </div>  
+    </div>
+</div>
+<script>
+(function ($) {
+    var user_token_n = '';
+    var user_token_a = '';
+
+    $('.newsletter-widget .user-email').on('focus', function() {
+        if ( 'undefined' === typeof(grecaptcha) ) {
+            console.log('rj-load-gcaptcha');
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'https://www.google.com/recaptcha/api.js?render=6LfbFwknAAAAAOYHjyIUb8rynrIx-LJmJFjz3Jhe';
+            head.appendChild(script);
+        }
+    });
+
+    $('.newsletter-widget .user-email').on('keypress', function(e) {
+        if (e.which === 13) { 
+            e.preventDefault();
+            var nwrapper = $(this).closest('.newsletter-widget'); 
+            if (nwrapper.length === 0) {
+                return;
+            }
+            on_submit(nwrapper);   
+        }
+    });
+
+    $('.newsletter-widget .btn-signup').on('click', function(e) {
+        //e.preventDefault();
+        var nwrapper = $(this).closest('.newsletter-widget');
+        if (nwrapper.length === 0) {
+            return;
+        }
+        on_submit(nwrapper);               
+    });
+
+    function on_submit(nwrapper) {
+        var pref_id = nwrapper.attr('data-prefid');
+        var alert_id = nwrapper.attr('data-alert-id');
+        var user_email = nwrapper.find('.user-email').val();
+        var err_elem = nwrapper.find('.err-msg');
+        if (!pref_id && !alert_id) {
+            err_elem.text('Missing settings!');
+            return;
+        }
+       
+        if (!validateEmail(user_email)) {
+            err_elem.text('invalid email address!');
+            return;
+        }
+        
+        grecaptcha.ready(function() {
+            if (pref_id) {
+                pref_id = pref_id.split(',');
+                grecaptcha.execute('6LfbFwknAAAAAOYHjyIUb8rynrIx-LJmJFjz3Jhe', {'action': 'neon_newsletters_widget_n'}).then(function(token) {
+                    //console.log('rj_urser_token_n:'+token);
+                    user_token_n = token;
+
+                    set_email_pref_sf(user_email, nwrapper, pref_id, err_elem); 
+                });
+
+            }
+            if (alert_id) {
+                alert_id = alert_id.split(',');
+                grecaptcha.execute('6LfbFwknAAAAAOYHjyIUb8rynrIx-LJmJFjz3Jhe', {'action': 'neon_newsletters_widget_a'}).then(function(token) {
+                    //console.log('rj_urser_token_a:'+token);
+                    user_token_a = token;
+
+                    set_alerts_sf(user_email, nwrapper, alert_id, err_elem); 
+                });
+            }
+        });  
+    }
+
+    function set_email_pref_sf(user_email, nwrapper, sub_ids, err_elem) { 
+        var dt = new Date().getTime();
+
+        var param = 'email='+user_email;
+        param += '&user_token='+user_token_n;
+        param += '&sub_ids='+sub_ids.join(',');
+        
+        var url;
+        url = '/wp-json/rj/v2/api?name=rjnewsletters';
+        url += '&method=REMOTE_GET';
+        url += '&end_point=/api/salesforce/upsert_newsletters_subscriber';
+        url += '&param='+encodeURIComponent(param);
+        url += '&dt='+dt;
+        
+        //url = 'https://rjnewsletters.reviewjournal.com/api/salesforce/upsert_newsletters_subscriber?'+param;
+        err_elem.text('Processing...');
+         $('.newsletter-widget .btn-signup').addClass('active');
+        $.ajax({
+            'method':'GET',
+            'dataType': 'json',
+            'cache': false,
+            'url': url,
+            'success': function (response) {
+                //console.log(response);
+                if (response.status == '1' && response.response.data) {
+                    err_elem.text('Thank you for subscribing to neon. Your first email will arrive soon!');   
+                    console.log('rj_sf:'+sub_ids.join(','));
+                    //mather_event_complete(user_email, nwrapper, sub_ids);    
+                } 
+            },
+            'error': function (xhr, ajaxOptions, thrownError) {
+                console.log('_xhr.status:' + xhr.status + '_error:' + thrownError);
+                //$('.newsletter-page .err-msg').text('Oops something went wrong, please try again later');
+            }
+        });
+    }
+
+    function set_alerts_sf(user_email, nwrapper, sub_ids, err_elem) {
+        var dt = new Date().getTime();
+
+        var param = 'email='+user_email;
+        param += '&user_token='+user_token_a;
+        param += '&sub_ids='+sub_ids.join(',');
+        
+        var url;
+        url = '/wp-json/rj/v2/api?name=rjnewsletters';
+        url += '&method=REMOTE_GET';
+        url += '&end_point=/api/salesforce/upsert_news_alert_subscriber';
+        url += '&param='+encodeURIComponent(param);
+        url += '&dt='+dt;
+        //url = 'https://rjnewsletters.reviewjournal.com/api/salesforce/upsert_news_alert_subscriber?'+param;
+        
+        err_elem.text('Processing...');
+        $.ajax({
+            'method':'GET',
+            'dataType': 'json',
+            'cache': false,
+            'url': url,
+            'success': function (response) {
+                //console.log(response);
+                if (response.status == '1' && response.response.data) {
+                    err_elem.text('Thank you for subscribing to neon. Your first email will arrive soon!');   
+                }
+            },
+            'error': function (xhr, ajaxOptions, thrownError) {
+                console.log('_xhr.status:' + xhr.status + '_error:' + thrownError);
+                //$('.newsletter-page .err-msg').text('Oops something went wrong, please try again later');
+            }
+        });
+    }
+
+})(jQuery); 
+</script>		</div><div id="rj_widget_text-333" class="rj-widget-num-7 rj-widget-odd tpl-neon-default_p-12 rj-widget rj_widget_text">		<div class="ads-insert" style="clear: both; text-align: center; margin-top: 10px">
+<div class="ad-text-continue">Story continues after advertisement</div>
+<div id="ad-in_article_banner_2" style="min-height:50px;" class="rj-ads-wrapper rj-lazy-ad" ></div></div>		</div><div id="rj_widget_text-432" class="rj-widget-num-8 rj-widget-even tpl-neon-default_p-17 rj-widget rj_widget_text">		<div class="ads-insert" style="clear: both; text-align: center; margin-top: 10px">
+<div class="ad-text-continue">Story continues after advertisement</div>
+<div id="ad-in_article_2" class="rj-ads-wrapper rj-lazy-ad" style="min-height: 250px; margin: 0 auto; overflow: hidden;"></div></div>		</div><div id="rj_widget_text-434" class="rj-widget-num-9 rj-widget-odd tpl-neon-default_p-27  rj-widget rj_widget_text">		<div class="ads-insert" style="clear: both; text-align: center; margin-top: 10px">
+<div class="ad-text-continue">Story continues after advertisement</div>
+<div id="ad-in_article_3" class="rj-ads-wrapper rj-lazy-ad" style="min-height: 250px; margin: 0 auto; overflow: hidden;"></div></div>		</div><div id="rj_widget_text-869" class="rj-widget-num-10 rj-widget-last rj-widget-even tpl-neon-default_p-last rj-widget rj_widget_text">		<style>
+a.prefer-google {
+display:inline-flex;
+align-items: center;
+font-family: urw-form, sans-serif;
+color: #fff;
+background-color: #000;
+border-radius: 20px;
+padding: 5px 10px;
+cursor: pointer;
+}
+.prefer-google img {
+width: 20px; height: auto; margin-right: 8px;
+}
+</style>
+<div class="rj-gutter-mobile" style="margin-top:20px; margin-bottom:20px;">
+<a class="prefer-google" href="https://www.google.com/preferences/source?q=neon.reviewjournal.com" target="_blank"><img src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_30/v1773336079/rj-project/google_g_logo.png" alt="google logo" width="30" height="31" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_30/v1773336079/rj-project/google_g_logo.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_30/v1773336079/rj-project/google_g_logo.png" alt="google logo" width="30" height="31"></noscript>Add as a preferred source on Google</a>
+</div>		</div>	</template><!-- #rjth-region-insert-content -->
+
+	<div id="rjth-region-under-article-content" class="rj-container-fluid">
+		<div class="widget-area rj-container">
+			<div class="row no-gutter rj-row-margin-7-9">
+				<div id="rj_widget_text-337" class="rj-widget-num-1 rj-widget-first rj-widget-odd  rj-widget rj_widget_text">		<div class="separator-horizontal"></div>
+<div class="rj-ads-wrapper high-impact"><div id="ad-high_impact_4"></div></div>
+<div class="separator-horizontal"></div>		</div><div id="rj_widget_render_posts-321" class="neon-topnews-custom  rj-widget-num-2 rj-widget-even rj-gutter card  rj-widget rj_widget_render_posts">				<div class="field-custom-1"><div class="rj-widget-title">more <span class="color-d" style="text-transform: lowercase;">Entertainment</span></div></div>
+						<div class="field-articles">
+												
+<article id="post-3313879" data-post-id="3313879" class="rj-story neon-thumb nth-1 has-image post-3313879 post type-post status-publish format-standard has-post-thumbnail hentry category-arts-culture category-entertainment category-music category-shows tag-mc-entertainment tag-translate rj-main-category--entertainment rj-main-category-id--105">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/entertainment/top-10-things-to-do-in-las-vegas-this-week-3313879/" aria-label="Top 10 things to do in Las Vegas this week" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="The musical phenomenon &quot;Hamilton&quot; returns to The Smith Center, running Tuesday throug ..." decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20280002_web1_-3-l-r-Nathan-Haydel-Tyler-Fauntleroy-Jared-Howelton-Elvie-Ellis-and-Company-HAMILTON-National-Tour-c-Joan-Marcus-2024.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/entertainment/top-10-things-to-do-in-las-vegas-this-week-3313879/" rel="bookmark">Top 10 things to do in Las Vegas this week</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313870" data-post-id="3313870" class="rj-story neon-thumb nth-2 has-image post-3313870 post type-post status-publish format-standard has-post-thumbnail hentry category-entertainment category-entertainment-columns category-kats category-music tag-mc-kats rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/backstreet-boys-are-going-larger-than-life-in-sphere-schedule-3313870/" aria-label="Backstreet Boys are going larger (than life) in Sphere schedule" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="Members of Backstreet Boys perform at DNA World Tour 2023 in Mumbai, India, Thursday, May 4, 20 ..." decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20452718_web1_AP23124581474007.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/backstreet-boys-are-going-larger-than-life-in-sphere-schedule-3313870/" rel="bookmark">Backstreet Boys are going larger (than life) in Sphere schedule</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313813" data-post-id="3313813" class="rj-story neon-thumb nth-3 has-image post-3313813 post type-post status-publish format-standard has-post-thumbnail hentry category-arts-culture category-celebrity category-entertainment category-entertainment-columns category-kats category-movies category-music category-nightlife category-shows tag-carlos-santana tag-mc-kats rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/rock-legend-didnt-want-a-las-vegas-residency-until-he-heard-a-voice-3313813/" aria-label="Rock legend didn’t want a Las Vegas residency, until he heard ‘a voice’" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="Carlos Santana has just released his latest album, &quot;Sentient,&quot; and has added dates at ..." decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20454262_web1_WEB-KATS-SANTANA-APR02-25-021.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/rock-legend-didnt-want-a-las-vegas-residency-until-he-heard-a-voice-3313813/" rel="bookmark">Rock legend didn’t want a Las Vegas residency, until he heard ‘a voice’</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313804" data-post-id="3313804" class="rj-story neon-thumb nth-4 has-image post-3313804 post type-post status-publish format-standard has-post-thumbnail hentry category-arts-culture category-celebrity category-entertainment category-entertainment-columns category-kats category-movies category-music tag-mc-kats rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/amas-to-honor-janet-jackson-just-as-strip-residency-closes-3313804/" aria-label="AMAs to honor Janet Jackson just as Strip residency closes" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="Janet Jackson performs at the launch of her residency production at Resorts World Theatre on Mo ..." decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462420_web1_Janet-Jackson-Performs-in-Launch-of-All-New-Residency-Janet-Jackson_-Las-Vegas-at-Resorts-World-Theatre-at-Resorts-World-Las-Vegas-12.30.24_Credit-Solaiman-Fazel-9-.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/amas-to-honor-janet-jackson-just-as-strip-residency-closes-3313804/" rel="bookmark">AMAs to honor Janet Jackson just as Strip residency closes</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313794" data-post-id="3313794" class="rj-story neon-thumb nth-5 has-video has-image post-3313794 post type-post status-publish format-standard has-post-thumbnail hentry category-entertainment category-entertainment-columns category-kats category-movies category-music category-shows tag-mc-kats tag-rj-has-vdo rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/lady-like-to-bow-out-as-virgin-hotels-builds-concert-series-3313794/" aria-label="‘Lady Like’ to bow out as Virgin Hotels builds concert series" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="" decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462580_web1_copy_Lady-Like-cast_083d5b.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+					<div class="play-button pb-bot-left">&nbsp;</div>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/lady-like-to-bow-out-as-virgin-hotels-builds-concert-series-3313794/" rel="bookmark">‘Lady Like’ to bow out as Virgin Hotels builds concert series</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313788" data-post-id="3313788" class="rj-story neon-thumb nth-6 has-video has-image post-3313788 post type-post status-publish format-standard has-post-thumbnail hentry category-celebrity category-entertainment category-movies tag-digital tag-mc-movies tag-rj-has-vdo rj_author-tony-garcia rj-main-category--movies rj-main-category-id--109">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/movies/studio-releases-1st-look-on-set-of-movie-about-legendary-raiders-coach-3313788/" aria-label="Studio releases 1st look on set of movie about legendary Raiders coach" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="" decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20461985_web1_AP060805018276_08e1c0.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+					<div class="play-button pb-bot-left">&nbsp;</div>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/movies/studio-releases-1st-look-on-set-of-movie-about-legendary-raiders-coach-3313788/" rel="bookmark">Studio releases 1st look on set of movie about legendary Raiders coach</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313782" data-post-id="3313782" class="rj-story neon-thumb nth-7 has-image post-3313782 post type-post status-publish format-standard has-post-thumbnail hentry category-dining-out category-entertainment tag-mc-dining-out rj_author-johnathan-l-wright rj-main-category--dining-out rj-main-category-id--108">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/dining-out/restaurant-owners-leave-las-vegas-strip-for-their-newest-spot-3313782/" aria-label="Restaurant owners leave Las Vegas Strip for their newest spot" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="Pappardelle from Nudo Italiano, an Italian restaurant set to open in late May 2025 in southwest ..." decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20460053_web1_Nudo-Italiano_Pappardelle_Credit-Chris-Wessling.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/dining-out/restaurant-owners-leave-las-vegas-strip-for-their-newest-spot-3313782/" rel="bookmark">Restaurant owners leave Las Vegas Strip for their newest spot</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313778" data-post-id="3313778" class="rj-story neon-thumb nth-8 has-image post-3313778 post type-post status-publish format-standard has-post-thumbnail hentry category-celebrity category-entertainment category-entertainment-columns category-kats category-music tag-mc-kats rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/jennifer-lopez-hurt-but-not-halted-in-ama-rehearsals-3313778/" aria-label="Jennifer Lopez hurt, but not halted, in AMA rehearsals" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="Jennifer Lopez hosts the American Music Awards from Las Vegas on May 26. (American Music Awards)" decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20462018_web1_copy_AMAs_KeyArt_16x9_Clean.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/jennifer-lopez-hurt-but-not-halted-in-ama-rehearsals-3313778/" rel="bookmark">Jennifer Lopez hurt, but not halted, in AMA rehearsals</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313771" data-post-id="3313771" class="rj-story neon-thumb nth-9 has-video has-image post-3313771 post type-post status-publish format-standard has-post-thumbnail hentry category-entertainment category-entertainment-columns category-kats category-music category-nightlife category-shows tag-mc-kats tag-rj-has-vdo rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/famed-las-vegas-production-to-close-move-to-3rd-venue-in-a-year-3313771/" aria-label="Famed Las Vegas production to close, move to 3rd venue in a year" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="" decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459838_web1_Chipps-Construction-Photo-Denise-Truscello_f01fa3.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+					<div class="play-button pb-bot-left">&nbsp;</div>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/famed-las-vegas-production-to-close-move-to-3rd-venue-in-a-year-3313771/" rel="bookmark">Famed Las Vegas production to close, move to 3rd venue in a year</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313762" data-post-id="3313762" class="rj-story neon-thumb nth-10 has-video has-image post-3313762 post type-post status-publish format-standard has-post-thumbnail hentry category-dining-out category-entertainment tag-mc-dining-out tag-rj-has-vdo rj_author-johnathan-l-wright rj-main-category--dining-out rj-main-category-id--108">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/dining-out/be-early-and-naughty-to-win-free-burgers-for-a-year-in-las-vegas-3313762/" aria-label="Be early and naughty to win free burgers for a year in Las Vegas" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="" decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20436080_web1_Naughty-Patty-s_ON-THE-SIDE-MAY16-25-MC-01_fd62e9.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+					<div class="play-button pb-bot-left">&nbsp;</div>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/dining-out/be-early-and-naughty-to-win-free-burgers-for-a-year-in-las-vegas-3313762/" rel="bookmark">Be early and naughty to win free burgers for a year in Las Vegas</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313591" data-post-id="3313591" class="rj-story neon-thumb nth-11 has-image post-3313591 post type-post status-publish format-standard has-post-thumbnail hentry category-dining-out category-entertainment tag-mc-dining-out rj_author-johnathan-l-wright rj-main-category--dining-out rj-main-category-id--108">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/dining-out/star-chef-opens-his-7th-restaurant-on-las-vegas-strip-3313591/" aria-label="Star chef opens his 7th restaurant on Las Vegas Strip" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="The bar at Zaytinya, a Mediterranean restaurant from chef José Andrés that opened in May 2025 ..." decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20458863_web1_Back-bar-2_Katrina-Frederick.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/dining-out/star-chef-opens-his-7th-restaurant-on-las-vegas-strip-3313591/" rel="bookmark">Star chef opens his 7th restaurant on Las Vegas Strip</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+																
+<article id="post-3313586" data-post-id="3313586" class="rj-story neon-thumb nth-12 has-image post-3313586 post type-post status-publish format-standard has-post-thumbnail hentry category-arts-culture category-celebrity category-entertainment category-entertainment-columns category-kats category-movies category-music tag-mc-kats rj_author-john-katsilometes rj-main-category--kats rj-main-category-id--118">
+	<div class="field-image">
+		<a href="https://neon.reviewjournal.com/kats/country-headliner-ushering-in-new-fm-station-with-free-show-3313586/" aria-label="Country headliner ushering in new FM station with free show" rel="bookmark">
+							<img width="720" height="480" src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?w=720&amp;h=480&amp;crop=1" class="post-img field-img wp-post-image rj-lazy-load lazy-image" alt="Deana Carter plays a free show at Palms Pool on May 25, 2025. (Deanna Carter)" decoding="async" loading="lazy" data-lazy-srcset="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg 1200w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=150,100 150w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=600,400 600w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=768,512 768w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=360,240 360w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=210,140 210w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=720,480 720w, https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?resize=900,600 900w" data-lazy-sizes="auto, (max-width: 720px) 100vw, 720px" data-lazy-src="https://neon.reviewjournal.com/wp-content/uploads/2025/05/20459142_web1_Deana-Carter-Resized-Photo.jpg?w=720&amp;h=480&amp;crop=1&amp;is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />					</a>
+			</div>
+
+	
+	
+	<a class="field-title" href="https://neon.reviewjournal.com/kats/country-headliner-ushering-in-new-fm-station-with-free-show-3313586/" rel="bookmark">Country headliner ushering in new FM station with free show</a>
+	
+	
+	
+	
+	</article><!-- #post-## -->
+													</div>
+					</div><div id="rj_widget_text-824" class="rj-widget-num-3 rj-widget-odd  rj-widget rj_widget_text">		<div class="separator-horizontal"></div>
+
+<div id="rev-cont" class="rj-lazy-load lazy-script rj-gutter"></div>
+<script> 
+document.getElementById('rev-cont').addEventListener('rj-lazy-load-handle', function(e) {    
+    $ = jQuery;
+    set_rav();
+    function set_rav() {
+        var ww = $(window).width();
+        var pos = 'pc';
+        if (ww < 1100) {
+            pos = 'mobile';
+        }
+        var sc = document.createElement('script');
+        sc.type = 'text/javascript';
+        sc.src = 'https://assets.revcontent.com/master/delivery.js';
+        sc.setAttribute('defer', 'defer');
+        sc.async = true;
+        
+        var rev = $('#rev-cont');
+        
+        rev.attr('data-pos', pos)
+        .append($('<div/>',{'id':'rc-widget-85a9e7','data-rc-widget':'', 'data-widget-host':'habitat', 'data-endpoint':'//trends.revcontent.com', 'data-widget-id':'282017'}))
+        .append(sc)
+        
+        /*
+        if (ww < 1100) {
+            rev.insertAfter('.rev-mobile-after');
+        } else {
+            rev.insertAfter('.rev-pc-after');
+        }
+        */
+    }
+});
+</script>		</div><div id="rj_widget_text-854" class="rj-widget-num-4 rj-widget-last rj-widget-even  rj-widget rj_widget_text">		<style>
+.faq .arrow-caret.original {
+    display: none;
+}    
+.faq .rj-widget-title {
+    line-height: 1.1;
+    color: #00bfaf;
+}
+.faq .rj-widget-title .field-arrow {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+.faq .arrow-caret {
+    width: 15px;
+    fill: #00bfaf;
+}
+.faq .arrow-down {
+    transform: rotate(90deg);
+}
+.faq .arrow-up {
+    transform: rotate(-90deg);
+}
+.faq .item-list {
+    min-height: 340px;
+}
+.faq .item {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: solid 1px #000;
+} 
+.faq .item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.faq .toggle-elem .toggle-click {
+    position: relative;
+    cursor: pointer;
+}
+.faq .toggle-elem .toggle-content {
+    display: none;
+}
+.faq .toggle-elem .arrow-down {
+    display: inline-block;
+}
+.faq .toggle-elem .arrow-up {
+    display: none;
+}
+
+.faq .toggle-elem.expand .arrow-down {
+    display: none;
+}
+.faq .toggle-elem.expand .arrow-up {
+    display: inline-block;
+}
+.faq .item .field-question {
+    font-weight: 900;
+    font-size: 18px;
+}
+.faq .item .field-answer {
+    font-size: 16px;
+    margin-top: 10px;
+}
+.faq .item .field-answer a {
+    color: #337ab7;
+}
+.faq .item .field-question {
+    padding-right: 30px;
+}
+.faq .item .field-arrow {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+@media (min-width: 768px) {
+    .faq .rj-widget-title {
+        margin-bottom: 10px;
+    }
+    .faq .rj-widget-title .field-arrow {
+        display: inline-flex;
+        margin: 0;
+        position: relative;
+        top: 2px;
+    }
+    .faq .rj-widget-title .field-arrow .arrow-caret {
+        width: 22px;
+    }
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-4,
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-5,
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-6,
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-7 {
+        display: none;
+    }
+}
+@media (min-width: 992px) {
+    .faq .rj-widget-title .field-arrow {
+        margin-left: 20px;
+    }
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-4,
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-5,
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-6,
+    .faq .rj-widget-title .field-arrow .arrow-caret.i-7 {
+        display: block;
+    }
+}
+</style>
+
+
+
+
+<div id="rj-faq" class="rj-event-widget faq rj-gutter rj-lazy-load lazy-script">
+    <div class="rj-widget-title">frequently asked questions <div class="field-arrow"></div></div>
+    <div class="item-list"></div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70.09 105.47" class="arrow-caret original fill-color-d">
+        <g><polygon points="27.54 105.47 70.09 53.97 70.09 51.73 27.54 0 0 13.88 26.2 52.85 0 91.81 27.54 105.47" /></g>
+    </svg>
+</div>
+<script>
+document.getElementById('rj-faq').addEventListener('rj-lazy-load-handle', function (e) {
+    load_data();
+    function load_data() {
+        var u, param;
+
+        param = 'file_path=NeonFAQ.xlsx';
+        //param += '&site_id=WebDevPublic';
+        //param += '&sheet_name=api_do_not_change';
+        param += '&range=all';
+        param += '&method=read';
+        
+        u = '/wp-json/rj/v2/api?name=microsoft&end_point=/excel_data&param='+encodeURIComponent(param);
+
+        //console.log('rj_u:'+u);
+        $.ajax({
+            type: 'GET',
+            url: u,
+            cache: true,
+            dataType: 'json',
+            timeout: 5000,
+            success: function (response) {
+                //console.log('load_discover', response);
+                if ( response.status == 1 && response.response && response.response.data ) {
+                    render_data(response.response.data);
+                } 
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('_xhr.status:' + xhr.status + '_error:' + thrownError);
+            }
+        });
+    }
+
+    function render_data(faq_data) {
+        var i, field, question, answer, html, arrow;
+
+        for (i=1; i<faq_data.length; i++) {
+            field = faq_data[i][0];
+
+            if (!field.startsWith('i_')) {
+                continue;
+            }
+
+            question = faq_data[i][1];
+            answer = faq_data[i][2];
+
+            html = '<div class="item toggle-elem">';
+            html += '<div class="toggle-click">';
+            html += '<div class="field-question">'+question+'</div>';
+            html += '<div class="field-arrow"></div>'; 
+            html += '</div>';
+            html += '<div class="field-answer toggle-content">'+answer+'</div>';
+            html += '</div>';
+        
+            $('#rj-faq .item-list').append(html);
+        }
+
+        arrow = $('.faq .arrow-caret.original').clone().removeClass('original').addClass('arrow-up');
+        $('.faq .item .field-arrow').append(arrow);
+
+        arrow = $('.faq .arrow-caret.original').clone().removeClass('original').addClass('arrow-down');
+        $('.faq .item .field-arrow').append(arrow);
+       
+        $('.toggle-click').on('click', function(e) {
+            var elem = $(e.target).closest('.toggle-elem');
+            if (elem.hasClass('expand')) {
+                elem.removeClass('expand');
+                //elem.find('.toggle-content').slideUp();
+            } else {
+                elem.addClass('expand');
+                //elem.find('.toggle-content').slideDown();
+            }
+            elem.find('.toggle-content').slideToggle();
+            
+        });
+
+        for (i=0; i<8; i++) {
+            arrow = $('.faq .arrow-caret.original').clone().removeClass('original').addClass('arrow-title i-'+i);
+            $('.faq .rj-widget-title .field-arrow').append(arrow);
+        }
+          
+    }    
+});
+</script>		</div>			</div>
+		</div>
+	</div><!-- #rjth-region-under-article-content -->
+
+	</div><!-- #content -->
+
+	
+</div><!-- #page -->
+
+<footer id="rj-footer" class="rj-container">
+	<div class="footer-c1">
+					<div id="rjth-region-footer-row-seo" class="widget-area rj-container">
+				<div id="rj_widget_text-792" class="rj-widget-num-1 rj-widget-first rj-widget-last rj-widget-odd  rj-widget rj_widget_text">		<style>
+    .power-by-site {
+        margin-bottom: 20px;
+    }
+    .power-by-site span {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 17px;
+    }
+    .power-by-site img {
+        display: inline-block;
+        vertical-align: middle;
+        height: 20px;
+        width: auto;
+        margin-left: 10px;
+    }
+    .socials-link {
+        margin-bottom: 20px;
+    }
+    .socials-link a {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .socials-link a img {
+        display: block;
+        width: 40px;
+        height: auto;  
+    }
+    .socials-link a:last-child {
+        margin-right: 0;
+    } 
+</style>
+<div class="main-logo-footer">
+    <a href="/" title="main-logo" rel="home" itemprop="url">
+        <img width="250" height="72" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_250/v1746648188/neon/neon_logo_default.png" alt="main-logo" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_250/v1746648188/neon/neon_logo_default.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img width="250" height="72" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_250/v1746648188/neon/neon_logo_default.png" alt="main-logo" /></noscript>
+    </a>
+</div>
+<div class="power-by-site"><span>POWERED BY THE</span> <a href="https://www.reviewjournal.com/" target="_blank" aria-label="Visit the Las Vegas Review-Journal"><img src="https://www.reviewjournal.com/wp-content/uploads/2020/07/rj_logo_black2.png" width="400" height="59" alt="power by site" data-lazy-src="https://www.reviewjournal.com/wp-content/uploads/2020/07/rj_logo_black2.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img src="https://www.reviewjournal.com/wp-content/uploads/2020/07/rj_logo_black2.png" width="400" height="59" alt="power by site" /></noscript></a></div>
+<div class="socials-link">
+     <a href="https://www.facebook.com/NeonLasVegas" target="_blank" aria-label="visit neon facebook">
+        <img alt="icon-fb" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-FB.png" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-FB.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="icon-fb" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-FB.png" /></noscript>
+    </a>
+    <a href="https://x.com/neonlasvegas" target="_blank" aria-label="visit neon x">
+        <img alt="icon-x" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-X.png" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-X.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="icon-x" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-X.png" /></noscript>
+    </a>
+    <a href="https://www.instagram.com/neon.lasvegas" target="_blank" aria-label="visit neon instagram">
+        <img alt="icon-instagram" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-IG.png" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-IG.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="icon-instagram" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-IG.png" /></noscript>
+    </a>
+    <a href="https://www.threads.com/@neon.lasvegas" target="_blank" aria-label="visit neon threads">
+        <img alt="icon-threads" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-Threads.png" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-Threads.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="icon-threads" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-Threads.png" /></noscript>
+    </a>
+    <a href="https://www.tiktok.com/@neonlasvegas" target="_blank" aria-label="visit neon tiktok">
+        <img alt="icon-tiktok" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-TT.png" data-lazy-src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-TT.png?is-pending-load=1" data-lazy-transform="1" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class=" rj-lazy-load lazy-image"><noscript><img alt="icon-tiktok" width="200" height="200" src="https://res.cloudinary.com/review-journal/image/upload/f_auto,c_scale,w_200/v1747430850/neon/icon/Social-TT.png" /></noscript>
+    </a>
+</div>		</div>			</div>
+			</div>
+	<div class="footer-c2">
+						<div id="rjth-region-footer-row-2" class="widget-area rj-container footer_menu">
+					<div id="rj_widget_text-816" class="rj-widget-num-1 rj-widget-first rj-widget-odd double-size rj-widget rj_widget_text">		<div class="contact-us" style="margin-bottom:20px;font-size:20px;font-weight:900;color: #e71887">say hello!<br><a style="color: #e71887;font-weight:900" href="mailto:neon@reviewjournal.com">neon@reviewjournal.com</a></div>
+
+<div style="margin-bottom:20px"><a style="color: #e71887;font-size:20px;font-weight:900" href="/email-alerts/">newsletter sign up</a></div>
+
+<div style="margin-bottom:20px"><a style="color: #e71887;font-size:20px;font-weight:900" href="/advertise-with-us/">advertise with us</a></div>
+
+<div style="margin-bottom:10px"><a style="color: #e71887;font-size:20px;font-weight:900" href="/contests/">contests</a></div>		</div><div id="nav_menu-2" class="rj-widget-num-2 rj-widget-last rj-widget-even double-size rj-widget widget_nav_menu"><div class="rj-widget-title">Affiliate Publications</div><div class="menu-affiliate-publications-container"><ul id="menu-affiliate-publications" class="menu"><li id="menu-item-3310027" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3310027"><a target="_blank" href="https://www.reviewjournal.com/">Las Vegas Review-Journal</a></li>
+<li id="menu-item-105317" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-105317"><a target="_blank" href="https://bestoflasvegas.com/">Best of Las Vegas</a></li>
+<li id="menu-item-105383" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-105383"><a target="_blank" href="https://www.reviewjournal.com/business/vegas-business/">Vegas Business</a></li>
+<li id="menu-item-105533" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-105533"><a target="_blank" href="https://pvtimes.com/">Pahrump Valley Times</a></li>
+<li id="menu-item-105610" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-105610"><a target="_blank" href="https://bouldercityreview.com/">Boulder City Review</a></li>
+<li id="menu-item-1847873" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1847873"><a target="_blank" href="https://www.reviewjournal.com/raiders/">Vegas Nation</a></li>
+<li id="menu-item-3310028" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3310028"><a target="_blank" href="https://www.reviewjournal.com/rj-magazine/">rj magazine</a></li>
+<li id="menu-item-2915809" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2915809"><a target="_blank" href="https://www.lightningdigital.com/">Lightning Digital</a></li>
+</ul></div></div>				</div>
+					</div>
+			<div id="rjth-region-footer-row-3" class="widget-area rj-container footer_copyright">
+			<div id="rj_widget_text-349" class="rj-widget-num-1 rj-widget-first rj-widget-odd  rj-widget rj_widget_text">		<style>#rj-footer .footer_copyright .copyright-pipe {margin: 0 5px;}</style>
+<p>Copyright &copy; <span class="current-year">2019</span> <a href="https://reviewjournal.com/" target="_blank">Las Vegas Review-Journal, Inc.</a> <span class="copyright-pipe">|</span> <a href="https://reviewjournal.com/privacy/" target="_blank">Privacy Policy</a> <span class="copyright-pipe">|</span> <a href="https://reviewjournal.com/terms-of-service/" target="_blank">Terms of Service</a> <span class="copyright-pipe">|</span> <a href="#cookie-preferences" onclick="event.preventDefault();window.Osano.cm.showDrawer('osano-cm-dom-info-dialog-open')">Cookie Preferences</a> <span class="copyright-pipe">|</span> <a href="#do-not-sell" onclick="event.preventDefault();window.Osano.cm. showDoNotSell()">Your Privacy Choices</a></p>
+<p class="powered-by">Powered by <a href="https://vip.wordpress.com/?utm_source=vip_powered_wpcom&utm_medium=web&utm_campaign=VIP%20Footer%20Credit&utm_term=reviewjournal.com" rel="nofollow generator" target="_blank">WordPress.com VIP</a></p>
+<script>(function ($) {var now = new Date(); $('.current-year').text(now.getFullYear()); })(jQuery); </script>		</div><div id="rj_widget_text-811" class="rj-widget-num-2 rj-widget-last rj-widget-even  rj-widget rj_widget_text">		<script type="text/javascript">
+    (function(cid,mkt,config,domain) {
+        var ml = document.createElement('script');
+        var s = document.getElementsByTagName('script')[0] || document.head;
+        var cb;
+        try {
+            if (!(cb = localStorage._matherVer)) {
+                throw false;
+            }
+        } catch (e) {
+            cb = Math.round(new Date() / 1.0368e9);
+        }
+        ml.type = 'text/javascript'; ml.async = true; ml.defer = true; ml.id = '_mljs';
+        ml.src = ('https:' == window.location.protocol ? 'https' : 'http') + '://' + (domain || 'js.matheranalytics.com/s') + '/' + cid + '/' + mkt + '/' + (config ? config + '/' : '') + 'ml.js?cb7=' + cb;
+        s.parentNode.insertBefore(ml, s);
+        })('ma54884','233443800','');
+</script>
+<script type="text/javascript">
+    (function(userDB) {
+        var initialized;
+        var done = function () {
+            if (!initialized) {
+                initialized = true;
+                timerId && clearTimeout(timerId);
+
+                if (window.Connext && window.Connext.Run) {
+                    window.Connext.Run();
+
+                } else {
+                    // wait for Connext to load
+                    var timerIdPoll = setInterval(function () {
+                        if (window.Connext && window.Connext.Run) {
+                            clearInterval(timerIdPoll);
+                            window.Connext.Run();
+                        }
+                    }, 500);
+                }
+            }
+        };
+        var timerId = setTimeout(function () {
+            done();
+        }, 3000);
+        (window.top._matherq = window.top._matherq || []).push(['getTracker', function (tracker) {
+            tracker.setPaywall('mg2');
+            if (userDB) {
+                tracker.getUserDBSegment({}, function (userDBData) {
+                    done();
+                });
+            } else {
+                done();
+            }
+        }]);
+    })(true);
+</script>		</div>		</div>
+	</footer><!-- #rj-footer -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/rjth2019/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript" id="jetpack-stats-js-before">
+/* <![CDATA[ */
+_stq = window._stq || [];
+_stq.push([ "view", {"v":"ext","blog":"241800963","post":"202602","tz":"-7","srv":"neon.reviewjournal.com","hp":"vip","j":"1:15.7"} ]);
+_stq.push([ "clickTrackerInit", "241800963", "202602" ]);
+//# sourceURL=jetpack-stats-js-before
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://stats.wp.com/e-202619.js" id="jetpack-stats-js" defer="defer" data-wp-strategy="defer"></script>
+<script type="text/javascript" async="async" src="//launch.newsinc.com/js/embed.js?ver=6.9.4" id="ndn-js"></script>
+<script type="text/javascript" id="ndn-js-after">
+/* <![CDATA[ */
+var _informq =_informq||[],_ndnq =_ndnq||[],_nw2e =_nw2e||[];
+//# sourceURL=ndn-js-after
+/* ]]> */
+</script>
+</body>
+</html>
